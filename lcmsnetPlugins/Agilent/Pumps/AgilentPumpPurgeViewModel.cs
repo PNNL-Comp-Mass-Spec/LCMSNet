@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
@@ -37,6 +38,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public AgilentPump Pump { get; }
 
         private string title = "";
+        private AgilentPumpReplyErrorCodes pumpError;
 
         public PumpPurgeData ChannelA1 => Pump.PurgeA1;
         public PumpPurgeData ChannelA2 => Pump.PurgeA2;
@@ -49,6 +51,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
             set { this.RaiseAndSetIfChanged(ref title, value); }
         }
 
+        public AgilentPumpReplyErrorCodes PumpError
+        {
+            get => pumpError;
+            set => this.RaiseAndSetIfChanged(ref pumpError, value);
+        }
+
         // In case the name was changed, trigger an update of the title bar
         private void Pump_DeviceSaveRequired(object sender, EventArgs e)
         {
@@ -59,12 +67,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public ReactiveCommand<Unit, bool> SetA2Command { get; private set; }
         public ReactiveCommand<Unit, bool> SetB1Command { get; private set; }
         public ReactiveCommand<Unit, bool> SetB2Command { get; private set; }
-        public ReactiveCommand<Unit, bool> AbortPurgesCommand { get; private set; }
+        public ReactiveCommand<Unit, AgilentPumpReplyErrorCodes> AbortPurgesCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PumpOnCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PumpOffCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; private set; }
         public ReactiveCommand<Unit, bool> RefreshPurgeSettingsCommand { get; private set; }
-        public ReactiveCommand<Unit, bool> PurgeCommand { get; private set; }
+        public ReactiveCommand<Unit, AgilentPumpReplyErrorCodes> PurgeCommand { get; private set; }
 
         private void SetupCommands()
         {
@@ -77,7 +85,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
             PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
             PumpStandbyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Standby));
             RefreshPurgeSettingsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.LoadPurgeData()));
-            PurgeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StartPurge()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off && x != PumpState.Standby));
+            PurgeCommand = ReactiveCommand.CreateFromTask(StartPumpPurge, this.WhenAnyValue(x => x.Pump.PumpState, x => x.Pump.PumpStatus.NotReadyState, x => x.Pump.PumpStatus.NotReadyReasons)
+                .Select(x => x.Item1 != PumpState.Off && x.Item1 != PumpState.Standby && (x.Item2 == AgilentPumpStateNotReady.READY || x.Item3.HasFlag(AgilentPumpNotReadyStates.Flow_Init))));
+        }
+
+        private async Task<AgilentPumpReplyErrorCodes> StartPumpPurge()
+        {
+            var result = await Task.Run(() => Pump.StartPurge());
+            RxApp.MainThreadScheduler.Schedule(() => PumpError = result);
+            return result;
         }
     }
 }

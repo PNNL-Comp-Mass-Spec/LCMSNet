@@ -16,6 +16,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.Threading;
 using Agilent.Licop;
 using FluidicsSDK.Devices;
 using LcmsNetData;
@@ -35,14 +36,14 @@ namespace LcmsNetPlugins.Agilent.Pumps
     [DeviceControl(typeof(AgilentPumpViewModel),
                                  "Agilent 1200 Nano Series",
                                  "Pumps")]
-    public class AgilentPump : IDevice, IPump, IFluidicsPump
+    public class AgilentPump : IDevice, IPump, IFluidicsPump, IDisposable
     {
         #region Members
 
         /// <summary>
         /// An 'instrument' object for the Agilent pump drivers
         /// </summary>
-        private Instrument m_pumps;
+        private Instrument m_pumps = null;
 
         /// <summary>
         /// A 'module' object for the Agilent pump drivers
@@ -101,6 +102,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private string pumpModel;
         private string pumpSerial;
         private string pumpFirmware;
+        private readonly Timer statusReadTimer = null;
+        private readonly AgilentPumpStatus pumpStatusInternal = new AgilentPumpStatus();
 
         #endregion
 
@@ -253,7 +256,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             m_status = DeviceStatus.NotInitialized;
 
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
-            TotalMonitoringSecondElapsed = CONST_MONITORING_SECONDS_ELAPSED;
+            TotalMonitoringSecondsElapsed = CONST_MONITORING_SECONDS_ELAPSED;
 
             if (m_notificationStrings == null)
             {
@@ -274,6 +277,23 @@ namespace LcmsNetPlugins.Agilent.Pumps
             PurgeA2 = new PumpPurgeData(PumpPurgeChannel.A2);
             PurgeB1 = new PumpPurgeData(PumpPurgeChannel.B1);
             PurgeB2 = new PumpPurgeData(PumpPurgeChannel.B2);
+
+            statusReadTimer = new Timer(UpdateStatus, this, Timeout.Infinite, Timeout.Infinite);
+        }
+
+        public void Dispose()
+        {
+            statusReadTimer?.Dispose();
+        }
+
+        private void UpdateStatus(object state)
+        {
+            if (m_pumps != null)
+            {
+                GetPumpStatus(pumpStatusInternal);
+                RxApp.MainThreadScheduler.Schedule(() => PumpStatus.UpdateValues(pumpStatusInternal));
+                GetPumpState();
+            }
         }
 
         /// <summary>
@@ -322,7 +342,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public int TotalMonitoringMinutesDataToKeep { get; set; }
 
         [PersistenceData("TotalMonitoringSecondsElapsed")]
-        public int TotalMonitoringSecondElapsed { get; set; }
+        public int TotalMonitoringSecondsElapsed { get; set; }
 
         /// <summary>
         /// Gets or sets the Emulation state.
@@ -419,6 +439,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
         public AgilentPumpInfo PumpInfo { get; } = new AgilentPumpInfo();
+        public AgilentPumpStatus PumpStatus{ get; } = new AgilentPumpStatus();
 
         public PumpPurgeData PurgeA1 { get; }
         public PumpPurgeData PurgeA2 { get; }
@@ -440,7 +461,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             return GetPurgeData(PurgeA1) && GetPurgeData(PurgeA2) && GetPurgeData(PurgeB1) && GetPurgeData(PurgeB2);
         }
 
-        public bool StartPurge()
+        public AgilentPumpReplyErrorCodes StartPurge()
         {
             var reply = "";
             return SendCommand("PURG 1", out reply, "");
@@ -455,15 +476,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="numberOfMinutes"></param>
         /// <returns></returns>
         [LCMethodEvent("Purge Channel", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public bool PurgePump(double timeout, PumpPurgeChannel channel, double flow, double numberOfMinutes)
+        public AgilentPumpReplyErrorCodes PurgePump(double timeout, PumpPurgeChannel channel, double flow, double numberOfMinutes)
         {
             var command = string.Format("PG{0} {1}, {2}", channel, Convert.ToInt32(flow), numberOfMinutes);
             var reply = "";
             var error = "";
             var worked = SendCommand(command, out reply, error);
 
-            if (!worked)
-                return false;
+            if (worked != AgilentPumpReplyErrorCodes.No_Error)
+                return worked;
 
             var bitField = 0;
             switch (channel)
@@ -483,8 +504,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
             command = string.Format("PRGE {0}, 1, 1", bitField);
             worked = SendCommand(command, out reply, error);
-            if (!worked)
-                return false;
+            if (worked != AgilentPumpReplyErrorCodes.No_Error)
+                return worked;
 
             return SendCommand("PURG 1", out reply, error);
         }
@@ -495,7 +516,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="timeout"></param>
         /// <returns></returns>
         [LCMethodEvent("Abort Purge", MethodOperationTimeoutType.Parameter, "", -1, false)]
-        public bool AbortPurges(double timeout)
+        public AgilentPumpReplyErrorCodes AbortPurges(double timeout)
         {
             var reply = "";
             var error = "";
@@ -728,21 +749,22 @@ namespace LcmsNetPlugins.Agilent.Pumps
             // Get the firmware revision of the running system
             // "IDN? gets "<manufacturer>,<model>,<serialNumber>,<running firmware revision>"; "IDN" causes "Identify by frontend LED"
             var gotIdent = SendCommand("IDN?", out reply, errorMessage);
-            ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
-            if (gotIdent)
+            //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+            if (gotIdent == AgilentPumpReplyErrorCodes.No_Error)
             {
                 var split = reply.Replace("\"", "").Split(',');
                 PumpFirmware = split[3];
             }
 
             GetPumpInformation();
+            GetPumpStatus();
 
             var worked = SendCommand(
-                string.Format("MONI:STRT {0},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", TotalMonitoringSecondElapsed),
+                string.Format("MONI:STRT {0},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", TotalMonitoringSecondsElapsed),
                 out reply,
                 errorMessage);
 
-            if (worked == false)
+            if (worked != AgilentPumpReplyErrorCodes.No_Error)
             {
                 errorMessage = "Could not put the pumps in monitoring mode.";
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
@@ -750,6 +772,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             GetPumpState();
+            statusReadTimer.Change(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
 
             return true;
         }
@@ -849,19 +872,27 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 var pressure = double.NaN;
                 var flowrate = double.NaN;
                 var compositionB = double.NaN;
+                //"MO 0000 ACT:FLOW 0.000;ACT:PRES 0.94;ACT:COMP 20.0,80.0,-1.0,-1.0;"
 
                 // Parse out the data
-                var dataArray = e.AsciiData.Split(new[] { "ACT:FLOW" }, StringSplitOptions.RemoveEmptyEntries);
-                if (dataArray.Length > 1)
+                //var dataArray = e.AsciiData.Split(new[] { "ACT:FLOW" }, StringSplitOptions.RemoveEmptyEntries);
+                //if (dataArray.Length > 1)
+                //{
+                //    var data = dataArray[1].Replace(";ACT:", ",");
+                //    data = data.Replace("COMP", "");
+                //    data = data.Replace("PRES", "");
+                //
+                //    var values = data.Split(',');
+                //    flowrate = Convert.ToDouble(values[0]);
+                //    pressure = Convert.ToDouble(values[1]);
+                //    compositionB = Convert.ToDouble(values[3]);
+                //}
+                var components = e.AsciiData.Split(';');
+                if (components.Length > 1)
                 {
-                    var data = dataArray[1].Replace(";ACT:", ",");
-                    data = data.Replace("COMP", "");
-                    data = data.Replace("PRES", "");
-
-                    var values = data.Split(',');
-                    flowrate = Convert.ToDouble(values[0]);
-                    pressure = Convert.ToDouble(values[1]);
-                    compositionB = Convert.ToDouble(values[3]);
+                    flowrate = Convert.ToDouble(components[0].Split(' ').Last());
+                    pressure = Convert.ToDouble(components[1].Split(' ').Last());
+                    compositionB = Convert.ToDouble(components[2].Split(' ').Last().Split(',')[1]);
                 }
                 ProcessMonitoringData(flowrate, pressure, compositionB);
             }
@@ -898,7 +929,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             // Find old data to remove -- needs to be updated (or could be) using LINQ
             //
             var count = m_times.Count;
-            var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
+            var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondsElapsed;
             if (count >= total)
             {
                 var i = 0;
@@ -965,7 +996,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="reply">The string to fill with the reply</param>
         /// <param name="errorstring">Any error results</param>
         /// <returns></returns>
-        private bool SendCommand(string command, out string reply, string errorstring)
+        private AgilentPumpReplyErrorCodes SendCommand(string command, out string reply, string errorstring)
         {
             return SendCommand(command, out reply, errorstring, m_inChannel);
         }
@@ -978,12 +1009,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="errorstring"></param>
         /// <param name="readChannel"></param>
         /// <returns></returns>
-        private bool SendCommand(string command, out string reply, string errorstring, Channel readChannel)
+        private AgilentPumpReplyErrorCodes SendCommand(string command, out string reply, string errorstring, Channel readChannel)
         {
             reply = "";
             if (Emulation)
             {
-                return true;
+                return AgilentPumpReplyErrorCodes.No_Error;
             }
             //Send the command over our serial port
             //TODO: Wrap this in exception checking
@@ -991,15 +1022,37 @@ namespace LcmsNetPlugins.Agilent.Pumps
             if (m_inChannel.TryWrite(command, CONST_WRITETIMEOUT) == false)
             {
                 //Couldn't send instruction
-                return false;
+                ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command got error response \"{AgilentPumpReplyErrorCodes.Instruction_Send_Failed}\"");
+                return AgilentPumpReplyErrorCodes.Instruction_Send_Failed;
             }
+
             if (readChannel.TryRead(out reply, CONST_READTIMEOUT) == false)
             {
                 //Couldn't read reply
-                return false;
+                ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command got error response \"{AgilentPumpReplyErrorCodes.Reply_Read_Failed}\"");
+                return AgilentPumpReplyErrorCodes.Reply_Read_Failed;
             }
 
-            return true;
+            // Reply information:
+            // RA 0000 ....: Request accepted (no error)
+            // RA xxxx ....: Request accepted (no error), xxxx is number of items received
+            // RE xxxx ....: Request error (xxxx is the code)
+            var errorCode = AgilentPumpReplyErrorCodes.No_Error;
+            if (reply.StartsWith("RA", StringComparison.OrdinalIgnoreCase))
+            {
+                errorCode = AgilentPumpReplyErrorCodes.No_Error;
+            }
+            else if (reply.StartsWith("RE", StringComparison.OrdinalIgnoreCase))
+            {
+                var error = reply.Substring(3, 4);
+                if (!Enum.TryParse(error, out errorCode))
+                {
+                    errorCode = AgilentPumpReplyErrorCodes.Unknown_Error;
+                }
+                ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command got error response \"{errorCode}\"");
+            }
+
+            return errorCode;
         }
 
         #endregion
@@ -1182,8 +1235,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return PumpState.Unknown;
             }
 
-            PumpState = PumpState.Unknown;
-
             try
             {
                 var reply = "";
@@ -1194,7 +1245,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 //We expect something like:
                 //reply = "RA 0000 ACT:PUMP 1";
                 var start = reply.IndexOf($"ACT:PUMP", StringComparison.InvariantCultureIgnoreCase);
-                if (!success || start == -1)
+                if (success != AgilentPumpReplyErrorCodes.No_Error || start == -1)
                 {
                     return PumpState.Unknown;
                 }
@@ -1212,7 +1263,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 }
 
                 var state = (PumpState) stateInt;
-                PumpState = state;
+                RxApp.MainThreadScheduler.Schedule(() => PumpState = state);
                 return state;
             }
             catch (Exception e)
@@ -1220,6 +1271,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 ApplicationLogger.LogError(2, "Error getting pump state ", e);
             }
 
+            RxApp.MainThreadScheduler.Schedule(() => PumpState = PumpState.Unknown);
             return PumpState.Unknown;
         }
 
@@ -1336,7 +1388,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PG{purgeChannelText} {purgeData.FlowRate}, {purgeData.Duration}'");
             var success = SendCommand($"PG{purgeChannelText} {purgeData.FlowRate}, {purgeData.Duration}", out reply, $"Attempting to set purge settings for channel {purgeChannelText}");
 
-            if (!success)
+            if (success != AgilentPumpReplyErrorCodes.No_Error)
             {
                 return false;
             }
@@ -1354,7 +1406,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PRGE {enabledChannels}, 1, 1'");
             success = SendCommand($"PRGE {enabledChannels}, 1, 1", out reply, $"Attempting to set purge state for channel {purgeChannelText}");
 
-            if (!success)
+            if (success != AgilentPumpReplyErrorCodes.No_Error)
             {
                 return false;
             }
@@ -1378,7 +1430,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //We expect something like:
             //reply = "RA 0000 PGA1 1000, 5";
             var start = reply.IndexOf($"PG{purgeChannelText}", StringComparison.InvariantCultureIgnoreCase);
-            if (!success || start == -1)
+            if (success != AgilentPumpReplyErrorCodes.No_Error || start == -1)
             {
                 purgeData.FlowRate = -1;
                 purgeData.Duration = -1;
@@ -1411,7 +1463,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //We expect something like:
             //reply = "RA 0000 PRGE 1, x, y";
             var start = reply.IndexOf($"PRGE", StringComparison.InvariantCultureIgnoreCase);
-            if (!success || start == -1)
+            if (success != AgilentPumpReplyErrorCodes.No_Error || start == -1)
             {
                 return 0;
             }
@@ -1543,6 +1595,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
             return (AgilentPumpModes)(Convert.ToInt32(reply));
         }
 
+        public void Identify()
+        {
+            SendCommand("IDN", out var reply, "");
+        }
+
         /// <summary>
         /// Load pump information into PumpInfo
         /// </summary>
@@ -1557,7 +1614,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 // "IDN? gets "<manufacturer>,<model>,<serialNumber>,<running firmware revision>"; "IDN" causes "Identify by frontend LED"
                 var gotIdent = SendCommand("IDN?", out reply, errorMessage);
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
-                if (gotIdent)
+                if (gotIdent == AgilentPumpReplyErrorCodes.No_Error)
                 {
                     var data = reply.Substring(12);
                     var split = data.Replace("\"", "").Split(',');
@@ -1620,12 +1677,89 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
         }
 
+        public void GetPumpStatus()
+        {
+            GetPumpStatus(PumpStatus);
+        }
+
+        private void GetPumpStatus(AgilentPumpStatus status)
+        {
+            try
+            {
+                var errorMessage = "";
+                var reply = "";
+                string[] split;
+
+                //// STAT? and ACT:STAT? get module states, STAT? gets the states in ASCII format, ACT:STAT? in decimal format
+                //SendCommand("STAT?", out reply, errorMessage);
+                //split = reply.Substring(14).Split(new char[] {'"', ',', ' '}, StringSplitOptions.RemoveEmptyEntries);
+                //PumpStatus.GenericState = split[0];
+                //PumpStatus.AnalysisState = split[1];
+                //PumpStatus.ErrorState = split[2];
+                //PumpStatus.NotReadyState = split[3];
+                //PumpStatus.TestState = split[4];
+                ////ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // STAT? and ACT:STAT? get module states, STAT? gets the states in ASCII format, ACT:STAT? in decimal format
+                SendCommand("ACT:STAT?", out reply, errorMessage);
+
+                var loc = reply.IndexOf("ACT:STAT", StringComparison.OrdinalIgnoreCase);
+                split = reply.Substring(loc + 9).Split(new char[] { '"', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                status.GenericState = (AgilentPumpStateGeneric)int.Parse(split[0]);
+                status.AnalysisState = (AgilentPumpStateAnalysis)int.Parse(split[1]);
+                status.ErrorState = (AgilentPumpStateError)int.Parse(split[2]);
+                status.NotReadyState = (AgilentPumpStateNotReady)int.Parse(split[3]);
+                status.TestState = (AgilentPumpStateTest)int.Parse(split[4]);
+
+                // ACT:BTMP? gets board temperature and leak status: ACT:BTMP? <boardtempC>,<leakSensorCurrent>,<leakState>
+                SendCommand("ACT:BTMP?", out reply, errorMessage);
+                split = reply.Substring(17).Split(',');
+                status.BoardTemperatureC = split[0];
+                status.LeakSensorCurrentMa = split[1];
+                //PumpStatus.LeakState = split[2];
+                switch (split[2])
+                {
+                    case "0":
+                        status.LeakState = "No Leak";
+                        break;
+                    case "1":
+                        status.LeakState = "Leak Detected";
+                        break;
+                    case "2":
+                        status.LeakState = "NTC Board Sensor shorted";
+                        break;
+                    case "3":
+                        status.LeakState = "NTC Board Sensor open";
+                        break;
+                    case "4":
+                        status.LeakState = "PTC Leak Sensor shorted";
+                        break;
+                    case "5":
+                        status.LeakState = "PTC Leak Sensor open";
+                        break;
+                }
+                //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+
+                // ACT:NRDY? gets the not ready status code, corresponding to bit flags
+                SendCommand("ACT:NRDY?", out reply, errorMessage);
+                status.NotReadyReasons = (AgilentPumpNotReadyStates) int.Parse(reply.Split(' ').Last());
+
+                // ACT:SRDY? gets the start not ready status code, corresponding to bit flags
+                SendCommand("ACT:SRDY?", out reply, errorMessage);
+                status.StartNotReadyReasons = (AgilentPumpStartNotReadyStates)int.Parse(reply.Split(' ').Last());
+            }
+            catch (Exception e)
+            {
+                ApplicationLogger.LogError(0, "Error getting Agilent Pump Status", e);
+            }
+        }
+
         public void SetModuleDateTime()
         {
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var reply = "";
             SendCommand($"TIME {timestamp}", out reply, "");
-            ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+            //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
             RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
         }
 
@@ -1643,7 +1777,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             var reply = "";
             SendCommand($"NAME \"{newName}\"", out reply, "");
-            ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+            //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
             RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
         }
 

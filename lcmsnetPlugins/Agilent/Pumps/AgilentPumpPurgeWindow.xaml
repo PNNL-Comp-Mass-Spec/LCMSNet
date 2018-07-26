@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LcmsNetPlugins.Agilent.Pumps"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Height="400" Width="468"
+        Height="430" Width="468"
         d:DataContext="{d:DesignInstance {x:Type local:AgilentPumpPurgeViewModel}, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterOwner"
         Title="{Binding Title}">
@@ -20,6 +20,7 @@
             <RowDefinition Height="0.5*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -55,9 +56,13 @@
         </StackPanel>
         <DockPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" LastChildFill="False">
             <Button DockPanel.Dock="Left" Margin="3" MinWidth="90" Content="Abort Purges" Command="{Binding AbortPurgesCommand}" />
-            <Button DockPanel.Dock="Left" Margin="3" MinWidth="90" Content="Start Purges" Command="{Binding PurgeCommand}" /> <!-- TODO: Properly report error states when a purge doesn't start. -->
+            <Button DockPanel.Dock="Left" Margin="3" MinWidth="90" Content="Start Purges" Command="{Binding PurgeCommand}" />
             <Button DockPanel.Dock="Right" Margin="3" MinWidth="60" Content="Close" IsDefault="True" IsCancel="True" Click="Close_OnClick" />
             <Button DockPanel.Dock="Right" Margin="3" MinWidth="60" Content="Refresh" Command="{Binding PurgeCommand}" />
         </DockPanel>
+        <TextBlock Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4">
+            <Run Text="Pump reply: " />
+            <Run Text="{Binding PumpError}" />
+        </TextBlock>
     </Grid>
 </Window>

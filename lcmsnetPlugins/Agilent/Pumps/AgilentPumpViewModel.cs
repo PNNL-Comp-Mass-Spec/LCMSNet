@@ -45,6 +45,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public void Dispose()
         {
             timer?.Dispose();
+            purgeWindow?.Close();
             GC.SuppressFinalize(this);
         }
 
@@ -52,6 +53,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             Pump = device as AgilentPump;
             NotifyPropertyChangedExtensions.RaisePropertyChanged(this, nameof(PumpInfo));
+            NotifyPropertyChangedExtensions.RaisePropertyChanged(this, nameof(PumpStatus));
 
             // Initialize the underlying device class
             if (Pump != null)
@@ -136,6 +138,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private readonly PumpDisplayViewModel pumpDisplay = null;
         private readonly PopoutViewModel pumpPopoutVm;
         private string newModuleName;
+        private AgilentPumpPurgeWindow purgeWindow = null;
 
         #endregion
 
@@ -214,6 +217,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public PumpDisplayViewModel PumpDisplay => pumpDisplay;
         public PopoutViewModel PumpPopoutVm => pumpPopoutVm;
         public AgilentPumpInfo PumpInfo => Pump?.PumpInfo;
+        public AgilentPumpStatus PumpStatus => Pump?.PumpStatus;
 
         /// <summary>
         /// The associated device.
@@ -270,6 +274,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public ReactiveUI.ReactiveCommand<Unit, Unit> SetModuleDateCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> SetModuleNameCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshInfoCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> IdentifyCommand { get; private set; }
 
         private void SetupCommands()
         {
@@ -285,7 +291,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             PumpOffCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
             PumpStandbyCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Standby));
             PurgePumpCommand = ReactiveUI.ReactiveCommand.Create(() => PurgePump());
-            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off && x != PumpState.Standby));
+            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()), this.WhenAnyValue(x => x.Pump.PumpState, x => x.PumpStatus.NotReadyState).Select(x => x.Item1 != PumpState.Off && x.Item1 != PumpState.Standby && x.Item2 == AgilentPumpStateNotReady.READY));
             StopPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StopMethod()));
             SetComPortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetComPortName()));
             ReadMethodFromPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = Pump.RetrieveMethod()));
@@ -294,6 +300,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
             SetModuleDateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleDateTime()));
             SetModuleNameCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleName(NewModuleName)), this.WhenAnyValue(x => x.PumpInfo.ModuleName, x => x.NewModuleName).Select(x => !string.Equals(x.Item1, x.Item2) && x.Item2.Length <= 30));
             RefreshInfoCommand = ReactiveUI.ReactiveCommand.Create(() => Pump.GetPumpInformation());
+            RefreshStatusCommand = ReactiveUI.ReactiveCommand.Create(() =>
+            {
+                Pump.GetPumpStatus();
+                Pump.GetPumpState();
+            });
+            IdentifyCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.Identify()));
         }
 
         #endregion
@@ -438,7 +450,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //#if DEBUG
             if (Pump != null && Emulation)
             {
-                timer.Change(Pump.TotalMonitoringSecondElapsed * 1000, Pump.TotalMonitoringSecondElapsed * 1000);
+                timer.Change(Pump.TotalMonitoringSecondsElapsed * 1000, Pump.TotalMonitoringSecondsElapsed * 1000);
                 Pump.PushData(r.NextDouble(), r.NextDouble(), r.NextDouble());
             }
             //#endif
@@ -503,9 +515,23 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private void PurgePump()
         {
             Pump.LoadPurgeData();
-            var vm = new AgilentPumpPurgeViewModel(Pump);
-            var v = new AgilentPumpPurgeWindow() {DataContext = vm};
-            v.Show();
+            if (purgeWindow == null)
+            {
+                var vm = new AgilentPumpPurgeViewModel(Pump);
+                purgeWindow = new AgilentPumpPurgeWindow() {DataContext = vm};
+                purgeWindow.Closed += PurgeWindowClosed;
+                purgeWindow.Show();
+            }
+            else
+            {
+                purgeWindow.Activate();
+            }
+        }
+
+        private void PurgeWindowClosed(object sender, EventArgs e)
+        {
+            purgeWindow.Closed -= PurgeWindowClosed;
+            purgeWindow = null;
         }
 
         private void SetComPortName()

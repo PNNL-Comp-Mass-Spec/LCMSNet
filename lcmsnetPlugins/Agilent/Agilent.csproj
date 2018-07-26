@@ -71,7 +71,11 @@
     <Compile Include="Pumps\AgilentPumpInfo.cs" />
     <Compile Include="Pumps\AgilentPumpModes.cs" />
     <Compile Include="Pumps\AgilentPumpPurgeViewModel.cs" />
+    <Compile Include="Pumps\AgilentPumpReplyErrorCodes.cs" />
+    <Compile Include="Pumps\AgilentPumpStates.cs" />
+    <Compile Include="Pumps\AgilentPumpStatus.cs" />
     <Compile Include="Pumps\AgilentPumpViewModel.cs" />
+    <Compile Include="Pumps\AgilentPumpNotReadyStates.cs" />
     <Compile Include="Pumps\PumpMethodEventArgs.cs" />
     <Compile Include="Pumps\PumpPurgeChannel.cs" />
     <Compile Include="Pumps\AgilentPumpPurgeWindow.xaml.cs">
