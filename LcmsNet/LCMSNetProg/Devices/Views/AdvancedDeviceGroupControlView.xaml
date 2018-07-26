@@ -29,35 +29,31 @@
         </TabControl>
         <StackPanel Grid.Row="1">
             <TextBlock Margin="3" Text="{Binding SelectedDevice.Status}" />
-            <GroupBox Margin="3,0,3,3" Header="Device">
-                <Grid Margin="3">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
-                    <TextBox Grid.Row="1" Grid.Column="0" Margin="3" Text="{Binding SelectedDevice.NameEdit}" />
-                    <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="3" VerticalAlignment="Bottom" Content="Rename" Command="{Binding RenameDeviceCommand}" />
-                </Grid>
-            </GroupBox>
-            <StackPanel Orientation="Horizontal">
-                <Button Margin="3" Command="{Binding InitializeDeviceCommand}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Margin="3" Command="{Binding InitializeDeviceCommand}">
                     <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                         <Image Source="{StaticResource CycleYellowImage16}" MaxHeight="20" />
                         <Label Content="Initialize" />
                     </StackPanel>
                 </Button>
-                <Button Margin="3" Command="{Binding ClearErrorCommand}">
+                <Button Grid.Column="1" Margin="3" Command="{Binding ClearErrorCommand}">
                     <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                         <Image Source="{StaticResource ButtonDeleteRedImage}" MaxHeight="16" />
                         <Label Content="Clear Error" />
                     </StackPanel>
                 </Button>
-            </StackPanel>
+                <TextBlock Grid.Column="3" Margin="3" VerticalAlignment="Center" Text="Device Name:" />
+                <TextBox Grid.Column="4" Margin="3" VerticalAlignment="Center" Text="{Binding SelectedDevice.NameEdit}" />
+                <Button Grid.Column="5" Margin="3" VerticalAlignment="Center" Content="Rename" Command="{Binding RenameDeviceCommand}" />
+            </Grid>
         </StackPanel>
     </Grid>
 </UserControl>

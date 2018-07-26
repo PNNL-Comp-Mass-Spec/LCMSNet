@@ -21,13 +21,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <DockPanel Grid.Row="0" LastChildFill="False">
-            <Button DockPanel.Dock="Left" Margin="3" Command="{Binding RefreshCommand}">
-                <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
-                    <!--<Image Source="{StaticResource SaveImage}" MaxHeight="20" />-->
-                    <Label Content="Refresh displayed devices" />
-                </StackPanel>
-            </Button>
+        <DockPanel LastChildFill="False">
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAsCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource SaveImage}" MaxHeight="20" />
@@ -44,6 +38,12 @@
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource OpenImage}" MaxHeight="18" />
                     <Label Content="Load" />
+                </StackPanel>
+            </Button>
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding RefreshCommand}">
+                <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
+                    <!--<Image Source="{StaticResource SaveImage}" MaxHeight="20" />-->
+                    <Label Content="Refresh displayed devices" />
                 </StackPanel>
             </Button>
         </DockPanel>
@@ -80,7 +80,7 @@
             </Button>
             <Button Height="70" Margin="3" Command="{Binding ConnectCommand}" Content="Connect" />
         </StackPanel>
-        <TabControl Grid.Row="1" Grid.Column="0" Margin="3">
+        <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Margin="0,10,3,0">
             <TabItem Header="Design" IsSelected="{Binding DesignTabSelected}">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
@@ -95,7 +95,7 @@
                         <TextBlock FontSize="16" Text="Configuration" />
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <devicesViews:AdvancedDeviceControlPanelView Margin="3" DataContext="{Binding AdvancedDeviceControlPanel}" />
+                <devicesViews:AdvancedDeviceControlPanelView DataContext="{Binding AdvancedDeviceControlPanel}" />
             </TabItem>
             <TabItem Header="Model Status">
                 <TabItem.HeaderTemplate>
