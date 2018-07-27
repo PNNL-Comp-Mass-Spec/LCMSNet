@@ -25,25 +25,25 @@
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAsCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource SaveImage}" MaxHeight="20" />
-                    <Label Content="Export" />
+                    <TextBlock Text="Export" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource SaveImage}" MaxHeight="20" />
-                    <Label Content="Save" />
+                    <TextBlock Text="Save" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding LoadCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource OpenImage}" MaxHeight="18" />
-                    <Label Content="Load" />
+                    <TextBlock Text="Load" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding RefreshCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <!--<Image Source="{StaticResource SaveImage}" MaxHeight="20" />-->
-                    <Label Content="Refresh displayed devices" />
+                    <TextBlock Text="Refresh displayed devices" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
         </DockPanel>
@@ -55,27 +55,27 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0" Source="{StaticResource LockImage}" MaxHeight="24" Visibility="{Binding DevicesUnlocked, Converter={StaticResource BoolToVis}}" />
-                    <Label Grid.Column="1" Content="Lock" Visibility="{Binding DevicesUnlocked, Converter={StaticResource BoolToVis}}" />
+                    <TextBlock Grid.Column="1" Text="Lock" Visibility="{Binding DevicesUnlocked, Converter={StaticResource BoolToVis}}" />
                     <Image Grid.Column="0" Source="{StaticResource UnlockImage}" MaxHeight="24" Visibility="{Binding DevicesLocked, Converter={StaticResource BoolToVis}}" />
-                    <Label Grid.Column="1" Content="Unlock" Visibility="{Binding DevicesLocked, Converter={StaticResource BoolToVis}}" />
+                    <TextBlock Grid.Column="1" Text="Unlock" Visibility="{Binding DevicesLocked, Converter={StaticResource BoolToVis}}" />
                 </Grid>
             </Button>
             <Button Height="70" Margin="3" Command="{Binding InitializeCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource CycleYellowImage16}" MaxHeight="16" />
-                    <Label Content="Initialize" />
+                    <TextBlock Text="Initialize" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button Height="70" Margin="3" Command="{Binding AddCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource AddImage}" MaxHeight="16" />
-                    <Label Content="Add" />
+                    <TextBlock Text="Add" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button Height="70" Margin="3" Command="{Binding RemoveCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource ButtonDeleteImage16}" MaxHeight="16" />
-                    <Label Content="Remove" />
+                    <TextBlock Text="Remove" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button Height="70" Margin="3" Command="{Binding ConnectCommand}" Content="Connect" />

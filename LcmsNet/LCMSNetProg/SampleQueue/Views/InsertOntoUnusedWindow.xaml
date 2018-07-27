@@ -19,8 +19,8 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="16">We noticed there are some unused samples.</Label>
-        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontSize="16">What do you want to do?</Label>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Text="We noticed there are some unused samples." />
+        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Text="What do you want to do?" />
         <Button Grid.Row="2" Grid.Column="0" Margin="8" Click="Insert_OnClick" ClickMode="Release">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -28,7 +28,7 @@
                     <ColumnDefinition Width="*" MinWidth="110" />
                 </Grid.ColumnDefinitions>
                 <Image Source="{StaticResource InsertUnusedImage}" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="48" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">Insert onto Unused</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" Text="Insert onto Unused" />
             </Grid>
         </Button>
         <Button Grid.Row="2" Grid.Column="1" Margin="8" Click="Append_OnClick" ClickMode="Release">
@@ -38,7 +38,7 @@
                     <ColumnDefinition Width="*" MinWidth="115" />
                 </Grid.ColumnDefinitions>
                 <Image Source="{StaticResource AppendImage}" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MaxWidth="48" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1">Append the samples</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" Text="Append the samples" />
             </Grid>
         </Button>
     </Grid>

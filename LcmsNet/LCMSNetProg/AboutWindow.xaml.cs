@@ -24,9 +24,9 @@ namespace LcmsNet
         public AboutWindow()
         {
             InitializeComponent();
-            CopyrightLabel.Content = App.SOFTWARE_COPYRIGHT;
+            CopyrightText.Text = App.SOFTWARE_COPYRIGHT;
             Developers.Text = App.SOFTWARE_DEVELOPERS;
-            VersionLabel.Content = Assembly.GetEntryAssembly().GetName().Version;
+            VersionText.Text = Assembly.GetEntryAssembly().GetName().Version.ToString();
         }
     }
 }

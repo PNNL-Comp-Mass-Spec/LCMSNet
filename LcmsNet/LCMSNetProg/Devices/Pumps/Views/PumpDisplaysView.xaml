@@ -51,7 +51,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="14" Foreground="DarkRed" Content="{Binding PumpName}" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="14" Foreground="DarkRed" Text="{Binding PumpName}" />
                     <Button Grid.Row="1" Grid.Column="0" MaxHeight="32" Margin="3" Command="{Binding MoveLeftCommand}" >
                         <Image Source="{StaticResource PreviousImage32}" MaxHeight="32" Margin="-3" />
                     </Button>

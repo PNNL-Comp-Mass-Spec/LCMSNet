@@ -23,9 +23,7 @@
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
         <Button Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="3,3,3,20" Background="{Binding ColumnData.Color, Converter={StaticResource ColorToSolidColorBrushConverter}}" IsEnabled="{Binding ColumnEnabled}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-        <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="8,8,8,25" HorizontalAlignment="Center" VerticalAlignment="Center" >
-            <Run Background="White" Text="{Binding ColumnId, Mode=OneWay}" />
-        </Label>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="8,8,8,25" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Text="{Binding ColumnId, Mode=OneWay}" />
         <!-- Absolutely transparent on purpose:
             Getting a button to look like I want it to: Easy.
             Getting the Xceed WPF Toolkit ColorPicker to look similar to the button, and still function properly: Hard.
@@ -34,8 +32,8 @@
         <xctk:ColorPicker Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="3,3,3,20" Opacity="0" DisplayColorAndName="False" SelectedColor="{Binding ColumnData.Color}" IsEnabled="{Binding ColumnEnabled}" ShowAvailableColors="True" ShowStandardColors="True" ShowDropDownButton="False" />
         <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="3" SelectedItem="{Binding ColumnData.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ColumnNamesComboBoxOptions}" IsEnabled="{Binding ColumnEnabled}" VerticalAlignment="Center" />
         <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <CheckBox VerticalAlignment="Center" Margin="5,0" IsChecked="{Binding ColumnEnabled}">Enabled</CheckBox>
-            <Label VerticalAlignment="Center" Margin="5,0" Content="{Binding ColumnData.Status}" ContentStringFormat="Status: {0}" />
+            <CheckBox VerticalAlignment="Center" Margin="5,0" IsChecked="{Binding ColumnEnabled}" Content="Enabled" />
+            <TextBlock VerticalAlignment="Center" Margin="5,0" Text="{Binding ColumnData.Status, StringFormat=Status: {0}}" />
         </StackPanel>
     </Grid>
 </UserControl>

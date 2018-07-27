@@ -29,7 +29,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Grid.Column="1">
-            <Label Content="Randomization Type" />
+            <TextBlock Text="Randomization Type" Margin="3,0" />
             <ComboBox Margin="3" Width="Auto" SelectedItem="{Binding SelectedRandomizer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding RandomizerNameList}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <Button Margin="3" Height="35" Content="Randomize" Command="{Binding RandomizeCommand}" />
         </StackPanel>

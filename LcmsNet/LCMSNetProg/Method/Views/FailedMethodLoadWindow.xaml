@@ -14,7 +14,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Content="These methods had issues you should review." />
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Text="These methods had issues you should review." />
         <TreeView Grid.Row="1" Margin="3" ItemsSource="{Binding ErrorList}">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">

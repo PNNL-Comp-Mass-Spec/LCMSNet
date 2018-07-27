@@ -16,7 +16,7 @@
         <DockPanel.Resources>
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </DockPanel.Resources>
-        <Label DockPanel.Dock="Left" MinWidth="32" VerticalAlignment="Center" Margin="3" Content="{Binding EventNumber}" />
+        <TextBlock DockPanel.Dock="Left" MinWidth="32" VerticalAlignment="Center" Margin="3" Text="{Binding EventNumber}" />
         <views:BreakpointView DockPanel.Dock="Left" Margin="3" DataContext="{Binding Breakpoint}" />
         <CheckBox DockPanel.Dock="Left" VerticalAlignment="Center" Margin="3" Background="Silver" IsChecked="{Binding IsSelected}" />
         <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DevicesComboBoxOptions}" IsEnabled="{Binding DevicesComboBoxEnabled}" cueBannerOverlay:CueBannerService.CueBanner="Select" />

@@ -20,17 +20,17 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Foreground="Red" Content="Time:" />
-        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Content="Message Type:" />
-        <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Content="Type:" />
-        <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Content="Event:" />
-        <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Content="Events Device:" />
-        <Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Content="Problem Device:" />
-        <Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Content="{Binding Time}" />
-        <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Content="{Binding MessageType}" />
-        <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Content="{Binding Type}" />
-        <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Content="{Binding Event}" />
-        <Label Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Content="{Binding Device}" />
-        <Label Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Content="{Binding ProblemDevice}" />
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3,0" VerticalAlignment="Center" FontSize="16" Foreground="Red" Text="Time:" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3,0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Text="Message Type:" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3,0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Text="Type:" />
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3,0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Text="Event:" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="3,0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Text="Events Device:" />
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="3,0" VerticalAlignment="Center" FontSize="16" Foreground="DimGray" Text="Problem Device:" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Margin="3,0" VerticalAlignment="Center" FontSize="16" Text="{Binding Time}" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="3,0" VerticalAlignment="Center" FontSize="16" Text="{Binding MessageType}" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Margin="3,0" VerticalAlignment="Center" FontSize="16" Text="{Binding Type}" />
+        <TextBlock Grid.Row="3" Grid.Column="1" Margin="3,0" VerticalAlignment="Center" FontSize="16" Text="{Binding Event}" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Margin="3,0" VerticalAlignment="Center" FontSize="16" Text="{Binding Device}" />
+        <TextBlock Grid.Row="5" Grid.Column="1" Margin="3,0" VerticalAlignment="Center" FontSize="16" Text="{Binding ProblemDevice}" />
     </Grid>
 </UserControl>

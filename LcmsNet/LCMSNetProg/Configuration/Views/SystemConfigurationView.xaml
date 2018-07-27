@@ -16,7 +16,7 @@
                 <GroupBox Header="Operator" Margin="5">
                     <StackPanel Orientation="Horizontal">
                         <ComboBox Width="227" Margin="3" SelectedItem="{Binding InstrumentOperator, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding OperatorsComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                        <Button Width="80" Margin="3" Command="{Binding SetOperatorCommand}" IsEnabled="{Binding OperatorNotSaved}">Set</Button>
+                        <Button Width="80" Margin="3" Command="{Binding SetOperatorCommand}" IsEnabled="{Binding OperatorNotSaved}" Content="Set" />
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
@@ -35,11 +35,11 @@
                                 <ColumnDefinition Width="1*" />
                                 <ColumnDefinition Width="4*" />
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Content="Cart Name:" />
+                            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Cart Name:" />
                             <TextBox Grid.Row="0" Grid.Column="1" Width="302" HorizontalAlignment="Left" Margin="3" IsReadOnly="True" Text="{Binding CartName}" />
-                            <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Content="Cart Configuration Name:" />
+                            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Cart Configuration Name:" />
                             <ComboBox Grid.Row="1" Grid.Column="1" Width="506" HorizontalAlignment="Left" Margin="3" SelectedItem="{Binding CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                            <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Content="Separation Type:" />
+                            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Separation Type:" />
                             <ComboBox Grid.Row="2" Grid.Column="1" Width="302" HorizontalAlignment="Left" Margin="3" SelectedItem="{Binding SeparationType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding SeparationTypeComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         </Grid>
                         <Grid Height="170" Margin="0,10">
@@ -63,13 +63,13 @@
                     </StackPanel>
                 </GroupBox>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <Label Content="Minimum Sample Volume (uL)" />
-                    <xctk:DoubleUpDown Width="109" Increment="0.1" Value="{Binding MinVolume}"></xctk:DoubleUpDown>
-                    <Label Content="Time Zone" Margin="10,0,0,0"/>
+                    <TextBlock Text="Minimum Sample Volume (uL)" VerticalAlignment="Center" Margin="0,0,3,0" />
+                    <xctk:DoubleUpDown Width="109" Increment="0.1" Value="{Binding MinVolume}" />
+                    <TextBlock Text="Time Zone" Margin="10,0,3,0" VerticalAlignment="Center" />
                     <ComboBox Width="242" SelectedItem="{Binding TimeZone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding TimeZoneComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <Label Content="Write PDF to:" />
+                    <TextBlock Text="Write PDF to:" VerticalAlignment="Center" Margin="0,0,3,0" />
                     <TextBox Width="428" Text="{Binding PdfPath}" IsReadOnly="True" />
                     <Button Margin="5,0" Content="Browse" Command="{Binding BrowsePdfPathCommand}" />
                 </StackPanel>
@@ -79,10 +79,10 @@
             <StackPanel>
                 <GroupBox Header="Mass Spectrometer Instrument" Margin="5">
                     <StackPanel>
-                        <Label Content="Available Instruments" />
+                        <TextBlock Text="Available Instruments" />
                         <StackPanel Orientation="Horizontal">
                             <ComboBox Width="227" Margin="3" SelectedItem="{Binding InstrumentName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding InstrumentComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                            <Button Width="80" Margin="3" Command="{Binding SetInstrumentCommand}" IsEnabled="{Binding InstrumentNameNotSaved}">Set</Button>
+                            <Button Width="80" Margin="3" Command="{Binding SetInstrumentCommand}" IsEnabled="{Binding InstrumentNameNotSaved}" Content="Set" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
@@ -92,7 +92,7 @@
             <StackPanel>
                 <GroupBox Header="Data Auto-Upload DMS" Margin="5">
                     <StackPanel Margin ="5">
-                        <Label Content="Remote Trigger File Location" />
+                        <TextBlock Text="Remote Trigger File Location" />
                         <TextBox Margin="5,0" Text="{Binding TriggerLocation}" IsReadOnly="True" />
                     </StackPanel>
                 </GroupBox>

@@ -28,7 +28,7 @@
             <RowDefinition Height="8" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" HorizontalAlignment="Center" Content="{Binding PumpName}" />
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center" Text="{Binding PumpName}" />
         <oxy:PlotView Grid.Row="1" Model="{Binding DataPressureMonitorPlot}" Margin="-10,-5,0,-10" />
         <oxy:PlotView Grid.Row="3" Model="{Binding DataFlowMonitorPlot}" Margin="-10,-5,0,-10" />
         <!-- HACK: Can't use the same bounds as the first 2, because the the top left or bottom right corner needs to be visible within the disabled ScrollViewer (oxyplot bug) -->

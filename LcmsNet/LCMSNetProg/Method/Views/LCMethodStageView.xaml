@@ -11,37 +11,37 @@
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodStageViewModel}, IsDesignTimeCreatable=True}">
     <DockPanel LastChildFill="True">
         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
-            <Label DockPanel.Dock="Left" Margin="5" Foreground="Blue" Content="Method Name:" />
+            <TextBlock DockPanel.Dock="Left" Margin="5" Foreground="Blue" Text="Method Name:" VerticalAlignment="Center" />
             <ComboBox DockPanel.Dock="Left" Margin="3" Width="120" VerticalAlignment="Center" SelectedItem="{Binding SelectedSavedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding SavedMethodsComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <TextBox DockPanel.Dock="Left" Margin="3" Width="120"  VerticalAlignment="Center" Text="{Binding MethodName}" />
             <Button DockPanel.Dock="Left" Margin="3" Command="{Binding BuildMethodCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{StaticResource BuildImage}" MaxHeight="24" />
-                    <Label Content="Build" />
+                    <TextBlock Text="Build" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Left" Margin="3" Command="{Binding UpdateMethodCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{StaticResource BuildUpdateImage}" MaxHeight="24" />
-                    <Label Content="Update" />
+                    <TextBlock Text="Update" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAllMethodsCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{StaticResource SaveWithIndicatorImage}" MaxHeight="24" />
-                    <Label Content="Save All" />
+                    <TextBlock Text="Save All" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveMethodCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{StaticResource SaveWithIndicatorImage}" MaxHeight="24" />
-                    <Label Content="Save" />
+                    <TextBlock Text="Save" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding LoadMethodCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{StaticResource OpenImage}" MaxHeight="16" />
-                    <Label Content="Load" />
+                    <TextBlock Text="Load" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
         </DockPanel>
@@ -62,7 +62,7 @@
             <Button DockPanel.Dock="Left" Margin="3" Width="50" Command="{Binding MoveEventUpCommand}">
                 <Image Source="{StaticResource ButtonUpImage16}" MaxHeight="20" />
             </Button>
-            <Label DockPanel.Dock="Left" Margin="5" Foreground="Blue" Content="Column" />
+            <TextBlock DockPanel.Dock="Left" Margin="5" Foreground="Blue" Text="Column" VerticalAlignment="Center" />
             <ComboBox DockPanel.Dock="Left" Margin="3" Width="120" VerticalAlignment="Center" SelectedItem="{Binding SelectedColumn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ColumnComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
         </DockPanel>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">

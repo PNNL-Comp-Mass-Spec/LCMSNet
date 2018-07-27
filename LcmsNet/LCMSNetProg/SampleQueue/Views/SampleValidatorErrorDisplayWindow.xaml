@@ -20,6 +20,6 @@
                 <DataGridTextColumn Header="Error" Width="Auto" Binding="{Binding Error.Error}" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Row="1" Margin="3" Height="30" Width="70" HorizontalAlignment="Center" Content="OK" IsDefault="True" IsCancel="True" Click="Ok_OnClick"></Button>
+        <Button Grid.Row="1" Margin="3" Height="30" Width="70" HorizontalAlignment="Center" Content="OK" IsDefault="True" IsCancel="True" Click="Ok_OnClick" />
     </Grid>
 </Window>

@@ -13,7 +13,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{StaticResource MethodEditorImage}" MaxHeight="32" />
-                        <Label Content="Messages" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
+                        <TextBlock Text="Messages" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
                     </StackPanel>
                 </DataTemplate>
             </TabItem.HeaderTemplate>
@@ -27,7 +27,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{StaticResource ErrorsImage}" MaxHeight="32" />
-                        <Label Content="Errors" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
+                        <TextBlock Text="Errors" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
                     </StackPanel>
                 </DataTemplate>
             </TabItem.HeaderTemplate>

@@ -33,12 +33,12 @@
             <Button DockPanel.Dock="Left" Margin="3" Width="150" Content="Assign All Selected To Vial" Command="{Binding AssignSelectedToVialCommand}" />
             <xctk:IntegerUpDown DockPanel.Dock="Left" Margin="3" Width="80" Minimum="1" Maximum="10000" Value="{Binding AssignVial}" />
             <xctk:IntegerUpDown DockPanel.Dock="Right" Margin="3" Width="80" Minimum="1" Maximum="10000" Value="{Binding MaxVials}" />
-            <Label DockPanel.Dock="Right" Margin="3,3,0,3" Content="Max Vials"/>
+            <TextBlock DockPanel.Dock="Right" Margin="3,3,0,3" Text="Max Vials" VerticalAlignment="Center" />
             <Button DockPanel.Dock="Right" Margin="3" Width="150" Content="Auto Assign Vials" Command="{Binding AutoAssignVialsCommand}" />
         </DockPanel>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="3" BorderThickness="1" BorderBrush="Black">
             <StackPanel Margin="5,5">
-                <Label Content="Move To:" />
+                <TextBlock Text="Move To:" Margin="3,0" />
                 <Button Margin="3" Height="30" Width="70" Content="Tray 1" Command="{Binding MoveToTray1Command}" />
                 <Button Margin="3" Height="30" Width="70" Content="Tray 2" Command="{Binding MoveToTray2Command}" />
                 <Button Margin="3" Height="30" Width="70" Content="Tray 3" Command="{Binding MoveToTray3Command}" />

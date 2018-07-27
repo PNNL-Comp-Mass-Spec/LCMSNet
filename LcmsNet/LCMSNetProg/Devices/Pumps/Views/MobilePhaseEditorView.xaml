@@ -18,8 +18,8 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="{StaticResource TestTubeImage32}" Margin="5" VerticalAlignment="Top" MaxHeight="32" />
-        <Label Grid.Row="0" Grid.Column="1" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Content="Mobile Phase" />
-        <Label Grid.Row="1" Grid.Column="1" Content="Comment" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,3,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Text="Mobile Phase" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Comment" VerticalAlignment="Center" />
         <TextBox Grid.Row="0" Grid.Column="2" Margin="3" Text="{Binding Name}" />
         <TextBox Grid.Row="1" Grid.Column="2" Margin="3" Text="{Binding Comment}" TextWrapping="Wrap" AcceptsReturn="True" />
     </Grid>

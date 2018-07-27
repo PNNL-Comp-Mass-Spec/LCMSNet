@@ -41,7 +41,7 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <Image Source="{StaticResource UndoImage16}" Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Row="0" />
-                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Row="1">Undo</TextBlock>
+                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Row="1" Text="Undo" />
             </Grid>
         </Button>
         <Button Grid.Column="1" Grid.Row="2" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding RedoCommand}" TabIndex="16" >
@@ -51,7 +51,7 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <Image Source="{StaticResource RedoImage16}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" />
-                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Row="1">Redo</TextBlock>
+                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Row="1" Text="Redo" />
             </Grid>
         </Button>
         <Image Grid.Row="2" Grid.Column="2" Margin="5" Source="{Binding SequencePreview}" Stretch="Fill" />
@@ -62,7 +62,7 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <Image Source="{StaticResource OkImage}" Stretch="Uniform" Grid.Column="0" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Column="1">Run</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Column="1" Margin="3,0" Text="Run" />
             </Grid>
         </Button>
         <Button Grid.Column="4" Grid.Row="2" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding StopQueueCommand}" TabIndex="18" Background="{Binding StopButtonBackColor}" IsEnabled="{Binding IsStopButtonEnabled}" >
@@ -72,7 +72,7 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <Image Source="{StaticResource NotOkImage}" Stretch="Uniform" Grid.Column="0" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Column="1">Stop</TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Grid.Column="1" Margin="3,0" Text="Stop" />
             </Grid>
         </Button>
     </Grid>

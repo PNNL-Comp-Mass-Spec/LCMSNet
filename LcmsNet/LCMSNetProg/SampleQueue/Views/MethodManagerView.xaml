@@ -33,7 +33,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" HorizontalAlignment="Right">Number of Methods to display: </Label>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Right" Text="Number of Methods to display:" Margin="3,0" VerticalAlignment="Center" />
             <xctk:IntegerUpDown Grid.Column="1" Minimum="1" Maximum="{Binding MaxMethodsVisible}" MaxWidth="60" HorizontalAlignment="Left" Value="{Binding MethodsVisible}" DefaultValue="2"></xctk:IntegerUpDown>
         </Grid>
         <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="0.3,0,0.3,0" />
@@ -90,7 +90,7 @@
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource AddImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Blank</TextBlock>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Blank" />
                 </Grid>
             </Button>
             <Button Grid.Column="1" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding AddBlankAppendCommand}" TabIndex="32">
@@ -100,7 +100,7 @@
                         <RowDefinition Height="1*" MinHeight="15" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource AddAppendBlankImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Blank</TextBlock>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Blank" />
                 </Grid>
             </Button>
             <Button Grid.Column="2" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding SampleDataManager.DMSAvailable}" Command="{Binding AddDMSCommand}" TabIndex="33" >
@@ -110,7 +110,7 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource AddDmsImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="41" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">DMS</TextBlock>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="DMS" />
                 </Grid>
             </Button>
             <Button Grid.Column="3" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding RemoveSelectedCommand}" TabIndex="34" >
@@ -120,7 +120,7 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource ButtonDeleteImage16}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Selected</TextBlock>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Selected" />
                 </Grid>
             </Button>
             <Button Grid.Column="4" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding DeleteUnusedCommand}" TabIndex="35" >
@@ -130,7 +130,7 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource ButtonDeleteImage16}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Unused</TextBlock>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Unused" />
                 </Grid>
             </Button>
             <Button Grid.Column="5" Margin="4" Command="{Binding MoveUpCommand}" TabIndex="29" >
@@ -146,7 +146,7 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource FillDownImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow">Fill Down</TextBlock>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow" Text="Fill Down" />
                 </Grid>
             </Button>
             <Button Grid.Column="8" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding TrayVialCommand}" TabIndex="37" >
@@ -156,7 +156,7 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource TestTubeImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow">Tray Vial</TextBlock>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow" Text="Tray Vial" />
                 </Grid>
             </Button>
             <Button Grid.Column="9" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding MoveToColumnCommand}" TabIndex="37" >
@@ -166,7 +166,7 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource ColumnImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="32" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow">Move</TextBlock>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow" Text="Move" />
                 </Grid>
             </Button>
             <Button Grid.Column="10" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding CartColumnDateCommand}" TabIndex="40" ToolTip="Add date, cart name, and columnID to the dataset name" >
@@ -176,7 +176,7 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource CartColumnNameImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="48" />
-                    <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1">Cart, Col, Date</TextBlock>
+                    <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Cart, Col, Date" />
                 </Grid>
             </Button>
             <Button Grid.Column="11" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding SampleDataManager.DMSAvailable}" Command="{Binding DmsEditCommand}" TabIndex="41">
@@ -186,7 +186,7 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Image Source="{StaticResource DmsEditImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="41" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow">DMS Edit</TextBlock>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow" Text="DMS Edit" />
                 </Grid>
             </Button>
         </Grid>

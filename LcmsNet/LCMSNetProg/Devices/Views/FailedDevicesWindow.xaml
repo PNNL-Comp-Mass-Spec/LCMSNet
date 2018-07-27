@@ -14,7 +14,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Content="These devices failed to initialize properly." />
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Text="These devices failed to initialize properly." />
         <DataGrid Grid.Row="1" Margin="3" AutoGenerateColumns="False" RowHeaderWidth="0" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" ColumnWidth="SizeToHeader" ItemsSource="{Binding DeviceErrorList}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Device Name" Binding="{Binding DeviceName}" />

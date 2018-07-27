@@ -30,8 +30,8 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Content="Minutes" />
-                <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Content="Seconds" />
+                <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Text="Minutes" />
+                <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Text="Seconds" />
                 <xctk:IntegerUpDown Grid.Row="1" Grid.Column="0" Margin="3" Width="98" Minimum="0" Maximum="10000" Value="{Binding Minutes}" />
                 <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Margin="3" Width="46" Minimum="0" Maximum="59" Value="{Binding Seconds}" />
             </Grid>
@@ -48,7 +48,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Content="Decimal Places" />
+                <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Text="Decimal Places" />
                 <xctk:IntegerUpDown Grid.Row="1" Grid.Column="0" Margin="3" Width="98" Minimum="0" Maximum="20" Value="{Binding DecimalPlaces}" />
             </Grid>
         </GroupBox>

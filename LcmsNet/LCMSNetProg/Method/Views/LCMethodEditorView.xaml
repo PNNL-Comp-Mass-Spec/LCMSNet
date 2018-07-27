@@ -37,7 +37,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <views:LCMethodSelectionView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding SelectedMethods}" />
-                    <Label Grid.Row="1" Grid.Column="0" Content="Preview Mode" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="3,0" Text="Preview Mode" VerticalAlignment="Center" />
                     <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding MethodTimelineThroughput.RenderMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PreviewModeComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 </Grid>
             </TabItem>
@@ -53,11 +53,11 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Animate" IsChecked="{Binding MethodPreviewOptions.Animate}" />
-                        <Label Grid.Row="1" Grid.Column="0" Content="Delay (ms)" />
-                        <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Width="60" Minimum="10" Maximum="30000" Value="{Binding MethodPreviewOptions.AnimateDelay}" />
-                        <Label Grid.Row="2" Grid.Column="0" Content="Frame Update" />
-                        <xctk:IntegerUpDown Grid.Row="2" Grid.Column="1" Width="60" Minimum="0" Maximum="1000" Value="{Binding MethodPreviewOptions.FrameDelay}" />
+                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" Content="Animate" IsChecked="{Binding MethodPreviewOptions.Animate}" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Delay (ms)" VerticalAlignment="Center" />
+                        <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Margin="3" Width="60" Minimum="10" Maximum="30000" Value="{Binding MethodPreviewOptions.AnimateDelay}" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Frame Update" VerticalAlignment="Center" />
+                        <xctk:IntegerUpDown Grid.Row="2" Grid.Column="1" Margin="3" Width="60" Minimum="0" Maximum="1000" Value="{Binding MethodPreviewOptions.FrameDelay}" />
                     </Grid>
                 </GroupBox>
             </TabItem>
