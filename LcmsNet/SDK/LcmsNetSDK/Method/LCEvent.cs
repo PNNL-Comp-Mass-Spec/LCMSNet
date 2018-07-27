@@ -112,7 +112,7 @@ namespace LcmsNetSDK.Method
         /// Gets or sets the duration for this action.
         ///
         /// Throws:
-        ///     classInvalidDurationException (value lt 0)
+        ///     classInvalidDurationException (value &lt; 0)
         /// </summary>
         public TimeSpan Duration
         {
