@@ -36,7 +36,15 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Calling this constructor is only for the windows form designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public MethodControlViewModel(bool commandsAreVisible = true) : base()
+        public MethodControlViewModel() : this(true) { }
+
+        /// <summary>
+        /// Default constructor for the sample view control that takes no arguments
+        /// but also no functionality unless the sample queue and dms form is supplied.
+        /// Calling this constructor is only for the windows form designer.
+        /// </summary>
+        [Obsolete("For WPF Design time use only.", true)]
+        public MethodControlViewModel(bool commandsAreVisible) : base()
         {
             filteredSamples = new ReactiveList<SampleViewModel>();
             CheckboxColumnVisible = false;

@@ -33,7 +33,15 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Calling this constructor is only for the windows ui designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public ColumnControlViewModel(bool commandsAreVisible = true) : base()
+        public ColumnControlViewModel() : this(true) { }
+
+        /// <summary>
+        /// Default constructor for the column view control that takes no arguments
+        /// but also no functionality unless the sample data manager and dms form is supplied.
+        /// Calling this constructor is only for the windows ui designer.
+        /// </summary>
+        [Obsolete("For WPF Design time use only.", true)]
+        public ColumnControlViewModel(bool commandsAreVisible) : base()
         {
             filteredSamples = new ReactiveList<SampleViewModel>();
             CheckboxColumnVisible = false;

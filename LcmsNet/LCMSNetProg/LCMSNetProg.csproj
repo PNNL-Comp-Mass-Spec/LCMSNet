@@ -306,6 +306,9 @@
     <Compile Include="SampleQueue\Views\MoveToMethodSelectorWindow.xaml.cs">
       <DependentUpon>MoveToMethodSelectorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SampleQueue\Views\QueueControlsView.xaml.cs">
+      <DependentUpon>QueueControlsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SampleQueue\Views\SampleBadBlockDisplayWindow.xaml.cs">
       <DependentUpon>SampleBadBlockDisplayWindow.xaml</DependentUpon>
     </Compile>
@@ -691,6 +694,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SampleQueue\Views\MoveToMethodSelectorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SampleQueue\Views\QueueControlsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
