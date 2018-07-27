@@ -68,9 +68,9 @@
             <TabItem ToolTip="Queue" IsSelected="{Binding QueueTabSelected, Mode=OneWayToSource}" x:Name="QueueTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource VialRealImage}" />
-                            <Label Content="Queue" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Height="25">
+                            <Image Source="{StaticResource VialRealImage}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock Text="Queue" Margin="3,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
@@ -79,9 +79,9 @@
             <TabItem ToolTip="Cart / Instrument Setup" x:Name="FluidicsDesignTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource WaterImage}" />
-                            <Label Content="Design" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Height="25">
+                            <Image Source="{StaticResource WaterImage}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock Text="Design" Margin="3,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
@@ -90,9 +90,9 @@
             <TabItem ToolTip="Simulate" Visibility="{Binding CanSimulate, Converter={StaticResource BoolToVis}}">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource SimulateImage}" />
-                            <Label Content="Simulate" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Height="25">
+                            <Image Source="{StaticResource SimulateImage}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock Text="Simulate" Margin="3,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
@@ -101,9 +101,9 @@
             <TabItem ToolTip="Progress" x:Name="ProgressTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource ProgressImage}" />
-                            <Label Content="Progress" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Height="25">
+                            <Image Source="{StaticResource ProgressImage}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock Text="Progress" Margin="3,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
@@ -112,9 +112,9 @@
             <TabItem ToolTip="Methods" x:Name="MethodsTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource MethodEditorImage}" />
-                            <Label Content="Methods" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Height="25">
+                            <Image Source="{StaticResource MethodEditorImage}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock Text="Methods" Margin="3,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
@@ -123,9 +123,9 @@
             <TabItem ToolTip="Pumps" x:Name="PumpsTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource Pumps2Image}" />
-                            <Label Content="Pumps" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Height="25">
+                            <Image Source="{StaticResource Pumps2Image}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock Text="Pumps" Margin="3,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
@@ -136,9 +136,9 @@
             <TabItem ToolTip="Notifications" x:Name="NotificationsTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource NotifyImage}" />
-                            <Label Content="Notifications" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Height="25">
+                            <Image Source="{StaticResource NotifyImage}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock Text="Notifications" Margin="3,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
@@ -147,15 +147,15 @@
             <TabItem ToolTip="Messages" x:Name="MessagesTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <Grid Height="Auto">
+                        <Grid  Height="25">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <!-- funny bindings because of how DataTemplates usually work with visual trees -->
-                            <Image Grid.Column="0" Source="{StaticResource StatusMessagesImage}" x:Name="MessageNormal" Visibility="{Binding DataContext.IsMessageNormal, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
-                            <Image Grid.Column="0" Source="{StaticResource StatusMessagesErrorImage}" x:Name="MessageError" Visibility="{Binding DataContext.IsMessageError, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
-                            <Label Grid.Column="1" Content="Messages" VerticalAlignment="Center" />
+                            <Image Grid.Column="0" Source="{StaticResource StatusMessagesImage}" x:Name="MessageNormal" Visibility="{Binding DataContext.IsMessageNormal, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <Image Grid.Column="0" Source="{StaticResource StatusMessagesErrorImage}" x:Name="MessageError" Visibility="{Binding DataContext.IsMessageError, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock Grid.Column="1" Text="Messages" Margin="3,0" VerticalAlignment="Center" />
                         </Grid>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
@@ -164,9 +164,9 @@
             <TabItem ToolTip="Config" x:Name="ConfigTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource GearsImage}" />
-                            <Label Content="Config" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Height="25">
+                            <Image Source="{StaticResource GearsImage}" RenderOptions.BitmapScalingMode="HighQuality" />
+                            <TextBlock Text="Config" Margin="3,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
