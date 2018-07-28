@@ -462,7 +462,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public AgilentPumpReplyErrorCodes StartPurge()
         {
             var reply = "";
-            return SendCommand("PURG 1", out reply, "");
+            return SendCommand("PURG 1", out reply);
         }
 
         /// <summary>
@@ -478,8 +478,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             var command = string.Format("PG{0} {1}, {2}", channel, Convert.ToInt32(flow), numberOfMinutes);
             var reply = "";
-            var error = "";
-            var worked = SendCommand(command, out reply, error);
+            var worked = SendCommand(command, out reply);
 
             if (worked != AgilentPumpReplyErrorCodes.No_Error)
                 return worked;
@@ -501,11 +500,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     break;
             }
             command = string.Format("PRGE {0}, 1, 1", bitField);
-            worked = SendCommand(command, out reply, error);
+            worked = SendCommand(command, out reply);
             if (worked != AgilentPumpReplyErrorCodes.No_Error)
                 return worked;
 
-            return SendCommand("PURG 1", out reply, error);
+            return SendCommand("PURG 1", out reply);
         }
 
         /// <summary>
@@ -519,7 +518,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var reply = "";
             var error = "";
             var command = "PURG 0";
-            var worked = SendCommand(command, out reply, error);
+            var worked = SendCommand(command, out reply);
             return worked;
         }
 
@@ -767,8 +766,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             var worked = SendCommand(
                 string.Format("MONI:STRT {0},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", TotalMonitoringSecondsElapsed),
-                out reply,
-                errorMessage);
+                out reply);
 
             if (worked != AgilentPumpReplyErrorCodes.No_Error)
             {
@@ -996,15 +994,22 @@ namespace LcmsNetPlugins.Agilent.Pumps
         }
 
         /// <summary>
-        /// Sends a command to the pump
+        /// Overload that reports extra details on error
         /// </summary>
-        /// <param name="command">The command to execute</param>
-        /// <param name="reply">The string to fill with the reply</param>
-        /// <param name="errorstring">Any error results</param>
+        /// <param name="command"></param>
+        /// <param name="reply"></param>
+        /// <param name="errorMessage"></param>
+        /// <param name="readChannel"></param>
         /// <returns></returns>
-        private AgilentPumpReplyErrorCodes SendCommand(string command, out string reply, string errorstring)
+        private AgilentPumpReplyErrorCodes SendCommand(string command, out string reply, string errorMessage, Channel readChannel = null)
         {
-            return SendCommand(command, out reply, errorstring, m_inChannel);
+            var result = SendCommand(command, out reply, readChannel);
+            if (result != AgilentPumpReplyErrorCodes.No_Error)
+            {
+                ApplicationLogger.LogError(0, errorMessage);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -1012,16 +1017,21 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         /// <param name="command"></param>
         /// <param name="reply"></param>
-        /// <param name="errorstring"></param>
         /// <param name="readChannel"></param>
         /// <returns></returns>
-        private AgilentPumpReplyErrorCodes SendCommand(string command, out string reply, string errorstring, Channel readChannel)
+        private AgilentPumpReplyErrorCodes SendCommand(string command, out string reply, Channel readChannel = null)
         {
             reply = "";
             if (Emulation)
             {
                 return AgilentPumpReplyErrorCodes.No_Error;
             }
+
+            if (readChannel == null)
+            {
+                readChannel = m_inChannel;
+            }
+
             //Send the command over our serial port
             //TODO: Wrap this in exception checking
             //      (if there is an error, send out errorstring)
@@ -1292,8 +1302,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return 0.0;
             }
             var reply = "";
-            SendCommand("ACT:COMP?", out reply, "Attmempting to query composition of solvent B.");
-            //expect: RA 0000 ACT:PRES 16.00
+            SendCommand("ACT:COMP?", out reply, "Attempting to query composition of solvent B.");
+            //expect: RA 0000 ACT:COMP 16.00,84.00,-1.0,-1.0
 
             if (reply.Contains("COMP"))
             {
@@ -1308,7 +1318,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             reply = "";
-            SendCommand("ACT:COMP?", out reply, "Attmempting to query composition of solvent B.");
+            SendCommand("ACT:COMP?", out reply, "Attempting to query composition of solvent B.");
             if (reply.Contains("COMP"))
             {
                 var replies = reply.Split(' ');
@@ -1489,7 +1499,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return 0.0;
             }
             var reply = "";
-            SendCommand("ACT:PRES?", out reply, "Attmempting to query pressure.");
+            SendCommand("ACT:PRES?", out reply, "Attempting to query pressure.");
             //expect: RA 0000 ACT:PRES 16.00
 
             if (reply.Contains("ACT:PRES"))
@@ -1504,7 +1514,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             reply = "";
-            SendCommand("ACT:PRES?", out reply, "Attmempting to query pressure.");
+            SendCommand("ACT:PRES?", out reply, "Attempting to query pressure.");
             //expect: RA 0000 ACT:PRES 16.00
 
             if (reply.Contains("ACT:PRES"))
@@ -1603,7 +1613,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public void Identify()
         {
-            SendCommand("IDN", out var reply, "");
+            SendCommand("IDN", out var reply);
         }
 
         /// <summary>
@@ -1613,12 +1623,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             try
             {
-                var errorMessage = "";
                 var reply = "";
 
                 // Get the firmware revision of the running system
                 // "IDN? gets "<manufacturer>,<model>,<serialNumber>,<running firmware revision>"; "IDN" causes "Identify by frontend LED"
-                var gotIdent = SendCommand("IDN?", out reply, errorMessage);
+                var gotIdent = SendCommand("IDN?", out reply);
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
                 if (gotIdent == AgilentPumpReplyErrorCodes.No_Error)
                 {
@@ -1630,18 +1639,18 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 }
 
                 // Also can use "REV? 0|1|2" for main|resident|boot firmware revisions
-                SendCommand("REV? 0", out reply, errorMessage);
+                SendCommand("REV? 0", out reply);
                 PumpInfo.MainFirmware = reply.Split(',')[1].Trim('"');
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
-                SendCommand("REV? 1", out reply, errorMessage);
+                SendCommand("REV? 1", out reply);
                 PumpInfo.ResidentFirmware = reply.Split(',')[1].Trim('"');
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
-                SendCommand("REV? 2", out reply, errorMessage);
+                SendCommand("REV? 2", out reply);
                 PumpInfo.BootFirmware = reply.Split(',')[1].Trim('"');
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
                 // Can also use "BLDN?" to get the firmware build number
-                SendCommand("BLDN?", out reply, errorMessage);
+                SendCommand("BLDN?", out reply);
                 PumpInfo.FirmwareBuildNumber = reply.Split(' ').Last().Trim('"');
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
@@ -1654,12 +1663,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
                 // "MFGD?" gets the instrument manufacture date as a unix timestamp
-                SendCommand("MFGD?", out reply, errorMessage);
+                SendCommand("MFGD?", out reply);
                 PumpInfo.ManufactureDateUtc = DateTimeOffset.FromUnixTimeSeconds(long.Parse(reply.Split(' ').Last())).DateTime;
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
                 // "OPT?" gets the option listing
-                SendCommand("OPT?", out reply, errorMessage);
+                SendCommand("OPT?", out reply);
                 PumpInfo.Options = reply.Split('"')[1];
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
@@ -1668,12 +1677,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
                 // "TIME?" gets the time as a unix timestamp; can set with "TIME secsSince1970"
-                SendCommand("TIME?", out reply, errorMessage);
+                SendCommand("TIME?", out reply);
                 PumpInfo.ModuleDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(reply.Split(' ').Last())).DateTime.ToLocalTime();
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
                 // "NAME?" gets the symbolic module name; "NAME MyName" sets it
-                SendCommand("NAME?", out reply, errorMessage);
+                SendCommand("NAME?", out reply);
                 PumpInfo.ModuleName = reply.Split('"')[1];
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
             }
@@ -1692,7 +1701,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             try
             {
-                var errorMessage = "";
                 var reply = "";
                 string[] split;
 
@@ -1707,7 +1715,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 ////ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
                 // STAT? and ACT:STAT? get module states, STAT? gets the states in ASCII format, ACT:STAT? in decimal format
-                SendCommand("ACT:STAT?", out reply, errorMessage);
+                SendCommand("ACT:STAT?", out reply);
 
                 var loc = reply.IndexOf("ACT:STAT", StringComparison.OrdinalIgnoreCase);
                 split = reply.Substring(loc + 9).Split(new char[] { '"', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -1718,7 +1726,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 status.TestState = (AgilentPumpStateTest)int.Parse(split[4]);
 
                 // ACT:BTMP? gets board temperature and leak status: ACT:BTMP? <boardtempC>,<leakSensorCurrent>,<leakState>
-                SendCommand("ACT:BTMP?", out reply, errorMessage);
+                SendCommand("ACT:BTMP?", out reply);
                 split = reply.Substring(17).Split(',');
                 status.BoardTemperatureC = split[0];
                 status.LeakSensorCurrentMa = split[1];
@@ -1747,11 +1755,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
                 // ACT:NRDY? gets the not ready status code, corresponding to bit flags
-                SendCommand("ACT:NRDY?", out reply, errorMessage);
+                SendCommand("ACT:NRDY?", out reply);
                 status.NotReadyReasons = (AgilentPumpNotReadyStates) int.Parse(reply.Split(' ').Last());
 
                 // ACT:SRDY? gets the start not ready status code, corresponding to bit flags
-                SendCommand("ACT:SRDY?", out reply, errorMessage);
+                SendCommand("ACT:SRDY?", out reply);
                 status.StartNotReadyReasons = (AgilentPumpStartNotReadyStates)int.Parse(reply.Split(' ').Last());
             }
             catch (Exception e)
@@ -1764,7 +1772,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var reply = "";
-            SendCommand($"TIME {timestamp}", out reply, "");
+            SendCommand($"TIME {timestamp}", out reply);
             //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
             RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
         }
@@ -1782,7 +1790,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             var reply = "";
-            SendCommand($"NAME \"{newName}\"", out reply, "");
+            SendCommand($"NAME \"{newName}\"", out reply);
             //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
             RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
         }
