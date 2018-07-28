@@ -692,8 +692,42 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             m_module = m_pumps.CreateModule(m_pumps.GetAccessPointIdentifier());
-            PumpModel = m_module.Type;
-            PumpSerial = m_module.Serial;
+            RxApp.MainThreadScheduler.Schedule(() =>
+            {
+                PumpModel = m_module.Type;
+                PumpSerial = m_module.Serial;
+            });
+
+            //
+            // Channel for inputs
+            //
+            m_inChannel = m_module.CreateChannel("IN");
+            if (m_inChannel.TryOpen(ReadMode.Polling) == false)
+            {
+                //"Could not open IN channel."
+                errorMessage = "Could not open the communication channel for input";
+                HandleError(errorMessage, CONST_INITIALIZE_ERROR);
+                return false;
+            }
+
+            var reply = "";
+            // Get the firmware revision of the running system
+            // "IDN? gets "<manufacturer>,<model>,<serialNumber>,<running firmware revision>"; "IDN" causes "Identify by frontend LED"
+            var gotIdent = SendCommand("IDN?", out reply, "");
+            var firmware = "";
+            //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
+            if (gotIdent == AgilentPumpReplyErrorCodes.No_Error)
+            {
+                var split = reply.Replace("\"", "").Split(',');
+                firmware = split[3];
+            }
+
+            RxApp.MainThreadScheduler.Schedule(() =>
+            {
+                PumpFirmware = firmware;
+                GetPumpInformation();
+                GetPumpStatus();
+            });
 
             //
             // Open a list channel to read time tables.
@@ -720,18 +754,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             //
-            // Channel for inputs
-            //
-            m_inChannel = m_module.CreateChannel("IN");
-            if (m_inChannel.TryOpen(ReadMode.Polling) == false)
-            {
-                //"Could not open IN channel."
-                errorMessage = "Could not open the communication channel for input";
-                HandleError(errorMessage, CONST_INITIALIZE_ERROR);
-                return false;
-            }
-
-            //
             // Monitoring for the pumps
             //
             m_monitorChannel = m_module.CreateChannel("MO");
@@ -742,20 +764,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
                 return false;
             }
-
-            var reply = "";
-            // Get the firmware revision of the running system
-            // "IDN? gets "<manufacturer>,<model>,<serialNumber>,<running firmware revision>"; "IDN" causes "Identify by frontend LED"
-            var gotIdent = SendCommand("IDN?", out reply, errorMessage);
-            //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
-            if (gotIdent == AgilentPumpReplyErrorCodes.No_Error)
-            {
-                var split = reply.Replace("\"", "").Split(',');
-                PumpFirmware = split[3];
-            }
-
-            GetPumpInformation();
-            GetPumpStatus();
 
             var worked = SendCommand(
                 string.Format("MONI:STRT {0},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", TotalMonitoringSecondsElapsed),
