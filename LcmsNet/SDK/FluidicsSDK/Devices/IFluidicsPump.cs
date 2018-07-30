@@ -27,6 +27,6 @@ namespace FluidicsSDK.Devices
         double GetPercentB();
         //actual measured flow rate
         double GetActualFlow();
-        double GetMixerVolume();
+        //double GetMixerVolume(); // Generally unnecessary, and is only even accessible on certain pumps
     }
 }

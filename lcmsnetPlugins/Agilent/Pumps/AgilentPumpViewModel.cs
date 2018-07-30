@@ -124,8 +124,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         private double flowRate;
         private double flowRateRead;
-        private double mixerVolume;
-        private double mixerVolumeRead;
+        //private double mixerVolume;
+        //private double mixerVolumeRead;
         private double percentB;
         private double percentBRead;
         private readonly ReactiveUI.ReactiveList<AgilentPumpModes> modeComboBoxOptions = new ReactiveUI.ReactiveList<AgilentPumpModes>();
@@ -160,17 +160,17 @@ namespace LcmsNetPlugins.Agilent.Pumps
             private set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref flowRateRead, value); }
         }
 
-        public double MixerVolume
-        {
-            get { return mixerVolume; }
-            set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref mixerVolume, value); }
-        }
+        //public double MixerVolume
+        //{
+        //    get { return mixerVolume; }
+        //    set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref mixerVolume, value); }
+        //}
 
-        public double MixerVolumeRead
-        {
-            get { return mixerVolumeRead; }
-            private set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref mixerVolumeRead, value); }
-        }
+        //public double MixerVolumeRead
+        //{
+        //    get { return mixerVolumeRead; }
+        //    private set { NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref mixerVolumeRead, value); }
+        //}
 
         public double PercentB
         {
@@ -255,12 +255,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public ReactiveUI.ReactiveCommand<Unit, Unit> SetFlowRateCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, double> ReadFlowRateCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetMixerVolumeCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, double> ReadMixerVolumeCommand { get; private set; }
+        //public ReactiveUI.ReactiveCommand<Unit, Unit> SetMixerVolumeCommand { get; private set; }
+        //public ReactiveUI.ReactiveCommand<Unit, double> ReadMixerVolumeCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> SetPercentBCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, double> ReadPercentBCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> SetModeCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, double> ReadPressureCommand { get; private set; }
+        public ReactiveUI.CombinedReactiveCommand<Unit, double> ReadAllCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> PumpOnCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> PumpOffCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; private set; }
@@ -280,13 +281,14 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private void SetupCommands()
         {
             SetFlowRateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetFlowRate(FlowRate)));
-            ReadFlowRateCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => FlowRateRead = Pump.GetActualFlow()));
-            SetMixerVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMixerVolume(MixerVolume)));
-            ReadMixerVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MixerVolumeRead = Pump.GetMixerVolume()));
+            ReadFlowRateCommand = ReactiveUI.ReactiveCommand.Create(() => FlowRateRead = Pump.GetActualFlow());
+            //SetMixerVolumeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMixerVolume(MixerVolume)));
+            //ReadMixerVolumeCommand = ReactiveUI.ReactiveCommand.Create(() => MixerVolumeRead = Pump.GetMixerVolume());
             SetPercentBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPercentB(PercentB)));
-            ReadPercentBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => PercentBRead = Pump.GetPercentB()));
+            ReadPercentBCommand = ReactiveUI.ReactiveCommand.Create(() => PercentBRead = Pump.GetPercentB());
             SetModeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMode(SelectedMode)));
-            ReadPressureCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pressure = Pump.GetPressure()));
+            ReadPressureCommand = ReactiveUI.ReactiveCommand.Create(() => Pressure = Pump.GetPressure());
+            ReadAllCommand = ReactiveUI.ReactiveCommand.CreateCombined(new [] {ReadFlowRateCommand, ReadPercentBCommand, ReadPressureCommand});
             PumpOnCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.On));
             PumpOffCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
             PumpStandbyCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Standby));

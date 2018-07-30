@@ -1109,23 +1109,23 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 out reply, "Attempting to set flow rate to " + newFlowRate.ToString(CultureInfo.InvariantCulture));
         }
 
-        /// <summary>
-        /// Sets the mixer volume
-        /// </summary>
-        /// <param name="newVolumeuL">The new mixer volume, in uL</param>
-        [LCMethodEvent("Set Mixer Volume", 1, "", -1, false)]
-        public void SetMixerVolume(double newVolumeuL)
-        {
-            if (Emulation)
-            {
-                return;
-            }
-
-            var reply = "";
-            if (newVolumeuL >= 0 && newVolumeuL <= 2000)
-                SendCommand("MVOL " + newVolumeuL.ToString(CultureInfo.InvariantCulture),
-                    out reply, "Attempting to set mixer volume to " + newVolumeuL.ToString(CultureInfo.InvariantCulture));
-        }
+        ///// <summary>
+        ///// Sets the mixer volume
+        ///// </summary>
+        ///// <param name="newVolumeuL">The new mixer volume, in uL</param>
+        //[LCMethodEvent("Set Mixer Volume", 1, "", -1, false)]
+        //public void SetMixerVolume(double newVolumeuL)
+        //{
+        //    if (Emulation)
+        //    {
+        //        return;
+        //    }
+        //
+        //    var reply = "";
+        //    if (newVolumeuL >= 0 && newVolumeuL <= 2000)
+        //        SendCommand("MVOL " + newVolumeuL.ToString(CultureInfo.InvariantCulture),
+        //            out reply, "Attempting to set mixer volume to " + newVolumeuL.ToString(CultureInfo.InvariantCulture));
+        //}
 
         /// <summary>
         /// Sets the percent B concentration.
@@ -1489,7 +1489,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         }
 
         /// <summary>
-        /// Gets the pressure
+        /// Gets the pressure (in bar)
         /// </summary>
         /// <returns>The pressure</returns>
         public double GetPressure()
@@ -1532,33 +1532,33 @@ namespace LcmsNetPlugins.Agilent.Pumps
             return double.NaN;
         }
 
-        /// <summary>
-        /// Gets the current mixer volume.
-        /// </summary>
-        /// <returns>The current mixer volume</returns>
-        public double GetMixerVolume()
-        {
-            if (Emulation)
-            {
-                return 0.0;
-            }
-            var reply = "";
-            SendCommand("MVOL?", out reply, "Attempting to query mixer volume.");
-            var start = reply.IndexOf("MVOL", StringComparison.InvariantCultureIgnoreCase);
-            if (start == -1)
-            {
-                reply = "";
-                SendCommand("MVOL?", out reply, "Attempting to query mixer volume.");
-                start = reply.IndexOf("MVOL", StringComparison.InvariantCultureIgnoreCase);
-                if (start == -1)
-                {
-                    HandleError("Invalid pump response to volume request", CONST_VOLUME_SET);
-                    return double.NaN;
-                }
-            }
-            reply = reply.Substring(start + 5, reply.Length - (start + 5));
-            return Convert.ToDouble(reply);
-        }
+        ///// <summary>
+        ///// Gets the current mixer volume.
+        ///// </summary>
+        ///// <returns>The current mixer volume</returns>
+        //public double GetMixerVolume()
+        //{
+        //    if (Emulation)
+        //    {
+        //        return 0.0;
+        //    }
+        //    var reply = "";
+        //    SendCommand("MVOL?", out reply, "Attempting to query mixer volume.");
+        //    var start = reply.IndexOf("MVOL", StringComparison.InvariantCultureIgnoreCase);
+        //    if (start == -1)
+        //    {
+        //        reply = "";
+        //        SendCommand("MVOL?", out reply, "Attempting to query mixer volume.");
+        //        start = reply.IndexOf("MVOL", StringComparison.InvariantCultureIgnoreCase);
+        //        if (start == -1)
+        //        {
+        //            HandleError("Invalid pump response to volume request", CONST_VOLUME_SET);
+        //            return double.NaN;
+        //        }
+        //    }
+        //    reply = reply.Substring(start + 5, reply.Length - (start + 5));
+        //    return Convert.ToDouble(reply);
+        //}
 
         /// <summary>
         /// Gets the actual flow rate

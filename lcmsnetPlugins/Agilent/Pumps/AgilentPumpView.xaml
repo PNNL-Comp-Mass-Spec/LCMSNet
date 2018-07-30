@@ -31,7 +31,12 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
@@ -47,115 +52,71 @@
                         <TextBlock Grid.Column="4" Margin="3" Text="    Firmware:" />
                         <TextBlock Grid.Column="5" Margin="3" Text="{Binding Pump.PumpFirmware}" />
                     </Grid>
-                    <GroupBox Grid.Row="1" Margin="5,3" Header="Flow Rate">
+                    <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="5,3" Header="Fluid control">
                         <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="79*" />
-                                <ColumnDefinition Width="40*" />
-                                <ColumnDefinition Width="56*" />
-                                <ColumnDefinition Width="10*" />
-                                <ColumnDefinition Width="46*" />
-                                <ColumnDefinition Width="40*" />
-                                <ColumnDefinition Width="56*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" MinWidth="50" />
+                                <ColumnDefinition Width="Auto" MinWidth="20" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" MinWidth="50" />
                             </Grid.ColumnDefinitions>
-                            <xctk:DoubleUpDown Grid.Column="0" Margin="3" Minimum="0" Maximum="1000" Value="{Binding FlowRate}" FormatString="F4" />
-                            <TextBlock Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="uL/min" />
-                            <Button Grid.Column="2" Margin="3" Content="Set" Command="{Binding SetFlowRateCommand}" />
-                            <TextBox Grid.Column="4" Margin="3" Text="{Binding FlowRateRead, Mode=OneWay, StringFormat='0.000'}" IsEnabled="False" />
-                            <TextBlock Grid.Column="5" Margin="3" VerticalAlignment="Center" Text="uL/min" />
-                            <Button Grid.Column="6" Margin="3" Content="Retrieve" Command="{Binding ReadFlowRateCommand}" />
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Flow Rate (&#181;L/min):" />
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="3" Text="{Binding FlowRateRead, Mode=OneWay, StringFormat='0.000'}" IsEnabled="False" />
+                            <Button Grid.Row="0" Grid.Column="2" Margin="3" Content="Read" Command="{Binding ReadFlowRateCommand}" />
+                            <xctk:DoubleUpDown Grid.Row="0" Grid.Column="4" Margin="3" Minimum="0" Maximum="1000" Value="{Binding FlowRate}" FormatString="F4" />
+                            <Button Grid.Row="0" Grid.Column="5" Margin="3" Content="Set" Command="{Binding SetFlowRateCommand}" />
+                            <!-- Not used, not settable via software:
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Mixer Volume (&#181;L):" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="3" Text="{Binding MixerVolumeRead, Mode=OneWay, StringFormat='0.000'}" IsEnabled="False" />
+                            <Button Grid.Row="1" Grid.Column="2" Margin="3" Content="Read" Command="{Binding ReadMixerVolumeCommand}" />
+                            <xctk:DoubleUpDown Grid.Row="1" Grid.Column="4" Margin="3" Minimum="0" Maximum="2000" Value="{Binding MixerVolume}" FormatString="F4" />
+                            <Button Grid.Row="1" Grid.Column="5" Margin="3" Content="Set" Command="{Binding SetMixerVolumeCommand}" /> -->
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="%B (%):" />
+                            <TextBox Grid.Row="2" Grid.Column="1" Margin="3" Text="{Binding PercentBRead, Mode=OneWay, StringFormat='0.0'}" IsEnabled="False" />
+                            <Button Grid.Row="2" Grid.Column="2" Margin="3" Content="Read" Command="{Binding ReadPercentBCommand}" />
+                            <xctk:DoubleUpDown Grid.Row="2" Grid.Column="4" Margin="3" Minimum="0" Maximum="100" Increment="1" FormatString="F1" Value="{Binding PercentB}" />
+                            <Button Grid.Row="2" Grid.Column="5" Margin="3" Content="Set" Command="{Binding SetPercentBCommand}" />
+                            <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" VerticalAlignment="Center" Text="Pressure (bar):" />
+                            <TextBox Grid.Row="3" Grid.Column="1" Margin="3" Text="{Binding Pressure, Mode=OneWay, StringFormat='0.000'}" IsEnabled="False" />
+                            <Button Grid.Row="3" Grid.Column="2" Margin="3" Content="Read" Command="{Binding ReadPressureCommand}" />
+                            <Button Grid.Row="4" Grid.Column="1" Margin="3" Content="Read All" Command="{Binding ReadAllCommand}" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Grid.Row="2" Margin="5,3" Header="Mixer Volume">
+                    <GroupBox Grid.Row="2" Grid.Column="0" Margin="5,3" Header="Mode">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="79*" />
-                                <ColumnDefinition Width="40*" />
-                                <ColumnDefinition Width="56*" />
-                                <ColumnDefinition Width="10*" />
-                                <ColumnDefinition Width="46*" />
-                                <ColumnDefinition Width="40*" />
-                                <ColumnDefinition Width="56*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
-                            <xctk:DoubleUpDown Grid.Column="0" Margin="3" Minimum="0" Maximum="1000" Value="{Binding MixerVolume}" FormatString="F4" />
-                            <TextBlock Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="uL" />
-                            <Button Grid.Column="2" Margin="3" Content="Set" Command="{Binding SetMixerVolumeCommand}" />
-                            <TextBox Grid.Column="4" Margin="3" Text="{Binding MixerVolumeRead, Mode=OneWay, StringFormat='0.000'}" IsEnabled="False" />
-                            <TextBlock Grid.Column="5" Margin="3" VerticalAlignment="Center" Text="uL" />
-                            <Button Grid.Column="6" Margin="3" Content="Retrieve" Command="{Binding ReadMixerVolumeCommand}" />
+                            <ComboBox Grid.Column="0" Margin="3" ItemsSource="{Binding ModeComboBoxOptions}" SelectedItem="{Binding SelectedMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                            <Button Grid.Column="1" Margin="3" Content="Set" Command="{Binding SetModeCommand}" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Grid.Row="3" Margin="5,3" Header="%B">
+                    <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,3" Header="Pumps On/Off">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="79*" />
-                                <ColumnDefinition Width="40*" />
-                                <ColumnDefinition Width="56*" />
-                                <ColumnDefinition Width="10*" />
-                                <ColumnDefinition Width="46*" />
-                                <ColumnDefinition Width="40*" />
-                                <ColumnDefinition Width="56*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <xctk:DoubleUpDown Grid.Column="0" Margin="3" Minimum="0" Maximum="100" Increment="1" FormatString="F1" Value="{Binding PercentB}" />
-                            <TextBlock Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="%" />
-                            <Button Grid.Column="2" Margin="3" Content="Set" Command="{Binding SetPercentBCommand}" />
-                            <TextBox Grid.Column="4" Margin="3" Text="{Binding PercentBRead, Mode=OneWay, StringFormat='0.0'}" IsEnabled="False" />
-                            <TextBlock Grid.Column="5" Margin="3" VerticalAlignment="Center" Text="%" />
-                            <Button Grid.Column="6" Margin="3" Content="Retrieve" Command="{Binding ReadPercentBCommand}" />
+                            <Button Grid.Column="0" Margin="3" Width="38" Content="ON" Background="LightGray" Command="{Binding PumpOnCommand}" />
+                            <Button Grid.Column="1" Margin="3" Width="38" Content="OFF" Background="Gray" Foreground="White" Command="{Binding PumpOffCommand}" />
+                            <Button Grid.Column="2" Margin="3" Width="54" Content="Standby" Background="DimGray" Foreground="White" Command="{Binding PumpStandbyCommand}" />
+                            <TextBlock Grid.Column="3" Margin="3" VerticalAlignment="Center" Text="{Binding Pump.PumpState}" />
                         </Grid>
                     </GroupBox>
-                    <Grid Grid.Row="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="193*" />
-                            <ColumnDefinition Width="156*" />
-                        </Grid.ColumnDefinitions>
-                        <GroupBox Grid.Column="0" Margin="5,3,3,3" Header="Mode">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="79*" />
-                                    <ColumnDefinition Width="40*" />
-                                    <ColumnDefinition Width="56*" />
-                                </Grid.ColumnDefinitions>
-                                <ComboBox Grid.Column="0" Margin="3" ItemsSource="{Binding ModeComboBoxOptions}" SelectedItem="{Binding SelectedMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                                <Button Grid.Column="2" Margin="3" Content="Set" Command="{Binding SetModeCommand}" />
-                            </Grid>
-                        </GroupBox>
-                        <GroupBox Grid.Column="1" Margin="3,3,5,3" Header="Pressure">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50*" />
-                                    <ColumnDefinition Width="30*" />
-                                    <ColumnDefinition Width="56*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBox Grid.Column="0" Margin="3" Text="{Binding Pressure, Mode=OneWay, StringFormat='0.000'}" IsEnabled="False" />
-                                <TextBlock Grid.Column="1" Margin="3" VerticalAlignment="Center" Text="psi" />
-                                <Button Grid.Column="2" Margin="3" Content="Retrieve" Command="{Binding ReadPressureCommand}" />
-                            </Grid>
-                        </GroupBox>
-                    </Grid>
-                    <Grid Grid.Row="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <GroupBox Grid.Column="0" Margin="5,3" Header="Pumps On/Off">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" Margin="3" Width="38" Content="ON" Background="LightGray" Command="{Binding PumpOnCommand}" />
-                                <Button Grid.Column="1" Margin="3" Width="38" Content="OFF" Background="Gray" Foreground="White" Command="{Binding PumpOffCommand}" />
-                                <Button Grid.Column="2" Margin="3" Width="54" Content="Standby" Background="DimGray" Foreground="White" Command="{Binding PumpStandbyCommand}" />
-                                <TextBlock Grid.Column="3" Margin="3" VerticalAlignment="Center" Text="{Binding Pump.PumpState}" />
-                            </Grid>
-                        </GroupBox>
-                        <Button Grid.Column="2" Margin="5,3" Width="134" Content="PURGE" Command="{Binding PurgePumpCommand}" />
-                    </Grid>
-                    <GroupBox Grid.Row="6" Margin="5,3" MinHeight="120" Header="Operation">
+                    <Button Grid.Row="5" Grid.Column="2" HorizontalAlignment="Stretch" Margin="5,3" Content="PURGE" Command="{Binding PurgePumpCommand}" />
+                    <GroupBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Margin="5,3" MinHeight="120" Header="Operation">
                         <Grid Margin="10,3">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
