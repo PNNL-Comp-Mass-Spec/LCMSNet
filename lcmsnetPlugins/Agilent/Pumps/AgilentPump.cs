@@ -25,7 +25,6 @@ using LcmsNetData.System;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
-using ReactiveUI;
 
 namespace LcmsNetPlugins.Agilent.Pumps
 {
@@ -291,7 +290,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             if (m_pumps != null)
             {
                 GetPumpStatus(pumpStatusInternal);
-                RxApp.MainThreadScheduler.Schedule(() => PumpStatus.UpdateValues(pumpStatusInternal));
+                ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => PumpStatus.UpdateValues(pumpStatusInternal));
                 GetPumpState();
             }
         }
@@ -400,7 +399,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public string PumpModel
         {
             get => pumpModel;
-            private set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pumpModel, value);
+            private set => this.RaiseAndSetIfChanged(ref pumpModel, value);
         }
 
         /// <summary>
@@ -409,7 +408,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public string PumpSerial
         {
             get => pumpSerial;
-            private set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pumpSerial, value);
+            private set => this.RaiseAndSetIfChanged(ref pumpSerial, value);
         }
 
         /// <summary>
@@ -418,7 +417,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public string PumpFirmware
         {
             get => pumpFirmware;
-            private set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pumpFirmware, value);
+            private set => this.RaiseAndSetIfChanged(ref pumpFirmware, value);
         }
 
         /// <summary>
@@ -447,7 +446,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public PumpState PumpState
         {
             get => pumpState;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref pumpState, value);
+            set => this.RaiseAndSetIfChanged(ref pumpState, value);
         }
 
         #endregion
@@ -516,7 +515,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public AgilentPumpReplyErrorCodes AbortPurges(double timeout)
         {
             var reply = "";
-            var error = "";
             var command = "PURG 0";
             var worked = SendCommand(command, out reply);
             return worked;
@@ -691,7 +689,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             m_module = m_pumps.CreateModule(m_pumps.GetAccessPointIdentifier());
-            RxApp.MainThreadScheduler.Schedule(() =>
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
             {
                 PumpModel = m_module.Type;
                 PumpSerial = m_module.Serial;
@@ -721,7 +719,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 firmware = split[3];
             }
 
-            RxApp.MainThreadScheduler.Schedule(() =>
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
             {
                 PumpFirmware = firmware;
                 GetPumpInformation();
@@ -1279,7 +1277,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 }
 
                 var state = (PumpState) stateInt;
-                RxApp.MainThreadScheduler.Schedule(() => PumpState = state);
+                ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => PumpState = state);
                 return state;
             }
             catch (Exception e)
@@ -1287,7 +1285,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 ApplicationLogger.LogError(2, "Error getting pump state ", e);
             }
 
-            RxApp.MainThreadScheduler.Schedule(() => PumpState = PumpState.Unknown);
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => PumpState = PumpState.Unknown);
             return PumpState.Unknown;
         }
 
@@ -1774,7 +1772,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var reply = "";
             SendCommand($"TIME {timestamp}", out reply);
             //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
-            RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
         }
 
         public void SetModuleName(string newName)
@@ -1792,7 +1790,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var reply = "";
             SendCommand($"NAME \"{newName}\"", out reply);
             //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
-            RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
+            ReactiveUI.RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
         }
 
         #endregion

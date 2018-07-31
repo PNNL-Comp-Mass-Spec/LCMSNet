@@ -26,12 +26,9 @@ namespace DemoPluginLibrary
             Device = null;
         }
 
-        public IDevice Device
+        public override IDevice Device
         {
-            get
-            {
-                return m_PALdevice;
-            }
+            get { return m_PALdevice; }
             set
             {
                 m_PALdevice = value as DemoPAL;
@@ -59,7 +56,7 @@ namespace DemoPluginLibrary
 
         public ReactiveUI.ReactiveCommand<Unit, Unit> RunCommand { get; private set; }
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new DemoPALAdvancedControlView();
         }

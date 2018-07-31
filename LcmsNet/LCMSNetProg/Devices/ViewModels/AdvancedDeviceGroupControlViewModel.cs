@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using LcmsNetCommonControls.Devices;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
@@ -96,6 +97,10 @@ namespace LcmsNet.Devices.ViewModels
                 if (viewModel is BaseDeviceControlViewModel vm)
                 {
                     vm.WhenAnyValue(x => x.DeviceStatus).ToProperty(this, x => x.Status, out status);
+                }
+                else if (viewModel is BaseDeviceControlViewModelReactive vmr)
+                {
+                    vmr.WhenAnyValue(x => x.DeviceStatus).ToProperty(this, x => x.Status, out status);
                 }
             }
 

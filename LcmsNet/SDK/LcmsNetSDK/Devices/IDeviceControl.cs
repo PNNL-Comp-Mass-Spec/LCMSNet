@@ -1,4 +1,6 @@
-﻿namespace LcmsNetSDK.Devices
+﻿using System;
+
+namespace LcmsNetSDK.Devices
 {
     /// <summary>
     /// Describes the interface for user control's that interface a given hardware device or object.
@@ -7,8 +9,15 @@
     {
         #region "Events"
 
-        event DelegateNameChanged NameChanged;
-        event DelegateSaveRequired SaveRequired;
+        /// <summary>
+        ///  An event that indicates the name has changed. The parameter is the new name
+        /// </summary>
+        event EventHandler<string> NameChanged;
+
+        /// <summary>
+        /// An event that indicates the control needs to be saved
+        /// </summary>
+        event Action SaveRequired;
 
         #endregion
 
@@ -29,6 +38,10 @@
         /// </summary>
         string Name { get; set; }
 
+        /// <summary>
+        /// Gets an instance of the default view for this view model
+        /// </summary>
+        /// <returns></returns>
         global::System.Windows.Controls.UserControl GetDefaultView();
 
         #endregion

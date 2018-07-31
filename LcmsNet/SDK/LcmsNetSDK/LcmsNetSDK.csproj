@@ -68,7 +68,6 @@
     <Compile Include="Devices\DeviceStatus.cs" />
     <Compile Include="Devices\DeviceStatusEventArgs.cs" />
     <Compile Include="Devices\DeviceType.cs" />
-    <Compile Include="Devices\FileControlDelegates.cs" />
     <Compile Include="Devices\FileDeviceDelegates.cs" />
     <Compile Include="Devices\IAutoSampler.cs" />
     <Compile Include="Devices\IDevice.cs" />

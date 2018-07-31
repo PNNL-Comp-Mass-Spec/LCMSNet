@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using LcmsNetCommonControls.Controls;
-using LcmsNetData;
+using LcmsNetCommonControls.Devices;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.PALAutoSampler.Pal
 {
-    public class PalViewModel : BaseDeviceControlViewModel, IDeviceControl, IDisposable
+    public class PalViewModel : BaseDeviceControlViewModelReactive, IDeviceControl, IDisposable
     {
         #region Constructors
 
@@ -26,7 +27,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             isInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
 
-            vialRangeComboBoxOptions = new ReactiveUI.ReactiveList<VialRanges>(Enum.GetValues(typeof(VialRanges)).Cast<VialRanges>());
+            vialRangeComboBoxOptions = new ReactiveList<VialRanges>(Enum.GetValues(typeof(VialRanges)).Cast<VialRanges>());
 
             SetupCommands();
 
@@ -57,7 +58,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 Pal.DeviceSaveRequired += Pal_DeviceSaveRequired;
                 Pal.Free += OnFree;
 
-                ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
+                RxApp.MainThreadScheduler.Schedule(() =>
                 {
                     ProcessTrays(Pal.TrayNames);
                     ProcessMethods(Pal.MethodNames);
@@ -75,7 +76,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Indicates that the device is available to take commands
         /// </summary>
-        public event DelegateFree Free;
+        public event Action Free;
 
         #endregion
 
@@ -86,10 +87,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         private Pal pal;
 
-        private readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
-        private readonly ReactiveUI.ReactiveList<string> trayComboBoxOptions = new ReactiveUI.ReactiveList<string>();
-        private readonly ReactiveUI.ReactiveList<VialRanges> vialRangeComboBoxOptions;
-        private readonly ReactiveUI.ReactiveList<string> trayNamesAndMaxVial = new ReactiveUI.ReactiveList<string>();
+        private readonly ReactiveList<string> methodComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<string> trayComboBoxOptions = new ReactiveList<string>();
+        private readonly ReactiveList<VialRanges> vialRangeComboBoxOptions;
+        private readonly ReactiveList<string> trayNamesAndMaxVial = new ReactiveList<string>();
         private readonly bool isInDesignMode = false;
         private string selectedMethod = "";
         private string selectedTray = "";
@@ -109,11 +110,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         #region Properties
 
-        public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<string> TrayComboBoxOptions => trayComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<VialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<SerialPortData> PortNamesComboBoxOptions => SerialPortGenericData.SerialPorts;
-        public ReactiveUI.IReadOnlyReactiveList<string> TrayNamesAndMaxVial => trayNamesAndMaxVial;
+        public IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
+        public IReadOnlyReactiveList<string> TrayComboBoxOptions => trayComboBoxOptions;
+        public IReadOnlyReactiveList<VialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
+        public IReadOnlyReactiveList<SerialPortData> PortNamesComboBoxOptions => SerialPortGenericData.SerialPorts;
+        public IReadOnlyReactiveList<string> TrayNamesAndMaxVial => trayNamesAndMaxVial;
 
         public string SelectedMethod
         {
@@ -238,7 +239,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// The associated device (PAL).
         /// </summary>
-        public IDevice Device
+        public override IDevice Device
         {
             get { return Pal; }
             set
@@ -263,25 +264,25 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         #region Commands
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshMethodListCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RunMethodCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> StopMethodCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ApplyPortNameCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SelectVialsCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ResetPalCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> FullResetPalCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshMethodListCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RunMethodCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> StopMethodCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ApplyPortNameCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SelectVialsCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ResetPalCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> FullResetPalCommand { get; private set; }
 
         private void SetupCommands()
         {
-            RefreshMethodListCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => RefreshMethods());
-            RunMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => RunMethod());
-            StopMethodCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => StopMethod());
-            RefreshStatusCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => RefreshStatus());
-            ApplyPortNameCommand = ReactiveUI.ReactiveCommand.Create(() => ApplyPortName());
-            SelectVialsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => SelectVials());
-            ResetPalCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => ResetPal());
-            FullResetPalCommand = ReactiveUI.ReactiveCommand.CreateFromTask(() => FullyResetPal());
+            RefreshMethodListCommand = ReactiveCommand.CreateFromTask(() => RefreshMethods());
+            RunMethodCommand = ReactiveCommand.CreateFromTask(() => RunMethod());
+            StopMethodCommand = ReactiveCommand.CreateFromTask(() => StopMethod());
+            RefreshStatusCommand = ReactiveCommand.CreateFromTask(() => RefreshStatus());
+            ApplyPortNameCommand = ReactiveCommand.Create(() => ApplyPortName());
+            SelectVialsCommand = ReactiveCommand.CreateFromTask(() => SelectVials());
+            ResetPalCommand = ReactiveCommand.CreateFromTask(() => ResetPal());
+            FullResetPalCommand = ReactiveCommand.CreateFromTask(() => FullyResetPal());
         }
 
         private async Task SelectVials()
@@ -295,7 +296,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         #region Methods
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new PalView();
         }
@@ -312,16 +313,16 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             if (e.PropertyName.Equals(nameof(Pal.VialRange)))
             {
-                OnPropertyChanged(nameof(MaxVial));
+                this.RaisePropertyChanged(nameof(MaxVial));
             }
         }
 
         /// <summary>
         /// Indicates that the device is available to take commands
         /// </summary>
-        public virtual void OnFree(object sender)
+        public virtual void OnFree()
         {
-            Free?.Invoke(this);
+            Free?.Invoke();
             // m_runningMethodManually = false;
             //mButton_RunMethod.Text = "Run Method";
         }

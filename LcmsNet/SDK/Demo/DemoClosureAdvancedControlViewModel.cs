@@ -25,12 +25,9 @@ namespace DemoPluginLibrary
             Device = null;
         }
 
-        public IDevice Device
+        public override IDevice Device
         {
-            get
-            {
-                return closure;
-            }
+            get { return closure; }
             set
             {
                 closure = value as DemoClosure;
@@ -55,7 +52,7 @@ namespace DemoPluginLibrary
 
         public ReactiveUI.ReactiveCommand<Unit, Unit> SendCommand { get; private set; }
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new DemoClosureAdvancedControlView();
         }

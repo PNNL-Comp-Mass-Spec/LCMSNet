@@ -1,15 +1,21 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows.Controls;
-using LcmsNetData;
+using LcmsNetSDK.Devices;
+using ReactiveUI;
 
-namespace LcmsNetSDK.Devices
+namespace LcmsNetCommonControls.Devices
 {
-    public abstract class BaseDeviceControlViewModel : IDeviceControl, INotifyPropertyChangedExt
+    /// <summary>
+    /// Base class for control
+    /// </summary>
+    public abstract class BaseDeviceControlViewModelReactive : ReactiveObject, IDeviceControl
     {
         #region Methods
 
-        protected BaseDeviceControlViewModel()
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        protected BaseDeviceControlViewModelReactive()
         {
             this.PropertyChanged += (sender, args) =>
             {
@@ -31,6 +37,10 @@ namespace LcmsNetSDK.Devices
 
         #endregion
 
+        /// <summary>
+        /// Updates the device status line
+        /// </summary>
+        /// <param name="message"></param>
         protected virtual void UpdateStatusDisplay(string message)
         {
             DeviceStatus = "Status: " + message;
@@ -43,6 +53,10 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         public event EventHandler<string> NameChanged;
 
+        /// <summary>
+        /// Fires the NameChanged event
+        /// </summary>
+        /// <param name="newname"></param>
         public virtual void OnNameChanged(string newname)
         {
             NameChanged?.Invoke(this, newname);
@@ -53,6 +67,9 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         public event Action SaveRequired;
 
+        /// <summary>
+        /// Fires the SaveRequired event
+        /// </summary>
         public virtual void OnSaveRequired()
         {
             SaveRequired?.Invoke();
@@ -100,11 +117,5 @@ namespace LcmsNetSDK.Devices
         private string deviceStatus = "";
 
         #endregion
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

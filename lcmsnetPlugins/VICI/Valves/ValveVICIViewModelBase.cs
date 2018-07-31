@@ -4,14 +4,14 @@ using System.IO.Ports;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using LcmsNetData;
+using LcmsNetCommonControls.Devices;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.VICI.Valves
 {
-    public abstract class ValveVICIViewModelBase : BaseDeviceControlViewModel, IDeviceControl
+    public abstract class ValveVICIViewModelBase : BaseDeviceControlViewModelReactive, IDeviceControl
     {
         #region Constructors
 
@@ -43,7 +43,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
         protected readonly bool IsInDesignMode = false;
 
-        private readonly ReactiveUI.ReactiveList<char> valveIdComboBoxOptions = new ReactiveUI.ReactiveList<char>();
+        private readonly ReactiveList<char> valveIdComboBoxOptions = new ReactiveList<char>();
         private char selectedValveId = ' ';
         private char currentValveId = ' ';
         private string currentValvePosition = "";
@@ -55,7 +55,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
         #region Properties
 
-        public ReactiveUI.IReadOnlyReactiveList<char> ValveIdComboBoxOptions => valveIdComboBoxOptions;
+        public IReadOnlyReactiveList<char> ValveIdComboBoxOptions => valveIdComboBoxOptions;
 
         public char SelectedValveId
         {
@@ -96,34 +96,27 @@ namespace LcmsNetPlugins.VICI.Valves
             protected set { this.RaiseAndSetIfChanged(ref comPort, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the associated device.
-        /// </summary>
-        public abstract IDevice Device { get; set; }
-
-        public abstract UserControl GetDefaultView();
-
         #endregion
 
         #region Commands
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ClearValveIdCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshValveIdCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshValvePositionCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshValveVersionInfoCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> OpenPortCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ClosePortCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ClearValveIdCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshValveIdCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshValvePositionCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshValveVersionInfoCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> OpenPortCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ClosePortCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; private set; }
 
         private void SetupCommands()
         {
-            ClearValveIdCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearValveId()));
-            RefreshValveIdCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveId()));
-            RefreshValvePositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValvePosition()));
-            RefreshValveVersionInfoCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveVersion()));
-            OpenPortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
-            ClosePortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
-            InitializeDeviceCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InitializeDevice()));
+            ClearValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearValveId()));
+            RefreshValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveId()));
+            RefreshValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValvePosition()));
+            RefreshValveVersionInfoCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveVersion()));
+            OpenPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
+            ClosePortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
+            InitializeDeviceCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InitializeDevice()));
         }
 
         #endregion

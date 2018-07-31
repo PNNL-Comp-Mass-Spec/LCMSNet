@@ -5,20 +5,21 @@ using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetCommonControls.Controls;
-using LcmsNetData;
+using LcmsNetCommonControls.Devices;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.Teledyne.Pumps
 {
-    public class IscoPumpViewModel : BaseDeviceControlViewModel, IDeviceControl
+    public class IscoPumpViewModel : BaseDeviceControlViewModelReactive, IDeviceControl
     {
         #region "Constructors"
 
         public IscoPumpViewModel()
         {
-            controlModesComboBoxOptions = new ReactiveUI.ReactiveList<IscoControlMode>(Enum.GetValues(typeof(IscoControlMode)).Cast<IscoControlMode>());
-            operationModeComboBoxOptions = new ReactiveUI.ReactiveList<IscoOperationMode>(Enum.GetValues(typeof(IscoOperationMode)).Cast<IscoOperationMode>());
+            controlModesComboBoxOptions = new ReactiveList<IscoControlMode>(Enum.GetValues(typeof(IscoControlMode)).Cast<IscoControlMode>());
+            operationModeComboBoxOptions = new ReactiveList<IscoOperationMode>(Enum.GetValues(typeof(IscoOperationMode)).Cast<IscoOperationMode>());
             controlModesComboBoxOptions.Remove(IscoControlMode.External); // External is not an option...
             SetupCommands();
             PropertyChanged += PumpIscoViewModel_PropertyChanged;
@@ -28,7 +29,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         #region "Class variables"
 
-        public class RefillData : ReactiveUI.ReactiveObject
+        public class RefillData : ReactiveObject
         {
             public string PumpName { get; private set; }
             public string PumpLabel => PumpName + ":";
@@ -37,13 +38,13 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             public double RefillRate
             {
                 get { return refillRate; }
-                set { ReactiveUI.IReactiveObjectExtensions.RaiseAndSetIfChanged(this, ref refillRate, value); }
+                set { this.RaiseAndSetIfChanged(ref refillRate, value); }
             }
 
             public double MaxRefillRate
             {
                 get { return maxRefillRate; }
-                set { ReactiveUI.IReactiveObjectExtensions.RaiseAndSetIfChanged(this, ref maxRefillRate, value); }
+                set { this.RaiseAndSetIfChanged(ref maxRefillRate, value); }
             }
 
             private double refillRate;
@@ -56,26 +57,26 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             }
         }
 
-        public class LimitData : ReactiveUI.ReactiveObject
+        public class LimitData : ReactiveObject
         {
             public string LimitName { get; private set; }
 
             public string PumpA
             {
                 get { return pumpA; }
-                set { ReactiveUI.IReactiveObjectExtensions.RaiseAndSetIfChanged(this, ref pumpA, value); }
+                set { this.RaiseAndSetIfChanged(ref pumpA, value); }
             }
 
             public string PumpB
             {
                 get { return pumpB; }
-                set { ReactiveUI.IReactiveObjectExtensions.RaiseAndSetIfChanged(this, ref pumpB, value); }
+                set { this.RaiseAndSetIfChanged(ref pumpB, value); }
             }
 
             public string PumpC
             {
                 get { return pumpC; }
-                set { ReactiveUI.IReactiveObjectExtensions.RaiseAndSetIfChanged(this, ref pumpC, value); }
+                set { this.RaiseAndSetIfChanged(ref pumpC, value); }
             }
 
             public void SetLimit(int pumpIndex, string limit)
@@ -106,13 +107,13 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         private IscoPump pump = new IscoPump();
         private int pumpCount = 3;
-        private readonly ReactiveUI.ReactiveList<IscoPumpDisplayViewModel> pumpDisplays = new ReactiveUI.ReactiveList<IscoPumpDisplayViewModel>();
-        private readonly ReactiveUI.ReactiveList<IscoControlMode> controlModesComboBoxOptions;
-        private readonly ReactiveUI.ReactiveList<int> pumpCountComboBoxOptions = new ReactiveUI.ReactiveList<int>();
-        private readonly ReactiveUI.ReactiveList<int> unitAddressComboBoxOptions = new ReactiveUI.ReactiveList<int>();
-        private readonly ReactiveUI.ReactiveList<IscoOperationMode> operationModeComboBoxOptions;
-        private readonly ReactiveUI.ReactiveList<RefillData> refillRates = new ReactiveUI.ReactiveList<RefillData>();
-        private readonly ReactiveUI.ReactiveList<LimitData> limitsList = new ReactiveUI.ReactiveList<LimitData>();
+        private readonly ReactiveList<IscoPumpDisplayViewModel> pumpDisplays = new ReactiveList<IscoPumpDisplayViewModel>();
+        private readonly ReactiveList<IscoControlMode> controlModesComboBoxOptions;
+        private readonly ReactiveList<int> pumpCountComboBoxOptions = new ReactiveList<int>();
+        private readonly ReactiveList<int> unitAddressComboBoxOptions = new ReactiveList<int>();
+        private readonly ReactiveList<IscoOperationMode> operationModeComboBoxOptions;
+        private readonly ReactiveList<RefillData> refillRates = new ReactiveList<RefillData>();
+        private readonly ReactiveList<LimitData> limitsList = new ReactiveList<LimitData>();
         private string comPort = "";
         private int unitAddress = 6;
         private string notes = "";
@@ -126,14 +127,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         #region "Properties"
 
-        public ReactiveUI.IReadOnlyReactiveList<IscoPumpDisplayViewModel> PumpDisplays => pumpDisplays;
-        public ReactiveUI.IReadOnlyReactiveList<IscoControlMode> ControlModesComboBoxOptions => controlModesComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<int> PumpCountComboBoxOptions => pumpCountComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
-        public ReactiveUI.IReadOnlyReactiveList<int> UnitAddressComboBoxOptions => unitAddressComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<IscoOperationMode> OperationModeComboBoxOptions => operationModeComboBoxOptions;
-        public ReactiveUI.IReadOnlyReactiveList<RefillData> RefillRates => refillRates;
-        public ReactiveUI.IReadOnlyReactiveList<LimitData> LimitsList => limitsList;
+        public IReadOnlyReactiveList<IscoPumpDisplayViewModel> PumpDisplays => pumpDisplays;
+        public IReadOnlyReactiveList<IscoControlMode> ControlModesComboBoxOptions => controlModesComboBoxOptions;
+        public IReadOnlyReactiveList<int> PumpCountComboBoxOptions => pumpCountComboBoxOptions;
+        public IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
+        public IReadOnlyReactiveList<int> UnitAddressComboBoxOptions => unitAddressComboBoxOptions;
+        public IReadOnlyReactiveList<IscoOperationMode> OperationModeComboBoxOptions => operationModeComboBoxOptions;
+        public IReadOnlyReactiveList<RefillData> RefillRates => refillRates;
+        public IReadOnlyReactiveList<LimitData> LimitsList => limitsList;
 
         public string COMPort
         {
@@ -189,7 +190,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             set { this.RaiseAndSetIfChanged(ref portBaudRate, value); }
         }
 
-        public IDevice Device
+        public override IDevice Device
         {
             get { return pump; }
             set { RegisterDevice(value); }
@@ -205,34 +206,34 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         #region Commands
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetControlModeCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> StartAllCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> StopAllCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetAllFlowCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetAllPressureCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RefillAllCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> UpdateDisplaysCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetPortSettingsCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetOperationModeCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetControlModeCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> StartAllCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> StopAllCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetAllFlowCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetAllPressureCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefillAllCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> UpdateDisplaysCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetPortSettingsCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetOperationModeCommand { get; private set; }
 
         private void SetupCommands()
         {
-            SetControlModeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetControlMode()));
-            StartAllCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartAllPumps()));
-            StopAllCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopAllPumps()));
-            SetAllFlowCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetAllFlow()));
-            SetAllPressureCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetAllPressure()));
-            RefillAllCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefillAll()));
-            UpdateDisplaysCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshPumpDisplays()));
-            SetPortSettingsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPortProperties()));
-            SetOperationModeCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetOperationMode()));
+            SetControlModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetControlMode()));
+            StartAllCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartAllPumps()));
+            StopAllCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopAllPumps()));
+            SetAllFlowCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetAllFlow()));
+            SetAllPressureCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetAllPressure()));
+            RefillAllCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefillAll()));
+            UpdateDisplaysCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshPumpDisplays()));
+            SetPortSettingsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPortProperties()));
+            SetOperationModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetOperationMode()));
         }
 
         #endregion
 
         #region "Methods"
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new IscoPumpView();
         }
@@ -327,7 +328,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         private void AddPumpDisplay(IscoPumpDisplayViewModel pumpDisplay)
         {
             //pumpDisplay.InitViewModel(pumpDisplays.Count);
-            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => pumpDisplays.Add(pumpDisplay));
+            RxApp.MainThreadScheduler.Schedule(() => pumpDisplays.Add(pumpDisplay));
 
             pumpDisplay.SetpointChanged += PumpDisplays_SetpointChanged;
             pumpDisplay.StartRefill += PumpDisplays_StartRefill;
@@ -386,7 +387,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             if (LimitsList.Count == 0)
             {
-                ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
+                RxApp.MainThreadScheduler.Schedule(() =>
                 {
                     using (limitsList.SuppressChangeNotifications())
                     {

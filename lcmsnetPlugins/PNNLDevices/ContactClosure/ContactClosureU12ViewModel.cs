@@ -1,9 +1,10 @@
 ﻿using System;
+using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.ContactClosure;
-using LcmsNetData;
 using LcmsNetData.Logging;
 using LcmsNetPlugins.LabJack;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.PNNLDevices.ContactClosure
 {
@@ -93,7 +94,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
                 {
                     RegisterDevice(value);
 
-                    OnPropertyChanged(nameof(Port));
+                    this.RaisePropertyChanged(nameof(Port));
                 }
             }
         }

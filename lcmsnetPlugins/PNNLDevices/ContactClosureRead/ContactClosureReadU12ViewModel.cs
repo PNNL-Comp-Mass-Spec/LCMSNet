@@ -1,9 +1,10 @@
 ﻿using System;
+using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.ContactClosureRead;
-using LcmsNetData;
 using LcmsNetData.Logging;
 using LcmsNetPlugins.LabJack;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
 {
@@ -92,8 +93,8 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
                 {
                     RegisterDevice(value);
 
-                    OnPropertyChanged(nameof(IsAnalog));
-                    OnPropertyChanged(nameof(Port));
+                    this.RaisePropertyChanged(nameof(IsAnalog));
+                    this.RaisePropertyChanged(nameof(Port));
                 }
             }
         }

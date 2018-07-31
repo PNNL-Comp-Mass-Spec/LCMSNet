@@ -37,8 +37,8 @@ namespace LcmsNetPlugins.IDEX.Valves
 
         #region IDeviceControl Members
 #pragma warning disable 67
-        public event DelegateNameChanged NameChanged;
-        public event DelegateSaveRequired SaveRequired;
+        public event EventHandler<string> NameChanged;
+        public event Action SaveRequired;
 #pragma warning restore 67
 
         public bool Running { get; set; }

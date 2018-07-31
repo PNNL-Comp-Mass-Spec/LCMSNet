@@ -4,12 +4,13 @@ using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using LcmsNetData;
+using LcmsNetCommonControls.Devices;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.Newport.ESP300
 {
-    public class NewportStageViewModel : BaseDeviceControlViewModel, IDeviceControl
+    public class NewportStageViewModel : BaseDeviceControlViewModelReactive, IDeviceControl
     {
         public NewportStageViewModel()
         {
@@ -22,7 +23,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         private NewportStage newportStage;
         private const string units = "mm";
         private const string positionNotDefined = "NoPosition";
-        private readonly ReactiveUI.ReactiveList<string> positionsList = new ReactiveUI.ReactiveList<string>();
+        private readonly ReactiveList<string> positionsList = new ReactiveList<string>();
         private string axis1MotorStatus = "";
         private string axis2MotorStatus = "";
         private string axis3MotorStatus = "";
@@ -38,7 +39,7 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         #region Properties
 
-        public ReactiveUI.IReadOnlyReactiveList<string> PositionsList => positionsList;
+        public IReadOnlyReactiveList<string> PositionsList => positionsList;
 
         public string Axis1MotorStatus
         {
@@ -106,7 +107,7 @@ namespace LcmsNetPlugins.Newport.ESP300
             private set { this.RaiseAndSetIfChanged(ref newportStage, value); }
         }
 
-        public IDevice Device
+        public override IDevice Device
         {
             get { return NewportStage; }
             set { RegisterDevice(value); }
@@ -116,62 +117,62 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         #region Commands
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshPositionCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis1ForwardCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis2ForwardCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis3ForwardCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis1BackwardCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis2BackwardCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis3BackwardCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis1ForwardReleaseCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis2ForwardReleaseCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis3ForwardReleaseCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis1BackwardReleaseCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis2BackwardReleaseCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis3BackwardReleaseCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ResetToHomePositionCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> GoToSelectedPositionCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> DeletePositionCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetPositionCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis1MotorPowerCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis2MotorPowerCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> Axis3MotorPowerCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> GetErrorsCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ClearErrorsCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> OpenPortCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ClosePortCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshPositionCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis1ForwardCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis2ForwardCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis3ForwardCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis1BackwardCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis2BackwardCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis3BackwardCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis1ForwardReleaseCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis2ForwardReleaseCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis3ForwardReleaseCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis1BackwardReleaseCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis2BackwardReleaseCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis3BackwardReleaseCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ResetToHomePositionCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> GoToSelectedPositionCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> DeletePositionCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetPositionCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis1MotorPowerCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis2MotorPowerCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Axis3MotorPowerCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> GetErrorsCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ClearErrorsCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> OpenPortCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ClosePortCommand { get; private set; }
 
         private void SetupCommands()
         {
-            RefreshPositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshPosition()));
-            Axis1ForwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1FwdPress()));
-            Axis2ForwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2FwdPress()));
-            Axis3ForwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3FwdPress()));
-            Axis1ForwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1FwdRelease()));
-            Axis2ForwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2FwdRelease()));
-            Axis3ForwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3FwdRelease()));
-            Axis1BackwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1BackPress()));
-            Axis2BackwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2BackPress()));
-            Axis3BackwardCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3BackPress()));
-            Axis1BackwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1BackRelease()));
-            Axis2BackwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2BackRelease()));
-            Axis3BackwardReleaseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3BackRelease()));
-            ResetToHomePositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ResetToHome()));
-            GoToSelectedPositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GoToSelectedPosition()));
-            DeletePositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RemovePosition()));
-            SetPositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPosition()));
-            Axis1MotorPowerCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis1Motor()));
-            Axis2MotorPowerCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis2Motor()));
-            Axis3MotorPowerCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis3Motor()));
-            GetErrorsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GetErrors()));
-            ClearErrorsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearErrors()));
-            OpenPortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
-            ClosePortCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
+            RefreshPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshPosition()));
+            Axis1ForwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1FwdPress()));
+            Axis2ForwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2FwdPress()));
+            Axis3ForwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3FwdPress()));
+            Axis1ForwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1FwdRelease()));
+            Axis2ForwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2FwdRelease()));
+            Axis3ForwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3FwdRelease()));
+            Axis1BackwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1BackPress()));
+            Axis2BackwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2BackPress()));
+            Axis3BackwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3BackPress()));
+            Axis1BackwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1BackRelease()));
+            Axis2BackwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2BackRelease()));
+            Axis3BackwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3BackRelease()));
+            ResetToHomePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ResetToHome()));
+            GoToSelectedPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GoToSelectedPosition()));
+            DeletePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RemovePosition()));
+            SetPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPosition()));
+            Axis1MotorPowerCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis1Motor()));
+            Axis2MotorPowerCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis2Motor()));
+            Axis3MotorPowerCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis3Motor()));
+            GetErrorsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GetErrors()));
+            ClearErrorsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearErrors()));
+            OpenPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
+            ClosePortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
         }
 
         #endregion
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new NewportStageView();
         }
@@ -381,7 +382,7 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         private void UpdatePositionListBox()
         {
-            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
+            RxApp.MainThreadScheduler.Schedule(() =>
             {
                 using (positionsList.SuppressChangeNotifications())
                 {

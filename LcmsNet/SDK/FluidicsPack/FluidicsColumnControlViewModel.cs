@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows.Controls;
 using LcmsNetData;
 using LcmsNetSDK.Devices;
@@ -54,13 +55,13 @@ namespace FluidicsPack
         }
 
         #region IDeviceControl Members
-        public event DelegateNameChanged NameChanged
+        public event EventHandler<string> NameChanged
         {
             add { }
             remove { }
         }
 
-        public event DelegateSaveRequired SaveRequired
+        public event Action SaveRequired
         {
             add { }
             remove { }

@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.VICI.Valves
 {
@@ -17,8 +18,8 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public ValveVICI2PosViewModel()
         {
-            SetPositionACommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPositionA()));
-            SetPositionBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPositionB()));
+            SetPositionACommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPositionA()));
+            SetPositionBCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPositionB()));
         }
 
         protected override void RegisterDevice(IDevice device)
@@ -42,9 +43,9 @@ namespace LcmsNetPlugins.VICI.Valves
         #region Events
 
         /// <summary>
-        /// Indicates that the position of the valve has changed.
+        /// Indicates that the position of the valve has changed. Argument is the new position.
         /// </summary>
-        public event DelegatePositionChanged PosChanged;
+        public event EventHandler<string> PosChanged;
 
         #endregion
 
@@ -119,8 +120,8 @@ namespace LcmsNetPlugins.VICI.Valves
             }
         }
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetPositionACommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetPositionBCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetPositionACommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetPositionBCommand { get; private set; }
 
         #endregion
 

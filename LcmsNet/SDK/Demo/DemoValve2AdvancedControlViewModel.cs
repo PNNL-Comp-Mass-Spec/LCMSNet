@@ -30,12 +30,9 @@ namespace DemoPluginLibrary
             Device = null;
         }
 
-        public IDevice Device
+        public override IDevice Device
         {
-            get
-            {
-                return valve;
-            }
+            get { return valve; }
             set
             {
                 valve = value as DemoValve2;
@@ -64,7 +61,7 @@ namespace DemoPluginLibrary
         public ReactiveUI.ReactiveCommand<Unit, Unit> SetCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshCommand { get; private set; }
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new DemoValve2AdvancedControlView();
         }

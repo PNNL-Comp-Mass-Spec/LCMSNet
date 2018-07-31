@@ -4,9 +4,9 @@ using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetData;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetPlugins.VICI.Valves
 {
@@ -18,7 +18,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             //Populate the combobox
             PopulateComboBox();
-            SetValvePositionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetValvePosition()));
+            SetValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetValvePosition()));
         }
 
         protected override void RegisterDevice(IDevice device)
@@ -69,14 +69,14 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public event EventHandler<ValvePositionEventArgs<int>> PositionChanged;
 
-        private readonly ReactiveUI.ReactiveList<string> valvePositionComboBoxOptions = new ReactiveUI.ReactiveList<string>();
+        private readonly ReactiveList<string> valvePositionComboBoxOptions = new ReactiveList<string>();
         private string selectedValvePosition = "";
 
         #endregion
 
         #region Properties
 
-        public ReactiveUI.IReadOnlyReactiveList<string> ValvePositionComboBoxOptions => valvePositionComboBoxOptions;
+        public IReadOnlyReactiveList<string> ValvePositionComboBoxOptions => valvePositionComboBoxOptions;
 
         public string SelectedValvePosition
         {
@@ -138,7 +138,7 @@ namespace LcmsNetPlugins.VICI.Valves
             }
         }
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetValvePositionCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetValvePositionCommand { get; private set; }
 
         #endregion
 

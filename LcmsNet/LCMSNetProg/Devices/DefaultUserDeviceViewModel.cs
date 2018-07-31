@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetSDK.Devices;
 
@@ -27,7 +23,7 @@ namespace LcmsNet.Devices
         /// An event that indicates the name of the column has changed.
         /// </summary>
         /// <remarks>This event is required by IDeviceControl but this class does not use it</remarks>
-        public event DelegateNameChanged NameChanged
+        public event EventHandler<string> NameChanged
         {
             add { }
             remove { }
@@ -43,7 +39,7 @@ namespace LcmsNet.Devices
         /// An event that indicates the control needs to be saved
         /// </summary>
         /// <remarks>This event is required by IDeviceControl but this class does not use it</remarks>
-        public event DelegateSaveRequired SaveRequired
+        public event Action SaveRequired
         {
             add { }
             remove { }

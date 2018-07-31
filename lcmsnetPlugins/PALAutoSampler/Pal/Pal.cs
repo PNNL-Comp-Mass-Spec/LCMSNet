@@ -116,7 +116,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Indicates that the device is not busy and can accept commands.
         /// </summary>
-        public event DelegateDeviceFree Free;
+        public event Action Free;
 
         /// <summary>
         /// Fired when an error occurs in the device.
@@ -414,7 +414,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public virtual void OnFree()
         {
-            Free?.Invoke(this);
+            Free?.Invoke();
         }
 
         /// <summary>

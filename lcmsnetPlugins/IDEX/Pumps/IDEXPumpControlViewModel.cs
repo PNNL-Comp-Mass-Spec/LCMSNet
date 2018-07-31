@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
@@ -24,8 +25,8 @@ namespace LcmsNetPlugins.IDEX.Pumps
 
         #region IDeviceControl Members
 #pragma warning disable 67
-        public event DelegateNameChanged NameChanged;
-        public event DelegateSaveRequired SaveRequired;
+        public event EventHandler<string> NameChanged;
+        public event Action SaveRequired;
 #pragma warning restore 67
 
         public bool Running { get; set; }

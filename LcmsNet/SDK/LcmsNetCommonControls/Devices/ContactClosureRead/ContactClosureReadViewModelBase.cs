@@ -3,8 +3,8 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetData;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetCommonControls.Devices.ContactClosureRead
 {
@@ -12,7 +12,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
     /// Base view model for a contact closure read
     /// </summary>
     /// <typeparam name="T">Enum, with the output port options</typeparam>
-    public abstract class ContactClosureReadViewModelBase<T> : BaseDeviceControlViewModel, IDeviceControl where T : struct
+    public abstract class ContactClosureReadViewModelBase<T> : BaseDeviceControlViewModelReactive, IDeviceControl where T : struct
     {
         /// <summary>
         /// State for a contact closure
@@ -153,11 +153,6 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
             set { this.RaiseAndSetIfChanged(ref status, value); }
         }
 
-        /// <summary>
-        /// The device this view model is associated with
-        /// </summary>
-        public abstract IDevice Device { get; set; }
-
         #endregion
 
         #region Methods
@@ -166,7 +161,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// Get the Default view for this view model
         /// </summary>
         /// <returns></returns>
-        public virtual UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new ContactClosureReadView();
         }

@@ -1,6 +1,6 @@
 ﻿using System;
+using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.ContactClosure;
-using LcmsNetData;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
 

@@ -2,15 +2,15 @@
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetData;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNetCommonControls.Devices.NetworkStart
 {
     /// <summary>
     /// Control for detector triggered by network start signal (presently just a stub)
     /// </summary>
-    public abstract class NetStartViewModelBase : BaseDeviceControlViewModel, IDeviceControl
+    public abstract class NetStartViewModelBase : BaseDeviceControlViewModelReactive, IDeviceControl
     {
         #region "Constructors"
 
@@ -92,11 +92,6 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
             set { this.RaiseAndSetIfChanged(ref port, value); }
         }
 
-        /// <summary>
-        /// Device associated with this control
-        /// </summary>
-        public abstract IDevice Device { get; set; }
-
         #endregion
 
         #region Commands
@@ -131,7 +126,7 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// The default view to use with this view model
         /// </summary>
         /// <returns></returns>
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new NetStartView();
         }

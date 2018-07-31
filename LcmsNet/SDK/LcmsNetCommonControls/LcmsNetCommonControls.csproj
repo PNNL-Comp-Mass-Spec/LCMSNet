@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Controls\SerialPortData.cs" />
     <Compile Include="Controls\SerialPortGenericData.cs" />
+    <Compile Include="Devices\BaseDeviceControlViewModelReactive.cs" />
     <Compile Include="Devices\ContactClosureRead\ContactClosureReadView.xaml.cs">
       <DependentUpon>ContactClosureReadView.xaml</DependentUpon>
     </Compile>
@@ -73,6 +74,7 @@
     <Compile Include="Devices\Pumps\PumpDisplayView.xaml.cs">
       <DependentUpon>PumpDisplayView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Devices\ReactiveObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Styles\LcmsNetStyles.cs" />
     <Compile Include="Styles\StyleRefExtension.cs" />

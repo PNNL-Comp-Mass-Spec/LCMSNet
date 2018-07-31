@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetSDK.Devices;
@@ -14,8 +15,8 @@ namespace LcmsNetPlugins.ASIpump
         }
 
 #pragma warning disable 67
-        public event DelegateSaveRequired SaveRequired;
-        public event DelegateNameChanged NameChanged;
+        public event Action SaveRequired;
+        public event EventHandler<string> NameChanged;
 #pragma warning restore 67
 
         private AsiPump pump;
