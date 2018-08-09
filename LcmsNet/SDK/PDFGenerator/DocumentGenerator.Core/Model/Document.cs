@@ -116,7 +116,7 @@ namespace EMSL.DocumentGenerator.Core
 
             text = text.Replace("\r", string.Empty);
             string[] breakdown = text.Split(ParagraphSplitChars, StringSplitOptions.None);
-            
+
             foreach (var s in breakdown)
             {
                 if (string.IsNullOrWhiteSpace(s))

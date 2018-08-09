@@ -199,7 +199,7 @@ namespace EMSL.DocumentGenerator.PDFSharp
             XRect pdfImageRect = new XRect(new XPoint(PAGE_MARGIN, currentHeight), pdfImageSize);
             //define the height of the caption text
             double textHeight = 0;
-            
+
             if(image.CaptionText != null)
                 textHeight = FindTextHeight(image.CaptionText, captionFont, gfx, currentPage.Width - 2 * PAGE_MARGIN);
 
@@ -208,7 +208,7 @@ namespace EMSL.DocumentGenerator.PDFSharp
                 throw new InvalidImageException("Image and caption do not fit on one page.");
 
             //if the height of the image and text are too big to fit on the current page, start a new page and recalculate
-           
+
             if (currentPage.Height - PAGE_MARGIN < currentHeight + pdfImageSize.Height + textHeight + PAGE_MARGIN)
             {
                 MoveToNextPage(pSharpDoc, ref currentPage, ref currentHeight, ref gfx, ref tf);
@@ -235,7 +235,7 @@ namespace EMSL.DocumentGenerator.PDFSharp
                         gfx.DrawImage(imageItem, pdfImageRect);
                         tf.DrawString(image.CaptionText, captionFont, XBrushes.Black, new XRect(PAGE_MARGIN, currentHeight + pdfImageSize.Height,
                             currentPage.Width - 2 * PAGE_MARGIN, textHeight), format);
-                    }                   
+                    }
                 }
                 else
                 {
@@ -243,7 +243,8 @@ namespace EMSL.DocumentGenerator.PDFSharp
                 }
                 //set the current height of the page, textHeight will be 0 if no caption text was specified, and so will have no effect on height.
                 currentHeight += pdfImageSize.Height + textHeight;
-            }               
+            }
+            imageItem.Dispose();
         }
 
 
@@ -271,7 +272,7 @@ namespace EMSL.DocumentGenerator.PDFSharp
 
         private void WriteText(string text, PdfDocument pSharpDoc, XFont font, ref PdfPage currentPage,
             ref double currentHeight, ref XGraphics gfx, ref XTextFormatter tf)
-        {           
+        {
             if (string.IsNullOrEmpty(text))
                 text = " ";
 
