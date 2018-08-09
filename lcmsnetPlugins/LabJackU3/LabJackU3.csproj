@@ -74,16 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>8.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Reactive">
-      <Version>4.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Reactive.Core">
-      <Version>4.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Reactive.Interfaces">
-      <Version>4.0.0</Version>
+      <Version>8.4.4</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
