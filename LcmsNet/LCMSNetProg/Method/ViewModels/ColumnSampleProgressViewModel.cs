@@ -27,7 +27,7 @@ namespace LcmsNet.Method.ViewModels
             SampleProgressFull.RenderCurrent = false;
             SampleProgressFull.RenderDisplayWindow = true;
 
-            this.WhenAnyValue(x => x.Minutes).Subscribe(x => this.PreviewMinutesUpdated());
+            this.WhenAnyValue(x => x.Minutes, x => x.Seconds).Subscribe(x => this.PreviewTimeUpdated());
 
             previewUpdateTimer = new Timer(UpdateDrawings, this, 1000, 1000);
         }
@@ -43,10 +43,12 @@ namespace LcmsNet.Method.ViewModels
             GC.SuppressFinalize(this);
         }
 
-        private string previewLabelText = "30-minute-preview";
+        private const int MinTimeSeconds = 5;
+
+        private string previewLabelText = "30-minute Preview";
         private int minutes = 30;
-        private int seconds = 1;
-        private int milliseconds = 1;
+        private int seconds = 0;
+        private int minSeconds = -1;
         private readonly Timer previewUpdateTimer;
         private SampleProgressViewModel sampleProgress;
         private SampleProgressViewModel sampleProgressFull;
@@ -57,22 +59,58 @@ namespace LcmsNet.Method.ViewModels
             set { this.RaiseAndSetIfChanged(ref previewLabelText, value); }
         }
 
+        public int MinSeconds
+        {
+            get => minSeconds;
+            set => this.RaiseAndSetIfChanged(ref minSeconds, value);
+        }
+
         public int Minutes
         {
             get { return minutes; }
-            set { this.RaiseAndSetIfChanged(ref minutes, value); }
+            set
+            {
+                if (minutes != value)
+                {
+                    if (value == 0)
+                    {
+                        MinSeconds = MinTimeSeconds;
+                        if (Seconds < MinSeconds)
+                        {
+                            Seconds = MinSeconds;
+                        }
+                    }
+                    else
+                    {
+                        MinSeconds = -1;
+                        if (Seconds == MinTimeSeconds)
+                        {
+                            Seconds = 0;
+                        }
+                    }
+                }
+
+                this.RaiseAndSetIfChanged(ref minutes, value);
+            }
         }
 
         public int Seconds
         {
             get { return seconds; }
-            set { this.RaiseAndSetIfChanged(ref seconds, value); }
-        }
-
-        public int Milliseconds
-        {
-            get { return milliseconds; }
-            set { this.RaiseAndSetIfChanged(ref milliseconds, value); }
+            set
+            {
+                if (value == 60)
+                {
+                    Minutes += 1;
+                    value = 0;
+                }
+                else if (value == -1)
+                {
+                    Minutes -= 1;
+                    value = 59;
+                }
+                this.RaiseAndSetIfChanged(ref seconds, value);
+            }
         }
 
         public SampleProgressViewModel SampleProgress
@@ -125,11 +163,24 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Updates preview label minute text.
         /// </summary>
-        private void PreviewMinutesUpdated()
+        private void PreviewTimeUpdated()
         {
-            PreviewLabelText = Minutes + "-minute-preview";
-            SampleProgress.PreviewMinutes = Minutes;
-            SampleProgressFull.PreviewMinutes = Minutes;
+            var labelText = Minutes + "-minute Preview";
+            if (Seconds == 0)
+            {
+                labelText = Minutes + "-minute Preview";
+            }
+            else if (Minutes == 0)
+            {
+                labelText = Seconds + "-second Preview";
+            }
+            else
+            {
+                labelText = $"{Minutes}:{Seconds:00}-minute Preview";
+            }
+            PreviewLabelText = labelText;
+            SampleProgress.UpdatePreviewTime(Minutes, Seconds);
+            SampleProgressFull.UpdatePreviewTime(Minutes, Seconds);
         }
 
         public event EventHandler<SampleProgressPreviewArgs> PreviewAvailable;

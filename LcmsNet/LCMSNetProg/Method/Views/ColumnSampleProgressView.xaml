@@ -19,12 +19,10 @@
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0" LastChildFill="False">
             <TextBlock DockPanel.Dock="Left" Margin="3" Text="{Binding PreviewLabelText}" VerticalAlignment="Center" />
-            <xctk:IntegerUpDown DockPanel.Dock="Right" Width="70" Margin="5" Minimum="1" Maximum="1000" Value="{Binding Milliseconds}" />
-            <TextBlock DockPanel.Dock="Right" Text=":" />
-            <xctk:IntegerUpDown DockPanel.Dock="Right" Width="70" Margin="5" Minimum="0" Maximum="59" Value="{Binding Seconds}" />
+            <xctk:IntegerUpDown DockPanel.Dock="Right" Width="70" Margin="5" Minimum="{Binding MinSeconds}" Maximum="60" Value="{Binding Seconds}" />
             <TextBlock DockPanel.Dock="Right" Text=":" />
             <xctk:IntegerUpDown DockPanel.Dock="Right" Width="70" Margin="5" Minimum="0" Maximum="3000" Value="{Binding Minutes}" />
-            <TextBlock DockPanel.Dock="Right" Text="Display (minutes : seconds : milliseconds):" VerticalAlignment="Center" />
+            <TextBlock DockPanel.Dock="Right" Text="Display (minutes : seconds):" VerticalAlignment="Center" />
         </DockPanel>
         <views:SampleProgressView Grid.Row="1" DataContext="{Binding SampleProgress}" />
         <GridSplitter Grid.Row="2" Height="8" BorderThickness="0,1" BorderBrush="DimGray" ShowsPreview="False" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows" Style="{styles:LcmsNetStyles GridSplitterWithDotsStyle}" />
@@ -33,7 +31,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Margin="3" Text="Four Column Preview" />
+            <TextBlock Grid.Row="0" Margin="3" Text="Enabled Columns Preview" />
             <views:SampleProgressView Grid.Row="1" DataContext="{Binding SampleProgressFull}" />
         </Grid>
     </Grid>

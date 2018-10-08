@@ -24,7 +24,6 @@ namespace LcmsNet.Method.ViewModels
         {
             // By default show N minutes
             PreviewMinutes = CONST_PREVIEW_MINUTES;
-            PreviewMilliseconds = CONST_PREVIEW_MILLISECONDS;
             PreviewSeconds = CONST_PREVIEW_SECONDS;
 
             // Create internal lists
@@ -215,11 +214,11 @@ namespace LcmsNet.Method.ViewModels
 
                         // But make sure we aren't rendering too little time.
                         if (span.TotalMinutes < 0)
-                            span = new TimeSpan(0, 0, PreviewMinutes, PreviewSeconds, PreviewMilliseconds);
+                            span = new TimeSpan(0, 0, PreviewMinutes, PreviewSeconds, 0);
                     }
                     else
                     {
-                        span = new TimeSpan(0, 0, PreviewMinutes, PreviewSeconds, PreviewMilliseconds);
+                        span = new TimeSpan(0, 0, PreviewMinutes, PreviewSeconds, 0);
                     }
 
                     // now render!
@@ -228,7 +227,7 @@ namespace LcmsNet.Method.ViewModels
                     if (RenderDisplayWindow)
                     {
                         var x1Seconds = Convert.ToSingle(now.Subtract(minTime).TotalSeconds);
-                        var spanx = new TimeSpan(0, 0, PreviewMinutes, PreviewSeconds, PreviewMilliseconds);
+                        var spanx = new TimeSpan(0, 0, PreviewMinutes, PreviewSeconds, 0);
                         var x2Seconds = Convert.ToSingle(now.Add(spanx).Subtract(minTime).TotalSeconds);
                         var ppt = (bounds.Width - bounds.X) / Convert.ToSingle(span.TotalSeconds);
 
@@ -300,7 +299,6 @@ namespace LcmsNet.Method.ViewModels
 
         private const int CONST_PREVIEW_MINUTES = 30;
         private const int CONST_PREVIEW_SECONDS = 1;
-        private const int CONST_PREVIEW_MILLISECONDS = 0;
 
         #endregion
 
@@ -343,7 +341,6 @@ namespace LcmsNet.Method.ViewModels
 
         private int previewMinutes = CONST_PREVIEW_MINUTES;
         private int previewSeconds = CONST_PREVIEW_SECONDS;
-        private int previewMilliseconds = CONST_PREVIEW_MILLISECONDS;
         private bool renderCurrent = false;
         private bool renderAllEvents = false;
         private bool renderWindow = false;
@@ -386,15 +383,6 @@ namespace LcmsNet.Method.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets the total number of milliseconds to preview.
-        /// </summary>
-        public int PreviewMilliseconds
-        {
-            get { return previewMilliseconds; }
-            set { this.RaiseAndSetIfChanged(ref previewMilliseconds, value); }
-        }
-
-        /// <summary>
         /// Gets or sets whether to show the full sample time or just from the current Date Time until PreviewMinutes or RenderAllEvents
         /// </summary>
         public bool RenderCurrent
@@ -422,5 +410,11 @@ namespace LcmsNet.Method.ViewModels
         }
 
         #endregion
+
+        public void UpdatePreviewTime(int minutes, int seconds)
+        {
+            PreviewMinutes = minutes;
+            PreviewSeconds = seconds;
+        }
     }
 }
