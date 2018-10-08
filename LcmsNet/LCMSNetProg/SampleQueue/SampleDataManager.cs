@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Data;
@@ -516,10 +517,10 @@ namespace LcmsNet.SampleQueue
                                 continue;
                             }
 
-                            sample.Sample.SampleErrors = string.Empty;
+                            var sampleErrors = string.Empty;
                             if (!sample.Sample.DmsData.DatasetNameCharactersValid())
                             {
-                                sample.Sample.SampleErrors += "Request name contains invalid characters!\n" +
+                                sampleErrors += "Request name contains invalid characters!\n" +
                                                               DMSData.ValidDatasetNameCharacters + "\n";
                                 foundError = true;
                             }
@@ -532,21 +533,22 @@ namespace LcmsNet.SampleQueue
 
                                 if (sampleValidErrors != DMSSampleValidatorErrors.NoError)
                                 {
-                                    sample.Sample.SampleErrors += mValidator.CreateErrorListFromErrors(sampleValidErrors);
+                                    sampleErrors += mValidator.CreateErrorListFromErrors(sampleValidErrors);
                                     foundError = true;
                                 }
                                 else
                                 {
-                                    sample.Sample.SampleErrors = string.Empty;
+                                    sampleErrors = string.Empty;
                                 }
                             }
                             else
                             {
                                 // DMS Sample validation is disabled
-                                return;
+                                RxApp.MainThreadScheduler.Schedule(() => sample.Sample.SampleErrors = sampleErrors);
+                                break;
                             }
 
-                            if (string.IsNullOrEmpty(sample.Sample.SampleErrors))
+                            if (string.IsNullOrEmpty(sampleErrors))
                             {
                                 // Validate other parts of the sample.
                                 var errors = new List<SampleValidationError>();
@@ -562,26 +564,28 @@ namespace LcmsNet.SampleQueue
 
                                 if (errors.Count > 0)
                                 {
-                                    if (sample.Sample.SampleErrors.Length > 0)
+                                    if (sampleErrors.Length > 0)
                                     {
-                                        sample.Sample.SampleErrors += "\n";
+                                        sampleErrors += "\n";
                                     }
-                                    sample.Sample.SampleErrors += string.Join("\n", errors.Select(x => x.ToString()));
+                                    sampleErrors += string.Join("\n", errors.Select(x => x.ToString()));
                                     foundError = true;
                                 }
                             }
 
+                            RxApp.MainThreadScheduler.Schedule(() => sample.Sample.SampleErrors = sampleErrors);
+
                             if (!foundError)
                             {
                                 // Add to run queue
-                                SampleQueue.MoveSamplesToRunningQueue(sample.Sample);
+                                SampleQueue.MoveSamplesToRunningQueue(sample.Sample); // TODO: MainThreadWrap?
                             }
 
                             if (sample.Equals(changedSample))
                             {
                                 if (foundError)
                                 {
-                                    sample.IsChecked = false;
+                                    RxApp.MainThreadScheduler.Schedule(() => sample.IsChecked = false);
                                 }
                                 //Stop validating and queuing samples
                                 break;
@@ -611,8 +615,8 @@ namespace LcmsNet.SampleQueue
                 }
                 catch (Exception ex)
                 {
-                    ApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueueing, task " + currentTask, ex);
-                    MessageBox.Show(@"Error in HandleSampleValidationAndQueueing, task " + currentTask + @": " + ex.Message, @"Error",
+                    ApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueuing, task " + currentTask, ex);
+                    MessageBox.Show(@"Error in HandleSampleValidationAndQueuing, task " + currentTask + @": " + ex.Message, @"Error",
                         MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
             }

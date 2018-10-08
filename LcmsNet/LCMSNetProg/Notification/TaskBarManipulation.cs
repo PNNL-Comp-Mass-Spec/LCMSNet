@@ -122,10 +122,8 @@ namespace LcmsNet.Notification
 
         private static void SafelyInvoke(Action action)
         {
-#if !DEBUG
             try
             {
-#endif
                 if (Application.Current == null)
                 {
                     return;
@@ -140,13 +138,11 @@ namespace LcmsNet.Notification
                 {
                     dispatchObject.Invoke(action);
                 }
-#if !DEBUG
             }
             catch (Exception)
             {
                 // suppress errors; generally only happens when closing during a task, when the UI thread becomes invalid.
             }
-#endif
         }
     }
 }
