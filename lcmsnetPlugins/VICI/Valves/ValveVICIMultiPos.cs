@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Threading.Tasks;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK.Devices;
@@ -58,7 +59,7 @@ namespace LcmsNetPlugins.VICI.Valves
         public event EventHandler<ValvePositionEventArgs<int>> PosChanged;
         protected virtual void OnPosChanged(int position)
         {
-            PosChanged?.Invoke(this, new ValvePositionEventArgs<int>(position));
+            Task.Run(() => PosChanged?.Invoke(this, new ValvePositionEventArgs<int>(position)));
         }
 
         public virtual Type GetStateType()

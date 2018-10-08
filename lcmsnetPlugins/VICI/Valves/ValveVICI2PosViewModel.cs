@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Base;
@@ -37,15 +38,6 @@ namespace LcmsNetPlugins.VICI.Valves
 
             ComPort = m_valve.Port;
         }
-
-        #endregion
-
-        #region Events
-
-        /// <summary>
-        /// Indicates that the position of the valve has changed. Argument is the new position.
-        /// </summary>
-        public event EventHandler<string> PosChanged;
 
         #endregion
 
@@ -139,7 +131,6 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <param name="newPosition">The new position</param>
         public virtual void OnPosChanged(object sender, ValvePositionEventArgs<TwoPositionState> newPosition)   // DAC changed
         {
-            PosChanged?.Invoke(this, newPosition.Position.ToCustomString());
             UpdatePositionTextBox(newPosition.Position);
         }
 
@@ -149,7 +140,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <param name="position"></param>
         private void UpdatePositionTextBox(TwoPositionState position)
         {
-            CurrentValvePosition = position.ToCustomString();
+            RxApp.MainThreadScheduler.Schedule(() => CurrentValvePosition = position.ToCustomString());
         }
 
         protected override void ValveControlSelected()

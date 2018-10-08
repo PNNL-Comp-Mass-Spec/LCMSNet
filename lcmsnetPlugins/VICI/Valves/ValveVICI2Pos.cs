@@ -13,6 +13,7 @@
 
 using System;
 using System.IO.Ports;
+using System.Threading.Tasks;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK.Devices;
@@ -110,7 +111,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <param name="position">The new position</param>
         protected virtual void OnPositionChanged(TwoPositionState position)
         {
-            PositionChanged?.Invoke(this, new ValvePositionEventArgs<TwoPositionState>(position));
+            Task.Run(() => PositionChanged?.Invoke(this, new ValvePositionEventArgs<TwoPositionState>(position)));
         }
 
         /// <summary>

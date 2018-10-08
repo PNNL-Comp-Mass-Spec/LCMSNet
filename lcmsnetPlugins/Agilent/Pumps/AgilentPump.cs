@@ -103,6 +103,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private string pumpFirmware;
         private readonly Timer statusReadTimer = null;
         private readonly AgilentPumpStatus pumpStatusInternal = new AgilentPumpStatus();
+        private readonly object pumpCommLock = new object();
 
         #endregion
 
@@ -275,13 +276,40 @@ namespace LcmsNetPlugins.Agilent.Pumps
             statusReadTimer?.Dispose();
         }
 
+        private int lastStatusInterval = 2;
+
         private void UpdateStatus(object state)
         {
             if (m_pumps != null)
             {
                 GetPumpStatus(pumpStatusInternal);
                 ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => PumpStatus.UpdateValues(pumpStatusInternal));
-                GetPumpState();
+                var agPumpState = GetPumpState();
+
+                var statusInterval = 3; // default to 3 seconds; applies to startup and error conditions
+                if (agPumpState == PumpState.On &&
+                    pumpStatusInternal.ErrorState == AgilentPumpStateError.NO_ERROR &&
+                    pumpStatusInternal.NotReadyState == AgilentPumpStateNotReady.READY &&
+                    pumpStatusInternal.TestState == AgilentPumpStateTest.NO_TEST)
+                {
+                    if (pumpStatusInternal.AnalysisState == AgilentPumpStateAnalysis.NO_ANALYSIS &&
+                        pumpStatusInternal.GenericState == AgilentPumpStateGeneric.PRERUN)
+                    {
+                        statusInterval = 10;
+                    }
+                    else if (pumpStatusInternal.AnalysisState == AgilentPumpStateAnalysis.ANALYSIS &&
+                             (pumpStatusInternal.GenericState == AgilentPumpStateGeneric.RUN ||
+                              pumpStatusInternal.GenericState == AgilentPumpStateGeneric.POSTRUN))
+                    {
+                        statusInterval = 60;
+                    }
+                }
+
+                if (statusInterval != lastStatusInterval)
+                {
+                    statusReadTimer.Change(TimeSpan.FromSeconds(statusInterval), TimeSpan.FromSeconds(statusInterval));
+                    lastStatusInterval = statusInterval;
+                }
             }
         }
 
@@ -764,7 +792,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             GetPumpState();
-            statusReadTimer.Change(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
+            lastStatusInterval = 3;
+            statusReadTimer.Change(TimeSpan.FromSeconds(lastStatusInterval), TimeSpan.FromSeconds(lastStatusInterval));
 
             return true;
         }
@@ -1020,21 +1049,24 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 readChannel = m_inChannel;
             }
 
-            //Send the command over our serial port
-            //TODO: Wrap this in exception checking
-            //      (if there is an error, send out errorstring)
-            if (m_inChannel.TryWrite(command, CONST_WRITETIMEOUT) == false)
+            lock (pumpCommLock)
             {
-                //Couldn't send instruction
-                ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command got error response \"{AgilentPumpReplyErrorCodes.Instruction_Send_Failed}\"");
-                return AgilentPumpReplyErrorCodes.Instruction_Send_Failed;
-            }
+                //Send the command over our serial port
+                //TODO: Wrap this in exception checking
+                //      (if there is an error, send out errorstring)
+                if (m_inChannel.TryWrite(command, CONST_WRITETIMEOUT) == false)
+                {
+                    //Couldn't send instruction
+                    ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command \"{command}\" got error response \"{AgilentPumpReplyErrorCodes.Instruction_Send_Failed}\"");
+                    return AgilentPumpReplyErrorCodes.Instruction_Send_Failed;
+                }
 
-            if (readChannel.TryRead(out reply, CONST_READTIMEOUT) == false)
-            {
-                //Couldn't read reply
-                ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command got error response \"{AgilentPumpReplyErrorCodes.Reply_Read_Failed}\"");
-                return AgilentPumpReplyErrorCodes.Reply_Read_Failed;
+                if (readChannel.TryRead(out reply, CONST_READTIMEOUT) == false)
+                {
+                    //Couldn't read reply
+                    ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command \"{command}\" got error response \"{AgilentPumpReplyErrorCodes.Reply_Read_Failed}\"");
+                    return AgilentPumpReplyErrorCodes.Reply_Read_Failed;
+                }
             }
 
             // Reply information:
@@ -1053,7 +1085,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 {
                     errorCode = AgilentPumpReplyErrorCodes.Unknown_Error;
                 }
-                ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command got error response \"{errorCode}\"");
+                ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command \"{command}\" got error response \"{errorCode}\" (full text: {reply})");
             }
 
             return errorCode;

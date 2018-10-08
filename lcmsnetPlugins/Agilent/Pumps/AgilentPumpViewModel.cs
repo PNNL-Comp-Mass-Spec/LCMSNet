@@ -406,7 +406,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var methods = new Dictionary<string, string>();
             foreach (var filename in filenames)
             {
-                var method = System.IO.File.ReadAllText(filename);
+                var method = System.IO.File.ReadAllText(filename).Trim('\r', '\n', '\'', '"');
                 methods[System.IO.Path.GetFileNameWithoutExtension(filename)] = method;
             }
 
@@ -429,10 +429,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 // try to select the last selected method, if it has been loaded back in to the system.
                 SelectedMethod = MethodComboBoxOptions.Contains(methodSelected) ? methodSelected : "";
             }
-        }
-
-        private void ReplacePumpMethods(Dictionary<string, string> methods)
-        {
         }
 
         private readonly Random r = new Random();

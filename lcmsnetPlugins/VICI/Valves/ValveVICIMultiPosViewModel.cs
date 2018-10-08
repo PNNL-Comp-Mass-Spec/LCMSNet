@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Devices.Valves;
@@ -53,8 +54,7 @@ namespace LcmsNetPlugins.VICI.Valves
         //Position change
         public virtual void OnPosChanged(object sender, ValvePositionEventArgs<int> newPosition)
         {
-            PositionChanged?.Invoke(this, new ValvePositionEventArgs<int>(newPosition.Position));
-            CurrentValvePosition = newPosition.Position.ToString();
+            RxApp.MainThreadScheduler.Schedule(() => CurrentValvePosition = newPosition.Position.ToString());
         }
         #endregion
 
@@ -63,11 +63,6 @@ namespace LcmsNetPlugins.VICI.Valves
         /// Class that interfaces the hardware.
         /// </summary>
         private ValveVICIMultiPos m_valve;
-
-        /// <summary>
-        /// Event fired when the position of the valve changes.
-        /// </summary>
-        public event EventHandler<ValvePositionEventArgs<int>> PositionChanged;
 
         private readonly ReactiveList<string> valvePositionComboBoxOptions = new ReactiveList<string>();
         private string selectedValvePosition = "";
