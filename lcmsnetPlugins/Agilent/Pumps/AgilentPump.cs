@@ -164,16 +164,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         #region Events
 
         /// <summary>
-        /// Fired when a method is added.
-        /// </summary>
-        public event EventHandler<classPumpMethodEventArgs> MethodAdded;
-
-        /// <summary>
-        /// Fired when a method is added.
-        /// </summary>
-        public event EventHandler<classPumpMethodEventArgs> MethodUpdated;
-
-        /// <summary>
         /// Fired when monitoring data is received from the instrument.
         /// </summary>
         public event EventHandler<PumpDataEventArgs> MonitoringDataReceived;
@@ -635,12 +625,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
             if (mdict_methods.ContainsKey(methodname))
             {
                 mdict_methods[methodname] = method;
-                MethodUpdated?.Invoke(this, new classPumpMethodEventArgs(methodname));
+
+                // Don't need to fire ListMethods() - the name didn't change.
             }
             else
             {
                 mdict_methods.Add(methodname, method);
-                MethodAdded?.Invoke(this, new classPumpMethodEventArgs(methodname));
 
                 ListMethods();
             }

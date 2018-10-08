@@ -76,7 +76,6 @@
     <Compile Include="Pumps\AgilentPumpStatus.cs" />
     <Compile Include="Pumps\AgilentPumpViewModel.cs" />
     <Compile Include="Pumps\AgilentPumpNotReadyStates.cs" />
-    <Compile Include="Pumps\PumpMethodEventArgs.cs" />
     <Compile Include="Pumps\PumpPurgeChannel.cs" />
     <Compile Include="Pumps\AgilentPumpPurgeWindow.xaml.cs">
       <DependentUpon>AgilentPumpPurgeWindow.xaml</DependentUpon>

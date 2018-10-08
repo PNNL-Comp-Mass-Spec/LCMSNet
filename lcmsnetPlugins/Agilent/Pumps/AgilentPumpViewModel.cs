@@ -58,10 +58,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
             // Initialize the underlying device class
             if (Pump != null)
             {
-                Pump.MethodAdded += Pump_MethodAdded;
-                Pump.MethodUpdated += Pump_MethodUpdated;
                 Pump.MonitoringDataReceived += Pump_MonitoringDataReceived;
                 Pump.PropertyChanged += PumpOnPropertyChanged;
+                Pump.MethodNames += PumpOnMethodNames;
                 using (modeComboBoxOptions.SuppressChangeNotifications())
                 {
                     modeComboBoxOptions.Clear();
@@ -361,31 +360,23 @@ namespace LcmsNetPlugins.Agilent.Pumps
         }
 
         /// <summary>
-        /// Handles when a pump method is updated.
+        /// Handles when new pump method names are available
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Pump_MethodUpdated(object sender, classPumpMethodEventArgs e)
+        /// <param name="data"></param>
+        private void PumpOnMethodNames(object sender, List<object> data)
         {
-            // This is likely rather pointless, but converting old code...
-            if (!methodComboBoxOptions.Contains(e.MethodName))
+            using (methodComboBoxOptions.SuppressChangeNotifications())
             {
-                methodComboBoxOptions.Add(e.MethodName);
+                methodComboBoxOptions.Clear();
+                methodComboBoxOptions.AddRange(data.Select(x => x.ToString()));
             }
-        }
-
-        /// <summary>
-        /// Handles when a pump method is added.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Pump_MethodAdded(object sender, classPumpMethodEventArgs e)
-        {
-            methodComboBoxOptions.Add(e.MethodName);
 
             // Make sure one method is selected.
-            if (MethodComboBoxOptions.Count == 1)
-                SelectedMethod = MethodComboBoxOptions[0];
+            if (methodComboBoxOptions.Count > 0 && !methodComboBoxOptions.Contains(SelectedMethod))
+            {
+                SelectedMethod = methodComboBoxOptions[0];
+            }
         }
 
         /// <summary>
