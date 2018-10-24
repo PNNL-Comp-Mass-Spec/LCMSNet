@@ -135,6 +135,7 @@ namespace FluidicsSDK.Devices
             pressure = e.Pressure.Last();
             percentB = e.PercentB.Last();
             lastMonitorUpdate = DateTime.Now;
+            DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
         }
 
         public override string StateString()
@@ -184,6 +185,12 @@ namespace FluidicsSDK.Devices
             }
         }
 
+        #endregion
+
+        #region Events
+
+        //event for when device changes
+        public override event EventHandler<FluidicsDevChangeEventArgs> DeviceChanged;
         #endregion
     }
 }

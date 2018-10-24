@@ -155,7 +155,7 @@ namespace FluidicsSDK
                 return;
             }
             // This foreach loop resets the color of all connections after every change in the model.
-            foreach (var conn in m_conManager.GetConnections())
+            foreach (var conn in m_conManager.GetConnections().ToList())
             {
                 conn.Color = Colors.Black;
             }
