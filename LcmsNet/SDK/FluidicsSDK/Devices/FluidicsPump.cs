@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
@@ -30,6 +31,13 @@ namespace FluidicsSDK.Devices
         const int MAX_PIXEL_VARIANCE = 5;
 
         IFluidicsPump m_pump;
+
+        private bool useMonitoringData = false;
+        private double flowRate = 0;
+        private double pressure = 0;
+        private double percentB = 0;
+        private DateTime lastStatusUpdate = DateTime.MinValue;
+        private DateTime lastMonitorUpdate = DateTime.MinValue;
 
         #endregion
 
@@ -92,7 +100,17 @@ namespace FluidicsSDK.Devices
 
         protected override void SetDevice(IDevice device)
         {
+            if (m_pump is IPump pOld)
+            {
+                pOld.MonitoringDataReceived -= PumpOnMonitoringDataReceived;
+            }
             m_pump = device as IFluidicsPump;
+            useMonitoringData = false;
+            if (m_pump is IPump p)
+            {
+                useMonitoringData = true;
+                p.MonitoringDataReceived += PumpOnMonitoringDataReceived;
+            }
             // m_pump.FlowChanged += new EventHandler<PumpEventArgs<double>>(pump_flow_change_event_handler);
         }
 
@@ -111,22 +129,41 @@ namespace FluidicsSDK.Devices
             MessageBox.Show(string.Format("Flowrate changed to: {0}", e.Value));
         }
 
-        public void SetPostion(TwoPositionState state)
+        private void PumpOnMonitoringDataReceived(object sender, PumpDataEventArgs e)
         {
+            flowRate = e.Flowrate.Last();
+            pressure = e.Pressure.Last();
+            percentB = e.PercentB.Last();
+            lastMonitorUpdate = DateTime.Now;
         }
 
         public override string StateString()
         {
+            if (useMonitoringData && DateTime.Now.AddSeconds(-65) >= lastMonitorUpdate)
+            {
+                // If we aren't receiving any monitoring data, turn off this optimization.
+                useMonitoringData = false;
+            }
+
+            if (!useMonitoringData && DateTime.Now.AddSeconds(-30) >= lastStatusUpdate)
+            {
+                flowRate = m_pump.GetFlowRate();
+                pressure = m_pump.GetPressure();
+                percentB = m_pump.GetPercentB();
+                lastStatusUpdate = DateTime.Now;
+            }
+
             var stateString = new StringBuilder();
             stateString.Append("Flow Rate: ");
-            stateString.Append(m_pump.GetFlowRate());
+            stateString.Append(flowRate);
             stateString.Append(Environment.NewLine);
             stateString.Append("Pressure: ");
-            stateString.Append(m_pump.GetPressure());
+            stateString.Append(pressure);
             stateString.Append(Environment.NewLine);
             stateString.Append("%B: ");
-            stateString.Append(m_pump.GetPercentB());
+            stateString.Append(percentB);
             stateString.Append(Environment.NewLine);
+
             return stateString.ToString();
         }
 
