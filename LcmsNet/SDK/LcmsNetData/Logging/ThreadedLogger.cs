@@ -12,11 +12,15 @@ namespace LcmsNetData.Logging
     public class ThreadedLogger<T> : IDisposable
     {
         /// <summary>
-        /// This could be directly replaced with a BufferBlock.
+        /// This could almost be directly replaced with a BufferBlock (but I don't want to add the TPL dependency).
         /// </summary>
         private readonly BufferQueue<T> buffer = new BufferQueue<T>();
         private readonly Thread consumerThread = null;
         private readonly Action<T> consumeAction;
+
+        /// <summary>
+        /// True if the logger has been shut down.
+        /// </summary>
         private bool isShutdown = false;
 
         /// <summary>
@@ -25,9 +29,15 @@ namespace LcmsNetData.Logging
         private void ConsumeAll()
         {
             T item = default(T);
-            while ((item = Consume().Result) != null)
+            while (!buffer.IsComplete || buffer.HasItemsInQueue)
             {
-                consumeAction(item);
+                while ((item = Consume().Result) != null)
+                {
+                    consumeAction(item);
+                }
+
+                // Sleep 100 milliseconds to prevent busy-looping
+                Thread.Sleep(100);
             }
         }
 
@@ -37,7 +47,7 @@ namespace LcmsNetData.Logging
         /// <returns></returns>
         private async Task<T> Consume()
         {
-            while (await buffer.OutputAvailableAsync())
+            if (await buffer.OutputAvailableAsync())
             {
                 return buffer.Receive();
             }
@@ -49,12 +59,15 @@ namespace LcmsNetData.Logging
         /// Add a new item to the queue (produce an item)
         /// </summary>
         /// <param name="item"></param>
-        public void AddItem(T item)
+        /// <returns>True if <paramref name="item"/> is null or was added; false if the logger is shutting down or shut down</returns>
+        public bool AddItem(T item)
         {
             if (item != null && !isShutdown)
             {
-                buffer.Post(item);
+                return buffer.Post(item);
             }
+
+            return item == null;
         }
 
         ~ThreadedLogger()
@@ -106,7 +119,17 @@ namespace LcmsNetData.Logging
             private readonly Queue<TU> queue = new Queue<TU>();
             private readonly SemaphoreSlim trigger = new SemaphoreSlim(0);
             private readonly object addRemoveLock = new object();
-            private bool complete = false;
+            private bool isClosing = false;
+
+            /// <summary>
+            /// True if the BufferQueue has been marked complete, and will accept new items
+            /// </summary>
+            public bool IsComplete { get; private set; } = false;
+
+            /// <summary>
+            /// True if there are items waiting to be consumed; only for checking in case of error
+            /// </summary>
+            public bool HasItemsInQueue => queue.Count > 0;
 
             /// <summary>
             /// Returns true if there is available output, false if an error or marked complete (with no more output)
@@ -137,7 +160,7 @@ namespace LcmsNetData.Logging
                     return true;
                 }
 
-                if (complete)
+                if (IsComplete)
                 {
                     return false;
                 }
@@ -150,14 +173,20 @@ namespace LcmsNetData.Logging
             /// Add an item to the queue, notifying any consumer(s) of the available item.
             /// </summary>
             /// <param name="item"></param>
-            public void Post(TU item)
+            public bool Post(TU item)
             {
+                if (IsComplete || isClosing)
+                {
+                    return false;
+                }
+
                 lock (addRemoveLock)
                 {
                     queue.Enqueue(item);
                 }
 
                 trigger.Release();
+                return true;
             }
 
             /// <summary>
@@ -165,11 +194,12 @@ namespace LcmsNetData.Logging
             /// </summary>
             public void Complete()
             {
-                if (!complete)
+                isClosing = true;
+                if (!IsComplete)
                 {
-                    trigger.Release(); // Doesn't matter if we release() extra times after we set complete to true.
+                    trigger.Release(queue.Count + 1); // Doesn't matter if we release() extra times after we set complete to true.
                 }
-                complete = true;
+                IsComplete = true;
             }
 
             /// <summary>

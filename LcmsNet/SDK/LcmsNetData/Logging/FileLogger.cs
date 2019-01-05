@@ -14,6 +14,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using LcmsNetData.System;
 
 namespace LcmsNetData.Logging
@@ -34,12 +35,16 @@ namespace LcmsNetData.Logging
 
         private StreamWriter logWriter = null;
 
+        private readonly Timer logFileStreamTimeout;
+
         /// <summary>
         /// Constructor
         /// </summary>
         private FileLogger()
         {
             AppFolder = "LCMSNet";
+            // Close out the log file once every hour, to help avoid issues with stale file handles
+            logFileStreamTimeout = new Timer(CloseLogFile, this, TimeSpan.FromHours(1), TimeSpan.FromHours(1));
         }
 
         #region Properties
@@ -212,6 +217,16 @@ namespace LcmsNetData.Logging
             return false;
         }
 
+        private void CloseLogFile(object sender)
+        {
+            lock (fileWriteLock)
+            {
+                logWriter?.Close();
+                logWriter?.Dispose();
+                logWriter = null;
+            }
+        }
+
         /// <summary>
         /// Writes a string to the log file
         /// </summary>
@@ -257,6 +272,8 @@ namespace LcmsNetData.Logging
 
         public void Dispose()
         {
+            logFileStreamTimeout.Dispose();
+            logWriter?.Close();
             logWriter?.Dispose();
         }
     }
