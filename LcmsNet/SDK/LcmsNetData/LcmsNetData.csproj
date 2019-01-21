@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\CartConfiguration.cs" />
+    <Compile Include="Data\CartConfigInfo.cs" />
     <Compile Include="Data\ColumnData.cs" />
     <Compile Include="Data\ColumnStatus.cs" />
     <Compile Include="Data\ConvertVialPosition.cs" />

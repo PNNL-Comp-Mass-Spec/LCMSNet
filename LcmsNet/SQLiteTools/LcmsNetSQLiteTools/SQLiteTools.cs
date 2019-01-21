@@ -44,7 +44,7 @@ namespace LcmsNetSQLiteTools
         //private static string m_errroString = "";
 
         private static List<string> m_cartNames;
-        private static List<string> m_cartConfigNames;
+        private static Dictionary<string, List<string>> m_cartConfigNames;
         private static List<string> m_columnNames;
         private static List<string> m_separationNames;
         private static List<string> m_datasetTypeNames;
@@ -874,6 +874,39 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
+        /// Saves a list of Cart_Configs (and associated Cart names) to cache
+        /// </summary>
+        /// <param name="cartConfigList">List containing cart config info.</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartConfigList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveCartConfigListToCache(List<CartConfigInfo> cartConfigList, bool clearFirst = true)
+        {
+            var dataInList = (cartConfigList.Count > 0);
+            var tableName = GetTableName(DatabaseTableTypes.CartConfigNameList);
+
+            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && cartConfigList.Count <= rowCount)
+            {
+                return;
+            }
+
+            // Clear the cache table
+            ClearCacheTable(tableName, ConnString);
+
+            //If no data in list, exit
+            if (!dataInList)
+            {
+                return;
+            }
+
+            // Convert input data for caching and call cache routine
+            var dataList = new List<ICacheInterface>();
+            foreach (var currentConfig in cartConfigList)
+            {
+                dataList.Add(currentConfig);
+            }
+            SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
+        }
+
+        /// <summary>
         /// Executes specified SQLite command
         /// </summary>
         /// <param name="cmdStr">SQL statement to execute</param>
@@ -1077,14 +1110,81 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for cart config name lists
         /// </summary>
+        /// <returns>Mapping of cart names to possible cart config names</returns>
+        public static Dictionary<string, List<string>> GetCartConfigNameMap(bool force)
+        {
+            if (m_cartConfigNames == null || force)
+            {
+                var cacheData = new Dictionary<string, List<string>>();
+
+                // Get data table name
+                var tableName = GetTableName(DatabaseTableTypes.CartConfigNameList);
+
+                // Get a list of string dictionaries containing properties for each item
+                var allConfigProps = GetPropertiesFromCache(tableName, ConnString);
+
+                var configList = new List<CartConfigInfo>();
+
+                // For each row (representing one config), create a dictionary and/or list entry
+                foreach (var configProps in allConfigProps)
+                {
+                    // Create a CartConfigInfo object
+                    var configInfo = new CartConfigInfo();
+
+                    // Load the cart config data object from the string dictionary
+                    configInfo.LoadPropertyValues(configProps);
+
+                    // Add the cart config data object to the full list
+                    configList.Add(configInfo);
+                }
+
+                // Transform the data, and allow "unknown" cart configs for all carts
+                foreach (var config in configList)
+                {
+                    if (!cacheData.TryGetValue(config.CartName, out var cartConfigList))
+                    {
+                        cartConfigList = new List<string>();
+                        cacheData.Add(config.CartName, cartConfigList);
+                    }
+                    cartConfigList.Add(config.CartConfigName);
+                }
+
+                // Add the unknown configs last.
+                var unknownConfigs = configList
+                    .Where(x => x.CartName.StartsWith("unknown", StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(x => x.CartConfigName).Select(x => x.CartConfigName).ToList();
+
+                foreach (var cart in cacheData.Where(x => !x.Key.StartsWith("unknown", StringComparison.OrdinalIgnoreCase)))
+                {
+                    cart.Value.Sort();
+                    cart.Value.AddRange(unknownConfigs);
+                }
+
+                // Add all carts without a config with the default unknown configs
+                foreach (var cart in GetCartNameList().Where(x => !cacheData.ContainsKey(x)))
+                {
+                    cacheData.Add(cart, new List<string>(unknownConfigs));
+                }
+
+                m_cartConfigNames = cacheData;
+            }
+
+            return m_cartConfigNames;
+        }
+
+        /// <summary>
+        /// Wrapper around generic retrieval method specifically for cart config name lists
+        /// </summary>
         /// <returns>List containing cart config names</returns>
         public static List<string> GetCartConfigNameList(bool force)
         {
             if (m_cartConfigNames == null || force)
             {
-                m_cartConfigNames = GetSingleColumnListFromCache(DatabaseTableTypes.CartConfigNameList);
+                GetCartConfigNameMap(force);
             }
-            return m_cartConfigNames;
+
+            // ReSharper disable once PossibleNullReferenceException
+            return m_cartConfigNames.Values.SelectMany(x => x).Distinct().OrderBy(x => x).ToList();
         }
 
         /// <summary>
@@ -1093,7 +1193,13 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing cart config names</returns>
         public static List<string> GetCartConfigNameList(string cartName, bool force)
         {
-            return GetCartConfigNameList(force).Where(x => x.StartsWith(cartName, StringComparison.OrdinalIgnoreCase) || x.StartsWith("unknown", StringComparison.OrdinalIgnoreCase)).ToList();
+            var data = GetCartConfigNameMap(force);
+            if (data.TryGetValue(cartName, out var configs))
+            {
+                return configs.ToList();
+            }
+
+            return data.First(x => x.Key.StartsWith("unknown", StringComparison.OrdinalIgnoreCase)).Value.ToList();
         }
 
         /// <summary>

@@ -482,12 +482,12 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetCartConfigNamesFromDMS()
         {
-
-            List<string> tmpCartConfigNames;
+            var tmpCartConfigInfo = new List<CartConfigInfo>();
             var connStr = GetConnectionString();
 
+            DataTable cartConfigTable;
+
             // Get a list containing all active cart configuration names
-            // TODO: get the cart name and store it in the cache as well, and use it for filtering.
             //  SELECT Cart_Config_ID,
             //         Cart_Config_Name,
             //         Cart_Name,
@@ -499,26 +499,33 @@ namespace LcmsNetDmsTools
             //         Cart_Config_State
             //    FROM V_LC_Cart_Config_Export
             const string sqlCmd =
-                "SELECT Cart_Config_Name " +
+                "SELECT Cart_Config_Name, Cart_Name " +
                 "FROM V_LC_Cart_Config_Export " +
                 "WHERE Cart_Config_State = 'Active' " +
-                "ORDER BY Cart_Config_Name";
+                "ORDER BY Cart_Name, Cart_Config_Name";
 
             try
             {
-                tmpCartConfigNames = GetSingleColumnTableFromDMS(sqlCmd, connStr);
+                cartConfigTable = GetDataTable(sqlCmd, connStr);
             }
             catch (Exception ex)
             {
-                ErrMsg = "Exception getting cart config names";
+                ErrMsg = "Exception getting cart config list";
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
+            }
+
+            foreach (DataRow currRow in cartConfigTable.Rows)
+            {
+                tmpCartConfigInfo.Add(new CartConfigInfo(
+                    (string) currRow[cartConfigTable.Columns["Cart_Config_Name"]],
+                    (string) currRow[cartConfigTable.Columns["Cart_Name"]]));
             }
 
             // Store the list of cart config names in the cache db
             try
             {
-                SQLiteTools.SaveSingleColumnListToCache(tmpCartConfigNames, DatabaseTableTypes.CartConfigNameList);
+                SQLiteTools.SaveCartConfigListToCache(tmpCartConfigInfo);
             }
             catch (Exception ex)
             {
@@ -536,9 +543,8 @@ namespace LcmsNetDmsTools
             var connStr = GetConnectionString();
 
             // Get a List containing all the carts
-            const string sqlCmd = "SELECT DISTINCT [Cart Name] FROM V_LC_Cart_List_Report " +
-                                  "WHERE State LIKE '%service%' " +
-                                  "ORDER BY [Cart Name]";
+            const string sqlCmd = "SELECT DISTINCT [Cart_Name] FROM V_LC_Cart_Active_Export " +
+                                  "ORDER BY [Cart_Name]";
             try
             {
                 tmpCartList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
