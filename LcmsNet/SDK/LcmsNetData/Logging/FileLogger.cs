@@ -206,6 +206,9 @@ namespace LcmsNetData.Logging
                 if (logFile.Directory.Exists)
                 {
                     logWriter = new StreamWriter(new FileStream(logFile.FullName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite));
+
+                    // Set AutoFlush to true to help ensure full log output.
+                    logWriter.AutoFlush = true;
                     return true;
                 }
             }
