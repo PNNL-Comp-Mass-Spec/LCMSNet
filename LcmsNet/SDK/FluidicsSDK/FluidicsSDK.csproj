@@ -58,12 +58,14 @@
     <Compile Include="Devices\Valves\EightPositionFluidicsValve.cs" />
     <Compile Include="Devices\Valves\FifteenPositionFluidicsValve.cs" />
     <Compile Include="Devices\Valves\FourPortFluidicsValve.cs" />
+    <Compile Include="Devices\Valves\FourPositionFluidicsValve.cs" />
     <Compile Include="Devices\Valves\IMultiPositionValve.cs" />
     <Compile Include="Devices\Valves\ISixPortInjectionValve.cs" />
     <Compile Include="Devices\Valves\ITwoPositionValve.cs" />
     <Compile Include="Devices\Valves\MultiPositionValve.cs" />
     <Compile Include="Devices\Valves\SixPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\SixPortInjectionFluidicsValve.cs" />
+    <Compile Include="Devices\Valves\SixteenPositionFluidicsValve.cs" />
     <Compile Include="Devices\Valves\SolidPhaseExtractor.cs" />
     <Compile Include="Devices\Valves\TenPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\TenPositionFluidicsValve.cs" />

@@ -28,6 +28,7 @@ namespace LcmsNetPlugins.VICI.Valves
         private DeviceStatus m_status;
 
         protected static readonly int IDChangeDelayTimems = 325;  //milliseconds
+        protected const int minTimeBetweenCommandsMs = 100; // milliseconds
 
         #endregion
 
@@ -310,6 +311,8 @@ namespace LcmsNetPlugins.VICI.Valves
                 return false;
             }
 
+            System.Threading.Thread.Sleep(minTimeBetweenCommandsMs);
+
             try
             {
                 GetVersion();
@@ -329,6 +332,8 @@ namespace LcmsNetPlugins.VICI.Valves
                 errorMessage = "Sending a command to get the valve version timed out. " + ex.Message;
                 return false;
             }
+
+            System.Threading.Thread.Sleep(minTimeBetweenCommandsMs);
 
             try
             {
@@ -384,6 +389,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
             try
             {
+                // TODO: Universal Actuator: 'VR' is main PCB Version, 'VR2' is serial interface version
                 Port.WriteLine(m_valveID + "VR");
             }
             catch (TimeoutException)
@@ -399,8 +405,9 @@ namespace LcmsNetPlugins.VICI.Valves
             //Version info is displayed on 2 lines
             try
             {
-                tempBuffer = Port.ReadLine() + " " + Port.ReadLine();
-                tempBuffer = tempBuffer.Replace("\r", " "); //Readability
+                //tempBuffer = Port.ReadLine() + " " + Port.ReadLine();
+                tempBuffer = Port.ReadExisting();
+                tempBuffer = tempBuffer.Replace("\r", "\n").Replace("\n\n", "\n").Trim('\n'); //Readability
             }
             catch (TimeoutException)
             {
@@ -471,10 +478,18 @@ namespace LcmsNetPlugins.VICI.Valves
             //  ID = 0
             //If there is no ID present, it will read
             //  ID = not used
-            if (tempBuffer.IndexOf("not used", StringComparison.Ordinal) == -1)   //Only do this if string doesn't contain "not used"
+            // Universal actuator: response looks like "\0ID" (not set) or "5ID5" (set to 5)
+
+            // Universal actuator: strip off null characters.
+            if (!string.IsNullOrEmpty(tempBuffer))
+            {
+                tempBuffer = tempBuffer.Trim('\0');
+            }
+
+            if (tempBuffer.Length > 2 && tempBuffer.IndexOf("not used", StringComparison.Ordinal) == -1)   //Only do this if string doesn't contain "not used"
             {
                 //Grab the actual position from the above string
-                if (tempBuffer.Length > 1)  //Make sure we have content in the string
+                if (tempBuffer.Contains("=")) //Make sure we have the expected content in the string
                 {
                     //Find the first =
                     var tempCharIndex = tempBuffer.IndexOf("=", StringComparison.Ordinal);
@@ -483,6 +498,12 @@ namespace LcmsNetPlugins.VICI.Valves
                         //Change the position to be the second character following the first =
                         tempID = tempBuffer.Substring(tempCharIndex + 2, 1).ToCharArray()[0];
                     }
+                }
+                else if (tempBuffer.Length == 4)
+                {
+                    // universal actuator
+                    // Return the last character.
+                    tempID = tempBuffer[3];
                 }
             }
 
@@ -554,6 +575,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
             try
             {
+                // TODO: Correct command for Universal actuator is '*ID*'
                 Port.WriteLine(m_valveID + "ID*");
                 m_valveID = ' ';
 
@@ -564,6 +586,108 @@ namespace LcmsNetPlugins.VICI.Valves
             catch (TimeoutException)
             {
                 return ValveErrors.TimeoutDuringWrite;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return ValveErrors.UnauthorizedAccess;
+            }
+
+            return ValveErrors.Success;
+        }
+
+        /// <summary>
+        /// Send a write-only command via the serial port
+        /// </summary>
+        /// <param name="command">The command to send, excluding valveId</param>
+        /// <returns></returns>
+        protected ValveErrors SendCommand(string command)
+        {
+            if (Emulation)
+            {
+                return ValveErrors.Success;
+            }
+
+            //If the serial port is not open, open it
+            if (!Port.IsOpen)
+            {
+                try
+                {
+                    Port.Open();
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return ValveErrors.UnauthorizedAccess;
+                }
+            }
+
+            try
+            {
+                Port.WriteLine(SoftwareID + command);
+            }
+
+            catch (TimeoutException)
+            {
+                //ApplicationLogger.LogError(0, "Could not send command.  Write timeout.");
+                return ValveErrors.TimeoutDuringWrite;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                //ApplicationLogger.LogError(0, "Could not send command.  Could not access serial port.");
+                return ValveErrors.UnauthorizedAccess;
+            }
+
+            return ValveErrors.Success;
+        }
+
+        /// <summary>
+        /// Send a read command via the serial port
+        /// </summary>
+        /// <param name="command">The read command to send, excluding valveId</param>
+        /// <param name="returnData">The d</param>
+        /// <returns></returns>
+        protected ValveErrors ReadCommand(string command, out string returnData)
+        {
+            returnData = "";
+            if (Emulation)
+            {
+                return ValveErrors.Success;
+            }
+
+            //If the serial port is not open, open it
+            if (!Port.IsOpen)
+            {
+                try
+                {
+                    Port.Open();
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return ValveErrors.UnauthorizedAccess;
+                }
+            }
+
+            try
+            {
+                Port.DiscardInBuffer();
+                Port.WriteLine(SoftwareID + command);
+                System.Threading.Thread.Sleep(200); // TODO: Is this really needed?
+            }
+            catch (TimeoutException)
+            {
+                return ValveErrors.TimeoutDuringWrite;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return ValveErrors.UnauthorizedAccess;
+            }
+
+            try
+            {
+                returnData = Port.ReadExisting();
+            }
+            catch (TimeoutException)
+            {
+                return ValveErrors.TimeoutDuringRead;
             }
             catch (UnauthorizedAccessException)
             {

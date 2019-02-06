@@ -63,9 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Valves\ValveExceptions.cs" />
+    <Compile Include="Valves\ValveVICI04Position.cs" />
     <Compile Include="Valves\ValveVICI08Position.cs" />
     <Compile Include="Valves\ValveVICI10Position.cs" />
     <Compile Include="Valves\ValveVICI15Position.cs" />
+    <Compile Include="Valves\ValveVICI16Position.cs" />
     <Compile Include="Valves\ValveVICI2Pos.cs" />
     <Compile Include="Valves\ValveVICI2Pos04port.cs" />
     <Compile Include="Valves\ValveVICI2Pos06Port.cs" />

@@ -34,6 +34,8 @@ namespace FluidicsSDK.Devices
                 {typeof(ISolidPhaseExtractor), typeof(SolidPhaseExtractor)},
                 {typeof(ITenPositionValve), typeof(TenPositionFluidicsValve)},
                 {typeof(IFifteenPositionValve), typeof(FifteenPositionFluidicsValve)},
+                {typeof(ISixteenPositionValve), typeof(SixteenPositionFluidicsValve)},
+                {typeof(IFourPositionValve), typeof(FourPositionFluidicsValve)},
                 {typeof(IContactClosure), typeof(ContactClosure)}
             };
         }

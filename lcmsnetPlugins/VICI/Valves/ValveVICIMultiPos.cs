@@ -268,22 +268,34 @@ namespace LcmsNetPlugins.VICI.Valves
             //Read in whatever is waiting in the buffer
             //This should look like
             //  Position is "B"
+            // Universal actuator:
+            // \0CP01 (no hardware ID) or 5CP01 (hardware ID 5)
             string tempBuffer;
             try
             {
-                tempBuffer    = Port.ReadExisting();
-                var contains = tempBuffer.Contains("Position is =");
+                tempBuffer = Port.ReadExisting();
 
-                var data = tempBuffer.Split(new[] {"\r"}, StringSplitOptions.RemoveEmptyEntries);
-                tempBuffer = "";
-                for (var i = data.Length - 1; i >= 0; i--)
+                var cpPos = tempBuffer.IndexOf("CP", StringComparison.OrdinalIgnoreCase);
+                if (cpPos >= 0 && cpPos < 2)
                 {
-                    var x = data[i];
-                    x = x.Replace(" ", "").ToLower();
-                    if (x.Contains("positionis="))
+                    // Universal actuator
+                    tempBuffer = "CP=" + tempBuffer.Substring(cpPos + 2).Trim('\r', '\n');
+                }
+                else
+                {
+                    var contains = tempBuffer.Contains("Position is =");
+
+                    var data = tempBuffer.Split(new[] {"\r"}, StringSplitOptions.RemoveEmptyEntries);
+                    tempBuffer = "";
+                    for (var i = data.Length - 1; i >= 0; i--)
                     {
-                        tempBuffer = data[i];
-                        break;
+                        var x = data[i];
+                        x = x.Replace(" ", "").ToLower();
+                        if (x.Contains("positionis="))
+                        {
+                            tempBuffer = data[i];
+                            break;
+                        }
                     }
                 }
             }

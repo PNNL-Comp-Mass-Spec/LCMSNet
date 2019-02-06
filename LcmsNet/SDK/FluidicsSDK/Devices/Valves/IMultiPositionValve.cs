@@ -10,6 +10,12 @@ namespace FluidicsSDK.Devices.Valves
         void SetPosition(T s);
     }
 
+    public interface IFourPositionValve : IMultiPositionValve<FourPositionState>
+    { }
+
+    public interface ISixteenPositionValve : IMultiPositionValve<SixteenPositionState>
+    { }
+
     public interface ITenPositionValve : IMultiPositionValve<TenPositionState>
     { }
 
