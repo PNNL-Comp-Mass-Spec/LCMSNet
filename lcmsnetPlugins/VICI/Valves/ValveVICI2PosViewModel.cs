@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
@@ -140,7 +141,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <param name="position"></param>
         private void UpdatePositionTextBox(TwoPositionState position)
         {
-            RxApp.MainThreadScheduler.Schedule(() => CurrentValvePosition = position.ToCustomString());
+            RxApp.MainThreadScheduler.Schedule(() => CurrentValvePosition = position.GetEnumDescription());
         }
 
         protected override void ValveControlSelected()

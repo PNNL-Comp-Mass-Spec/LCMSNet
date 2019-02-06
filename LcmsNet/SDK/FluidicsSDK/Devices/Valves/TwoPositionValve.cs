@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
+using LcmsNetData;
 
 namespace FluidicsSDK.Devices.Valves
 {
@@ -86,7 +87,7 @@ namespace FluidicsSDK.Devices.Valves
 
         public override string StateString()
         {
-            return m_currentState.ToCustomString();
+            return m_currentState.GetEnumDescription();
         }
 
         public override void ActivateState(int state)

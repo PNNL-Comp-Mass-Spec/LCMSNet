@@ -27,13 +27,13 @@ namespace FluidicsSDK.Devices
                 {typeof(IFluidicsPump), typeof(FluidicsPump)},
                 {typeof(ISixPortValve), typeof(SixPortFluidicsValve)},
                 {typeof(ITenPortValve), typeof(TenPortFluidicsValve)},
-                {typeof(INinePortValve), typeof(NinePortFluidicsValve)},
+                {typeof(IEightPositionValve), typeof(EightPositionFluidicsValve)},
                 {typeof(IFluidicsSampler), typeof(FluidicsSampler)},
                 {typeof(ISixPortInjectionValve), typeof(SixPortInjectionFluidicsValve)},
                 {typeof(IFluidicsClosure), typeof(FluidicsDetector)},
                 {typeof(ISolidPhaseExtractor), typeof(SolidPhaseExtractor)},
-                {typeof(IElevenPortValve), typeof(ElevenPortFluidicsValve)},
-                {typeof(ISixteenPortValve), typeof(SixteenPortFluidicsValve)},
+                {typeof(ITenPositionValve), typeof(TenPositionFluidicsValve)},
+                {typeof(IFifteenPositionValve), typeof(FifteenPositionFluidicsValve)},
                 {typeof(IContactClosure), typeof(ContactClosure)}
             };
         }

@@ -17,14 +17,14 @@ namespace LcmsNetPlugins.VICI.Valves
                                  "Four-Port",
                                  "Valves Two-Position")
     ]
-    public class ValveVICI2Pos4port: ValveVICI2Pos, IFourPortValve
+    public class ValveVICI2Pos04port: ValveVICI2Pos, IFourPortValve
     {
-        public ValveVICI2Pos4port()
+        public ValveVICI2Pos04port()
             : base()
         {
         }
 
-        public ValveVICI2Pos4port(SerialPort port)
+        public ValveVICI2Pos04port(SerialPort port)
             : base(port)
         {
         }

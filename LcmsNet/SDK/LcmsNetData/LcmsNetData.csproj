@@ -62,6 +62,7 @@
     <Compile Include="Data\TriggerFileUtils.cs" />
     <Compile Include="Data\UserIDPIDCrossReferenceEntry.cs" />
     <Compile Include="Data\UserInfo.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="ICacheInterface.cs" />
     <Compile Include="INotifyPropertyChangedExtensions.cs" />

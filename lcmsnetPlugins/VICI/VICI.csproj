@@ -63,18 +63,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Valves\ValveExceptions.cs" />
+    <Compile Include="Valves\ValveVICI08Position.cs" />
+    <Compile Include="Valves\ValveVICI10Position.cs" />
+    <Compile Include="Valves\ValveVICI15Position.cs" />
     <Compile Include="Valves\ValveVICI2Pos.cs" />
+    <Compile Include="Valves\ValveVICI2Pos04port.cs" />
+    <Compile Include="Valves\ValveVICI2Pos06Port.cs" />
     <Compile Include="Valves\ValveVICI2Pos10Port.cs" />
-    <Compile Include="Valves\ValveVICI2Pos4port.cs" />
-    <Compile Include="Valves\ValveVICI2Pos6Port.cs" />
     <Compile Include="Valves\ValveVICIBase.cs" />
     <Compile Include="Valves\ValveVICIMultiPos.cs" />
-    <Compile Include="Valves\ValveVICIMultiPos16Port.cs" />
-    <Compile Include="Valves\ValveVICIMultiPos9Port.cs" />
-    <Compile Include="Valves\ValveVICIMultiPos11Port.cs" />
     <Compile Include="Valves\ValveVICISixPortInjection.cs" />
     <Compile Include="Valves\ValveVICISPE.cs" />
-    <Compile Include="Valves\ValvePosition2Pos.cs" />
     <Compile Include="Valves\SixPortInjectionValveView.xaml.cs">
       <DependentUpon>SixPortInjectionValveView.xaml</DependentUpon>
     </Compile>

@@ -17,31 +17,32 @@ namespace LcmsNetPlugins.VICI.Valves
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [DeviceControl(typeof(ValveVICIMultiPosViewModel),
-                                 "Sixteen-Port",
+                                 "10-Position",
                                  "Valves Multi-Position")
     ]
-    public class ValveVICIMultiPos16Port : ValveVICIMultiPos, ISixteenPortValve
+    public class ValveVICI10Position : ValveVICIMultiPos, ITenPositionValve
     {
-        private const int numPositions = 15;
-        public ValveVICIMultiPos16Port()
+        private const int numPositions = 10;
+
+        public ValveVICI10Position()
             : base(numPositions)
         {
         }
 
-        public ValveVICIMultiPos16Port(SerialPort port)
+        public ValveVICI10Position(SerialPort port)
             : base(numPositions, port)
         {
         }
 
         [LCMethodEvent("Set Position", LC_EVENT_SET_POSITION_TIME_SECONDS, true, "", -1, false)]
-        public void SetPosition(FifteenPositionState position)
+        public void SetPosition(TenPositionState position)
         {
             var err = base.SetPosition((int)position);
         }
 
         public override Type GetStateType()
         {
-            return typeof(FifteenPositionState);
+            return typeof(TenPositionState);
         }
     }
 }

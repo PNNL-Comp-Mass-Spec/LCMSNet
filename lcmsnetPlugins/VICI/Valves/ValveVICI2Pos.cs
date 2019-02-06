@@ -16,6 +16,7 @@ using System.IO.Ports;
 using System.Threading.Tasks;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
@@ -73,7 +74,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             //Set positions to unknown
             m_lastMeasuredPosition = TwoPositionState.Unknown;
-            m_lastSentPosition       = TwoPositionState.Unknown;
+            m_lastSentPosition = TwoPositionState.Unknown;
         }
 
         /// <summary>
@@ -83,8 +84,8 @@ namespace LcmsNetPlugins.VICI.Valves
         public ValveVICI2Pos(SerialPort port) : base(port, "valve")
         {
             //Set positions to unknown
-            m_lastMeasuredPosition   = TwoPositionState.Unknown;
-            m_lastSentPosition       = TwoPositionState.Unknown;
+            m_lastMeasuredPosition = TwoPositionState.Unknown;
+            m_lastSentPosition = TwoPositionState.Unknown;
         }
 
         #endregion
@@ -356,7 +357,7 @@ namespace LcmsNetPlugins.VICI.Valves
             }
             else
             {
-                throw new ArgumentOutOfRangeException("Invalid Position to set" + newPosition.ToCustomString());
+                throw new ArgumentOutOfRangeException("Invalid Position to set" + newPosition.GetEnumDescription());
             }
 
             Port.WriteLine(cmd);

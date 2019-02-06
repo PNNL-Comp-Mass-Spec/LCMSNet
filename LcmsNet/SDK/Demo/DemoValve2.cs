@@ -12,9 +12,9 @@ namespace DemoPluginLibrary
 {
     //TODO: Add a custom user control for this guy....maybe?
     [DeviceControl(typeof(DemoValve2AdvancedControlViewModel),
-                                    "Demo Valve - Multipostion",
+                                    "Demo Valve - Multiposition",
                                     "Demo")]
-    public class DemoValve2 : IDevice, INinePortValve
+    public class DemoValve2 : IDevice, IEightPositionValve
     {
         #region Methods
         public DemoValve2()

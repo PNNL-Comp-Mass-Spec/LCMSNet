@@ -12,4 +12,16 @@ namespace FluidicsSDK.Devices.Valves
         int GetPosition();
         void SetPosition(TwoPositionState s);
     }
+
+    public interface IFourPortValve : ITwoPositionValve
+    { }
+
+    public interface ISixPortValve : ITwoPositionValve
+    { }
+
+    public interface ITenPortValve : ITwoPositionValve
+    { }
+
+    public interface ISolidPhaseExtractor : ITwoPositionValve
+    { }
 }

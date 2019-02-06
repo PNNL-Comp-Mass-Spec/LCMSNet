@@ -24,6 +24,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <NoWarn>1591</NoWarn>
     <DocumentationFile>bin\Debug\FluidicsSDK.xml</DocumentationFile>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -54,24 +55,18 @@
     <Compile Include="Base\Port.cs" />
     <Compile Include="Base\ValveErrors.cs" />
     <Compile Include="Base\ValveStates.cs" />
-    <Compile Include="Devices\Valves\ElevenPortFluidicsValve.cs" />
+    <Compile Include="Devices\Valves\EightPositionFluidicsValve.cs" />
+    <Compile Include="Devices\Valves\FifteenPositionFluidicsValve.cs" />
     <Compile Include="Devices\Valves\FourPortFluidicsValve.cs" />
-    <Compile Include="Devices\Valves\IElevenPortValve.cs" />
-    <Compile Include="Devices\Valves\IFourPortValve.cs" />
-    <Compile Include="Devices\Valves\INinePortValve.cs" />
+    <Compile Include="Devices\Valves\IMultiPositionValve.cs" />
     <Compile Include="Devices\Valves\ISixPortInjectionValve.cs" />
-    <Compile Include="Devices\Valves\ISixPortValve.cs" />
-    <Compile Include="Devices\Valves\ISixteenPortValve.cs" />
-    <Compile Include="Devices\Valves\ISolidPhaseExtractor.cs" />
-    <Compile Include="Devices\Valves\ITenPortValve.cs" />
     <Compile Include="Devices\Valves\ITwoPositionValve.cs" />
     <Compile Include="Devices\Valves\MultiPositionValve.cs" />
-    <Compile Include="Devices\Valves\NinePortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\SixPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\SixPortInjectionFluidicsValve.cs" />
-    <Compile Include="Devices\Valves\SixteenPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\SolidPhaseExtractor.cs" />
     <Compile Include="Devices\Valves\TenPortFluidicsValve.cs" />
+    <Compile Include="Devices\Valves\TenPositionFluidicsValve.cs" />
     <Compile Include="Devices\Valves\TwoPositionValve.cs" />
     <Compile Include="Devices\Valves\ValvePositionEventArgs.cs" />
     <Compile Include="Devices\ContactClosure.cs" />

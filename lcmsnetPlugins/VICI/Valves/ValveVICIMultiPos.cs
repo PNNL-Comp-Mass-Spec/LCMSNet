@@ -36,8 +36,6 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         private int m_lastSentPosition;
 
-        private int m_numberOfPositions;
-
         /// <summary>
         /// How long to tell LCMSNet the SetPosition method can take. it is 6  seconds instead of 4 because we verify that
         /// the the position has change, and that 1.5 seconds+ so 4 + 1.5 rounded up = 6.
@@ -80,7 +78,7 @@ namespace LcmsNetPlugins.VICI.Valves
             m_lastMeasuredPosition   = -1;
             m_lastSentPosition       = -1;
 
-            m_numberOfPositions      = numPositions;
+            NumberOfPositions      = numPositions;
         }
 
         /// <summary>
@@ -94,7 +92,7 @@ namespace LcmsNetPlugins.VICI.Valves
             m_lastMeasuredPosition   = -1;
             m_lastSentPosition       = -1;
 
-            m_numberOfPositions  = numPositions;
+            NumberOfPositions  = numPositions;
         }
 
         #endregion
@@ -115,11 +113,7 @@ namespace LcmsNetPlugins.VICI.Valves
         ///
         /// </summary>
         [PersistenceData("NumberOfPositions")]
-        public int NumberOfPositions
-        {
-            get { return m_numberOfPositions; }
-            set { m_numberOfPositions = value; }
-        }
+        public int NumberOfPositions { get; set; }
 
         #endregion
 
@@ -172,7 +166,7 @@ namespace LcmsNetPlugins.VICI.Valves
                 }
             }
 
-            if (newPosition > 0 && newPosition <= m_numberOfPositions)
+            if (newPosition > 0 && newPosition <= NumberOfPositions)
             {
                 try
                 {
@@ -308,7 +302,7 @@ namespace LcmsNetPlugins.VICI.Valves
             if (tempBuffer.Length > 1)
             {
                 var positions = tempBuffer.Split('=');
-                var   tempPosition = positions[positions.Length - 1];
+                var tempPosition = positions[positions.Length - 1];
 
                 int position;
                 if (int.TryParse(tempPosition, out position))
@@ -333,14 +327,14 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             if (Emulation)
             {
-                m_numberOfPositions = numPositions;
+                NumberOfPositions = numPositions;
                 return ValveErrors.Success;
             }
 
             try
             {
                 Port.WriteLine(SoftwareID + "NP" + numPositions);
-                m_numberOfPositions = numPositions;
+                NumberOfPositions = numPositions;
 
                 //Wait 325ms for the command to go through
 
@@ -365,7 +359,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             if (Emulation)
             {
-                return m_numberOfPositions;
+                return NumberOfPositions;
             }
 
             var tempNumPositions = -1;
@@ -426,7 +420,7 @@ namespace LcmsNetPlugins.VICI.Valves
                 }
             }
 
-            m_numberOfPositions = tempNumPositions;
+            NumberOfPositions = tempNumPositions;
             return tempNumPositions;
         }
         #endregion
