@@ -8,16 +8,15 @@ using LcmsNetSDK.Devices;
 namespace LcmsNetPlugins.VICI.Valves
 {
     /// <summary>
-    /// Class used for interacting with the VICI multipositon valve
+    /// Class used for interacting with the VICI multiposition valves
     /// </summary>
     //[Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    //[DeviceControlAttribute(typeof(controlValveVICIMultiPos),
-    //                             typeof(controlValveVICIMultiPosGlyph),
-    //                             "Valve Multi-Position",
-    //                             "Valves")
+    //[DeviceControl(typeof(ValveVICIMultiPosViewModel),
+    //    "MultiPosition",
+    //    "Valves Multi-Position")
     //]
-    public class ValveVICIMultiPos : ValveVICIBase, IDevice
+    public class ValveVICIMultiPos : ValveVICIBase, IDevice, IMultiPositionValve
     {
         // Settings for EMTCA-CE (Multi-pos actuator):
         //     Baud Rate   9600
@@ -27,14 +26,6 @@ namespace LcmsNetPlugins.VICI.Valves
         //     Handshake   None
 
         #region Members
-        /// <summary>
-        /// The last measured position of the valve.
-        /// </summary>
-        private int m_lastMeasuredPosition;
-        /// <summary>
-        /// The last sent position to the valve.
-        /// </summary>
-        private int m_lastSentPosition;
 
         /// <summary>
         /// How long to tell LCMSNet the SetPosition method can take. it is 6  seconds instead of 4 because we verify that
@@ -72,11 +63,11 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ValveVICIMultiPos(int numPositions) : base(CONST_DEFAULT_TIMEOUT, CONST_DEFAULT_TIMEOUT, "MPValve")
+        public ValveVICIMultiPos(int numPositions) : base(CONST_DEFAULT_TIMEOUT, CONST_DEFAULT_TIMEOUT, "MPValve" + numPositions)
         {
             //Set positions to unknown
-            m_lastMeasuredPosition   = -1;
-            m_lastSentPosition       = -1;
+            LastMeasuredPosition   = -1;
+            LastSentPosition       = -1;
 
             NumberOfPositions      = numPositions;
         }
@@ -86,11 +77,11 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         /// <param name="numPositions"></param>
         /// <param name="port">The serial port object to use.</param>
-        public ValveVICIMultiPos(int numPositions, SerialPort port) : base(port, "MPValve")
+        public ValveVICIMultiPos(int numPositions, SerialPort port) : base(port, "MPValve" + numPositions)
         {
             //Set positions to unknown
-            m_lastMeasuredPosition   = -1;
-            m_lastSentPosition       = -1;
+            LastMeasuredPosition   = -1;
+            LastSentPosition       = -1;
 
             NumberOfPositions  = numPositions;
         }
@@ -100,14 +91,14 @@ namespace LcmsNetPlugins.VICI.Valves
         #region Properties
 
         /// <summary>
-        /// Gets the last measured position of the valve.
+        /// The last measured position of the valve.
         /// </summary>
-        public int LastMeasuredPosition => m_lastMeasuredPosition;
+        public int LastMeasuredPosition { get; private set; }
 
         /// <summary>
-        /// Gets the last position sent to the valve.
+        /// The last position sent to the valve.
         /// </summary>
-        public int LastSentPosition => m_lastSentPosition;
+        public int LastSentPosition { get; private set; }
 
         /// <summary>
         ///
@@ -130,10 +121,19 @@ namespace LcmsNetPlugins.VICI.Valves
             if (Emulation)
             {
                 //Fill in fake position
-                m_lastMeasuredPosition = 0;
+                LastMeasuredPosition = 0;
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Explicit implementation of SetPosition(int) to wrap the version that returns error info.
+        /// </summary>
+        /// <param name="s">The new position</param>
+        void IMultiPositionValve.SetPosition(int s)
+        {
+            SetPosition(s);
         }
 
         /// <summary>
@@ -145,11 +145,11 @@ namespace LcmsNetPlugins.VICI.Valves
             var newPosition = Convert.ToInt32(position);
             if (Emulation)
             {
-                m_lastSentPosition = m_lastMeasuredPosition = newPosition;
+                LastSentPosition = LastMeasuredPosition = newPosition;
                 OnPosChanged(newPosition);
                 return ValveErrors.Success;
             }
-            if(position == m_lastMeasuredPosition)
+            if(position == LastMeasuredPosition)
             {
                 return ValveErrors.Success;
             }
@@ -170,7 +170,7 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 try
                 {
-                    m_lastSentPosition = newPosition;
+                    LastSentPosition = newPosition;
                     Port.WriteLine(SoftwareID + "GO" + newPosition);
                 }
 
@@ -212,13 +212,13 @@ namespace LcmsNetPlugins.VICI.Valves
                     return ValveErrors.UnauthorizedAccess;
                 }
 
-                if (m_lastMeasuredPosition != m_lastSentPosition)
+                if (LastMeasuredPosition != LastSentPosition)
                 {
                     //ApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position.");
                     return ValveErrors.ValvePositionMismatch;
                 }
 
-                OnPosChanged(m_lastMeasuredPosition);
+                OnPosChanged(LastMeasuredPosition);
                 //ApplicationLogger.LogMessage(0, Name + " changed position to: " + m_lastMeasuredPosition);
                 return ValveErrors.Success;
             }
@@ -234,7 +234,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             if (Emulation)
             {
-                return m_lastSentPosition;
+                return LastSentPosition;
             }
 
             //If the serial port is not open, open it
@@ -321,12 +321,12 @@ namespace LcmsNetPlugins.VICI.Valves
                 {
                     if (position >= 0 && position <= NumberOfPositions)
                     {
-                        m_lastMeasuredPosition = position;
+                        LastMeasuredPosition = position;
                         return position;
                     }
                 }
             }
-            m_lastMeasuredPosition = -1;
+            LastMeasuredPosition = -1;
             return -1;
         }
 

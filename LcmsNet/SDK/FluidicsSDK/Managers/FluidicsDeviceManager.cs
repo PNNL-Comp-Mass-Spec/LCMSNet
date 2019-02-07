@@ -46,7 +46,7 @@ namespace FluidicsSDK.Managers
             // Then parse out the potential fluidics device types so we can add to the user interface.
             var type = device.GetType();
 
-            var fluidicsDevice = FluidicsDeviceTypeFactory.CreateDevice(type);
+            var fluidicsDevice = FluidicsDeviceTypeFactory.CreateDevice(type, device);
             if (fluidicsDevice != null)
             {
                 m_devices.Add(fluidicsDevice);

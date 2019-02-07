@@ -27,15 +27,11 @@ namespace FluidicsSDK.Devices
                 {typeof(IFluidicsPump), typeof(FluidicsPump)},
                 {typeof(ISixPortValve), typeof(SixPortFluidicsValve)},
                 {typeof(ITenPortValve), typeof(TenPortFluidicsValve)},
-                {typeof(IEightPositionValve), typeof(EightPositionFluidicsValve)},
                 {typeof(IFluidicsSampler), typeof(FluidicsSampler)},
                 {typeof(ISixPortInjectionValve), typeof(SixPortInjectionFluidicsValve)},
                 {typeof(IFluidicsClosure), typeof(FluidicsDetector)},
                 {typeof(ISolidPhaseExtractor), typeof(SolidPhaseExtractor)},
-                {typeof(ITenPositionValve), typeof(TenPositionFluidicsValve)},
-                {typeof(IFifteenPositionValve), typeof(FifteenPositionFluidicsValve)},
-                {typeof(ISixteenPositionValve), typeof(SixteenPositionFluidicsValve)},
-                {typeof(IFourPositionValve), typeof(FourPositionFluidicsValve)},
+                {typeof(IMultiPositionValve), typeof(MultiPositionValve)},
                 {typeof(IContactClosure), typeof(ContactClosure)}
             };
         }
@@ -63,10 +59,11 @@ namespace FluidicsSDK.Devices
         /// Creates a device from the device type checking to see if it supports standard fluidics device interfaces or valid custom interface types.
         /// </summary>
         /// <param name="deviceType"></param>
+        /// <param name="device"></param>
         /// <returns></returns>
-        public static FluidicsDevice CreateDevice(Type deviceType)
+        public static FluidicsDevice CreateDevice(Type deviceType, IDevice device = null)
         {
-            FluidicsDevice device = null;
+            FluidicsDevice fluidicsDevice = null;
             var attributes = deviceType.GetCustomAttributes(typeof(DeviceControlAttribute), false);
             foreach (var o in attributes)
             {
@@ -95,14 +92,18 @@ namespace FluidicsSDK.Devices
                         }
                     }
 
-                    if (fluidicsDeviceType != null)
+                    if (fluidicsDeviceType == typeof(MultiPositionValve) && device is IMultiPositionValve mpv)
                     {
-                        device = Activator.CreateInstance(fluidicsDeviceType) as FluidicsDevice;
+                        fluidicsDevice = new MultiPositionValve(mpv.NumberOfPositions);
+                    }
+                    else if (fluidicsDeviceType != null)
+                    {
+                        fluidicsDevice = Activator.CreateInstance(fluidicsDeviceType) as FluidicsDevice;
                     }
                 }
             }
 
-            return device;
+            return fluidicsDevice;
         }
     }
 }

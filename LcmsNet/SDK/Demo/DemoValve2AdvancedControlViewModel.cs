@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using FluidicsSDK.Base;
 using LcmsNetData;
 using LcmsNetSDK.Devices;
 

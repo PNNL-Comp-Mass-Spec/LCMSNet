@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO.Ports;
-using FluidicsSDK.Base;
-using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
@@ -13,7 +11,7 @@ namespace LcmsNetPlugins.VICI.Valves
         "4-Position",
         "Valves Multi-Position")
     ]
-    public class ValveVICI04Position : ValveVICIMultiPos, IFourPositionValve
+    public class ValveVICI04Position : ValveVICIMultiPos
     {
         private const int numPositions = 4;
         public ValveVICI04Position()

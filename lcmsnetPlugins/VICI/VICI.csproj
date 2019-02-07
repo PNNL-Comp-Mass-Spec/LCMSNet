@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Valves\ValveExceptions.cs" />
+    <Compile Include="Valves\ValveStates.cs" />
     <Compile Include="Valves\ValveVICI04Position.cs" />
     <Compile Include="Valves\ValveVICI08Position.cs" />
     <Compile Include="Valves\ValveVICI10Position.cs" />

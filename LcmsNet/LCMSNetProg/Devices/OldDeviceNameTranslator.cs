@@ -42,6 +42,7 @@ namespace LcmsNet.Devices
             //FullyQualifiedNameMapper.Add("FluidicsPack.Tee", "FluidicsPack.Tee");
             //FullyQualifiedNameMapper.Add("FluidicsPack.Union", "FluidicsPack.Union");
             //FullyQualifiedNameMapper.Add("FluidicsPack.WasteComponent", "FluidicsPack.WasteComponent");
+            FullyQualifiedNameMapper.Add("FluidicsSDK.Base.EightPositionState", "LcmsNetPlugins.VICI.Valves.EightPositionState");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.BrukerStart.classBrukerStart", "LcmsNetPlugins.Bruker.BrukerStart");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.classContactClosureU12", "LcmsNetPlugins.PNNLDevices.ContactClosure.ContactClosureU12");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.classContactClosureU3", "LcmsNetPlugins.LabJackU3.ContactClosureU3");

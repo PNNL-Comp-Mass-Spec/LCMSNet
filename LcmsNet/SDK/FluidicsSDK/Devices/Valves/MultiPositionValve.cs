@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
-using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Devices.Valves
@@ -14,19 +13,25 @@ namespace FluidicsSDK.Devices.Valves
     /// </summary>
     // can technically have 1-16 ports, more than that and the ports start overlapping and become unclickable.
     // used as a base class for other valve glyphs
-    public abstract class MultiPositionValve<T, T1> : FluidicsDevice where T : Enum where T1 : class, IMultiPositionValve<T>
+    public class MultiPositionValve : FluidicsDevice
     {
         #region Members
         // radius of the valve's circle primitive in pixels, arbitrarily chosen
         private const int _radius = 75;
-        // number of ports the valve has
-        private readonly int _numberOfPositions;
         protected Dictionary<int, List<Tuple<int, int>>> _states;
-        protected T1 Valve { get; private set; }
+        private IMultiPositionValve _valve;
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="numberOfPositions">the number of positions the valve will have</param>
+        public MultiPositionValve(int numberOfPositions) : this(numberOfPositions, 2, 2)
+        {
+        }
 
         /// <summary>
         /// constructor
@@ -37,7 +42,7 @@ namespace FluidicsSDK.Devices.Valves
         protected MultiPositionValve(int numberOfPositions, int xOffset = 2, int yOffset = 2) :
             base()
         {
-            _numberOfPositions = numberOfPositions;
+            NumberOfPositions = numberOfPositions;
             _states = SetupStates();
             CurrentState = 1;
             Offset = new Point(xOffset, yOffset);
@@ -53,6 +58,7 @@ namespace FluidicsSDK.Devices.Valves
             Sink = false;
 
             ActivateState(_states[CurrentState]);
+
             var stateControlSize = new Size(15, 15);
             var stateControl1Loc = new Point(Center.X - (stateControlSize.Width * 3), Center.Y - (stateControlSize.Height / 2));
             var stateControl2Loc = new Point(Center.X + stateControlSize.Width * 2, Center.Y - (stateControlSize.Height / 2));
@@ -63,6 +69,11 @@ namespace FluidicsSDK.Devices.Valves
             //add right control
             AddPrimitive(new FluidicsTriangle(stateControlRectangle2, Orient.Right), RightButtonAction);
         }
+
+        /// <summary>
+        /// Number of positions the valve has
+        /// </summary>
+        public int NumberOfPositions { get; }
 
         /// <summary>
         /// The x,y offset of the main drawing to compensate for line width, ports, etc.
@@ -80,11 +91,11 @@ namespace FluidicsSDK.Devices.Valves
             // an angle which is a multiple of this one. e.g. port 4 is on the vector
             // of (angle * 4). So 4 ports would be placed at pi/2, pi, 3pi/2, and 2pi.
             var currentAngle = (3 * Math.PI) / 2;
-            var angle = (2 * Math.PI) / (_numberOfPositions);
+            var angle = (2 * Math.PI) / (NumberOfPositions);
 
-            var points = new Point[_numberOfPositions + 1];
+            var points = new Point[NumberOfPositions + 1];
             points[0] = new Point(Center.X, Center.Y);
-            for (var i = 1; i <= _numberOfPositions; i++)
+            for (var i = 1; i <= NumberOfPositions; i++)
             {
                 // place them on a circle at a radius of m_radius/2 from the center
                 // of the valve.
@@ -113,11 +124,10 @@ namespace FluidicsSDK.Devices.Valves
         private Dictionary<int, List<Tuple<int, int>>> SetupStates()
         {
             var states = new Dictionary<int, List<Tuple<int, int>>>();
-            for (var i = 1; i <= _numberOfPositions; i++)
+            for (var i = 1; i <= NumberOfPositions; i++)
             {
                 states.Add(i, GenerateState(0, i));
             }
-            //states.Add(FifteenPositionState.P9, GenerateState(-1, -1));
             return states;
         }
 
@@ -145,15 +155,13 @@ namespace FluidicsSDK.Devices.Valves
             {
                 state = LowestPosition;
             }
-            Valve.SetPosition(GetPositionForState(state));
+            _valve.SetPosition(state);
         }
 
-        protected abstract int LowestPosition { get; }
-        protected abstract int HighestPosition { get; }
-        protected abstract int UnknownPosition { get; }
-        protected abstract T CurrentPosition { get; }
-
-        protected abstract T GetPositionForState(int state);
+        protected int LowestPosition => 1;
+        protected int HighestPosition => NumberOfPositions;
+        protected int UnknownPosition => -1;
+        protected int CurrentPosition { get; }
 
         private void LeftButtonAction()
         {
@@ -167,18 +175,16 @@ namespace FluidicsSDK.Devices.Valves
 
         public override string StateString()
         {
-            return CurrentPosition.GetEnumDescription();
+            return LowestPosition <= CurrentState && CurrentState <= HighestPosition ? CurrentState.ToString() : "Unknown";
         }
-
-        protected abstract T1 GetCastDevice(IDevice device);
 
         protected override void SetDevice(IDevice device)
         {
-            Valve = GetCastDevice(device);
+            _valve = device as IMultiPositionValve;
             try
             {
-                if (Valve != null)
-                    Valve.PosChanged += Valve_PositionChanged;
+                if (_valve != null)
+                    _valve.PosChanged += Valve_PositionChanged;
             }
             catch (Exception)
             {
@@ -193,7 +199,7 @@ namespace FluidicsSDK.Devices.Valves
 
         protected override void ClearDevice(IDevice device)
         {
-            Valve = null;
+            _valve = null;
         }
 
         protected override List<Tuple<int, int>> GenerateState(int startingPortIndex, int endingPortIndex)

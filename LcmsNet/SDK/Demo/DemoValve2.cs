@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using FluidicsSDK.Devices;
-using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetData;
 using LcmsNetSDK.Devices;
@@ -10,11 +8,24 @@ using LcmsNetSDK.Method;
 
 namespace DemoPluginLibrary
 {
+    public enum EightPositionState
+    {
+        [Description("1")] P1 = 1,
+        [Description("2")] P2 = 2,
+        [Description("3")] P3 = 3,
+        [Description("4")] P4 = 4,
+        [Description("5")] P5 = 5,
+        [Description("6")] P6 = 6,
+        [Description("7")] P7 = 7,
+        [Description("8")] P8 = 8,
+        [Description("Unknown")] Unknown = -1
+    };
+
     //TODO: Add a custom user control for this guy....maybe?
     [DeviceControl(typeof(DemoValve2AdvancedControlViewModel),
                                     "Demo Valve - Multiposition",
                                     "Demo")]
-    public class DemoValve2 : IDevice, IEightPositionValve
+    public class DemoValve2 : IDevice, IMultiPositionValve
     {
         #region Methods
         public DemoValve2()
@@ -22,6 +33,7 @@ namespace DemoPluginLibrary
             Name = "Demo Valve";
             Version = "infinity.";
             Position = 1;
+            NumberOfPositions = 8;
             AbortEvent = new System.Threading.ManualResetEvent(false);
         }
 
@@ -68,6 +80,14 @@ namespace DemoPluginLibrary
             return Position;
         }
 
+        public void SetPosition(int s)
+        {
+            if (1 <= s && s <= 8)
+            {
+                SetPosition((EightPositionState) s);
+            }
+        }
+
         [LCMethodEvent("SetPosition", 1.0, "", -1, false)]
         public void SetPosition(EightPositionState position)
         {
@@ -77,7 +97,6 @@ namespace DemoPluginLibrary
             }
             Position = (int)position;
             PosChanged?.Invoke(this, new ValvePositionEventArgs<int>((int)position));
-
         }
 
         #endregion
@@ -115,6 +134,7 @@ namespace DemoPluginLibrary
         }
 
         private string name;
+
         public string Name
         {
             get { return name; }
@@ -146,6 +166,8 @@ namespace DemoPluginLibrary
         }
 
         public int Position { get; set; }
+
+        public int NumberOfPositions { get; }
 
         #endregion
 

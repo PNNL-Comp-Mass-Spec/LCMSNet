@@ -1,27 +1,12 @@
 ﻿using System;
-using FluidicsSDK.Base;
 
 namespace FluidicsSDK.Devices.Valves
 {
-    public interface IMultiPositionValve<in T> : IFluidicsDevice where T : Enum
+    public interface IMultiPositionValve : IFluidicsDevice
     {
+        int NumberOfPositions { get; }
         event EventHandler<ValvePositionEventArgs<int>> PosChanged;
         int GetPosition();
-        void SetPosition(T s);
+        void SetPosition(int s);
     }
-
-    public interface IFourPositionValve : IMultiPositionValve<FourPositionState>
-    { }
-
-    public interface ISixteenPositionValve : IMultiPositionValve<SixteenPositionState>
-    { }
-
-    public interface ITenPositionValve : IMultiPositionValve<TenPositionState>
-    { }
-
-    public interface IEightPositionValve : IMultiPositionValve<EightPositionState>
-    { }
-
-    public interface IFifteenPositionValve : IMultiPositionValve<FifteenPositionState>
-    { }
 }
