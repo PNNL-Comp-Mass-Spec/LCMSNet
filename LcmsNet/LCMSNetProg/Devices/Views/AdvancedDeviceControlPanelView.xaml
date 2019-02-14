@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              d:DesignHeight="846" d:DesignWidth="708"
              d:DataContext="{d:DesignInstance {x:Type viewModels:AdvancedDeviceControlPanelViewModel}, IsDesignTimeCreatable=True}">
-    <TabControl ItemsSource="{Binding DeviceGroups}">
+    <TabControl ItemsSource="{Binding DeviceGroups}" SelectedItem="{Binding SelectedGroup}">
         <TabControl.ItemTemplate>
             <DataTemplate>
                 <TextBlock Text="{Binding Name}" />

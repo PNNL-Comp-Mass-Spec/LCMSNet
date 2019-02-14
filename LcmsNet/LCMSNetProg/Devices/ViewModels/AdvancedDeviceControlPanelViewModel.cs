@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
@@ -16,6 +17,10 @@ namespace LcmsNet.Devices.ViewModels
 
             DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
+
+            // Once a group is added to the device controls, automatically make the first one the "Selected group" if one hasn't been previously set.
+            this.WhenAnyValue(x => x.deviceGroups, x => x.SelectedGroup, x => x.deviceGroups.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
+                .Subscribe(x => SelectedGroup = x.Item1[0]);
         }
 
         ~AdvancedDeviceControlPanelViewModel()
@@ -76,8 +81,18 @@ namespace LcmsNet.Devices.ViewModels
         }
 
         private readonly ReactiveList<DeviceGroup> deviceGroups = new ReactiveList<DeviceGroup>();
+        private DeviceGroup selectedGroup = null;
 
         public IReadOnlyReactiveList<DeviceGroup> DeviceGroups => deviceGroups;
+
+        /// <summary>
+        /// Selected device
+        /// </summary>
+        public DeviceGroup SelectedGroup
+        {
+            get => selectedGroup;
+            set => this.RaiseAndSetIfChanged(ref selectedGroup, value);
+        }
 
         private readonly Dictionary<AdvancedDeviceGroupControlViewModel, DeviceGroup> m_controlToPageMap;
 

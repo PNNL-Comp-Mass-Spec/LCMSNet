@@ -31,7 +31,6 @@ using LcmsNetData.Logging;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSQLiteTools;
 using PDFGenerator;
