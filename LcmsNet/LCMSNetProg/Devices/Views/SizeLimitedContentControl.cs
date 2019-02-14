@@ -9,8 +9,15 @@ namespace LcmsNet.Devices.Views
     /// </summary>
     public class SizeLimitedContentControl : ContentControl
     {
+        public SizeLimitedContentControl()
+        {
+            AvailableSize = new Size(0, 0);
+        }
+
         protected override Size MeasureOverride(Size constraint)
         {
+            // ScrollViewer: always passes Size(Infinity, Infinity) to contents; we don't quite want that.
+            var newSize = AvailableSize;
             var minWidth = 0.0;
             var minHeight = 0.0;
             if (Content is FrameworkElement fe)
@@ -19,11 +26,17 @@ namespace LcmsNet.Devices.Views
                 minHeight = fe.MinHeight;
             }
 
-            var minSize = new Size(minWidth, minHeight);
+            if (AvailableSize.Width < minWidth || AvailableSize.Height < minHeight)
+            {
+                newSize = new Size(minWidth, minHeight);
+            }
 
-            base.MeasureOverride(minSize);
+            // Re-trigger a measure of the child elements
+            base.MeasureOverride(newSize);
 
-            return minSize;
+            return newSize;
         }
+
+        public Size AvailableSize { get; set; }
     }
 }

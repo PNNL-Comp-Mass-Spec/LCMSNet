@@ -21,7 +21,7 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate DataType="{x:Type viewModels:AdvancedDeviceGroupControlViewModel+DeviceControlData}">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_SizeChanged">
                         <views:SizeLimitedContentControl Content="{Binding View}" />
                     </ScrollViewer>
                 </DataTemplate>
