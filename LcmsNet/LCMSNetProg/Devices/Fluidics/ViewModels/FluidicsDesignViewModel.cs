@@ -12,6 +12,7 @@ using LcmsNet.Devices.ViewModels;
 using LcmsNet.Devices.Views;
 using LcmsNetData;
 using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 using Microsoft.Win32;
@@ -230,6 +231,10 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             }
 
             var writer = new DeviceConfigurationINIWriter();
+            if (path.Equals(CONST_DEFAULT_CONFIG_FILEPATH))
+            {
+                path = PersistDataPaths.GetFileSavePath(path);
+            }
             writer.WriteConfiguration(path, configuration);
 
             ApplicationLogger.LogMessage(0, string.Format("Saved device configuration to {0}.", path));
@@ -240,7 +245,12 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// </summary>
         public void LoadConfiguration()
         {
-            if (File.Exists(CONST_DEFAULT_CONFIG_FILEPATH))
+            var path = PersistDataPaths.GetFileLoadPath(CONST_DEFAULT_CONFIG_FILEPATH);
+            if (File.Exists(path))
+            {
+                LoadConfiguration(path);
+            }
+            else if (File.Exists(CONST_DEFAULT_CONFIG_FILEPATH))
             {
                 LoadConfiguration(CONST_DEFAULT_CONFIG_FILEPATH);
             }

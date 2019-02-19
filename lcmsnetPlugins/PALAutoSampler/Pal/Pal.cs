@@ -506,12 +506,14 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 }
 
                 var status = WaitUntilReady(CONST_WAITTIMEOUT);
-                if (System.IO.File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal"))
-                {
-                    System.IO.File.Delete(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal");
-                }
-                System.IO.TextWriter writer = System.IO.File.CreateText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal");
-                writer.Close();
+                // Bryson: Removed, because it doesn't appear to be used at all?
+                // If re-enabled, should change to use "PersistDataPaths" to not write to the ProgramFiles directory
+                //if (System.IO.File.Exists(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal"))
+                //{
+                //    System.IO.File.Delete(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal");
+                //}
+                //System.IO.TextWriter writer = System.IO.File.CreateText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\init.pal");
+                //writer.Close();
 
                 //Reset the pal
                 error = m_PALDrvr.ResetPAL();

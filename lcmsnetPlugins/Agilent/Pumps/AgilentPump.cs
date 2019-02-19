@@ -228,9 +228,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
             if (mwatcher_methods == null)
             {
-                var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
-                path = Path.Combine(Path.GetDirectoryName(path), "..\\pumpmethods");
-                path = path.Substring(path.IndexOf(":", StringComparison.Ordinal) + 2); // gets rid of the file:/ tag.
+                var path = PersistDataPaths.GetDirectoryLoadPathCheckFiles("PumpMethods", "*.txt");
                 //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
                 mwatcher_methods = new FileSystemWatcher(path, "*.txt");
                 mwatcher_methods.Created += mwatcher_methods_Created;

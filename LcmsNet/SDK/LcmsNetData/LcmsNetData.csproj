@@ -79,6 +79,7 @@
     <Compile Include="Method\LCMethodBasic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemInformationReporter.cs" />
+    <Compile Include="System\PersistDataPaths.cs" />
     <Compile Include="System\TimeKeeper.cs" />
     <Compile Include="WpfConversions.cs" />
   </ItemGroup>

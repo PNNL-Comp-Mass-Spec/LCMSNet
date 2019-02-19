@@ -16,6 +16,7 @@ using System.Xml;
 using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
+using LcmsNetData.System;
 
 namespace LcmsNetSDK.Data
 {
@@ -163,7 +164,7 @@ namespace LcmsNetSDK.Data
             var outFileName = SampleData.GetTriggerFileName(sample, ".xml");
 
             // Write trigger file to local folder
-            var appPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH);
+            var appPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH);
             var localTriggerFolderPath = Path.Combine(appPath, "TriggerFiles");
             var wasLocalFileCreated = false;
 
@@ -174,7 +175,13 @@ namespace LcmsNetSDK.Data
             {
                 try
                 {
+                    /**/
+                    // TODO: this line is here for upgrade compatibility - if the folder does not exist in ProgramData, but does in ProgramFiles, this will copy all existing contents.
+                    var loader = PersistDataPaths.GetDirectorySavePath("TriggerFiles");
+                    /*/
+                    // TODO: This line needs to be uncommented when the above is removed.
                     Directory.CreateDirectory(localTriggerFolderPath);
+                    /**/
 
                     // Create the trigger file on the local computer
                     try

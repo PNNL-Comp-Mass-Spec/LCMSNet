@@ -19,6 +19,7 @@ using LcmsNetData;
 using LcmsNetData.Configuration;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
@@ -274,6 +275,7 @@ namespace LcmsNet
             // Add path to executable as a saved setting
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
             LCMSSettings.SetParameter(LCMSSettings.PARAM_APPLICATIONPATH, fi.DirectoryName);
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH, PersistDataPaths.ProgramDataPath);
 
             var emulation = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED);
             if (!string.IsNullOrWhiteSpace(emulation))
@@ -351,7 +353,11 @@ namespace LcmsNet
         /// <param name="localPath">Local path to create.</param>
         private void CreatePath(string localPath)
         {
-            var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), localPath);
+            var path = localPath;
+            if (!Path.IsPathRooted(localPath))
+            {
+                path = PersistDataPaths.GetDirectorySavePath(localPath);
+            }
 
             // See if the logging directory exists
             if (Directory.Exists(path) == false)
@@ -365,7 +371,7 @@ namespace LcmsNet
                     // Not much we can do here...
                     var errorMessage =
                         string.Format(
-                            "LCMS could not create missing folder {0} required for operation.  Please run application with higher priveleges.  {1}",
+                            "LCMS could not create missing folder {0} required for operation.  Please run application with higher privileges.  {1}",
                             localPath, ex.Message);
 
                     Window window = main;
@@ -579,12 +585,16 @@ namespace LcmsNet
             // created.
             //LogMessage(-1, "Creating pertinent folders");
 
+            // Load settings
+            LogMessage(-1, "Loading settings");
+            LoadSettings();
+
             // Make sure we can log/error report locally before we do anything!
             try
             {
                 CreatePath(LCMethodFactory.CONST_LC_METHOD_FOLDER);
                 CreatePath(DeviceManager.CONST_PUMP_METHOD_PATH);
-                CreatePath(DeviceManager.CONST_DEVICE_PLUGIN_PATH);
+                CreatePath(Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), DeviceManager.CONST_DEVICE_PLUGIN_PATH));
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -598,10 +608,6 @@ namespace LcmsNet
                 window.ShowMessage("The application does not have the required privileges to run. Please run as administrator.");
                 return false;
             }
-
-            // Load settings
-            LogMessage(-1, "Loading settings");
-            LoadSettings();
 
             // Now that settings have been loaded, set the event handler so that when any of these settings change, we save them to disk.
             LCMSSettings.SettingChanged += LCMSSettings_SettingChanged;

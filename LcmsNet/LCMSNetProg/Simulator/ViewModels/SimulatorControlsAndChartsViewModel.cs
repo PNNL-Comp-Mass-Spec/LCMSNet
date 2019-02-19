@@ -91,7 +91,7 @@ namespace LcmsNet.Simulator.ViewModels
             var writer = new LCMethodWriter();
 
             // Construct the path
-            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
+            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = Path.Combine(path, method.Name + LCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!

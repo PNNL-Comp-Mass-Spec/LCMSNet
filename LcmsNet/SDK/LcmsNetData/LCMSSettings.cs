@@ -37,6 +37,7 @@ namespace LcmsNetData
         public const string CONST_UNASSIGNED_CART_NAME = "(none)";
 
         public const string PARAM_APPLICATIONPATH = "ApplicationPath";
+        public const string PARAM_APPLICATIONDATAPATH = "ApplicationDataPath";
         public const string PARAM_CACHEFILENAME = "CacheFileName";
         public const string PARAM_CARTCONFIGNAME = "CartConfigName";
         public const string PARAM_CARTNAME = "CartName";

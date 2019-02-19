@@ -13,6 +13,7 @@ using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.Pumps;
 using LcmsNetCommonControls.ViewModels;
 using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Devices;
 using Microsoft.Win32;
 using ReactiveUI;
@@ -21,7 +22,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 {
     public class AgilentPumpViewModel : BaseDeviceControlViewModelReactive, IDeviceControl, IDisposable
     {
-        private const string CONST_PUMP_METHOD_PATH = "pumpmethods";
+        private const string CONST_PUMP_METHOD_PATH = "PumpMethods";
 
         #region Constructors
 
@@ -388,8 +389,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             // design pattern that things propagate events to us, since we are not in charge of managing the
             // data.  We will catch an event from adding a method that one was added...and thus update
             // the user interface intrinsically.
-            var path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),
-                CONST_PUMP_METHOD_PATH);
+            var path = PersistDataPaths.GetDirectoryLoadPathCheckFiles(CONST_PUMP_METHOD_PATH, "*.txt");
             if (!System.IO.Directory.Exists(path))
             {
                 throw new System.IO.DirectoryNotFoundException("The directory " + path + " does not exist.");
@@ -459,7 +459,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             var dialog = new SaveFileDialog
             {
-                InitialDirectory = CONST_PUMP_METHOD_PATH,
+                InitialDirectory = PersistDataPaths.GetDirectorySavePath(CONST_PUMP_METHOD_PATH),
                 FileName = "pumpMethod",
                 DefaultExt = ".txt"
             };

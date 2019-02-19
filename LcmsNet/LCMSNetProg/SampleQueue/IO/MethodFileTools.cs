@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using LcmsNet.Method;
 using LcmsNetData;
 using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue.IO
@@ -215,8 +216,11 @@ namespace LcmsNet.SampleQueue.IO
         {
             string message;
 
+            // TODO: this line is here for upgrade compatibility - if the folder does not exist in ProgramData, but does in ProgramFiles, this will copy all existing contents.
+            var loader = PersistDataPaths.GetDirectorySavePath(LOCAL_METHOD_FOLDER_NAME);
+
             // Verify local method folder exists. Otherwise, create the folder.
-            var localFolder = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH),
+            var localFolder = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH),
                 LOCAL_METHOD_FOLDER_NAME);
             if (!Directory.Exists(localFolder))
             {
@@ -241,7 +245,7 @@ namespace LcmsNet.SampleQueue.IO
         public static bool CheckLocalMethodFolders()
         {
             // Check for presence of local method directory
-            var localMethodXferFolder = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH),
+            var localMethodXferFolder = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH),
                 LOCAL_METHOD_FOLDER_NAME);
             if (!Directory.Exists(localMethodXferFolder))
                 return false; // If no directory, there are no folders needing transfer
@@ -262,7 +266,7 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         public static void MoveLocalMethodFiles()
         {
-            var localFolder = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH),
+            var localFolder = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH),
                 LOCAL_METHOD_FOLDER_NAME);
 
             if (!Directory.Exists(localFolder))

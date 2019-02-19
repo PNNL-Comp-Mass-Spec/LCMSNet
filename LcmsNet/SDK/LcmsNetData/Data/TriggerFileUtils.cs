@@ -14,7 +14,7 @@ namespace LcmsNetData.Data
         public static bool CheckLocalTriggerFiles()
         {
             // Check for presence of local trigger file directory
-            var localFolderPath = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), "TriggerFiles");
+            var localFolderPath = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), "TriggerFiles");
 
             // If local folder doen't exist, then there are no local trigger files
             if (!Directory.Exists(localFolderPath)) return false;
@@ -35,7 +35,7 @@ namespace LcmsNetData.Data
         /// </summary>
         public static void MoveLocalTriggerFiles()
         {
-            var localFolderPath = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), "TriggerFiles");
+            var localFolderPath = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), "TriggerFiles");
 
             // Verify local trigger file directory exists
             if (!Directory.Exists(localFolderPath))
