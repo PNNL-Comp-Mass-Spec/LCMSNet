@@ -32,9 +32,7 @@ namespace LcmsNet.Devices.Views
             }
 
             // Re-trigger a measure of the child elements
-            base.MeasureOverride(newSize);
-
-            return newSize;
+            return base.MeasureOverride(newSize);
         }
 
         public Size AvailableSize { get; set; }

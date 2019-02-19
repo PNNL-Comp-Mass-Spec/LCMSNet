@@ -16,7 +16,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Delimeter of file.
         /// </summary>
-        private const string CONST_DELIMETER = " = ";
+        private const string CONST_DELIMITER = " = ";
 
         /// <summary>
         /// Writes the configuration to file.
@@ -38,7 +38,7 @@ namespace LcmsNet.Devices
                     foreach (var setting in settings.Keys)
                     {
                         var value = settings[setting];
-                        writer.WriteLine("{0}{1}{2}", setting, CONST_DELIMETER, value);
+                        writer.WriteLine("{0}{1}{2}", setting, CONST_DELIMITER, value);
                     }
                 }
                 writer.WriteLine(CONST_CONNECTION_HEADER_TAG);
