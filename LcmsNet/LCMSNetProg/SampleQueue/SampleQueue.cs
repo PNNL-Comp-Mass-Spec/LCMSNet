@@ -2002,8 +2002,8 @@ namespace LcmsNet.SampleQueue
             var sample = FindSample(m_runningQueue, sampleData.UniqueID);
             if (sample == null)
             {
-                var errorMessage = string.Format("The sample {0} was not found on the running Queue.",
-                    sampleData);
+                var errorMessage = $"The sample {sampleData} was not found on the running Queue.";
+                ApplicationLogger.LogError(1, errorMessage, null, sampleData);
                 //TODO: BLL Removed because of the notification system.
                 // throw new classSampleNotRunningException(errorMessage);
                 return;
@@ -2026,7 +2026,6 @@ namespace LcmsNet.SampleQueue
             //
             m_nextAvailableSample = Math.Max(m_nextAvailableSample - 1, 0);
             sample.RunningStatus = SampleRunningStatus.Complete;
-
 
             var args = new SampleQueueArgs(
                 new[] { sample },
