@@ -37,6 +37,12 @@ namespace LcmsNetPlugins.PalValidator
         {
             var errors = new List<SampleValidationError>();
 
+            if (AutoSamplers.ConnectedAutoSamplers.Count == 0)
+            {
+                LogOnce("NoPALNoValidate", "Could not access the PAL for sample validation! Will not validate PAL settings for sample.");
+                return errors;
+            }
+
             //
             // We've validated the method, and the devices... Now we need to validate the PAL settings.
             //
