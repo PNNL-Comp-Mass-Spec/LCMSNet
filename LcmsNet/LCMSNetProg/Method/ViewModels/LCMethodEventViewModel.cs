@@ -55,6 +55,7 @@ namespace LcmsNet.Method.ViewModels
             SelectedDevice = null;
             EventNumber = eventNum.ToString();
             StoppedHere = false;
+            EventUnlocked = true;
 
             Breakpoint = new BreakpointViewModel();
 
