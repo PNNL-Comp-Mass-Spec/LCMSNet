@@ -93,6 +93,7 @@ namespace AgilentPumpExe
             AgilentPump?.Dispose();
             InitializePumpCommand?.Dispose();
             ClearStatusHistoryCommand?.Dispose();
+            ApplicationLogger.ShutDownLogging();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,14 @@ namespace AgilentPumpExe
         {
             InitializeComponent();
             DataContext = new MainWindowViewModel();
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel mwvm)
+            {
+                mwvm.Dispose();
+            }
         }
     }
 }
