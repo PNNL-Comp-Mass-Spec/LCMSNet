@@ -4,6 +4,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using LcmsNetData.Logging;
 using LcmsNetPlugins.Agilent.Pumps;
+using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace AgilentPumpExe
@@ -39,8 +40,16 @@ namespace AgilentPumpExe
             AgilentPumpVm.Device = AgilentPump;
 
             InitializePumpCommand = ReactiveCommand.Create(InitializePump, this.WhenAnyValue(x => x.Initialized).Select(x => !x));
+            ClearStatusHistoryCommand = ReactiveCommand.Create(ClearStatusHistory, this.WhenAnyValue(x => x.statusHistory.Count).Select(x => x > 0));
             ApplicationLogger.Error += ApplicationLoggerOnError;
             ApplicationLogger.Message += ApplicationLoggerOnMessage;
+            AgilentPump.Error += PumpOnError;
+        }
+
+        private void PumpOnError(object sender, DeviceErrorEventArgs e)
+        {
+            // TODO: Add exception unwind
+            RxApp.MainThreadScheduler.Schedule(() => AddStatusHistoryItem(e.Notification, e.Error));
         }
 
         private void ApplicationLoggerOnError(int errorLevel, ErrorLoggerArgs args)
