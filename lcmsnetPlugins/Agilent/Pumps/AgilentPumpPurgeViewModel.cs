@@ -18,6 +18,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             Title = "Purge Pumps Unknown";
             SetupCommands();
             Pump = new AgilentPump(true);
+            Pump.Emulation = true;
         }
 
         /// <summary>

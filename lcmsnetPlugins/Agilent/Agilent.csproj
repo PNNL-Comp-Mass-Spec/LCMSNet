@@ -55,9 +55,8 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
@@ -68,12 +67,17 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pumps\AgilentPump.cs" />
+    <Compile Include="Pumps\AgilentPumpControlView.xaml.cs">
+      <DependentUpon>AgilentPumpControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pumps\AgilentPumpInfo.cs" />
+    <Compile Include="Pumps\AgilentPumpInfoViewModel.cs" />
     <Compile Include="Pumps\AgilentPumpModes.cs" />
     <Compile Include="Pumps\AgilentPumpPurgeViewModel.cs" />
     <Compile Include="Pumps\AgilentPumpReplyErrorCodes.cs" />
     <Compile Include="Pumps\AgilentPumpStates.cs" />
     <Compile Include="Pumps\AgilentPumpStatus.cs" />
+    <Compile Include="Pumps\AgilentPumpStatusViewModel.cs" />
     <Compile Include="Pumps\AgilentPumpViewModel.cs" />
     <Compile Include="Pumps\AgilentPumpNotReadyStates.cs" />
     <Compile Include="Pumps\PumpPurgeChannel.cs" />
@@ -101,6 +105,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Pumps\AgilentPumpControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pumps\AgilentPumpPurgeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -120,7 +128,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
-rem powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
+powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
 
 xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"

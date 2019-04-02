@@ -33,6 +33,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             pumpDisplay = new PumpDisplayViewModel("Unknown");
             pumpPopoutVm = new PopoutViewModel(pumpDisplay);
+
+            pumpModel = this.WhenAnyValue(x => x.Pump, x => x.Pump.PumpModel).Select(x => x.Item2).ToProperty(this, nameof(PumpModel), "", true, RxApp.MainThreadScheduler);
+            pumpSerial = this.WhenAnyValue(x => x.Pump, x => x.Pump.PumpSerial).Select(x => x.Item2).ToProperty(this, nameof(PumpSerial), "", true, RxApp.MainThreadScheduler);
+            pumpFirmware = this.WhenAnyValue(x => x.Pump, x => x.Pump.PumpFirmware).Select(x => x.Item2).ToProperty(this, nameof(PumpFirmware), "", true, RxApp.MainThreadScheduler);
+            pumpState = this.WhenAnyValue(x => x.Pump, x => x.Pump.PumpState).Select(x => x.Item2).ToProperty(this, nameof(PumpState), PumpState.Unknown, true, RxApp.MainThreadScheduler);
+
             SetupCommands();
             timer = new Timer(TimerTick, this, 1000, 1000);
             NewModuleName = "";
@@ -53,8 +59,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private void RegisterDevice(IDevice device)
         {
             Pump = device as AgilentPump;
-            this.RaisePropertyChanged(nameof(PumpInfo));
-            this.RaisePropertyChanged(nameof(PumpStatus));
+            PumpInfo.PumpInfo = Pump?.PumpInfo;
+            PumpStatus.PumpStatus = Pump?.PumpStatus;
 
             // Initialize the underlying device class
             if (Pump != null)
@@ -137,8 +143,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private string methodText = "";
         private readonly PumpDisplayViewModel pumpDisplay = null;
         private readonly PopoutViewModel pumpPopoutVm;
-        private string newModuleName;
+        private string newModuleName = "";
         private AgilentPumpPurgeWindow purgeWindow = null;
+        private readonly ObservableAsPropertyHelper<string> pumpModel;
+        private readonly ObservableAsPropertyHelper<string> pumpSerial;
+        private readonly ObservableAsPropertyHelper<string> pumpFirmware;
+        private readonly ObservableAsPropertyHelper<PumpState> pumpState;
 
         #endregion
 
@@ -147,6 +157,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public IReadOnlyReactiveList<AgilentPumpModes> ModeComboBoxOptions => modeComboBoxOptions;
         public IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
         public IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
+
+        public string PumpModel => pumpModel?.Value ?? "";
+        public string PumpSerial => pumpSerial?.Value ?? "";
+        public string PumpFirmware => pumpFirmware?.Value ?? "";
+        public PumpState PumpState => pumpState?.Value ?? PumpState.Unknown;
 
         public double FlowRate
         {
@@ -216,8 +231,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public PumpDisplayViewModel PumpDisplay => pumpDisplay;
         public PopoutViewModel PumpPopoutVm => pumpPopoutVm;
-        public AgilentPumpInfo PumpInfo => Pump?.PumpInfo;
-        public AgilentPumpStatus PumpStatus => Pump?.PumpStatus;
+        public AgilentPumpInfoViewModel PumpInfo { get; } = new AgilentPumpInfoViewModel();
+        public AgilentPumpStatusViewModel PumpStatus { get; } = new AgilentPumpStatusViewModel();
 
         /// <summary>
         /// The associated device.
@@ -289,11 +304,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
             SetModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMode(SelectedMode)));
             ReadPressureCommand = ReactiveCommand.Create(() => Pressure = Pump.GetPressure());
             ReadAllCommand = ReactiveCommand.CreateCombined(new [] {ReadFlowRateCommand, ReadPercentBCommand, ReadPressureCommand});
-            PumpOnCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.On));
-            PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
-            PumpStandbyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Standby));
+            PumpOnCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.On));
+            PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.Off));
+            PumpStandbyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.Standby));
             PurgePumpCommand = ReactiveCommand.Create(() => PurgePump());
-            StartPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()), this.WhenAnyValue(x => x.Pump.PumpState, x => x.PumpStatus.NotReadyState).Select(x => x.Item1 != PumpState.Off && x.Item1 != PumpState.Standby && x.Item2 == AgilentPumpStateNotReady.READY));
+            StartPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()), this.WhenAnyValue(x => x.PumpState, x => x.PumpStatus.NotReadyState).Select(x => x.Item1 != PumpState.Off && x.Item1 != PumpState.Standby && x.Item2 == AgilentPumpStateNotReady.READY));
             StopPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StopMethod()));
             SetComPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetComPortName()));
             ReadMethodFromPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = Pump.RetrieveMethod()));

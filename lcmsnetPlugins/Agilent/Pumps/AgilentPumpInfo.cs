@@ -1,9 +1,10 @@
 ﻿using System;
-using ReactiveUI;
+using System.ComponentModel;
+using LcmsNetData;
 
 namespace LcmsNetPlugins.Agilent.Pumps
 {
-    public class AgilentPumpInfo : ReactiveObject
+    public class AgilentPumpInfo : INotifyPropertyChangedExt
     {
         private string manufacturer;
         private string model;
@@ -81,6 +82,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             get => moduleDate;
             set => this.RaiseAndSetIfChanged(ref moduleDate, value);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

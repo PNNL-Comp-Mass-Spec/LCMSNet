@@ -15,7 +15,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reactive.Concurrency;
 using System.Threading;
 using Agilent.Licop;
 using FluidicsSDK.Devices;
@@ -102,8 +101,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private string pumpSerial;
         private string pumpFirmware;
         private readonly Timer statusReadTimer = null;
-        private readonly AgilentPumpStatus pumpStatusInternal = new AgilentPumpStatus();
         private readonly object pumpCommLock = new object();
+        private bool isMonitoringDisabled = false;
 
         #endregion
 
@@ -214,9 +213,16 @@ namespace LcmsNetPlugins.Agilent.Pumps
         #region Constructors
 
         /// <summary>
-        /// Default constructor.
+        /// Default constructor - for use within LCMSNet
         /// </summary>
-        public AgilentPump()
+        public AgilentPump() : this(false)
+        {
+        }
+
+        /// <summary>
+        /// Constructor - provides option to skip reading methods from file.
+        /// </summary>
+        public AgilentPump(bool skipMethodLoad)
         {
             CreateErrorCodes();
             CreateStatusCodes();
@@ -226,7 +232,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             {
                 mdict_methods = new Dictionary<string, string>();
             }
-            if (mwatcher_methods == null)
+            if (mwatcher_methods == null && !skipMethodLoad)
             {
                 var path = PersistDataPaths.GetDirectoryLoadPathCheckFiles("PumpMethods", "*.txt");
                 //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
@@ -280,24 +286,23 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             if (m_pumps != null)
             {
-                GetPumpStatus(pumpStatusInternal);
-                ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => PumpStatus.UpdateValues(pumpStatusInternal));
+                GetPumpStatus();
                 var agPumpState = GetPumpState();
 
                 var statusInterval = 3; // default to 3 seconds; applies to startup and error conditions
                 if (agPumpState == PumpState.On &&
-                    pumpStatusInternal.ErrorState == AgilentPumpStateError.NO_ERROR &&
-                    pumpStatusInternal.NotReadyState == AgilentPumpStateNotReady.READY &&
-                    pumpStatusInternal.TestState == AgilentPumpStateTest.NO_TEST)
+                    PumpStatus.ErrorState == AgilentPumpStateError.NO_ERROR &&
+                    PumpStatus.NotReadyState == AgilentPumpStateNotReady.READY &&
+                    PumpStatus.TestState == AgilentPumpStateTest.NO_TEST)
                 {
-                    if (pumpStatusInternal.AnalysisState == AgilentPumpStateAnalysis.NO_ANALYSIS &&
-                        pumpStatusInternal.GenericState == AgilentPumpStateGeneric.PRERUN)
+                    if (PumpStatus.AnalysisState == AgilentPumpStateAnalysis.NO_ANALYSIS &&
+                        PumpStatus.GenericState == AgilentPumpStateGeneric.PRERUN)
                     {
                         statusInterval = 10;
                     }
-                    else if (pumpStatusInternal.AnalysisState == AgilentPumpStateAnalysis.ANALYSIS &&
-                             (pumpStatusInternal.GenericState == AgilentPumpStateGeneric.RUN ||
-                              pumpStatusInternal.GenericState == AgilentPumpStateGeneric.POSTRUN))
+                    else if (PumpStatus.AnalysisState == AgilentPumpStateAnalysis.ANALYSIS &&
+                             (PumpStatus.GenericState == AgilentPumpStateGeneric.RUN ||
+                              PumpStatus.GenericState == AgilentPumpStateGeneric.POSTRUN))
                     {
                         statusInterval = 60;
                     }
@@ -309,20 +314,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     lastStatusInterval = statusInterval;
                 }
             }
-        }
-
-        /// <summary>
-        /// Calling this constructor is only for the windows WPF designer.
-        /// </summary>
-        [Obsolete("For WPF Design time use only.", true)]
-        public AgilentPump(bool emulated)
-        {
-            Emulation = true;
-
-            PurgeA1 = new PumpPurgeData(PumpPurgeChannel.A1);
-            PurgeA2 = new PumpPurgeData(PumpPurgeChannel.A2);
-            PurgeB1 = new PumpPurgeData(PumpPurgeChannel.B1);
-            PurgeB2 = new PumpPurgeData(PumpPurgeChannel.B2);
         }
 
         void mwatcher_methods_Changed(object sender, FileSystemEventArgs e)
@@ -464,6 +455,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             get => pumpState;
             set => this.RaiseAndSetIfChanged(ref pumpState, value);
         }
+
+        public bool IsMonitoringDiabled => isMonitoringDisabled;
 
         #endregion
 
@@ -627,6 +620,26 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         #region Methods
 
+        public void DisableMonitoring()
+        {
+            isMonitoringDisabled = true;
+
+            if (m_monitorChannel != null && m_monitorChannel.IsOpen)
+            {
+                SendCommand("MONI:STOP", out _);
+            }
+        }
+
+        public void EnableMonitoring()
+        {
+            isMonitoringDisabled = false;
+
+            if (m_monitorChannel != null && m_monitorChannel.IsOpen)
+            {
+                SendCommand($"MONI:STRT {TotalMonitoringSecondsElapsed},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", out _);
+            }
+        }
+
         /// <summary>
         /// Clears all of the listed pump methods.
         /// </summary>
@@ -705,11 +718,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
 
             m_module = m_pumps.CreateModule(m_pumps.GetAccessPointIdentifier());
-            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
-            {
-                PumpModel = m_module.Type;
-                PumpSerial = m_module.Serial;
-            });
+            PumpModel = m_module.Type;
+            PumpSerial = m_module.Serial;
 
             //
             // Channel for inputs
@@ -735,12 +745,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 firmware = split[3];
             }
 
-            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
-            {
-                PumpFirmware = firmware;
-                GetPumpInformation();
-                GetPumpStatus();
-            });
+            PumpFirmware = firmware;
+            GetPumpInformation();
+            GetPumpStatus();
 
             //
             // Open a list channel to read time tables.
@@ -778,9 +785,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return false;
             }
 
-            var worked = SendCommand(
-                string.Format("MONI:STRT {0},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", TotalMonitoringSecondsElapsed),
-                out reply);
+            var worked = AgilentPumpReplyErrorCodes.No_Error;
+            if (!isMonitoringDisabled)
+            {
+                worked = SendCommand(
+                    $"MONI:STRT {TotalMonitoringSecondsElapsed},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"",
+                    out reply);
+            }
 
             if (worked != AgilentPumpReplyErrorCodes.No_Error)
             {
@@ -797,7 +808,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         }
 
         /// <summary>
-        /// Internal error handler that propogates the error message to listening objects.
+        /// Internal error handler that propagates the error message to listening objects.
         /// </summary>
         private void HandleError(string message, string type)
         {
@@ -805,7 +816,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         }
 
         /// <summary>
-        /// Internal error handler that propogates the error message to listening objects.
+        /// Internal error handler that propagates the error message to listening objects.
         /// </summary>
         private void HandleError(string message, string type, Exception ex)
         {
@@ -815,12 +826,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 {
                     type = CONST_DEFAULT_ERROR;
                 }
-                Error(this,
-                      new DeviceErrorEventArgs(message,
-                                                    ex,
-                                                    DeviceErrorStatus.ErrorAffectsAllColumns,
-                                                    this,
-                                                    type));
+
+                Error(this, new DeviceErrorEventArgs(message, ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, type));
             }
         }
 
@@ -1296,16 +1303,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     return PumpState.Unknown;
                 }
 
-                var state = (PumpState) stateInt;
-                ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => PumpState = state);
-                return state;
+                PumpState = (PumpState) stateInt;
+                return PumpState;
             }
             catch (Exception e)
             {
                 ApplicationLogger.LogError(2, "Error getting pump state ", e);
             }
 
-            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() => PumpState = PumpState.Unknown);
+            PumpState = PumpState.Unknown;
             return PumpState.Unknown;
         }
 
@@ -1712,11 +1718,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public void GetPumpStatus()
         {
-            GetPumpStatus(PumpStatus);
-        }
-
-        private void GetPumpStatus(AgilentPumpStatus status)
-        {
             try
             {
                 var reply = "";
@@ -1737,48 +1738,48 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
                 var loc = reply.IndexOf("ACT:STAT", StringComparison.OrdinalIgnoreCase);
                 split = reply.Substring(loc + 9).Split(new char[] { '"', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                status.GenericState = (AgilentPumpStateGeneric)int.Parse(split[0]);
-                status.AnalysisState = (AgilentPumpStateAnalysis)int.Parse(split[1]);
-                status.ErrorState = (AgilentPumpStateError)int.Parse(split[2]);
-                status.NotReadyState = (AgilentPumpStateNotReady)int.Parse(split[3]);
-                status.TestState = (AgilentPumpStateTest)int.Parse(split[4]);
+                PumpStatus.GenericState = (AgilentPumpStateGeneric)int.Parse(split[0]);
+                PumpStatus.AnalysisState = (AgilentPumpStateAnalysis)int.Parse(split[1]);
+                PumpStatus.ErrorState = (AgilentPumpStateError)int.Parse(split[2]);
+                PumpStatus.NotReadyState = (AgilentPumpStateNotReady)int.Parse(split[3]);
+                PumpStatus.TestState = (AgilentPumpStateTest)int.Parse(split[4]);
 
                 // ACT:BTMP? gets board temperature and leak status: ACT:BTMP? <boardtempC>,<leakSensorCurrent>,<leakState>
                 SendCommand("ACT:BTMP?", out reply);
                 split = reply.Substring(17).Split(',');
-                status.BoardTemperatureC = split[0];
-                status.LeakSensorCurrentMa = split[1];
+                PumpStatus.BoardTemperatureC = split[0];
+                PumpStatus.LeakSensorCurrentMa = split[1];
                 //PumpStatus.LeakState = split[2];
                 switch (split[2])
                 {
                     case "0":
-                        status.LeakState = "No Leak";
+                        PumpStatus.LeakState = "No Leak";
                         break;
                     case "1":
-                        status.LeakState = "Leak Detected";
+                        PumpStatus.LeakState = "Leak Detected";
                         break;
                     case "2":
-                        status.LeakState = "NTC Board Sensor shorted";
+                        PumpStatus.LeakState = "NTC Board Sensor shorted";
                         break;
                     case "3":
-                        status.LeakState = "NTC Board Sensor open";
+                        PumpStatus.LeakState = "NTC Board Sensor open";
                         break;
                     case "4":
-                        status.LeakState = "PTC Leak Sensor shorted";
+                        PumpStatus.LeakState = "PTC Leak Sensor shorted";
                         break;
                     case "5":
-                        status.LeakState = "PTC Leak Sensor open";
+                        PumpStatus.LeakState = "PTC Leak Sensor open";
                         break;
                 }
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
                 // ACT:NRDY? gets the not ready status code, corresponding to bit flags
                 SendCommand("ACT:NRDY?", out reply);
-                status.NotReadyReasons = (AgilentPumpNotReadyStates) int.Parse(reply.Split(' ').Last());
+                PumpStatus.NotReadyReasons = (AgilentPumpNotReadyStates) int.Parse(reply.Split(' ').Last());
 
                 // ACT:SRDY? gets the start not ready status code, corresponding to bit flags
                 SendCommand("ACT:SRDY?", out reply);
-                status.StartNotReadyReasons = (AgilentPumpStartNotReadyStates)int.Parse(reply.Split(' ').Last());
+                PumpStatus.StartNotReadyReasons = (AgilentPumpStartNotReadyStates)int.Parse(reply.Split(' ').Last());
             }
             catch (Exception e)
             {
@@ -1792,7 +1793,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var reply = "";
             SendCommand($"TIME {timestamp}", out reply);
             //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
-            ReactiveUI.RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
+            GetPumpInformation();
         }
 
         public void SetModuleName(string newName)
@@ -1810,7 +1811,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var reply = "";
             SendCommand($"NAME \"{newName}\"", out reply);
             //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
-            ReactiveUI.RxApp.MainThreadScheduler.Schedule(GetPumpInformation);
+            GetPumpInformation();
         }
 
         #endregion
