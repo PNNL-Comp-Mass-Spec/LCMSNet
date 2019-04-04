@@ -75,6 +75,24 @@ namespace LcmsNetCommonControls.Controls
                 ApplicationLogger.LogError(LogLevel.Warning, "Unable to read serial port names from SerialPort.GetPortNames(). Serial Port listing may not be complete.", ex);
             }
 
+            // WMI PnP information: Will give the most complete information, but may not be accurate (i.e., the COM ports for EdgePort devices may all be wrong)
+            // Don't let this data add new serial ports due to the possible inaccuracy
+            var wmiPnpSerialPorts = ReadSerialPortWmiPnPInfo();
+            foreach (var port in wmiPnpSerialPorts.Values)
+            {
+                var data = new SerialPortData(port.ComPort, port.Description, port.DeviceId);
+
+                if (mapping.ContainsKey(port.ComPort.ToUpper()))
+                {
+                    mapping[port.ComPort.ToUpper()] = data;
+                }
+                //else
+                //{
+                //    mapping.Add(port.ComPort.ToUpper(), data);
+                //}
+            }
+
+            // WMI Serial Port information: Will give very accurate information (details that WMI PnP does not provide), but may not have all serial ports (i.e., Prolific USB-To-Serial devices)
             var wmiSerialPorts = ReadSerialPortWmiInfo();
             foreach (var port in wmiSerialPorts.Values)
             {
@@ -230,12 +248,10 @@ namespace LcmsNetCommonControls.Controls
             public string Service { get; set; }
         }
 
-        // TODO: This class may still be useful, tied together with the version that reads from Win32_SerialPort
-        // ReSharper disable once UnusedMember.Local
         private static Dictionary<string, WmiSerialData> ReadSerialPortWmiPnPInfo()
         {
             // See WMI query "SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%(COM%'" for all com port friendly names/descriptions (but doesn't line up with EdgePort port numbers)
-            // Also for WMI Win32_PnPEntity, if Service='Serial', it is a standard serial device, if Service='EdgeSer', it is an EdgePort device
+            // Also for WMI Win32_PnPEntity, if Service='Serial', it is a standard serial device, if Service='EdgeSer', it is an EdgePort device, if Service='Ser2ol', it is a prolific USB-to-Serial
             // Unfortunately, this listing can show incorrect COM ports for some devices (i.e., EdgePort USB-To-Serial devices)
             // A better method may be to use "SELECT * FROM Win32_SerialPort", and use 'DeviceID', since it is correct.
 
@@ -275,7 +291,7 @@ namespace LcmsNetCommonControls.Controls
         private static Dictionary<string, WmiSerialData> ReadSerialPortWmiInfo()
         {
             // See WMI query "SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%(COM%'" for all com port friendly names/descriptions (but doesn't line up with EdgePort port numbers)
-            // Also for WMI Win32_PnPEntity, if Service='Serial', it is a standard serial device, if Service='EdgeSer', it is an EdgePort device
+            // Also for WMI Win32_PnPEntity, if Service='Serial', it is a standard serial device, if Service='EdgeSer', it is an EdgePort device, if Service='Ser2ol', it is a prolific USB-to-Serial
             // Unfortunately, this listing can show incorrect COM ports for some devices (i.e., EdgePort USB-To-Serial devices)
             // A better method may be to use "SELECT * FROM Win32_SerialPort", and use 'DeviceID', since it is correct.
 
