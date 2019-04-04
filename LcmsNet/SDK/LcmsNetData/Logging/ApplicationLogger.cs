@@ -75,7 +75,7 @@ namespace LcmsNetData.Logging
         {
             var args = new ErrorLoggerArgs(errorLevel, message, ex, sample);
 
-            if (!loggingRunner.AddItem(args))
+            if (loggingStopped || !loggingRunner.AddItem(args))
             {
                 // If logging via the separate thread fails, log on this thread
                 FireLogging(args);
@@ -108,7 +108,7 @@ namespace LcmsNetData.Logging
         {
             var args = new MessageLoggerArgs(messageLevel, message, sample);
 
-            if (!loggingRunner.AddItem(args))
+            if (loggingStopped || !loggingRunner.AddItem(args))
             {
                 // If logging via the separate thread fails, log on this thread
                 FireLogging(args);

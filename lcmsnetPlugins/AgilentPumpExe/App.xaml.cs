@@ -7,6 +7,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using LcmsNetData.Logging;
 
 namespace AgilentPumpExe
 {
@@ -18,6 +19,9 @@ namespace AgilentPumpExe
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
             AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
+
+            // Kill the extra logging thread
+            ApplicationLogger.ShutDownLogging();
 
             var mainVm = new MainWindowViewModel();
             MainWindow = new MainWindow() { DataContext = mainVm };

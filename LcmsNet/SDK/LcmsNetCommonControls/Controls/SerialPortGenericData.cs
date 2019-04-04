@@ -4,6 +4,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Security.Permissions;
+using LcmsNetData.Logging;
 using Microsoft.Win32;
 using ReactiveUI;
 
@@ -71,7 +72,7 @@ namespace LcmsNetCommonControls.Controls
                 mapping.Add(port.ToUpper(), new SerialPortData(port));
             }
 
-            // WMI gives use port descriptions, but the information for EdgePort devices is... somewhat randomized (port names are correct, but it can't give use the port number)
+            // WMI gives use port descriptions, but the information for EdgePort devices is... somewhat randomized (port names are correct, but it can't give us the port number)
             // It can also give false devices (like 2 non-existent COM ports on EdgePort devices), so don't add new ports here.
             foreach (var port in wmiSerialPorts.Values)
             {
@@ -147,12 +148,12 @@ namespace LcmsNetCommonControls.Controls
 
             var data = new Dictionary<string, EdgeSerialRegistryData>();
 
-            var regPermission = new RegistryPermission(RegistryPermissionAccess.Read,
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\EdgeSer\Parameters");
-            regPermission.Assert();
-
             try
             {
+                var regPermission = new RegistryPermission(RegistryPermissionAccess.Read,
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\EdgeSer\Parameters");
+                regPermission.Assert();
+
                 using (var baseKey = Registry.LocalMachine)
                 using (var edgeSerKey = baseKey.OpenSubKey(@"SYSTEM\CurrentControlSet\services\EdgeSer\Parameters", false))
                 {
@@ -168,7 +169,8 @@ namespace LcmsNetCommonControls.Controls
                                     continue;
                                 }
 
-                                var regData = new EdgeSerialRegistryData {SerialNumExt = subkeyName, SerialNumBase = subkeyName};
+                                var regData = new EdgeSerialRegistryData
+                                    {SerialNumExt = subkeyName, SerialNumBase = subkeyName};
                                 if (subkeyName[subkeyName.Length - 2] == '-')
                                 {
                                     regData.SerialNumBase = subkeyName.Substring(0, subkeyName.Length - 2);
@@ -194,6 +196,10 @@ namespace LcmsNetCommonControls.Controls
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read EdgePort configuration information from the registry. If no EdgePort USB-to-Serial adapter is connected, this warning can be ignored.", ex);
+            }
             finally
             {
                 RegistryPermission.RevertAssert();
@@ -218,21 +224,29 @@ namespace LcmsNetCommonControls.Controls
 
             var data = new Dictionary<string, WmiSerialData>();
 
-            using (var objSearcher = new System.Management.ManagementObjectSearcher(@"SELECT * FROM Win32_PnPEntity WHERE Caption LIKE '%(COM%' OR Service = 'Serial'"))
+            try
             {
-                foreach (var match in objSearcher.Get())
+                using (var objSearcher = new System.Management.ManagementObjectSearcher(
+                    @"SELECT * FROM Win32_PnPEntity WHERE Caption LIKE '%(COM%' OR Service = 'Serial'"))
                 {
-                    var wmiData = new WmiSerialData
+                    foreach (var match in objSearcher.Get())
                     {
-                        DeviceId = match["DeviceID"].ToString(),
-                        Caption = match["Caption"].ToString(),
-                        Name = match["Name"].ToString(),
-                        Description = match["Description"].ToString(),
-                        Service = match["Service"].ToString()
-                    };
+                        var wmiData = new WmiSerialData
+                        {
+                            DeviceId = match["DeviceID"].ToString(),
+                            Caption = match["Caption"].ToString(),
+                            Name = match["Name"].ToString(),
+                            Description = match["Description"].ToString(),
+                            Service = match["Service"].ToString()
+                        };
 
-                    data.Add(wmiData.DeviceId, wmiData);
+                        data.Add(wmiData.DeviceId, wmiData);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read serial port information from WMI. Extra detail about COM ports will not be displayed.", ex);
             }
 
             return data;
