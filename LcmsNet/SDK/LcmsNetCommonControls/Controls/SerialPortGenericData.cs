@@ -60,36 +60,38 @@ namespace LcmsNetCommonControls.Controls
 
         private static List<SerialPortData> GetSerialPortInformation()
         {
-            var sysSerialPorts = SerialPort.GetPortNames();
-            var wmiSerialPorts = ReadSerialPortWmiInfo();
-            var regEdgePortSerial = ReadEdgeSerialPortDataFromRegistry();
-
             var mapping = new Dictionary<string, SerialPortData>();
 
-            // SerialPort.GetPortNames() is the least descriptive - it gives us only the names
-            foreach (var port in sysSerialPorts)
+            try
             {
-                mapping.Add(port.ToUpper(), new SerialPortData(port));
+                // SerialPort.GetPortNames() is the least descriptive - it gives us only the names
+                foreach (var port in SerialPort.GetPortNames())
+                {
+                    mapping.Add(port.ToUpper(), new SerialPortData(port));
+                }
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read serial port names from SerialPort.GetPortNames(). Serial Port listing may not be complete.", ex);
             }
 
-            // WMI gives use port descriptions, but the information for EdgePort devices is... somewhat randomized (port names are correct, but it can't give us the port number)
-            // It can also give false devices (like 2 non-existent COM ports on EdgePort devices), so don't add new ports here.
+            var wmiSerialPorts = ReadSerialPortWmiInfo();
             foreach (var port in wmiSerialPorts.Values)
             {
-                var name = port.Caption.Substring(port.Caption.LastIndexOf("(COM", StringComparison.OrdinalIgnoreCase)).Trim('(', ')');
-                var data = new SerialPortData(name, port.Description, port.DeviceId);
+                var data = new SerialPortData(port.ComPort, port.Description, port.DeviceId);
 
-                if (mapping.ContainsKey(name.ToUpper()))
+                if (mapping.ContainsKey(port.ComPort.ToUpper()))
                 {
-                    mapping[name.ToUpper()] = data;
+                    mapping[port.ComPort.ToUpper()] = data;
                 }
-                //else
-                //{
-                //    mapping.Add(name.ToUpper(), data);
-                //}
+                else
+                {
+                    mapping.Add(port.ComPort.ToUpper(), data);
+                }
             }
 
             // Overwrite the EdgePort information with data read from the registry, since it lets us associate port numbers with port names
+            var regEdgePortSerial = ReadEdgeSerialPortDataFromRegistry();
             foreach (var serialNumGp in regEdgePortSerial.Values.GroupBy(x => x.SerialNumBase))
             {
                 var serialNumber = serialNumGp.Key;
@@ -190,7 +192,17 @@ namespace LcmsNetCommonControls.Controls
                                     }
                                 }
 
-                                data.Add(regData.SerialNumExt, regData);
+                                // Prevent null exceptions, make sure the EasyName is set.
+                                if (string.IsNullOrWhiteSpace(regData.EasyName))
+                                {
+                                    regData.EasyName = regData.SerialNumBase;
+                                }
+
+                                // Entries are not removed for non-present devices, but the com port configuration might be
+                                if (!string.IsNullOrWhiteSpace(regData.ComSetup))
+                                {
+                                    data.Add(regData.SerialNumExt, regData);
+                                }
                             }
                         }
                     }
@@ -210,6 +222,7 @@ namespace LcmsNetCommonControls.Controls
 
         private class WmiSerialData
         {
+            public string ComPort { get; set; }
             public string DeviceId { get; set; }
             public string Caption { get; set; }
             public string Name { get; set; }
@@ -217,11 +230,17 @@ namespace LcmsNetCommonControls.Controls
             public string Service { get; set; }
         }
 
-        private static Dictionary<string, WmiSerialData> ReadSerialPortWmiInfo()
+        // TODO: This class may still be useful, tied together with the version that reads from Win32_SerialPort
+        // ReSharper disable once UnusedMember.Local
+        private static Dictionary<string, WmiSerialData> ReadSerialPortWmiPnPInfo()
         {
-            // See WMI query "SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%(COM%' for all com port friendly names/descriptions (but doesn't line up with EdgePort port numbers)
+            // See WMI query "SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%(COM%'" for all com port friendly names/descriptions (but doesn't line up with EdgePort port numbers)
             // Also for WMI Win32_PnPEntity, if Service='Serial', it is a standard serial device, if Service='EdgeSer', it is an EdgePort device
+            // Unfortunately, this listing can show incorrect COM ports for some devices (i.e., EdgePort USB-To-Serial devices)
+            // A better method may be to use "SELECT * FROM Win32_SerialPort", and use 'DeviceID', since it is correct.
 
+            // WMI gives us port descriptions, but the information for EdgePort devices is... somewhat randomized (port names are correct, but it can't give us the port number)
+            // It can also give incorrect ports for devices (e.g., EdgePort), so don't use this function to add new ports.
             var data = new Dictionary<string, WmiSerialData>();
 
             try
@@ -238,6 +257,45 @@ namespace LcmsNetCommonControls.Controls
                             Name = match["Name"].ToString(),
                             Description = match["Description"].ToString(),
                             Service = match["Service"].ToString()
+                        };
+
+                        wmiData.ComPort = wmiData.Caption.Substring(wmiData.Caption.LastIndexOf("(COM", StringComparison.OrdinalIgnoreCase)).Trim('(', ')').ToUpper();
+                        data.Add(wmiData.DeviceId, wmiData);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read serial port information from WMI. Extra detail about COM ports will not be displayed.", ex);
+            }
+
+            return data;
+        }
+
+        private static Dictionary<string, WmiSerialData> ReadSerialPortWmiInfo()
+        {
+            // See WMI query "SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%(COM%'" for all com port friendly names/descriptions (but doesn't line up with EdgePort port numbers)
+            // Also for WMI Win32_PnPEntity, if Service='Serial', it is a standard serial device, if Service='EdgeSer', it is an EdgePort device
+            // Unfortunately, this listing can show incorrect COM ports for some devices (i.e., EdgePort USB-To-Serial devices)
+            // A better method may be to use "SELECT * FROM Win32_SerialPort", and use 'DeviceID', since it is correct.
+
+            var data = new Dictionary<string, WmiSerialData>();
+
+            try
+            {
+                using (var objSearcher = new System.Management.ManagementObjectSearcher(
+                    @"SELECT * FROM Win32_SerialPort"))
+                {
+                    foreach (var match in objSearcher.Get())
+                    {
+                        var wmiData = new WmiSerialData
+                        {
+                            ComPort = match["DeviceID"].ToString(),
+                            DeviceId = match["PNPDeviceID"].ToString(),
+                            Caption = match["Caption"].ToString(),
+                            Name = match["Name"].ToString(),
+                            Description = match["Description"].ToString(),
+                            Service = match["ProviderType"].ToString()
                         };
 
                         data.Add(wmiData.DeviceId, wmiData);
