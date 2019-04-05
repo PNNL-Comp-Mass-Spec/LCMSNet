@@ -41,7 +41,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// An 'instrument' object for the Agilent pump drivers
         /// </summary>
-        private Instrument m_pumps = null;
+        private Instrument pumpModule = null;
 
         /// <summary>
         /// A 'module' object for the Agilent pump drivers
@@ -93,8 +93,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         private static string[] m_notificationStrings;
 
-        private static Dictionary<string, string> m_errorCodes;
-        private static Dictionary<string, string> m_statusCodes;
+        private static Dictionary<string, string> errorCodes;
+        private static Dictionary<string, string> statusCodes;
+        private static Dictionary<string, string> statusErrorCodes;
 
         private PumpState pumpState;
         private string pumpModel;
@@ -226,6 +227,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             CreateErrorCodes();
             CreateStatusCodes();
+            CreateStatusErrorCodes();
 
             PortName = CONST_DEFAULTPORT;
             if (mdict_methods == null)
@@ -284,7 +286,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         private void UpdateStatus(object state)
         {
-            if (m_pumps != null)
+            if (pumpModule != null)
             {
                 GetPumpStatus();
                 var agPumpState = GetPumpState();
@@ -535,7 +537,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         private void CreateErrorCodes()
         {
-            if (m_errorCodes == null)
+            if (errorCodes == null)
             {
                 var map = new Dictionary<string, string>
                 {
@@ -553,16 +555,62 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     {"ER 2048", "Attempt to specify more than 11 points in FSAC table."}
                 };
 
-                m_errorCodes = map;
+                errorCodes = map;
             }
         }
 
         private void CreateStatusCodes()
         {
-            if (m_statusCodes == null)
+            if (statusCodes == null)
             {
                 var map = new Dictionary<string, string>
                 {
+                    {"EC 0001", "Module cold reset."},
+                    {"EC 0002", "Module warm reset."},
+                    {"EC 0003", "Module connected."},
+                    {"EC 0010", "Module ready for communication."},
+                    {"ES 0100", "Module Runtime state LEAK."},
+                    {"ES 0101", "Module Runtime state SHUTDOWN."},
+                    {"ES 0103", "Module Runtime state PRERUN."},
+                    {"ES 0104", "Module Runtime state RUN."},
+                    {"ES 0105", "Module Runtime state POSTRUN."},
+                    {"ES 0102", "Module Error state ERROR."},
+                    {"ES 0107", "Module Error state NOERROR."},
+                    {"ES 0108", "Module Ready state NOTREADY."},
+                    {"ES 0109", "Module Ready state READY."},
+                    {"ES 0110", "Module Analysis state ANALYSIS."},
+                    {"ES 0111", "Module Analysis state NO ANALYSIS."},
+                    {"ES 0114", "Module Analysis state PENDING."},
+                    {"ES 0112", "Module Test state TEST."},
+                    {"ES 0113", "Module Test state NOTEST."},
+                    {"ES 0128", "Module Start/Ready state START NOTREADY."},
+                    {"ES 0129", "Module Start/Ready state START READY."},
+
+                    {"EE 2066", "Column flow unstable."},
+                    {"EE 2067", "No EMPV connected."},
+                    {"EE 2068", "No flow sensor connected."},
+                    {"EE 2069", "EMPV initialization failed."},
+                    {"EE 2090", "Flow sensor not supported by pump."},
+                    {"ES 2100", "Pump state PUMP OFF."},
+                    {"ES 2101", "Pump state INIT PUMP."},
+                    {"ES 2102", "Pump state PUMP STANDBY."},
+                    {"ES 2104", "Pump state PUMP ON."},
+                    {"ES 2110", "Pump composition state RAMP OFF."},
+                    {"ES 2111", "Pump composition state RAMP ON."},
+                    {"ES 2112", "Pump composition state RAMP HOLD."},
+                    {"ES 2113", "Pump flow ramp state RAMP OFF."},
+                    {"ES 2114", "Pump flow ramp state RAMP ON."},
+                    {"ES 2115", "Pump flow ramp state RAMP HOLD."},
+                    {"ES 2116", "Pump in normal mode."},
+                    {"ES 2117", "Pump in micro mode."},
+                    {"ES 2118", "Pump in test mode."},
+                    {"ES 2119", "Purge valve on."},
+                    {"ES 2120", "Purge valve off."},
+                    {"ES 2121", "Column flow in sensor range."},
+                    {"ES 2122", "Column flow out of sensor range."},
+                    {"ES 2123", "Pump operating pressure control state ENABLED."},
+                    {"ES 2124", "Pump operating pressure control state DISABLED."},
+                    {"ES 2126", "Unknown startup event."},
                     {"EV 2227", "no start allowed while purging."},
                     {"EV 2228", "no start allowed while fast composition change."},
                     {"EV 2229", "Column flow in limit."},
@@ -572,21 +620,27 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     {"EV 2233", "Calibration table stored. Parameter: table reference, 1..10"},
                     {"EV 2234", "Calibration table deleted. Parameter: table reference, 1..10"},
                     {"EV 2235", "Fast Composition Change failed."},
-                    {"EE 2066", "Column flow unstable."},
-                    {"EE 2067", "No EMPV connected."},
-                    {"EE 2068", "No flow sensor connected."},
-                    {"EE 2069", "EMPV initialization failed."},
-                    {"EE 2090", "Flow sensor not supported by pump."},
-                    {"ES 2116", "Pump in normal mode.            "},
-                    {"ES 2117", "Pump in micro mode.             "},
-                    {"ES 2118", "Pump in test mode.              "},
-                    {"ES 2119", "Purge valve on.                 "},
-                    {"ES 2120", "Purge valve off.                "},
-                    {"ES 2121", "Column flow in sensor range.    "},
-                    {"ES 2122", "Column flow out of sensor range."}
                 };
 
-                m_statusCodes = map;
+                statusCodes = map;
+            }
+        }
+
+        private void CreateStatusErrorCodes()
+        {
+            if (statusErrorCodes == null)
+            {
+                var map = new Dictionary<string, string>
+                {
+                    {"EE 2014", CONST_ERROR_ABOVE_PRESSURE},
+                    {"EE 2015", CONST_ERROR_BELOW_PRESSURE},
+                    {"EE 2064", CONST_ERROR_FLOW_EXCEEDS},
+                    {"EE 2066", CONST_ERROR_FLOW_UNSTABLE},
+                    {"EE 2500", CONST_ERROR_ABOVE_PRESSURE},
+                    {"EE 2501", CONST_ERROR_BELOW_PRESSURE},
+                };
+
+                statusErrorCodes = map;
             }
         }
 
@@ -599,15 +653,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void m_pumps_ErrorOccurred(object sender, global::Agilent.Licop.ErrorEventArgs e)
+        private void PumpErrorOccurred(object sender, global::Agilent.Licop.ErrorEventArgs e)
         {
             if (e.Message == null)
                 return;
 
             var errorMessage = e.Message.Split(',');
-            if (m_errorCodes.ContainsKey(errorMessage[0]))
+            if (errorCodes.ContainsKey(errorMessage[0]))
             {
-                var displayedError = m_errorCodes[errorMessage[0]];
+                var displayedError = errorCodes[errorMessage[0]];
                 HandleError(displayedError, displayedError);
             }
             else
@@ -708,13 +762,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return true;
             }
 
-            m_pumps = new Instrument(CONST_DEFAULTTIMEOUT, CONST_DEFAULTTIMEOUT);
-            m_pumps.ErrorOccurred += m_pumps_ErrorOccurred;
+            pumpModule = new Instrument(CONST_DEFAULTTIMEOUT, CONST_DEFAULTTIMEOUT);
+            pumpModule.ErrorOccurred += PumpErrorOccurred;
 
             //
             // Try initial connection
             //
-            if (m_pumps.TryConnect(PortName, CONST_DEFAULTTIMEOUT) == false)
+            if (pumpModule.TryConnect(PortName, CONST_DEFAULTTIMEOUT) == false)
             {
                 errorMessage = "Could not connect to the Agilent Pumps.";
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
@@ -722,7 +776,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return false;
             }
 
-            m_module = m_pumps.CreateModule(m_pumps.GetAccessPointIdentifier());
+            m_module = pumpModule.CreateModule(pumpModule.GetAccessPointIdentifier());
             PumpModel = m_module.Type;
             PumpSerial = m_module.Serial;
 
@@ -855,36 +909,22 @@ namespace LcmsNetPlugins.Agilent.Pumps
         void m_evChannel_DataReceived(object sender, DataEventArgs e)
         {
             var data = e.AsciiData;
+            var message = data.Split(',');
+            var code = message[0];
 
-            if (data.Contains("EE 2014"))
+            if (statusErrorCodes.TryGetValue(code, out var errorMessage))
             {
-                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_ABOVE_PRESSURE, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, CONST_ERROR_ABOVE_PRESSURE));
+                Error?.Invoke(this, new DeviceErrorEventArgs(errorMessage, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, errorMessage));
             }
-            else if (data.Contains("EE 2015"))
+            else if (statusCodes.TryGetValue(code, out var eventMessage))
             {
-                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_BELOW_PRESSURE, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, CONST_ERROR_BELOW_PRESSURE));
-            }
-            else if (data.Contains("EE 2064"))
-            {
-                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_FLOW_EXCEEDS, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, CONST_ERROR_FLOW_EXCEEDS));
-            }
-            else if (data.Contains("EE 2066"))
-            {
-                Error?.Invoke(this, new DeviceErrorEventArgs(CONST_ERROR_FLOW_UNSTABLE, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, CONST_ERROR_FLOW_UNSTABLE));
+                HandleError(eventMessage, "Pump Event");
             }
             else
             {
-                var errorMessage = data.Split(',');
-                if (m_statusCodes.ContainsKey(errorMessage[0]))
-                {
-                    var displayedError = m_statusCodes[errorMessage[0]];
-                    HandleError(displayedError, displayedError);
-                }
-                else
-                {
-                    HandleError("Pump " + Name + " status: " + data, CONST_PUMP_ERROR);
-                }
+                HandleError("Pump " + Name + " status: " + data, CONST_PUMP_ERROR);
             }
+
             //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(2, Name + " Agilent Pump Message " + data);
         }
 
@@ -1015,7 +1055,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             m_monitorChannel.DataReceived -= m_monitorChannel_DataReceived;
 
             // disconnect
-            m_pumps?.Disconnect();
+            pumpModule?.Disconnect();
 
             return true;
         }
@@ -1906,7 +1946,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             notifications.AddRange(m_notificationStrings);
 
-            foreach (var value in m_statusCodes.Values)
+            foreach (var value in statusCodes.Values)
             {
                 notifications.Add(value);
             }
@@ -1928,7 +1968,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                                         CONST_PUMP_ERROR
             };
 
-            foreach (var value in m_errorCodes.Values)
+            foreach (var value in errorCodes.Values)
             {
                 notifications.Add(value);
             }
