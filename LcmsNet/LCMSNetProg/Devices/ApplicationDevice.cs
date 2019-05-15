@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Threading;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetData;
+using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
 using LcmsNetSDK.Data;

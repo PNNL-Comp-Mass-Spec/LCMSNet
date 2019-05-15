@@ -122,7 +122,10 @@ namespace LcmsNetSDK.Data
             newSample.LCMethod = this.LCMethod;
             newSample.actualMethod = this.actualMethod?.Clone() as LCMethod;
             newSample.InstrumentData = this.InstrumentData?.Clone() as InstrumentInfo;
-            newSample.Operator = this.Operator;
+            if (!string.IsNullOrWhiteSpace(Operator))
+            {
+                newSample.Operator = this.Operator;
+            }
             newSample.m_IsDuplicateRequestName = this.m_IsDuplicateRequestName;
             newSample.m_SampleErrors = this.m_SampleErrors;
 
@@ -174,19 +177,6 @@ namespace LcmsNetSDK.Data
         public static void ResetDatasetNameToRequestName(SampleData sample)
         {
             sample.DmsData.DatasetName = sample.DmsData.RequestName;
-        }
-
-        public static string GetTriggerFileName(SampleData sample, string extension)
-        {
-            var datasetName = sample.DmsData.DatasetName;
-            var outFileName =
-                string.Format("{0}_{1}_{2}{3}",
-                    LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME),
-                    //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM.dd.yyyy_hh.mm.ss_"),
-                    sample.ActualLCMethod.Start.ToString("MM.dd.yyyy_hh.mm.ss"),
-                    datasetName,
-                    extension);
-            return outFileName;
         }
 
         public override string ToString()

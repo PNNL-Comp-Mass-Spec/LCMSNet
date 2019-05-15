@@ -44,7 +44,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -55,7 +54,6 @@
     <Compile Include="Data\IMethodWriter.cs" />
     <Compile Include="Data\MobilePhase.cs" />
     <Compile Include="Data\SampleData.cs" />
-    <Compile Include="Data\TriggerFileTools.cs" />
     <Compile Include="Devices\BaseDeviceControlViewModel.cs" />
     <Compile Include="Devices\DeviceConfiguration.cs" />
     <Compile Include="Devices\DeviceControlAttribute.cs" />

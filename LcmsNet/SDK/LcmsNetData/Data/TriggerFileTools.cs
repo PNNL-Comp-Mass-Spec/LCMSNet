@@ -10,15 +10,12 @@
 //*********************************************************************************************************
 
 using System;
-using System.Globalization;
 using System.IO;
 using System.Xml;
-using LcmsNetData;
-using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
 
-namespace LcmsNetSDK.Data
+namespace LcmsNetData.Data
 {
     /// <summary>
     /// Tools for generation of trigger files

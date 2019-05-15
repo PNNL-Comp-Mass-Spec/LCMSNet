@@ -11,6 +11,7 @@ using System.IO;
 using System.Threading.Tasks;
 using LcmsNet.Method;
 using LcmsNetData;
+using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
 using LcmsNetSDK.Data;
@@ -73,7 +74,7 @@ namespace LcmsNet.SampleQueue.IO
             // ----------------------------------------------------------------------------------------------------
             // Write the LC Method file
             // ----------------------------------------------------------------------------------------------------
-            var methodFileName = SampleData.GetTriggerFileName(sample, ".incompleteLcmethod");
+            var methodFileName = TriggerFileTools.GetTriggerFileName(sample, ".incompleteLcmethod");
             var lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
             var lcWriter = new LCMethodWriter();
             try
@@ -134,7 +135,7 @@ namespace LcmsNet.SampleQueue.IO
             // Write the LC Method file
             // ----------------------------------------------------------------------------------------------------
             var methodWriter = new LCMethodWriter();
-            var methodFileName = SampleData.GetTriggerFileName(sample, ".lcmethod");
+            var methodFileName = TriggerFileTools.GetTriggerFileName(sample, ".lcmethod");
             var lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
             var lcWriter = new LCMethodWriter();
             try
