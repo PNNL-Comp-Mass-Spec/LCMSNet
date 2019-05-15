@@ -25,19 +25,13 @@ namespace LcmsNetSDK.Data
     /// </summary>
     public class TriggerFileTools
     {
-        #region "Class variables"
-
-        private static XmlDocument m_TriggerFileContents;
-
-        #endregion
-
         #region "Methods"
 
         /// <summary>
         /// Generates a trigger file for a sample
         /// </summary>
         /// <param name="sample"></param>
-        public static void GenerateTriggerFile(SampleData sample)
+        public static void GenerateTriggerFile(ITriggerFileData sample)
         {
             /*
                 var createTriggerFiles = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATETRIGGERFILES, false);
@@ -50,42 +44,48 @@ namespace LcmsNetSDK.Data
             */
 
             // Create an XML document containing the trigger file's contents
-            GenerateXmlDoc(sample);
+            var triggerFileContents = GenerateXmlDoc(sample);
 
             // Write the document to the file
-            SaveFile(m_TriggerFileContents, sample, sample.DmsData.DatasetName);
+            SaveFile(triggerFileContents, sample, sample.DmsData.DatasetName);
         }
 
         /// <summary>
         /// Generates the XML-formatted trigger file contents
         /// </summary>
         /// <param name="sample">sample object for sample that was run</param>
-        private static void GenerateXmlDoc(SampleData sample)
+        private static XmlDocument GenerateXmlDoc(ITriggerFileData sample)
         {
             // Create and initialize the document
-            m_TriggerFileContents = new XmlDocument();
-            var docDeclaration = m_TriggerFileContents.CreateXmlDeclaration("1.0", null, null);
-            m_TriggerFileContents.AppendChild(docDeclaration);
+            var triggerFileContents = new XmlDocument();
+            var docDeclaration = triggerFileContents.CreateXmlDeclaration("1.0", null, null);
+            triggerFileContents.AppendChild(docDeclaration);
 
             // Add dataset (Root) element
-            var rootElement = m_TriggerFileContents.CreateElement("Dataset");
-            m_TriggerFileContents.AppendChild(rootElement);
+            var rootElement = triggerFileContents.CreateElement("Dataset");
+            triggerFileContents.AppendChild(rootElement);
 
             // Add the parameters
             AddParam(rootElement, "Dataset Name", sample.DmsData.DatasetName);
-            AddParam(rootElement, "Experiment Name", sample.DmsData.Experiment);
-            AddParam(rootElement, "Instrument Name", LCMSSettings.GetParameter(LCMSSettings.PARAM_INSTNAME));
-            AddParam(rootElement, "Separation Type", LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE));
-            AddParam(rootElement, "LC Cart Name", LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME));
-            AddParam(rootElement, "LC Cart Config", LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME));
-            AddParam(rootElement, "LC Column", sample.ColumnData.Name);
-            AddParam(rootElement, "Wellplate Number", sample.PAL.WellPlate);
-            AddParam(rootElement, "Well Number", sample.PAL.Well.ToString());
-            AddParam(rootElement, "Dataset Type", sample.DmsData.DatasetType);
-            // AddParam(rootElement, "Operator (PRN)", sample.Operator);
-            AddParam(rootElement, "Operator (PRN)", LCMSSettings.GetParameter(LCMSSettings.PARAM_OPERATOR));
-            AddParam(rootElement, "Comment", "");
-            AddParam(rootElement, "Interest Rating", "Unreviewed");
+            AddParam(rootElement, "Experiment Name", TrimWhitespace(sample.DmsData.Experiment));
+            AddParam(rootElement, "Instrument Name", TrimWhitespace(sample.InstrumentName));
+            AddParam(rootElement, "Capture Subfolder", TrimWhitespace(sample.CaptureSubdirectoryPath));
+            AddParam(rootElement, "Separation Type", TrimWhitespace(sample.SeparationType));
+            AddParam(rootElement, "LC Cart Name", TrimWhitespace(sample.DmsData.CartName));
+            AddParam(rootElement, "LC Cart Config", TrimWhitespace(sample.DmsData.CartConfigName));
+            AddParam(rootElement, "LC Column", TrimWhitespace(sample.ColumnName));
+
+            if (sample is ITriggerFilePalData lcSample)
+            {
+                AddParam(rootElement, "Wellplate Number", TrimWhitespace(lcSample.PAL.WellPlate));
+                AddParam(rootElement, "Well Number", TrimWhitespace(lcSample.PAL.Well.ToString()));
+            }
+
+            AddParam(rootElement, "Dataset Type", TrimWhitespace(sample.DmsData.DatasetType));
+
+            AddParam(rootElement, "Operator (PRN)", TrimWhitespace(sample.Operator));
+            AddParam(rootElement, "Comment", TrimWhitespace(sample.DmsData.Comment));
+            AddParam(rootElement, "Interest Rating", TrimWhitespace(sample.InterestRating ?? "Unreviewed"));
 
             //
             // BLL: Added to appease the trigger file gods, so that we don't
@@ -105,10 +105,20 @@ namespace LcmsNetSDK.Data
             AddParam(rootElement, "EMSL Proposal ID", proposal);
             AddParam(rootElement, "EMSL Usage Type", usage);
             AddParam(rootElement, "EMSL Users List", userList);
-            AddParam(rootElement, "Run Start", sample.ActualLCMethod.ActualStart.ToString("MM/dd/yyyy HH:mm:ss"));
-            AddParam(rootElement, "Run Finish", sample.ActualLCMethod.ActualEnd.ToString("MM/dd/yyyy HH:mm:ss"));
+            AddParam(rootElement, "Run Start", sample.RunStart.ToString("MM/dd/yyyy HH:mm:ss"));
+            AddParam(rootElement, "Run Finish", sample.RunFinish.ToString("MM/dd/yyyy HH:mm:ss"));
             // Removed to fix date comparison problems during DMS data import
             //AddParam(rootElement, "Run Finish UTC",   ConvertTimeLocalToUtc(sample.LCMethod.ActualEnd));
+
+            return triggerFileContents;
+        }
+
+        private static string TrimWhitespace(string metadata)
+        {
+            if (string.IsNullOrWhiteSpace(metadata))
+                return string.Empty;
+
+            return metadata.Trim();
         }
 
         /// <summary>
@@ -130,21 +140,21 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Adds a trigger file parameter to the XML document defining the file contents
         /// </summary>
-        /// <param name="Parent">Parent element to add the parameter to</param>
+        /// <param name="parent">Parent element to add the parameter to</param>
         /// <param name="paramName">Name of the parameter to add</param>
         /// <param name="paramValue">Value of the parameter</param>
-        private static void AddParam(XmlElement Parent, string paramName, string paramValue)
+        private static void AddParam(XmlElement parent, string paramName, string paramValue)
         {
             try
             {
-                var newElement = m_TriggerFileContents.CreateElement("Parameter");
-                var nameAttr = m_TriggerFileContents.CreateAttribute("Name");
+                var newElement = parent.OwnerDocument.CreateElement("Parameter");
+                var nameAttr = parent.OwnerDocument.CreateAttribute("Name");
                 nameAttr.Value = paramName;
                 newElement.Attributes.Append(nameAttr);
-                var valueAttr = m_TriggerFileContents.CreateAttribute("Value");
+                var valueAttr = parent.OwnerDocument.CreateAttribute("Value");
                 valueAttr.Value = paramValue;
                 newElement.Attributes.Append(valueAttr);
-                Parent.AppendChild(newElement);
+                parent.AppendChild(newElement);
             }
             catch (Exception ex)
             {
@@ -153,15 +163,34 @@ namespace LcmsNetSDK.Data
         }
 
         /// <summary>
+        /// Get the trigger file name for the provided dataset
+        /// </summary>
+        /// <param name="sample"></param>
+        /// <param name="extension"></param>
+        /// <returns></returns>
+        public static string GetTriggerFileName(ITriggerFileData sample, string extension)
+        {
+            var datasetName = sample.DmsData.DatasetName;
+            var outFileName =
+                string.Format("{0}_{1}_{2}{3}",
+                    LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME),
+                    //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM.dd.yyyy_hh.mm.ss_"),
+                    sample.RunStart.ToString("MM.dd.yyyy_hh.mm.ss"),
+                    datasetName,
+                    extension);
+            return outFileName;
+        }
+
+        /// <summary>
         /// Write the trigger file
         /// </summary>
         /// <param name="doc">XML document to be written</param>
         /// <param name="sample">Name of the sample this trigger file is for</param>
         /// <param name="datasetName">Dataset name</param>
-        private static void SaveFile(XmlDocument doc, SampleData sample, string datasetName)
+        private static void SaveFile(XmlDocument doc, ITriggerFileData sample, string datasetName)
         {
             var sampleName = sample.DmsData.DatasetName;
-            var outFileName = SampleData.GetTriggerFileName(sample, ".xml");
+            var outFileName = GetTriggerFileName(sample, ".xml");
 
             // Write trigger file to local folder
             var appPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH);

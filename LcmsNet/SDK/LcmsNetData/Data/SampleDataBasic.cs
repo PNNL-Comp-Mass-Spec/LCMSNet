@@ -5,7 +5,7 @@ using LcmsNetData.Method;
 
 namespace LcmsNetData.Data
 {
-    public class SampleDataBasic : LcmsNetDataClassBase, INotifyPropertyChangedExt
+    public class SampleDataBasic : LcmsNetDataClassBase, ITriggerFilePalData, INotifyPropertyChangedExt
     {
         public SampleDataBasic()
         {
@@ -163,6 +163,38 @@ namespace LcmsNetData.Data
         /// Operator performing LC run
         /// </summary>
         public string Operator { get; set; } = "";
+
+        #endregion
+
+        #region ITriggerFilePalData Implementation
+
+        /// <inheritdoc />
+        [NotStoredProperty]
+        public virtual DateTime RunStart => ActualLCMethodBasic.ActualStart;
+
+        /// <inheritdoc />
+        [NotStoredProperty]
+        public virtual DateTime RunFinish => ActualLCMethodBasic.ActualEnd;
+
+        /// <inheritdoc />
+        [NotStoredProperty]
+        public virtual string ColumnName => ColumnData.Name;
+
+        /// <inheritdoc />
+        [NotStoredProperty]
+        public virtual string InstrumentName => "";
+
+        /// <inheritdoc />
+        [NotStoredProperty]
+        public virtual string SeparationType => "";
+
+        /// <inheritdoc />
+        [NotStoredProperty]
+        public virtual string CaptureSubdirectoryPath => "";
+
+        /// <inheritdoc />
+        [NotStoredProperty]
+        public virtual string InterestRating => "Unreviewed";
 
         #endregion
 

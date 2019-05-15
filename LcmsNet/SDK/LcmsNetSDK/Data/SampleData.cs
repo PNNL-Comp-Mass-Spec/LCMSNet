@@ -97,6 +97,8 @@ namespace LcmsNetSDK.Data
             // Default state is always to be queued but not waiting to run.
             //
             RunningStatus = SampleRunningStatus.Queued;
+
+            Operator = LCMSSettings.GetParameter(LCMSSettings.PARAM_OPERATOR);
         }
 
         #endregion
@@ -488,6 +490,18 @@ namespace LcmsNetSDK.Data
         /// Unique ID for this sample not related to request name or sequence ID.
         /// </summary>
         public long UniqueID { get; set; }
+
+        #endregion
+
+        #region ITriggerFilePalData Implementation
+
+        /// <inheritdoc />
+        [NotStoredProperty]
+        public override string InstrumentName => LCMSSettings.GetParameter(LCMSSettings.PARAM_INSTNAME);
+
+        /// <inheritdoc />
+        [NotStoredProperty]
+        public override string SeparationType => LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE);
 
         #endregion
 

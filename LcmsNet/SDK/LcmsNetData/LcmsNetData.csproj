@@ -49,6 +49,7 @@
     <Compile Include="Data\ConvertVialPosition.cs" />
     <Compile Include="Data\ExperimentData.cs" />
     <Compile Include="Data\InstrumentInfo.cs" />
+    <Compile Include="Data\ITriggerFileData.cs" />
     <Compile Include="Data\LCColumnData.cs" />
     <Compile Include="Data\LcmsNetDataClassBase.cs" />
     <Compile Include="Data\MRMFileData.cs" />
