@@ -169,10 +169,10 @@ namespace LcmsNetData.Data
         {
             var datasetName = sample.DmsData.DatasetName;
             var outFileName =
-                string.Format("{0}_{1}_{2}{3}",
-                    LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME),
-                    //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MM.dd.yyyy_hh.mm.ss_"),
-                    sample.RunStart.ToString("MM.dd.yyyy_hh.mm.ss"),
+                string.Format("{0}_{1:MM.dd.yyyy_hh.mm.ss}_{2}{3}",
+                    sample.DmsData.CartName,
+                    //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)),
+                    sample.RunStart,
                     datasetName,
                     extension);
             return outFileName;
