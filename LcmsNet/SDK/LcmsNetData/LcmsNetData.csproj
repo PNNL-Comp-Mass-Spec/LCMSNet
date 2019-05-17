@@ -62,7 +62,6 @@
     <Compile Include="Data\SampleRunningStatus.cs" />
     <Compile Include="Data\DMSData.cs" />
     <Compile Include="Data\TriggerFileTools.cs" />
-    <Compile Include="Data\TriggerFileUtils.cs" />
     <Compile Include="Data\UserIDPIDCrossReferenceEntry.cs" />
     <Compile Include="Data\UserInfo.cs" />
     <Compile Include="EnumExtensions.cs" />
