@@ -27,7 +27,7 @@ namespace LcmsNetData.Data
         /// Generates a trigger file for a sample
         /// </summary>
         /// <param name="sample"></param>
-        public static void GenerateTriggerFile(ITriggerFileData sample)
+        public static string GenerateTriggerFile(ITriggerFileData sample)
         {
             /*
              * NOTE: Disabled because the 'CopyTriggerFiles' setting allows us to create the trigger file locally, but not copy it to the server.
@@ -44,7 +44,7 @@ namespace LcmsNetData.Data
             var triggerFileContents = GenerateXmlDoc(sample);
 
             // Write the document to the file
-            SaveFile(triggerFileContents, sample);
+            return SaveFile(triggerFileContents, sample);
         }
 
         /// <summary>
