@@ -282,6 +282,9 @@ namespace LcmsNetData.Data
             set => this.RaiseAndSetIfChangedLockCheck(ref comment, value, LockData, nameof(Comment));
         }
 
+        /// <summary>
+        /// The full comment, including the addition and addition prefix
+        /// </summary>
         public string CommentComplete => $"{Comment} {(string.IsNullOrWhiteSpace(CommentAdditionPrefix) ? string.Empty : CommentAdditionPrefix.Trim() + " ")}{CommentAddition}".Trim();
 
         /// <summary>
