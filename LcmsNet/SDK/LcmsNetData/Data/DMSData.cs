@@ -278,9 +278,11 @@ namespace LcmsNetData.Data
         /// </summary>
         public string Comment
         {
-            get => $"{comment} {CommentAddition}".Trim();
+            get => comment;
             set => this.RaiseAndSetIfChangedLockCheck(ref comment, value, LockData, nameof(Comment));
         }
+
+        public string CommentComplete => $"{Comment} {(string.IsNullOrWhiteSpace(CommentAdditionPrefix) ? string.Empty : CommentAdditionPrefix.Trim() + " ")}{CommentAddition}".Trim();
 
         /// <summary>
         /// Additional comment. Used by Buzzard to add comment information to datasets matched to run requests.
@@ -290,6 +292,11 @@ namespace LcmsNetData.Data
             get => commentAddition;
             set => this.RaiseAndSetIfChanged(ref commentAddition, value);
         }
+
+        /// <summary>
+        /// Additional comment prefix. Used by Buzzard, output before CommentAddition.
+        /// </summary>
+        public string CommentAdditionPrefix { get; set; }
 
         /// <summary>
         /// File ID for locating MRM file to download
