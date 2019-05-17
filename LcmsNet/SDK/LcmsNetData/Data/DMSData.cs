@@ -35,6 +35,7 @@ namespace LcmsNetData.Data
             CartName = "";
             CartConfigName = "";
             Comment = "";
+            CommentAddition = "";
             DatasetName = "";
             DatasetType = "";
             Experiment = "";
@@ -77,41 +78,50 @@ namespace LcmsNetData.Data
             return newDmsData;
         }
 
-        /// <summary>
-        /// Clones the data and locks it
-        /// </summary>
-        /// <returns></returns>
-        public DMSData CloneLocked()
+        public void CopyValuesAndLock(DMSData other)
         {
-            var clone = (DMSData)Clone();
-            clone.LockData = true;
-
-            return clone;
+            LockData = false;
+            Batch = other.Batch;
+            Block = other.Block;
+            CartName = other.CartName;
+            CartConfigName = other.CartConfigName;
+            Comment = other.Comment;
+            DatasetName = other.DatasetName;
+            DatasetType = other.DatasetType;
+            Experiment = other.Experiment;
+            MRMFileID = other.MRMFileID;
+            EMSLProposalID = other.EMSLProposalID;
+            RequestID = other.RequestID;
+            RequestName = other.RequestName;
+            RunOrder = other.RunOrder;
+            SelectedToRun = other.SelectedToRun;
+            EMSLUsageType = other.EMSLUsageType;
+            UserList = other.UserList;
+            LockData = other.LockData;
         }
 
         /// <summary>
-        /// Clones the data and locks it, and sets the dataset name to the filename in <paramref name="filePath"/>
+        /// Copies the data and locks this object, and sets the dataset name to the filename in <paramref name="filePath"/>
+        /// Used in Buzzard
         /// </summary>
+        /// <param name="other"></param>
         /// <param name="filePath"></param>
-        /// <returns></returns>
-        public DMSData CloneLockedWithPath(string filePath)
+        public void CopyValuesAndLockWithNewPath(DMSData other, string filePath)
         {
-            var clone = CloneLocked();
+            CopyValuesAndLock(other);
 
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                return clone;
+                return;
             }
 
             var fileName = Path.GetFileNameWithoutExtension(filePath);
             if (!string.IsNullOrWhiteSpace(fileName))
             {
-                clone.LockData = false;
-                clone.DatasetName = fileName;
-                clone.LockData = true;
+                LockData = false;
+                DatasetName = fileName;
+                LockData = true;
             }
-
-            return clone;
         }
 
         #region Property Backing Variables
@@ -133,6 +143,7 @@ namespace LcmsNetData.Data
         private string cartName;
         private string comment;
         private int mrmFileId;
+        private string commentAddition;
 
         #endregion
 
@@ -267,8 +278,17 @@ namespace LcmsNetData.Data
         /// </summary>
         public string Comment
         {
-            get => comment;
+            get => $"{comment} {CommentAddition}".Trim();
             set => this.RaiseAndSetIfChangedLockCheck(ref comment, value, LockData, nameof(Comment));
+        }
+
+        /// <summary>
+        /// Additional comment. Used by Buzzard to add comment information to datasets matched to run requests.
+        /// </summary>
+        public string CommentAddition
+        {
+            get => commentAddition;
+            set => this.RaiseAndSetIfChanged(ref commentAddition, value);
         }
 
         /// <summary>

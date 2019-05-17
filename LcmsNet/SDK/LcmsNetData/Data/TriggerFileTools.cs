@@ -32,6 +32,7 @@ namespace LcmsNetData.Data
         public static void GenerateTriggerFile(ITriggerFileData sample)
         {
             /*
+             * NOTE: Disabled because the 'CopyTriggerFiles' setting allows us to create the trigger file locally, but not copy it to the server.
                 var createTriggerFiles = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATETRIGGERFILES, false);
                 if (!createTriggerFiles)
                 {
@@ -45,14 +46,14 @@ namespace LcmsNetData.Data
             var triggerFileContents = GenerateXmlDoc(sample);
 
             // Write the document to the file
-            SaveFile(triggerFileContents, sample, sample.DmsData.DatasetName);
+            SaveFile(triggerFileContents, sample);
         }
 
         /// <summary>
         /// Generates the XML-formatted trigger file contents
         /// </summary>
         /// <param name="sample">sample object for sample that was run</param>
-        private static XmlDocument GenerateXmlDoc(ITriggerFileData sample)
+        protected static XmlDocument GenerateXmlDoc(ITriggerFileData sample)
         {
             // Create and initialize the document
             var triggerFileContents = new XmlDocument();
@@ -94,9 +95,9 @@ namespace LcmsNetData.Data
             var proposal = "";
             if (sample.DmsData.RequestID <= 0)
             {
+                proposal = sample.DmsData.EMSLProposalID;
                 usage = sample.DmsData.EMSLUsageType;
                 userList = sample.DmsData.UserList;
-                proposal = sample.DmsData.EMSLProposalID;
             }
 
             AddParam(rootElement, "Request", sample.DmsData.RequestID.ToString());
@@ -184,8 +185,7 @@ namespace LcmsNetData.Data
         /// </summary>
         /// <param name="doc">XML document to be written</param>
         /// <param name="sample">Name of the sample this trigger file is for</param>
-        /// <param name="datasetName">Dataset name</param>
-        private static void SaveFile(XmlDocument doc, ITriggerFileData sample, string datasetName)
+        private static void SaveFile(XmlDocument doc, ITriggerFileData sample)
         {
             var sampleName = sample.DmsData.DatasetName;
             var outFileName = GetTriggerFileName(sample, ".xml");
@@ -259,7 +259,7 @@ namespace LcmsNetData.Data
                 }
                 else
                 {
-                    var msg = "Generate Trigger File: Sample " + datasetName + ", Trigger file copy disabled";
+                    var msg = "Generate Trigger File: Sample " + sample.DmsData.DatasetName + ", Trigger file copy disabled";
                     ApplicationLogger.LogMessage(0, msg);
                 }
             }
