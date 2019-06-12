@@ -120,6 +120,8 @@ namespace LcmsNetDmsTools
         /// <remarks>Default is 18 months; use 0 to load all data</remarks>
         public int RecentExperimentsMonthsToLoad { get; set; }
 
+        public bool UseConnectionPooling { get; set; }
+
         private readonly Dictionary<string,string> mConfiguration;
 
         #endregion
@@ -150,6 +152,8 @@ namespace LcmsNetDmsTools
             RecentDatasetsMonthsToLoad = 12;
             RecentExperimentsMonthsToLoad = 18;
             LoadConfiguration();
+            // This should generally be true for SqlClient/SqlConnection, false means connection reuse (and potential multi-threading problems)
+            UseConnectionPooling = true;
         }
         #endregion
 
@@ -234,7 +238,16 @@ namespace LcmsNetDmsTools
                 }
             }
 
-            return new SqlConnectionWrapper(connection, failedConnectionAttemptMessage);
+            if (UseConnectionPooling && connection != null)
+            {
+                // MSSQL/SqlConnection connection pooling: handled transparently based on connection strings
+                // https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql-server-connection-pooling
+                return new SqlConnectionWrapper(connection.ConnectionString);
+            }
+            else
+            {
+                return new SqlConnectionWrapper(connection, failedConnectionAttemptMessage);
+            }
         }
 
         /// <summary>
