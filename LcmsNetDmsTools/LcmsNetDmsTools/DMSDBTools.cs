@@ -242,7 +242,7 @@ namespace LcmsNetDmsTools
             {
                 // MSSQL/SqlConnection connection pooling: handled transparently based on connection strings
                 // https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql-server-connection-pooling
-                return new SqlConnectionWrapper(connection.ConnectionString);
+                return new SqlConnectionWrapper(connString);
             }
             else
             {
