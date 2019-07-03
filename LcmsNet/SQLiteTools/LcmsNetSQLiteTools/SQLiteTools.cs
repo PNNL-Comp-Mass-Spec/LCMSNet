@@ -51,6 +51,7 @@ namespace LcmsNetSQLiteTools
 
         private static List<string> m_datasetNames;
 
+        private static Dictionary<string, WorkPackageInfo> workPackageMap;
         private static List<UserInfo> m_userInfo;
         private static List<InstrumentInfo> m_instrumentInfo;
         private static List<ExperimentData> m_experimentsData;
@@ -907,6 +908,39 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
+        /// Saves a list of WorkPackageInfo objects to cache
+        /// </summary>
+        /// <param name="workPackageList">List containing work package info.</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="workPackageList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveWorkPackageListToCache(List<WorkPackageInfo> workPackageList, bool clearFirst = true)
+        {
+            var dataInList = (workPackageList.Count > 0);
+            var tableName = GetTableName(DatabaseTableTypes.WorkPackages);
+
+            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && workPackageList.Count <= rowCount)
+            {
+                return;
+            }
+
+            // Clear the cache table
+            ClearCacheTable(tableName, ConnString);
+
+            //If no data in list, exit
+            if (!dataInList)
+            {
+                return;
+            }
+
+            // Convert input data for caching and call cache routine
+            var dataList = new List<ICacheInterface>();
+            foreach (var currentConfig in workPackageList)
+            {
+                dataList.Add(currentConfig);
+            }
+            SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
+        }
+
+        /// <summary>
         /// Executes specified SQLite command
         /// </summary>
         /// <param name="cmdStr">SQL statement to execute</param>
@@ -1252,6 +1286,44 @@ namespace LcmsNetSQLiteTools
                 m_datasetTypeNames = GetSingleColumnListFromCache(DatabaseTableTypes.DatasetTypeList);
             }
             return m_datasetTypeNames;
+        }
+
+        /// <summary>
+        /// Wrapper around generic retrieval method specifically for Work Package lists
+        /// </summary>
+        /// <returns>Mapping of Charge Codes to WorkPackageInfo objects</returns>
+        public static Dictionary<string, WorkPackageInfo> GetWorkPackageMap(bool force)
+        {
+            if (workPackageMap == null || force)
+            {
+                var cacheData = new Dictionary<string, WorkPackageInfo>();
+
+                // Get data table name
+                var tableName = GetTableName(DatabaseTableTypes.WorkPackages);
+
+                // Get a list of string dictionaries containing properties for each item
+                var allWorkPackageProps = GetPropertiesFromCache(tableName, ConnString);
+
+                // For each row (representing one work package), create a dictionary and/or list entry
+                foreach (var wpProps in allWorkPackageProps)
+                {
+                    // Create a WorkPackageInfo object
+                    var wpInfo = new WorkPackageInfo();
+
+                    // Load the work package data object from the string dictionary
+                    wpInfo.LoadPropertyValues(wpProps);
+
+                    // Add the work package data object to the full list
+                    cacheData.Add(wpInfo.ChargeCode, wpInfo);
+                }
+
+                // Add empty/"unknown" entry
+                cacheData.Add("", new WorkPackageInfo("", "Inactive, old", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"));
+
+                workPackageMap = cacheData;
+            }
+
+            return workPackageMap;
         }
 
         /// <summary>

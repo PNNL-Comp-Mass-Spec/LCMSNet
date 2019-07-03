@@ -202,7 +202,7 @@ namespace LcmsNetDmsTools
         }
 
         /// <summary>
-        /// Get a SQLiteConnection, but lim
+        /// Get a SQLiteConnection, but control creation of new connections based on UseConnectionPooling
         /// </summary>
         /// <param name="connString"></param>
         /// <returns></returns>
@@ -399,7 +399,7 @@ namespace LcmsNetDmsTools
 
         public void LoadCacheFromDMS(bool loadExperiments, bool loadDatasets)
         {
-            const int STEP_COUNT_BASE = 10;
+            const int STEP_COUNT_BASE = 11;
             const int EXPERIMENT_STEPS = 20;
             const int DATASET_STEPS = 50;
 
@@ -446,13 +446,16 @@ namespace LcmsNetDmsTools
             ReportProgress("Loading instruments", 5, stepCountTotal);
             GetInstrumentListFromDMS();
 
-            ReportProgress("Loading users", 6, stepCountTotal);
+            ReportProgress("Loading work packages", 6, stepCountTotal);
+            GetWorkPackagesFromDMS();
+
+            ReportProgress("Loading users", 7, stepCountTotal);
             GetUserListFromDMS();
 
-            ReportProgress("Loading LC columns", 7, stepCountTotal);
+            ReportProgress("Loading LC columns", 8, stepCountTotal);
             GetColumnListFromDMS();
 
-            ReportProgress("Loading proposal users", 8, stepCountTotal);
+            ReportProgress("Loading proposal users", 9, stepCountTotal);
             GetProposalUsers();
 
             var stepCountCompleted = STEP_COUNT_BASE;
@@ -539,6 +542,76 @@ namespace LcmsNetDmsTools
             try
             {
                 SQLiteTools.SaveCartConfigListToCache(tmpCartConfigInfo);
+            }
+            catch (Exception ex)
+            {
+                const string errMsg = "Exception storing LC cart config names in cache";
+                ApplicationLogger.LogError(0, errMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of Work Packages from DMS and stores it in cache
+        /// </summary>
+        public void GetWorkPackagesFromDMS()
+        {
+            var tmpWorkPackageInfo = new List<WorkPackageInfo>();
+            var connStr = GetConnectionString();
+
+            DataTable workPackagesTable;
+
+            // Get a list containing all active cart configuration names
+            // SELECT TOP(1000) [Charge_Code]
+            //     ,[State]
+            //     ,[SubAccount]
+            //     ,[WorkBreakdownStructure]
+            //     ,[Title]
+            //     ,[Usage_SamplePrep]
+            //     ,[Usage_RequestedRun]
+            //     ,[Owner_PRN]
+            //     ,[Owner_Name]
+            //     ,[Setup_Date]
+            //     ,[SortKey]
+            // FROM[DMS5].[dbo].[V_Charge_Code_Export]
+
+            // Filters:
+            // * Only get the last 6 years
+            // * None from an 'unallowable' subaccount
+            // * None that are inactive and never used
+            // * None that have not been used, where the owner name is unknown (not in DMS)
+            var sqlCmd =
+                "SELECT Charge_Code, State, SubAccount, WorkBreakdownStructure, Title, Owner_PRN, Owner_Name " +
+                "FROM V_Charge_Code_Export " +
+                $"WHERE Setup_Date > '{DateTime.Now.AddYears(-6):yyyy-MM-dd}' AND SubAccount NOT LIKE '%UNALLOWABLE%' AND State <> 'Inactive, unused' AND (State LIKE '%, used%' OR Owner_Name IS NOT NULL)" +
+                "ORDER BY SortKey";
+
+            try
+            {
+                workPackagesTable = GetDataTable(sqlCmd, connStr);
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting work package list";
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+                return;
+            }
+
+            foreach (DataRow currRow in workPackagesTable.Rows)
+            {
+                tmpWorkPackageInfo.Add(new WorkPackageInfo(
+                    currRow[workPackagesTable.Columns["Charge_Code"]].CastDBValTo<string>()?.Trim(),
+                    currRow[workPackagesTable.Columns["State"]].CastDBValTo<string>()?.Trim(),
+                    currRow[workPackagesTable.Columns["SubAccount"]].CastDBValTo<string>()?.Trim(),
+                    currRow[workPackagesTable.Columns["WorkBreakdownStructure"]].CastDBValTo<string>()?.Trim(),
+                    currRow[workPackagesTable.Columns["Title"]].CastDBValTo<string>()?.Trim(),
+                    currRow[workPackagesTable.Columns["Owner_PRN"]].CastDBValTo<string>()?.Trim(),
+                    currRow[workPackagesTable.Columns["Owner_Name"]].CastDBValTo<string>()?.Trim()));
+            }
+
+            // Store the list of cart config names in the cache db
+            try
+            {
+                SQLiteTools.SaveWorkPackageListToCache(tmpWorkPackageInfo);
             }
             catch (Exception ex)
             {
@@ -1052,9 +1125,17 @@ namespace LcmsNetDmsTools
                         EMSLProposalID = currRow[schedRunList.Columns["Proposal ID"]] as string,
                         RequestID = (int)currRow[schedRunList.Columns["Request"]],
                         RequestName = currRow[schedRunList.Columns["Name"]] as string,
+                        WorkPackage = currRow[schedRunList.Columns["Work Package"]] as string,
                         EMSLUsageType = currRow[schedRunList.Columns["Usage Type"]] as string,
-                        UserList = currRow[schedRunList.Columns["EUS Users"]] as string
-                    }
+                        UserList = currRow[schedRunList.Columns["EUS Users"]] as string,
+                        CartName = currRow[schedRunList.Columns["Cart"]] as string,
+                        Comment = currRow[schedRunList.Columns["Comment"]] as string,
+                        MRMFileID = DbCint(currRow[schedRunList.Columns["MRMFileID"]]),
+                        Block = DbCint(currRow[schedRunList.Columns["Block"]]),
+                        RunOrder = DbCint(currRow[schedRunList.Columns["RunOrder"]]),
+                        Batch = DbCint(currRow[schedRunList.Columns["Batch"]]),
+                        SelectedToRun = false,
+            }
                 };
 
                 var wellNumber = currRow[schedRunList.Columns["Well Number"]] as string;
@@ -1074,13 +1155,6 @@ namespace LcmsNetDmsTools
                 if (string.IsNullOrWhiteSpace(tmpDMSData.PAL.WellPlate) || tmpDMSData.PAL.WellPlate == "na")
                     tmpDMSData.PAL.WellPlate = "";
 
-                tmpDMSData.DmsData.CartName = currRow[schedRunList.Columns["Cart"]] as string;
-                tmpDMSData.DmsData.Comment = currRow[schedRunList.Columns["Comment"]] as string;
-                tmpDMSData.DmsData.MRMFileID = DbCint(currRow[schedRunList.Columns["MRMFileID"]]);
-                tmpDMSData.DmsData.Block = DbCint(currRow[schedRunList.Columns["Block"]]);
-                tmpDMSData.DmsData.RunOrder = DbCint(currRow[schedRunList.Columns["RunOrder"]]);
-                tmpDMSData.DmsData.Batch = DbCint(currRow[schedRunList.Columns["Batch"]]);
-                tmpDMSData.DmsData.SelectedToRun = false;
                 tmpReturnVal.Add(tmpDMSData);
             }
 

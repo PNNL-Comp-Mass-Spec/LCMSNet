@@ -33,6 +33,7 @@ namespace LcmsNetSQLiteTools
         PReferenceList, // A cross reference of the PUser and a Proposal
         DatasetList,
         CartConfigNameList,
-        CartConfigNameSelected
+        CartConfigNameSelected,
+        WorkPackages
     }
 }

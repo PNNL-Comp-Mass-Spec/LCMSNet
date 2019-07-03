@@ -131,6 +131,7 @@ namespace LcmsNetData.Data
         private string datasetName;
         private string datasetType;
         private string cartConfigName;
+        private string workPackage;
         private string emslUsageType;
         private string emslProposalId;
         private string userList;
@@ -224,6 +225,15 @@ namespace LcmsNetData.Data
         {
             get => datasetType;
             set => this.RaiseAndSetIfChangedLockCheck(ref datasetType, value, LockData, nameof(DatasetType));
+        }
+
+        /// <summary>
+        /// Work Package/charge code
+        /// </summary>
+        public string WorkPackage
+        {
+            get => workPackage;
+            set => this.RaiseAndSetIfChangedLockCheck(ref workPackage, value, LockData, nameof(WorkPackage));
         }
 
         /// <summary>

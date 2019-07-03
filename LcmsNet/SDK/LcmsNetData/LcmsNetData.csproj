@@ -64,6 +64,7 @@
     <Compile Include="Data\TriggerFileTools.cs" />
     <Compile Include="Data\UserIDPIDCrossReferenceEntry.cs" />
     <Compile Include="Data\UserInfo.cs" />
+    <Compile Include="Data\WorkPackageInfo.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="ICacheInterface.cs" />
