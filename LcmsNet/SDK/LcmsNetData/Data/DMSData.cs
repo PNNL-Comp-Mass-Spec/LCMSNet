@@ -47,6 +47,7 @@ namespace LcmsNetData.Data
             SelectedToRun = false;
             EMSLUsageType = "";
             UserList = "";
+            WorkPackage = "";
         }
 
         /// <summary>
@@ -73,6 +74,7 @@ namespace LcmsNetData.Data
             newDmsData.SelectedToRun = SelectedToRun;
             newDmsData.EMSLUsageType = EMSLUsageType;
             newDmsData.UserList = UserList;
+            newDmsData.WorkPackage = WorkPackage;
             newDmsData.LockData = LockData;
 
             return newDmsData;
@@ -97,6 +99,7 @@ namespace LcmsNetData.Data
             SelectedToRun = other.SelectedToRun;
             EMSLUsageType = other.EMSLUsageType;
             UserList = other.UserList;
+            WorkPackage = other.WorkPackage;
             LockData = other.LockData;
         }
 
