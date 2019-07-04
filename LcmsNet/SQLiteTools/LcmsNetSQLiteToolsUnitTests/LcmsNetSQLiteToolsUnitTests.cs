@@ -66,7 +66,7 @@ namespace LcmsNetSQLiteToolsUnitTests
             };
 
             // if the following line doesn't throw an exception, it "worked".
-            SQLiteTools.SaveSingleColumnListToCache(testSeparationTypes, DatabaseTableTypes.SeparationTypeList);
+            SQLiteTools.SaveSeparationTypeListToCache(testSeparationTypes);
         }
 
         /// <summary>

@@ -2107,7 +2107,7 @@ namespace LcmsNet.SampleQueue
             {
                 var cartNames = SQLiteTools.GetCartNameList();
                 var columnNames = SQLiteTools.GetColumnList(false);
-                var datasetNames = SQLiteTools.GetDatasetTypeList(false);
+                var datasetTypeNames = SQLiteTools.GetDatasetTypeList(false);
                 var instrumentList = SQLiteTools.GetInstrumentList(false);
                 var separationTypes = SQLiteTools.GetSepTypeList(false);
                 var userNames = SQLiteTools.GetUserList(false);
@@ -2117,10 +2117,10 @@ namespace LcmsNet.SampleQueue
 
                 SQLiteTools.SaveInstListToCache(instrumentList);
                 SQLiteTools.SaveSelectedSeparationType(separationDefault);
-                SQLiteTools.SaveSingleColumnListToCache(columnNames, DatabaseTableTypes.ColumnList);
-                SQLiteTools.SaveSingleColumnListToCache(datasetNames, DatabaseTableTypes.DatasetTypeList);
-                SQLiteTools.SaveSingleColumnListToCache(separationTypes, DatabaseTableTypes.SeparationTypeList);
-                SQLiteTools.SaveSingleColumnListToCache(cartNames, DatabaseTableTypes.CartList);
+                SQLiteTools.SaveColumnListToCache(columnNames);
+                SQLiteTools.SaveDatasetTypeListToCache(datasetTypeNames);
+                SQLiteTools.SaveSeparationTypeListToCache(separationTypes);
+                SQLiteTools.SaveCartListToCache(cartNames);
                 SQLiteTools.SaveUserListToCache(userNames);
             }
 

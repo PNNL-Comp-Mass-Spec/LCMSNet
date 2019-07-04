@@ -615,7 +615,7 @@ namespace LcmsNetDmsTools
             }
             catch (Exception ex)
             {
-                const string errMsg = "Exception storing LC cart config names in cache";
+                const string errMsg = "Exception storing work packages in cache";
                 ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
@@ -645,7 +645,7 @@ namespace LcmsNetDmsTools
             // Store the list of carts in the cache db
             try
             {
-                SQLiteTools.SaveSingleColumnListToCache(tmpCartList, DatabaseTableTypes.CartList);
+                SQLiteTools.SaveCartListToCache(tmpCartList);
             }
             catch (Exception ex)
             {
@@ -679,7 +679,7 @@ namespace LcmsNetDmsTools
                 // Store the data in the cache db
                 try
                 {
-                    SQLiteTools.SaveSingleColumnListToCache(datasetList, DatabaseTableTypes.DatasetList);
+                    SQLiteTools.SaveDatasetNameListToCache(datasetList);
                 }
                 catch (Exception ex)
                 {
@@ -720,7 +720,7 @@ namespace LcmsNetDmsTools
             // Store the list of carts in the cache db
             try
             {
-                SQLiteTools.SaveSingleColumnListToCache(tmpColList, DatabaseTableTypes.ColumnList);
+                SQLiteTools.SaveColumnListToCache(tmpColList);
             }
             catch (Exception ex)
             {
@@ -805,7 +805,7 @@ namespace LcmsNetDmsTools
             // Store data in cache
             try
             {
-                SQLiteTools.SaveSingleColumnListToCache(tmpRetVal, DatabaseTableTypes.SeparationTypeList);
+                SQLiteTools.SaveSeparationTypeListToCache(tmpRetVal);
             }
             catch (Exception ex)
             {
@@ -839,7 +839,7 @@ namespace LcmsNetDmsTools
             // Store data in cache
             try
             {
-                SQLiteTools.SaveSingleColumnListToCache(tmpRetVal, DatabaseTableTypes.DatasetTypeList);
+                SQLiteTools.SaveDatasetTypeListToCache(tmpRetVal);
             }
             catch (Exception ex)
             {

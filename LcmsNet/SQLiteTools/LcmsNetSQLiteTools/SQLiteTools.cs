@@ -871,6 +871,7 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentInst);
             }
+
             SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
         }
 
@@ -904,7 +905,11 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentConfig);
             }
+
             SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
+
+            // Reload the in-memory copy of the cached data
+            GetCartConfigNameMap(true);
         }
 
         /// <summary>
@@ -937,7 +942,76 @@ namespace LcmsNetSQLiteTools
             {
                 dataList.Add(currentConfig);
             }
+
             SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
+
+            // Reload the in-memory copy of the cached data
+            GetWorkPackageMap(true);
+        }
+
+        /// <summary>
+        /// Saves a list of cart names to the SQLite cache
+        /// </summary>
+        /// <param name="cartNameList">Cart names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartNameList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveCartListToCache(List<string> cartNameList, bool clearFirst = true)
+        {
+            // Refresh the in-memory list with the new data
+            m_cartNames = new List<string>(cartNameList);
+
+            SaveSingleColumnListToCache(cartNameList, DatabaseTableTypes.CartList, clearFirst);
+        }
+
+        /// <summary>
+        /// Saves a list of column names to the SQLite cache
+        /// </summary>
+        /// <param name="columnList">Column names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="columnList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveColumnListToCache(List<string> columnList, bool clearFirst = true)
+        {
+            // Refresh the in-memory list with the new data
+            m_columnNames = new List<string>(columnList);
+
+            SaveSingleColumnListToCache(columnList, DatabaseTableTypes.ColumnList, clearFirst);
+        }
+
+        /// <summary>
+        /// Saves a list of Dataset names to the SQLite cache
+        /// </summary>
+        /// <param name="datasetNameList">Dataset names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="datasetNameList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveDatasetNameListToCache(List<string> datasetNameList, bool clearFirst = true)
+        {
+            // Refresh the in-memory list with the new data
+            m_datasetNames = new List<string>(datasetNameList);
+
+            SaveSingleColumnListToCache(datasetNameList, DatabaseTableTypes.DatasetList, clearFirst);
+        }
+
+        /// <summary>
+        /// Saves a list of dataset type names to the SQLite cache
+        /// </summary>
+        /// <param name="datasetTypeList">Dataset type names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="datasetTypeList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveDatasetTypeListToCache(List<string> datasetTypeList, bool clearFirst = true)
+        {
+            // Refresh the in-memory list with the new data
+            m_datasetTypeNames = new List<string>(datasetTypeList);
+
+            SaveSingleColumnListToCache(datasetTypeList, DatabaseTableTypes.DatasetTypeList, clearFirst);
+        }
+
+        /// <summary>
+        /// Saves a list of separation types to the SQLite cache
+        /// </summary>
+        /// <param name="separationTypeList">Separation type names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="separationTypeList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveSeparationTypeListToCache(List<string> separationTypeList, bool clearFirst = true)
+        {
+            // Refresh the in-memory list with the new data
+            m_separationNames = new List<string>(separationTypeList);
+
+            SaveSingleColumnListToCache(separationTypeList, DatabaseTableTypes.SeparationTypeList, clearFirst);
         }
 
         /// <summary>
@@ -1314,7 +1388,20 @@ namespace LcmsNetSQLiteTools
                     wpInfo.LoadPropertyValues(wpProps);
 
                     // Add the work package data object to the full list
-                    cacheData.Add(wpInfo.ChargeCode, wpInfo);
+                    if (!cacheData.ContainsKey(wpInfo.ChargeCode))
+                    {
+                        cacheData.Add(wpInfo.ChargeCode, wpInfo);
+                    }
+                    else
+                    {
+                        // Collision: probably due to certain types of joint appointments
+                        // if username exists in DMS, try to keep the one with the current owner name.
+                        var existing = cacheData[wpInfo.ChargeCode];
+                        if (existing.OwnerName == null || existing.OwnerName.IndexOf("(old", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            cacheData[wpInfo.ChargeCode] = wpInfo;
+                        }
+                    }
                 }
 
                 // Add empty/"unknown" entry
@@ -1604,7 +1691,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="listData">List of data for storing in table</param>
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="listData"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         /// <remarks>Used with T_CartList, T_SeparationTypeSelected, T_LCColumnList, T_DatasetTypeList, T_DatasetList, and T_CartConfigNameSelected</remarks>
-        public static void SaveSingleColumnListToCache(List<string> listData, DatabaseTableTypes tableType, bool clearFirst = true)
+        private static void SaveSingleColumnListToCache(List<string> listData, DatabaseTableTypes tableType, bool clearFirst = true)
         {
             const string GENERIC_COLUMN_NAME = "Column1";
 
