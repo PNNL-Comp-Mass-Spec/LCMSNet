@@ -1195,6 +1195,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for cart lists
         /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing cart names</returns>
         [Obsolete("Use GetCartNameList that does not have parameter force (since force is not used)")]
         public static List<string> GetCartNameList(bool force)
@@ -1218,6 +1219,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for cart config name lists
         /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>Mapping of cart names to possible cart config names</returns>
         public static Dictionary<string, List<string>> GetCartConfigNameMap(bool force)
         {
@@ -1283,6 +1285,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for cart config name lists
         /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing cart config names</returns>
         public static List<string> GetCartConfigNameList(bool force)
         {
@@ -1298,6 +1301,8 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Get the cart config name list for a specific cart
         /// </summary>
+        /// <param name="cartName">Cart name</param>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing cart config names</returns>
         public static List<string> GetCartConfigNameList(string cartName, bool force)
         {
@@ -1313,6 +1318,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for LC column lists
         /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing cart names</returns>
         public static List<string> GetColumnList(bool force)
         {
@@ -1326,10 +1332,11 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for separation type lists
         /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing separation types</returns>
         public static List<string> GetSepTypeList(bool force)
         {
-            if (m_separationNames == null)
+            if (m_separationNames == null || force)
             {
                 m_separationNames = GetSingleColumnListFromCache(DatabaseTableTypes.SeparationTypeList);
             }
@@ -1352,10 +1359,11 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for dataset type lists
         /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing dataset types</returns>
         public static List<string> GetDatasetTypeList(bool force)
         {
-            if (m_datasetTypeNames == null)
+            if (m_datasetTypeNames == null || force)
             {
                 m_datasetTypeNames = GetSingleColumnListFromCache(DatabaseTableTypes.DatasetTypeList);
             }
@@ -1365,6 +1373,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for Work Package lists
         /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>Mapping of Charge Codes to WorkPackageInfo objects</returns>
         public static Dictionary<string, WorkPackageInfo> GetWorkPackageMap(bool force)
         {
@@ -1404,9 +1413,6 @@ namespace LcmsNetSQLiteTools
                     }
                 }
 
-                // Add empty/"unknown" entry
-                cacheData.Add("", new WorkPackageInfo("", "Inactive, old", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"));
-
                 workPackageMap = cacheData;
             }
 
@@ -1416,6 +1422,7 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Gets user list from cache
         /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List of user data</returns>
         public static List<UserInfo> GetUserList(bool force)
         {
@@ -1451,10 +1458,11 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Gets a list of instruments from the cache
         /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List of instruments</returns>
         public static List<InstrumentInfo> GetInstrumentList(bool force)
         {
-            if (m_instrumentInfo == null)
+            if (m_instrumentInfo == null || force)
             {
                 var returnData = new List<InstrumentInfo>();
 
