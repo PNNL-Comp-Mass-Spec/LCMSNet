@@ -81,6 +81,7 @@ namespace LcmsNetData.Data
             AddParam(rootElement, "Dataset Type", TrimWhitespace(sample.DmsData.DatasetType));
 
             AddParam(rootElement, "Operator (PRN)", TrimWhitespace(sample.Operator));
+            AddParam(rootElement, "Work Package", TrimWhitespace(sample.DmsData.WorkPackage));
             AddParam(rootElement, "Comment", TrimWhitespace(sample.DmsData.CommentComplete));
             AddParam(rootElement, "Interest Rating", TrimWhitespace(sample.InterestRating ?? "Unreviewed"));
 
