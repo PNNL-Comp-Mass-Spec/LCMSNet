@@ -43,22 +43,22 @@ namespace LcmsNetSQLiteTools
 
         #region Class Variables
 
-        private static List<string> m_cartNames;
-        private static Dictionary<string, List<string>> m_cartConfigNames;
-        private static List<string> m_columnNames;
-        private static List<string> m_separationNames;
-        private static List<string> m_datasetTypeNames;
+        private static List<string> cartNames;
+        private static Dictionary<string, List<string>> cartConfigNames;
+        private static List<string> columnNames;
+        private static List<string> separationNames;
+        private static List<string> datasetTypeNames;
 
-        private static List<string> m_datasetNames;
+        private static List<string> datasetNames;
 
         private static Dictionary<string, WorkPackageInfo> workPackageMap;
-        private static List<UserInfo> m_userInfo;
-        private static List<InstrumentInfo> m_instrumentInfo;
-        private static List<ExperimentData> m_experimentsData;
-        private static List<LCColumnData> m_lcColumns;
+        private static List<UserInfo> userInfo;
+        private static List<InstrumentInfo> instrumentInfo;
+        private static List<ExperimentData> experimentsData;
+        private static List<LCColumnData> lcColumns;
 
-        private static List<ProposalUser> m_proposalUsers;
-        private static Dictionary<string, List<UserIDPIDCrossReferenceEntry>> m_pidIndexedReferenceList;
+        private static List<ProposalUser> proposalUsers;
+        private static Dictionary<string, List<UserIDPIDCrossReferenceEntry>> proposalIdIndexedReferenceList;
 
         private static string cacheFullPath;
 
@@ -748,7 +748,7 @@ namespace LcmsNetSQLiteTools
             // Clear the cache table
             ClearCacheTable(tableName, ConnString);
 
-            m_userInfo = new List<UserInfo>(userList);
+            userInfo = new List<UserInfo>(userList);
 
             //If no data in list, exit
             if (!dataInList)
@@ -786,7 +786,7 @@ namespace LcmsNetSQLiteTools
             // Clear the cache table
             ClearCacheTable(tableName, ConnString);
 
-            m_experimentsData = new List<ExperimentData>(expList);
+            experimentsData = new List<ExperimentData>(expList);
             // Exit if there's nothing to cache
             if (!listHasData)
                 return;
@@ -868,8 +868,8 @@ namespace LcmsNetSQLiteTools
 
             SavePropertiesToCache(referenceCacheList, referenceTableName, ConnString, false); // Single column, column names don't matter...
 
-            m_proposalUsers = users;
-            m_pidIndexedReferenceList = pidIndexedReferenceList;
+            proposalUsers = users;
+            proposalIdIndexedReferenceList = pidIndexedReferenceList;
         }
 
         public static void SaveEntireLCColumnListToCache(List<LCColumnData> lcColumnList)
@@ -880,7 +880,7 @@ namespace LcmsNetSQLiteTools
             // Clear the cache table
             ClearCacheTable(tableName, ConnString);
 
-            m_lcColumns = new List<LCColumnData>(lcColumnList);
+            lcColumns = new List<LCColumnData>(lcColumnList);
             // Exit if there's nothing to cache
             if (!listHasData)
                 return;
@@ -911,7 +911,7 @@ namespace LcmsNetSQLiteTools
             // Clear the cache table
             ClearCacheTable(tableName, ConnString, 6);
 
-            m_instrumentInfo = new List<InstrumentInfo>(instList);
+            instrumentInfo = new List<InstrumentInfo>(instList);
             //If no data in list, just exit
             if (!dataInList)
             {
@@ -1010,7 +1010,7 @@ namespace LcmsNetSQLiteTools
         public static void SaveCartListToCache(List<string> cartNameList, bool clearFirst = true)
         {
             // Refresh the in-memory list with the new data
-            m_cartNames = new List<string>(cartNameList);
+            cartNames = new List<string>(cartNameList);
 
             SaveSingleColumnListToCache(cartNameList, DatabaseTableTypes.CartList, clearFirst);
         }
@@ -1023,7 +1023,7 @@ namespace LcmsNetSQLiteTools
         public static void SaveColumnListToCache(List<string> columnList, bool clearFirst = true)
         {
             // Refresh the in-memory list with the new data
-            m_columnNames = new List<string>(columnList);
+            columnNames = new List<string>(columnList);
 
             SaveSingleColumnListToCache(columnList, DatabaseTableTypes.ColumnList, clearFirst);
         }
@@ -1036,7 +1036,7 @@ namespace LcmsNetSQLiteTools
         public static void SaveDatasetNameListToCache(List<string> datasetNameList, bool clearFirst = true)
         {
             // Refresh the in-memory list with the new data
-            m_datasetNames = new List<string>(datasetNameList);
+            datasetNames = new List<string>(datasetNameList);
 
             SaveSingleColumnListToCache(datasetNameList, DatabaseTableTypes.DatasetList, clearFirst);
         }
@@ -1049,7 +1049,7 @@ namespace LcmsNetSQLiteTools
         public static void SaveDatasetTypeListToCache(List<string> datasetTypeList, bool clearFirst = true)
         {
             // Refresh the in-memory list with the new data
-            m_datasetTypeNames = new List<string>(datasetTypeList);
+            datasetTypeNames = new List<string>(datasetTypeList);
 
             SaveSingleColumnListToCache(datasetTypeList, DatabaseTableTypes.DatasetTypeList, clearFirst);
         }
@@ -1062,7 +1062,7 @@ namespace LcmsNetSQLiteTools
         public static void SaveSeparationTypeListToCache(List<string> separationTypeList, bool clearFirst = true)
         {
             // Refresh the in-memory list with the new data
-            m_separationNames = new List<string>(separationTypeList);
+            separationNames = new List<string>(separationTypeList);
 
             SaveSingleColumnListToCache(separationTypeList, DatabaseTableTypes.SeparationTypeList, clearFirst);
         }
@@ -1265,11 +1265,11 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing cart names</returns>
         public static List<string> GetCartNameList()
         {
-            if (m_cartNames == null)
+            if (cartNames == null)
             {
-                m_cartNames = GetSingleColumnListFromCache(DatabaseTableTypes.CartList);
+                cartNames = GetSingleColumnListFromCache(DatabaseTableTypes.CartList);
             }
-            return m_cartNames;
+            return cartNames;
         }
 
         /// <summary>
@@ -1279,7 +1279,7 @@ namespace LcmsNetSQLiteTools
         /// <returns>Mapping of cart names to possible cart config names</returns>
         public static Dictionary<string, List<string>> GetCartConfigNameMap(bool force)
         {
-            if (m_cartConfigNames == null || force)
+            if (cartConfigNames == null || force)
             {
                 var cacheData = new Dictionary<string, List<string>>();
 
@@ -1332,10 +1332,10 @@ namespace LcmsNetSQLiteTools
                     cacheData.Add(cart, new List<string>(unknownConfigs));
                 }
 
-                m_cartConfigNames = cacheData;
+                cartConfigNames = cacheData;
             }
 
-            return m_cartConfigNames;
+            return cartConfigNames;
         }
 
         /// <summary>
@@ -1345,13 +1345,13 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing cart config names</returns>
         public static List<string> GetCartConfigNameList(bool force)
         {
-            if (m_cartConfigNames == null || force)
+            if (cartConfigNames == null || force)
             {
                 GetCartConfigNameMap(force);
             }
 
             // ReSharper disable once PossibleNullReferenceException
-            return m_cartConfigNames.Values.SelectMany(x => x).Distinct().OrderBy(x => x).ToList();
+            return cartConfigNames.Values.SelectMany(x => x).Distinct().OrderBy(x => x).ToList();
         }
 
         /// <summary>
@@ -1378,11 +1378,11 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing cart names</returns>
         public static List<string> GetColumnList(bool force)
         {
-            if (m_columnNames == null || force)
+            if (columnNames == null || force)
             {
-                m_columnNames = GetSingleColumnListFromCache(DatabaseTableTypes.ColumnList);
+                columnNames = GetSingleColumnListFromCache(DatabaseTableTypes.ColumnList);
             }
-            return m_columnNames;
+            return columnNames;
         }
 
         /// <summary>
@@ -1392,11 +1392,11 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing separation types</returns>
         public static List<string> GetSepTypeList(bool force)
         {
-            if (m_separationNames == null || force)
+            if (separationNames == null || force)
             {
-                m_separationNames = GetSingleColumnListFromCache(DatabaseTableTypes.SeparationTypeList);
+                separationNames = GetSingleColumnListFromCache(DatabaseTableTypes.SeparationTypeList);
             }
-            return m_separationNames;
+            return separationNames;
         }
 
         /// <summary>
@@ -1405,11 +1405,11 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing separation types</returns>
         public static List<string> GetDatasetList()
         {
-            if (m_datasetNames == null)
+            if (datasetNames == null)
             {
-                m_datasetNames = GetSingleColumnListFromCache(DatabaseTableTypes.DatasetList);
+                datasetNames = GetSingleColumnListFromCache(DatabaseTableTypes.DatasetList);
             }
-            return m_datasetNames;
+            return datasetNames;
         }
 
         /// <summary>
@@ -1419,11 +1419,11 @@ namespace LcmsNetSQLiteTools
         /// <returns>List containing dataset types</returns>
         public static List<string> GetDatasetTypeList(bool force)
         {
-            if (m_datasetTypeNames == null || force)
+            if (datasetTypeNames == null || force)
             {
-                m_datasetTypeNames = GetSingleColumnListFromCache(DatabaseTableTypes.DatasetTypeList);
+                datasetTypeNames = GetSingleColumnListFromCache(DatabaseTableTypes.DatasetTypeList);
             }
-            return m_datasetTypeNames;
+            return datasetTypeNames;
         }
 
         /// <summary>
@@ -1482,7 +1482,7 @@ namespace LcmsNetSQLiteTools
         /// <returns>List of user data</returns>
         public static List<UserInfo> GetUserList(bool force)
         {
-            if (m_userInfo == null || force)
+            if (userInfo == null || force)
             {
                 var returnData = new List<UserInfo>();
 
@@ -1505,10 +1505,10 @@ namespace LcmsNetSQLiteTools
                     // Add the user data object to the return list
                     returnData.Add(userData);
                 }
-                m_userInfo = returnData;
+                userInfo = returnData;
             }
             // All finished, so return
-            return m_userInfo;
+            return userInfo;
         }
 
         /// <summary>
@@ -1518,7 +1518,7 @@ namespace LcmsNetSQLiteTools
         /// <returns>List of instruments</returns>
         public static List<InstrumentInfo> GetInstrumentList(bool force)
         {
-            if (m_instrumentInfo == null || force)
+            if (instrumentInfo == null || force)
             {
                 var returnData = new List<InstrumentInfo>();
 
@@ -1543,14 +1543,14 @@ namespace LcmsNetSQLiteTools
                 }
 
                 // All finished, so return
-                m_instrumentInfo = returnData;
+                instrumentInfo = returnData;
             }
-            return m_instrumentInfo;
+            return instrumentInfo;
         }
 
         public static List<ExperimentData> GetExperimentList()
         {
-            if (m_experimentsData == null)
+            if (experimentsData == null)
             {
                 var returnData = new List<ExperimentData>();
 
@@ -1567,21 +1567,21 @@ namespace LcmsNetSQLiteTools
                     returnData.Add(expDatum);
                 }
 
-                m_experimentsData = returnData;
+                experimentsData = returnData;
             }
 
-            return m_experimentsData;
+            return experimentsData;
         }
 
         public static void GetProposalUsers(
             out List<ProposalUser> users,
             out Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
         {
-            if (m_proposalUsers != null && m_proposalUsers.Count > 0 && m_pidIndexedReferenceList != null &&
-                m_pidIndexedReferenceList.Count > 0)
+            if (proposalUsers != null && proposalUsers.Count > 0 && proposalIdIndexedReferenceList != null &&
+                proposalIdIndexedReferenceList.Count > 0)
             {
-                users = m_proposalUsers;
-                pidIndexedReferenceList = m_pidIndexedReferenceList;
+                users = proposalUsers;
+                pidIndexedReferenceList = proposalIdIndexedReferenceList;
             }
             else
             {
@@ -1622,14 +1622,14 @@ namespace LcmsNetSQLiteTools
                     pidIndexedReferenceList[crossReference.PID].Add(crossReference);
                 }
 
-                m_pidIndexedReferenceList = pidIndexedReferenceList;
-                m_proposalUsers = users;
+                proposalIdIndexedReferenceList = pidIndexedReferenceList;
+                proposalUsers = users;
             }
         }
 
         public static List<LCColumnData> GetEntireLCColumnList()
         {
-            if (m_experimentsData == null)
+            if (experimentsData == null)
             {
                 var returnData = new List<LCColumnData>();
 
@@ -1644,10 +1644,10 @@ namespace LcmsNetSQLiteTools
                     returnData.Add(datum);
                 }
 
-                m_lcColumns = returnData;
+                lcColumns = returnData;
             }
 
-            return m_lcColumns;
+            return lcColumns;
         }
 
         /// <summary>
