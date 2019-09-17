@@ -384,6 +384,44 @@ namespace LcmsNetDmsTools
         }
 
         /// <summary>
+        /// Test if we can query each of the needed DMS tables/views.
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckDMSConnection()
+        {
+            try
+            {
+                var connStr = GetConnectionString();
+                var conn = GetConnection(connStr);
+                // Test getting 1 row from every table we query?...
+                using (var cmd = conn.CreateCommand())
+                {
+                    var tableNames = new List<string>()
+                    {
+                        "V_LC_Cart_Config_Export", "V_Charge_Code_Export", "V_LC_Cart_Active_Export",
+                        "V_LCMSNet_Dataset_Export", "V_LCMSNet_Column_Export", "T_Secondary_Sep", "t_DatasetTypeName",
+                        "V_Active_Users", "V_LCMSNet_Experiment_Export", "V_EUS_Proposal_Users",
+                        "V_Instrument_Info_LCMSNet", "V_Scheduled_Run_Export", "T_Attachments", "T_Requested_Run"
+                    };
+
+                    foreach (var tableName in tableNames)
+                    {
+                        cmd.CommandText = $"SELECT TOP(1) * FROM {tableName}";
+                        cmd.ExecuteScalar(); // TODO: Test the returned value? (for what?)
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(0, "Failed to test read a needed table!", ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Loads all DMS data into cache
         /// </summary>
         public void LoadCacheFromDMS()
@@ -484,7 +522,6 @@ namespace LcmsNetDmsTools
             }
 
             ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);
-
         }
 
         private void ReportProgress(string currentTask, int currentStep, int stepCountTotal)

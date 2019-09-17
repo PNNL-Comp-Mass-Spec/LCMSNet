@@ -37,11 +37,11 @@ namespace LcmsNetSQLiteTools
 
         public static string ConnString { get; set; } = "";
 
+        public static bool DatabaseImageBad { get; private set; }
+
         #endregion
 
         #region Class Variables
-
-        //private static string m_errroString = "";
 
         private static List<string> m_cartNames;
         private static Dictionary<string, List<string>> m_cartConfigNames;
@@ -60,6 +60,8 @@ namespace LcmsNetSQLiteTools
         private static List<ProposalUser> m_proposalUsers;
         private static Dictionary<string, List<UserIDPIDCrossReferenceEntry>> m_pidIndexedReferenceList;
 
+        private static string cacheFullPath;
+
         #endregion
 
         #region Initialize
@@ -73,15 +75,15 @@ namespace LcmsNetSQLiteTools
             Initialize();
         }
 
-        public static void Initialize()
-        {
-            Initialize("LCMSNet");
-        }
-
-        public static void Initialize(string appDataFolderName)
+        /// <summary>
+        /// Initialize the cache, with the provided app name and cache filename
+        /// </summary>
+        /// <param name="appDataFolderName"></param>
+        /// <param name="cacheName"></param>
+        public static void Initialize(string appDataFolderName = "LCMSNet", string cacheName = "LCMSCache.que")
         {
             AppDataFolderName = appDataFolderName;
-            CacheName = "LCMSCache.que";
+            CacheName = cacheName;
 
             BuildConnectionString(false);
         }
@@ -116,6 +118,8 @@ namespace LcmsNetSQLiteTools
                     name = Path.Combine(name, CacheName);
                     LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, name);
                 }
+
+                cacheFullPath = name;
 
                 //workaround for SQLite library version 1.0.93 for network addresses
                 if (name.Substring(0, 1) == "\\")
@@ -269,6 +273,50 @@ namespace LcmsNetSQLiteTools
         #region Methods
 
         /// <summary>
+        /// Delete a cache file that has issues so a good cache can be made it its place.
+        /// It is the responsibility of the calling method to ensure no other database operations are occurring that could interfere.
+        /// </summary>
+        /// <param name="force">If true, deletes the cache regardless of the <see cref="DatabaseImageBad"/> value</param>
+        public static void DeleteBadCache(bool force = false)
+        {
+            if (DatabaseImageBad || force)
+            {
+                // close down existing connections
+                CloseConnection();
+
+                try
+                {
+                    if (File.Exists(cacheFullPath))
+                    {
+                        File.Delete(cacheFullPath);
+                    }
+
+                    DatabaseImageBad = false;
+                }
+                catch (Exception ex)
+                {
+                    ApplicationLogger.LogError(0, "Could not delete the SQLite database!", ex);
+                }
+            }
+        }
+
+        private static void CheckExceptionMessageForDbState(Exception ex)
+        {
+            while (ex != null)
+            {
+                if (!string.IsNullOrWhiteSpace(ex.Message) &&
+                    (ex.Message.IndexOf("malformed", StringComparison.OrdinalIgnoreCase) > -1 ||
+                     ex.Message.IndexOf("corrupted", StringComparison.OrdinalIgnoreCase) > -1))
+                {
+                    DatabaseImageBad = true;
+                    break;
+                }
+
+                ex = ex.InnerException;
+            }
+        }
+
+        /// <summary>
         /// Sets the cache location to the path provided
         /// </summary>
         /// <param name="location">New path to location of queue</param>
@@ -285,7 +333,6 @@ namespace LcmsNetSQLiteTools
             CacheName = location;
 
             BuildConnectionString(!File.Exists(location));
-            //m_ConnectionString = "data source=" + location;
         }
 
         /// <summary>
@@ -451,6 +498,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
+                CheckExceptionMessageForDbState(ex);
                 var errMsg = "SQLite exception verifying table " + tableName + " exists";
                 // throw new DatabaseDataException(errMsg, ex);
                 ApplicationLogger.LogError(0, errMsg, ex);
@@ -475,6 +523,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
+                CheckExceptionMessageForDbState(ex);
                 var errMsg = "SQLite exception counting columns in table " + tableName;
                 ApplicationLogger.LogError(0, errMsg, ex);
                 columnCount = 0;
@@ -497,6 +546,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
+                CheckExceptionMessageForDbState(ex);
                 var errMsg = "SQLite exception counting rows in table " + tableName;
                 ApplicationLogger.LogError(0, errMsg, ex);
                 rowCount = 0;
@@ -533,6 +583,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
+                CheckExceptionMessageForDbState(ex);
                 var errMsg = "SQLite exception verifying table " + tableName + " exists";
                 // throw new DatabaseDataException(errMsg, ex);
                 ApplicationLogger.LogError(0, errMsg, ex);
@@ -613,6 +664,7 @@ namespace LcmsNetSQLiteTools
                 }
                 catch (Exception ex)
                 {
+                    CheckExceptionMessageForDbState(ex);
                     var errMsg = "SQLite exception creating table " + tableName;
                     ApplicationLogger.LogError(0, errMsg, ex);
                     return;
@@ -774,6 +826,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
+                CheckExceptionMessageForDbState(ex);
                 ApplicationLogger.LogError(0,
                     string.Format("Could not insert all of the experiment data into the experiment table. {0}",
                         ex.Message));
@@ -1032,6 +1085,7 @@ namespace LcmsNetSQLiteTools
                 }
                 catch (Exception ex)
                 {
+                    CheckExceptionMessageForDbState(ex);
                     var errMsg = "SQLite Exception executing command " + cmdStr;
                     ApplicationLogger.LogError(0, errMsg, ex);
                     throw new DatabaseDataException(errMsg, ex);
@@ -1069,6 +1123,7 @@ namespace LcmsNetSQLiteTools
                 }
                 catch (Exception ex)
                 {
+                    CheckExceptionMessageForDbState(ex);
                     const string errMsg = "SQLite exception adding data";
                     ApplicationLogger.LogError(0, errMsg, ex);
                     throw new DatabaseDataException(errMsg, ex);
@@ -1099,6 +1154,7 @@ namespace LcmsNetSQLiteTools
                 }
                 catch (Exception ex)
                 {
+                    CheckExceptionMessageForDbState(ex);
                     var errMsg = "SQLite exception getting data table via query " + cmdStr + " : " + connStr;
                     ApplicationLogger.LogError(0, errMsg, ex);
                     throw new DatabaseDataException(errMsg, ex);
@@ -1620,8 +1676,9 @@ namespace LcmsNetSQLiteTools
             {
                 cartConfigNames = GetSingleColumnListFromCache(DatabaseTableTypes.CartConfigNameSelected);
             }
-            catch
+            catch (Exception ex)
             {
+                CheckExceptionMessageForDbState(ex);
                 // Table T_CartConfigNameSelected not found
                 // This will happen if the default has not yet been saved
                 return string.Empty;
@@ -1663,6 +1720,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
+                CheckExceptionMessageForDbState(ex);
                 var firstTimeLookupedSelectedSepType = LCMSSettings.GetParameter(LCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE);
 
                 var isFirstTime = true;
@@ -1728,6 +1786,7 @@ namespace LcmsNetSQLiteTools
                 }
                 catch (Exception ex)
                 {
+                    CheckExceptionMessageForDbState(ex);
                     var errMsg = "SQLite exception clearing table via command " + sqlClearCmd;
                     // throw new DatabaseDataException(errMsg, ex);
                     ApplicationLogger.LogError(0, errMsg, ex);
@@ -1743,6 +1802,7 @@ namespace LcmsNetSQLiteTools
                 }
                 catch (Exception ex)
                 {
+                    CheckExceptionMessageForDbState(ex);
                     var errMsg = "SQLite exception creating table " + tableName;
                     // throw new DatabaseDataException(errMsg, ex);
                     ApplicationLogger.LogError(0, errMsg, ex);
@@ -1781,6 +1841,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
+                CheckExceptionMessageForDbState(ex);
                 var errMsg = "SQLite exception filling table " + tableName;
                 // throw new DatabaseDataException(errMsg, ex);
                 ApplicationLogger.LogError(0, errMsg, ex);
@@ -1817,6 +1878,7 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
+                CheckExceptionMessageForDbState(ex);
                 var errMsg = "SQLite exception getting data table via query " + sqlQueryCmd;
                 throw new DatabaseDataException(errMsg, ex);
             }
@@ -1897,6 +1959,7 @@ namespace LcmsNetSQLiteTools
                 }
                 catch (Exception ex)
                 {
+                    CheckExceptionMessageForDbState(ex);
                     var errorMessage = "Exception clearing table " + tableName;
                     ApplicationLogger.LogError(0, errorMessage, ex);
                     throw new DatabaseDataException("Exception clearing table " + tableName, ex);
