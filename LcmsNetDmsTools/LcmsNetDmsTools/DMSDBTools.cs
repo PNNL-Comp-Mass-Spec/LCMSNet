@@ -310,11 +310,6 @@ namespace LcmsNetDmsTools
                 return connection.BeginTransaction();
             }
 
-            ~SqlConnectionWrapper()
-            {
-                Dispose();
-            }
-
             public void Dispose()
             {
                 if (!closeConnectionOnDispose)
@@ -324,7 +319,6 @@ namespace LcmsNetDmsTools
 
                 connection?.Close();
                 connection?.Dispose();
-                GC.SuppressFinalize(this);
             }
         }
 
