@@ -120,6 +120,11 @@ namespace LcmsNetDmsTools
         /// <remarks>Default is 18 months; use 0 to load all data</remarks>
         public int RecentExperimentsMonthsToLoad { get; set; }
 
+        /// <summary>
+        /// Number of months back to load expired EMSL Proposals; defaults to '12', use '-1' to load all data
+        /// </summary>
+        public int EMSLProposalsRecentMonthsToLoad { get; set; }
+
         public bool UseConnectionPooling { get; set; }
 
         private readonly Dictionary<string,string> mConfiguration;
@@ -151,6 +156,7 @@ namespace LcmsNetDmsTools
             mConfiguration = new Dictionary<string, string>();
             RecentDatasetsMonthsToLoad = 12;
             RecentExperimentsMonthsToLoad = 18;
+            EMSLProposalsRecentMonthsToLoad = 12;
             LoadConfiguration();
             // This should generally be true for SqlClient/SqlConnection, false means connection reuse (and potential multi-threading problems)
             UseConnectionPooling = true;
@@ -980,12 +986,21 @@ namespace LcmsNetDmsTools
             }
         }
 
+        /// <summary>
+        /// Get EMSL User Proposal IDs and associated users. Uses <see cref="EMSLProposalsRecentMonthsToLoad"/> to control how much data is loaded.
+        /// </summary>
         public void GetProposalUsers()
         {
             var connStr = GetConnectionString();
             DataTable expTable;
 
-            const string sqlCmd = "SELECT [User ID], [User Name], [#Proposal] FROM V_EUS_Proposal_Users";
+            const string sqlCmdStart = "SELECT [User ID], [User Name], [#Proposal] FROM V_EUS_Proposal_Users";
+            var sqlCmd = sqlCmdStart;
+            if (EMSLProposalsRecentMonthsToLoad > -1)
+            {
+                var oldestExpiration = DateTime.Now.AddMonths(-EMSLProposalsRecentMonthsToLoad);
+                sqlCmd += $" WHERE Proposal_End_Date >= '{oldestExpiration:yyyy-MM-dd}' OR Proposal_End_Date IS NULL";
+            }
 
             try
             {
