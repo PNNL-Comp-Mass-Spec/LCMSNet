@@ -1,59 +1,33 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace LcmsNetData.Data
 {
     [Serializable]
     public class UserIDPIDCrossReferenceEntry
-        : LcmsNetDataClassBase, INotifyPropertyChanged
+        : LcmsNetDataClassBase, INotifyPropertyChangedExt
     {
-        #region Events
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        #endregion
-
-        #region Methods
-
-        private void OnPropertyChanged(string propertyName)
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
-
-        #region Properties
+        private int userID;
+        private string pid;
 
         public int UserID
         {
-            get { return m_userID; }
-            set
-            {
-                if (m_userID != value)
-                {
-                    m_userID = value;
-                    OnPropertyChanged("UserID");
-                }
-            }
+            get => userID;
+            set => this.RaiseAndSetIfChanged(ref userID, value);
         }
-
-        private int m_userID;
 
         public string PID
         {
-            get { return m_pid; }
-            set
-            {
-                if (m_pid != value)
-                {
-                    m_pid = value;
-                    OnPropertyChanged("PID");
-                }
-            }
+            get => pid;
+            set => this.RaiseAndSetIfChanged(ref pid, value);
         }
-
-        private string m_pid;
-
-        #endregion
     }
 }

@@ -18,30 +18,12 @@ using LcmsNetData.Logging;
 namespace LcmsNetData.Data
 {
     [Serializable]
-    public class LcmsNetDataClassBase : ICacheInterface
+    public abstract class LcmsNetDataClassBase : ICacheInterface
     {
         //*********************************************************************************************************
         // Base class for LCMS data storage classes. Contains methods and properties common
         //      to all data storage classes
         //**********************************************************************************************************
-
-        #region "Constants"
-
-        #endregion
-
-        #region "Class variables"
-
-        #endregion
-
-        #region "Events"
-
-        #endregion
-
-        #region "Properties"
-
-        #endregion
-
-        #region "Methods"
 
         /// <summary>
         /// Gets current values for all the properties in the class in key/value format
@@ -182,7 +164,5 @@ namespace LcmsNetData.Data
 
             throw new Exception("LcmsNetDataClassBase.LoadPropertyValues(), Invalid property type specified: " + targetType);
         }
-
-        #endregion
     }
 }

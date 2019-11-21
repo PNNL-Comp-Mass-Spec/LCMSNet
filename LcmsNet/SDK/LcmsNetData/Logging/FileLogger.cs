@@ -147,7 +147,7 @@ namespace LcmsNetData.Logging
         /// <param name="msg">Message(s) contained in exception</param>
         private void GetExceptionMessage(Exception ex, out string msg)
         {
-            msg = ex.Message + " " + ex.StackTrace;
+            msg = ex.Message + "\n" + ex.StackTrace;
             if (ex.InnerException != null)
             {
                 GetExceptionMessage(ex.InnerException, out var innerMsg);
