@@ -1553,16 +1553,13 @@ namespace LcmsNetDmsTools
         /// <returns>Integer position</returns>
         private int ConvertWellStringToInt(string vialPosition)
         {
-            const string regexNum = @"^\d+$";
             int vialNumber;
 
             // First, we'll see if it's a simple number
-            var re = new Regex(regexNum);
-            var match = re.Match(vialPosition);
-            if (match.Success)
+            if (int.TryParse(vialPosition, out var parsed))
             {
                 // vialPosition is simply an integer
-                vialNumber = int.Parse(match.Value);
+                vialNumber = parsed;
             }
             else
             {

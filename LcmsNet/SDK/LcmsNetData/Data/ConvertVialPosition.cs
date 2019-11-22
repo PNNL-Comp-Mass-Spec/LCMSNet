@@ -82,6 +82,8 @@ namespace LcmsNetData.Data
             return prefix.ToString() + firstChar + numericPart.ToString("00");
         }
 
+        private static readonly Regex VialLetterMatch = new Regex("^[A-Z]+", RegexOptions.Compiled);
+
         /// <summary>
         /// Converts a vial position in LCMSNet format (string A1 - H12) to LCMS format (integer 1 - 96)
         /// Supports positions beyond H12, where position Z12 is vial 312, then position AA01 is vial 313, AA02 is 314, etc.
@@ -101,10 +103,8 @@ namespace LcmsNetData.Data
             if (columnsPerRow < 1)
                 columnsPerRow = 12;
 
-            var tmpPosition = vialPosition.ToUpper();
-
             // Get first character(s)
-            var match = Regex.Match(tmpPosition, "^[A-Z]+");
+            var match = VialLetterMatch.Match(vialPosition.ToUpper());
             if (!match.Success || match.Value.Length > 2)
             {
                 return 9999;
