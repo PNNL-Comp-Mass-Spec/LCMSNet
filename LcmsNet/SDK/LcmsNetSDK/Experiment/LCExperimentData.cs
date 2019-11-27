@@ -15,7 +15,7 @@ namespace LcmsNetSDK.Experiment
     /// Experiment data
     /// </summary>
     [Serializable]
-    public class LCExperimentData : LcmsNetDataClassBase
+    public class LCExperimentData
     {
         #region Properties
 

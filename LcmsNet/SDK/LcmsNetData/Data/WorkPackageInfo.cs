@@ -3,7 +3,7 @@
     /// <summary>
     /// Class to hold information about a work package
     /// </summary>
-    public class WorkPackageInfo : LcmsNetDataClassBase
+    public class WorkPackageInfo
     {
         /// <summary>
         /// Constructor: for auto-population

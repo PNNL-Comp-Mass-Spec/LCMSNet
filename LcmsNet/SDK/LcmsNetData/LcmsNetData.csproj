@@ -52,10 +52,9 @@
     <Compile Include="Data\InstrumentInfo.cs" />
     <Compile Include="Data\ITriggerFileData.cs" />
     <Compile Include="Data\LCColumnData.cs" />
-    <Compile Include="Data\LcmsNetDataClassBase.cs" />
     <Compile Include="Data\MRMFileData.cs" />
-    <Compile Include="Data\NotStoredPropertyAttribute.cs" />
     <Compile Include="Data\PalData.cs" />
+    <Compile Include="Data\PersistenceSettingAttribute.cs" />
     <Compile Include="Data\ProposalUser.cs" />
     <Compile Include="Data\SampleDataBasic.cs" />
     <Compile Include="Data\SampleQueryData.cs" />
@@ -67,7 +66,6 @@
     <Compile Include="Data\WorkPackageInfo.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="EventArgs.cs" />
-    <Compile Include="ICacheInterface.cs" />
     <Compile Include="INotifyPropertyChangedExtensions.cs" />
     <Compile Include="LCMSSettings.cs" />
     <Compile Include="Logging\ApplicationLogger.cs" />

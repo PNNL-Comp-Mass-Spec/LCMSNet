@@ -4,8 +4,7 @@ using System.ComponentModel;
 namespace LcmsNetData.Data
 {
     [Serializable]
-    public class LCColumnData
-        : LcmsNetDataClassBase, INotifyPropertyChanged
+    public class LCColumnData : INotifyPropertyChanged
     {
         #region Events
 

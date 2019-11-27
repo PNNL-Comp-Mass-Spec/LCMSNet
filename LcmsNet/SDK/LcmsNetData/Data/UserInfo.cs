@@ -14,7 +14,7 @@ namespace LcmsNetData.Data
     /// <summary>
     /// Class to hold data about LcmsNet users
     /// </summary>
-    public class UserInfo : LcmsNetDataClassBase
+    public class UserInfo
     {
         #region "Properties"
 

@@ -40,6 +40,7 @@
     <Reference Include="LcmsNetData">
       <HintPath>..\..\..\lib\LcmsNetData.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />

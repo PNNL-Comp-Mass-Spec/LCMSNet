@@ -4,8 +4,7 @@ using System.ComponentModel;
 namespace LcmsNetData.Data
 {
     [Serializable]
-    public class ExperimentData
-        : LcmsNetDataClassBase, INotifyPropertyChanged
+    public class ExperimentData : INotifyPropertyChanged
     {
         #region Initialization
 

@@ -20,11 +20,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Windows.Media;
 using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
@@ -62,6 +66,9 @@ namespace LcmsNetSQLiteTools
         private static readonly Dictionary<string, List<UserIDPIDCrossReferenceEntry>> proposalIdIndexedReferenceList = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>(0);
 
         private static string cacheFullPath;
+
+        private static readonly Dictionary<Type, Dictionary<string, PropertyColumnMapping>> PropertyColumnMappings = new Dictionary<Type, Dictionary<string, PropertyColumnMapping>>();
+        private static readonly Dictionary<Type, Dictionary<string, string>> PropertyColumnNameMappings = new Dictionary<Type, Dictionary<string, string>>();
 
         #endregion
 
@@ -365,44 +372,43 @@ namespace LcmsNetSQLiteTools
             // Convert type of queue into a data table name
             var tableName = GetTableName(tableType);
 
-            // Get a list of string dictionaries containing properties for each sample
-            var allSampleProps = GetPropertiesFromCache(tableName, connectionString);
-
-            var returnData = new List<T>(allSampleProps.Count);
-
-            // For each row (representing one sample), create a sample data object
-            //      and load the property values
-            foreach (var sampleProps in allSampleProps)
-            {
-                // Create a SampleData object
-                var sampleData = (T)(new T().GetNewNonDummy());
-
-                // Load the sample data object from the string dictionary
-                sampleData.LoadPropertyValues(sampleProps);
-
-                // Add the sample data object to the return list
-                returnData.Add(sampleData);
-            }
-
             // All finished, so return
-            return returnData;
+            return ReadDataFromCache(tableName, () => (T)(new T().GetNewNonDummy()), connectionString);
         }
 
         /// <summary>
-        /// Gets a list of string dictionary objects containing properties for each item in the cache
+        /// Create a list of objects with row data from a cache table
         /// </summary>
+        /// <typeparam name="T">Type</typeparam>
         /// <param name="tableName">Name of table containing the properties</param>
+        /// <param name="objectCreator">Method to create a new object of type <typeparamref name="T"/></param>
         /// <param name="connStr">Connection string</param>
-        /// <returns>List with properties for each item in cache</returns>
-        private static List<Dictionary<string, string>> GetPropertiesFromCache(string tableName, string connStr)
+        /// <returns>List of items read from the table</returns>
+        private static List<T> ReadDataFromCache<T>(string tableName, Func<T> objectCreator, string connStr)
         {
-            var returnData = new List<Dictionary<string, string>>();
+            var returnData = new List<T>();
 
             // Verify table exists in database
             if (!VerifyTableExists(tableName, connStr))
             {
                 // No table, so return an empty list
                 return returnData;
+            }
+
+            var type = typeof(T);
+            var typeMappings = GetPropertyColumnMapping(type);
+            var nameMappings = PropertyColumnNameMappings[type];
+
+            // Compatibility mappings
+            // TODO: Remove these in the future
+            if (nameMappings.TryGetValue("dms.emslusagetype", out var eusTypeVal) && !nameMappings.ContainsKey("dms.usagetype"))
+            {
+                nameMappings.Add("dms.usagetype", eusTypeVal);
+            }
+
+            if (nameMappings.TryGetValue("dms.emslproposalid", out var eusPid) && !nameMappings.ContainsKey("dms.proposalid"))
+            {
+                nameMappings.Add("dms.proposalid", eusPid);
             }
 
             // Get table containing cached data
@@ -414,43 +420,48 @@ namespace LcmsNetSQLiteTools
                 return returnData;
             }
 
+            returnData.Capacity = cacheData.Rows.Count;
+            var columnMappings = new KeyValuePair<int, Action<object, object>>[cacheData.Columns.Count];
+            var columnSetOrder = new int[cacheData.Columns.Count];
+
+            // Create the column mappings, for fast access to set methods
+            foreach (DataColumn column in cacheData.Columns)
+            {
+                var properName = nameMappings[column.ColumnName.ToLower()];
+                var setMethod = typeMappings[properName].SetProperty;
+                columnMappings[column.Ordinal] = new KeyValuePair<int, Action<object, object>>(column.Ordinal, setMethod);
+                columnSetOrder[column.Ordinal] = column.Ordinal;
+
+                if (properName.ToLower().Contains("runningstatus"))
+                {
+                    // Always process runningstatus last
+                    columnSetOrder[column.Ordinal] = int.MaxValue;
+                }
+            }
+
+            Array.Sort(columnSetOrder, columnMappings);
+
             // For each row (representing properties and values for one sample), create a string dictionary
             //          with the object's properties from the table columns, and add it to the return list
             foreach (DataRow currentRow in cacheData.Rows)
             {
-                // Create a string dictionary containing the properties and values for this sample
-                var sampleProps = GetPropertyDictionaryForSample(currentRow, cacheData.Columns);
+                // Create a new object
+                var data = objectCreator();
 
-                // Add the string dictionary to the return list
-                returnData.Add(sampleProps);
+                // Populate the properties from the cache
+                foreach (var column in columnMappings)
+                {
+                    var value = currentRow[column.Key];
+                    var setMethod = column.Value;
+                    setMethod(data, value);
+                }
+
+                // Add the object to the return list
+                returnData.Add(data);
             }
 
             // Return the list
             return returnData;
-        }
-
-        /// <summary>
-        /// Gets a string dictionary containing property names and values contained in
-        /// a row of the cache data table
-        /// </summary>
-        /// <param name="RowOfValues">DataRow containing property values from table</param>
-        /// <param name="TableColumns">Collection of data columns in table</param>
-        /// <returns>Dictionary in property name, property value format</returns>
-        private static Dictionary<string, string> GetPropertyDictionaryForSample(DataRow RowOfValues,
-            DataColumnCollection TableColumns)
-        {
-            var returnDict = new Dictionary<string, string>();
-
-            // Build the string dictionary
-            foreach (DataColumn column in TableColumns)
-            {
-                var colName = column.ColumnName;
-                var colData = (string) RowOfValues[TableColumns[colName]];
-                returnDict.Add(colName, colData);
-            }
-
-            // Return the dictionary
-            return returnDict;
         }
 
         /// <summary>
@@ -563,7 +574,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="connStr"></param>
         /// <param name="fieldNames"></param>
         /// <returns></returns>
-        private static bool TableColumnNamesMatched(string tableName, string connStr, Dictionary<string, string> fieldNames)
+        private static bool TableColumnNamesMatched(string tableName, string connStr, List<string> fieldNames)
         {
             if (!VerifyTableExists(tableName, connStr, out var columnCount))
             {
@@ -611,7 +622,7 @@ namespace LcmsNetSQLiteTools
                 }
             }
 
-            foreach (var name in fieldNames.Keys)
+            foreach (var name in fieldNames)
             {
                 if (!namesList.Contains(name))
                 {
@@ -623,30 +634,24 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Saves a list of properties for an object to the cache database
+        /// Saves a list of objects to the cache database
         /// </summary>
-        /// <param name="dataToCache">List of ICacheInterface objects to save properites for</param>
+        /// <param name="dataToCache">List of objects to save properties for</param>
         /// <param name="tableName">Name of the table to save data in</param>
         /// <param name="connStr">Connection string</param>
-        /// <param name="insertsIncludeFieldNames"></param>
-        private static void SavePropertiesToCache(
-            IList<ICacheInterface> dataToCache, string tableName, string connStr, bool insertsIncludeFieldNames)
+        private static void WriteDataToCache<T>(IReadOnlyCollection<T> dataToCache, string tableName, string connStr)
         {
-            var dataExists = (dataToCache.Count > 0);
-
             // If there is no data, then just exit
-            if (!dataExists)
+            if (dataToCache.Count < 1)
             {
                 return;
             }
 
-            // Create a string dictionary holding the property names and values for object,
-            //      using the first object in the input list
-            var firstItem = dataToCache[0];
-            var fieldNames = firstItem.GetPropertyValues();
+            var mappings = GetPropertyColumnMapping(typeof(T)).Values.ToList();
 
             // Verify table exists, and column names are correct; if not, create it; Otherwise, clear it
             var tableExists = VerifyTableExists(tableName, connStr);
+            var fieldNames = mappings.Select(x => x.ColumnName).ToList();
             var tableColumnsCorrect = !tableExists || TableColumnNamesMatched(tableName, connStr, fieldNames); // if the table doesn't exist, automatically set this to true
             if (!tableExists || !tableColumnsCorrect)
             {
@@ -672,16 +677,36 @@ namespace LcmsNetSQLiteTools
                 }
             }
 
-            // Copy the field data to the data table
-            var cmdList = new List<string>();
-            foreach (var tempItem in dataToCache)
+            // Fill the data table
+            using (var connection = GetConnection(ConnString))
+            using (var command = connection.CreateCommand())
+            using (var transaction = connection.BeginTransaction())
             {
-                var itemProps = tempItem.GetPropertyValues();
-                var sqlInsertCmd = BuildInsertPropValueCmd(itemProps, tableName, insertsIncludeFieldNames);
-                cmdList.Add(sqlInsertCmd);
-            }
+                try
+                {
+                    command.CommandText = $"INSERT INTO {tableName}({string.Join(",", mappings.Select(x => $"'{x.ColumnName}'"))}) VALUES ({string.Join(",", mappings.Select(x => $":{x.ColumnName.Replace(".", "")}"))})";
 
-            StoreCmdListData(connStr, tableName, cmdList);
+                    foreach (var item in dataToCache)
+                    {
+                        command.Parameters.Clear();
+                        foreach (var map in mappings)
+                        {
+                            command.Parameters.Add(new SQLiteParameter($":{map.ColumnName.Replace(".", "")}", map.ReadProperty(item)?.ToString()));
+                        }
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    const string errMsg = "SQLite exception adding data";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    //throw new DatabaseDataException(errMsg, ex);
+                }
+            }
         }
 
         private static void UpdateProposalIdIndexReferenceList(Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
@@ -739,25 +764,18 @@ namespace LcmsNetSQLiteTools
                 return;
             }
 
-            var dataInList = (queueData.Count > 0);
             var tableName = GetTableName(tableType);
 
             // Clear the cache table
             ClearCacheTable(tableName, connStr);
 
             //If no data in list, just exit
-            if (!dataInList)
+            if (queueData.Count < 1)
             {
                 return;
             }
 
-            // Convert input data for caching and call cache routine
-            var dataList = new List<ICacheInterface>();
-            foreach (var currentSample in queueData)
-            {
-                dataList.Add(currentSample);
-            }
-            SavePropertiesToCache(dataList, tableName, connStr, true);
+            WriteDataToCache(queueData, tableName, connStr);
         }
 
         /// <summary>
@@ -767,7 +785,6 @@ namespace LcmsNetSQLiteTools
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="userList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveUserListToCache(List<UserInfo> userList, bool clearFirst = true)
         {
-            var dataInList = (userList.Count > 0);
             var tableName = GetTableName(DatabaseTableTypes.UserList);
 
             if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && userList.Count <= rowCount)
@@ -785,18 +802,12 @@ namespace LcmsNetSQLiteTools
             }
 
             //If no data in list, exit
-            if (!dataInList)
+            if (userList.Count < 1)
             {
                 return;
             }
 
-            // Convert input data for caching and call cache routine
-            var dataList = new List<ICacheInterface>();
-            foreach (var currentUser in userList)
-            {
-                dataList.Add(currentUser);
-            }
-            SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
+            WriteDataToCache(userList, tableName, ConnString);
         }
 
         /// <summary>
@@ -897,15 +908,8 @@ namespace LcmsNetSQLiteTools
             ClearCacheTable(userTableName, ConnString);
             ClearCacheTable(referenceTableName, ConnString);
 
-            var userCacheList = new List<ICacheInterface>();
-            var referenceCacheList = new List<ICacheInterface>();
-
-            userCacheList.AddRange(users);
-            referenceCacheList.AddRange(crossReferenceList);
-
-            SavePropertiesToCache(userCacheList, userTableName, ConnString, true); // Force true, or suffer the random consequences...
-
-            SavePropertiesToCache(referenceCacheList, referenceTableName, ConnString, false); // Single column, column names don't matter...
+            WriteDataToCache(users, userTableName, ConnString);
+            WriteDataToCache(crossReferenceList, referenceTableName, ConnString);
 
             if (!AlwaysRead)
             {
@@ -918,7 +922,6 @@ namespace LcmsNetSQLiteTools
 
         public static void SaveEntireLCColumnListToCache(List<LCColumnData> lcColumnList)
         {
-            var listHasData = lcColumnList.Count != 0;
             var tableName = GetTableName(DatabaseTableTypes.LCColumnList);
 
             // Clear the cache table
@@ -930,15 +933,10 @@ namespace LcmsNetSQLiteTools
                 lcColumns.AddRange(lcColumnList);
             }
             // Exit if there's nothing to cache
-            if (!listHasData)
+            if (lcColumnList.Count < 1)
                 return;
 
-            // Convert input data for caching and call cache routine
-            var dataList = new List<ICacheInterface>();
-            foreach (var datum in lcColumnList)
-                dataList.Add(datum);
-
-            SavePropertiesToCache(dataList, tableName, ConnString, false);
+            WriteDataToCache(lcColumnList, tableName, ConnString);
         }
 
         /// <summary>
@@ -948,7 +946,6 @@ namespace LcmsNetSQLiteTools
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="instList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveInstListToCache(List<InstrumentInfo> instList, bool clearFirst = true)
         {
-            var dataInList = (instList.Count > 0);
             var tableName = GetTableName(DatabaseTableTypes.InstrumentList);
 
             if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && instList.Count <= rowCount)
@@ -965,19 +962,12 @@ namespace LcmsNetSQLiteTools
                 instrumentInfo.AddRange(instList);
             }
             //If no data in list, just exit
-            if (!dataInList)
+            if (instList.Count < 1)
             {
                 return;
             }
 
-            // Convert input data for caching and call cache routine
-            var dataList = new List<ICacheInterface>();
-            foreach (var currentInst in instList)
-            {
-                dataList.Add(currentInst);
-            }
-
-            SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
+            WriteDataToCache(instList, tableName, ConnString);
         }
 
         /// <summary>
@@ -987,7 +977,6 @@ namespace LcmsNetSQLiteTools
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartConfigList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveCartConfigListToCache(List<CartConfigInfo> cartConfigList, bool clearFirst = true)
         {
-            var dataInList = (cartConfigList.Count > 0);
             var tableName = GetTableName(DatabaseTableTypes.CartConfigNameList);
 
             if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && cartConfigList.Count <= rowCount)
@@ -999,19 +988,12 @@ namespace LcmsNetSQLiteTools
             ClearCacheTable(tableName, ConnString);
 
             //If no data in list, exit
-            if (!dataInList)
+            if (cartConfigList.Count < 1)
             {
                 return;
             }
 
-            // Convert input data for caching and call cache routine
-            var dataList = new List<ICacheInterface>();
-            foreach (var currentConfig in cartConfigList)
-            {
-                dataList.Add(currentConfig);
-            }
-
-            SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
+            WriteDataToCache(cartConfigList, tableName, ConnString);
 
             // Reload the in-memory copy of the cached data
             GetCartConfigNameMap(true);
@@ -1024,7 +1006,6 @@ namespace LcmsNetSQLiteTools
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="workPackageList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveWorkPackageListToCache(List<WorkPackageInfo> workPackageList, bool clearFirst = true)
         {
-            var dataInList = (workPackageList.Count > 0);
             var tableName = GetTableName(DatabaseTableTypes.WorkPackages);
 
             if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && workPackageList.Count <= rowCount)
@@ -1036,19 +1017,12 @@ namespace LcmsNetSQLiteTools
             ClearCacheTable(tableName, ConnString);
 
             //If no data in list, exit
-            if (!dataInList)
+            if (workPackageList.Count < 1)
             {
                 return;
             }
 
-            // Convert input data for caching and call cache routine
-            var dataList = new List<ICacheInterface>();
-            foreach (var currentConfig in workPackageList)
-            {
-                dataList.Add(currentConfig);
-            }
-
-            SavePropertiesToCache(dataList, tableName, ConnString, true); // Force true, or suffer the random consequences...
+            WriteDataToCache(workPackageList, tableName, ConnString);
 
             // Reload the in-memory copy of the cached data
             GetWorkPackageMap(true);
@@ -1166,44 +1140,6 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Executes a collection of SQL commands wrapped in a transaction to improve performance
-        /// </summary>
-        /// <param name="cmdList">List containing the commands to execute</param>
-        /// <param name="connStr">Connection string</param>
-        private static void ExecuteSQLiteCmdsWithTransaction(IEnumerable<string> cmdList, string connStr)
-        {
-            using (var connection = GetConnection(connStr))
-            using (var command = connection.CreateCommand())
-            using (var transaction = connection.BeginTransaction())
-            {
-                try
-                {
-                    command.CommandType = CommandType.Text;
-                    // Turn off journal, which speeds up transaction
-                    command.CommandText = "PRAGMA journal_mode = OFF";
-                    command.ExecuteNonQuery();
-
-                    // Send each of the commands
-                    foreach (var currCmd in cmdList)
-                    {
-                        command.CommandText = currCmd;
-                        command.ExecuteNonQuery();
-                    }
-
-                    // End transaction
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    CheckExceptionMessageForDbState(ex);
-                    const string errMsg = "SQLite exception adding data";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                    throw new DatabaseDataException(errMsg, ex);
-                }
-            }
-        }
-
-        /// <summary>
         /// Retrieves a data table from a SQLite database
         /// </summary>
         /// <param name="cmdStr">SQL command to execute</param>
@@ -1238,76 +1174,15 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Replaces characters in a string that are incompatible with SQLite
-        /// </summary>
-        /// <param name="InpString">String to clean</param>
-        /// <returns>String compatible with SQLite</returns>
-        private static string ScrubField(string InpString)
-        {
-            // Check for empty string
-            if (InpString == "")
-            {
-                return InpString;
-            }
-
-            // Escape single quotes
-            return InpString.Replace("'", "''");
-        }
-
-        /// <summary>
-        /// Builds a INSERT command from the input string dictionary
-        /// </summary>
-        /// <param name="inpData">String dictionary containing property names and values</param>
-        /// <param name="tableName">Name of table to insert values into</param>
-        /// <param name="insertsIncludeFieldNames">When true, use the key names in inpData as the field names</param>
-        /// <returns>String consisting of a complete INSERT SQL statement</returns>
-        /// <remarks>Set insertsIncludeFieldNames to true when the data in inpData does not match all of the columns in the target table</remarks>
-        private static string BuildInsertPropValueCmd(Dictionary<string, string> inpData, string tableName, bool insertsIncludeFieldNames)
-        {
-            var sb = new StringBuilder();
-            sb.Append("INSERT INTO ");
-            sb.Append(tableName);
-
-            if (insertsIncludeFieldNames)
-            {
-                // Field names in SQLite are delimited by double quotes
-                var fieldNames = (from item in inpData.Keys select "\"" + item + "\"");
-                sb.Append("(");
-                sb.Append(string.Join(",", fieldNames));
-                sb.Append(")");
-            }
-
-            sb.Append(" VALUES(");
-
-            // Add the property values to the string
-            // String values in SQLite are delimited by single quotes
-            var valueData = (from item in inpData select "'" + ScrubField(item.Value) + "'");
-            sb.Append(string.Join(",", valueData));
-
-            // Terminate the string and return
-            sb.Append(")");
-            return sb.ToString();
-        }
-
-        /// <summary>
         /// Builds a CREATE TABLE command from the input string dictionary
         /// </summary>
-        /// <param name="inpData">String dictionary containing property names and values</param>
+        /// <param name="inpData">String list containing property names</param>
         /// <param name="tableName">Name of table to create</param>
         /// <returns>String consisting of a complete CREATE TABLE SQL statement</returns>
-        private static string BuildCreatePropTableCmd(Dictionary<string, string> inpData, string tableName)
+        private static string BuildCreatePropTableCmd(List<string> inpData, string tableName)
         {
-            var sb = new StringBuilder();
-            sb.Append("CREATE TABLE ");
-            sb.Append(tableName + "(");
-
             // Create column names for each key, which is same as property name in queue being saved
-            var query = (from item in inpData.Keys select "'" + item + "'");
-            sb.Append(string.Join(",", query));
-
-            // Terminate the string and return
-            sb.Append(")");
-            return sb.ToString();
+            return $"CREATE TABLE {tableName}({string.Join(",", inpData.Select(x => $"'{x}'"))})";
         }
 
         /// <summary>
@@ -1370,23 +1245,8 @@ namespace LcmsNetSQLiteTools
                 // Get data table name
                 var tableName = GetTableName(DatabaseTableTypes.CartConfigNameList);
 
-                // Get a list of string dictionaries containing properties for each item
-                var allConfigProps = GetPropertiesFromCache(tableName, ConnString);
-
-                var configList = new List<CartConfigInfo>(allConfigProps.Count);
-
-                // For each row (representing one config), create a dictionary and/or list entry
-                foreach (var configProps in allConfigProps)
-                {
-                    // Create a CartConfigInfo object
-                    var configInfo = new CartConfigInfo();
-
-                    // Load the cart config data object from the string dictionary
-                    configInfo.LoadPropertyValues(configProps);
-
-                    // Add the cart config data object to the full list
-                    configList.Add(configInfo);
-                }
+                // Read the data from the cache
+                var configList = ReadDataFromCache(tableName, () => new CartConfigInfo(), ConnString);
 
                 // Transform the data, and allow "unknown" cart configs for all carts
                 foreach (var config in configList)
@@ -1593,20 +1453,14 @@ namespace LcmsNetSQLiteTools
                 // Get data table name
                 var tableName = GetTableName(DatabaseTableTypes.WorkPackages);
 
-                // Get a list of string dictionaries containing properties for each item
-                var allWorkPackageProps = GetPropertiesFromCache(tableName, ConnString);
+                // Read the data from the cache
+                var workPackages = ReadDataFromCache(tableName, () => new WorkPackageInfo(), ConnString);
 
-                cacheData = new Dictionary<string, WorkPackageInfo>(allWorkPackageProps.Count);
+                cacheData = new Dictionary<string, WorkPackageInfo>(workPackages.Count);
 
                 // For each row (representing one work package), create a dictionary and/or list entry
-                foreach (var wpProps in allWorkPackageProps)
+                foreach (var wpInfo in workPackages)
                 {
-                    // Create a WorkPackageInfo object
-                    var wpInfo = new WorkPackageInfo();
-
-                    // Load the work package data object from the string dictionary
-                    wpInfo.LoadPropertyValues(wpProps);
-
                     // Add the work package data object to the full list
                     if (!cacheData.ContainsKey(wpInfo.ChargeCode))
                     {
@@ -1650,24 +1504,8 @@ namespace LcmsNetSQLiteTools
                 // Get data table name
                 var tableName = GetTableName(DatabaseTableTypes.UserList);
 
-                // Get a list of string dictionaries containing properties for each item
-                var allUserProps = GetPropertiesFromCache(tableName, ConnString);
-
-                returnData = new List<UserInfo>(allUserProps.Count);
-
-                // For each row (representing one user), create a user data object
-                //      and load the property values
-                foreach (var userProps in allUserProps)
-                {
-                    // Create a classUserInfo object
-                    var userData = new UserInfo();
-
-                    // Load the user data object from the string dictionary
-                    userData.LoadPropertyValues(userProps);
-
-                    // Add the user data object to the return list
-                    returnData.Add(userData);
-                }
+                // Read the data from the cache
+                returnData = ReadDataFromCache(tableName, () => new UserInfo(), ConnString);
 
                 userInfo.Clear();
                 if (AlwaysRead)
@@ -1696,24 +1534,8 @@ namespace LcmsNetSQLiteTools
                 // Convert type of list into a data table name
                 var tableName = GetTableName(DatabaseTableTypes.InstrumentList);
 
-                // Get a list of string dictionaries containing properties for each instrument
-                var allInstProps = GetPropertiesFromCache(tableName, ConnString);
-
-                returnData = new List<InstrumentInfo>(allInstProps.Count);
-
-                // For each row (representing one instrument), create an instrument data object
-                //      and load the property values
-                foreach (var instProps in allInstProps)
-                {
-                    // Create a InstrumentInfo object
-                    var instData = new InstrumentInfo();
-
-                    // Load the instrument data object from the string dictionary
-                    instData.LoadPropertyValues(instProps);
-
-                    // Add the instrument data object to the return list
-                    returnData.Add(instData);
-                }
+                // Read the data from the cache
+                returnData = ReadDataFromCache(tableName, () => new InstrumentInfo(), ConnString);
 
                 // All finished, so return
                 instrumentInfo.Clear();
@@ -1736,18 +1558,8 @@ namespace LcmsNetSQLiteTools
             {
                 var tableName = GetTableName(DatabaseTableTypes.ExperimentList);
 
-                var allExpProperties = GetPropertiesFromCache(tableName, ConnString);
-
-                returnData = new List<ExperimentData>(allExpProperties.Count);
-
-                foreach (var props in allExpProperties)
-                {
-                    var expDatum = new ExperimentData();
-
-                    expDatum.LoadPropertyValues(props);
-
-                    returnData.Add(expDatum);
-                }
+                // Read the data from the cache
+                returnData = ReadDataFromCache(tableName, () => new ExperimentData(), ConnString);
 
                 experimentsData.Clear();
                 if (AlwaysRead)
@@ -1779,26 +1591,9 @@ namespace LcmsNetSQLiteTools
                 var userTableName = GetTableName(DatabaseTableTypes.PUserList);
                 var referenceTableName = GetTableName(DatabaseTableTypes.PReferenceList);
 
-                var userExpProperties = GetPropertiesFromCache(userTableName, ConnString);
-
-                var referenceExpProperties = GetPropertiesFromCache(referenceTableName, ConnString);
-
-                users = new List<ProposalUser>(userExpProperties.Count);
-                var crossReferenceList = new List<UserIDPIDCrossReferenceEntry>(referenceExpProperties.Count);
-
-                foreach (var props in userExpProperties)
-                {
-                    var datum = new ProposalUser();
-                    datum.LoadPropertyValues(props);
-                    users.Add(datum);
-                }
-
-                foreach (var props in referenceExpProperties)
-                {
-                    var datum = new UserIDPIDCrossReferenceEntry();
-                    datum.LoadPropertyValues(props);
-                    crossReferenceList.Add(datum);
-                }
+                // Read the data from the cache
+                users = ReadDataFromCache(userTableName, () => new ProposalUser(), ConnString);
+                var crossReferenceList = ReadDataFromCache(userTableName, () => new UserIDPIDCrossReferenceEntry(), ConnString);
 
                 foreach (var crossReference in crossReferenceList)
                 {
@@ -1833,16 +1628,8 @@ namespace LcmsNetSQLiteTools
             {
                 var tableName = GetTableName(DatabaseTableTypes.LCColumnList);
 
-                var allLCColumnProperties = GetPropertiesFromCache(tableName, ConnString);
-
-                returnData = new List<LCColumnData>(allLCColumnProperties.Count);
-
-                foreach (var props in allLCColumnProperties)
-                {
-                    var datum = new LCColumnData();
-                    datum.LoadPropertyValues(props);
-                    returnData.Add(datum);
-                }
+                // Read the data from the cache
+                returnData = ReadDataFromCache(tableName, () => new LCColumnData(), ConnString);
 
                 lcColumns.Clear();
                 if (AlwaysRead)
@@ -2045,25 +1832,6 @@ namespace LcmsNetSQLiteTools
             }
         }
 
-        private static void StoreCmdListData(string connectionString, string tableName, ICollection<string> cmdList)
-        {
-            if (cmdList.Count == 0)
-                return;
-
-            // Execute the command list to store data in database
-            try
-            {
-                ExecuteSQLiteCmdsWithTransaction(cmdList, connectionString);
-            }
-            catch (Exception ex)
-            {
-                CheckExceptionMessageForDbState(ex);
-                var errMsg = "SQLite exception filling table " + tableName;
-                // throw new DatabaseDataException(errMsg, ex);
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
         /// <summary>
         /// Generic method for retrieving data from a single column table
         /// </summary>
@@ -2104,6 +1872,8 @@ namespace LcmsNetSQLiteTools
             {
                 return returnList;
             }
+
+            returnList.Capacity = resultTable.Rows.Count;
 
             // Fill the return list
             foreach (DataRow currentRow in resultTable.Rows)
@@ -2181,6 +1951,317 @@ namespace LcmsNetSQLiteTools
                     throw new DatabaseDataException("Exception clearing table " + tableName, ex);
                 }
             }
+        }
+
+        #endregion
+
+        #region Property to Column mappings
+
+        private class PropertyColumnMapping
+        {
+            /// <summary>
+            /// SQLite table column name
+            /// </summary>
+            public string ColumnName { get; }
+
+            /// <summary>
+            /// The type of the property, for conversion handling
+            /// </summary>
+            public Type PropertyType { get; }
+
+            /// <summary>
+            /// Method for reading the property
+            /// </summary>
+            public Func<object, object> ReadProperty { get; }
+
+            /// <summary>
+            /// Method for setting the property
+            /// </summary>
+            public Action<object, object> SetProperty { get; }
+
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="columnName">SQLite table column name</param>
+            /// <param name="propertyType">Type of the property, for conversion handling</param>
+            /// <param name="readProperty">Method for reading the property</param>
+            /// <param name="setProperty">Method for setting the property</param>
+            public PropertyColumnMapping(string columnName, Type propertyType,
+                Func<object, object> readProperty, Action<object, object> setProperty)
+            {
+                ColumnName = columnName;
+                PropertyType = propertyType;
+                ReadProperty = readProperty;
+                SetProperty = setProperty;
+            }
+        }
+
+        private static Dictionary<string, PropertyColumnMapping> GetPropertyColumnMapping(Type type)
+        {
+            if (PropertyColumnMappings.TryGetValue(type, out var mappings))
+            {
+                return mappings;
+            }
+
+            mappings = new Dictionary<string, PropertyColumnMapping>();
+            var nameMapping = new Dictionary<string, string>();
+
+            foreach (var property in type.GetProperties())
+            {
+                var settings = (PersistenceSettingAttribute)Attribute.GetCustomAttribute(property, typeof(PersistenceSettingAttribute)) ?? new PersistenceSettingAttribute();
+                if (settings.IgnoreProperty)
+                {
+                    continue;
+                }
+
+                // Test to make sure the property has both get and set accessors
+                // TODO: Should not be necessary for non-primitive-type properties, as long as they are otherwise initialized appropriately.
+                // TODO: Requirement: if an object, then "CanWrite" can be false as long as there is a default constructor for the object type.
+                if (!(property.CanRead && property.CanWrite))
+                {
+                    throw new NotSupportedException(
+                        "Operation requires get and set accessors for all persisted properties. " +
+                        "Add the attribute '[PersistenceSetting(IgnoreProperty = true)]' to ignore the failing property. Property info: Class '" +
+                        type.FullName + "', property '" + property.Name + "'.");
+                }
+
+                if (string.IsNullOrWhiteSpace(settings.ColumnName))
+                {
+                    settings.ColumnName = property.Name;
+                }
+
+                if (string.IsNullOrWhiteSpace(settings.ColumnNamePrefix))
+                {
+                    settings.ColumnNamePrefix = settings.ColumnName;
+                }
+
+                if (!string.IsNullOrWhiteSpace(settings.ColumnReadOverrideMethod))
+                {
+                    // Special read method: resolve the method, and generate the mappings
+                    try
+                    {
+                        var methodInfo = type.GetMethod(settings.ColumnReadOverrideMethod, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                        if (methodInfo == null)
+                        {
+                            throw new NotSupportedException($"Method named \"{settings.ColumnReadOverrideMethod}\" not found in type \"{type.FullName ?? type.Name}\"!");
+                        }
+
+                        if (methodInfo.GetParameters().Length > 0 && methodInfo.GetParameters().Any(x => !x.HasDefaultValue))
+                        {
+                            throw new NotSupportedException($"Method named \"{settings.ColumnReadOverrideMethod}\" in type \"{type.FullName ?? type.Name}\" has required arguments, and cannot be used for object persistence!");
+                        }
+
+                        var propMappings = GetPropertyColumnMapping(type, property, settings, x => methodInfo.Invoke(x, null));
+                        foreach (var mapping in propMappings)
+                        {
+                            mappings.Add(mapping.ColumnName, mapping);
+                            nameMapping.Add(mapping.ColumnName.ToLower(), mapping.ColumnName);
+                        }
+                    }
+                    catch (AmbiguousMatchException)
+                    {
+                        throw new NotSupportedException($"Multiple matches found in class \"{type.FullName ?? type.Name}\" for method name \"{settings.ColumnReadOverrideMethod}\". Method name must be unique!");
+                    }
+                }
+                else
+                {
+                    var propMappings = GetPropertyColumnMapping(type, property, settings);
+                    foreach (var mapping in propMappings)
+                    {
+                        mappings.Add(mapping.ColumnName, mapping);
+                        nameMapping.Add(mapping.ColumnName.ToLower(), mapping.ColumnName);
+                    }
+                }
+            }
+
+            PropertyColumnMappings.Add(type, mappings);
+            PropertyColumnNameMappings.Add(type, nameMapping);
+            return mappings;
+        }
+
+        private static IEnumerable<PropertyColumnMapping> GetPropertyColumnMapping(Type type, PropertyInfo property, PersistenceSettingAttribute settings, Func<object, object> readMethod = null)
+        {
+            var propType = property.PropertyType;
+            if (propType.IsValueType || propType.IsEnum || propType == typeof(string))
+            {
+                // Built-in direct handling: read or assign, with some error checking
+                yield return new PropertyColumnMapping(settings.ColumnName, propType, x =>
+                {
+                    if (x.GetType() != type)
+                    {
+                        // return the default value for the type
+                        //return Activator.CreateInstance(propType);
+                        throw new NotSupportedException($"Cannot access property \"{property.Name}\" on object of type \"{x.GetType().FullName ?? x.GetType().Name}\"");
+                    }
+
+                    if (readMethod != null)
+                    {
+                        return readMethod(x);
+                    }
+
+                    return property.GetValue(x);
+                }, (cls, propValue) =>
+                {
+                    if (cls.GetType() != type)
+                    {
+                        // return the default value for the type
+                        //return Activator.CreateInstance(propType);
+                        throw new NotSupportedException($"Cannot access property \"{property.Name}\" on object of type \"{cls.GetType().FullName ?? cls.GetType().Name}\"");
+                    }
+
+                    if (propValue.GetType() == propType)
+                    {
+                        property.SetValue(cls, propValue);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            var value = ConvertToType(propValue, propType);
+                            property.SetValue(cls, value);
+                        }
+                        catch (Exception ex) when (ex is InvalidCastException || ex is FormatException || ex is OverflowException)
+                        {
+                            throw new NotSupportedException($"Could not convert value of type \"{propValue.GetType().Name}\" with value \"{propValue}\" to target type \"{propType.Name}\"; type \"{cls.GetType().FullName ?? cls.GetType().Name}\", column name \"{settings.ColumnName}\"");
+                        }
+                    }
+                });
+                yield break;
+            }
+
+            if (propType.IsClass && propType.FullName.ToLower().StartsWith("lcmsnet"))
+            {
+                // LCMSNet class: generate the mapping, with cascading through sub-objects
+                var objectMappings = GetPropertyColumnMapping(propType);
+                foreach (var mapping in objectMappings)
+                {
+                    yield return new PropertyColumnMapping($"{settings.ColumnNamePrefix}{mapping.Key}", mapping.Value.PropertyType, x =>
+                    {
+                        if (x.GetType() != type)
+                        {
+                            // return the default value for the type
+                            //return Activator.CreateInstance(propType);
+                            throw new NotSupportedException($"Cannot access property {property.Name} on object of type {x.GetType()}");
+                        }
+
+                        if (readMethod != null)
+                        {
+                            return mapping.Value.ReadProperty(readMethod(x));
+                        }
+
+                        return mapping.Value.ReadProperty(property.GetValue(x));
+                    }, (cls, propValue) =>
+                    {
+                        if (cls.GetType() != type)
+                        {
+                            // return the default value for the type
+                            //return Activator.CreateInstance(propType);
+                            throw new NotSupportedException($"Cannot access property \"{property.Name}\" on object of type \"{cls.GetType().FullName ?? cls.GetType().Name}\"");
+                        }
+
+                        var subObject = property.GetValue(cls);
+                        if (subObject == null)
+                        {
+                            try
+                            {
+                                subObject = Activator.CreateInstance(propType);
+                                property.SetValue(cls, subObject);
+                            }
+                            catch (Exception e)
+                            {
+                                throw new NotSupportedException($"Could not set a value for property \"{property.Name}\" in class \"{cls.GetType().FullName ?? cls.GetType().Name}\", of type \"{propType}\": {e}");
+                            }
+                        }
+
+                        var targetType = mapping.Value.PropertyType;
+                        if (propValue.GetType() == targetType)
+                        {
+                            mapping.Value.SetProperty(subObject, propValue);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                var value = ConvertToType(propValue, targetType);
+                                mapping.Value.SetProperty(subObject, value);
+                            }
+                            catch (Exception ex) when (ex is InvalidCastException || ex is FormatException || ex is OverflowException)
+                            {
+                                throw new NotSupportedException($"Could not convert value of type \"{propValue.GetType().Name}\" with value \"{propValue}\" to target type \"{propType.Name}\"; type \"{cls.GetType().FullName ?? cls.GetType().Name}\", column name \"{settings.ColumnName}\"");
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        private static object ConvertToType(object value, Type targetType)
+        {
+            if (value == null || value is DBNull)
+            {
+                if (targetType.IsValueType || targetType.IsEnum || targetType.IsValueType)
+                {
+                    // return the default value for the type
+                    return Activator.CreateInstance(targetType);
+                }
+
+                return null;
+            }
+            if (value.GetType() == targetType)
+            {
+                return value;
+            }
+            if (targetType == typeof(string))
+            {
+                return value;
+            }
+
+            if (targetType.IsEnum && !string.IsNullOrWhiteSpace(value.ToString()))
+            {
+                return Enum.Parse(targetType, value.ToString());
+            }
+            if (targetType.IsPrimitive)
+            {
+                return Convert.ChangeType(value, targetType);
+            }
+            if (targetType == typeof(DateTime))
+            {
+                var tempValue = (DateTime)Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
+                return TimeZoneInfo.ConvertTimeToUtc(tempValue);
+            }
+            if (targetType == typeof(Color))
+            {
+                var convertFromString = TypeDescriptor.GetConverter(typeof(Color)).ConvertFromString(value.ToString());
+                if (convertFromString != null)
+                {
+                    return (Color)convertFromString;
+                }
+
+                return new Color();
+            }
+            if (targetType.ToString().StartsWith("System.Nullable"))
+            {
+                var wrappedType = targetType.GenericTypeArguments[0];
+                if (string.IsNullOrWhiteSpace(value.ToString()))
+                {
+                    return null;
+                }
+
+                // We're dealing with nullable types here, and the default
+                // value for those is null, so we shouldn't have to set the
+                // value to null if parsing doesn't work.
+                try
+                {
+                    return ConvertToType(value, wrappedType);
+                }
+                catch (InvalidCastException) { }
+                catch (FormatException) { }
+                catch (OverflowException) { }
+
+                return null;
+            }
+
+            throw new NotSupportedException("LcmsNetSQLiteTools.SQLiteTools.ConvertToType(), Invalid property type specified: " + targetType);
         }
 
         #endregion

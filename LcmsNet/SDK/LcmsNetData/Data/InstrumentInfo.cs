@@ -22,7 +22,7 @@ namespace LcmsNetData.Data
     /// </summary>
     ///
     [Serializable]
-    public class InstrumentInfo : LcmsNetDataClassBase, IEquatable<InstrumentInfo>, INotifyPropertyChangedExt, ICloneable
+    public class InstrumentInfo : IEquatable<InstrumentInfo>, INotifyPropertyChangedExt, ICloneable
     {
         private string methodName;
 

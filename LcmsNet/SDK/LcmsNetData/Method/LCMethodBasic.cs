@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using LcmsNetData.Data;
 
 namespace LcmsNetData.Method
 {
-    public class LCMethodBasic : LcmsNetDataClassBase, INotifyPropertyChangedExt
+    public class LCMethodBasic : INotifyPropertyChangedExt
     {
         /// <summary>
         /// Default Constructor
@@ -48,11 +47,13 @@ namespace LcmsNetData.Method
         /// <summary>
         /// Gets or sets the duration for this action.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public TimeSpan Duration => methodDuration;
 
         /// <summary>
         /// Gets the end time of the action.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public DateTime End
         {
             get
@@ -65,16 +66,19 @@ namespace LcmsNetData.Method
         /// <summary>
         /// Gets or sets the name of the Method.
         /// </summary>
+        [PersistenceSetting(ColumnName = "ExperimentName")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets the start time of this action.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public DateTime Start => startTime;
 
         /// <summary>
         /// Gets the actual start of the sample.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public DateTime ActualStart
         {
             get { return actualStart; }
@@ -84,6 +88,7 @@ namespace LcmsNetData.Method
         /// <summary>
         /// Gets the actual end time of the sample.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public DateTime ActualEnd
         {
             get { return actualEnd; }
@@ -93,6 +98,7 @@ namespace LcmsNetData.Method
         /// <summary>
         /// Gets the actual duration of the experiment that was run.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public TimeSpan ActualDuration => ActualEnd.Subtract(ActualStart);
 
         #endregion
@@ -135,29 +141,6 @@ namespace LcmsNetData.Method
         public override string ToString()
         {
             return string.IsNullOrWhiteSpace(Name) ? "Undefined method" : Name;
-        }
-
-        #endregion
-
-        #region Overrides for Dictionary Name
-
-        /// <summary>
-        /// Returns a string dictionary containing the key to the method rather than all of the
-        /// events contained within.
-        /// </summary>
-        /// <returns>StringDictionary containing the name of the LC Method</returns>
-        public override Dictionary<string, string> GetPropertyValues()
-        {
-            throw new NotSupportedException("Serialization not supported for LCMethodBasic.");
-        }
-
-        /// <summary>
-        /// Loads the name of the method and stores it.
-        /// </summary>
-        /// <param name="propValues"></param>
-        public override void LoadPropertyValues(Dictionary<string, string> propValues)
-        {
-            throw new NotSupportedException("Serialization not supported for LCMethodBasic.");
         }
 
         #endregion

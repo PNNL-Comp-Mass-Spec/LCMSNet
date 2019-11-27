@@ -226,7 +226,7 @@ namespace LcmsNetSDK.Data
 
         #region "Properties"
 
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public string SampleErrors
         {
             get { return m_SampleErrors; }
@@ -244,7 +244,7 @@ namespace LcmsNetSDK.Data
         /// Whether this is possibly a dummy sample, and a real sample needs to be looked up before we perform any operations
         /// Default value is true; exists to prevent excessive lookups of the real sample.
         /// </summary>
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public bool IsDummySample { get; private set; }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Gets or sets if the sample's request name is a duplicate
         /// </summary>
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public bool IsDuplicateRequestName
         {
             get { return m_IsDuplicateRequestName; }
@@ -290,7 +290,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// True when changing the Running status manually is enabled
         /// </summary>
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public bool HasNotRun
         {
             get { return !(RunningStatus == SampleRunningStatus.Complete || RunningStatus == SampleRunningStatus.Running); }
@@ -299,7 +299,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// True when the sample has been set to run or has run
         /// </summary>
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public bool IsSetToRunOrHasRun
         {
             get { return RunningStatus == SampleRunningStatus.WaitingToRun || !HasNotRun; }
@@ -308,13 +308,13 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Gets or sets the experiment setup object data.
         /// </summary>
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public override LCMethodBasic ActualLCMethodBasic => ActualLCMethod;
 
         /// <summary>
         /// Gets the experiment object data.
         /// </summary>
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public LCMethod ActualLCMethod
         {
             get { return actualMethod; }
@@ -334,7 +334,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Gets or sets the experiment setup object data.
         /// </summary>
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public override LCMethodBasic LCMethodBasic
         {
             get { return LCMethod; }
@@ -351,6 +351,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Gets or sets the experiment setup object data.
         /// </summary>
+        [PersistenceSetting(ColumnNamePrefix = "exp.", ColumnReadOverrideMethod = nameof(GetLcMethodToPersist))]
         public LCMethod LCMethod
         {
             get { return method; }
@@ -403,6 +404,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Gets or sets the column data this sample is/was run on.
         /// </summary>
+        [PersistenceSetting(ColumnNamePrefix = "Col.")]
         public override ColumnData ColumnData
         {
             // TODO: Should this just return LCMethod.Column? It would solve a few headaches.
@@ -486,196 +488,31 @@ namespace LcmsNetSDK.Data
         #region ITriggerFilePalData Implementation
 
         /// <inheritdoc />
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public override string InstrumentName => LCMSSettings.GetParameter(LCMSSettings.PARAM_INSTNAME);
 
         /// <inheritdoc />
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public override string SeparationType => LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE);
 
         #endregion
 
         #region "Methods"
 
-        /// <summary>
-        /// Reset the sample completion status by force, done by method to allow the property to prevent this accidentally occurring. This only has an effect if the current status is "Complete".
-        /// </summary>
-        /// <param name="desiredStatus"></param>
-        public void ResetSampleCompletedStatus(SampleRunningStatus desiredStatus = SampleRunningStatus.Queued)
+        private LCMethod GetLcMethodToPersist()
         {
-            // Exit if the current status is not "Complete"
-            if (m_RunningStatus != SampleRunningStatus.Complete)
+            var methodToExport = new LCMethod();
+            if (ActualLCMethod != null && RunningStatus == SampleRunningStatus.Complete)
             {
-                return;
+                // Store the actual LCMethod rather than the current version of it
+                methodToExport = ActualLCMethod;
+            }
+            else if (LCMethod != null)
+            {
+                methodToExport = LCMethod;
             }
 
-            // First set the backing variable to a non-complete status that is not the desired status
-            var firstSetStatus = SampleRunningStatus.Stopped;
-            if (desiredStatus == SampleRunningStatus.Stopped)
-            {
-                firstSetStatus = SampleRunningStatus.Queued;
-            }
-            m_RunningStatus = firstSetStatus;
-
-            // Set the desired status, using the property so that the appropriate "PropertyChanged" events are raised.
-            RunningStatus = desiredStatus;
-        }
-
-        /// <summary>
-        /// Gets current values for all the properties in the class in key/value format
-        /// </summary>
-        /// <returns>String dictionary containing current values of all properties</returns>
-        public override Dictionary<string, string> GetPropertyValues()
-        {
-            //NOTE: This method must be modified if new property representing an object is added
-            var newDictionary = new Dictionary<string, string>();
-
-            // Use reflection to get the name and value for each property and store in a dictionary
-            var classType = GetType();
-            var properties = classType.GetProperties();
-            foreach (var property in properties)
-            {
-                // Ignore flagged properties
-                if (Attribute.IsDefined(property, typeof(NotStoredPropertyAttribute)))
-                {
-                    continue;
-                }
-
-                if (property.PropertyType == typeof(DMSData))
-                {
-                    // Special case - get the DMS data for this object and add properties to string dictionary
-                    var dmsDict = DmsData.GetPropertyValues();
-                    foreach (var entry in dmsDict)
-                    {
-                        newDictionary.Add("DMS." + entry.Key, entry.Value);
-                    }
-                }
-                else if (property.PropertyType == typeof(PalData))
-                {
-                    // Special case - get the PAL data for this object and add properties to string dictionary
-                    var palDict = PAL.GetPropertyValues();
-                    foreach (var entry in palDict)
-                    {
-                        newDictionary.Add("PAL." + entry.Key, entry.Value);
-                    }
-                }
-                else if (property.PropertyType == typeof(ColumnData))
-                {
-                    if (ColumnData != null)
-                    {
-                        // Special case - get the column data for this object and add properties to string dictionary
-                        var colDict = ColumnData.GetPropertyValues();
-                        foreach (var entry in colDict)
-                        {
-                            newDictionary.Add("Col." + entry.Key, entry.Value);
-                        }
-                    }
-                }
-                else if (property.PropertyType == typeof(LCMethod))
-                {
-                    var methodToExport = new LCMethod();
-                    if (ActualLCMethod != null && RunningStatus == SampleRunningStatus.Complete)
-                    {
-                        // Store the actual LCMethod rather than the current version of it
-                        methodToExport = ActualLCMethod;
-                    }
-                    else if (LCMethod != null)
-                    {
-                        methodToExport = LCMethod;
-                    }
-
-                    var expDict = methodToExport.GetPropertyValues();
-                    // Special case - get the experiment data for this object and add properties to string dictionary
-                    foreach (var entry in expDict)
-                    {
-                        newDictionary.Add("exp." + entry.Key, entry.Value.ToString());
-                    }
-                }
-                else if (property.PropertyType == typeof(InstrumentInfo))
-                {
-                    // Special case - get the experiment data for this object and add properties to string dictionary
-                    var instDict = InstrumentData.GetPropertyValues();
-                    foreach (var entry in instDict)
-                    {
-                        newDictionary.Add("Ins." + entry.Key, entry.Value);
-                    }
-                }
-                else
-                {
-                    newDictionary.Add(property.Name, property.GetValue(this, null).ToString());
-                }
-            }
-
-            return newDictionary;
-        }
-
-        public override void LoadPropertyValues(Dictionary<string, string> propValues)
-        {
-            //NOTE: This method must be modified if new property representing an object is added
-            var baseProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            var dmsProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            var palProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            var colProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            var expProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            var instProps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-
-            // Separate the properties into class dictionaries
-            foreach (var property in propValues)
-            {
-                var keyName = property.Key;
-                if (keyName.Length < 4)
-                {
-                    // Property name is too short to be one of the properties that holds a class, so add
-                    //      it to the main class dictionary
-                    baseProps.Add(keyName, property.Value);
-                    continue;
-                }
-                // Stuff string dictionaries for each property holding a class, and main class
-                switch (keyName.Substring(0, 4).ToLower())
-                {
-                    case "dms.":
-                        dmsProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
-                        break;
-                    case "pal.":
-                        palProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
-                        break;
-                    case "col.":
-                        colProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
-                        break;
-                    case "exp.":
-                        expProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
-                        break;
-                    case "ins.":
-                        instProps.Add(keyName.Substring(4, keyName.Length - 4), property.Value);
-                        break;
-                    default:
-                        baseProps.Add(keyName, property.Value);
-                        break;
-                }
-            }
-
-            // Call each of LoadPropertyValues methods for properties that represent objects
-            base.LoadPropertyValues(baseProps);
-
-            var existingRunningStatus = RunningStatus;
-            ResetSampleCompletedStatus();
-
-            DmsData.LoadPropertyValues(dmsProps);
-            PAL.LoadPropertyValues(palProps);
-
-            if (colProps.Count > 0)
-            {
-                ColumnData = new ColumnData();
-                ColumnData.LoadPropertyValues(colProps);
-            }
-
-            if (expProps.Count > 0)
-            {
-                LCMethod = new LCMethod();
-                LCMethod.LoadPropertyValues(expProps);
-            }
-
-            RunningStatus = existingRunningStatus;
+            return methodToExport;
         }
 
         #endregion

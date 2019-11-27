@@ -14,7 +14,7 @@ using System.ComponentModel;
 namespace LcmsNetData.Data
 {
     [Serializable]
-    public class PalData : LcmsNetDataClassBase, ICloneable, INotifyPropertyChangedExt
+    public class PalData : ICloneable, INotifyPropertyChangedExt
     {
         #region "Constructors"
 

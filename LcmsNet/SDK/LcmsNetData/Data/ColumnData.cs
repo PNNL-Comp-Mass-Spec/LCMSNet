@@ -9,7 +9,7 @@ namespace LcmsNetData.Data
     /// Class that manages all of the information about a given column
     /// </summary>
     [Serializable]
-    public class ColumnData : LcmsNetDataClassBase, INotifyPropertyChangedExt, IEquatable<ColumnData>, ICloneable
+    public class ColumnData : INotifyPropertyChangedExt, IEquatable<ColumnData>, ICloneable
     {
         #region Constructors
 

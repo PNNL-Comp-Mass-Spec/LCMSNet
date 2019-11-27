@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using LcmsNetData.Method;
 
 namespace LcmsNetData.Data
 {
-    public class SampleDataBasic : LcmsNetDataClassBase, ITriggerFilePalData, INotifyPropertyChangedExt
+    public class SampleDataBasic : ITriggerFilePalData, INotifyPropertyChangedExt
     {
         public SampleDataBasic()
         {
@@ -65,6 +64,7 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Gets or sets the instrument object data.
         /// </summary>
+        [PersistenceSetting(ColumnNamePrefix = "Ins.")]
         public InstrumentInfo InstrumentData
         {
             get { return instrumentData; }
@@ -89,13 +89,13 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Gets or sets the experiment setup object data.
         /// </summary>
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual LCMethodBasic ActualLCMethodBasic => LCMethodBasic;
 
         /// <summary>
         /// Gets or sets the experiment setup object data.
         /// </summary>
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual LCMethodBasic LCMethodBasic
         {
             get { return methodBasic; }
@@ -105,6 +105,7 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Gets or sets the list of data downloaded from DMS for this sample
         /// </summary>
+        [PersistenceSetting(ColumnNamePrefix = "DMS.")]
         public DMSData DmsData
         {
             get { return dmsData; }
@@ -129,6 +130,7 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Gets or sets the pal data associated with this sample.
         /// </summary>
+        [PersistenceSetting(ColumnNamePrefix = "PAL.")]
         public PalData PAL
         {
             get { return palData; }
@@ -169,62 +171,32 @@ namespace LcmsNetData.Data
         #region ITriggerFilePalData Implementation
 
         /// <inheritdoc />
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual DateTime RunStart => ActualLCMethodBasic.ActualStart;
 
         /// <inheritdoc />
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual DateTime RunFinish => ActualLCMethodBasic.ActualEnd;
 
         /// <inheritdoc />
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual string ColumnName => ColumnData.Name;
 
         /// <inheritdoc />
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual string InstrumentName => "";
 
         /// <inheritdoc />
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual string SeparationType => "";
 
         /// <inheritdoc />
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual string CaptureSubdirectoryPath => "";
 
         /// <inheritdoc />
-        [NotStoredProperty]
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual string InterestRating => "Unreviewed";
-
-        #endregion
-
-        #region "Methods"
-
-        /// <summary>
-        /// Gets current values for all the properties in the class in key/value format
-        /// </summary>
-        /// <returns>String dictionary containing current values of all properties</returns>
-        public override Dictionary<string, string> GetPropertyValues()
-        {
-            // if this is a SampleDataBasic object (i.e., this was not called via 'base.GetPropertyValues()'), throw an exception
-            if (this.GetType() == typeof(SampleDataBasic))
-            {
-                throw new NotSupportedException("Serialization not supported for SampleDataBasic.");
-            }
-
-            return base.GetPropertyValues();
-        }
-
-        public override void LoadPropertyValues(Dictionary<string, string> propValues)
-        {
-            // if this is a SampleDataBasic object (i.e., this was not called via 'base.LoadPropertyValues(Dictionary<string, string>)'), throw an exception
-            if (this.GetType() == typeof(SampleDataBasic))
-            {
-                throw new NotSupportedException("Serialization not supported for SampleDataBasic.");
-            }
-
-            base.LoadPropertyValues(propValues);
-        }
 
         #endregion
 

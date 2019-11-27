@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -10,7 +9,7 @@ namespace LcmsNetData.Data
     /// Dataset information supplied by or required by DMS; includes run request information
     /// </summary>
     [Serializable]
-    public class DMSData : LcmsNetDataClassBase, INotifyPropertyChangedExt, ICloneable
+    public class DMSData : INotifyPropertyChangedExt, ICloneable
     {
         /// <summary>
         /// The matching string to ensure only valid characters exist in a dataset name
@@ -298,11 +297,13 @@ namespace LcmsNetData.Data
         /// <summary>
         /// The full comment, including the addition and addition prefix
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public string CommentComplete => $"{Comment} {(string.IsNullOrWhiteSpace(CommentAdditionPrefix) ? string.Empty : CommentAdditionPrefix.Trim() + " ")}{CommentAddition}".Trim();
 
         /// <summary>
         /// Additional comment. Used by Buzzard to add comment information to datasets matched to run requests.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public string CommentAddition
         {
             get => commentAddition;
@@ -312,6 +313,7 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Additional comment prefix. Used by Buzzard, output before CommentAddition.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public string CommentAdditionPrefix { get; set; }
 
         /// <summary>
@@ -384,26 +386,6 @@ namespace LcmsNetData.Data
             }
 
             return NameValidationRegex.IsMatch(name);
-        }
-
-        /// <summary>
-        /// Loads the class properties from a string dictionary
-        /// </summary>
-        /// <param name="propValues">String dictionary containing property names and values</param>
-        public override void LoadPropertyValues(Dictionary<string, string> propValues)
-        {
-            // FUTURE TODO: when generally rolled out, this should be delete-able (temporary mapping to allow upgrading from existing queues)
-            if (propValues.TryGetValue("UsageType", out var usage))
-            {
-                propValues.Add(nameof(EMSLUsageType), usage);
-            }
-
-            if (propValues.TryGetValue("ProposalID", out var proposal))
-            {
-                propValues.Add(nameof(EMSLProposalID), proposal);
-            }
-
-            base.LoadPropertyValues(propValues);
         }
 
         #endregion

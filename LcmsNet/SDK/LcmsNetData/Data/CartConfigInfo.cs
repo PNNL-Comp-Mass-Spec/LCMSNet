@@ -3,7 +3,7 @@
     /// <summary>
     /// Class to hold information about a single LC Cart Config
     /// </summary>
-    public class CartConfigInfo : LcmsNetDataClassBase
+    public class CartConfigInfo
     {
         /// <summary>
         /// Name of LC Cart Config

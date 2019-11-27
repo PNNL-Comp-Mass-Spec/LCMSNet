@@ -5,8 +5,7 @@ using System.Runtime.CompilerServices;
 namespace LcmsNetData.Data
 {
     [Serializable]
-    public class UserIDPIDCrossReferenceEntry
-        : LcmsNetDataClassBase, INotifyPropertyChangedExt
+    public class UserIDPIDCrossReferenceEntry : INotifyPropertyChangedExt
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

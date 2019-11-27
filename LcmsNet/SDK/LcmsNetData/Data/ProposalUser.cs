@@ -4,8 +4,7 @@ using System.ComponentModel;
 namespace LcmsNetData.Data
 {
     [Serializable]
-    public class ProposalUser
-        : LcmsNetDataClassBase, INotifyPropertyChanged
+    public class ProposalUser : INotifyPropertyChanged
     {
         #region Events
 

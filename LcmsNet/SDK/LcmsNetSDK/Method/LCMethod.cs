@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using LcmsNetData.Data;
 using LcmsNetData.Method;
 
 namespace LcmsNetSDK.Method
@@ -12,11 +13,6 @@ namespace LcmsNetSDK.Method
     [Serializable]
     public class LCMethod : LCMethodBasic, ICloneable, IEquatable<LCMethod>
     {
-        /// <summary>
-        /// Sample method key name.
-        /// </summary>
-        private const string CONST_NAME_METHOD_KEY = "ExperimentName";
-
         /// <summary>
         /// Number indicating that a sample has not run.
         /// </summary>
@@ -69,16 +65,19 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets or sets the method for a
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public LCEventRelative RelativeMethod { get; set; }
 
         /// <summary>
         /// Gets or sets whether this has a deterministic start or not.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public bool HasNonDeterministicStart { get; set; }
 
         /// <summary>
         /// Gets or sets the LC-Events to be performed by this method.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public List<LCEvent> Events
         {
             get { return m_events; }
@@ -88,6 +87,7 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets or sets the LC-Events data that were performed by this method.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public List<LCEvent> ActualEvents
         {
             get { return m_actualEvents; }
@@ -97,27 +97,32 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets or sets the event number being executed.  -1 = not run, 0-N is the current event, where N is the total events defined in LCEvents.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public int CurrentEventNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the index of the column that this method is associated with.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public int Column { get; set; }
 
         /// <summary>
         /// Gets or sets whether the method is special.  This means that the method
         /// is not targeted to run on a column.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public bool IsSpecialMethod { get; set; }
 
         /// <summary>
         /// Gets or sets whether to allow pre-method overlap.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public bool AllowPreOverlap { get; set; }
 
         /// <summary>
         /// Gets or sets whether to allow post-method overlap.
         /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
         public bool AllowPostOverlap { get; set; }
 
         #endregion
@@ -229,39 +234,6 @@ namespace LcmsNetSDK.Method
 
             newMethod.SetStartTime(Start);
             return newMethod;
-        }
-
-        #endregion
-
-        #region Overrides for Dictionary Name
-
-        /// <summary>
-        /// Returns a string dictionary containing the key to the method rather than all of the
-        /// events contained within.
-        /// </summary>
-        /// <returns>StringDictionary containing the name of the LC Method</returns>
-        public override Dictionary<string, string> GetPropertyValues()
-        {
-            var dictionary = new Dictionary<string, string> {
-                { CONST_NAME_METHOD_KEY, Name}
-            };
-
-            return dictionary;
-        }
-
-        /// <summary>
-        /// Loads the name of the method and stores it.
-        /// </summary>
-        /// <param name="propValues"></param>
-        public override void LoadPropertyValues(Dictionary<string, string> propValues)
-        {
-            if (propValues == null)
-                return;
-
-            string nameMatch;
-            if (propValues.TryGetValue(CONST_NAME_METHOD_KEY, out nameMatch))
-                Name = nameMatch;
-
         }
 
         #endregion
