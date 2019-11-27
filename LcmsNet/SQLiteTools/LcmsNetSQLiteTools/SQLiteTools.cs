@@ -1967,8 +1967,6 @@ namespace LcmsNetSQLiteTools
         /// <remarks>Used with T_CartList, T_SeparationTypeSelected, T_LCColumnList, T_DatasetTypeList, T_DatasetList, and T_CartConfigNameSelected</remarks>
         private static void SaveSingleColumnListToCache(List<string> listData, DatabaseTableTypes tableType, bool clearFirst = true)
         {
-            const string GENERIC_COLUMN_NAME = "Column1";
-
             // Set up table name
             var tableName = GetTableName(tableType);
 
@@ -1976,8 +1974,14 @@ namespace LcmsNetSQLiteTools
             var sqlClearCmd = "DELETE FROM " + tableName;
 
             // Build SQL statement for creating table
-            string[] colNames = {GENERIC_COLUMN_NAME};
-            var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, GENERIC_COLUMN_NAME);
+            var columnName = tableName.Substring(2);
+            if (columnName.EndsWith("List", StringComparison.OrdinalIgnoreCase) &&
+                !columnName.ToLower().Contains("name"))
+            {
+                columnName = columnName.Substring(0, columnName.Length - 4) + "Name";
+            }
+            string[] colNames = { columnName };
+            var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, columnName);
 
             // If table exists, clear it. Otherwise create one
             if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
