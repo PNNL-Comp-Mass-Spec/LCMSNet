@@ -301,15 +301,17 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="memoryCache"></param>
-        /// <param name="tableName"></param>
+        /// <param name="tableType"></param>
         /// <param name="newObjectCreator"></param>
         /// <param name="force"></param>
         /// <returns></returns>
-        private static List<T> ReadMultiColumnDataListFromCache<T>(List<T> memoryCache, string tableName, Func<T> newObjectCreator, bool force = false)
+        private static List<T> ReadMultiColumnDataListFromCache<T>(List<T> memoryCache, DatabaseTableTypes tableType, Func<T> newObjectCreator, bool force = false)
         {
             var returnData = memoryCache;
             if (memoryCache.Count == 0 || force || AlwaysRead)
             {
+                var tableName = GetTableName(tableType);
+
                 // Read the data from the cache
                 returnData = ReadDataFromCache(tableName, newObjectCreator, ConnString);
 
@@ -590,10 +592,30 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dataList">list of data to be stored</param>
+        /// <param name="memoryCache">in-memory cache of the list</param>
         /// <param name="clearFirst">if the existing data should be removed first (always); otherwise, if the row counts match, nothing is changed</param>
-        /// <param name="tableName">name of the table the data is to be stored in</param>
-        private static void SaveMultiColumnListToCache<T>(List<T> dataList, bool clearFirst, string tableName)
+        /// <param name="tableType">table the data is to be stored in</param>
+        private static void SaveMultiColumnListToCache<T>(List<T> dataList, List<T> memoryCache, bool clearFirst, DatabaseTableTypes tableType)
         {
+            SaveMultiColumnListToCache(dataList, clearFirst, tableType);
+
+            if (!AlwaysRead)
+            {
+                memoryCache.Clear();
+                memoryCache.AddRange(dataList);
+            }
+        }
+
+        /// <summary>
+        /// Store the contents of a list in the specified table
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dataList">list of data to be stored</param>
+        /// <param name="clearFirst">if the existing data should be removed first (always); otherwise, if the row counts match, nothing is changed</param>
+        /// <param name="tableType">table the data is to be stored in</param>
+        private static void SaveMultiColumnListToCache<T>(List<T> dataList, bool clearFirst, DatabaseTableTypes tableType)
+        {
+            var tableName = GetTableName(tableType);
             if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && !clearFirst && dataList.Count <= rowCount)
             {
                 return;
@@ -1368,9 +1390,7 @@ namespace LcmsNetSQLiteTools
         /// <returns>List of user data</returns>
         public static List<UserInfo> GetUserList(bool force)
         {
-            // Get data table name
-            var tableName = GetTableName(DatabaseTableTypes.UserList);
-            return ReadMultiColumnDataListFromCache(userInfo, tableName, () => new UserInfo(), force);
+            return ReadMultiColumnDataListFromCache(userInfo, DatabaseTableTypes.UserList, () => new UserInfo(), force);
         }
 
         /// <summary>
@@ -1380,15 +1400,12 @@ namespace LcmsNetSQLiteTools
         /// <returns>List of instruments</returns>
         public static List<InstrumentInfo> GetInstrumentList(bool force)
         {
-            // Convert type of list into a data table name
-            var tableName = GetTableName(DatabaseTableTypes.InstrumentList);
-            return ReadMultiColumnDataListFromCache(instrumentInfo, tableName, () => new InstrumentInfo(), force);
+            return ReadMultiColumnDataListFromCache(instrumentInfo, DatabaseTableTypes.InstrumentList, () => new InstrumentInfo(), force);
         }
 
         public static List<ExperimentData> GetExperimentList()
         {
-            var tableName = GetTableName(DatabaseTableTypes.ExperimentList);
-            return ReadMultiColumnDataListFromCache(experimentsData, tableName, () => new ExperimentData(), false);
+            return ReadMultiColumnDataListFromCache(experimentsData, DatabaseTableTypes.ExperimentList, () => new ExperimentData(), false);
         }
 
         public static void GetProposalUsers(
@@ -1439,8 +1456,7 @@ namespace LcmsNetSQLiteTools
 
         public static List<LCColumnData> GetEntireLCColumnList()
         {
-            var tableName = GetTableName(DatabaseTableTypes.LCColumnList);
-            return ReadMultiColumnDataListFromCache(lcColumns, tableName, () => new LCColumnData(), false);
+            return ReadMultiColumnDataListFromCache(lcColumns, DatabaseTableTypes.LCColumnList, () => new LCColumnData(), false);
         }
 
         /// <summary>
@@ -1543,8 +1559,7 @@ namespace LcmsNetSQLiteTools
                 return;
             }
 
-            var tableName = GetTableName(tableType);
-            SaveMultiColumnListToCache(queueData, true, tableName);
+            SaveMultiColumnListToCache(queueData, true, tableType);
         }
 
         /// <summary>
@@ -1554,14 +1569,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="userList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveUserListToCache(List<UserInfo> userList, bool clearFirst = true)
         {
-            var tableName = GetTableName(DatabaseTableTypes.UserList);
-            SaveMultiColumnListToCache(userList, clearFirst, tableName);
-
-            if (!AlwaysRead)
-            {
-                userInfo.Clear();
-                userInfo.AddRange(userList);
-            }
+            SaveMultiColumnListToCache(userList, userInfo, clearFirst, DatabaseTableTypes.UserList);
         }
 
         /// <summary>
@@ -1571,17 +1579,9 @@ namespace LcmsNetSQLiteTools
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="expList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveExperimentListToCache(List<ExperimentData> expList, bool clearFirst = true)
         {
-            if (expList == null)
-                return;
+            if (expList == null) return;
 
-            var tableName = GetTableName(DatabaseTableTypes.ExperimentList);
-            SaveMultiColumnListToCache(expList, clearFirst, tableName);
-
-            if (!AlwaysRead)
-            {
-                experimentsData.Clear();
-                experimentsData.AddRange(expList);
-            }
+            SaveMultiColumnListToCache(expList, experimentsData, clearFirst, DatabaseTableTypes.ExperimentList);
         }
 
         /// <summary>
@@ -1598,30 +1598,18 @@ namespace LcmsNetSQLiteTools
             List<UserIDPIDCrossReferenceEntry> crossReferenceList,
             Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList, bool clearFirst = true)
         {
-            var userTableName = GetTableName(DatabaseTableTypes.PUserList);
-            var referenceTableName = GetTableName(DatabaseTableTypes.PReferenceList);
-            SaveMultiColumnListToCache(users, clearFirst, userTableName);
-            SaveMultiColumnListToCache(crossReferenceList, clearFirst, referenceTableName);
+            SaveMultiColumnListToCache(users, proposalUsers, clearFirst, DatabaseTableTypes.PUserList);
+            SaveMultiColumnListToCache(crossReferenceList, clearFirst, DatabaseTableTypes.PReferenceList);
 
             if (!AlwaysRead)
             {
-                proposalUsers.Clear();
-                proposalUsers.AddRange(users);
-
                 UpdateProposalIdIndexReferenceList(pidIndexedReferenceList);
             }
         }
 
         public static void SaveEntireLCColumnListToCache(List<LCColumnData> lcColumnList)
         {
-            var tableName = GetTableName(DatabaseTableTypes.LCColumnList);
-            SaveMultiColumnListToCache(lcColumnList, true, tableName);
-
-            if (!AlwaysRead)
-            {
-                lcColumns.Clear();
-                lcColumns.AddRange(lcColumnList);
-            }
+            SaveMultiColumnListToCache(lcColumnList, lcColumns, true, DatabaseTableTypes.LCColumnList);
         }
 
         /// <summary>
@@ -1631,14 +1619,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="instList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveInstListToCache(List<InstrumentInfo> instList, bool clearFirst = true)
         {
-            var tableName = GetTableName(DatabaseTableTypes.InstrumentList);
-            SaveMultiColumnListToCache(instList, clearFirst, tableName);
-
-            if (!AlwaysRead)
-            {
-                instrumentInfo.Clear();
-                instrumentInfo.AddRange(instList);
-            }
+            SaveMultiColumnListToCache(instList, instrumentInfo, clearFirst, DatabaseTableTypes.InstrumentList);
         }
 
         /// <summary>
@@ -1648,8 +1629,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartConfigList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveCartConfigListToCache(List<CartConfigInfo> cartConfigList, bool clearFirst = true)
         {
-            var tableName = GetTableName(DatabaseTableTypes.CartConfigNameList);
-            SaveMultiColumnListToCache(cartConfigList, clearFirst, tableName);
+            SaveMultiColumnListToCache(cartConfigList, clearFirst, DatabaseTableTypes.CartConfigNameList);
 
             // Reload the in-memory copy of the cached data
             if (!AlwaysRead)
@@ -1665,8 +1645,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="workPackageList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         public static void SaveWorkPackageListToCache(List<WorkPackageInfo> workPackageList, bool clearFirst = true)
         {
-            var tableName = GetTableName(DatabaseTableTypes.WorkPackages);
-            SaveMultiColumnListToCache(workPackageList, clearFirst, tableName);
+            SaveMultiColumnListToCache(workPackageList, clearFirst, DatabaseTableTypes.WorkPackages);
 
             // Reload the in-memory copy of the cached data
             if (!AlwaysRead)
