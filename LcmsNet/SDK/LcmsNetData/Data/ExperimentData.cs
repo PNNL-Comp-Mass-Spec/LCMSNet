@@ -283,6 +283,7 @@ namespace LcmsNetData.Data
             }
         }
 
+        [PersistenceSetting(ColumnReadOverrideMethod = nameof(ReasonPropertyReadOverride))]
         public string Reason
         {
             get { return m_reason; }
@@ -311,6 +312,7 @@ namespace LcmsNetData.Data
             }
         }
 
+        [PersistenceSetting(ColumnReadOverrideMethod = nameof(CreatedPropertyReadOverride))]
         public DateTime? Created
         {
             get { return m_created; }
@@ -354,6 +356,16 @@ namespace LcmsNetData.Data
                 return m_id + ": " + experiment;
 
             return experiment;
+        }
+
+        private string ReasonPropertyReadOverride()
+        {
+            return Reason?.Replace("'", "") ?? "";
+        }
+
+        private DateTime CreatedPropertyReadOverride()
+        {
+            return Created ?? DateTime.MinValue;
         }
 
         #endregion
