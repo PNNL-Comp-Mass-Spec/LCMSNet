@@ -315,7 +315,7 @@ namespace LcmsNet
         private bool canSimulate = true;
         private bool isMessageError = false;
         private bool queueTabSelected = true;
-        private readonly IDisposable sqlInstance = SQLiteTools.GetDisposable();
+        private readonly IDisposable sqliteDisposable = SQLiteTools.GetDisposable();
 
         /// <summary>
         /// Method Scheduler and execution engine.
@@ -885,7 +885,7 @@ namespace LcmsNet
             FluidicsDesignVm.Dispose();
             DMSDataContainer.DBTools.CloseConnection();
             SQLiteTools.CloseConnection();
-            sqlInstance.Dispose();
+            sqliteDisposable.Dispose();
             TaskBarManipulation.Instance.Dispose();
         }
     }

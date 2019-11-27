@@ -4,6 +4,93 @@
         <name>WpfExtras</name>
     </assembly>
     <members>
+        <member name="T:WpfExtras.BindingProxy">
+            <summary>
+            Binding proxy to help with DataGrid binding to base DataContext
+            </summary>
+            <remarks>https://thomaslevesque.com/2011/03/21/wpf-how-to-bind-to-data-when-the-datacontext-is-not-inherited/</remarks>
+            <example>
+            &lt;DataGrid ...&gt;
+            &lt;DataGrid.Resources&gt;
+            &lt;views:BindingProxy x:Key="BaseDC" Data="{Binding}" /&gt;
+            &lt;/DataGrid.Resources&gt;
+            &lt;DataGrid.Columns&gt;
+            ...
+            &lt;DataGridTemplateColumn ...&gt;
+            &lt;DataGridTemplateColumn.CellTemplate&gt;
+            &lt;DataTemplate&gt;
+            &lt;ComboBox ItemsSource="{Binding Source={StaticResource BaseDC}, Path=Data....}" SelectedItem="{Binding ...}" /&gt;
+            &lt;/DataTemplate&gt;
+            &lt;/DataGridTemplateColumn.CellTemplate&gt;
+            &lt;/DataGridTemplateColumn&gt;
+            ...
+            &lt;/DataGrid.Columns&gt;
+            &lt;/DataGrid&gt;
+            </example>
+        </member>
+        <member name="M:WpfExtras.BindingProxy.CreateInstanceCore">
+            <summary>
+            Local constructor called by Freezable implementation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:WpfExtras.BindingProxy.Data">
+            <summary>
+            Data object for binding
+            </summary>
+        </member>
+        <member name="F:WpfExtras.BindingProxy.DataProperty">
+            <summary>
+            DependencyProperty definition for Data
+            </summary>
+        </member>
+        <member name="T:WpfExtras.BindingProxy`1">
+            <summary>
+            Binding proxy (generic) to help with DataGrid binding to base DataContext.
+            Any instance must override CreateNewInstance(), Data (get/set), and also add a static DataProperty set using DataProperty.AddOwner.
+            </summary>
+            <remarks>https://thomaslevesque.com/2011/03/21/wpf-how-to-bind-to-data-when-the-datacontext-is-not-inherited/</remarks>
+            <example>
+            &lt;DataGrid ...&gt;
+            &lt;DataGrid.Resources&gt;
+            &lt;views:BindingProxy x:Key="BaseDC" Data="{Binding}" /&gt;
+            &lt;/DataGrid.Resources&gt;
+            &lt;DataGrid.Columns&gt;
+            ...
+            &lt;DataGridTemplateColumn ...&gt;
+            &lt;DataGridTemplateColumn.CellTemplate&gt;
+            &lt;DataTemplate&gt;
+            &lt;ComboBox ItemsSource="{Binding Source={StaticResource BaseDC}, Path=Data....}" SelectedItem="{Binding ...}" /&gt;
+            &lt;/DataTemplate&gt;
+            &lt;/DataGridTemplateColumn.CellTemplate&gt;
+            &lt;/DataGridTemplateColumn&gt;
+            ...
+            &lt;/DataGrid.Columns&gt;
+            &lt;/DataGrid&gt;
+            </example>
+        </member>
+        <member name="M:WpfExtras.BindingProxy`1.CreateInstanceCore">
+            <summary>
+            Local constructor called by Freezable implementation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WpfExtras.BindingProxy`1.CreateNewInstance">
+            <summary>
+            Creates a new instance of the derived instance of BindingProxy&lt;T&gt;
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:WpfExtras.BindingProxy`1.Data">
+            <summary>
+            Data object for binding
+            </summary>
+        </member>
+        <member name="F:WpfExtras.BindingProxy`1.DataProperty">
+            <summary>
+            DependencyProperty definition for Data
+            </summary>
+        </member>
         <member name="T:WpfExtras.CueBannerOverlay.IInputOverlayable">
             <summary>
             Interface class for facilitating CueBanner overlays on 3rd-party controls

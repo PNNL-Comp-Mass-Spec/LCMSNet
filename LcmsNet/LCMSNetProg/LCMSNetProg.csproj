@@ -312,6 +312,7 @@
     <Compile Include="SampleQueue\Views\SampleBadBlockDisplayWindow.xaml.cs">
       <DependentUpon>SampleBadBlockDisplayWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SampleQueue\Views\SampleControlBindingProxy.cs" />
     <Compile Include="SampleQueue\Views\SampleControlView.xaml.cs">
       <DependentUpon>SampleControlView.xaml</DependentUpon>
     </Compile>
