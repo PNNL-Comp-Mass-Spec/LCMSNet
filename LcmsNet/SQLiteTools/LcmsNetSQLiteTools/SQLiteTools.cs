@@ -2018,23 +2018,27 @@ namespace LcmsNetSQLiteTools
                 }
             }
 
-            // Fill the data table
-            const int MAX_ROWS_PER_TRANSACTION = 100000;
-
-            var cmdList = new List<string>();
-            foreach (var itemName in listData)
+            if (listData.Count < 1)
             {
-                var sqlInsertCmd = "INSERT INTO " + tableName + " values('" + itemName + "')";
-                cmdList.Add(sqlInsertCmd);
-
-                if (cmdList.Count >= MAX_ROWS_PER_TRANSACTION)
-                {
-                    StoreCmdListData(ConnString, tableName, cmdList);
-                    cmdList.Clear();
-                }
+                return;
             }
 
-            StoreCmdListData(ConnString, tableName, cmdList);
+            // Fill the data table
+            using (var connection = GetConnection(ConnString))
+            using (var command = connection.CreateCommand())
+            using (var transaction = connection.BeginTransaction())
+            {
+                command.CommandText = $"INSERT INTO {tableName} VALUES(:Value)";
+                foreach (var item in listData)
+                {
+                    var param = new SQLiteParameter(":Value", item);
+                    command.Parameters.Clear();
+                    command.Parameters.Add(param);
+                    command.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+            }
         }
 
         private static void StoreCmdListData(string connectionString, string tableName, ICollection<string> cmdList)
