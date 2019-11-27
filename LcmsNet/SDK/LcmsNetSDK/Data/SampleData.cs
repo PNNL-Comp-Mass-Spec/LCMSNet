@@ -351,7 +351,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Gets or sets the experiment setup object data.
         /// </summary>
-        [PersistenceSetting(ColumnNamePrefix = "exp.", ColumnReadOverrideMethod = nameof(GetLcMethodToPersist))]
+        [PersistenceSetting(ColumnNamePrefix = "exp.", PropertyGetOverrideMethod = nameof(GetLcMethodToPersist))]
         public LCMethod LCMethod
         {
             get { return method; }

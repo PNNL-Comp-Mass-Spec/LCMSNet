@@ -283,7 +283,7 @@ namespace LcmsNetData.Data
             }
         }
 
-        [PersistenceSetting(ColumnReadOverrideMethod = nameof(ReasonPropertyReadOverride))]
+        [PersistenceSetting(PropertyGetOverrideMethod = nameof(ReasonPropertyReadOverride))]
         public string Reason
         {
             get { return m_reason; }
@@ -312,7 +312,7 @@ namespace LcmsNetData.Data
             }
         }
 
-        [PersistenceSetting(ColumnReadOverrideMethod = nameof(CreatedPropertyReadOverride))]
+        [PersistenceSetting(PropertyGetOverrideMethod = nameof(CreatedPropertyReadOverride))]
         public DateTime? Created
         {
             get { return m_created; }

@@ -26,7 +26,7 @@ namespace LcmsNetData.Data
         /// <summary>
         /// For special read handling: Supply the name of the method to use for reading the value (preferably using the "nameof(...)" compiler method). Needs to have a unique name, no parameters, and return the same type as the property.
         /// </summary>
-        public string ColumnReadOverrideMethod { get; set; }
+        public string PropertyGetOverrideMethod { get; set; }
 
         /// <summary>
         /// Default constructor
@@ -36,7 +36,7 @@ namespace LcmsNetData.Data
             IgnoreProperty = false;
             ColumnName = null;
             ColumnNamePrefix = null;
-            ColumnReadOverrideMethod = null;
+            PropertyGetOverrideMethod = null;
         }
 
         /// <summary>

@@ -315,7 +315,7 @@ namespace LcmsNet
         private bool canSimulate = true;
         private bool isMessageError = false;
         private bool queueTabSelected = true;
-        private readonly SQLiteTools sqlInstance = SQLiteTools.GetInstance();
+        private readonly IDisposable sqlInstance = SQLiteTools.GetDisposable();
 
         /// <summary>
         /// Method Scheduler and execution engine.
