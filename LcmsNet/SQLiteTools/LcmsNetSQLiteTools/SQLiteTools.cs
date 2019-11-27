@@ -278,35 +278,7 @@ namespace LcmsNetSQLiteTools
 
         #endregion
 
-        #region Methods
-
-        /// <summary>
-        /// Delete a cache file that has issues so a good cache can be made it its place.
-        /// It is the responsibility of the calling method to ensure no other database operations are occurring that could interfere.
-        /// </summary>
-        /// <param name="force">If true, deletes the cache regardless of the <see cref="DatabaseImageBad"/> value</param>
-        public static void DeleteBadCache(bool force = false)
-        {
-            if (DatabaseImageBad || force)
-            {
-                // close down existing connections
-                CloseConnection();
-
-                try
-                {
-                    if (File.Exists(cacheFullPath))
-                    {
-                        File.Delete(cacheFullPath);
-                    }
-
-                    DatabaseImageBad = false;
-                }
-                catch (Exception ex)
-                {
-                    ApplicationLogger.LogError(0, "Could not delete the SQLite database!", ex);
-                }
-            }
-        }
+        #region Private Methods
 
         private static void CheckExceptionMessageForDbState(Exception ex)
         {
@@ -322,58 +294,6 @@ namespace LcmsNetSQLiteTools
 
                 ex = ex.InnerException;
             }
-        }
-
-        /// <summary>
-        /// Sets the cache location to the path provided
-        /// </summary>
-        /// <param name="location">New path to location of queue</param>
-        /// <remarks>If location is a filename (and not a path), then updates to use AppDataFolderName</remarks>
-        public static void SetCacheLocation(string location)
-        {
-            if (!location.Contains(@"\"))
-            {
-                var fileName = Path.GetFileName(location);
-                var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                location = Path.Combine(appPath, AppDataFolderName, fileName);
-            }
-
-            CacheName = location;
-
-            BuildConnectionString(!File.Exists(location));
-        }
-
-        /// <summary>
-        /// Retrieves a sample queue from cache database
-        /// Connection string and database name are defined by defaults
-        /// </summary>
-        /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
-        /// <returns>List containing queue data</returns>
-        public static List<T> GetQueueFromCache<T>(DatabaseTableTypes tableType) where T : SampleDataBasic, new()
-        {
-            return GetQueueFromCache<T>(tableType, ConnString);
-        }
-
-        /// <summary>
-        /// Retrieves a sample queue from a SQLite database
-        /// Overload requires connection string to be specified
-        /// </summary>
-        /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
-        /// <param name="connectionString">Cache connection string</param>
-        /// <returns>List containing queue data</returns>
-        public static List<T> GetQueueFromCache<T>(DatabaseTableTypes tableType, string connectionString) where T : SampleDataBasic, new()
-        {
-            if (typeof(T) == typeof(SampleDataBasic))
-            {
-                ApplicationLogger.LogError(0, "Cannot populate list of SampleDataBasic objects from database!");
-                return new List<T>();
-            }
-
-            // Convert type of queue into a data table name
-            var tableName = GetTableName(tableType);
-
-            // All finished, so return
-            return ReadDataFromCache(tableName, () => (T)(new T().GetNewNonDummy()), connectionString);
         }
 
         /// <summary>
@@ -797,214 +717,6 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Saves the contents of specified sample queue to the SQLite cache file
-        /// Connection string and database name are defined by defaults
-        /// </summary>
-        /// <param name="queueData">List of SampleData containing the sample data to save</param>
-        /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
-        public static void SaveQueueToCache<T>(List<T> queueData, DatabaseTableTypes tableType) where T : SampleDataBasic, new()
-        {
-            SaveQueueToCache(queueData, tableType, ConnString);
-        }
-
-        /// <summary>
-        /// Saves the contents of specified sample queue to an SQLite database file
-        /// Overload requires database connection string be specified
-        /// </summary>
-        /// <param name="queueData">List containing the sample data to save</param>
-        /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
-        /// <param name="connStr">Connection string for database file</param>
-        public static void SaveQueueToCache<T>(List<T> queueData, DatabaseTableTypes tableType, string connStr) where T : SampleDataBasic, new()
-        {
-            if (typeof(T) == typeof(SampleDataBasic))
-            {
-                ApplicationLogger.LogError(0, "Cannot write list of SampleDataBasic objects to database!");
-                return;
-            }
-
-            var tableName = GetTableName(tableType);
-            SaveMultiColumnListToCache(queueData, true, tableName);
-        }
-
-        /// <summary>
-        /// Saves a list of users to cache
-        /// </summary>
-        /// <param name="userList">List containing user data</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="userList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveUserListToCache(List<UserInfo> userList, bool clearFirst = true)
-        {
-            var tableName = GetTableName(DatabaseTableTypes.UserList);
-            SaveMultiColumnListToCache(userList, clearFirst, tableName);
-
-            if (!AlwaysRead)
-            {
-                userInfo.Clear();
-                userInfo.AddRange(userList);
-            }
-        }
-
-        /// <summary>
-        /// Save a list of experiments to cache
-        /// </summary>
-        /// <param name="expList"></param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="expList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveExperimentListToCache(List<ExperimentData> expList, bool clearFirst = true)
-        {
-            if (expList == null)
-                return;
-
-            var tableName = GetTableName(DatabaseTableTypes.ExperimentList);
-            SaveMultiColumnListToCache(expList, clearFirst, tableName);
-
-            if (!AlwaysRead)
-            {
-                experimentsData.Clear();
-                experimentsData.AddRange(expList);
-            }
-        }
-
-        /// <summary>
-        /// Saves the Proposal Users list and a Proposal ID to Proposal User ID cross-reference
-        /// list to the cache.
-        /// </summary>
-        /// <param name="users">A list of the Proposal Users to cache.</param>
-        /// <param name="crossReferenceList">A list of cross references to cache.</param>
-        /// <param name="pidIndexedReferenceList">
-        /// A dictionary of cross reference lists that have been grouped by Proposal ID.
-        /// </param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="users"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveProposalUsers(List<ProposalUser> users,
-            List<UserIDPIDCrossReferenceEntry> crossReferenceList,
-            Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList, bool clearFirst = true)
-        {
-            var userTableName = GetTableName(DatabaseTableTypes.PUserList);
-            var referenceTableName = GetTableName(DatabaseTableTypes.PReferenceList);
-            SaveMultiColumnListToCache(users, clearFirst, userTableName);
-            SaveMultiColumnListToCache(crossReferenceList, clearFirst, referenceTableName);
-
-            if (!AlwaysRead)
-            {
-                proposalUsers.Clear();
-                proposalUsers.AddRange(users);
-
-                UpdateProposalIdIndexReferenceList(pidIndexedReferenceList);
-            }
-        }
-
-        public static void SaveEntireLCColumnListToCache(List<LCColumnData> lcColumnList)
-        {
-            var tableName = GetTableName(DatabaseTableTypes.LCColumnList);
-            SaveMultiColumnListToCache(lcColumnList, true, tableName);
-
-            if (!AlwaysRead)
-            {
-                lcColumns.Clear();
-                lcColumns.AddRange(lcColumnList);
-            }
-        }
-
-        /// <summary>
-        /// Saves a list of instruments to cache
-        /// </summary>
-        /// <param name="instList">List of InstrumentInfo containing instrument data</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="instList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveInstListToCache(List<InstrumentInfo> instList, bool clearFirst = true)
-        {
-            var tableName = GetTableName(DatabaseTableTypes.InstrumentList);
-            SaveMultiColumnListToCache(instList, clearFirst, tableName);
-
-            if (!AlwaysRead)
-            {
-                instrumentInfo.Clear();
-                instrumentInfo.AddRange(instList);
-            }
-        }
-
-        /// <summary>
-        /// Saves a list of Cart_Configs (and associated Cart names) to cache
-        /// </summary>
-        /// <param name="cartConfigList">List containing cart config info.</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartConfigList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveCartConfigListToCache(List<CartConfigInfo> cartConfigList, bool clearFirst = true)
-        {
-            var tableName = GetTableName(DatabaseTableTypes.CartConfigNameList);
-            SaveMultiColumnListToCache(cartConfigList, clearFirst, tableName);
-
-            // Reload the in-memory copy of the cached data
-            if (!AlwaysRead)
-            {
-                GetCartConfigNameMap(true);
-            }
-        }
-
-        /// <summary>
-        /// Saves a list of WorkPackageInfo objects to cache
-        /// </summary>
-        /// <param name="workPackageList">List containing work package info.</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="workPackageList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveWorkPackageListToCache(List<WorkPackageInfo> workPackageList, bool clearFirst = true)
-        {
-            var tableName = GetTableName(DatabaseTableTypes.WorkPackages);
-            SaveMultiColumnListToCache(workPackageList, clearFirst, tableName);
-
-            // Reload the in-memory copy of the cached data
-            if (!AlwaysRead)
-            {
-                GetWorkPackageMap(true);
-            }
-        }
-
-        /// <summary>
-        /// Saves a list of cart names to the SQLite cache
-        /// </summary>
-        /// <param name="cartNameList">Cart names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartNameList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveCartListToCache(List<string> cartNameList, bool clearFirst = true)
-        {
-            SaveSingleColumnListToCache(cartNameList, cartNames, DatabaseTableTypes.CartList, clearFirst);
-        }
-
-        /// <summary>
-        /// Saves a list of column names to the SQLite cache
-        /// </summary>
-        /// <param name="columnList">Column names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="columnList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveColumnListToCache(List<string> columnList, bool clearFirst = true)
-        {
-            SaveSingleColumnListToCache(columnList, columnNames, DatabaseTableTypes.ColumnList, clearFirst);
-        }
-
-        /// <summary>
-        /// Saves a list of Dataset names to the SQLite cache
-        /// </summary>
-        /// <param name="datasetNameList">Dataset names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="datasetNameList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveDatasetNameListToCache(List<string> datasetNameList, bool clearFirst = true)
-        {
-            SaveSingleColumnListToCache(datasetNameList, datasetNames, DatabaseTableTypes.DatasetList, clearFirst);
-        }
-
-        /// <summary>
-        /// Saves a list of dataset type names to the SQLite cache
-        /// </summary>
-        /// <param name="datasetTypeList">Dataset type names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="datasetTypeList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveDatasetTypeListToCache(List<string> datasetTypeList, bool clearFirst = true)
-        {
-            SaveSingleColumnListToCache(datasetTypeList, datasetTypeNames, DatabaseTableTypes.DatasetTypeList, clearFirst);
-        }
-
-        /// <summary>
-        /// Saves a list of separation types to the SQLite cache
-        /// </summary>
-        /// <param name="separationTypeList">Separation type names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="separationTypeList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveSeparationTypeListToCache(List<string> separationTypeList, bool clearFirst = true)
-        {
-            SaveSingleColumnListToCache(separationTypeList, separationNames, DatabaseTableTypes.SeparationTypeList, clearFirst);
-        }
-
-        /// <summary>
         /// Executes specified SQLite command
         /// </summary>
         /// <param name="cmdStr">SQL statement to execute</param>
@@ -1083,7 +795,349 @@ namespace LcmsNetSQLiteTools
         /// <returns>Name of db table</returns>
         private static string GetTableName(DatabaseTableTypes tableType)
         {
-            return "T_" + Enum.GetName(typeof (DatabaseTableTypes), tableType);
+            return "T_" + Enum.GetName(typeof(DatabaseTableTypes), tableType);
+        }
+
+        /// <summary>
+        /// Generic method for saving a single column list to the cache db
+        /// </summary>
+        /// <param name="listData">List of data for storing in table</param>
+        /// <param name="memoryCache">List used for in-memory cache of contents</param>
+        /// <param name="tableType">enumTableNames specifying table name suffix</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="listData"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        private static void SaveSingleColumnListToCache(List<string> listData, List<string> memoryCache, DatabaseTableTypes tableType, bool clearFirst = true)
+        {
+            // Refresh the in-memory list with the new data
+            if (!AlwaysRead)
+            {
+                memoryCache.Clear();
+                memoryCache.AddRange(listData);
+            }
+
+            SaveSingleColumnListToCache(listData, tableType, clearFirst);
+        }
+
+        /// <summary>
+        /// Generic method for saving a single column list to the cache db
+        /// </summary>
+        /// <param name="tableType">enumTableNames specifying table name suffix</param>
+        /// <param name="listData">List of data for storing in table</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="listData"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        /// <remarks>Used with T_CartList, T_SeparationTypeSelected, T_LCColumnList, T_DatasetTypeList, T_DatasetList, and T_CartConfigNameSelected</remarks>
+        private static void SaveSingleColumnListToCache(List<string> listData, DatabaseTableTypes tableType, bool clearFirst = true)
+        {
+            // Set up table name
+            var tableName = GetTableName(tableType);
+
+            // SQL statement for table clear command
+            var sqlClearCmd = "DELETE FROM " + tableName;
+
+            // Build SQL statement for creating table
+            var columnName = tableName.Substring(2);
+            if (columnName.EndsWith("List", StringComparison.OrdinalIgnoreCase) &&
+                !columnName.ToLower().Contains("name"))
+            {
+                columnName = columnName.Substring(0, columnName.Length - 4) + "Name";
+            }
+            string[] colNames = { columnName };
+            var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, columnName);
+
+            // If table exists, clear it. Otherwise create one
+            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
+            {
+                if (!clearFirst && rowCount > listData.Count)
+                {
+                    return;
+                }
+
+                // Clear table
+                try
+                {
+                    ExecuteSQLiteCommand(sqlClearCmd, ConnString);
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    var errMsg = "SQLite exception clearing table via command " + sqlClearCmd;
+                    // throw new DatabaseDataException(errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    return;
+                }
+            }
+            else
+            {
+                // Create table
+                try
+                {
+                    ExecuteSQLiteCommand(sqlCreateCmd, ConnString);
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    var errMsg = "SQLite exception creating table " + tableName;
+                    // throw new DatabaseDataException(errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    return;
+                }
+            }
+
+            if (listData.Count < 1)
+            {
+                return;
+            }
+
+            // Fill the data table
+            using (var connection = GetConnection(ConnString))
+            using (var command = connection.CreateCommand())
+            using (var transaction = connection.BeginTransaction())
+            {
+                command.CommandText = $"INSERT INTO {tableName} VALUES(:Value)";
+                foreach (var item in listData)
+                {
+                    var param = new SQLiteParameter(":Value", item);
+                    command.Parameters.Clear();
+                    command.Parameters.Add(param);
+                    command.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+            }
+        }
+
+        /// <summary>
+        /// Read a single-column list from the cache, handling management of an in-memory list
+        /// </summary>
+        /// <param name="memoryCache"></param>
+        /// <param name="tabletype">DatabaseTableTypes specifying type of table to retrieve</param>
+        /// <param name="force"></param>
+        /// <returns>List containing cached data</returns>
+        private static List<string> ReadSingleColumnListFromCache(List<string> memoryCache, DatabaseTableTypes tabletype, bool force = false)
+        {
+            var data = memoryCache;
+            if (memoryCache.Count == 0 || force || AlwaysRead)
+            {
+                data = ReadSingleColumnListFromCache(tabletype);
+
+                memoryCache.Clear();
+                if (AlwaysRead)
+                {
+                    memoryCache.Capacity = 0;
+                }
+                else
+                {
+                    memoryCache.AddRange(data);
+                }
+            }
+            return data;
+        }
+
+        /// <summary>
+        /// Generic method for retrieving data from a single column table
+        /// </summary>
+        /// <param name="tableType">DatabaseTableTypes specifying type of table to retrieve</param>
+        /// <returns>List containing cached data</returns>
+        private static List<string> ReadSingleColumnListFromCache(DatabaseTableTypes tableType)
+        {
+            var returnList = new List<string>();
+
+            // Set up table name
+            var tableName = GetTableName(tableType);
+
+            // Verify specified table exists
+            if (!VerifyTableExists(tableName, ConnString))
+            {
+                var errMsg = "Data table " + tableName + " not found in cache";
+                throw new DatabaseDataException(errMsg, new Exception());
+            }
+
+            // SQL statement for query command
+            var sqlQueryCmd = "SELECT * FROM " + tableName;
+
+            // Get a table from the cache db
+            DataTable resultTable;
+            try
+            {
+                resultTable = GetSQLiteDataTable(sqlQueryCmd, ConnString);
+            }
+            catch (Exception ex)
+            {
+                CheckExceptionMessageForDbState(ex);
+                var errMsg = "SQLite exception getting data table via query " + sqlQueryCmd;
+                throw new DatabaseDataException(errMsg, ex);
+            }
+
+            // Return empty list if no data in table
+            if (resultTable.Rows.Count < 1)
+            {
+                return returnList;
+            }
+
+            returnList.Capacity = resultTable.Rows.Count;
+
+            // Fill the return list
+            foreach (DataRow currentRow in resultTable.Rows)
+            {
+                returnList.Add((string)currentRow[resultTable.Columns[0]]);
+            }
+
+            // All finished, so return
+            return returnList;
+        }
+
+        /// <summary>
+        /// Generic method to build a CREATE TABLE command
+        /// </summary>
+        /// <param name="tableName">Name of table to create</param>
+        /// <param name="ColNames">String array containing column names</param>
+        /// <param name="primaryKeyColumn">Optional: name of the column to create as the primary key</param>
+        /// <returns>Complete CREATE TABLE command</returns>
+        private static string BuildGenericCreateTableCmd(string tableName, IEnumerable<string> ColNames,
+            string primaryKeyColumn)
+        {
+            var sb = new StringBuilder();
+            sb.Append("CREATE TABLE ");
+            sb.Append(tableName + "(");
+
+            // Create column names for each key, which is same as property name in queue being saved
+            var query = (from item in ColNames select "'" + item + "'");
+            sb.Append(string.Join(",", query));
+
+            if (!string.IsNullOrWhiteSpace(primaryKeyColumn))
+            {
+                sb.Append(", PRIMARY KEY('" + primaryKeyColumn + "')");
+            }
+
+            // Terminate the string and return
+            sb.Append(")");
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Clears a cache table
+        /// </summary>
+        /// <param name="tableName">Name of table to clear</param>
+        /// <param name="connStr">Connection string</param>
+        /// <param name="columnCountExpected">Expected number of columns; 0 to not validate column count</param>
+        /// <remarks>If the actual column count is less than columnCountExpected, then the table is deleted (dropped)</remarks>
+        private static void ClearCacheTable(string tableName, string connStr, int columnCountExpected = 0)
+        {
+            // Clear the table, if it exists
+            int columnCount;
+            if (VerifyTableExists(tableName, connStr, out columnCount))
+            {
+                string sqlStr;
+                if (columnCountExpected > 0 && columnCount < columnCountExpected)
+                {
+                    // Drop the table; it will get re-created later
+                    sqlStr = "DROP TABLE " + tableName;
+                }
+                else
+                {
+                    // Clear the table (note that SQLite does not have command "Truncate Table")
+                    sqlStr = "DELETE FROM " + tableName;
+                }
+
+                try
+                {
+                    ExecuteSQLiteCommand(sqlStr, connStr);
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    var errorMessage = "Exception clearing table " + tableName;
+                    ApplicationLogger.LogError(0, errorMessage, ex);
+                    throw new DatabaseDataException("Exception clearing table " + tableName, ex);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Delete a cache file that has issues so a good cache can be made it its place.
+        /// It is the responsibility of the calling method to ensure no other database operations are occurring that could interfere.
+        /// </summary>
+        /// <param name="force">If true, deletes the cache regardless of the <see cref="DatabaseImageBad"/> value</param>
+        public static void DeleteBadCache(bool force = false)
+        {
+            if (DatabaseImageBad || force)
+            {
+                // close down existing connections
+                CloseConnection();
+
+                try
+                {
+                    if (File.Exists(cacheFullPath))
+                    {
+                        File.Delete(cacheFullPath);
+                    }
+
+                    DatabaseImageBad = false;
+                }
+                catch (Exception ex)
+                {
+                    ApplicationLogger.LogError(0, "Could not delete the SQLite database!", ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the cache location to the path provided
+        /// </summary>
+        /// <param name="location">New path to location of queue</param>
+        /// <remarks>If location is a filename (and not a path), then updates to use AppDataFolderName</remarks>
+        public static void SetCacheLocation(string location)
+        {
+            if (!location.Contains(@"\"))
+            {
+                var fileName = Path.GetFileName(location);
+                var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                location = Path.Combine(appPath, AppDataFolderName, fileName);
+            }
+
+            CacheName = location;
+
+            BuildConnectionString(!File.Exists(location));
+        }
+
+        #endregion
+
+        #region Public Methods: Cache Reading
+
+        /// <summary>
+        /// Retrieves a sample queue from cache database
+        /// Connection string and database name are defined by defaults
+        /// </summary>
+        /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
+        /// <returns>List containing queue data</returns>
+        public static List<T> GetQueueFromCache<T>(DatabaseTableTypes tableType) where T : SampleDataBasic, new()
+        {
+            return GetQueueFromCache<T>(tableType, ConnString);
+        }
+
+        /// <summary>
+        /// Retrieves a sample queue from a SQLite database
+        /// Overload requires connection string to be specified
+        /// </summary>
+        /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
+        /// <param name="connectionString">Cache connection string</param>
+        /// <returns>List containing queue data</returns>
+        public static List<T> GetQueueFromCache<T>(DatabaseTableTypes tableType, string connectionString) where T : SampleDataBasic, new()
+        {
+            if (typeof(T) == typeof(SampleDataBasic))
+            {
+                ApplicationLogger.LogError(0, "Cannot populate list of SampleDataBasic objects from database!");
+                return new List<T>();
+            }
+
+            // Convert type of queue into a data table name
+            var tableName = GetTableName(tableType);
+
+            // All finished, so return
+            return ReadDataFromCache(tableName, () => (T)(new T().GetNewNonDummy()), connectionString);
         }
 
         /// <summary>
@@ -1390,16 +1444,6 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Caches the cart configuration name that is currently selected for this cart
-        /// </summary>
-        /// <param name="cartConfigName">Cart configuration name</param>
-        public static void SaveSelectedCartConfigName(string cartConfigName)
-        {
-            // Create a list for the Save call to use (it requires a list)
-            SaveSingleColumnListToCache(new List<string> { cartConfigName }, DatabaseTableTypes.CartConfigNameSelected);
-        }
-
-        /// <summary>
         /// Retrieves the cached cart configuration name
         /// </summary>
         /// <returns>Cart configuration name</returns>
@@ -1424,16 +1468,6 @@ namespace LcmsNetSQLiteTools
             }
 
             return cartConfigNames[0];
-        }
-
-        /// <summary>
-        /// Caches the separation type that is currently selected for this cart
-        /// </summary>
-        /// <param name="separationType">Separation type</param>
-        public static void SaveSelectedSeparationType(string separationType)
-        {
-            // Create a list for the Save call to use (it requires a list)
-            SaveSingleColumnListToCache(new List<string> { separationType }, DatabaseTableTypes.SeparationTypeSelected);
         }
 
         /// <summary>
@@ -1479,258 +1513,236 @@ namespace LcmsNetSQLiteTools
             return sepType[0];
         }
 
-        /// <summary>
-        /// Generic method for saving a single column list to the cache db
-        /// </summary>
-        /// <param name="listData">List of data for storing in table</param>
-        /// <param name="memoryCache">List used for in-memory cache of contents</param>
-        /// <param name="tableType">enumTableNames specifying table name suffix</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="listData"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        private static void SaveSingleColumnListToCache(List<string> listData, List<string> memoryCache, DatabaseTableTypes tableType, bool clearFirst = true)
-        {
-            // Refresh the in-memory list with the new data
-            if (!AlwaysRead)
-            {
-                memoryCache.Clear();
-                memoryCache.AddRange(listData);
-            }
+        #endregion
 
-            SaveSingleColumnListToCache(listData, tableType, clearFirst);
+        #region Public Methods: Cache Writing
+
+        /// <summary>
+        /// Saves the contents of specified sample queue to the SQLite cache file
+        /// Connection string and database name are defined by defaults
+        /// </summary>
+        /// <param name="queueData">List of SampleData containing the sample data to save</param>
+        /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
+        public static void SaveQueueToCache<T>(List<T> queueData, DatabaseTableTypes tableType) where T : SampleDataBasic, new()
+        {
+            SaveQueueToCache(queueData, tableType, ConnString);
         }
 
         /// <summary>
-        /// Generic method for saving a single column list to the cache db
+        /// Saves the contents of specified sample queue to an SQLite database file
+        /// Overload requires database connection string be specified
         /// </summary>
-        /// <param name="tableType">enumTableNames specifying table name suffix</param>
-        /// <param name="listData">List of data for storing in table</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="listData"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        /// <remarks>Used with T_CartList, T_SeparationTypeSelected, T_LCColumnList, T_DatasetTypeList, T_DatasetList, and T_CartConfigNameSelected</remarks>
-        private static void SaveSingleColumnListToCache(List<string> listData, DatabaseTableTypes tableType, bool clearFirst = true)
+        /// <param name="queueData">List containing the sample data to save</param>
+        /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
+        /// <param name="connStr">Connection string for database file</param>
+        public static void SaveQueueToCache<T>(List<T> queueData, DatabaseTableTypes tableType, string connStr) where T : SampleDataBasic, new()
         {
-            // Set up table name
-            var tableName = GetTableName(tableType);
-
-            // SQL statement for table clear command
-            var sqlClearCmd = "DELETE FROM " + tableName;
-
-            // Build SQL statement for creating table
-            var columnName = tableName.Substring(2);
-            if (columnName.EndsWith("List", StringComparison.OrdinalIgnoreCase) &&
-                !columnName.ToLower().Contains("name"))
+            if (typeof(T) == typeof(SampleDataBasic))
             {
-                columnName = columnName.Substring(0, columnName.Length - 4) + "Name";
-            }
-            string[] colNames = { columnName };
-            var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, columnName);
-
-            // If table exists, clear it. Otherwise create one
-            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
-            {
-                if (!clearFirst && rowCount > listData.Count)
-                {
-                    return;
-                }
-
-                // Clear table
-                try
-                {
-                    ExecuteSQLiteCommand(sqlClearCmd, ConnString);
-                }
-                catch (Exception ex)
-                {
-                    CheckExceptionMessageForDbState(ex);
-                    var errMsg = "SQLite exception clearing table via command " + sqlClearCmd;
-                    // throw new DatabaseDataException(errMsg, ex);
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                    return;
-                }
-            }
-            else
-            {
-                // Create table
-                try
-                {
-                    ExecuteSQLiteCommand(sqlCreateCmd, ConnString);
-                }
-                catch (Exception ex)
-                {
-                    CheckExceptionMessageForDbState(ex);
-                    var errMsg = "SQLite exception creating table " + tableName;
-                    // throw new DatabaseDataException(errMsg, ex);
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                    return;
-                }
-            }
-
-            if (listData.Count < 1)
-            {
+                ApplicationLogger.LogError(0, "Cannot write list of SampleDataBasic objects to database!");
                 return;
             }
 
-            // Fill the data table
-            using (var connection = GetConnection(ConnString))
-            using (var command = connection.CreateCommand())
-            using (var transaction = connection.BeginTransaction())
-            {
-                command.CommandText = $"INSERT INTO {tableName} VALUES(:Value)";
-                foreach (var item in listData)
-                {
-                    var param = new SQLiteParameter(":Value", item);
-                    command.Parameters.Clear();
-                    command.Parameters.Add(param);
-                    command.ExecuteNonQuery();
-                }
-
-                transaction.Commit();
-            }
-        }
-
-        /// <summary>
-        /// Read a single-column list from the cache, handling management of an in-memory list
-        /// </summary>
-        /// <param name="memoryCache"></param>
-        /// <param name="tabletype">DatabaseTableTypes specifying type of table to retrieve</param>
-        /// <param name="force"></param>
-        /// <returns>List containing cached data</returns>
-        private static List<string> ReadSingleColumnListFromCache(List<string> memoryCache, DatabaseTableTypes tabletype, bool force = false)
-        {
-            var data = memoryCache;
-            if (memoryCache.Count == 0 || force || AlwaysRead)
-            {
-                data = ReadSingleColumnListFromCache(tabletype);
-
-                memoryCache.Clear();
-                if (AlwaysRead)
-                {
-                    memoryCache.Capacity = 0;
-                }
-                else
-                {
-                    memoryCache.AddRange(data);
-                }
-            }
-            return data;
-        }
-
-        /// <summary>
-        /// Generic method for retrieving data from a single column table
-        /// </summary>
-        /// <param name="tableType">DatabaseTableTypes specifying type of table to retrieve</param>
-        /// <returns>List containing cached data</returns>
-        private static List<string> ReadSingleColumnListFromCache(DatabaseTableTypes tableType)
-        {
-            var returnList = new List<string>();
-
-            // Set up table name
             var tableName = GetTableName(tableType);
-
-            // Verify specified table exists
-            if (!VerifyTableExists(tableName, ConnString))
-            {
-                var errMsg = "Data table " + tableName + " not found in cache";
-                throw new DatabaseDataException(errMsg, new Exception());
-            }
-
-            // SQL statement for query command
-            var sqlQueryCmd = "SELECT * FROM " + tableName;
-
-            // Get a table from the cache db
-            DataTable resultTable;
-            try
-            {
-                resultTable = GetSQLiteDataTable(sqlQueryCmd, ConnString);
-            }
-            catch (Exception ex)
-            {
-                CheckExceptionMessageForDbState(ex);
-                var errMsg = "SQLite exception getting data table via query " + sqlQueryCmd;
-                throw new DatabaseDataException(errMsg, ex);
-            }
-
-            // Return empty list if no data in table
-            if (resultTable.Rows.Count < 1)
-            {
-                return returnList;
-            }
-
-            returnList.Capacity = resultTable.Rows.Count;
-
-            // Fill the return list
-            foreach (DataRow currentRow in resultTable.Rows)
-            {
-                returnList.Add((string) currentRow[resultTable.Columns[0]]);
-            }
-
-            // All finished, so return
-            return returnList;
+            SaveMultiColumnListToCache(queueData, true, tableName);
         }
 
         /// <summary>
-        /// Generic method to build a CREATE TABLE command
+        /// Saves a list of users to cache
         /// </summary>
-        /// <param name="tableName">Name of table to create</param>
-        /// <param name="ColNames">String array containing column names</param>
-        /// <param name="primaryKeyColumn">Optional: name of the column to create as the primary key</param>
-        /// <returns>Complete CREATE TABLE command</returns>
-        private static string BuildGenericCreateTableCmd(string tableName, IEnumerable<string> ColNames,
-            string primaryKeyColumn)
+        /// <param name="userList">List containing user data</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="userList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveUserListToCache(List<UserInfo> userList, bool clearFirst = true)
         {
-            var sb = new StringBuilder();
-            sb.Append("CREATE TABLE ");
-            sb.Append(tableName + "(");
+            var tableName = GetTableName(DatabaseTableTypes.UserList);
+            SaveMultiColumnListToCache(userList, clearFirst, tableName);
 
-            // Create column names for each key, which is same as property name in queue being saved
-            var query = (from item in ColNames select "'" + item + "'");
-            sb.Append(string.Join(",", query));
-
-            if (!string.IsNullOrWhiteSpace(primaryKeyColumn))
+            if (!AlwaysRead)
             {
-                sb.Append(", PRIMARY KEY('" + primaryKeyColumn + "')");
+                userInfo.Clear();
+                userInfo.AddRange(userList);
             }
-
-            // Terminate the string and return
-            sb.Append(")");
-
-            return sb.ToString();
         }
 
         /// <summary>
-        /// Clears a cache table
+        /// Save a list of experiments to cache
         /// </summary>
-        /// <param name="tableName">Name of table to clear</param>
-        /// <param name="connStr">Connection string</param>
-        /// <param name="columnCountExpected">Expected number of columns; 0 to not validate column count</param>
-        /// <remarks>If the actual column count is less than columnCountExpected, then the table is deleted (dropped)</remarks>
-        private static void ClearCacheTable(string tableName, string connStr, int columnCountExpected = 0)
+        /// <param name="expList"></param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="expList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveExperimentListToCache(List<ExperimentData> expList, bool clearFirst = true)
         {
-            // Clear the table, if it exists
-            int columnCount;
-            if (VerifyTableExists(tableName, connStr, out columnCount))
-            {
-                string sqlStr;
-                if (columnCountExpected > 0 && columnCount < columnCountExpected)
-                {
-                    // Drop the table; it will get re-created later
-                    sqlStr = "DROP TABLE " + tableName;
-                }
-                else
-                {
-                    // Clear the table (note that SQLite does not have command "Truncate Table")
-                    sqlStr = "DELETE FROM " + tableName;
-                }
+            if (expList == null)
+                return;
 
-                try
-                {
-                    ExecuteSQLiteCommand(sqlStr, connStr);
-                }
-                catch (Exception ex)
-                {
-                    CheckExceptionMessageForDbState(ex);
-                    var errorMessage = "Exception clearing table " + tableName;
-                    ApplicationLogger.LogError(0, errorMessage, ex);
-                    throw new DatabaseDataException("Exception clearing table " + tableName, ex);
-                }
+            var tableName = GetTableName(DatabaseTableTypes.ExperimentList);
+            SaveMultiColumnListToCache(expList, clearFirst, tableName);
+
+            if (!AlwaysRead)
+            {
+                experimentsData.Clear();
+                experimentsData.AddRange(expList);
             }
+        }
+
+        /// <summary>
+        /// Saves the Proposal Users list and a Proposal ID to Proposal User ID cross-reference
+        /// list to the cache.
+        /// </summary>
+        /// <param name="users">A list of the Proposal Users to cache.</param>
+        /// <param name="crossReferenceList">A list of cross references to cache.</param>
+        /// <param name="pidIndexedReferenceList">
+        /// A dictionary of cross reference lists that have been grouped by Proposal ID.
+        /// </param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="users"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveProposalUsers(List<ProposalUser> users,
+            List<UserIDPIDCrossReferenceEntry> crossReferenceList,
+            Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList, bool clearFirst = true)
+        {
+            var userTableName = GetTableName(DatabaseTableTypes.PUserList);
+            var referenceTableName = GetTableName(DatabaseTableTypes.PReferenceList);
+            SaveMultiColumnListToCache(users, clearFirst, userTableName);
+            SaveMultiColumnListToCache(crossReferenceList, clearFirst, referenceTableName);
+
+            if (!AlwaysRead)
+            {
+                proposalUsers.Clear();
+                proposalUsers.AddRange(users);
+
+                UpdateProposalIdIndexReferenceList(pidIndexedReferenceList);
+            }
+        }
+
+        public static void SaveEntireLCColumnListToCache(List<LCColumnData> lcColumnList)
+        {
+            var tableName = GetTableName(DatabaseTableTypes.LCColumnList);
+            SaveMultiColumnListToCache(lcColumnList, true, tableName);
+
+            if (!AlwaysRead)
+            {
+                lcColumns.Clear();
+                lcColumns.AddRange(lcColumnList);
+            }
+        }
+
+        /// <summary>
+        /// Saves a list of instruments to cache
+        /// </summary>
+        /// <param name="instList">List of InstrumentInfo containing instrument data</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="instList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveInstListToCache(List<InstrumentInfo> instList, bool clearFirst = true)
+        {
+            var tableName = GetTableName(DatabaseTableTypes.InstrumentList);
+            SaveMultiColumnListToCache(instList, clearFirst, tableName);
+
+            if (!AlwaysRead)
+            {
+                instrumentInfo.Clear();
+                instrumentInfo.AddRange(instList);
+            }
+        }
+
+        /// <summary>
+        /// Saves a list of Cart_Configs (and associated Cart names) to cache
+        /// </summary>
+        /// <param name="cartConfigList">List containing cart config info.</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartConfigList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveCartConfigListToCache(List<CartConfigInfo> cartConfigList, bool clearFirst = true)
+        {
+            var tableName = GetTableName(DatabaseTableTypes.CartConfigNameList);
+            SaveMultiColumnListToCache(cartConfigList, clearFirst, tableName);
+
+            // Reload the in-memory copy of the cached data
+            if (!AlwaysRead)
+            {
+                GetCartConfigNameMap(true);
+            }
+        }
+
+        /// <summary>
+        /// Saves a list of WorkPackageInfo objects to cache
+        /// </summary>
+        /// <param name="workPackageList">List containing work package info.</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="workPackageList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveWorkPackageListToCache(List<WorkPackageInfo> workPackageList, bool clearFirst = true)
+        {
+            var tableName = GetTableName(DatabaseTableTypes.WorkPackages);
+            SaveMultiColumnListToCache(workPackageList, clearFirst, tableName);
+
+            // Reload the in-memory copy of the cached data
+            if (!AlwaysRead)
+            {
+                GetWorkPackageMap(true);
+            }
+        }
+
+        /// <summary>
+        /// Saves a list of cart names to the SQLite cache
+        /// </summary>
+        /// <param name="cartNameList">Cart names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartNameList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveCartListToCache(List<string> cartNameList, bool clearFirst = true)
+        {
+            SaveSingleColumnListToCache(cartNameList, cartNames, DatabaseTableTypes.CartList, clearFirst);
+        }
+
+        /// <summary>
+        /// Saves a list of column names to the SQLite cache
+        /// </summary>
+        /// <param name="columnList">Column names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="columnList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveColumnListToCache(List<string> columnList, bool clearFirst = true)
+        {
+            SaveSingleColumnListToCache(columnList, columnNames, DatabaseTableTypes.ColumnList, clearFirst);
+        }
+
+        /// <summary>
+        /// Saves a list of Dataset names to the SQLite cache
+        /// </summary>
+        /// <param name="datasetNameList">Dataset names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="datasetNameList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveDatasetNameListToCache(List<string> datasetNameList, bool clearFirst = true)
+        {
+            SaveSingleColumnListToCache(datasetNameList, datasetNames, DatabaseTableTypes.DatasetList, clearFirst);
+        }
+
+        /// <summary>
+        /// Saves a list of dataset type names to the SQLite cache
+        /// </summary>
+        /// <param name="datasetTypeList">Dataset type names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="datasetTypeList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveDatasetTypeListToCache(List<string> datasetTypeList, bool clearFirst = true)
+        {
+            SaveSingleColumnListToCache(datasetTypeList, datasetTypeNames, DatabaseTableTypes.DatasetTypeList, clearFirst);
+        }
+
+        /// <summary>
+        /// Saves a list of separation types to the SQLite cache
+        /// </summary>
+        /// <param name="separationTypeList">Separation type names</param>
+        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="separationTypeList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
+        public static void SaveSeparationTypeListToCache(List<string> separationTypeList, bool clearFirst = true)
+        {
+            SaveSingleColumnListToCache(separationTypeList, separationNames, DatabaseTableTypes.SeparationTypeList, clearFirst);
+        }
+
+        /// <summary>
+        /// Caches the cart configuration name that is currently selected for this cart
+        /// </summary>
+        /// <param name="cartConfigName">Cart configuration name</param>
+        public static void SaveSelectedCartConfigName(string cartConfigName)
+        {
+            // Create a list for the Save call to use (it requires a list)
+            SaveSingleColumnListToCache(new List<string> { cartConfigName }, DatabaseTableTypes.CartConfigNameSelected);
+        }
+
+        /// <summary>
+        /// Caches the separation type that is currently selected for this cart
+        /// </summary>
+        /// <param name="separationType">Separation type</param>
+        public static void SaveSelectedSeparationType(string separationType)
+        {
+            // Create a list for the Save call to use (it requires a list)
+            SaveSingleColumnListToCache(new List<string> { separationType }, DatabaseTableTypes.SeparationTypeSelected);
         }
 
         #endregion
