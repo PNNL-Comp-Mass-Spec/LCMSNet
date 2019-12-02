@@ -12,7 +12,7 @@ namespace LcmsNetSQLiteTools
 {
     internal class SQLiteCacheIO : IDisposable
     {
-        private SQLiteConnection connection = null;
+        private SQLiteConnection storedConnection = null;
         private string lastConnectionString = "";
 
         private string cacheFullPath;
@@ -115,9 +115,9 @@ namespace LcmsNetSQLiteTools
         {
             try
             {
-                connection?.Close();
-                connection?.Dispose();
-                connection = null;
+                storedConnection?.Close();
+                storedConnection?.Dispose();
+                storedConnection = null;
             }
             catch
             {
@@ -143,13 +143,13 @@ namespace LcmsNetSQLiteTools
                     Close();
                 }
 
-                if (connection == null)
+                if (storedConnection == null)
                 {
                     lastConnectionString = connString;
-                    connection = new SQLiteConnection(connString).OpenAndReturn();
+                    storedConnection = new SQLiteConnection(connString).OpenAndReturn();
                 }
 
-                return new SQLiteConnectionWrapper(connection);
+                return new SQLiteConnectionWrapper(storedConnection);
             }
 
             return new SQLiteConnectionWrapper(connString);
@@ -343,14 +343,36 @@ namespace LcmsNetSQLiteTools
         /// <returns></returns>
         private bool TableColumnNamesMatched(string tableName, string connStr, List<string> fieldNames)
         {
-            if (!VerifyTableExists(tableName, connStr, out var columnCount))
+            var namesList = GetTableColumnNames(tableName, connStr, out var columnCount);
+            if (columnCount != fieldNames.Count || namesList.Count == 0)
             {
                 return false;
             }
 
-            if (columnCount != fieldNames.Count)
+            foreach (var name in fieldNames)
             {
-                return false;
+                if (!namesList.Contains(name))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Get a list of column names for the specified table
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="connStr"></param>
+        /// <param name="columnCount"></param>
+        /// <returns></returns>
+        private List<string> GetTableColumnNames(string tableName, string connStr, out int columnCount)
+        {
+            var colNames = new List<string>();
+            if (!VerifyTableExists(tableName, connStr, out columnCount))
+            {
+                return colNames;
             }
 
             var sqlString = "pragma table_info(" + tableName + ")";
@@ -366,15 +388,14 @@ namespace LcmsNetSQLiteTools
                 var errMsg = "SQLite exception verifying table " + tableName + " exists";
                 // throw new DatabaseDataException(errMsg, ex);
                 ApplicationLogger.LogError(0, errMsg, ex);
-                return false;
+                return colNames;
             }
 
             if (resultSet1.Rows.Count < 1)
             {
-                return false;
+                return colNames;
             }
 
-            var namesList = new List<string>();
             foreach (DataRow currentRow in resultSet1.Rows)
             {
                 foreach (DataColumn column in resultSet1.Columns)
@@ -384,20 +405,12 @@ namespace LcmsNetSQLiteTools
                     {
                         // row that contains the column name
                         var colData = (string)currentRow[resultSet1.Columns[colName]];
-                        namesList.Add(colData);
+                        colNames.Add(colData);
                     }
                 }
             }
 
-            foreach (var name in fieldNames)
-            {
-                if (!namesList.Contains(name))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return colNames;
         }
 
         /// <summary>
@@ -545,7 +558,41 @@ namespace LcmsNetSQLiteTools
         private string BuildCreatePropTableCmd(List<string> inpData, string tableName)
         {
             // Create column names for each key, which is same as property name in queue being saved
-            return $"CREATE TABLE {tableName}({string.Join(",", inpData.Select(x => $"'{x}'"))})";
+            return $"CREATE TABLE {tableName}({string.Join(",", inpData.Select(x => $"'{x}' TEXT"))})";
+        }
+
+        /// <summary>
+        /// Generic method to build a CREATE TABLE command
+        /// </summary>
+        /// <param name="tableName">Name of table to create</param>
+        /// <param name="colNames">String array containing column names</param>
+        /// <param name="primaryKeyColumn">Optional: name of the column to create as the primary key</param>
+        /// <param name="caseInsensitive">If true, 'COLLATE NOCASE' is added to column definitions</param>
+        /// <returns>Complete CREATE TABLE command</returns>
+        private string BuildGenericCreateTableCmd(string tableName, IEnumerable<string> colNames, string primaryKeyColumn, bool caseInsensitive = false)
+        {
+            var sb = new StringBuilder();
+            sb.Append("CREATE TABLE ");
+            sb.Append(tableName + "(");
+
+            var nocaseAppend = "";
+            if (caseInsensitive)
+            {
+                nocaseAppend = " COLLATE NOCASE";
+            }
+
+            // Create column names for each key, which is same as property name in queue being saved
+            sb.Append(string.Join(",", colNames.Select(x => $"'{x}' TEXT{nocaseAppend}")));
+
+            if (!string.IsNullOrWhiteSpace(primaryKeyColumn))
+            {
+                sb.Append(", PRIMARY KEY('" + primaryKeyColumn + "')");
+            }
+
+            // Terminate the string and return
+            sb.Append(")");
+
+            return sb.ToString();
         }
 
         /// <summary>
@@ -559,31 +606,26 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Generic method to build a CREATE TABLE command
+        /// Get the name of the single column in a single-column table
         /// </summary>
-        /// <param name="tableName">Name of table to create</param>
-        /// <param name="colNames">String array containing column names</param>
-        /// <param name="primaryKeyColumn">Optional: name of the column to create as the primary key</param>
-        /// <returns>Complete CREATE TABLE command</returns>
-        private string BuildGenericCreateTableCmd(string tableName, IEnumerable<string> colNames, string primaryKeyColumn)
+        /// <param name="tableType"></param>
+        /// <returns></returns>
+        private string GetSingleColumnName(DatabaseTableTypes tableType)
         {
-            var sb = new StringBuilder();
-            sb.Append("CREATE TABLE ");
-            sb.Append(tableName + "(");
-
-            // Create column names for each key, which is same as property name in queue being saved
-            var query = (from item in colNames select "'" + item + "'");
-            sb.Append(string.Join(",", query));
-
-            if (!string.IsNullOrWhiteSpace(primaryKeyColumn))
+            var names = GetTableColumnNames(GetTableName(tableType), ConnString, out _);
+            if (names.Count == 0)
             {
-                sb.Append(", PRIMARY KEY('" + primaryKeyColumn + "')");
+                var columnName = "" + Enum.GetName(typeof(DatabaseTableTypes), tableType);
+                if (columnName.EndsWith("List", StringComparison.OrdinalIgnoreCase) &&
+                    !columnName.ToLower().Contains("name"))
+                {
+                    columnName = columnName.Substring(0, columnName.Length - 4) + "Name";
+                }
+
+                return columnName;
             }
 
-            // Terminate the string and return
-            sb.Append(")");
-
-            return sb.ToString();
+            return names[0];
         }
 
         /// <summary>
@@ -903,14 +945,9 @@ namespace LcmsNetSQLiteTools
             var sqlClearCmd = "DELETE FROM " + tableName;
 
             // Build SQL statement for creating table
-            var columnName = tableName.Substring(2);
-            if (columnName.EndsWith("List", StringComparison.OrdinalIgnoreCase) &&
-                !columnName.ToLower().Contains("name"))
-            {
-                columnName = columnName.Substring(0, columnName.Length - 4) + "Name";
-            }
+            var columnName = GetSingleColumnName(tableType);
             string[] colNames = { columnName };
-            var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, columnName);
+            var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, columnName, true);
 
             // If table exists, clear it. Otherwise create one
             if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
@@ -971,6 +1008,32 @@ namespace LcmsNetSQLiteTools
                 }
 
                 transaction.Commit();
+            }
+        }
+
+        /// <summary>
+        /// Checks if the provided dataset name exists in the cache, case-insensitive
+        /// </summary>
+        /// <param name="datasetName"></param>
+        /// <returns>true if the dataset name exists</returns>
+        public bool CheckDatasetExists(string datasetName)
+        {
+            if (string.IsNullOrWhiteSpace(datasetName))
+            {
+                return false;
+            }
+
+            var tableName = GetTableName(DatabaseTableTypes.DatasetList);
+            var columnName = GetSingleColumnName(DatabaseTableTypes.DatasetList);
+            using (var connection = GetConnection(ConnString))
+            using (var command = connection.CreateCommand())
+            using (var transaction = connection.BeginTransaction())
+            {
+                command.CommandText = $"SELECT COUNT(*) FROM {tableName} WHERE {columnName} LIKE :DatasetName";
+                command.Parameters.Add(new SQLiteParameter(":DatasetName", datasetName));
+                var result = command.ExecuteScalar();
+                // We always expect a result, because COUNT(*) returns 0 for no-match
+                return (long) result > 0;
             }
         }
 

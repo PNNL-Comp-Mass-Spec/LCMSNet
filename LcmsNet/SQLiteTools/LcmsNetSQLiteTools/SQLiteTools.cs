@@ -364,6 +364,16 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
+        /// Checks if the provided dataset name exists in the cache, case-insensitive
+        /// </summary>
+        /// <param name="datasetName"></param>
+        /// <returns></returns>
+        public static bool CheckDatasetExists(string datasetName)
+        {
+            return Cache.CheckDatasetExists(datasetName);
+        }
+
+        /// <summary>
         /// Wrapper around generic retrieval method specifically for dataset type lists
         /// </summary>
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
