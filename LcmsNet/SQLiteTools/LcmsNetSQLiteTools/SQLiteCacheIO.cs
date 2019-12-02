@@ -335,6 +335,50 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
+        /// Determines if a particular table exists in the SQLite database, and is in the expected format (column names, data types, etc.)
+        /// </summary>
+        /// <param name="tableName">Name of the table to search for</param>
+        /// <param name="connStr">Connection string for database</param>
+        /// <param name="createCommand">Table creation text, to compare to the create command of the existing table</param>
+        /// <returns>TRUE if table found and create command matches (ignore case); FALSE if not found or error</returns>
+        private bool VerifyTableFormat(string tableName, string connStr, string createCommand)
+        {
+            var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + tableName + "'";
+            try
+            {
+                // Get a list of database tables matching the specified table name
+                using (var resultSet = GetSQLiteDataTable(sqlString, connStr))
+                {
+                    if (resultSet.Rows.Count < 1)
+                    {
+                        return false;
+                    }
+
+                    var createText = resultSet.Rows[0]["sql"]?.ToString();
+                    if (string.IsNullOrWhiteSpace(createText))
+                    {
+                        return false;
+                    }
+
+                    if (createText.Equals(createCommand, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                CheckExceptionMessageForDbState(ex);
+                var errMsg = "SQLite exception verifying table format for table " + tableName;
+                // throw new DatabaseDataException(errMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Check if the table has the correct column count and names
         /// </summary>
         /// <param name="tableName"></param>
@@ -950,7 +994,8 @@ namespace LcmsNetSQLiteTools
             var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, columnName, true);
 
             // If table exists, clear it. Otherwise create one
-            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
+            var tableFormatGood = VerifyTableFormat(tableName, ConnString, sqlCreateCmd);
+            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && tableFormatGood)
             {
                 if (!clearFirst && rowCount > listData.Count)
                 {
@@ -973,6 +1018,12 @@ namespace LcmsNetSQLiteTools
             }
             else
             {
+                if (!tableFormatGood)
+                {
+                    // Table column name wrong, or type/options incorrect; drop the table and re-create it.
+                    sqlCreateCmd = $"DROP TABLE {tableName}; " + sqlCreateCmd;
+                }
+
                 // Create table
                 try
                 {
