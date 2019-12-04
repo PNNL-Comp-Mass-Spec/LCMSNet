@@ -1697,9 +1697,9 @@ namespace LcmsNet.SampleQueue
             // Get the list of cart configuration names from DMS
             try
             {
-                var totalConfigCount = SQLiteTools.GetCartConfigNameList(false).Count;
+                var totalConfigCount = SQLiteTools.GetCartConfigNameList(false).Count();
                 var cartName = CartConfiguration.CartName;
-                var cartConfigList = SQLiteTools.GetCartConfigNameList(cartName, false);
+                var cartConfigList = SQLiteTools.GetCartConfigNameList(cartName, false).ToList();
                 if (cartConfigList.Count > 0)
                 {
                     cartConfigOptions.Clear();

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using LcmsNetData;
+using LcmsNetData.Data;
 using LcmsNetData.Logging;
 
 namespace LcmsNetSQLiteTools
@@ -269,11 +270,16 @@ namespace LcmsNetSQLiteTools
             rowCount = 0;
 
             var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + tableName + "'";
-            DataTable resultSet1;
             try
             {
                 // Get a list of database tables matching the specified table name
-                resultSet1 = GetSQLiteDataTable(sqlString, connStr);
+                using (var resultSet1 = GetSQLiteDataTable(sqlString, connStr))
+                {
+                    if (resultSet1.Rows.Count < 1)
+                    {
+                        return false;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -284,11 +290,6 @@ namespace LcmsNetSQLiteTools
                 return false;
             }
 
-            if (resultSet1.Rows.Count < 1)
-            {
-                return false;
-            }
-
             // Exactly 1 row returned; examine the number of columns
             // Count the number of columns
             var colCountSql = "pragma table_info(" + tableName + ")";
@@ -296,9 +297,10 @@ namespace LcmsNetSQLiteTools
             try
             {
                 // Use the pragma statement to get a table with one row per column
-                var resultSet2 = GetSQLiteDataTable(colCountSql, connStr);
-
-                columnCount = resultSet2.Rows.Count;
+                using (var resultSet2 = GetSQLiteDataTable(colCountSql, connStr))
+                {
+                    columnCount = resultSet2.Rows.Count;
+                }
             }
             catch (Exception ex)
             {
@@ -319,9 +321,10 @@ namespace LcmsNetSQLiteTools
             try
             {
                 // Use the pragma statement to get a table with one row per column
-                var resultSet3 = GetSQLiteDataTable(rowCountSql, connStr);
-
-                rowCount = Convert.ToInt32(resultSet3.Rows[0][0]);
+                using (var resultSet3 = GetSQLiteDataTable(rowCountSql, connStr))
+                {
+                    rowCount = Convert.ToInt32(resultSet3.Rows[0][0]);
+                }
             }
             catch (Exception ex)
             {
@@ -420,11 +423,30 @@ namespace LcmsNetSQLiteTools
             }
 
             var sqlString = "pragma table_info(" + tableName + ")";
-            DataTable resultSet1;
             try
             {
                 // Get a list of database tables matching the specified table name
-                resultSet1 = GetSQLiteDataTable(sqlString, connStr);
+                using (var resultSet1 = GetSQLiteDataTable(sqlString, connStr))
+                {
+                    if (resultSet1.Rows.Count < 1)
+                    {
+                        return colNames;
+                    }
+
+                    foreach (DataColumn column in resultSet1.Columns)
+                    {
+                        var colName = column.ColumnName;
+                        if (colName.ToLower().Equals("name"))
+                        {
+                            foreach (DataRow currentRow in resultSet1.Rows)
+                            {
+                                // row that contains the column name
+                                var colData = (string)currentRow[resultSet1.Columns[colName]];
+                                colNames.Add(colData);
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -435,102 +457,7 @@ namespace LcmsNetSQLiteTools
                 return colNames;
             }
 
-            if (resultSet1.Rows.Count < 1)
-            {
-                return colNames;
-            }
-
-            foreach (DataRow currentRow in resultSet1.Rows)
-            {
-                foreach (DataColumn column in resultSet1.Columns)
-                {
-                    var colName = column.ColumnName;
-                    if (colName.ToLower().Equals("name"))
-                    {
-                        // row that contains the column name
-                        var colData = (string)currentRow[resultSet1.Columns[colName]];
-                        colNames.Add(colData);
-                    }
-                }
-            }
-
             return colNames;
-        }
-
-        /// <summary>
-        /// Saves a list of objects to the cache database
-        /// </summary>
-        /// <param name="dataToCache">List of objects to save properties for</param>
-        /// <param name="tableName">Name of the table to save data in</param>
-        /// <param name="connStr">Connection string</param>
-        private void WriteDataToCache<T>(IReadOnlyCollection<T> dataToCache, string tableName, string connStr)
-        {
-            // If there is no data, then just exit
-            if (dataToCache.Count < 1)
-            {
-                return;
-            }
-
-            var mappings = propToColumnMap.GetPropertyColumnMapping(typeof(T)).Values.ToList();
-
-            // Verify table exists, and column names are correct; if not, create it; Otherwise, clear it
-            var tableExists = VerifyTableExists(tableName, connStr);
-            var fieldNames = mappings.Select(x => x.ColumnName).ToList();
-            var tableColumnsCorrect = !tableExists || TableColumnNamesMatched(tableName, connStr, fieldNames); // if the table doesn't exist, automatically set this to true
-            if (!tableExists || !tableColumnsCorrect)
-            {
-                try
-                {
-                    if (!tableColumnsCorrect)
-                    {
-                        // table column names mismatched, drop the table so we can re-create it
-                        var sqlStr = "DROP TABLE " + tableName;
-                        ExecuteSQLiteCommand(sqlStr, connStr);
-                    }
-
-                    // Table doesn't exist, so create it
-                    var sqlCmd = BuildCreatePropTableCmd(fieldNames, tableName);
-                    ExecuteSQLiteCommand(sqlCmd, connStr);
-                }
-                catch (Exception ex)
-                {
-                    CheckExceptionMessageForDbState(ex);
-                    var errMsg = "SQLite exception creating table " + tableName;
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                    return;
-                }
-            }
-
-            // Fill the data table
-            using (var connection = GetConnection(ConnString))
-            using (var command = connection.CreateCommand())
-            using (var transaction = connection.BeginTransaction())
-            {
-                try
-                {
-                    command.CommandText = $"INSERT INTO {tableName}({string.Join(",", mappings.Select(x => $"'{x.ColumnName}'"))}) VALUES ({string.Join(",", mappings.Select(x => $":{x.ColumnName.Replace(".", "")}"))})";
-
-                    foreach (var item in dataToCache)
-                    {
-                        command.Parameters.Clear();
-                        foreach (var map in mappings)
-                        {
-                            command.Parameters.Add(new SQLiteParameter($":{map.ColumnName.Replace(".", "")}", map.ReadProperty(item)?.ToString()));
-                        }
-
-                        command.ExecuteNonQuery();
-                    }
-
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    CheckExceptionMessageForDbState(ex);
-                    const string errMsg = "SQLite exception adding data";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                    //throw new DatabaseDataException(errMsg, ex);
-                }
-            }
         }
 
         /// <summary>
@@ -653,10 +580,11 @@ namespace LcmsNetSQLiteTools
         /// Get the name of the single column in a single-column table
         /// </summary>
         /// <param name="tableType"></param>
+        /// <param name="connString"></param>
         /// <returns></returns>
-        private string GetSingleColumnName(DatabaseTableTypes tableType)
+        private string GetSingleColumnName(DatabaseTableTypes tableType, string connString)
         {
-            var names = GetTableColumnNames(GetTableName(tableType), ConnString, out _);
+            var names = GetTableColumnNames(GetTableName(tableType), connString, out _);
             if (names.Count == 0)
             {
                 var columnName = "" + Enum.GetName(typeof(DatabaseTableTypes), tableType);
@@ -673,30 +601,39 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Clears a cache table
+        /// Checks for existing multi-column table, creates it if it doesn't exist, and optionally drops existing data
         /// </summary>
-        /// <param name="tableName">Name of table to clear</param>
-        /// <param name="connStr">Connection string</param>
-        /// <param name="columnCountExpected">Expected number of columns; 0 to not validate column count</param>
-        /// <remarks>If the actual column count is less than columnCountExpected, then the table is deleted (dropped)</remarks>
-        private void ClearCacheTable(string tableName, string connStr, int columnCountExpected = 0)
+        /// <param name="tableName"></param>
+        /// <param name="connStr"></param>
+        /// <param name="dataType"></param>
+        /// <param name="dropOnMismatch">If true, the table exists, and the column names don't match property names, drops and re-creates the table</param>
+        /// <param name="clearExisting">If true and the table exists, the existing data will be truncated</param>
+        /// <returns>True if table exists and is readable</returns>
+        private bool PrepareMultiColumnTable(string tableName, string connStr, Type dataType, bool dropOnMismatch = true, bool clearExisting = true)
         {
-            // Clear the table, if it exists
-            int columnCount;
-            if (VerifyTableExists(tableName, connStr, out columnCount))
-            {
-                string sqlStr;
-                if (columnCountExpected > 0 && columnCount < columnCountExpected)
-                {
-                    // Drop the table; it will get re-created later
-                    sqlStr = "DROP TABLE " + tableName;
-                }
-                else
-                {
-                    // Clear the table (note that SQLite does not have command "Truncate Table")
-                    sqlStr = "DELETE FROM " + tableName;
-                }
+            var mappings = propToColumnMap.GetPropertyColumnMapping(dataType).Values.ToList();
+            return PrepareMultiColumnTable(tableName, connStr, mappings, dropOnMismatch, clearExisting);
+        }
 
+        /// <summary>
+        /// Checks for existing multi-column table, creates it if it doesn't exist, and optionally drops existing data
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="connStr"></param>
+        /// <param name="mappings"></param>
+        /// <param name="dropOnMismatch">If true, the table exists, and the column names don't match property names, drops and re-creates the table</param>
+        /// <param name="clearExisting">If true and the table exists, the existing data will be truncated</param>
+        /// <returns>True if table exists and is readable</returns>
+        private bool PrepareMultiColumnTable(string tableName, string connStr, List<PropertyToColumnMapping.PropertyColumnMapping> mappings, bool dropOnMismatch = true, bool clearExisting = true)
+        {
+            // Verify table exists, and column names are correct; if not, create it; Otherwise, clear it
+            var tableExists = VerifyTableExists(tableName, connStr);
+            var fieldNames = mappings.Select(x => x.ColumnName).ToList();
+            var tableColumnsCorrect = !tableExists || TableColumnNamesMatched(tableName, connStr, fieldNames); // if the table doesn't exist, automatically set this to true
+            if (tableExists && tableColumnsCorrect && clearExisting)
+            {
+                // Clear the table (note that SQLite does not have command "Truncate Table")
+                var sqlStr = "DELETE FROM " + tableName;
                 try
                 {
                     ExecuteSQLiteCommand(sqlStr, connStr);
@@ -706,8 +643,151 @@ namespace LcmsNetSQLiteTools
                     CheckExceptionMessageForDbState(ex);
                     var errorMessage = "Exception clearing table " + tableName;
                     ApplicationLogger.LogError(0, errorMessage, ex);
-                    throw new DatabaseDataException("Exception clearing table " + tableName, ex);
+                    return false;
                 }
+            }
+            else if (!tableExists || (!tableColumnsCorrect && dropOnMismatch))
+            {
+                try
+                {
+                    if (!tableColumnsCorrect)
+                    {
+                        // table column names mismatched, drop the table so we can re-create it
+                        var sqlStr = "DROP TABLE " + tableName;
+                        ExecuteSQLiteCommand(sqlStr, connStr);
+                    }
+
+                    // Table doesn't exist, so create it
+                    var sqlCmd = BuildCreatePropTableCmd(fieldNames, tableName);
+                    ExecuteSQLiteCommand(sqlCmd, connStr);
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    var errMsg = "SQLite exception creating table " + tableName;
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks for existing single-column table, creates it if it doesn't exist, and optionally drops existing data
+        /// </summary>
+        /// <param name="tableType"></param>
+        /// <param name="connStr"></param>
+        /// <param name="dropOnMismatch">If true, the table exists, and the column name doesn't match desired name, drops and re-creates the table</param>
+        /// <param name="clearExisting">If true and the table exists, the existing data will be truncated</param>
+        /// <returns>True if table exists and is readable</returns>
+        private bool PrepareSingleColumnTable(DatabaseTableTypes tableType, string connStr, bool dropOnMismatch = true, bool clearExisting = true)
+        {
+            var tableName = GetTableName(tableType);
+
+            // Build SQL statement for creating table
+            var columnName = GetSingleColumnName(tableType, connStr);
+            string[] colNames = { columnName };
+            var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, columnName, true);
+
+            // If table exists, clear it. Otherwise create one
+            var tableFormatGood = VerifyTableFormat(tableName, connStr, sqlCreateCmd);
+            var tableExists = VerifyTableExists(tableName, ConnString, out _, out int rowCount, true);
+            if (tableExists && tableFormatGood)
+            {
+                if (!clearExisting)
+                {
+                    return true;
+                }
+
+                // SQL statement for table clear command
+                var sqlClearCmd = "DELETE FROM " + tableName;
+
+                // Clear table
+                try
+                {
+                    ExecuteSQLiteCommand(sqlClearCmd, ConnString);
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    var errMsg = "SQLite exception clearing table via command " + sqlClearCmd;
+                    // throw new DatabaseDataException(errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    return false;
+                }
+            }
+            else
+            {
+                if (tableExists && !tableFormatGood)
+                {
+                    if (!dropOnMismatch)
+                    {
+                        return true;
+                    }
+
+                    // Table column name wrong, or type/options incorrect; drop the table and re-create it.
+                    sqlCreateCmd = $"DROP TABLE {tableName}; " + sqlCreateCmd;
+                }
+
+                // Create table
+                try
+                {
+                    ExecuteSQLiteCommand(sqlCreateCmd, connStr);
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    var errMsg = "SQLite exception creating table " + tableName;
+                    // throw new DatabaseDataException(errMsg, ex);
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if a cache table exists, creating it if it doesn't (and writing the default data if there is no data present)
+        /// </summary>
+        /// <param name="tableType"></param>
+        /// <param name="defaultData">Entries to add to the table if there are none present</param>
+        /// <returns>table row count</returns>
+        private void CheckSingleColumnCacheTable(DatabaseTableTypes tableType, IEnumerable<string> defaultData)
+        {
+            // Set up table name
+            var tableName = GetTableName(tableType);
+
+            // If table exists, clear it. Otherwise create one
+            if (!VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
+            {
+                if (!PrepareSingleColumnTable(tableType, ConnString, false, false))
+                {
+                    rowCount = -1;
+                }
+            }
+
+            if (rowCount < 1)
+            {
+                SaveSingleColumnListToCache(tableType, defaultData);
+            }
+        }
+
+        private void CheckMultiColumnCacheTable<T>(DatabaseTableTypes tableType, IEnumerable<T> defaultData)
+        {
+            var tableName = GetTableName(tableType);
+            if (!VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
+            {
+                if (!PrepareMultiColumnTable(tableName, ConnString, typeof(T), false, false))
+                {
+                    rowCount = -1;
+                }
+            }
+
+            if (rowCount < 1)
+            {
+                //SaveMultiColumnListToCache(tableType, defaultData, true);
             }
         }
 
@@ -763,6 +843,24 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
+        /// Checks for an existing cache or creates a new one, and makes sure certain tables exist.
+        /// </summary>
+        /// <param name="defaultData"></param>
+        public void CheckOrCreateCache(SQLiteCacheDefaultData defaultData = null)
+        {
+            var writeData = defaultData ?? new SQLiteCacheDefaultData();
+            CheckSingleColumnCacheTable(DatabaseTableTypes.CartList, writeData.CartNames);
+            CheckSingleColumnCacheTable(DatabaseTableTypes.SeparationTypeList, writeData.SeparationTypes);
+            CheckSingleColumnCacheTable(DatabaseTableTypes.DatasetTypeList, writeData.DatasetTypes);
+            CheckSingleColumnCacheTable(DatabaseTableTypes.ColumnList, writeData.ColumnNames);
+            CheckMultiColumnCacheTable(DatabaseTableTypes.InstrumentList, writeData.InstrumentInfo);
+            CheckMultiColumnCacheTable(DatabaseTableTypes.UserList, writeData.Users);
+            CheckMultiColumnCacheTable(DatabaseTableTypes.ExperimentList, writeData.Experiments);
+            CheckMultiColumnCacheTable(DatabaseTableTypes.PUserList, new List<ProposalUser>());
+            CheckMultiColumnCacheTable(DatabaseTableTypes.PReferenceList, new List<UserIDPIDCrossReferenceEntry>());
+        }
+
+        /// <summary>
         /// Read the data for a list from the cache, handling the in-memory cache appropriately
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -771,9 +869,9 @@ namespace LcmsNetSQLiteTools
         /// <param name="newObjectCreator"></param>
         /// <param name="force"></param>
         /// <returns></returns>
-        public List<T> ReadMultiColumnDataFromCache<T>(DatabaseTableTypes tableType, Func<T> newObjectCreator, List<T> memoryCache, bool force = false)
+        public IEnumerable<T> ReadMultiColumnDataFromCache<T>(DatabaseTableTypes tableType, Func<T> newObjectCreator, List<T> memoryCache, bool force = false)
         {
-            var returnData = memoryCache;
+            var returnData = (IEnumerable<T>)memoryCache;
             if (memoryCache.Count == 0 || force || AlwaysRead)
             {
                 // Read the data from the cache
@@ -787,6 +885,7 @@ namespace LcmsNetSQLiteTools
                 else
                 {
                     memoryCache.AddRange(returnData);
+                    returnData = memoryCache;
                 }
             }
 
@@ -801,7 +900,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="tableType">Table containing the properties</param>
         /// <param name="objectCreator">Method to create a new object of type <typeparamref name="T"/></param>
         /// <returns>List of items read from the table</returns>
-        public List<T> ReadMultiColumnDataFromCache<T>(DatabaseTableTypes tableType, Func<T> objectCreator)
+        public IEnumerable<T> ReadMultiColumnDataFromCache<T>(DatabaseTableTypes tableType, Func<T> objectCreator)
         {
             return ReadMultiColumnDataFromCache(tableType, objectCreator, ConnString);
         }
@@ -814,16 +913,15 @@ namespace LcmsNetSQLiteTools
         /// <param name="objectCreator">Method to create a new object of type <typeparamref name="T"/></param>
         /// <param name="connString">SQLite database connection string</param>
         /// <returns>List of items read from the table</returns>
-        public List<T> ReadMultiColumnDataFromCache<T>(DatabaseTableTypes tableType, Func<T> objectCreator, string connString)
+        public IEnumerable<T> ReadMultiColumnDataFromCache<T>(DatabaseTableTypes tableType, Func<T> objectCreator, string connString)
         {
-            var returnData = new List<T>();
             var tableName = GetTableName(tableType);
 
             // Verify table exists in database
             if (!VerifyTableExists(tableName, connString))
             {
                 // No table, so return an empty list
-                return returnData;
+                yield break;
             }
 
             var type = typeof(T);
@@ -844,86 +942,84 @@ namespace LcmsNetSQLiteTools
 
             // Get table containing cached data
             var sqlStr = "SELECT * FROM " + tableName;
-            var cacheData = GetSQLiteDataTable(sqlStr, connString);
-            if (cacheData.Rows.Count < 1)
+            using (var cacheData = GetSQLiteDataTable(sqlStr, connString))
             {
-                // No cached data found, so return an empty list
-                return returnData;
-            }
-
-            returnData.Capacity = cacheData.Rows.Count;
-            var columnMappings = new KeyValuePair<int, Action<object, object>>[cacheData.Columns.Count];
-            var columnSetOrder = new int[cacheData.Columns.Count];
-
-            // Create the column mappings, for fast access to set methods
-            foreach (DataColumn column in cacheData.Columns)
-            {
-                var properName = nameMappings[column.ColumnName.ToLower()];
-                var setMethod = typeMappings[properName].SetProperty;
-                columnMappings[column.Ordinal] = new KeyValuePair<int, Action<object, object>>(column.Ordinal, setMethod);
-                columnSetOrder[column.Ordinal] = column.Ordinal;
-
-                if (properName.ToLower().Contains("runningstatus"))
+                if (cacheData.Rows.Count < 1)
                 {
-                    // Always process runningstatus last
-                    columnSetOrder[column.Ordinal] = int.MaxValue;
-                }
-            }
-
-            Array.Sort(columnSetOrder, columnMappings);
-
-            // For each row (representing properties and values for one sample), create a string dictionary
-            //          with the object's properties from the table columns, and add it to the return list
-            foreach (DataRow currentRow in cacheData.Rows)
-            {
-                // Create a new object
-                var data = objectCreator();
-
-                // Populate the properties from the cache
-                foreach (var column in columnMappings)
-                {
-                    var value = currentRow[column.Key];
-                    var setMethod = column.Value;
-                    setMethod(data, value);
+                    // No cached data found, so return an empty list
+                    yield break;
                 }
 
-                // Add the object to the return list
-                returnData.Add(data);
-            }
+                var columnMappings = new KeyValuePair<int, Action<object, object>>[cacheData.Columns.Count];
+                var columnSetOrder = new int[cacheData.Columns.Count];
 
-            // Return the list
-            return returnData;
+                // Create the column mappings, for fast access to set methods
+                foreach (DataColumn column in cacheData.Columns)
+                {
+                    var properName = nameMappings[column.ColumnName.ToLower()];
+                    var setMethod = typeMappings[properName].SetProperty;
+                    columnMappings[column.Ordinal] = new KeyValuePair<int, Action<object, object>>(column.Ordinal, setMethod);
+                    columnSetOrder[column.Ordinal] = column.Ordinal;
+
+                    if (properName.ToLower().Contains("runningstatus"))
+                    {
+                        // Always process runningstatus last
+                        columnSetOrder[column.Ordinal] = int.MaxValue;
+                    }
+                }
+
+                Array.Sort(columnSetOrder, columnMappings);
+
+                // For each row (representing properties and values for one sample), create a string dictionary
+                //          with the object's properties from the table columns, and add it to the return list
+                foreach (DataRow currentRow in cacheData.Rows)
+                {
+                    // Create a new object
+                    var data = objectCreator();
+
+                    // Populate the properties from the cache
+                    foreach (var column in columnMappings)
+                    {
+                        var value = currentRow[column.Key];
+                        var setMethod = column.Value;
+                        setMethod(data, value);
+                    }
+
+                    // return the data
+                    yield return data;
+                }
+            }
         }
 
         /// <summary>
         /// Store the contents of a list in the specified table
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="tableType">table the data is to be stored in</param>
         /// <param name="dataList">list of data to be stored</param>
         /// <param name="memoryCache">in-memory cache of the list</param>
-        /// <param name="clearFirst">if the existing data should be removed first (always); otherwise, if the row counts match, nothing is changed</param>
-        /// <param name="tableType">table the data is to be stored in</param>
-        public void SaveMultiColumnListToCache<T>(DatabaseTableTypes tableType, List<T> dataList, List<T> memoryCache, bool clearFirst)
+        public void SaveMultiColumnListToCache<T>(DatabaseTableTypes tableType, IEnumerable<T> dataList, List<T> memoryCache)
         {
-            SaveMultiColumnListToCache(tableType, dataList, clearFirst);
-
             if (!AlwaysRead)
             {
                 memoryCache.Clear();
                 memoryCache.AddRange(dataList);
+                // Change the enumerable used to write to the cache
+                dataList = memoryCache;
             }
+
+            SaveMultiColumnListToCache(tableType, dataList);
         }
 
         /// <summary>
         /// Store the contents of a list in the specified table
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="dataList">list of data to be stored</param>
-        /// <param name="clearFirst">if the existing data should be removed first (always); otherwise, if the row counts match, nothing is changed</param>
         /// <param name="tableType">table the data is to be stored in</param>
-        public void SaveMultiColumnListToCache<T>(DatabaseTableTypes tableType, List<T> dataList, bool clearFirst)
+        /// <param name="dataList">list of data to be stored</param>
+        public void SaveMultiColumnListToCache<T>(DatabaseTableTypes tableType, IEnumerable<T> dataList)
         {
-            SaveMultiColumnListToCache(tableType, dataList, clearFirst, ConnString);
+            SaveMultiColumnListToCache(tableType, dataList, ConnString);
         }
 
         /// <summary>
@@ -931,27 +1027,58 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dataList">list of data to be stored</param>
-        /// <param name="clearFirst">if the existing data should be removed first (always); otherwise, if the row counts match, nothing is changed</param>
         /// <param name="tableType">table the data is to be stored in</param>
         /// <param name="connStr">Connection string; used for export/save as</param>
-        public void SaveMultiColumnListToCache<T>(DatabaseTableTypes tableType, List<T> dataList, bool clearFirst, string connStr)
+        public void SaveMultiColumnListToCache<T>(DatabaseTableTypes tableType, IEnumerable<T> dataList, string connStr)
         {
+            // Set up table name
             var tableName = GetTableName(tableType);
-            if (VerifyTableExists(tableName, connStr, out _, out int rowCount, true) && !clearFirst && dataList.Count <= rowCount)
+            var firstItem = true;
+
+            // Fill the data table
+            using (var connection = GetConnection(connStr))
+            using (var command = connection.CreateCommand())
+            using (var transaction = connection.BeginTransaction())
             {
-                return;
+                var mappings = propToColumnMap.GetPropertyColumnMapping(typeof(T)).Values.ToList();
+                // TODO: GUTS!!!!
+
+                try
+                {
+                    command.CommandText = $"INSERT INTO {tableName}({string.Join(",", mappings.Select(x => $"'{x.ColumnName}'"))}) VALUES ({string.Join(",", mappings.Select(x => $":{x.ColumnName.Replace(".", "")}"))})";
+
+                    foreach (var item in dataList)
+                    {
+                        if (firstItem)
+                        {
+                            // Only clears the table if we have at least one item we are adding.
+                            // Verify table exists, and column names are correct; if not, create it; Otherwise, clear it
+                            if (!PrepareMultiColumnTable(tableName, connStr, mappings, true, true))
+                            {
+                                return;
+                            }
+                            firstItem = false;
+                        }
+
+                        command.Parameters.Clear();
+                        foreach (var map in mappings)
+                        {
+                            command.Parameters.Add(new SQLiteParameter($":{map.ColumnName.Replace(".", "")}", map.ReadProperty(item)?.ToString()));
+                        }
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    const string errMsg = "SQLite exception adding data";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    //throw new DatabaseDataException(errMsg, ex);
+                }
             }
-
-            // Clear the cache table
-            ClearCacheTable(tableName, connStr);
-
-            //If no data in list, exit
-            if (dataList.Count < 1)
-            {
-                return;
-            }
-
-            WriteDataToCache(dataList, tableName, connStr);
         }
 
         /// <summary>
@@ -960,17 +1087,18 @@ namespace LcmsNetSQLiteTools
         /// <param name="listData">List of data for storing in table</param>
         /// <param name="memoryCache">List used for in-memory cache of contents</param>
         /// <param name="tableType">enumTableNames specifying table name suffix</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="listData"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public void SaveSingleColumnListToCache(DatabaseTableTypes tableType, List<string> listData, List<string> memoryCache, bool clearFirst = true)
+        public void SaveSingleColumnListToCache(DatabaseTableTypes tableType, IEnumerable<string> listData, List<string> memoryCache)
         {
             // Refresh the in-memory list with the new data
             if (!AlwaysRead)
             {
                 memoryCache.Clear();
                 memoryCache.AddRange(listData);
+                // Change the enumerable used to write to the cache
+                listData = memoryCache;
             }
 
-            SaveSingleColumnListToCache(tableType, listData, clearFirst);
+            SaveSingleColumnListToCache(tableType, listData);
         }
 
         /// <summary>
@@ -978,71 +1106,12 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="tableType">enumTableNames specifying table name suffix</param>
         /// <param name="listData">List of data for storing in table</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="listData"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
         /// <remarks>Used with T_CartList, T_SeparationTypeSelected, T_LCColumnList, T_DatasetTypeList, T_DatasetList, and T_CartConfigNameSelected</remarks>
-        public void SaveSingleColumnListToCache(DatabaseTableTypes tableType, List<string> listData, bool clearFirst = true)
+        public void SaveSingleColumnListToCache(DatabaseTableTypes tableType, IEnumerable<string> listData)
         {
             // Set up table name
             var tableName = GetTableName(tableType);
-
-            // SQL statement for table clear command
-            var sqlClearCmd = "DELETE FROM " + tableName;
-
-            // Build SQL statement for creating table
-            var columnName = GetSingleColumnName(tableType);
-            string[] colNames = { columnName };
-            var sqlCreateCmd = BuildGenericCreateTableCmd(tableName, colNames, columnName, true);
-
-            // If table exists, clear it. Otherwise create one
-            var tableFormatGood = VerifyTableFormat(tableName, ConnString, sqlCreateCmd);
-            if (VerifyTableExists(tableName, ConnString, out _, out int rowCount, true) && tableFormatGood)
-            {
-                if (!clearFirst && rowCount > listData.Count)
-                {
-                    return;
-                }
-
-                // Clear table
-                try
-                {
-                    ExecuteSQLiteCommand(sqlClearCmd, ConnString);
-                }
-                catch (Exception ex)
-                {
-                    CheckExceptionMessageForDbState(ex);
-                    var errMsg = "SQLite exception clearing table via command " + sqlClearCmd;
-                    // throw new DatabaseDataException(errMsg, ex);
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                    return;
-                }
-            }
-            else
-            {
-                if (!tableFormatGood)
-                {
-                    // Table column name wrong, or type/options incorrect; drop the table and re-create it.
-                    sqlCreateCmd = $"DROP TABLE {tableName}; " + sqlCreateCmd;
-                }
-
-                // Create table
-                try
-                {
-                    ExecuteSQLiteCommand(sqlCreateCmd, ConnString);
-                }
-                catch (Exception ex)
-                {
-                    CheckExceptionMessageForDbState(ex);
-                    var errMsg = "SQLite exception creating table " + tableName;
-                    // throw new DatabaseDataException(errMsg, ex);
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                    return;
-                }
-            }
-
-            if (listData.Count < 1)
-            {
-                return;
-            }
+            var firstItem = true;
 
             // Fill the data table
             using (var connection = GetConnection(ConnString))
@@ -1052,6 +1121,17 @@ namespace LcmsNetSQLiteTools
                 command.CommandText = $"INSERT INTO {tableName} VALUES(:Value)";
                 foreach (var item in listData)
                 {
+                    if (firstItem)
+                    {
+                        // Only clears the table if we have at least one item we are adding.
+                        if (!PrepareSingleColumnTable(tableType, ConnString, true, true))
+                        {
+                            return;
+                        }
+
+                        firstItem = false;
+                    }
+
                     var param = new SQLiteParameter(":Value", item);
                     command.Parameters.Clear();
                     command.Parameters.Add(param);
@@ -1075,10 +1155,9 @@ namespace LcmsNetSQLiteTools
             }
 
             var tableName = GetTableName(DatabaseTableTypes.DatasetList);
-            var columnName = GetSingleColumnName(DatabaseTableTypes.DatasetList);
+            var columnName = GetSingleColumnName(DatabaseTableTypes.DatasetList, ConnString);
             using (var connection = GetConnection(ConnString))
             using (var command = connection.CreateCommand())
-            using (var transaction = connection.BeginTransaction())
             {
                 command.CommandText = $"SELECT COUNT(*) FROM {tableName} WHERE {columnName} LIKE :DatasetName";
                 command.Parameters.Add(new SQLiteParameter(":DatasetName", datasetName));
@@ -1095,9 +1174,9 @@ namespace LcmsNetSQLiteTools
         /// <param name="tabletype">DatabaseTableTypes specifying type of table to retrieve</param>
         /// <param name="force"></param>
         /// <returns>List containing cached data</returns>
-        public List<string> ReadSingleColumnListFromCache(DatabaseTableTypes tabletype, List<string> memoryCache, bool force = false)
+        public IEnumerable<string> ReadSingleColumnListFromCache(DatabaseTableTypes tabletype, List<string> memoryCache, bool force = false)
         {
-            var data = memoryCache;
+            var data = (IEnumerable<string>)memoryCache;
             if (memoryCache.Count == 0 || force || AlwaysRead)
             {
                 data = ReadSingleColumnListFromCache(tabletype);
@@ -1110,6 +1189,7 @@ namespace LcmsNetSQLiteTools
                 else
                 {
                     memoryCache.AddRange(data);
+                    data = memoryCache;
                 }
             }
             return data;
@@ -1120,7 +1200,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="tableType">DatabaseTableTypes specifying type of table to retrieve</param>
         /// <returns>List containing cached data</returns>
-        public List<string> ReadSingleColumnListFromCacheCheckExceptions(DatabaseTableTypes tableType)
+        public IEnumerable<string> ReadSingleColumnListFromCacheCheckExceptions(DatabaseTableTypes tableType)
         {
             try
             {
@@ -1138,10 +1218,8 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="tableType">DatabaseTableTypes specifying type of table to retrieve</param>
         /// <returns>List containing cached data</returns>
-        public List<string> ReadSingleColumnListFromCache(DatabaseTableTypes tableType)
+        public IEnumerable<string> ReadSingleColumnListFromCache(DatabaseTableTypes tableType)
         {
-            var returnList = new List<string>();
-
             // Set up table name
             var tableName = GetTableName(tableType);
 
@@ -1154,9 +1232,9 @@ namespace LcmsNetSQLiteTools
 
             // SQL statement for query command
             var sqlQueryCmd = "SELECT * FROM " + tableName;
+            DataTable resultTable;
 
             // Get a table from the cache db
-            DataTable resultTable;
             try
             {
                 resultTable = GetSQLiteDataTable(sqlQueryCmd, ConnString);
@@ -1168,22 +1246,15 @@ namespace LcmsNetSQLiteTools
                 throw new DatabaseDataException(errMsg, ex);
             }
 
-            // Return empty list if no data in table
-            if (resultTable.Rows.Count < 1)
-            {
-                return returnList;
-            }
-
-            returnList.Capacity = resultTable.Rows.Count;
-
-            // Fill the return list
-            foreach (DataRow currentRow in resultTable.Rows)
-            {
-                returnList.Add((string)currentRow[resultTable.Columns[0]]);
-            }
-
             // All finished, so return
-            return returnList;
+            using (resultTable)
+            {
+                // Fill the return list
+                foreach (DataRow currentRow in resultTable.Rows)
+                {
+                    yield return (string)currentRow[resultTable.Columns[0]];
+                }
+            }
         }
 
         #endregion

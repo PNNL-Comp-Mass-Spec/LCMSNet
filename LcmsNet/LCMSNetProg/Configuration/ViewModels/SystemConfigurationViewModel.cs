@@ -321,7 +321,7 @@ namespace LcmsNet.Configuration.ViewModels
         private void LoadInstrumentInformation()
         {
             // Load combo box
-            var instList = SQLiteTools.GetInstrumentList(false);
+            var instList = SQLiteTools.GetInstrumentList(false).ToList();
 
             if (instList == null)
             {
@@ -365,7 +365,7 @@ namespace LcmsNet.Configuration.ViewModels
         /// Loads the user combo box
         /// </summary>
         /// <param name="userList"></param>
-        private void LoadUserCombo(List<UserInfo> userList)
+        private void LoadUserCombo(IEnumerable<UserInfo> userList)
         {
             // Make a dictionary based on the input list, with the first entry = "(None)"
             if (dmsUserList == null)
@@ -514,9 +514,9 @@ namespace LcmsNet.Configuration.ViewModels
             try
             {
                 // Get the new cart config names from the cache db
-                cartConfigNameList = SQLiteTools.GetCartConfigNameList(true);
+                cartConfigNameList = SQLiteTools.GetCartConfigNameList(true).ToList();
                 fullCount = cartConfigNameList.Count;
-                cartConfigNameList = SQLiteTools.GetCartConfigNameList(CartConfiguration.CartName, false);
+                cartConfigNameList = SQLiteTools.GetCartConfigNameList(CartConfiguration.CartName, false).ToList();
             }
             catch (DatabaseDataException ex)
             {
@@ -571,7 +571,7 @@ namespace LcmsNet.Configuration.ViewModels
             try
             {
                 // Get the new list of columns from the cache db
-                columnList = SQLiteTools.GetColumnList(true);
+                columnList = SQLiteTools.GetColumnList(true).ToList();
             }
             catch (DatabaseDataException ex)
             {

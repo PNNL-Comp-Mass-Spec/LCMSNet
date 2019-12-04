@@ -289,7 +289,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Get the list of carts from DMS
             try
             {
-                cartList = SQLiteTools.GetCartNameList();
+                cartList = SQLiteTools.GetCartNameList().ToList();
             }
             catch (DatabaseConnectionStringException ex)
             {
@@ -339,7 +339,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Get the list of cart configuration names from DMS
             try
             {
-                cartConfigList = SQLiteTools.GetCartConfigNameList(false);
+                cartConfigList = SQLiteTools.GetCartConfigNameList(false).ToList();
             }
             catch (DatabaseConnectionStringException ex)
             {
@@ -496,7 +496,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             try
             {
                 var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
-                tempRequestList = dmsTools.GetRequestedRunsFromDMS<SampleData>(queryData);
+                tempRequestList = dmsTools.GetRequestedRunsFromDMS<SampleData>(queryData).ToList();
             }
             catch (DatabaseConnectionStringException ex)
             {

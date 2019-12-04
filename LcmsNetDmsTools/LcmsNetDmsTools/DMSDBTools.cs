@@ -535,10 +535,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetCartConfigNamesFromDMS()
         {
-            var tmpCartConfigInfo = new List<CartConfigInfo>();
             var connStr = GetConnectionString();
-
-            DataTable cartConfigTable;
 
             // Get a list containing all active cart configuration names
             //  SELECT Cart_Config_ID,
@@ -559,31 +556,27 @@ namespace LcmsNetDmsTools
 
             try
             {
-                cartConfigTable = GetDataTable(sqlCmd, connStr);
+                using (var cartConfigTable = GetDataTable(sqlCmd, connStr))
+                {
+                    // Store the list of cart config names in the cache db
+                    try
+                    {
+                        SQLiteTools.SaveCartConfigListToCache(cartConfigTable.Rows.Cast<DataRow>().Select(currRow => new CartConfigInfo(
+                            (string)currRow["Cart_Config_Name"],
+                            (string)currRow["Cart_Name"])));
+                    }
+                    catch (Exception ex)
+                    {
+                        const string errMsg = "Exception storing LC cart config names in cache";
+                        ApplicationLogger.LogError(0, errMsg, ex);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting cart config list";
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
-            }
-
-            foreach (DataRow currRow in cartConfigTable.Rows)
-            {
-                tmpCartConfigInfo.Add(new CartConfigInfo(
-                    (string) currRow[cartConfigTable.Columns["Cart_Config_Name"]],
-                    (string) currRow[cartConfigTable.Columns["Cart_Name"]]));
-            }
-
-            // Store the list of cart config names in the cache db
-            try
-            {
-                SQLiteTools.SaveCartConfigListToCache(tmpCartConfigInfo);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing LC cart config names in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -592,10 +585,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetWorkPackagesFromDMS()
         {
-            var tmpWorkPackageInfo = new List<WorkPackageInfo>();
             var connStr = GetConnectionString();
-
-            DataTable workPackagesTable;
 
             // Get a list containing all active cart configuration names
             // SELECT TOP(1000) [Charge_Code]
@@ -624,36 +614,32 @@ namespace LcmsNetDmsTools
 
             try
             {
-                workPackagesTable = GetDataTable(sqlCmd, connStr);
+                using (var workPackagesTable = GetDataTable(sqlCmd, connStr))
+                {
+                    // Store the list of cart config names in the cache db
+                    try
+                    {
+                        SQLiteTools.SaveWorkPackageListToCache(workPackagesTable.Rows.Cast<DataRow>().Select(currRow => new WorkPackageInfo(
+                            currRow["Charge_Code"].CastDBValTo<string>()?.Trim(),
+                            currRow["State"].CastDBValTo<string>()?.Trim(),
+                            currRow["SubAccount"].CastDBValTo<string>()?.Trim(),
+                            currRow["WorkBreakdownStructure"].CastDBValTo<string>()?.Trim(),
+                            currRow["Title"].CastDBValTo<string>()?.Trim(),
+                            currRow["Owner_PRN"].CastDBValTo<string>()?.Trim(),
+                            currRow["Owner_Name"].CastDBValTo<string>()?.Trim())));
+                    }
+                    catch (Exception ex)
+                    {
+                        const string errMsg = "Exception storing work packages in cache";
+                        ApplicationLogger.LogError(0, errMsg, ex);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting work package list";
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
-            }
-
-            foreach (DataRow currRow in workPackagesTable.Rows)
-            {
-                tmpWorkPackageInfo.Add(new WorkPackageInfo(
-                    currRow[workPackagesTable.Columns["Charge_Code"]].CastDBValTo<string>()?.Trim(),
-                    currRow[workPackagesTable.Columns["State"]].CastDBValTo<string>()?.Trim(),
-                    currRow[workPackagesTable.Columns["SubAccount"]].CastDBValTo<string>()?.Trim(),
-                    currRow[workPackagesTable.Columns["WorkBreakdownStructure"]].CastDBValTo<string>()?.Trim(),
-                    currRow[workPackagesTable.Columns["Title"]].CastDBValTo<string>()?.Trim(),
-                    currRow[workPackagesTable.Columns["Owner_PRN"]].CastDBValTo<string>()?.Trim(),
-                    currRow[workPackagesTable.Columns["Owner_Name"]].CastDBValTo<string>()?.Trim()));
-            }
-
-            // Store the list of cart config names in the cache db
-            try
-            {
-                SQLiteTools.SaveWorkPackageListToCache(tmpWorkPackageInfo);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing work packages in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -662,7 +648,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetCartListFromDMS()
         {
-            List<string> tmpCartList;   // Temp list for holding return values
+            IEnumerable<string> tmpCartList;   // Temp list for holding return values
             var connStr = GetConnectionString();
 
             // Get a List containing all the carts
@@ -737,7 +723,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetColumnListFromDMS()
         {
-            List<string> tmpColList;    // Temp list for holding return values
+            IEnumerable<string> tmpColList;    // Temp list for holding return values
             var connStr = GetConnectionString();
 
             // Get a list of active columns
@@ -769,51 +755,40 @@ namespace LcmsNetDmsTools
         public void GetEntireColumnListListFromDMS()
         {
             var connStr = GetConnectionString();
-            DataTable lcColumnTable;
 
             // This view will return all columns, even retired ones
             const string sqlCmd = "SELECT [State], [ColumnNumber] FROM V_LCMSNet_Column_Export";
             try
             {
-                lcColumnTable = GetDataTable(sqlCmd, connStr);
+                using (var lcColumnTable = GetDataTable(sqlCmd, connStr))
+                {
+                    //// Get list of column names in the table
+                    //var columnNames = new List<string>(lcColumnTable.Columns.Count);
+                    //foreach (DataColumn column in lcColumnTable.Columns)
+                    //{
+                    //    string s = column.ColumnName;
+                    //    columnNames.Add(s);
+                    //}
+
+                    try
+                    {
+                        SQLiteTools.SaveEntireLCColumnListToCache(lcColumnTable.Rows.Cast<DataRow>().Select(currentRow => new LCColumnData
+                        {
+                            LCColumn = currentRow["Column Number"] as string,
+                            State = currentRow["State"] as string
+                        }));
+                    }
+                    catch (Exception ex)
+                    {
+                        const string errMsg = "Exception storing LC Column data list in cache";
+                        ApplicationLogger.LogError(0, errMsg, ex);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting experiment list";
                 ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            //// Get list of column names in the table
-            //var columnNames = new List<string>(lcColumnTable.Columns.Count);
-            //foreach (DataColumn column in lcColumnTable.Columns)
-            //{
-            //    string s = column.ColumnName;
-            //    columnNames.Add(s);
-            //}
-
-            var rowCount = lcColumnTable.Rows.Count;
-            var lcColumnList = new List<LCColumnData>(rowCount);
-
-            foreach (DataRow currentRow in lcColumnTable.Rows)
-            {
-                var tempObject = new LCColumnData
-                {
-                    LCColumn = currentRow["Column Number"] as string,
-                    State = currentRow["State"] as string
-                };
-
-                lcColumnList.Add(tempObject);
-            }
-
-            try
-            {
-                SQLiteTools.SaveEntireLCColumnListToCache(lcColumnList);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing LC Column data list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -822,7 +797,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetSepTypeListFromDMS()
         {
-            List<string> tmpRetVal; // Temp list for holding separation types
+            IEnumerable<string> tmpRetVal; // Temp list for holding separation types
             var connStr = GetConnectionString();
 
             const string sqlCmd = "SELECT Distinct SS_Name FROM T_Secondary_Sep ORDER BY SS_Name";
@@ -856,7 +831,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetDatasetTypeListFromDMS()
         {
-            List<string> tmpRetVal; // Temp list for holding dataset types
+            IEnumerable<string> tmpRetVal; // Temp list for holding dataset types
             var connStr = GetConnectionString();
 
             // Get a list of the dataset types
@@ -890,52 +865,41 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetUserListFromDMS()
         {
-            var tmpRetVal = new List<UserInfo>();  // Temp list for holding user data
             var connStr = GetConnectionString();
-
-            DataTable userTable;
 
             // Get a data table containing all the users
             const string sqlCmd = "SELECT Name, [Payroll Num] as Payroll FROM V_Active_Users ORDER BY Name";
             try
             {
-                userTable = GetDataTable(sqlCmd, connStr);
+                using (var userTable = GetDataTable(sqlCmd, connStr))
+                {
+                    // Store data in cache
+                    try
+                    {
+                        SQLiteTools.SaveUserListToCache(userTable.Rows.Cast<DataRow>().Select(currRow => new UserInfo
+                        {
+                            UserName = (string)currRow["Name"],
+                            PayrollNum = (string)currRow["Payroll"]
+                        }));
+                    }
+                    catch (Exception ex)
+                    {
+                        const string errMsg = "Exception storing user list in cache";
+                        ApplicationLogger.LogError(0, errMsg, ex);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting user list";
                 //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            //Fill out the temp list
-            foreach (DataRow currRow in userTable.Rows)
-            {
-                var tempUser = new UserInfo
-                {
-                    UserName = (string)currRow[userTable.Columns["Name"]],
-                    PayrollNum = (string)currRow[userTable.Columns["Payroll"]]
-                };
-                tmpRetVal.Add(tempUser);
-            }
-
-            // Store data in cache
-            try
-            {
-                SQLiteTools.SaveUserListToCache(tmpRetVal);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing user list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
         public void GetExperimentListFromDMS()
         {
             var connStr = GetConnectionString();
-            DataTable expTable;
 
             var sqlCmd = "SELECT ID, Experiment, Created, Organism, Reason, Request, Researcher FROM V_LCMSNet_Experiment_Export";
 
@@ -945,44 +909,56 @@ namespace LcmsNetDmsTools
                 sqlCmd += " WHERE Last_Used >= '" + dateThreshold + "'";
             }
 
+            //var experimentData = new List<ExperimentData>();
+
             try
             {
-                expTable = GetDataTable(sqlCmd, connStr);
+                using (var expTable = GetDataTable(sqlCmd, connStr))
+                {
+                    //experimentData.Capacity = expTable.Rows.Count;
+                    //
+                    //foreach (DataRow currentRow in expTable.Rows)
+                    //{
+                    //    var tempObject = new ExperimentData
+                    //    {
+                    //        Created = currentRow["Created"] as DateTime?,
+                    //        Experiment = currentRow["Experiment"] as string,
+                    //        ID = currentRow["ID"] as int?,
+                    //        Organism = currentRow["Organism"] as string,
+                    //        Reason = currentRow["Reason"] as string,
+                    //        Request = currentRow["Request"] as int?,
+                    //        Researcher = currentRow["Researcher"] as string
+                    //    };
+                    //
+                    //    experimentData.Add(tempObject);
+                    //}
+
+                    try
+                    {
+                        //SQLiteTools.SaveExperimentListToCache(experimentData);
+                        SQLiteTools.SaveExperimentListToCache(expTable.Rows.Cast<DataRow>().Select(currentRow => new ExperimentData()
+                        {
+                            Created = currentRow["Created"] as DateTime?,
+                            Experiment = currentRow["Experiment"] as string,
+                            ID = currentRow["ID"] as int?,
+                            Organism = currentRow["Organism"] as string,
+                            Reason = currentRow["Reason"] as string,
+                            Request = currentRow["Request"] as int?,
+                            Researcher = currentRow["Researcher"] as string
+                        }));
+                    }
+                    catch (Exception ex)
+                    {
+                        const string errMsg = "Exception storing experiment list in cache";
+                        ApplicationLogger.LogError(0, errMsg, ex);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting experiment list";
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
-            }
-
-            var rowCount = expTable.Rows.Count;
-            var experimentData = new List<ExperimentData>(rowCount);
-
-            foreach (DataRow currentRow in expTable.Rows)
-            {
-                var tempObject = new ExperimentData
-                {
-                    Created = currentRow["Created"] as DateTime?,
-                    Experiment = currentRow["Experiment"] as string,
-                    ID = currentRow["ID"] as int?,
-                    Organism = currentRow["Organism"] as string,
-                    Reason = currentRow["Reason"] as string,
-                    Request = currentRow["Request"] as int?,
-                    Researcher = currentRow["Researcher"] as string
-                };
-
-                experimentData.Add(tempObject);
-            }
-
-            try
-            {
-                SQLiteTools.SaveExperimentListToCache(experimentData);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing experiment list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -992,7 +968,6 @@ namespace LcmsNetDmsTools
         public void GetProposalUsers()
         {
             var connStr = GetConnectionString();
-            DataTable expTable;
 
             const string sqlCmdStart = "SELECT [User ID], [User Name], [#Proposal] FROM V_EUS_Proposal_Users";
             var sqlCmd = sqlCmdStart;
@@ -1002,60 +977,60 @@ namespace LcmsNetDmsTools
                 sqlCmd += $" WHERE Proposal_End_Date >= '{oldestExpiration:yyyy-MM-dd}' OR Proposal_End_Date IS NULL";
             }
 
+            var users = new List<ProposalUser>();
+            var referenceList = new List<UserIDPIDCrossReferenceEntry>();
+            var referenceDictionary = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>();
+
             try
             {
-                expTable = GetDataTable(sqlCmd, connStr);
+                using (var proposalUserTable = GetDataTable(sqlCmd, connStr))
+                {
+                    // Split the View back into the two tables it was built from.
+                    // Note: It would be faster if we had the component tables the View was created from.
+                    var userMap = new Dictionary<int, ProposalUser>();
+
+                    foreach (DataRow row in proposalUserTable.Rows)
+                    {
+                        var uid = row["User ID"] as int?;
+                        var pid = row["#Proposal"] as string;
+                        var userName = row["User Name"] as string;
+
+                        if (!uid.HasValue || string.IsNullOrWhiteSpace(pid) || string.IsNullOrWhiteSpace(userName))
+                            continue;
+
+                        var user = new ProposalUser();
+                        var crossReference = new UserIDPIDCrossReferenceEntry();
+
+                        user.UserID = uid.Value;
+                        user.UserName = userName;
+
+                        crossReference.PID = pid;
+                        crossReference.UserID = uid.Value;
+
+                        if (!userMap.ContainsKey(user.UserID))
+                        {
+                            userMap.Add(user.UserID, user);
+                            users.Add(user);
+                        }
+
+                        if (!referenceDictionary.ContainsKey(crossReference.PID))
+                            referenceDictionary.Add(crossReference.PID, new List<UserIDPIDCrossReferenceEntry>());
+
+                        if (referenceDictionary[crossReference.PID].Any(cr => cr.UserID == crossReference.UserID))
+                        {
+                            continue;
+                        }
+
+                        referenceDictionary[crossReference.PID].Add(crossReference);
+                        referenceList.Add(crossReference);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting EUS Proposal Users list";
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return;
-            }
-
-            // Split the View back into the two tables it was built from.
-            // Note: It would be faster if we had the component tables the View was created from.
-
-            var users = new List<ProposalUser>();
-            var referenceList = new List<UserIDPIDCrossReferenceEntry>();
-            var referenceDictionary = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>();
-
-            var userMap = new Dictionary<int, ProposalUser>();
-
-            foreach (DataRow row in expTable.Rows)
-            {
-                var uid = row["User ID"] as int?;
-                var pid = row["#Proposal"] as string;
-                var userName = row["User Name"] as string;
-
-                if (!uid.HasValue || string.IsNullOrWhiteSpace(pid) || string.IsNullOrWhiteSpace(userName))
-                    continue;
-
-                var user = new ProposalUser();
-                var crossReference = new UserIDPIDCrossReferenceEntry();
-
-                user.UserID = uid.Value;
-                user.UserName = userName;
-
-                crossReference.PID = pid;
-                crossReference.UserID = uid.Value;
-
-                if (!userMap.ContainsKey(user.UserID))
-                {
-                    userMap.Add(user.UserID, user);
-                    users.Add(user);
-                }
-
-                if (!referenceDictionary.ContainsKey(crossReference.PID))
-                    referenceDictionary.Add(crossReference.PID, new List<UserIDPIDCrossReferenceEntry>());
-
-                if (referenceDictionary[crossReference.PID].Any(cr => cr.UserID == crossReference.UserID))
-                {
-                    continue;
-                }
-
-                referenceDictionary[crossReference.PID].Add(crossReference);
-                referenceList.Add(crossReference);
             }
 
             try
@@ -1075,10 +1050,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         public void GetInstrumentListFromDMS()
         {
-            var tmpRetVal = new List<InstrumentInfo>();    // Temp list for holding instrument data
             var connStr = GetConnectionString();
-
-            DataTable instTable;
 
             // Get a table containing the instrument data
             const string sqlCmd = "SELECT Instrument, NameAndUsage, CaptureMethod, " +
@@ -1087,40 +1059,33 @@ namespace LcmsNetDmsTools
                                   "ORDER BY Instrument";
             try
             {
-                instTable = GetDataTable(sqlCmd, connStr);
+                using (var instTable = GetDataTable(sqlCmd, connStr))
+                {
+                    // Store data in cache
+                    try
+                    {
+                        SQLiteTools.SaveInstListToCache(instTable.Rows.Cast<DataRow>().Select(currRow => new InstrumentInfo
+                        {
+                            DMSName = (string)currRow["Instrument"],
+                            CommonName = (string)currRow["NameAndUsage"],
+                            MethodName = (string)currRow["CaptureMethod"],
+                            Status = (string)currRow["Status"],
+                            HostName = (string)currRow["HostName"],
+                            SharePath = (string)currRow["SharePath"]
+                        }));
+                    }
+                    catch (Exception ex)
+                    {
+                        const string errMsg = "Exception storing instrument list in cache";
+                        ApplicationLogger.LogError(0, errMsg, ex);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting instrument list";
                 //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            //Fill out the temp list
-            foreach (DataRow currRow in instTable.Rows)
-            {
-                var tempInst = new InstrumentInfo
-                {
-                    DMSName = (string)currRow[instTable.Columns["Instrument"]],
-                    CommonName = (string)currRow[instTable.Columns["NameAndUsage"]],
-                    MethodName = (string)currRow[instTable.Columns["CaptureMethod"]],
-                    Status = (string)currRow[instTable.Columns["Status"]],
-                    HostName = (string)currRow[instTable.Columns["HostName"]],
-                    SharePath = (string)currRow[instTable.Columns["SharePath"]]
-                };
-                tmpRetVal.Add(tempInst);
-            }
-
-            // Store data in cache
-            try
-            {
-                SQLiteTools.SaveInstListToCache(tmpRetVal);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing instrument list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
             }
         }
 
@@ -1129,7 +1094,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
         [Obsolete("This method has a misleading name; use GetRequestedRunsFromDMS instead")]
-        public List<T> GetSamplesFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
+        public IEnumerable<T> GetSamplesFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
         {
             return GetRequestedRunsFromDMS<T>(queryData);
         }
@@ -1138,15 +1103,13 @@ namespace LcmsNetDmsTools
         /// Gets a list of samples (essentially requested runs) from DMS
         /// </summary>
         /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
-        public List<T> GetRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
+        public IEnumerable<T> GetRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
         {
-            var tmpReturnVal = new List<T>(); // Temp list for holding samples
             var connStr = GetConnectionString();
-
-            DataTable schedRunList;
 
             // Retrieve run requests from V_Scheduled_Run_Export, filtering based on settings in queryData
             var sqlCmd = queryData.BuildSqlString();
+            DataTable schedRunList;
 
             try
             {
@@ -1157,56 +1120,55 @@ namespace LcmsNetDmsTools
                 ErrMsg = "Exception getting run request list";
                 //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
-                return tmpReturnVal;
+                yield break;
             }
 
-            foreach (DataRow currRow in schedRunList.Rows)
+            using (schedRunList)
             {
-                var tmpDMSData = new T
+                foreach (DataRow currRow in schedRunList.Rows)
                 {
-                    DmsData =
+                    var tmpDMSData = new T
                     {
-                        DatasetType = currRow[schedRunList.Columns["Type"]] as string,
-                        Experiment = currRow[schedRunList.Columns["Experiment"]] as string,
-                        EMSLProposalID = currRow[schedRunList.Columns["Proposal ID"]] as string,
-                        RequestID = (int)currRow[schedRunList.Columns["Request"]],
-                        RequestName = currRow[schedRunList.Columns["Name"]] as string,
-                        WorkPackage = currRow[schedRunList.Columns["Work Package"]] as string,
-                        EMSLUsageType = currRow[schedRunList.Columns["Usage Type"]] as string,
-                        UserList = currRow[schedRunList.Columns["EUS Users"]] as string,
-                        CartName = currRow[schedRunList.Columns["Cart"]] as string,
-                        Comment = currRow[schedRunList.Columns["Comment"]] as string,
-                        MRMFileID = DbCint(currRow[schedRunList.Columns["MRMFileID"]]),
-                        Block = DbCint(currRow[schedRunList.Columns["Block"]]),
-                        RunOrder = DbCint(currRow[schedRunList.Columns["RunOrder"]]),
-                        Batch = DbCint(currRow[schedRunList.Columns["Batch"]]),
-                        SelectedToRun = false,
-            }
-                };
+                        DmsData =
+                            {
+                                DatasetType = currRow[schedRunList.Columns["Type"]] as string,
+                                Experiment = currRow[schedRunList.Columns["Experiment"]] as string,
+                                EMSLProposalID = currRow[schedRunList.Columns["Proposal ID"]] as string,
+                                RequestID = (int)currRow[schedRunList.Columns["Request"]],
+                                RequestName = currRow[schedRunList.Columns["Name"]] as string,
+                                WorkPackage = currRow[schedRunList.Columns["Work Package"]] as string,
+                                EMSLUsageType = currRow[schedRunList.Columns["Usage Type"]] as string,
+                                UserList = currRow[schedRunList.Columns["EUS Users"]] as string,
+                                CartName = currRow[schedRunList.Columns["Cart"]] as string,
+                                Comment = currRow[schedRunList.Columns["Comment"]] as string,
+                                MRMFileID = DbCint(currRow[schedRunList.Columns["MRMFileID"]]),
+                                Block = DbCint(currRow[schedRunList.Columns["Block"]]),
+                                RunOrder = DbCint(currRow[schedRunList.Columns["RunOrder"]]),
+                                Batch = DbCint(currRow[schedRunList.Columns["Batch"]]),
+                                SelectedToRun = false,
+                            }
+                    };
 
-                var wellNumber = currRow[schedRunList.Columns["Well Number"]] as string;
-                if (string.IsNullOrWhiteSpace(wellNumber) || wellNumber == "na")
-                    wellNumber = "0";
+                    var wellNumber = currRow[schedRunList.Columns["Well Number"]] as string;
+                    if (string.IsNullOrWhiteSpace(wellNumber) || wellNumber == "na")
+                        wellNumber = "0";
 
-                try
-                {
-                    tmpDMSData.PAL.Well = ConvertWellStringToInt(wellNumber);
+                    try
+                    {
+                        tmpDMSData.PAL.Well = ConvertWellStringToInt(wellNumber);
+                    }
+                    catch
+                    {
+                        tmpDMSData.PAL.Well = 0;
+                    }
+                    tmpDMSData.PAL.WellPlate = currRow[schedRunList.Columns["Wellplate Number"]] as string;
+
+                    if (string.IsNullOrWhiteSpace(tmpDMSData.PAL.WellPlate) || tmpDMSData.PAL.WellPlate == "na")
+                        tmpDMSData.PAL.WellPlate = "";
+
+                    yield return tmpDMSData;
                 }
-                catch
-                {
-                    tmpDMSData.PAL.Well = 0;
-                }
-                tmpDMSData.PAL.WellPlate = currRow[schedRunList.Columns["Wellplate Number"]] as string;
-
-                if (string.IsNullOrWhiteSpace(tmpDMSData.PAL.WellPlate) || tmpDMSData.PAL.WellPlate == "na")
-                    tmpDMSData.PAL.WellPlate = "";
-
-                tmpReturnVal.Add(tmpDMSData);
             }
-
-            // Return and close
-            return tmpReturnVal;
-
         }
 
         /// <summary>
@@ -1221,34 +1183,32 @@ namespace LcmsNetDmsTools
                 throw new ArgumentNullException(nameof(fileData), "fileData must be initialized before calling GetMRMFilesFromDMS");
             }
 
-            DataTable dt;
             var sqlCmd = "SELECT File_Name, Contents FROM T_Attachments WHERE ID IN (" + FileIndxList + ")";
             var connStr = GetConnectionString();
 
             // Get the data from DMS
             try
             {
-                dt = GetDataTable(sqlCmd, connStr);
+                using (var dt = GetDataTable(sqlCmd, connStr))
+                {
+                    fileData.Capacity = fileData.Count + dt.Rows.Count;
 
+                    foreach (DataRow currRow in dt.Rows)
+                    {
+                        var currData = new MRMFileData
+                        {
+                            FileName = currRow[dt.Columns["File_Name"]] as string,
+                            FileContents = currRow[dt.Columns["Contents"]] as string
+                        };
+                        fileData.Add(currData);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 m_ErrMsg = "Exception getting MRM file data from DMS";
                 ApplicationLogger.LogError(0, m_ErrMsg, ex);
                 throw new DatabaseDataException(m_ErrMsg, ex);
-            }
-
-            if (dt != null)
-            {
-                foreach (DataRow currRow in dt.Rows)
-                {
-                    var currData = new MRMFileData
-                    {
-                        FileName = currRow[dt.Columns["File_Name"]] as string,
-                        FileContents = currRow[dt.Columns["Contents"]] as string
-                    };
-                    fileData.Add(currData);
-                }
             }
         }
 
@@ -1262,7 +1222,6 @@ namespace LcmsNetDmsTools
         {
             var retList = new Dictionary<int, int>();
 
-            DataTable dt;
             var sqlCmd = "SELECT ID, RDS_MRM_Attachment FROM T_Requested_Run WHERE (not RDS_MRM_Attachment is null) " +
                                     "AND (ID BETWEEN " + MinID + " AND " + MaxID + ")";
             var connStr = GetConnectionString();
@@ -1270,7 +1229,16 @@ namespace LcmsNetDmsTools
             // Get the data from DMS
             try
             {
-                dt = GetDataTable(sqlCmd, connStr);
+                using (var dt = GetDataTable(sqlCmd, connStr))
+                {
+                    // Pull the data from the table
+                    foreach (DataRow currRow in dt.Rows)
+                    {
+                        var tempIndx = (int)currRow[dt.Columns["ID"]];
+                        var tempValue = (int)currRow[dt.Columns["RDS_MRM_Attachment"]];
+                        retList.Add(tempIndx, tempValue);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1279,16 +1247,6 @@ namespace LcmsNetDmsTools
                 throw new DatabaseDataException(m_ErrMsg, ex);
             }
 
-            // Pull the data from the table
-            if (dt != null)
-            {
-                foreach (DataRow currRow in dt.Rows)
-                {
-                    var tempIndx = (int)currRow[dt.Columns["ID"]];
-                    var tempValue = (int)currRow[dt.Columns["RDS_MRM_Attachment"]];
-                    retList.Add(tempIndx, tempValue);
-                }
-            }
             return retList;
         }
 
@@ -1313,7 +1271,6 @@ namespace LcmsNetDmsTools
         /// <returns></returns>
         private string GetConnectionString()
         {
-
             // Construct the connection string, for example:
             // Data Source=Gigasax;Initial Catalog=DMS5;User ID=LCMSNetUser;Password=ThePassword"
 
@@ -1444,9 +1401,8 @@ namespace LcmsNetDmsTools
         /// <param name="CmdStr">SQL command to execute</param>
         /// <param name="ConnStr">Database connection string</param>
         /// <returns>List containing the table's contents</returns>
-        private List<string> GetSingleColumnTableFromDMS(string CmdStr, string ConnStr)
+        private IEnumerable<string> GetSingleColumnTableFromDMS(string CmdStr, string ConnStr)
         {
-            var retList = new List<string>();
             DataTable dbTable;
 
             // Get a table from the database
@@ -1462,14 +1418,14 @@ namespace LcmsNetDmsTools
                 throw new Exception(ErrMsg, ex);
             }
 
-            // Copy the table contents into the list
-            foreach (DataRow currRow in dbTable.Rows)
+            using (dbTable)
             {
-                retList.Add((string)currRow[dbTable.Columns[0]]);
+                // Copy the table contents into the list
+                foreach (DataRow currRow in dbTable.Rows)
+                {
+                    yield return (string)currRow[dbTable.Columns[0]];
+                }
             }
-
-            // Return the list
-            return retList;
         }
 
         /// <summary>

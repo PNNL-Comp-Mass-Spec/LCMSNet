@@ -108,7 +108,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestE()
         {
-            var users = SQLiteTools.GetUserList(false);
+            var users = SQLiteTools.GetUserList(false).ToList();
             Assert.AreEqual(1, users.Count);
             Assert.IsTrue(users.Exists(x => x.UserName == "Test User" && x.PayrollNum == "1"));
         }
@@ -157,7 +157,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestI()
         {
-            var samples = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.WaitingQueue);
+            var samples = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.WaitingQueue).ToList();
             Assert.AreEqual(1, samples[0].UniqueID);
         }
 
@@ -181,7 +181,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestK()
         {
-            var samples = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.RunningQueue);
+            var samples = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.RunningQueue).ToList();
             Assert.AreEqual(2, samples[0].UniqueID);
         }
 
@@ -212,7 +212,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestM()
         {
-            var experiments = SQLiteTools.GetExperimentList();
+            var experiments = SQLiteTools.GetExperimentList().ToList();
             Assert.AreEqual(1, experiments[0].ID);
             Assert.AreEqual("Test", experiments[0].Experiment);
         }
@@ -238,7 +238,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestO()
         {
-            var insts = SQLiteTools.GetInstrumentList(false);
+            var insts = SQLiteTools.GetInstrumentList(false).ToList();
             Assert.AreEqual("Test instrument", insts[0].CommonName);
         }
 
@@ -290,7 +290,7 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestS()
         {
-            var cols = SQLiteTools.GetEntireLCColumnList();
+            var cols = SQLiteTools.GetEntireLCColumnList().ToList();
             Assert.AreEqual(1, cols.Count);
             Assert.IsTrue(cols[0].LCColumn == "ColTest1");
         }

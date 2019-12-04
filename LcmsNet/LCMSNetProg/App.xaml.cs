@@ -723,16 +723,7 @@ namespace LcmsNet
         /// </summary>
         private void CreateSQLCache()
         {
-            SQLiteTools.SaveCartListToCache(new List<string> { "default" }, false);
-            SQLiteTools.SaveSeparationTypeListToCache(new List<string> { "default" }, false);
-            SQLiteTools.SaveDatasetTypeListToCache(new List<string> { "default" }, false);
-            SQLiteTools.SaveInstListToCache(new List<InstrumentInfo>(), false);
-            SQLiteTools.SaveUserListToCache(new List<UserInfo>(), false);
-            SQLiteTools.SaveColumnListToCache(new List<string> { "0", "1", "2", "3", "4" }, false);
-            SQLiteTools.SaveExperimentListToCache(new List<ExperimentData> { new ExperimentData() }, false);
-            SQLiteTools.SaveProposalUsers(new List<ProposalUser>(),
-                new List<UserIDPIDCrossReferenceEntry>(),
-                new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>(), false);
+            SQLiteTools.CheckOrCreateCache(new SQLiteCacheDefaultData());
         }
 
         private void LogMessage(string message)

@@ -55,6 +55,7 @@
     <Compile Include="DatabaseStoredProcException.cs" />
     <Compile Include="DatabaseTableTypes.cs" />
     <Compile Include="PropertyToColumnMapping.cs" />
+    <Compile Include="SQLiteCacheDefaultData.cs" />
     <Compile Include="SQLiteCacheIO.cs" />
     <Compile Include="SQLiteTools.cs" />
   </ItemGroup>

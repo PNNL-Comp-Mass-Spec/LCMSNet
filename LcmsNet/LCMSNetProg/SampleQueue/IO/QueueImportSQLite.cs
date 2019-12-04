@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
 using LcmsNetSQLiteTools;
@@ -29,7 +30,7 @@ namespace LcmsNet.SampleQueue.IO
             var sampleList = new List<SampleData>();
             try
             {
-                sampleList = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.WaitingQueue, connStr);
+                sampleList = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.WaitingQueue, connStr).ToList();
                 var msg = "Successfully read input queue file " + path;
                 ApplicationLogger.LogMessage(0, msg);
             }

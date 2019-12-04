@@ -2157,7 +2157,7 @@ namespace LcmsNet.SampleQueue
         {
             lock (m_completeQueue)
             {
-                m_completeQueue = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.CompletedQueue);
+                m_completeQueue = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.CompletedQueue).ToList();
 
                 foreach (var sample in m_completeQueue)
                 {

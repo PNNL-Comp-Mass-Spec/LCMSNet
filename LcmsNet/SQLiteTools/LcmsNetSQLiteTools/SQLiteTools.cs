@@ -182,7 +182,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <returns>List containing queue data</returns>
-        public static List<T> GetQueueFromCache<T>(DatabaseTableTypes tableType) where T : SampleDataBasic, new()
+        public static IEnumerable<T> GetQueueFromCache<T>(DatabaseTableTypes tableType) where T : SampleDataBasic, new()
         {
             return GetQueueFromCache<T>(tableType, ConnString);
         }
@@ -194,12 +194,12 @@ namespace LcmsNetSQLiteTools
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <param name="connectionString">Cache connection string</param>
         /// <returns>List containing queue data</returns>
-        public static List<T> GetQueueFromCache<T>(DatabaseTableTypes tableType, string connectionString) where T : SampleDataBasic, new()
+        public static IEnumerable<T> GetQueueFromCache<T>(DatabaseTableTypes tableType, string connectionString) where T : SampleDataBasic, new()
         {
             if (typeof(T) == typeof(SampleDataBasic))
             {
                 ApplicationLogger.LogError(0, "Cannot populate list of SampleDataBasic objects from database!");
-                return new List<T>();
+                return Enumerable.Empty<T>();
             }
 
             // All finished, so return
@@ -212,7 +212,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing cart names</returns>
         [Obsolete("Use GetCartNameList that does not have parameter force (since force is not used)")]
-        public static List<string> GetCartNameList(bool force)
+        public static IEnumerable<string> GetCartNameList(bool force)
         {
             return GetCartNameList();
         }
@@ -221,7 +221,7 @@ namespace LcmsNetSQLiteTools
         /// Wrapper around generic retrieval method specifically for cart lists
         /// </summary>
         /// <returns>List containing cart names</returns>
-        public static List<string> GetCartNameList()
+        public static IEnumerable<string> GetCartNameList()
         {
             return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.CartList, cartNames, false);
         }
@@ -306,7 +306,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing cart config names</returns>
-        public static List<string> GetCartConfigNameList(bool force)
+        public static IEnumerable<string> GetCartConfigNameList(bool force)
         {
             var configs = cartConfigNames;
             if (cartConfigNames.Count == 0 || force || Cache.AlwaysRead)
@@ -314,7 +314,7 @@ namespace LcmsNetSQLiteTools
                 configs = GetCartConfigNameMap(force);
             }
 
-            return configs.Values.SelectMany(x => x).Distinct().OrderBy(x => x).ToList();
+            return configs.Values.SelectMany(x => x).Distinct().OrderBy(x => x);
         }
 
         /// <summary>
@@ -323,15 +323,15 @@ namespace LcmsNetSQLiteTools
         /// <param name="cartName">Cart name</param>
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing cart config names</returns>
-        public static List<string> GetCartConfigNameList(string cartName, bool force)
+        public static IEnumerable<string> GetCartConfigNameList(string cartName, bool force)
         {
             var data = GetCartConfigNameMap(force);
             if (data.TryGetValue(cartName, out var configs))
             {
-                return configs.ToList();
+                return configs;
             }
 
-            return data.First(x => x.Key.StartsWith("unknown", StringComparison.OrdinalIgnoreCase)).Value.ToList();
+            return data.First(x => x.Key.StartsWith("unknown", StringComparison.OrdinalIgnoreCase)).Value;
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing cart names</returns>
-        public static List<string> GetColumnList(bool force)
+        public static IEnumerable<string> GetColumnList(bool force)
         {
             return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.ColumnList, columnNames, force);
         }
@@ -349,7 +349,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing separation types</returns>
-        public static List<string> GetSepTypeList(bool force)
+        public static IEnumerable<string> GetSepTypeList(bool force)
         {
             return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.SeparationTypeList, separationNames, force);
         }
@@ -358,7 +358,7 @@ namespace LcmsNetSQLiteTools
         /// Wrapper around generic retrieval method specifically for dataset name lists
         /// </summary>
         /// <returns>List containing separation types</returns>
-        public static List<string> GetDatasetList()
+        public static IEnumerable<string> GetDatasetList()
         {
             return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.DatasetList, datasetNames, false);
         }
@@ -378,7 +378,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List containing dataset types</returns>
-        public static List<string> GetDatasetTypeList(bool force)
+        public static IEnumerable<string> GetDatasetTypeList(bool force)
         {
             return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.DatasetTypeList, datasetTypeNames, force);
         }
@@ -394,7 +394,7 @@ namespace LcmsNetSQLiteTools
             if (workPackageMap.Count == 0 || force || Cache.AlwaysRead)
             {
                 // Read the data from the cache
-                var workPackages = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.WorkPackages, () => new WorkPackageInfo());
+                var workPackages = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.WorkPackages, () => new WorkPackageInfo()).ToList();
 
                 cacheData = new Dictionary<string, WorkPackageInfo>(workPackages.Count);
 
@@ -436,7 +436,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List of user data</returns>
-        public static List<UserInfo> GetUserList(bool force)
+        public static IEnumerable<UserInfo> GetUserList(bool force)
         {
             return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.UserList, () => new UserInfo(), userInfo, force);
         }
@@ -446,12 +446,12 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
         /// <returns>List of instruments</returns>
-        public static List<InstrumentInfo> GetInstrumentList(bool force)
+        public static IEnumerable<InstrumentInfo> GetInstrumentList(bool force)
         {
             return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.InstrumentList, () => new InstrumentInfo(), instrumentInfo, force);
         }
 
-        public static List<ExperimentData> GetExperimentList()
+        public static IEnumerable<ExperimentData> GetExperimentList()
         {
             return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.ExperimentList, () => new ExperimentData(), experimentsData, false);
         }
@@ -470,7 +470,7 @@ namespace LcmsNetSQLiteTools
                 pidIndexedReferenceList = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>();
 
                 // Read the data from the cache
-                users = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.PUserList, () => new ProposalUser(), proposalUsers);
+                users = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.PUserList, () => new ProposalUser(), proposalUsers).ToList();
                 var crossReferenceList = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.PReferenceList, () => new UserIDPIDCrossReferenceEntry());
 
                 foreach (var crossReference in crossReferenceList)
@@ -496,7 +496,7 @@ namespace LcmsNetSQLiteTools
             }
         }
 
-        public static List<LCColumnData> GetEntireLCColumnList()
+        public static IEnumerable<LCColumnData> GetEntireLCColumnList()
         {
             return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.LCColumnList, () => new LCColumnData(), lcColumns, false);
         }
@@ -510,7 +510,7 @@ namespace LcmsNetSQLiteTools
             List<string> cartConfigNamesList;
             try
             {
-                cartConfigNamesList = Cache.ReadSingleColumnListFromCacheCheckExceptions(DatabaseTableTypes.CartConfigNameSelected);
+                cartConfigNamesList = Cache.ReadSingleColumnListFromCacheCheckExceptions(DatabaseTableTypes.CartConfigNameSelected).ToList();
             }
             catch
             {
@@ -536,7 +536,7 @@ namespace LcmsNetSQLiteTools
             List<string> sepType;
             try
             {
-                sepType = Cache.ReadSingleColumnListFromCacheCheckExceptions(DatabaseTableTypes.SeparationTypeSelected);
+                sepType = Cache.ReadSingleColumnListFromCacheCheckExceptions(DatabaseTableTypes.SeparationTypeSelected).ToList();
             }
             catch (Exception ex)
             {
@@ -573,13 +573,18 @@ namespace LcmsNetSQLiteTools
 
         #region Public Methods: Cache Writing
 
+        public static void CheckOrCreateCache(SQLiteCacheDefaultData defaultData = null)
+        {
+            Cache.CheckOrCreateCache(defaultData);
+        }
+
         /// <summary>
         /// Saves the contents of specified sample queue to the SQLite cache file
         /// Connection string and database name are defined by defaults
         /// </summary>
         /// <param name="queueData">List of SampleData containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
-        public static void SaveQueueToCache<T>(List<T> queueData, DatabaseTableTypes tableType) where T : SampleDataBasic, new()
+        public static void SaveQueueToCache<T>(IEnumerable<T> queueData, DatabaseTableTypes tableType) where T : SampleDataBasic, new()
         {
             SaveQueueToCache(queueData, tableType, ConnString);
         }
@@ -591,7 +596,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="queueData">List containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         /// <param name="connStr">Connection string for database file</param>
-        public static void SaveQueueToCache<T>(List<T> queueData, DatabaseTableTypes tableType, string connStr) where T : SampleDataBasic, new()
+        public static void SaveQueueToCache<T>(IEnumerable<T> queueData, DatabaseTableTypes tableType, string connStr) where T : SampleDataBasic, new()
         {
             if (typeof(T) == typeof(SampleDataBasic))
             {
@@ -599,29 +604,27 @@ namespace LcmsNetSQLiteTools
                 return;
             }
 
-            Cache.SaveMultiColumnListToCache(tableType, queueData, true, connStr);
+            Cache.SaveMultiColumnListToCache(tableType, queueData, connStr);
         }
 
         /// <summary>
         /// Saves a list of users to cache
         /// </summary>
         /// <param name="userList">List containing user data</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="userList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveUserListToCache(List<UserInfo> userList, bool clearFirst = true)
+        public static void SaveUserListToCache(IEnumerable<UserInfo> userList)
         {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.UserList, userList, userInfo, clearFirst);
+            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.UserList, userList, userInfo);
         }
 
         /// <summary>
         /// Save a list of experiments to cache
         /// </summary>
         /// <param name="expList"></param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="expList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveExperimentListToCache(List<ExperimentData> expList, bool clearFirst = true)
+        public static void SaveExperimentListToCache(IEnumerable<ExperimentData> expList)
         {
             if (expList == null) return;
 
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.ExperimentList, expList, experimentsData, clearFirst);
+            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.ExperimentList, expList, experimentsData);
         }
 
         /// <summary>
@@ -633,13 +636,12 @@ namespace LcmsNetSQLiteTools
         /// <param name="pidIndexedReferenceList">
         /// A dictionary of cross reference lists that have been grouped by Proposal ID.
         /// </param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="users"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveProposalUsers(List<ProposalUser> users,
-            List<UserIDPIDCrossReferenceEntry> crossReferenceList,
-            Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList, bool clearFirst = true)
+        public static void SaveProposalUsers(IEnumerable<ProposalUser> users,
+            IEnumerable<UserIDPIDCrossReferenceEntry> crossReferenceList,
+            Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
         {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.PUserList, users, proposalUsers, clearFirst);
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.PReferenceList, crossReferenceList, clearFirst);
+            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.PUserList, users, proposalUsers);
+            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.PReferenceList, crossReferenceList);
 
             if (!Cache.AlwaysRead)
             {
@@ -647,29 +649,27 @@ namespace LcmsNetSQLiteTools
             }
         }
 
-        public static void SaveEntireLCColumnListToCache(List<LCColumnData> lcColumnList)
+        public static void SaveEntireLCColumnListToCache(IEnumerable<LCColumnData> lcColumnList)
         {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.LCColumnList, lcColumnList, lcColumns, true);
+            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.LCColumnList, lcColumnList, lcColumns);
         }
 
         /// <summary>
         /// Saves a list of instruments to cache
         /// </summary>
         /// <param name="instList">List of InstrumentInfo containing instrument data</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="instList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveInstListToCache(List<InstrumentInfo> instList, bool clearFirst = true)
+        public static void SaveInstListToCache(IEnumerable<InstrumentInfo> instList)
         {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.InstrumentList, instList, instrumentInfo, clearFirst);
+            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.InstrumentList, instList, instrumentInfo);
         }
 
         /// <summary>
         /// Saves a list of Cart_Configs (and associated Cart names) to cache
         /// </summary>
         /// <param name="cartConfigList">List containing cart config info.</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartConfigList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveCartConfigListToCache(List<CartConfigInfo> cartConfigList, bool clearFirst = true)
+        public static void SaveCartConfigListToCache(IEnumerable<CartConfigInfo> cartConfigList)
         {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.CartConfigNameList, cartConfigList, clearFirst);
+            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.CartConfigNameList, cartConfigList);
 
             // Reload the in-memory copy of the cached data
             if (!Cache.AlwaysRead)
@@ -682,10 +682,9 @@ namespace LcmsNetSQLiteTools
         /// Saves a list of WorkPackageInfo objects to cache
         /// </summary>
         /// <param name="workPackageList">List containing work package info.</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="workPackageList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveWorkPackageListToCache(List<WorkPackageInfo> workPackageList, bool clearFirst = true)
+        public static void SaveWorkPackageListToCache(IEnumerable<WorkPackageInfo> workPackageList)
         {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.WorkPackages, workPackageList, clearFirst);
+            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.WorkPackages, workPackageList);
 
             // Reload the in-memory copy of the cached data
             if (!Cache.AlwaysRead)
@@ -698,50 +697,45 @@ namespace LcmsNetSQLiteTools
         /// Saves a list of cart names to the SQLite cache
         /// </summary>
         /// <param name="cartNameList">Cart names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="cartNameList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveCartListToCache(List<string> cartNameList, bool clearFirst = true)
+        public static void SaveCartListToCache(IEnumerable<string> cartNameList)
         {
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.CartList, cartNameList, cartNames, clearFirst);
+            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.CartList, cartNameList, cartNames);
         }
 
         /// <summary>
         /// Saves a list of column names to the SQLite cache
         /// </summary>
         /// <param name="columnList">Column names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="columnList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveColumnListToCache(List<string> columnList, bool clearFirst = true)
+        public static void SaveColumnListToCache(IEnumerable<string> columnList)
         {
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.ColumnList, columnList, columnNames, clearFirst);
+            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.ColumnList, columnList, columnNames);
         }
 
         /// <summary>
         /// Saves a list of Dataset names to the SQLite cache
         /// </summary>
         /// <param name="datasetNameList">Dataset names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="datasetNameList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveDatasetNameListToCache(List<string> datasetNameList, bool clearFirst = true)
+        public static void SaveDatasetNameListToCache(IEnumerable<string> datasetNameList)
         {
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.DatasetList, datasetNameList, datasetNames, clearFirst);
+            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.DatasetList, datasetNameList, datasetNames);
         }
 
         /// <summary>
         /// Saves a list of dataset type names to the SQLite cache
         /// </summary>
         /// <param name="datasetTypeList">Dataset type names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="datasetTypeList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveDatasetTypeListToCache(List<string> datasetTypeList, bool clearFirst = true)
+        public static void SaveDatasetTypeListToCache(IEnumerable<string> datasetTypeList)
         {
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.DatasetTypeList, datasetTypeList, datasetTypeNames, clearFirst);
+            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.DatasetTypeList, datasetTypeList, datasetTypeNames);
         }
 
         /// <summary>
         /// Saves a list of separation types to the SQLite cache
         /// </summary>
         /// <param name="separationTypeList">Separation type names</param>
-        /// <param name="clearFirst">if true, the existing data will always be removed from the list; if false and <paramref name="separationTypeList"/>.Count is &lt;= to the number of existing rows, nothing is changed</param>
-        public static void SaveSeparationTypeListToCache(List<string> separationTypeList, bool clearFirst = true)
+        public static void SaveSeparationTypeListToCache(IEnumerable<string> separationTypeList)
         {
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.SeparationTypeList, separationTypeList, separationNames, clearFirst);
+            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.SeparationTypeList, separationTypeList, separationNames);
         }
 
         /// <summary>
