@@ -269,16 +269,14 @@ namespace LcmsNetSQLiteTools
             columnCount = 0;
             rowCount = 0;
 
-            var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + tableName + "'";
+            var sqlString = "SELECT COUNT(*) FROM sqlite_master WHERE name ='" + tableName + "'";
             try
             {
                 // Get a list of database tables matching the specified table name
-                using (var resultSet1 = GetSQLiteDataTable(sqlString, connStr))
+                var tableMatches = (long) ExecuteSQLiteCommandScalar(sqlString, connStr);
+                if (tableMatches < 1)
                 {
-                    if (resultSet1.Rows.Count < 1)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -292,15 +290,20 @@ namespace LcmsNetSQLiteTools
 
             // Exactly 1 row returned; examine the number of columns
             // Count the number of columns
-            var colCountSql = "pragma table_info(" + tableName + ")";
+            //var colCountSql = "pragma table_info(" + tableName + ")";
+            // Requires SQLite 3.16.0 or newer:
+            var colCountSql = "SELECT COUNT(*) FROM pragma_table_info('" + tableName + "')";
 
             try
             {
                 // Use the pragma statement to get a table with one row per column
-                using (var resultSet2 = GetSQLiteDataTable(colCountSql, connStr))
-                {
-                    columnCount = resultSet2.Rows.Count;
-                }
+                //using (var resultSet2 = GetSQLiteDataTable(colCountSql, connStr))
+                //{
+                //    columnCount = resultSet2.Rows.Count;
+                //}
+
+                // Cast to long (because the object will be a boxed long) and then to int.
+                columnCount = (int)(long) ExecuteSQLiteCommandScalar(colCountSql, connStr);
             }
             catch (Exception ex)
             {
@@ -320,11 +323,8 @@ namespace LcmsNetSQLiteTools
 
             try
             {
-                // Use the pragma statement to get a table with one row per column
-                using (var resultSet3 = GetSQLiteDataTable(rowCountSql, connStr))
-                {
-                    rowCount = Convert.ToInt32(resultSet3.Rows[0][0]);
-                }
+                // Cast to long (because the object will be a boxed long) and then to int.
+                rowCount = (int)(long) ExecuteSQLiteCommandScalar(rowCountSql, connStr);
             }
             catch (Exception ex)
             {
@@ -346,30 +346,21 @@ namespace LcmsNetSQLiteTools
         /// <returns>TRUE if table found and create command matches (ignore case); FALSE if not found or error</returns>
         private bool VerifyTableFormat(string tableName, string connStr, string createCommand)
         {
-            var sqlString = "SELECT * FROM sqlite_master WHERE name ='" + tableName + "'";
+            var sqlString = "SELECT sql FROM sqlite_master WHERE name ='" + tableName + "'";
             try
             {
-                // Get a list of database tables matching the specified table name
-                using (var resultSet = GetSQLiteDataTable(sqlString, connStr))
+                var createText = ExecuteSQLiteCommandScalar(sqlString, connStr)?.ToString();
+                if (string.IsNullOrWhiteSpace(createText))
                 {
-                    if (resultSet.Rows.Count < 1)
-                    {
-                        return false;
-                    }
-
-                    var createText = resultSet.Rows[0]["sql"]?.ToString();
-                    if (string.IsNullOrWhiteSpace(createText))
-                    {
-                        return false;
-                    }
-
-                    if (createText.Equals(createCommand, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
-
                     return false;
                 }
+
+                if (createText.Equals(createCommand, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
@@ -422,28 +413,18 @@ namespace LcmsNetSQLiteTools
                 return colNames;
             }
 
-            var sqlString = "pragma table_info(" + tableName + ")";
+            var sqlString = "SELECT name FROM pragma_table_info('" + tableName + "')";
             try
             {
-                // Get a list of database tables matching the specified table name
-                using (var resultSet1 = GetSQLiteDataTable(sqlString, connStr))
+                using (var connection = GetConnection(connStr))
+                using (var command = connection.CreateCommand())
                 {
-                    if (resultSet1.Rows.Count < 1)
+                    command.CommandText = sqlString;
+                    using (var reader = command.ExecuteReader())
                     {
-                        return colNames;
-                    }
-
-                    foreach (DataColumn column in resultSet1.Columns)
-                    {
-                        var colName = column.ColumnName;
-                        if (colName.ToLower().Equals("name"))
+                        while (reader.Read())
                         {
-                            foreach (DataRow currentRow in resultSet1.Rows)
-                            {
-                                // row that contains the column name
-                                var colData = (string)currentRow[resultSet1.Columns[colName]];
-                                colNames.Add(colData);
-                            }
+                            colNames.Add(reader.GetString(0));
                         }
                     }
                 }
@@ -484,6 +465,42 @@ namespace LcmsNetSQLiteTools
                     throw new DatabaseDataException(errMsg, ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Executes specified SQLite command that returns a scalar value
+        /// </summary>
+        /// <param name="cmdStr">SQL command to execute</param>
+        /// <param name="connStr">Connection string for SQLite database file</param>
+        /// <returns>An object returned by the SQLite command - the value of the first row and column of the table; may be null.</returns>
+        private object ExecuteSQLiteCommandScalar(string cmdStr, string connStr)
+        {
+            object value = null;
+            using (var connection = GetConnection(connStr))
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandType = CommandType.Text;
+                command.CommandText = cmdStr;
+
+                try
+                {
+                    value = command.ExecuteScalar();
+                    if (value is DBNull)
+                    {
+                        value = null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    var errMsg = "SQLite exception getting scalar value via query " + cmdStr + " : " + connStr;
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    throw new DatabaseDataException(errMsg, ex);
+                }
+            }
+
+            // Everything worked, so return the value
+            return value;
         }
 
         /// <summary>
