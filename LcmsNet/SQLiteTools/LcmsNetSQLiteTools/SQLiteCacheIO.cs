@@ -509,6 +509,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="cmdStr">SQL command to execute</param>
         /// <param name="connStr">Connection string for SQLite database file</param>
         /// <returns>A DataTable containing data specfied by CmdStr</returns>
+        /// <remarks>Works well, but it also uses more memory and processing time vs. reading directly to the output object</remarks>
         private DataTable GetSQLiteDataTable(string cmdStr, string connStr)
         {
             var returnTable = new DataTable();
@@ -959,51 +960,82 @@ namespace LcmsNetSQLiteTools
 
             // Get table containing cached data
             var sqlStr = "SELECT * FROM " + tableName;
-            using (var cacheData = GetSQLiteDataTable(sqlStr, connString))
+
+
+            using (var connection = GetConnection(connString))
+            using (var command = connection.CreateCommand())
             {
-                if (cacheData.Rows.Count < 1)
+                command.CommandType = CommandType.Text;
+                command.CommandText = sqlStr;
+                SQLiteDataReader reader;
+
+                try
+                {
+                    // Get a table from the cache db
+                    reader = command.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    var errMsg = "SQLite exception getting data table via query " + sqlStr + " : " + connString;
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    throw new DatabaseDataException(errMsg, ex);
+                }
+
+                if (!reader.HasRows)
                 {
                     // No cached data found, so return an empty list
                     yield break;
                 }
 
-                var columnMappings = new KeyValuePair<int, Action<object, object>>[cacheData.Columns.Count];
-                var columnSetOrder = new int[cacheData.Columns.Count];
+                KeyValuePair<int, Action<object, object>>[] columnMappings = null;
 
-                // Create the column mappings, for fast access to set methods
-                foreach (DataColumn column in cacheData.Columns)
-                {
-                    var properName = nameMappings[column.ColumnName.ToLower()];
-                    var setMethod = typeMappings[properName].SetProperty;
-                    columnMappings[column.Ordinal] = new KeyValuePair<int, Action<object, object>>(column.Ordinal, setMethod);
-                    columnSetOrder[column.Ordinal] = column.Ordinal;
-
-                    if (properName.ToLower().Contains("runningstatus"))
-                    {
-                        // Always process runningstatus last
-                        columnSetOrder[column.Ordinal] = int.MaxValue;
-                    }
-                }
-
-                Array.Sort(columnSetOrder, columnMappings);
-
+                // Return the data; less likely to encounter exceptions here.
                 // For each row (representing properties and values for one sample), create a string dictionary
                 //          with the object's properties from the table columns, and add it to the return list
-                foreach (DataRow currentRow in cacheData.Rows)
+                using (reader)
                 {
-                    // Create a new object
-                    var data = objectCreator();
-
-                    // Populate the properties from the cache
-                    foreach (var column in columnMappings)
+                    while (reader.Read())
                     {
-                        var value = currentRow[column.Key];
-                        var setMethod = column.Value;
-                        setMethod(data, value);
-                    }
+                        if (columnMappings == null)
+                        {
+                            var columnCount = reader.VisibleFieldCount;
+                            columnMappings = new KeyValuePair<int, Action<object, object>>[columnCount];
+                            var columnSetOrder = new int[columnCount];
 
-                    // return the data
-                    yield return data;
+                            // Create the column mappings, for fast access to set methods
+                            for (var i = 0; i < columnCount; i++)
+                            {
+                                var columnName = reader.GetName(i);
+                                var properName = nameMappings[columnName.ToLower()];
+                                var setMethod = typeMappings[properName].SetProperty;
+                                columnMappings[i] = new KeyValuePair<int, Action<object, object>>(i, setMethod);
+                                columnSetOrder[i] = i;
+
+                                if (properName.ToLower().Contains("runningstatus"))
+                                {
+                                    // Always process runningstatus last
+                                    columnSetOrder[i] = int.MaxValue;
+                                }
+                            }
+
+                            Array.Sort(columnSetOrder, columnMappings);
+                        }
+
+                        // Create a new object
+                        var data = objectCreator();
+
+                        // Populate the properties from the cache
+                        foreach (var column in columnMappings)
+                        {
+                            var value = reader[column.Key];
+                            var setMethod = column.Value;
+                            setMethod(data, value);
+                        }
+
+                        // return the data
+                        yield return data;
+                    }
                 }
             }
         }
@@ -1249,27 +1281,35 @@ namespace LcmsNetSQLiteTools
 
             // SQL statement for query command
             var sqlQueryCmd = "SELECT * FROM " + tableName;
-            DataTable resultTable;
 
-            // Get a table from the cache db
-            try
+            using (var connection = GetConnection(ConnString))
+            using (var command = connection.CreateCommand())
             {
-                resultTable = GetSQLiteDataTable(sqlQueryCmd, ConnString);
-            }
-            catch (Exception ex)
-            {
-                CheckExceptionMessageForDbState(ex);
-                var errMsg = "SQLite exception getting data table via query " + sqlQueryCmd;
-                throw new DatabaseDataException(errMsg, ex);
-            }
+                command.CommandType = CommandType.Text;
+                command.CommandText = sqlQueryCmd;
+                SQLiteDataReader reader;
 
-            // All finished, so return
-            using (resultTable)
-            {
-                // Fill the return list
-                foreach (DataRow currentRow in resultTable.Rows)
+                try
                 {
-                    yield return (string)currentRow[resultTable.Columns[0]];
+                    // Get a table from the cache db
+                    reader = command.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    CheckExceptionMessageForDbState(ex);
+                    var errMsg = "SQLite exception getting single column table via query " + sqlQueryCmd + " : " + ConnString;
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                    throw new DatabaseDataException(errMsg, ex);
+                }
+
+                // Return the data; less likely to encounter exceptions here.
+                using (reader)
+                {
+                    while (reader.Read())
+                    {
+                        // Only return the first column.
+                        yield return reader.GetString(0);
+                    }
                 }
             }
         }
