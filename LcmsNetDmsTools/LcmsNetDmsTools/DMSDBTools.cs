@@ -328,7 +328,7 @@ namespace LcmsNetDmsTools
 
         #endregion
 
-        #region "Methods"
+        #region Private Methods
 
         /// <summary>
         /// Loads DMS configuration from file
@@ -371,7 +371,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        void settings_ValidationEventHandler(object sender, ValidationEventArgs e)
+        private void settings_ValidationEventHandler(object sender, ValidationEventArgs e)
         {
             if (e.Severity == XmlSeverityType.Error)
             {
@@ -379,635 +379,6 @@ namespace LcmsNetDmsTools
             }
 
             ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "DmsTools Configuration warning: " + e.Message);
-        }
-
-        /// <summary>
-        /// Test if we can query each of the needed DMS tables/views.
-        /// </summary>
-        /// <returns></returns>
-        public bool CheckDMSConnection()
-        {
-            try
-            {
-                var connStr = GetConnectionString();
-                var conn = GetConnection(connStr);
-                // Test getting 1 row from every table we query?...
-                using (var cmd = conn.CreateCommand())
-                {
-                    var tableNames = new List<string>()
-                    {
-                        "V_LC_Cart_Config_Export", "V_Charge_Code_Export", "V_LC_Cart_Active_Export",
-                        "V_LCMSNet_Dataset_Export", "V_LCMSNet_Column_Export", "T_Secondary_Sep", "t_DatasetTypeName",
-                        "V_Active_Users", "V_LCMSNet_Experiment_Export", "V_EUS_Proposal_Users",
-                        "V_Instrument_Info_LCMSNet", "V_Scheduled_Run_Export", "T_Attachments", "T_Requested_Run"
-                    };
-
-                    foreach (var tableName in tableNames)
-                    {
-                        cmd.CommandText = $"SELECT TOP(1) * FROM {tableName}";
-                        cmd.ExecuteScalar(); // TODO: Test the returned value? (for what?)
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                ApplicationLogger.LogError(0, "Failed to test read a needed table!", ex);
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Loads all DMS data into cache
-        /// </summary>
-        public void LoadCacheFromDMS()
-        {
-            LoadCacheFromDMS(LoadExperiments, LoadDatasets);
-        }
-
-        public void LoadCacheFromDMS(bool loadExperiments)
-        {
-            ReportProgress("Loading data from DMS (entering LoadCacheFromDMS(bool loadExperiments)", 0, 20);
-            LoadCacheFromDMS(loadExperiments, LoadDatasets);
-        }
-
-        public void LoadCacheFromDMS(bool loadExperiments, bool loadDatasets)
-        {
-            const int STEP_COUNT_BASE = 11;
-            const int EXPERIMENT_STEPS = 20;
-            const int DATASET_STEPS = 50;
-
-            var stepCountTotal = STEP_COUNT_BASE;
-
-            if (loadExperiments)
-                stepCountTotal += EXPERIMENT_STEPS;
-
-            if (loadDatasets)
-                stepCountTotal += DATASET_STEPS;
-
-            ReportProgress("Loading data from DMS (determining Connection String)", 0, stepCountTotal);
-
-            var sqLiteConnectionString = SQLiteTools.ConnString;
-            var equalsIndex = sqLiteConnectionString.IndexOf('=');
-            string cacheFilePath;
-
-            if (equalsIndex > 0 && equalsIndex < sqLiteConnectionString.Length - 1)
-                cacheFilePath = @"SQLite cache file path: " + sqLiteConnectionString.Substring(equalsIndex + 1);
-            else
-                cacheFilePath = @"SQLite cache file path: " + sqLiteConnectionString;
-
-            var dmsConnectionString = GetConnectionString();
-
-            // Remove the password from the connection string
-            var passwordStartindex = dmsConnectionString.IndexOf(";Password", StringComparison.InvariantCultureIgnoreCase);
-            if (passwordStartindex > 0)
-                dmsConnectionString = dmsConnectionString.Substring(0, passwordStartindex);
-
-            ReportProgress("Loading data from DMS (" + dmsConnectionString + ") and storing in " + cacheFilePath, 0, stepCountTotal);
-
-            ReportProgress("Loading cart names", 1, stepCountTotal);
-            GetCartListFromDMS();
-
-            ReportProgress("Loading cart config names", 2, stepCountTotal);
-            GetCartConfigNamesFromDMS();
-
-            ReportProgress("Loading separation types", 3, stepCountTotal);
-            GetSepTypeListFromDMS();
-
-            ReportProgress("Loading dataset types", 4, stepCountTotal);
-            GetDatasetTypeListFromDMS();
-
-            ReportProgress("Loading instruments", 5, stepCountTotal);
-            GetInstrumentListFromDMS();
-
-            ReportProgress("Loading work packages", 6, stepCountTotal);
-            GetWorkPackagesFromDMS();
-
-            ReportProgress("Loading users", 7, stepCountTotal);
-            GetUserListFromDMS();
-
-            ReportProgress("Loading LC columns", 8, stepCountTotal);
-            GetColumnListFromDMS();
-
-            ReportProgress("Loading proposal users", 9, stepCountTotal);
-            GetProposalUsers();
-
-            var stepCountCompleted = STEP_COUNT_BASE;
-            if (loadExperiments)
-            {
-                var currentTask = "Loading experiments";
-                if (RecentExperimentsMonthsToLoad > 0)
-                    currentTask += " created/used in the last " + RecentExperimentsMonthsToLoad + " months";
-
-                ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
-
-                GetExperimentListFromDMS();
-                stepCountCompleted = stepCountCompleted + EXPERIMENT_STEPS;
-            }
-
-            if (loadDatasets)
-            {
-                var currentTask = "Loading datasets";
-                if (RecentDatasetsMonthsToLoad > 0)
-                    currentTask += " from the last " + RecentDatasetsMonthsToLoad + " months";
-
-                ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
-
-                GetDatasetListFromDMS();
-                stepCountCompleted = stepCountCompleted + DATASET_STEPS;
-            }
-
-            ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);
-        }
-
-        private void ReportProgress(string currentTask, int currentStep, int stepCountTotal)
-        {
-            var percentComplete = currentStep / (double)stepCountTotal * 100;
-            OnProgressUpdate(new ProgressEventArgs(currentTask, percentComplete));
-        }
-
-        /// <summary>
-        /// Gets a list of Cart Config Names from DMS and stores it in cache
-        /// </summary>
-        public void GetCartConfigNamesFromDMS()
-        {
-            try
-            {
-                var cartConfigs = ReadCartConfigNamesFromDMS();
-
-                // Store the list of cart config names in the cache db
-                try
-                {
-                    SQLiteTools.SaveCartConfigListToCache(cartConfigs);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing LC cart config names in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting cart config list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of Work Packages from DMS and stores it in cache
-        /// </summary>
-        public void GetWorkPackagesFromDMS()
-        {
-            try
-            {
-                var dataFromDms = ReadWorkPackagesFromDMS();
-
-                // Store the list of cart config names in the cache db
-                try
-                {
-                    SQLiteTools.SaveWorkPackageListToCache(dataFromDms);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing work packages in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting work package list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of instrument carts from DMS and stores it in cache
-        /// </summary>
-        public void GetCartListFromDMS()
-        {
-            IEnumerable<string> tmpCartList;   // Temp list for holding return values
-            var connStr = GetConnectionString();
-
-            // Get a List containing all the carts
-            const string sqlCmd = "SELECT DISTINCT [Cart_Name] FROM V_LC_Cart_Active_Export " +
-                                  "ORDER BY [Cart_Name]";
-            try
-            {
-                tmpCartList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting cart list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            // Store the list of carts in the cache db
-            try
-            {
-                SQLiteTools.SaveCartListToCache(tmpCartList);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing LC cart list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
-        [Obsolete("This version of the function is obsolete since the stepCount variables are not used")]
-        public void GetDatasetListFromDMS(int stepCountAtStart, int stepCountAtEnd, int stepCountOverall)
-        {
-            GetDatasetListFromDMS();
-        }
-
-        public void GetDatasetListFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            var sqlCmd = "SELECT Dataset FROM V_LCMSNet_Dataset_Export";
-
-            if (RecentDatasetsMonthsToLoad > 0)
-            {
-                var dateThreshold = DateTime.Now.AddMonths(-RecentDatasetsMonthsToLoad).ToString("yyyy-MM-dd");
-                sqlCmd += " WHERE Created >= '" + dateThreshold + "'";
-            }
-
-            try
-            {
-                var datasetList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
-
-                // Store the data in the cache db
-                try
-                {
-                    SQLiteTools.SaveDatasetNameListToCache(datasetList);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing dataset list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting dataset list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-
-        }
-
-        /// <summary>
-        /// Gets a list of active LC columns from DMS and stores in the cache
-        /// </summary>
-        public void GetColumnListFromDMS()
-        {
-            IEnumerable<string> tmpColList;    // Temp list for holding return values
-            var connStr = GetConnectionString();
-
-            // Get a list of active columns
-            const string sqlCmd = "SELECT ColumnNumber FROM V_LCMSNet_Column_Export WHERE State <> 'Retired' ORDER BY ColumnNumber";
-            try
-            {
-                tmpColList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting column list";
-                //              throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            // Store the list of carts in the cache db
-            try
-            {
-                SQLiteTools.SaveColumnListToCache(tmpColList);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing column list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
-        public void GetEntireColumnListListFromDMS()
-        {
-            try
-            {
-                var lcColumns = ReadLcColumnsFromDMS();
-
-                try
-                {
-                    SQLiteTools.SaveEntireLCColumnListToCache(lcColumns);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing LC Column data list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting experiment list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of separation types from DMS and stores it in cache
-        /// </summary>
-        public void GetSepTypeListFromDMS()
-        {
-            IEnumerable<string> tmpRetVal; // Temp list for holding separation types
-            var connStr = GetConnectionString();
-
-            const string sqlCmd = "SELECT Distinct SS_Name FROM T_Secondary_Sep ORDER BY SS_Name";
-
-            try
-            {
-                tmpRetVal = GetSingleColumnTableFromDMS(sqlCmd, connStr);
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting separation type list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            // Store data in cache
-            try
-            {
-                SQLiteTools.SaveSeparationTypeListToCache(tmpRetVal);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing separation type list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of dataset types from DMS ans stores it in cache
-        /// </summary>
-        public void GetDatasetTypeListFromDMS()
-        {
-            IEnumerable<string> tmpRetVal; // Temp list for holding dataset types
-            var connStr = GetConnectionString();
-
-            // Get a list of the dataset types
-            const string sqlCmd = "SELECT Distinct DST_Name FROM t_DatasetTypeName ORDER BY DST_Name";
-            try
-            {
-                tmpRetVal = GetSingleColumnTableFromDMS(sqlCmd, connStr);
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting dataset type list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            // Store data in cache
-            try
-            {
-                SQLiteTools.SaveDatasetTypeListToCache(tmpRetVal);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing dataset type list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of active users from DMS and stores it in cache
-        /// </summary>
-        public void GetUserListFromDMS()
-        {
-            try
-            {
-                var dmsUsers = ReadUsersFromDMS();
-
-                // Store data in cache
-                try
-                {
-                    SQLiteTools.SaveUserListToCache(dmsUsers);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing user list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting user list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        public void GetExperimentListFromDMS()
-        {
-            try
-            {
-                var experiments = ReadExperimentsFromDMS();
-
-                try
-                {
-                    SQLiteTools.SaveExperimentListToCache(experiments);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing experiment list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting experiment list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Get EMSL User Proposal IDs and associated users. Uses <see cref="EMSLProposalsRecentMonthsToLoad"/> to control how much data is loaded.
-        /// </summary>
-        public void GetProposalUsers()
-        {
-            var users = new List<ProposalUser>();
-            var referenceList = new List<UserIDPIDCrossReferenceEntry>();
-            var referenceDictionary = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>();
-
-            try
-            {
-                // Split the View back into the two tables it was built from.
-                // Note: It would be faster if we had the component tables the View was created from.
-                var userMap = new Dictionary<int, ProposalUser>();
-
-                foreach (var pUser in ReadProposalUsersFromDMS())
-                {
-                    if (!pUser.UserId.HasValue || string.IsNullOrWhiteSpace(pUser.ProposalId) || string.IsNullOrWhiteSpace(pUser.UserName))
-                        continue;
-
-                    var user = new ProposalUser();
-                    var crossReference = new UserIDPIDCrossReferenceEntry();
-
-                    user.UserID = pUser.UserId.Value;
-                    user.UserName = pUser.UserName;
-
-                    crossReference.PID = pUser.ProposalId;
-                    crossReference.UserID = pUser.UserId.Value;
-
-                    if (!userMap.ContainsKey(user.UserID))
-                    {
-                        userMap.Add(user.UserID, user);
-                        users.Add(user);
-                    }
-
-                    if (!referenceDictionary.ContainsKey(crossReference.PID))
-                        referenceDictionary.Add(crossReference.PID, new List<UserIDPIDCrossReferenceEntry>());
-
-                    if (referenceDictionary[crossReference.PID].Any(cr => cr.UserID == crossReference.UserID))
-                    {
-                        continue;
-                    }
-
-                    referenceDictionary[crossReference.PID].Add(crossReference);
-                    referenceList.Add(crossReference);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting EUS Proposal Users list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            try
-            {
-                SQLiteTools.SaveProposalUsers(users, referenceList, referenceDictionary);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing Proposal Users list in cache";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of instruments from DMS
-        /// </summary>
-        public void GetInstrumentListFromDMS()
-        {
-            try
-            {
-                var instruments = ReadInstrumentFromDMS();
-
-                // Store data in cache
-                try
-                {
-                    SQLiteTools.SaveInstListToCache(instruments);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing instrument list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting instrument list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of samples (essentially requested runs) from DMS
-        /// </summary>
-        /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
-        [Obsolete("This method has a misleading name; use GetRequestedRunsFromDMS instead", true)]
-        public IEnumerable<T> GetSamplesFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
-        {
-            return GetRequestedRunsFromDMS<T>(queryData);
-        }
-
-        /// <summary>
-        /// Gets a list of samples (essentially requested runs) from DMS
-        /// </summary>
-        /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
-        public IEnumerable<T> GetRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
-        {
-            try
-            {
-                return ReadRequestedRunsFromDMS<T>(queryData);
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting run request list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return Enumerable.Empty<T>();
-            }
-        }
-
-        /// <summary>
-        /// Adds data for block of MRM files to file data list
-        /// </summary>
-        /// <param name="fileIndxList">Comma-separated list of file indices needing data</param>
-        /// <param name="fileData">ist of file names and contents; new data will be appended to this list</param>
-        public void GetMRMFilesFromDMS(string fileIndxList, List<MRMFileData> fileData)
-        {
-            if (fileData == null)
-            {
-                throw new ArgumentNullException(nameof(fileData), "fileData must be initialized before calling GetMRMFilesFromDMS");
-            }
-
-            // Get the data from DMS
-            try
-            {
-                fileData.AddRange(ReadMRMFilesFromDMS(fileIndxList));
-            }
-            catch (Exception ex)
-            {
-                m_ErrMsg = "Exception getting MRM file data from DMS";
-                ApplicationLogger.LogError(0, m_ErrMsg, ex);
-                throw new DatabaseDataException(m_ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of MRM files to retrieve
-        /// </summary>
-        /// <param name="minID">Minimum request ID for MRM file search</param>
-        /// <param name="maxID"></param>
-        /// <returns></returns>
-        public Dictionary<int, int> GetMRMFileListFromDMS(int minID, int maxID)
-        {
-            var retList = new Dictionary<int, int>();
-
-            // Get the data from DMS
-            try
-            {
-                // Pull the data from the table
-                foreach (var file in ReadMRMFileListFromDMS(minID, maxID))
-                {
-                    retList.Add(file.Key, file.Value);
-                }
-            }
-            catch (Exception ex)
-            {
-                m_ErrMsg = "Exception getting MRM file list from DMS";
-                ApplicationLogger.LogError(0, m_ErrMsg, ex);
-                throw new DatabaseDataException(m_ErrMsg, ex);
-            }
-
-            return retList;
         }
 
         /// <summary>
@@ -1083,76 +454,6 @@ namespace LcmsNetDmsTools
             }
 
             return retStr;
-        }
-
-        /// <summary>
-        /// Updates the cart assignment in DMS
-        /// </summary>
-        /// <param name="requestList">Comma-delimited string of request ID's (must be less than 8000 chars long)</param>
-        /// <param name="cartName">Name of cart to assign (ignored for removing aasignment)</param>
-        /// <param name="cartConfigName">Name of cart config name to assign</param>
-        /// <param name="updateMode">TRUE for updating assignment; FALSE to clear assignment</param>
-        /// <returns>TRUE for success; FALSE for error</returns>
-        public bool UpdateDMSCartAssignment(string requestList, string cartName, string cartConfigName, bool updateMode)
-        {
-            var connStr = GetConnectionString();
-            string mode;
-            int resultCode;
-
-            // Verify request list is < 8000 chars (stored procedure limitation)
-            if (requestList.Length > 8000)
-            {
-                m_ErrMsg = "Too many requests selected for import.\r\nReduce the number of requests being imported.";
-                return false;
-            }
-
-            // Convert mode to string value
-            if (updateMode)
-            {
-                mode = "Add";
-            }
-            else
-            {
-                mode = "Remove";
-            }
-
-            // Set up parameters for stored procedure call
-            var spCmd = new SqlCommand
-            {
-                CommandType = CommandType.StoredProcedure,
-                CommandText = "AddRemoveRequestCartAssignment"
-            };
-            spCmd.Parameters.Add(new SqlParameter("@Return", SqlDbType.Int)).Direction = ParameterDirection.ReturnValue;
-
-            spCmd.Parameters.Add(new SqlParameter("@RequestIDList", SqlDbType.VarChar, 8000)).Value = requestList;
-            spCmd.Parameters.Add(new SqlParameter("@CartName", SqlDbType.VarChar, 128)).Value = cartName;
-            spCmd.Parameters.Add(new SqlParameter("@CartConfigName", SqlDbType.VarChar, 128)).Value = cartConfigName;
-            spCmd.Parameters.Add(new SqlParameter("@Mode", SqlDbType.VarChar, 32)).Value = mode;
-
-            spCmd.Parameters.Add(new SqlParameter("@message", SqlDbType.VarChar, 512));
-            spCmd.Parameters["@message"].Direction = ParameterDirection.InputOutput;
-            spCmd.Parameters["@message"].Value = "";
-
-            // Execute the SP
-            try
-            {
-                resultCode = ExecuteSP(spCmd, connStr);
-            }
-            catch (Exception ex)
-            {
-                ApplicationLogger.LogError(0, "Exception updating DMS cart information", ex);
-                return false;
-            }
-
-            if (resultCode != 0)    // Error occurred
-            {
-                var returnMsg = spCmd.Parameters["@message"].ToString();
-                throw new DatabaseStoredProcException("AddRemoveRequestCartAssignment", resultCode, returnMsg);
-            }
-
-            // Success!
-            return true;
-
         }
 
         /// <summary>
@@ -1264,7 +565,7 @@ namespace LcmsNetDmsTools
                     spCmd.Connection = cn.GetConnection();
                     da.SelectCommand = spCmd;
                     da.Fill(ds);
-                    resultCode = (int) da.SelectCommand.Parameters["@Return"].Value;
+                    resultCode = (int)da.SelectCommand.Parameters["@Return"].Value;
                 }
             }
             catch (Exception ex)
@@ -1276,32 +577,7 @@ namespace LcmsNetDmsTools
             return resultCode;
         }
 
-        /// <summary>
-        /// Converts a letter/number or just number string representing a well/vial into an integer
-        /// </summary>
-        /// <param name="vialPosition">Input string</param>
-        /// <returns>Integer position</returns>
-        private int ConvertWellStringToInt(string vialPosition)
-        {
-            int vialNumber;
-
-            // First, we'll see if it's a simple number
-            if (int.TryParse(vialPosition, out var parsed))
-            {
-                // vialPosition is simply an integer
-                vialNumber = parsed;
-            }
-            else
-            {
-                // vialPosition is in the form A1 or B10
-                // Convert it using ConvertVialToInt
-                vialNumber = ConvertVialPosition.ConvertVialToInt(vialPosition);
-            }
-
-            return vialNumber;
-        }
-
-        private void CreateDefaultConfigFile(string configurationPath)
+        private static void CreateDefaultConfigFile(string configurationPath)
         {
             // Create a new file with default config data
             using (var writer = new StreamWriter(new FileStream(configurationPath, FileMode.Create, FileAccess.Write, FileShare.Read)))
@@ -1342,7 +618,6 @@ namespace LcmsNetDmsTools
                 writer.WriteLine("  </p:PrismDMSConfig>");
                 writer.WriteLine("</catalog>");
             }
-
         }
 
         /// <summary>
@@ -1350,7 +625,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="enPwd">Encoded password</param>
         /// <returns>Clear text password</returns>
-        private string DecodePassword(string enPwd)
+        private static string DecodePassword(string enPwd)
         {
             // Decrypts password received from ini file
             // Password was created by alternately subtracting or adding 1 to the ASCII value of each character
@@ -1383,25 +658,412 @@ namespace LcmsNetDmsTools
             return retStr;
         }
 
-        /// <summary>
-        /// Converts to integer while handling null values
-        /// </summary>
-        /// <param name="InpObj">Object to convert</param>
-        /// <returns>0 if null, otherwise integer version of InpObj</returns>
-        [Obsolete("old, use .CastDBVal<T>()", true)]
-        private int DbCint(object InpObj)
+        private void ReportProgress(string currentTask, int currentStep, int stepCountTotal)
         {
-            if (InpObj is DBNull)
-            {
-                return 0;
-            }
-
-            return (int)InpObj;
+            var percentComplete = currentStep / (double)stepCountTotal * 100;
+            OnProgressUpdate(new ProgressEventArgs(currentTask, percentComplete));
         }
 
         #endregion
 
-        #region DMS database read-and-convert methods
+        #region Private Methods: Read from DMS and cache to SQLite
+
+        /// <summary>
+        /// Gets a list of Cart Config Names from DMS and stores it in cache
+        /// </summary>
+        private void GetCartConfigNamesFromDMS()
+        {
+            try
+            {
+                var cartConfigs = ReadCartConfigNamesFromDMS();
+
+                // Store the list of cart config names in the cache db
+                try
+                {
+                    SQLiteTools.SaveCartConfigListToCache(cartConfigs);
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "Exception storing LC cart config names in cache";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting cart config list";
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of Work Packages from DMS and stores it in cache
+        /// </summary>
+        private void GetWorkPackagesFromDMS()
+        {
+            try
+            {
+                var dataFromDms = ReadWorkPackagesFromDMS();
+
+                // Store the list of cart config names in the cache db
+                try
+                {
+                    SQLiteTools.SaveWorkPackageListToCache(dataFromDms);
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "Exception storing work packages in cache";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting work package list";
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of instrument carts from DMS and stores it in cache
+        /// </summary>
+        private void GetCartListFromDMS()
+        {
+            IEnumerable<string> tmpCartList;   // Temp list for holding return values
+            var connStr = GetConnectionString();
+
+            // Get a List containing all the carts
+            const string sqlCmd = "SELECT DISTINCT [Cart_Name] FROM V_LC_Cart_Active_Export " +
+                                  "ORDER BY [Cart_Name]";
+            try
+            {
+                tmpCartList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting cart list";
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+                return;
+            }
+
+            // Store the list of carts in the cache db
+            try
+            {
+                SQLiteTools.SaveCartListToCache(tmpCartList);
+            }
+            catch (Exception ex)
+            {
+                const string errMsg = "Exception storing LC cart list in cache";
+                ApplicationLogger.LogError(0, errMsg, ex);
+            }
+        }
+
+        private void GetDatasetListFromDMS()
+        {
+            var connStr = GetConnectionString();
+
+            var sqlCmd = "SELECT Dataset FROM V_LCMSNet_Dataset_Export";
+
+            if (RecentDatasetsMonthsToLoad > 0)
+            {
+                var dateThreshold = DateTime.Now.AddMonths(-RecentDatasetsMonthsToLoad).ToString("yyyy-MM-dd");
+                sqlCmd += " WHERE Created >= '" + dateThreshold + "'";
+            }
+
+            try
+            {
+                var datasetList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
+
+                // Store the data in the cache db
+                try
+                {
+                    SQLiteTools.SaveDatasetNameListToCache(datasetList);
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "Exception storing dataset list in cache";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting dataset list";
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+            }
+
+        }
+
+        /// <summary>
+        /// Gets a list of active LC columns from DMS and stores in the cache
+        /// </summary>
+        private void GetColumnListFromDMS()
+        {
+            IEnumerable<string> tmpColList;    // Temp list for holding return values
+            var connStr = GetConnectionString();
+
+            // Get a list of active columns
+            const string sqlCmd = "SELECT ColumnNumber FROM V_LCMSNet_Column_Export WHERE State <> 'Retired' ORDER BY ColumnNumber";
+            try
+            {
+                tmpColList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting column list";
+                //              throw new DatabaseDataException(ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+                return;
+            }
+
+            // Store the list of carts in the cache db
+            try
+            {
+                SQLiteTools.SaveColumnListToCache(tmpColList);
+            }
+            catch (Exception ex)
+            {
+                const string errMsg = "Exception storing column list in cache";
+                ApplicationLogger.LogError(0, errMsg, ex);
+            }
+        }
+
+        public void GetEntireColumnListListFromDMS()
+        {
+            try
+            {
+                var lcColumns = ReadLcColumnsFromDMS();
+
+                try
+                {
+                    SQLiteTools.SaveEntireLCColumnListToCache(lcColumns);
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "Exception storing LC Column data list in cache";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting experiment list";
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of separation types from DMS and stores it in cache
+        /// </summary>
+        private void GetSepTypeListFromDMS()
+        {
+            IEnumerable<string> tmpRetVal; // Temp list for holding separation types
+            var connStr = GetConnectionString();
+
+            const string sqlCmd = "SELECT Distinct SS_Name FROM T_Secondary_Sep ORDER BY SS_Name";
+
+            try
+            {
+                tmpRetVal = GetSingleColumnTableFromDMS(sqlCmd, connStr);
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting separation type list";
+                //                  throw new DatabaseDataException(ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+                return;
+            }
+
+            // Store data in cache
+            try
+            {
+                SQLiteTools.SaveSeparationTypeListToCache(tmpRetVal);
+            }
+            catch (Exception ex)
+            {
+                const string errMsg = "Exception storing separation type list in cache";
+                ApplicationLogger.LogError(0, errMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of dataset types from DMS ans stores it in cache
+        /// </summary>
+        private void GetDatasetTypeListFromDMS()
+        {
+            IEnumerable<string> tmpRetVal; // Temp list for holding dataset types
+            var connStr = GetConnectionString();
+
+            // Get a list of the dataset types
+            const string sqlCmd = "SELECT Distinct DST_Name FROM t_DatasetTypeName ORDER BY DST_Name";
+            try
+            {
+                tmpRetVal = GetSingleColumnTableFromDMS(sqlCmd, connStr);
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting dataset type list";
+                //                  throw new DatabaseDataException(ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+                return;
+            }
+
+            // Store data in cache
+            try
+            {
+                SQLiteTools.SaveDatasetTypeListToCache(tmpRetVal);
+            }
+            catch (Exception ex)
+            {
+                const string errMsg = "Exception storing dataset type list in cache";
+                ApplicationLogger.LogError(0, errMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of active users from DMS and stores it in cache
+        /// </summary>
+        private void GetUserListFromDMS()
+        {
+            try
+            {
+                var dmsUsers = ReadUsersFromDMS();
+
+                // Store data in cache
+                try
+                {
+                    SQLiteTools.SaveUserListToCache(dmsUsers);
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "Exception storing user list in cache";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting user list";
+                //                  throw new DatabaseDataException(ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+            }
+        }
+
+        private void GetExperimentListFromDMS()
+        {
+            try
+            {
+                var experiments = ReadExperimentsFromDMS();
+
+                try
+                {
+                    SQLiteTools.SaveExperimentListToCache(experiments);
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "Exception storing experiment list in cache";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting experiment list";
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Get EMSL User Proposal IDs and associated users. Uses <see cref="EMSLProposalsRecentMonthsToLoad"/> to control how much data is loaded.
+        /// </summary>
+        private void GetProposalUsers()
+        {
+            var users = new List<ProposalUser>();
+            var referenceList = new List<UserIDPIDCrossReferenceEntry>();
+            var referenceDictionary = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>();
+
+            try
+            {
+                // Split the View back into the two tables it was built from.
+                // Note: It would be faster if we had the component tables the View was created from.
+                var userMap = new Dictionary<int, ProposalUser>();
+
+                foreach (var pUser in ReadProposalUsersFromDMS())
+                {
+                    if (!pUser.UserId.HasValue || string.IsNullOrWhiteSpace(pUser.ProposalId) || string.IsNullOrWhiteSpace(pUser.UserName))
+                        continue;
+
+                    var user = new ProposalUser();
+                    var crossReference = new UserIDPIDCrossReferenceEntry();
+
+                    user.UserID = pUser.UserId.Value;
+                    user.UserName = pUser.UserName;
+
+                    crossReference.PID = pUser.ProposalId;
+                    crossReference.UserID = pUser.UserId.Value;
+
+                    if (!userMap.ContainsKey(user.UserID))
+                    {
+                        userMap.Add(user.UserID, user);
+                        users.Add(user);
+                    }
+
+                    if (!referenceDictionary.ContainsKey(crossReference.PID))
+                        referenceDictionary.Add(crossReference.PID, new List<UserIDPIDCrossReferenceEntry>());
+
+                    if (referenceDictionary[crossReference.PID].Any(cr => cr.UserID == crossReference.UserID))
+                    {
+                        continue;
+                    }
+
+                    referenceDictionary[crossReference.PID].Add(crossReference);
+                    referenceList.Add(crossReference);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting EUS Proposal Users list";
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+                return;
+            }
+
+            try
+            {
+                SQLiteTools.SaveProposalUsers(users, referenceList, referenceDictionary);
+            }
+            catch (Exception ex)
+            {
+                const string errMsg = "Exception storing Proposal Users list in cache";
+                //                  throw new DatabaseDataException(ErrMsg, ex);
+                ApplicationLogger.LogError(0, errMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of instruments from DMS
+        /// </summary>
+        private void GetInstrumentListFromDMS()
+        {
+            try
+            {
+                var instruments = ReadInstrumentFromDMS();
+
+                // Store data in cache
+                try
+                {
+                    SQLiteTools.SaveInstListToCache(instruments);
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "Exception storing instrument list in cache";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting instrument list";
+                //                  throw new DatabaseDataException(ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+            }
+        }
+
+        #endregion
+
+        #region Private DMS database read-and-convert methods
 
         private IEnumerable<CartConfigInfo> ReadCartConfigNamesFromDMS()
         {
@@ -1725,17 +1387,8 @@ namespace LcmsNetDmsTools
                         };
 
                         var wellNumber = reader["Well Number"].CastDBValTo<string>();
-                        if (string.IsNullOrWhiteSpace(wellNumber) || wellNumber == "na")
-                            wellNumber = "0";
+                        tmpDMSData.PAL.Well = ConvertWellStringToInt(wellNumber);
 
-                        try
-                        {
-                            tmpDMSData.PAL.Well = ConvertWellStringToInt(wellNumber);
-                        }
-                        catch
-                        {
-                            tmpDMSData.PAL.Well = 0;
-                        }
                         tmpDMSData.PAL.WellPlate = reader["Wellplate Number"].CastDBValTo<string>();
 
                         if (string.IsNullOrWhiteSpace(tmpDMSData.PAL.WellPlate) || tmpDMSData.PAL.WellPlate == "na")
@@ -1744,6 +1397,37 @@ namespace LcmsNetDmsTools
                         yield return tmpDMSData;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Converts a letter/number or just number string representing a well/vial into an integer
+        /// </summary>
+        /// <param name="vialPosition">Input string</param>
+        /// <returns>Integer position</returns>
+        private int ConvertWellStringToInt(string vialPosition)
+        {
+            if (string.IsNullOrWhiteSpace(vialPosition) || vialPosition == "na")
+            {
+                return 0;
+            }
+
+            // First, we'll see if it's a simple number
+            if (int.TryParse(vialPosition, out var parsed))
+            {
+                // vialPosition is simply an integer
+                return parsed;
+            }
+
+            try
+            {
+                // vialPosition is in the form A1 or B10
+                // Convert it using ConvertVialToInt
+                return ConvertVialPosition.ConvertVialToInt(vialPosition);
+            }
+            catch
+            {
+                return 0;
             }
         }
 
@@ -1836,6 +1520,293 @@ namespace LcmsNetDmsTools
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Test if we can query each of the needed DMS tables/views.
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckDMSConnection()
+        {
+            try
+            {
+                var connStr = GetConnectionString();
+                var conn = GetConnection(connStr);
+                // Test getting 1 row from every table we query?...
+                using (var cmd = conn.CreateCommand())
+                {
+                    var tableNames = new List<string>()
+                    {
+                        "V_LC_Cart_Config_Export", "V_Charge_Code_Export", "V_LC_Cart_Active_Export",
+                        "V_LCMSNet_Dataset_Export", "V_LCMSNet_Column_Export", "T_Secondary_Sep", "t_DatasetTypeName",
+                        "V_Active_Users", "V_LCMSNet_Experiment_Export", "V_EUS_Proposal_Users",
+                        "V_Instrument_Info_LCMSNet", "V_Scheduled_Run_Export", "T_Attachments", "T_Requested_Run"
+                    };
+
+                    foreach (var tableName in tableNames)
+                    {
+                        cmd.CommandText = $"SELECT TOP(1) * FROM {tableName}";
+                        cmd.ExecuteScalar(); // TODO: Test the returned value? (for what?)
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(0, "Failed to test read a needed table!", ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Loads all DMS data into cache
+        /// </summary>
+        public void LoadCacheFromDMS()
+        {
+            LoadCacheFromDMS(LoadExperiments, LoadDatasets);
+        }
+
+        public void LoadCacheFromDMS(bool loadExperiments)
+        {
+            ReportProgress("Loading data from DMS (entering LoadCacheFromDMS(bool loadExperiments)", 0, 20);
+            LoadCacheFromDMS(loadExperiments, LoadDatasets);
+        }
+
+        public void LoadCacheFromDMS(bool loadExperiments, bool loadDatasets)
+        {
+            const int STEP_COUNT_BASE = 11;
+            const int EXPERIMENT_STEPS = 20;
+            const int DATASET_STEPS = 50;
+
+            var stepCountTotal = STEP_COUNT_BASE;
+
+            if (loadExperiments)
+                stepCountTotal += EXPERIMENT_STEPS;
+
+            if (loadDatasets)
+                stepCountTotal += DATASET_STEPS;
+
+            ReportProgress("Loading data from DMS (determining Connection String)", 0, stepCountTotal);
+
+            var sqLiteConnectionString = SQLiteTools.ConnString;
+            var equalsIndex = sqLiteConnectionString.IndexOf('=');
+            string cacheFilePath;
+
+            if (equalsIndex > 0 && equalsIndex < sqLiteConnectionString.Length - 1)
+                cacheFilePath = @"SQLite cache file path: " + sqLiteConnectionString.Substring(equalsIndex + 1);
+            else
+                cacheFilePath = @"SQLite cache file path: " + sqLiteConnectionString;
+
+            var dmsConnectionString = GetConnectionString();
+
+            // Remove the password from the connection string
+            var passwordStartindex = dmsConnectionString.IndexOf(";Password", StringComparison.InvariantCultureIgnoreCase);
+            if (passwordStartindex > 0)
+                dmsConnectionString = dmsConnectionString.Substring(0, passwordStartindex);
+
+            ReportProgress("Loading data from DMS (" + dmsConnectionString + ") and storing in " + cacheFilePath, 0, stepCountTotal);
+
+            ReportProgress("Loading cart names", 1, stepCountTotal);
+            GetCartListFromDMS();
+
+            ReportProgress("Loading cart config names", 2, stepCountTotal);
+            GetCartConfigNamesFromDMS();
+
+            ReportProgress("Loading separation types", 3, stepCountTotal);
+            GetSepTypeListFromDMS();
+
+            ReportProgress("Loading dataset types", 4, stepCountTotal);
+            GetDatasetTypeListFromDMS();
+
+            ReportProgress("Loading instruments", 5, stepCountTotal);
+            GetInstrumentListFromDMS();
+
+            ReportProgress("Loading work packages", 6, stepCountTotal);
+            GetWorkPackagesFromDMS();
+
+            ReportProgress("Loading users", 7, stepCountTotal);
+            GetUserListFromDMS();
+
+            ReportProgress("Loading LC columns", 8, stepCountTotal);
+            GetColumnListFromDMS();
+
+            ReportProgress("Loading proposal users", 9, stepCountTotal);
+            GetProposalUsers();
+
+            var stepCountCompleted = STEP_COUNT_BASE;
+            if (loadExperiments)
+            {
+                var currentTask = "Loading experiments";
+                if (RecentExperimentsMonthsToLoad > 0)
+                    currentTask += " created/used in the last " + RecentExperimentsMonthsToLoad + " months";
+
+                ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
+
+                GetExperimentListFromDMS();
+                stepCountCompleted = stepCountCompleted + EXPERIMENT_STEPS;
+            }
+
+            if (loadDatasets)
+            {
+                var currentTask = "Loading datasets";
+                if (RecentDatasetsMonthsToLoad > 0)
+                    currentTask += " from the last " + RecentDatasetsMonthsToLoad + " months";
+
+                ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
+
+                GetDatasetListFromDMS();
+                stepCountCompleted = stepCountCompleted + DATASET_STEPS;
+            }
+
+            ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);
+        }
+
+        /// <summary>
+        /// Gets a list of samples (essentially requested runs) from DMS
+        /// </summary>
+        /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
+        public IEnumerable<T> GetRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
+        {
+            try
+            {
+                return ReadRequestedRunsFromDMS<T>(queryData);
+            }
+            catch (Exception ex)
+            {
+                ErrMsg = "Exception getting run request list";
+                //                  throw new DatabaseDataException(ErrMsg, ex);
+                ApplicationLogger.LogError(0, ErrMsg, ex);
+                return Enumerable.Empty<T>();
+            }
+        }
+
+        /// <summary>
+        /// Adds data for block of MRM files to file data list
+        /// </summary>
+        /// <param name="fileIndxList">Comma-separated list of file indices needing data</param>
+        /// <param name="fileData">ist of file names and contents; new data will be appended to this list</param>
+        public void GetMRMFilesFromDMS(string fileIndxList, List<MRMFileData> fileData)
+        {
+            if (fileData == null)
+            {
+                throw new ArgumentNullException(nameof(fileData), "fileData must be initialized before calling GetMRMFilesFromDMS");
+            }
+
+            // Get the data from DMS
+            try
+            {
+                fileData.AddRange(ReadMRMFilesFromDMS(fileIndxList));
+            }
+            catch (Exception ex)
+            {
+                m_ErrMsg = "Exception getting MRM file data from DMS";
+                ApplicationLogger.LogError(0, m_ErrMsg, ex);
+                throw new DatabaseDataException(m_ErrMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of MRM files to retrieve
+        /// </summary>
+        /// <param name="minID">Minimum request ID for MRM file search</param>
+        /// <param name="maxID"></param>
+        /// <returns></returns>
+        public Dictionary<int, int> GetMRMFileListFromDMS(int minID, int maxID)
+        {
+            var retList = new Dictionary<int, int>();
+
+            // Get the data from DMS
+            try
+            {
+                // Pull the data from the table
+                foreach (var file in ReadMRMFileListFromDMS(minID, maxID))
+                {
+                    retList.Add(file.Key, file.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                m_ErrMsg = "Exception getting MRM file list from DMS";
+                ApplicationLogger.LogError(0, m_ErrMsg, ex);
+                throw new DatabaseDataException(m_ErrMsg, ex);
+            }
+
+            return retList;
+        }
+
+        /// <summary>
+        /// Updates the cart assignment in DMS
+        /// </summary>
+        /// <param name="requestList">Comma-delimited string of request ID's (must be less than 8000 chars long)</param>
+        /// <param name="cartName">Name of cart to assign (ignored for removing aasignment)</param>
+        /// <param name="cartConfigName">Name of cart config name to assign</param>
+        /// <param name="updateMode">TRUE for updating assignment; FALSE to clear assignment</param>
+        /// <returns>TRUE for success; FALSE for error</returns>
+        public bool UpdateDMSCartAssignment(string requestList, string cartName, string cartConfigName, bool updateMode)
+        {
+            var connStr = GetConnectionString();
+            string mode;
+            int resultCode;
+
+            // Verify request list is < 8000 chars (stored procedure limitation)
+            if (requestList.Length > 8000)
+            {
+                m_ErrMsg = "Too many requests selected for import.\r\nReduce the number of requests being imported.";
+                return false;
+            }
+
+            // Convert mode to string value
+            if (updateMode)
+            {
+                mode = "Add";
+            }
+            else
+            {
+                mode = "Remove";
+            }
+
+            // Set up parameters for stored procedure call
+            var spCmd = new SqlCommand
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandText = "AddRemoveRequestCartAssignment"
+            };
+            spCmd.Parameters.Add(new SqlParameter("@Return", SqlDbType.Int)).Direction = ParameterDirection.ReturnValue;
+
+            spCmd.Parameters.Add(new SqlParameter("@RequestIDList", SqlDbType.VarChar, 8000)).Value = requestList;
+            spCmd.Parameters.Add(new SqlParameter("@CartName", SqlDbType.VarChar, 128)).Value = cartName;
+            spCmd.Parameters.Add(new SqlParameter("@CartConfigName", SqlDbType.VarChar, 128)).Value = cartConfigName;
+            spCmd.Parameters.Add(new SqlParameter("@Mode", SqlDbType.VarChar, 32)).Value = mode;
+
+            spCmd.Parameters.Add(new SqlParameter("@message", SqlDbType.VarChar, 512));
+            spCmd.Parameters["@message"].Direction = ParameterDirection.InputOutput;
+            spCmd.Parameters["@message"].Value = "";
+
+            // Execute the SP
+            try
+            {
+                resultCode = ExecuteSP(spCmd, connStr);
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(0, "Exception updating DMS cart information", ex);
+                return false;
+            }
+
+            if (resultCode != 0)    // Error occurred
+            {
+                var returnMsg = spCmd.Parameters["@message"].ToString();
+                throw new DatabaseStoredProcException("AddRemoveRequestCartAssignment", resultCode, returnMsg);
+            }
+
+            // Success!
+            return true;
         }
 
         #endregion
