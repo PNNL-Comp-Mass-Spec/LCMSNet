@@ -670,6 +670,7 @@ namespace LcmsNet
 
             try
             {
+                SQLiteTools.DisableInMemoryCaching = true;
 
                 var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
@@ -681,7 +682,6 @@ namespace LcmsNet
 
                 LcmsNet.Configuration.DMSDataContainer.LogDBToolsEvents = true;
                 dmsTools.ProgressEvent -= DmsToolsManager_ProgressEvent;
-
             }
             catch (Exception ex)
             {
