@@ -958,7 +958,6 @@ namespace LcmsNetDmsTools
             {
                 ErrMsg = "Exception getting experiment list";
                 ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
             }
         }
 

@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace LcmsNetData.Data
 {
@@ -82,8 +81,6 @@ namespace LcmsNetData.Data
             return prefix.ToString() + firstChar + numericPart.ToString("00");
         }
 
-        private static readonly Regex VialLetterMatch = new Regex("^[A-Z]+", RegexOptions.Compiled);
-
         /// <summary>
         /// Converts a vial position in LCMSNet format (string A1 - H12) to LCMS format (integer 1 - 96)
         /// Supports positions beyond H12, where position Z12 is vial 312, then position AA01 is vial 313, AA02 is 314, etc.
@@ -104,29 +101,31 @@ namespace LcmsNetData.Data
                 columnsPerRow = 12;
 
             // Get first character(s)
-            var match = VialLetterMatch.Match(vialPosition.ToUpper());
-            if (!match.Success || match.Value.Length > 2)
+            var intPos = vialPosition.IndexOfAny("0123456789".ToCharArray());
+            if (intPos < 1 || intPos > 2)
             {
                 return 9999;
             }
 
             var prefixAddon = 0;
             char columnLetter;
-            if (match.Value.Length > 1)
+            var vialPositionUpper = vialPosition.ToUpper();
+
+            if (intPos > 1)
             {
                 // Position is of the form AB02 or AC10
                 // Convert the first character to ascii, subtract 64 (1 less than "A"), then multiply by 26 * columnsPerRow
-                var prefix = match.Value[0];
+                var prefix = vialPositionUpper[0];
                 prefixAddon = (26 * columnsPerRow) * (prefix - 64);
-                columnLetter = match.Value[1];
+                columnLetter = vialPositionUpper[1];
             }
             else
             {
                 // Position is of the form A9 or C11
-                columnLetter = match.Value[0];
+                columnLetter = vialPositionUpper[0];
             }
 
-            var positionInColumnText = vialPosition.Substring(match.Value.Length);
+            var positionInColumnText = vialPosition.Substring(intPos);
             int positionInColumn;
             if (!int.TryParse(positionInColumnText, out positionInColumn))
             {
@@ -140,7 +139,6 @@ namespace LcmsNetData.Data
             var vialNum = prefixAddon + columnAddon + positionInColumn;
 
             return vialNum;
-
         }
 
         /// <summary>
