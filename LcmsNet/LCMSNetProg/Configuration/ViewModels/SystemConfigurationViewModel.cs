@@ -462,7 +462,8 @@ namespace LcmsNet.Configuration.ViewModels
             try
             {
                 var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
-                dmsTools.GetColumnListFromDMS();
+                // Just re-load everything
+                dmsTools.LoadCacheFromDMS();
             }
             catch (Exception ex)
             {
