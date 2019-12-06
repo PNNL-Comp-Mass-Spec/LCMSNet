@@ -50,6 +50,32 @@ namespace LcmsNetData.Data
         }
 
         /// <summary>
+        /// Unlock the object and reset all properties to default values.
+        /// </summary>
+        public void Reset()
+        {
+            LockData = false;
+            Batch = -1;
+            Block = -1;
+            CartName = "";
+            CartConfigName = "";
+            Comment = "";
+            CommentAddition = "";
+            DatasetName = "";
+            DatasetType = "";
+            Experiment = "";
+            MRMFileID = -1;
+            EMSLProposalID = "";
+            RequestID = 0;
+            RequestName = "";
+            RunOrder = -1;
+            SelectedToRun = false;
+            EMSLUsageType = "";
+            UserList = "";
+            WorkPackage = "";
+        }
+
+        /// <summary>
         /// Clone - get a deep copy
         /// </summary>
         /// <returns></returns>
