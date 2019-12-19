@@ -856,7 +856,7 @@ namespace LcmsNetDmsTools
             IEnumerable<string> tmpRetVal; // Temp list for holding separation types
             var connStr = GetConnectionString();
 
-            const string sqlCmd = "SELECT Distinct SS_Name FROM T_Secondary_Sep ORDER BY SS_Name";
+            const string sqlCmd = "SELECT Distinct SS_Name FROM T_Secondary_Sep WHERE SS_active > 0 ORDER BY SS_Name";
 
             try
             {
