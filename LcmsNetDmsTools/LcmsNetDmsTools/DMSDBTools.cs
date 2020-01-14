@@ -246,6 +246,7 @@ namespace LcmsNetDmsTools
             {
                 // MSSQL/SqlConnection connection pooling: handled transparently based on connection strings
                 // https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql-server-connection-pooling
+                connection.Close();
                 return new SqlConnectionWrapper(connString);
             }
             else
@@ -467,6 +468,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -515,6 +517,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -555,6 +558,7 @@ namespace LcmsNetDmsTools
                 var cn = GetConnection(connStr);
                 if (!cn.IsValid)
                 {
+                    cn.Dispose();
                     throw new Exception(cn.FailedConnectionAttemptMessage);
                 }
 
@@ -1089,6 +1093,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1120,6 +1125,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1158,6 +1164,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1199,6 +1206,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1235,6 +1243,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1265,6 +1274,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1317,6 +1327,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1351,6 +1362,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1441,6 +1453,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1496,6 +1509,7 @@ namespace LcmsNetDmsTools
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
             {
+                cn.Dispose();
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
@@ -1535,7 +1549,7 @@ namespace LcmsNetDmsTools
             try
             {
                 var connStr = GetConnectionString();
-                var conn = GetConnection(connStr);
+                using (var conn = GetConnection(connStr))
                 // Test getting 1 row from every table we query?...
                 using (var cmd = conn.CreateCommand())
                 {
