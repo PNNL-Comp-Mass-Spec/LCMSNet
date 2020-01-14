@@ -1173,12 +1173,12 @@ namespace LcmsNetDmsTools
                     {
                         yield return new ExperimentData
                         {
-                            Created = reader["Created"].CastDBValTo<DateTime?>(),
+                            Created = reader["Created"].CastDBValTo<DateTime>(),
                             Experiment = reader["Experiment"].CastDBValTo<string>(),
-                            ID = reader["ID"].CastDBValTo<int?>(),
+                            ID = reader["ID"].CastDBValTo<int>(),
                             Organism = reader["Organism"].CastDBValTo<string>(),
                             Reason = reader["Reason"].CastDBValTo<string>(),
-                            Request = reader["Request"].CastDBValTo<int?>(),
+                            Request = reader["Request"].CastDBValTo<int>(),
                             Researcher = reader["Researcher"].CastDBValTo<string>()
                         };
                     }

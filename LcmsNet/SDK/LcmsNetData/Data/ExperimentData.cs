@@ -14,12 +14,12 @@ namespace LcmsNetData.Data
             //Campaign = null;
             //Comment = null;
 
-            Created = null;
+            Created = DateTime.MinValue;
             Experiment = null;
-            ID = null;
+            ID = 0;
             Organism = null;
             Reason = string.Empty;
-            Request = null;
+            Request = 0;
             Researcher = null;
         }
 
@@ -38,14 +38,14 @@ namespace LcmsNetData.Data
 
         #region Attributes
 
-        private int? id;
+        private int id;
         private string experimentName;
         private string researcher;
         private string reason;
 
         private string organism;
-        private DateTime? created;
-        private int? request;
+        private DateTime created;
+        private int request;
         //private string comment;
         //private string campaign;
 
@@ -65,7 +65,7 @@ namespace LcmsNetData.Data
         //    set => this.RaiseAndSetIfChanged(ref comment, value);
         //}
 
-        public int? ID
+        public int ID
         {
             get => id;
             set => this.RaiseAndSetIfChanged(ref id, value);
@@ -97,14 +97,13 @@ namespace LcmsNetData.Data
             set => this.RaiseAndSetIfChanged(ref organism, value);
         }
 
-        [PersistenceSetting(PropertyGetOverrideMethod = nameof(CreatedPropertyReadOverride))]
-        public DateTime? Created
+        public DateTime Created
         {
             get => created;
             set => this.RaiseAndSetIfChanged(ref created, value);
         }
 
-        public int? Request
+        public int Request
         {
             get => request;
             set => this.RaiseAndSetIfChanged(ref request, value);
@@ -118,20 +117,12 @@ namespace LcmsNetData.Data
         {
             var experiment = string.IsNullOrWhiteSpace(experimentName) ? "Undefined experiment" : experimentName;
 
-            if (id.HasValue)
-                return id + ": " + experiment;
-
-            return experiment;
+            return id + ": " + experiment;
         }
 
         private string ReasonPropertyReadOverride()
         {
             return Reason?.Replace("'", "") ?? "";
-        }
-
-        private DateTime CreatedPropertyReadOverride()
-        {
-            return Created ?? DateTime.MinValue;
         }
 
         #endregion
