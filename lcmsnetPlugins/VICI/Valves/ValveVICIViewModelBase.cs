@@ -28,7 +28,13 @@ namespace LcmsNetPlugins.VICI.Valves
             }
             ValveControlTabSelected = true; // Default selected tab
 
-            SetupCommands();
+            ClearValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearValveId()));
+            RefreshValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveId()));
+            RefreshValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValvePosition()));
+            RefreshValveVersionInfoCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveVersion()));
+            OpenPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
+            ClosePortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
+            InitializeDeviceCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InitializeDevice()));
 
             this.PropertyChanged += OnPropertyChanged;
         }
@@ -107,17 +113,6 @@ namespace LcmsNetPlugins.VICI.Valves
         public ReactiveCommand<Unit, Unit> OpenPortCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> ClosePortCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            ClearValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearValveId()));
-            RefreshValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveId()));
-            RefreshValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValvePosition()));
-            RefreshValveVersionInfoCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveVersion()));
-            OpenPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
-            ClosePortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
-            InitializeDeviceCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InitializeDevice()));
-        }
 
         #endregion
 
