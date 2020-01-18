@@ -106,13 +106,13 @@ namespace LcmsNetPlugins.VICI.Valves
 
         #region Commands
 
-        public ReactiveCommand<Unit, Unit> ClearValveIdCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RefreshValveIdCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RefreshValvePositionCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RefreshValveVersionInfoCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> OpenPortCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ClosePortCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ClearValveIdCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshValveIdCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshValvePositionCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshValveVersionInfoCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenPortCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClosePortCommand { get; }
+        public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; }
 
         #endregion
 

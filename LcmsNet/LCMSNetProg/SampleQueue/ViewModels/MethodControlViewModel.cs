@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Windows.Media;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetData.Configuration;
@@ -149,8 +150,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region Commands
 
-        public ReactiveCommand AddBlankAppendCommand { get; protected set; }
-        public ReactiveCommand MoveToColumnCommand { get; protected set; }
+        public ReactiveCommand<Unit, SampleData> AddBlankAppendCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> MoveToColumnCommand { get; protected set; }
 
         protected override void SetupCommands()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Linq;
 using LcmsNetCommonControls.Devices.Pumps;
 using LcmsNetSDK.Data;
@@ -182,8 +183,8 @@ namespace LcmsNet.Devices.Pumps.ViewModels
 
         #endregion
 
-        public ReactiveCommand MoveLeftCommand { get; private set; }
-        public ReactiveCommand MoveRightCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> MoveLeftCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> MoveRightCommand { get; private set; }
 
         private void SetupCommands()
         {

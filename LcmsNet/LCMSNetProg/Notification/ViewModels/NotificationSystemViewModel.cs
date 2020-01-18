@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
@@ -1010,11 +1011,11 @@ namespace LcmsNet.Notification.ViewModels
 
         #region Commands
 
-        public ReactiveCommand SaveCommand { get; private set; }
-        public ReactiveCommand EnableCommand { get; private set; }
-        public ReactiveCommand DisableCommand { get; private set; }
-        public ReactiveCommand IgnoreSettingCommand { get; private set; }
-        public ReactiveCommand IgnoreAllCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SaveCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> EnableCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> DisableCommand { get; private set; }
+        public ReactiveCommand<Unit, DeviceNotificationAction> IgnoreSettingCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> IgnoreAllCommand { get; private set; }
 
         private void SetupCommands()
         {

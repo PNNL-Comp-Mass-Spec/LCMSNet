@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Windows;
 using LcmsNetData.Configuration;
 using LcmsNetData.Data;
@@ -203,13 +204,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region ReactiveCommands
 
-        public ReactiveCommand ApplyLCMethodCommand { get; private set; }
-        public ReactiveCommand ApplyInstrumentMethodCommand { get; private set; }
-        public ReactiveCommand ApplyVolumeCommand { get; private set; }
-        public ReactiveCommand ApplyDatasetTypeCommand { get; private set; }
-        public ReactiveCommand ApplyCartConfigCommand { get; private set; }
-        public ReactiveCommand ApplyAllCommand { get; private set; }
-        public ReactiveCommand CloseWindowCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ApplyLCMethodCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ApplyInstrumentMethodCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ApplyVolumeCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ApplyDatasetTypeCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ApplyCartConfigCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ApplyAllCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> CloseWindowCommand { get; private set; }
 
         private void SetupCommands()
         {

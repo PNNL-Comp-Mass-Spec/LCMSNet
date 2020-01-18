@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Windows.Data;
 using LcmsNetData.Logging;
@@ -127,8 +128,8 @@ namespace LcmsNet.Logging.ViewModels
 
         #region Commands
 
-        public ReactiveCommand AcknowledgeErrorsCommand { get; private set; }
-        public ReactiveCommand ClearMessagesCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> AcknowledgeErrorsCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ClearMessagesCommand { get; private set; }
 
         private void SetupCommands()
         {

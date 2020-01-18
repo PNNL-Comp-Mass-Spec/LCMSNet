@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
@@ -589,10 +590,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             SampleControlViewModel.RestoreUserUIState();
         }
 
-        public ReactiveCommand UndoCommand { get; private set; }
-        public ReactiveCommand RedoCommand { get; private set; }
-        public ReactiveCommand RunQueueCommand { get; private set; }
-        public ReactiveCommand StopQueueCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> UndoCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RedoCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RunQueueCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> StopQueueCommand { get; private set; }
 
         private void SetupCommands()
         {

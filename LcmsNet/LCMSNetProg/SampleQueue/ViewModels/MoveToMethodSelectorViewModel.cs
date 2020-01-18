@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 
@@ -30,8 +31,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region Commands
 
-        public ReactiveCommand OkCommand { get; private set; }
-        public ReactiveCommand CancelCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> OkCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> CancelCommand { get; private set; }
 
         private void SetupCommands()
         {

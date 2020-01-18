@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -746,22 +747,22 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region ReactiveCommands
 
-        public ReactiveCommand AddBlankCommand { get; protected set; }
-        public ReactiveCommand AddBlankToUnusedCommand { get; protected set; }
-        public ReactiveCommand AddDMSCommand { get; protected set; }
-        public ReactiveCommand RemoveSelectedCommand { get; protected set; }
-        public ReactiveCommand FillDownCommand { get; protected set; }
-        public ReactiveCommand TrayVialCommand { get; protected set; }
-        public ReactiveCommand RandomizeCommand { get; protected set; }
-        public ReactiveCommand MoveDownCommand { get; protected set; }
-        public ReactiveCommand MoveUpCommand { get; protected set; }
-        public ReactiveCommand DeleteUnusedCommand { get; protected set; }
-        public ReactiveCommand CartColumnDateCommand { get; protected set; }
-        public ReactiveCommand DmsEditCommand { get; protected set; }
-        public ReactiveCommand UndoCommand { get; protected set; }
-        public ReactiveCommand RedoCommand { get; protected set; }
-        public ReactiveCommand PreviewThroughputCommand { get; protected set; }
-        public ReactiveCommand ClearAllSamplesCommand { get; protected set; }
+        public ReactiveCommand<Unit, SampleData> AddBlankCommand { get; protected set; }
+        public ReactiveCommand<Unit, SampleData> AddBlankToUnusedCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> AddDMSCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> RemoveSelectedCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> FillDownCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> TrayVialCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> RandomizeCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> MoveDownCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> MoveUpCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> DeleteUnusedCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> CartColumnDateCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> DmsEditCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> UndoCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> RedoCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> PreviewThroughputCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> ClearAllSamplesCommand { get; protected set; }
 
         protected virtual void SetupCommands()
         {
