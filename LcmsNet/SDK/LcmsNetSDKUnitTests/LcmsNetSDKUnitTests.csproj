@@ -51,9 +51,6 @@
     <Compile Include="TimeKeeperTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Demo\DemoPluginLibrary.csproj">
       <Project>{36381f3a-1ca7-4c8b-b99c-035b3c4e84f4}</Project>
       <Name>DemoPluginLibrary</Name>
