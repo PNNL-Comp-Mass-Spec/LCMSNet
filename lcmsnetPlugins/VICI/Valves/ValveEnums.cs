@@ -12,7 +12,7 @@ namespace LcmsNetPlugins.VICI.Valves
         [Description("3")] P3 = 3,
         [Description("4")] P4 = 4,
         [Description("Unknown")] Unknown = -1
-    };
+    }
 
     public enum EightPositionState
     {
@@ -25,7 +25,7 @@ namespace LcmsNetPlugins.VICI.Valves
         [Description("7")] P7 = 7,
         [Description("8")] P8 = 8,
         [Description("Unknown")] Unknown = -1
-    };
+    }
 
     public enum TenPositionState
     {
@@ -40,7 +40,8 @@ namespace LcmsNetPlugins.VICI.Valves
         [Description("9")] P9 = 9,
         [Description("10")] P10 = 10,
         [Description("Unknown")] Unknown = -1
-    };
+    }
+
     /// <summary>
     /// state enum for 15-position valves
     /// </summary>
@@ -62,7 +63,7 @@ namespace LcmsNetPlugins.VICI.Valves
         [Description("14")] P14 = 14,
         [Description("15")] P15 = 15,
         [Description("Unknown")] Unknown = -1
-    };
+    }
 
     /// <summary>
     /// state enum for a sixteen position multiposition valve, for example a 33-port valve with a 16-position isolated continuous flow plate
@@ -86,5 +87,5 @@ namespace LcmsNetPlugins.VICI.Valves
         [Description("15")] P15 = 15,
         [Description("16")] P16 = 16,
         [Description("Unknown")] Unknown = -1
-    };
+    }
 }
