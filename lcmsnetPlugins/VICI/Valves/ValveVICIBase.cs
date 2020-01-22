@@ -406,7 +406,9 @@ namespace LcmsNetPlugins.VICI.Valves
                 }
             }
 
-            if (version.EndsWith("UA_MAIN_EQ", StringComparison.OrdinalIgnoreCase))
+            // Universal Actuators have a "Main" firmware, and a "Serial" firmware (VR2)
+            // Detect universal actuators by finding the text "UA_MAIN_" in the returned value (examples are UA_MAIN_CH and UA_MAIN_EQ
+            if (version.IndexOf("UA_MAIN_", StringComparison.OrdinalIgnoreCase) > -1)
             {
                 ReadCommand("VR2", out var version2, 100);
                 if (result == ValveErrors.Success && !string.IsNullOrWhiteSpace(version2))
@@ -420,7 +422,6 @@ namespace LcmsNetPlugins.VICI.Valves
                 IsUniversalActuator = false;
             }
 
-            // TODO: Get the serial interface firmware version for universal actuators
             Version = version;
             return version;
         }
@@ -731,7 +732,7 @@ namespace LcmsNetPlugins.VICI.Valves
                 returnData = Port.ReadExisting();
                 if (!string.IsNullOrEmpty(returnData))
                 {
-                    // Valve may return \r\n or \n\r; make all instances be \n
+                    // Valve may return string containing \r\n or \n\r; make all instances be \n
                     returnData = returnData.Replace("\r", "\n").Replace("\n\n", "\n").Trim('\n');
                 }
             }
