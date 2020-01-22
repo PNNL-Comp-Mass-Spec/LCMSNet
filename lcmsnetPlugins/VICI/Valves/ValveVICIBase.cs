@@ -27,6 +27,8 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         private DeviceStatus status;
 
+        private string versionBackingValue = "";
+
         protected static readonly int IDChangeDelayTimeMsec = 325;  //milliseconds
         protected const int MinTimeBetweenCommandsMs = 100; // milliseconds
 
@@ -118,6 +120,11 @@ namespace LcmsNetPlugins.VICI.Valves
         public bool Emulation { get; set; }
 
         /// <summary>
+        /// Flag set by GetVersion, if a universal actuator is detected; used to conditionalize the use of some commands
+        /// </summary>
+        public bool IsUniversalActuator { get; private set; }
+
+        /// <summary>
         /// Gets or sets the status of the device
         /// </summary>
         public DeviceStatus Status
@@ -202,7 +209,7 @@ namespace LcmsNetPlugins.VICI.Valves
         }
 
         /// <summary>
-        /// Gets and sets the valve's ID in the software. DOES NOT CHANGE THE VALVE'S HARDWARE ID.
+        /// Gets and sets the valve's ID in the software. DOES NOT CHANGE THE VALVE'S HARDWARE ID (Must call SetHardwareID to do that).
         /// </summary>
         [PersistenceData("SoftwareID")]
         public char SoftwareID
@@ -220,7 +227,11 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// Gets the valve's version information.
         /// </summary>
-        public string Version { get; private set; }
+        public string Version
+        {
+            get => versionBackingValue;
+            private set => this.RaiseAndSetIfChanged(ref versionBackingValue, value);
+        }
 
         #endregion
 
@@ -376,52 +387,37 @@ namespace LcmsNetPlugins.VICI.Valves
                 return "3.1337";
             }
 
-            //If the serial port is not open, open it
-            if (!Port.IsOpen)
+            var result = ReadCommand("VR", out var version, 100);
+            if (result != ValveErrors.Success)
             {
-                try
+                switch (result)
                 {
-                    Port.Open();
+                    case ValveErrors.UnauthorizedAccess:
+                        throw new ValveExceptionUnauthorizedAccess();
+                    case ValveErrors.TimeoutDuringWrite:
+                        throw new ValveExceptionWriteTimeout();
+                    case ValveErrors.TimeoutDuringRead:
+                        throw new ValveExceptionReadTimeout();
                 }
-                catch (UnauthorizedAccessException)
+            }
+
+            if (version.EndsWith("UA_MAIN_EQ", StringComparison.OrdinalIgnoreCase))
+            {
+                ReadCommand("VR2", out var version2, 100);
+                if (result == ValveErrors.Success && !string.IsNullOrWhiteSpace(version2))
                 {
-                    throw new ValveExceptionUnauthorizedAccess();
+                    IsUniversalActuator = true;
+                    version += "\n" + version2;
                 }
             }
-
-            try
+            else
             {
-                // TODO: Universal Actuator: 'VR' is main PCB Version, 'VR2' is serial interface version
-                Port.WriteLine(SoftwareID + "VR");
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionWriteTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
+                IsUniversalActuator = false;
             }
 
-            string tempBuffer;
-            //Version info is displayed on 2 lines
-            try
-            {
-                //tempBuffer = Port.ReadLine() + " " + Port.ReadLine();
-                tempBuffer = Port.ReadExisting();
-                tempBuffer = tempBuffer.Replace("\r", "\n").Replace("\n\n", "\n").Trim('\n'); //Readability
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionReadTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
-            }
-
-            Version = tempBuffer;
-            return tempBuffer;
+            // TODO: Get the serial interface firmware version for universal actuators
+            Version = version;
+            return version;
         }
         /// <summary>
         /// Get the hardware ID of the connected valve.
@@ -434,47 +430,21 @@ namespace LcmsNetPlugins.VICI.Valves
                 return '0';
             }
 
-            //If the serial port is not open, open it
-            if (!Port.IsOpen)
+            var result = ReadCommand("ID", out var tempBuffer, 100);
+            if (result != ValveErrors.Success)
             {
-                try
+                switch (result)
                 {
-                    Port.Open();
+                    case ValveErrors.UnauthorizedAccess:
+                        throw new ValveExceptionUnauthorizedAccess();
+                    case ValveErrors.TimeoutDuringWrite:
+                        throw new ValveExceptionWriteTimeout();
+                    case ValveErrors.TimeoutDuringRead:
+                        throw new ValveExceptionReadTimeout();
                 }
-                catch (UnauthorizedAccessException)
-                {
-                    throw new ValveExceptionUnauthorizedAccess();
-                }
-            }
-
-            try
-            {
-                Port.WriteLine(SoftwareID + "ID");
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionWriteTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
             }
 
             var tempID = ' ';  //Default to blank space
-            string tempBuffer;
-
-            try
-            {
-                tempBuffer = Port.ReadLine();
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionReadTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
-            }
 
             //This should look something like
             //  ID = 0
@@ -485,13 +455,17 @@ namespace LcmsNetPlugins.VICI.Valves
             // Universal actuator: strip off null characters.
             if (!string.IsNullOrEmpty(tempBuffer))
             {
-                tempBuffer = tempBuffer.Trim('\0');
+                tempBuffer = tempBuffer.Trim('\0', ' ');
+            }
+            else
+            {
+                tempBuffer = "";
             }
 
             if (tempBuffer.Length > 2 && tempBuffer.IndexOf("not used", StringComparison.Ordinal) == -1)   //Only do this if string doesn't contain "not used"
             {
                 //Grab the actual position from the above string
-                if (tempBuffer.Contains("=")) //Make sure we have the expected content in the string
+                if (tempBuffer.Contains("=") && !tempBuffer.EndsWith("=")) //Make sure we have the expected content in the string
                 {
                     //Find the first =
                     var tempCharIndex = tempBuffer.IndexOf("=", StringComparison.Ordinal);
@@ -528,38 +502,18 @@ namespace LcmsNetPlugins.VICI.Valves
             //Validate the new ID
             if (newID - '0' <= 9 && newID - '0' >= 0)
             {
-                //If the serial port is not open, open it
-                if (!Port.IsOpen)
-                {
-                    try
-                    {
-                        Port.Open();
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        throw new ValveExceptionUnauthorizedAccess();
-                    }
-                }
+                var result = SendCommand("ID" + newID);
 
-                try
+                //Wait 325ms for the command to go through
+                System.Threading.Thread.Sleep(IDChangeDelayTimeMsec);
+
+                if (result == ValveErrors.Success)
                 {
-                    Port.WriteLine(SoftwareID + "ID" + newID);
                     SoftwareID = newID;
+                    OnDeviceSaveRequired();
+                }
 
-                    //Wait 325ms for the command to go through
-
-                    System.Threading.Thread.Sleep(IDChangeDelayTimeMsec);
-                }
-                catch (TimeoutException)
-                {
-                    return ValveErrors.TimeoutDuringWrite;
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    return ValveErrors.UnauthorizedAccess;
-                }
-                OnDeviceSaveRequired();
-                return ValveErrors.Success;
+                return result;
             }
 
             return ValveErrors.BadArgument;
@@ -575,39 +529,35 @@ namespace LcmsNetPlugins.VICI.Valves
                 return ValveErrors.Success;
             }
 
-            try
+            // Universal actuator can use '*ID*' (to clear ID for all connected valves); but nID* will clear it for a single valve
+            var result = SendCommand("ID*");
+
+            //Wait 325ms for the command to go through
+            System.Threading.Thread.Sleep(IDChangeDelayTimeMsec);
+
+            if (result == ValveErrors.Success)
             {
-                // TODO: Correct command for Universal actuator is '*ID*'
-                Port.WriteLine(SoftwareID + "ID*");
                 SoftwareID = ' ';
-
-                //Wait 325ms for the command to go through
-
-                System.Threading.Thread.Sleep(IDChangeDelayTimeMsec);
-            }
-            catch (TimeoutException)
-            {
-                return ValveErrors.TimeoutDuringWrite;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return ValveErrors.UnauthorizedAccess;
+                OnDeviceSaveRequired();
             }
 
-            return ValveErrors.Success;
+            return result;
         }
 
         /// <summary>
         /// Send a write-only command via the serial port
         /// </summary>
         /// <param name="command">The command to send, excluding valveId</param>
+        /// <param name="noPrefix">If true, the SoftwareID is not pre-pended to the command</param>
         /// <returns></returns>
-        protected ValveErrors SendCommand(string command)
+        protected ValveErrors SendCommand(string command, bool noPrefix = false)
         {
             if (Emulation)
             {
                 return ValveErrors.Success;
             }
+
+            var id = noPrefix ? "" : SoftwareID.ToString();
 
             //If the serial port is not open, open it
             if (!Port.IsOpen)
@@ -624,7 +574,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
             try
             {
-                Port.WriteLine(SoftwareID + command);
+                Port.WriteLine(id + command);
             }
             catch (TimeoutException)
             {
@@ -644,9 +594,10 @@ namespace LcmsNetPlugins.VICI.Valves
         /// Send a read command via the serial port
         /// </summary>
         /// <param name="command">The read command to send, excluding valveId</param>
-        /// <param name="returnData">The d</param>
+        /// <param name="returnData">The data returned by the command</param>
+        /// <param name="readDelayMs">The delay between when the command is sent, and when returned data is read</param>
         /// <returns></returns>
-        protected ValveErrors ReadCommand(string command, out string returnData)
+        protected ValveErrors ReadCommand(string command, out string returnData, int readDelayMs = 0)
         {
             returnData = "";
             if (Emulation)
@@ -671,7 +622,10 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 Port.DiscardInBuffer();
                 Port.WriteLine(SoftwareID + command);
-                System.Threading.Thread.Sleep(200); // TODO: Is this really needed?
+                if (readDelayMs > 0)
+                {
+                    System.Threading.Thread.Sleep(readDelayMs);
+                }
             }
             catch (TimeoutException)
             {
@@ -684,7 +638,13 @@ namespace LcmsNetPlugins.VICI.Valves
 
             try
             {
+                //Read in whatever is waiting in the buffer
                 returnData = Port.ReadExisting();
+                if (!string.IsNullOrEmpty(returnData))
+                {
+                    // Valve may return \r\n or \n\r; make all instances be \n
+                    returnData = returnData.Replace("\r", "\n").Replace("\n\n", "\n").Trim('\n');
+                }
             }
             catch (TimeoutException)
             {
@@ -693,6 +653,11 @@ namespace LcmsNetPlugins.VICI.Valves
             catch (UnauthorizedAccessException)
             {
                 return ValveErrors.UnauthorizedAccess;
+            }
+
+            if (returnData.IndexOf("Bad command", StringComparison.OrdinalIgnoreCase) > -1)
+            {
+                return ValveErrors.BadCommand;
             }
 
             return ValveErrors.Success;

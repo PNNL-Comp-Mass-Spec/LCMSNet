@@ -19,6 +19,7 @@ namespace FluidicsSDK.Base
         TimeoutDuringWrite,
         ValvePositionMismatch,
         BadArgument,
+        BadCommand,
         UndefinedPort
     }
 }

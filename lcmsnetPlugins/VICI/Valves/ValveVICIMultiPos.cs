@@ -229,7 +229,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// Gets the current position of the valve.
         /// </summary>
-        /// <returns>The position as an enumValvePosition2Pos.</returns>
+        /// <returns>The position as an int.</returns>
         public override int GetPosition()
         {
             if (Emulation)
