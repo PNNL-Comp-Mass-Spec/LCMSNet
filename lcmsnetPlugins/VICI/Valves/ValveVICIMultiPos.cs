@@ -43,6 +43,7 @@ namespace LcmsNetPlugins.VICI.Valves
         //More positions reduces time it takes to rotate, but we can't know how many positions there are
         //Also, as LCEvents are timed in seconds, we round up to 4000ms to ensure that the
         //method isn't killed over 150ms + concurrency delays.
+        // TODO: Universal actuator has "TM" command to notify how long the previous move took - should use it to calculate this delay time.
         private static readonly int RotationDelayTimeMsec = 4000;
         private const int CONST_DEFAULT_TIMEOUT = 1500;
 
@@ -76,6 +77,7 @@ namespace LcmsNetPlugins.VICI.Valves
             LastSentPosition       = -1;
 
             NumberOfPositions      = numPositions;
+            HardwarePositions = numPositions;
         }
 
         /// <summary>
@@ -90,6 +92,7 @@ namespace LcmsNetPlugins.VICI.Valves
             LastSentPosition       = -1;
 
             NumberOfPositions  = numPositions;
+            HardwarePositions = numPositions;
         }
 
         #endregion
@@ -206,63 +209,22 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 return ValveErrors.Success;
             }
-            //If the serial port is not open, open it
-            if (!Port.IsOpen)
-            {
-                try
-                {
-                    Port.Open();
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    return ValveErrors.UnauthorizedAccess;
-                }
-            }
+
+            // TODO: Set the rotationalDelayTimeMs based on the number of positions, and then wait positions changed + 1 for it to change?
+            // TODO: Hard challenge is dealing with valves that are configured with unidirectional movement
+            // TODO: Math for setting the delay for bidirectional movement: Math.Min(Math.Abs(oldPos - newPos), (oldPos + newPos) % numPositions) * rotationalDelayTimeMs
+            // TODO: Read the rotation mode;
+            // TODO: If Auto, use the above math; if not:
+            // TODO: clockwise/Forward: ((newPos - oldPos + numPositions) % numPositions) * rotationalDelayTimeMs
+            // TODO: counter-clockwise/Reverse: ((oldPos - newPos + numPositions) % numPositions) * rotationalDelayTimeMs
 
             if (newPosition > 0 && newPosition <= NumberOfPositions)
             {
-                try
+                LastSentPosition = newPosition;
+                var sendError = SetHardwarePosition(newPosition.ToString(), RotationDelayTimeMsec);
+                if (sendError != ValveErrors.Success)
                 {
-                    LastSentPosition = newPosition;
-                    Port.WriteLine(SoftwareID + "GO" + newPosition);
-                }
-
-                catch (TimeoutException)
-                {
-                    //ApplicationLogger.LogError(0, "Could not set position.  Write timeout.");
-                    return ValveErrors.TimeoutDuringWrite;
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    //ApplicationLogger.LogError(0, "Could not set position.  Could not access serial port.");
-                    return ValveErrors.UnauthorizedAccess;
-                }
-
-                //Wait RotationDelayTimeMsec for valve to actually switch before proceeding
-                //TODO: BLL test this instead using the abort event.
-                if (AbortEvent == null)
-                    AbortEvent = new System.Threading.ManualResetEvent(false);
-
-                var waited = System.Threading.WaitHandle.WaitAll(new System.Threading.WaitHandle[] { AbortEvent }, RotationDelayTimeMsec);
-                if (waited)
-                    return ValveErrors.BadArgument;
-
-                //System.Threading.Thread.Sleep(RotationDelayTimeMsec);
-
-                //Doublecheck that the position change was correctly executed
-                try
-                {
-                    GetPosition();
-                }
-                catch (ValveExceptionWriteTimeout)
-                {
-                    //ApplicationLogger.LogError(0, "Could not set position.  The write operation timed out to device.");
-                    return ValveErrors.TimeoutDuringWrite;
-                }
-                catch (ValveExceptionUnauthorizedAccess)
-                {
-                    //ApplicationLogger.LogError(0, "Could not set position. Could not access port.");
-                    return ValveErrors.UnauthorizedAccess;
+                    return sendError;
                 }
 
                 if (LastMeasuredPosition != LastSentPosition)
@@ -300,87 +262,17 @@ namespace LcmsNetPlugins.VICI.Valves
                 return LastSentPosition;
             }
 
-            //If the serial port is not open, open it
-            if (!Port.IsOpen)
-            {
-                try
-                {
-                    Port.Open();
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    throw new ValveExceptionUnauthorizedAccess();
-                }
-            }
-
-            try
-            {
-                Port.DiscardInBuffer();
-                Port.WriteLine(SoftwareID + "CP");
-                System.Threading.Thread.Sleep(200);
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionWriteTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
-            }
-
-            //Read in whatever is waiting in the buffer
-            //This should look like
-            //  Position is "B"
+            // Data returned from hardware should look like
+            //  Position is = 1
             // Universal actuator:
             // \0CP01 (no hardware ID) or 5CP01 (hardware ID 5)
-            string tempBuffer;
-            try
-            {
-                tempBuffer = Port.ReadExisting();
+            // GetHardwarePosition should return "1" or "01"
+            var tempPosition = GetHardwarePosition();
 
-                var cpPos = tempBuffer.IndexOf("CP", StringComparison.OrdinalIgnoreCase);
-                if (cpPos >= 0 && cpPos < 2)
-                {
-                    // Universal actuator
-                    tempBuffer = "CP=" + tempBuffer.Substring(cpPos + 2).Trim('\r', '\n');
-                }
-                else
-                {
-                    var contains = tempBuffer.Contains("Position is =");
-
-                    var data = tempBuffer.Split(new[] {"\r"}, StringSplitOptions.RemoveEmptyEntries);
-                    tempBuffer = "";
-                    for (var i = data.Length - 1; i >= 0; i--)
-                    {
-                        var x = data[i];
-                        x = x.Replace(" ", "").ToLower();
-                        if (x.Contains("positionis="))
-                        {
-                            tempBuffer = data[i];
-                            break;
-                        }
-                    }
-                }
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionReadTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
-            }
-
-            //
             // Grab the actual position from the above string
-            //
-            if (tempBuffer.Length > 1)
+            if (!string.IsNullOrWhiteSpace(tempPosition))
             {
-                var positions = tempBuffer.Split('=');
-                var tempPosition = positions[positions.Length - 1];
-
-                int position;
-                if (int.TryParse(tempPosition, out position))
+                if (int.TryParse(tempPosition, out var position))
                 {
                     if (position >= 0 && position <= NumberOfPositions)
                     {
@@ -407,23 +299,21 @@ namespace LcmsNetPlugins.VICI.Valves
                 return ValveErrors.Success;
             }
 
-            try
+            // TODO: Test this; will there be a line-ending character problem?
+            var sendError = SendCommand("NP" + numPositions);
+            if (sendError != ValveErrors.Success)
             {
-                Port.WriteLine(SoftwareID + "NP" + numPositions);
-                NumberOfPositions = numPositions;
+                switch (sendError)
+                {
+                    case ValveErrors.UnauthorizedAccess:
+                        throw new ValveExceptionUnauthorizedAccess();
+                    case ValveErrors.TimeoutDuringWrite:
+                        throw new ValveExceptionWriteTimeout();
+                }
+            }
 
-                //Wait 325ms for the command to go through
-
-                System.Threading.Thread.Sleep(IDChangeDelayTimeMsec);
-            }
-            catch (TimeoutException)
-            {
-                return ValveErrors.TimeoutDuringWrite;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return ValveErrors.UnauthorizedAccess;
-            }
+            //Wait 325ms for the command to go through
+            System.Threading.Thread.Sleep(IDChangeDelayTimeMsec);
 
             return ValveErrors.Success;
         }
@@ -439,64 +329,56 @@ namespace LcmsNetPlugins.VICI.Valves
             }
 
             var tempNumPositions = -1;
-
-            //If the serial port is not open, open it
-            if (!Port.IsOpen)
+            // 'NP' command misbehaves when the port NewLine is just the default "\n" - for some reason it was setting the number of positions to 2 when just trying to get the number of positions.
+            // Appending "\r" to the command resolves this.
+            var readError = ReadCommand("NP\r", out var numPositions, 100);
+            if (readError != ValveErrors.Success)
             {
-                try
+                switch (readError)
                 {
-                    Port.Open();
+                    case ValveErrors.UnauthorizedAccess:
+                        throw new ValveExceptionUnauthorizedAccess();
+                    case ValveErrors.TimeoutDuringWrite:
+                        throw new ValveExceptionWriteTimeout();
+                    case ValveErrors.TimeoutDuringRead:
+                        throw new ValveExceptionReadTimeout();
                 }
-                catch (UnauthorizedAccessException)
-                {
-                    throw new ValveExceptionUnauthorizedAccess();
-                }
-            }
-
-            try
-            {
-                Port.WriteLine(SoftwareID + "NP");
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionWriteTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
-            }
-
-            string tempBuffer;
-
-            try
-            {
-                tempBuffer = Port.ReadLine();
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionReadTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
             }
 
             //This should look something like
             //  NP = 5
+            //  NP5 (for universal actuator
             //Grab the actual #positions from the above string
-            if (tempBuffer.Length > 1)  //Make sure we have content in the string
+            if (numPositions.Length > 1)  //Make sure we have content in the string
             {
                 //Find the first =
-                var tempCharIndex = tempBuffer.IndexOf("=", StringComparison.Ordinal);
+                var tempCharIndex = numPositions.IndexOf("=", StringComparison.Ordinal);
                 if (tempCharIndex >= 0)  //Make sure we found a =
                 {
-                    //Change the position to be the second character following the first =
-                    //TODO: Do we ever have more than 9 positions? Do we need 2 digits?
-                    tempNumPositions = Convert.ToInt32(tempBuffer.Substring(tempCharIndex + 2, 1).ToCharArray()[0]);
+                    // Take everything after the '=', trim any whitespace, and split off any extra lines
+                    if (!int.TryParse(numPositions.Substring(tempCharIndex + 1).Trim().Split('\n')[0].Trim(), out tempNumPositions))
+                    {
+                        tempNumPositions = -1;
+                    }
+                }
+                else
+                {
+                    // Universal actuator
+                    var np = numPositions.IndexOf("NP", StringComparison.OrdinalIgnoreCase);
+                    if (np >= 0 && !int.TryParse(numPositions.Substring(np + 2).Split('\n')[0].Trim(), out tempNumPositions))
+                    {
+                        tempNumPositions = -1;
+                    }
                 }
             }
 
-            NumberOfPositions = tempNumPositions;
+            if (tempNumPositions > 1)
+            {
+                // TODO: I would like to do this, but other code need to be changed first so that this would have desired results.
+                //NumberOfPositions = tempNumPositions;
+                HardwarePositions = tempNumPositions;
+            }
+
             return tempNumPositions;
         }
 

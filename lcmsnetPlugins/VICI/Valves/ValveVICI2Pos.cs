@@ -34,12 +34,6 @@ namespace LcmsNetPlugins.VICI.Valves
     ]*/
     public class ValveVICI2Pos : ValveVICIBase, IDevice, ITwoPositionValve
     {
-        // Serial port Settings for EHCA-CE (2-pos actuator):
-        //     Baud Rate   9600
-        //     Parity      None
-        //     Stop Bits   One
-        //     Data Bits   8
-        //     Handshake   None
 
         #region Members
 
@@ -149,90 +143,40 @@ namespace LcmsNetPlugins.VICI.Valves
                 return (int)LastSentPosition;
             }
 
-            //If the serial port is not open, open it
-            if (!Port.IsOpen)
-            {
-                try
-                {
-                    Port.Open();
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    throw new ValveExceptionUnauthorizedAccess();
-                }
-            }
-
-            try
-            {
-                Port.WriteLine(SoftwareID + "CP");
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionWriteTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
-            }
-
-            //Read in whatever is waiting in the buffer
-            //This should look like
+            // Data returned from hardware should look like
             //  Position is "B"
-            string tempBuffer;
-            try
-            {
-                tempBuffer = Port.ReadLine();
-            }
-            catch (TimeoutException)
-            {
-                throw new ValveExceptionReadTimeout();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new ValveExceptionUnauthorizedAccess();
-            }
+            // GetHardwarePosition should return "B" (no quotes)
+            var tempPosition = GetHardwarePosition();
 
-            //Make a string containing the position
-            var tempPosition = "Unknown";        //Default to unknown
-
-            //Grab the actual position from the above string
-            if (tempBuffer.Length > 1)  //Make sure we have content in the string
+            switch (tempPosition.ToUpper())
             {
-                //Find the "
-                var tempCharIndex = tempBuffer.IndexOf("Position is \"", StringComparison.Ordinal);
-                if (tempCharIndex >= 0)  //Make sure we found it
-                {
-                    //Change the position to be the character following the "
-                    tempPosition = tempBuffer.Substring(tempCharIndex + 13, 1);
-                }
+                case "A":
+                    LastMeasuredPosition = TwoPositionState.PositionA;
+                    return (int)TwoPositionState.PositionA;
+                case "B":
+                    LastMeasuredPosition = TwoPositionState.PositionB;
+                    return (int)TwoPositionState.PositionB;
+                default:
+                    LastMeasuredPosition = TwoPositionState.Unknown;
+                    return (int)TwoPositionState.Unknown;
             }
-
-            if (tempPosition == "A")
-            {
-                LastMeasuredPosition = TwoPositionState.PositionA;
-                return (int)TwoPositionState.PositionA;
-            }
-
-            if (tempPosition == "B")
-            {
-                LastMeasuredPosition = TwoPositionState.PositionB;
-                return (int)TwoPositionState.PositionB;
-            }
-
-            LastMeasuredPosition = TwoPositionState.Unknown;
-            return (int)TwoPositionState.Unknown;
         }
 
         #endregion
 
         #region Method Editor Enabled Methods
 
+        void ITwoPositionValve.SetPosition(TwoPositionState newPosition)
+        {
+            SetPosition(newPosition);
+        }
+
         /// <summary>
         /// Sets the position of the valve (A or B).
         /// </summary>
         /// <param name="newPosition">The new position.</param>
         [LCMethodEvent("Set Position", 1, true, "", -1, false)]
-        public void SetPosition(TwoPositionState newPosition)
+        public ValveErrors SetPosition(TwoPositionState newPosition)
         {
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("\tSetting Position" + newPosition.ToString());
@@ -242,48 +186,41 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 LastSentPosition = LastMeasuredPosition = newPosition;
                 OnPositionChanged(LastMeasuredPosition);
-                return;
+                return ValveErrors.Success;
             }
 
             // short circuit..if we're already in that position, why bother trying to move to it?
             if (newPosition == LastMeasuredPosition)
             {
-                return;
-            }
-            //If the serial port is not open, open it
-            if (!Port.IsOpen)
-            {
-                Port.Open();
+                return ValveErrors.Success;
             }
 
-            string cmd;
-            if (newPosition == TwoPositionState.PositionA)
+            if (newPosition == TwoPositionState.PositionA || newPosition == TwoPositionState.PositionB)
             {
-                LastSentPosition = TwoPositionState.PositionA;
-                cmd = SoftwareID + "GOA";
-            }
+                //Wait 145ms for valve to actually switch before proceeding
+                //NOTE: This can be shortened if there are more than 4 ports but still
+                //      2 positions; see manual page 1 for switching times
+                var sendError = SetHardwarePosition(newPosition.GetEnumDescription(), RotationDelayTimeMsec);
 
-            else if (newPosition == TwoPositionState.PositionB)
-            {
-                LastSentPosition = TwoPositionState.PositionB;
-                cmd = SoftwareID + "GOB";
+                if (sendError != ValveErrors.Success)
+                {
+                    return sendError;
+                }
             }
             else
             {
                 throw new ArgumentOutOfRangeException("Invalid Position to set" + newPosition.GetEnumDescription());
             }
 
-            Port.WriteLine(cmd);
-
-            //Wait 145ms for valve to actually switch before proceeding
-            //NOTE: This can be shortened if there are more than 4 ports but still
-            //      2 positions; see manual page 1 for switching times
-
-            System.Threading.Thread.Sleep(RotationDelayTimeMsec);
-
             //Doublecheck that the position change was correctly executed
-            GetPosition();
+            if (LastMeasuredPosition != newPosition)
+            {
+                //ApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position.");
+                return ValveErrors.ValvePositionMismatch;
+            }
+
             OnPositionChanged(LastMeasuredPosition);
+            return ValveErrors.Success;
         }
 
         #endregion
