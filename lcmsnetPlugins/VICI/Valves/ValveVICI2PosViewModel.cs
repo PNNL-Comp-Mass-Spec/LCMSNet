@@ -26,54 +26,30 @@ namespace LcmsNetPlugins.VICI.Valves
 
         protected override void RegisterDevice(IDevice device)
         {
-            valve = device as ValveVICI2Pos;
-
             //TODO: Throw error!
-            if (valve == null)
+            if (!(device is ValveVICI2Pos v2p))
+            {
                 return;
+            }
 
+            valve = v2p;
             valve.PositionChanged += OnPosChanged;
-            valve.DeviceSaveRequired += Valve_DeviceSaveRequired;
 
-            SetBaseDevice(valve);
-
-            ComPort = valve.Port;
+            RegisterBaseDevice(valve);
         }
 
         #endregion
 
         #region Members
 
-        ///// <summary>
-        ///// The serial port used for communicating with the Valve
-        ///// </summary>
-        //public static SerialPort testPort = new SerialPort();
-
         /// <summary>
         /// The valve object
         /// </summary>
         protected ValveVICI2Pos valve;
 
-        //public ValveEventListener ValveEventListener;
-
         #endregion
 
         #region Properties
-
-        ///// <summary>
-        ///// Gets or sets the emulation state of the device.
-        ///// </summary>
-        //public bool Emulation
-        //{
-        //    get
-        //    {
-        //        return valve.Emulation;
-        //    }
-        //    set
-        //    {
-        //        valve.Emulation = value;
-        //    }
-        //}
 
         /// <summary>
         /// Gets or sets the associated device.
@@ -85,28 +61,8 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 if (!IsInDesignMode)
                 {
-                    //valve = (classValveVICI2Pos)value;
                     RegisterDevice(value);
-                    //try
-                    //{
-                    //    string errorMessage = "";
-                    //    valve.Initialize(ref errorMessage);
-                    //    mpropertyGrid_Serial.SelectedObject = valve.Port;
-                    //}
-                    //catch (ValveExceptionReadTimeout ex)
-                    //{
-                    //    ShowError("Timeout (read) when attempting to initialize valve", ex);
-                    //}
-                    //catch (ValveExceptionWriteTimeout ex)
-                    //{
-                    //    ShowError("Timeout (write) when attempting to initialize valve", ex);
-                    //}
-                    //catch (ValveExceptionUnauthorizedAccess ex)
-                    //{
-                    //    ShowError("Unauthorized access when attempting to initialize valve", ex);
-                    //}
                 }
-                //ValveEventListener = new ValveEventListener(valve, this);
             }
         }
 
@@ -139,11 +95,6 @@ namespace LcmsNetPlugins.VICI.Valves
         private void UpdatePositionTextBox(TwoPositionState position)
         {
             RxApp.MainThreadScheduler.Schedule(() => CurrentValvePosition = position.GetEnumDescription());
-        }
-
-        protected override void ValveControlSelected()
-        {
-            UpdatePositionTextBox(valve.LastMeasuredPosition);
         }
 
         private void SetPositionA()
@@ -204,178 +155,6 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 ShowError("Valve position mismatch", ex);
             }
-        }
-
-        protected override void RefreshValvePosition()
-        {
-            try
-            {
-                UpdatePositionTextBox((TwoPositionState)valve.GetPosition());
-            }
-            catch (ValveExceptionReadTimeout ex)
-            {
-                ShowError("Timeout (read) when attempting to get valve position", ex);
-            }
-            catch (ValveExceptionWriteTimeout ex)
-            {
-                ShowError("Timeout (write) when attempting to get valve position", ex);
-            }
-            catch (ValveExceptionUnauthorizedAccess ex)
-            {
-                ShowError("Unauthorized access when attempting to get valve position", ex);
-            }
-        }
-
-        protected override void RefreshValveVersion()
-        {
-            try
-            {
-                ValveVersionInfo = valve.GetVersion();
-            }
-            catch (ValveExceptionReadTimeout ex)
-            {
-                ShowError("Timeout (read) when attempting to get valve version", ex);
-            }
-            catch (ValveExceptionWriteTimeout ex)
-            {
-                ShowError("Timeout (write) when attempting to get valve version", ex);
-            }
-            catch (ValveExceptionUnauthorizedAccess ex)
-            {
-                ShowError("Unauthorized access when attempting to get valve version", ex);
-            }
-        }
-
-        protected override void OpenPort()
-        {
-            try
-            {
-                if (!valve.Port.IsOpen)
-                {
-                    valve.Port.Open();
-                }
-            }
-            catch (NullReferenceException ex)
-            {
-                ShowError("Null reference when attempting to open port", ex);
-            }
-            catch (ValveExceptionUnauthorizedAccess ex)
-            {
-                ShowError("Unauthorized access exception when attempting to open port", ex);
-            }
-        }
-
-        protected override void ClosePort()
-        {
-            try
-            {
-                valve.Port.Close();
-            }
-            catch (NullReferenceException ex)
-            {
-                ShowError("Null reference when attempting to close port", ex);
-            }
-            catch (ValveExceptionUnauthorizedAccess ex)
-            {
-                ShowError("Unauthorized access exception when attempting to close port", ex);
-            }
-        }
-
-        protected override void SelectedValveIdUpdated()
-        {
-            var newID = SelectedValveId;
-            try
-            {
-                valve.SetHardwareID(newID);
-                CurrentValveId = valve.GetHardwareID();
-                OnSaveRequired();
-            }
-            catch (ValveExceptionReadTimeout ex)
-            {
-                ShowError("Timeout (read) when attempting to set valve ID", ex);
-            }
-            catch (ValveExceptionWriteTimeout ex)
-            {
-                ShowError("Timeout (write) when attempting to set valve ID", ex);
-            }
-            catch (ValveExceptionUnauthorizedAccess ex)
-            {
-                ShowError("Unauthorized access when attempting to set valve ID", ex);
-            }
-        }
-
-        protected override void RefreshValveId()
-        {
-            try
-            {
-                CurrentValveId = valve.GetHardwareID();
-            }
-            catch (ValveExceptionReadTimeout ex)
-            {
-                ShowError("Timeout (read) when attempting to get valve ID", ex);
-            }
-            catch (ValveExceptionWriteTimeout ex)
-            {
-                ShowError("Timeout (write) when attempting to get valve ID", ex);
-            }
-            catch (ValveExceptionUnauthorizedAccess ex)
-            {
-                ShowError("Unauthorized access when attempting to get valve ID", ex);
-            }
-        }
-
-        protected override void ClearValveId()
-        {
-            try
-            {
-                valve.ClearHardwareID();
-                CurrentValveId = valve.GetHardwareID();
-                SelectedValveId = ' ';
-                OnSaveRequired();
-            }
-            catch (ValveExceptionReadTimeout ex)
-            {
-                ShowError("Timeout (read) when attempting to clear valve ID", ex);
-            }
-            catch (ValveExceptionWriteTimeout ex)
-            {
-                ShowError("Timeout (write) when attempting to clear valve ID", ex);
-            }
-            catch (ValveExceptionUnauthorizedAccess ex)
-            {
-                ShowError("Unauthorized access when attempting to clear valve ID", ex);
-            }
-        }
-
-        protected override void InitializeDevice()
-        {
-            if (IsInDesignMode)
-                return;
-
-            try
-            {
-                var errorMessage = "";
-                var success = valve.Initialize(ref errorMessage);
-
-                if (success == false)
-                    ShowError("Could not initialize the valve. " + errorMessage);
-            }
-            catch (ValveExceptionReadTimeout ex)
-            {
-                ShowError("Timeout (read) when attempting to initialize valve", ex);
-            }
-            catch (ValveExceptionWriteTimeout ex)
-            {
-                ShowError("Timeout (write) when attempting to initialize valve", ex);
-            }
-            catch (ValveExceptionUnauthorizedAccess ex)
-            {
-                ShowError("Unauthorized access when attempting to initialize valve", ex);
-            }
-
-            ValveVersionInfo = valve.Version;
-            CurrentValvePosition = valve.LastMeasuredPosition.ToString();
-            CurrentValveId = valve.SoftwareID;
         }
 
         #endregion

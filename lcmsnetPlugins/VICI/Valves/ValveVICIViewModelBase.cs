@@ -37,9 +37,24 @@ namespace LcmsNetPlugins.VICI.Valves
             InitializeDeviceCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InitializeDevice()));
 
             this.PropertyChanged += OnPropertyChanged;
+            this.WhenAnyValue(x => x.SelectedValveId).Subscribe(x =>
+            {
+                valve?.SetHardwareID(x);
+                CurrentValveId = valve?.SoftwareID ?? ' ';
+            });
         }
 
         protected abstract void RegisterDevice(IDevice device);
+
+        protected void RegisterBaseDevice(ValveVICIBase valveObj)
+        {
+            valve = valveObj;
+            SetBaseDevice(valveObj);
+
+            valve.DeviceSaveRequired += Valve_DeviceSaveRequired;
+
+            ComPort = valve.Port;
+        }
 
         #endregion
 
@@ -56,6 +71,7 @@ namespace LcmsNetPlugins.VICI.Valves
         private string valveVersionInfo = "";
         private bool valveControlTabSelected = false;
         private SerialPort comPort;
+        private ValveVICIBase valve = null;
 
         #endregion
 
@@ -99,7 +115,7 @@ namespace LcmsNetPlugins.VICI.Valves
         public SerialPort ComPort
         {
             get => comPort;
-            protected set => this.RaiseAndSetIfChanged(ref comPort, value);
+            private set => this.RaiseAndSetIfChanged(ref comPort, value);
         }
 
         #endregion
@@ -154,23 +170,187 @@ namespace LcmsNetPlugins.VICI.Valves
             MessageBox.Show(message + "\r\n" + ex.Message, Device.Name);
         }
 
-        protected abstract void ValveControlSelected();
+        private void ValveControlSelected()
+        {
+            CurrentValvePosition = valve.LastMeasuredPositionDisplay;
+        }
 
-        protected abstract void RefreshValvePosition();
+        /// <summary>
+        /// Handles initializing the device (common operations).
+        /// </summary>
+        private void InitializeDevice()
+        {
+            if (IsInDesignMode)
+                return;
 
-        protected abstract void RefreshValveVersion();
+            ComPort = valve.Port;
 
-        protected abstract void OpenPort();
+            try
+            {
+                var errorMessage = "";
+                var success = valve.Initialize(ref errorMessage);
 
-        protected abstract void ClosePort();
+                if (success == false)
+                    ShowError("Could not initialize the valve. " + errorMessage);
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                ShowError("Timeout (read) when attempting to initialize valve", ex);
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                ShowError("Timeout (write) when attempting to initialize valve", ex);
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                ShowError("Unauthorized access when attempting to initialize valve", ex);
+            }
 
-        protected abstract void InitializeDevice();
+            ValveVersionInfo = valve.Version;
+            CurrentValvePosition = valve.LastMeasuredPositionDisplay;
+            CurrentValveId = valve.SoftwareID;
+        }
 
-        protected abstract void SelectedValveIdUpdated();
+        private void RefreshValvePosition()
+        {
+            try
+            {
+                CurrentValvePosition = valve.GetPositionDisplay();
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                ShowError("Timeout (read) when attempting to get valve position", ex);
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                ShowError("Timeout (write) when attempting to get valve position", ex);
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                ShowError("Unauthorized access when attempting to get valve position", ex);
+            }
+        }
 
-        protected abstract void RefreshValveId();
+        private void RefreshValveVersion()
+        {
+            try
+            {
+                ValveVersionInfo = valve.GetVersion();
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                ShowError("Timeout (read) when attempting to get valve version", ex);
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                ShowError("Timeout (write) when attempting to get valve version", ex);
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                ShowError("Unauthorized access when attempting to get valve version", ex);
+            }
+        }
 
-        protected abstract void ClearValveId();
+        private void OpenPort()
+        {
+            try
+            {
+                if (!valve.Port.IsOpen)
+                {
+                    valve.Port.Open();
+                }
+            }
+            catch (NullReferenceException ex)
+            {
+                ShowError("Null reference when attempting to open port", ex);
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                ShowError("Unauthorized access exception when attempting to open port", ex);
+            }
+        }
+
+        private void ClosePort()
+        {
+            try
+            {
+                valve.Port.Close();
+            }
+            catch (NullReferenceException ex)
+            {
+                ShowError("Null reference when attempting to close port", ex);
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                ShowError("Unauthorized access exception when attempting to close port", ex);
+            }
+        }
+
+        private void SelectedValveIdUpdated()
+        {
+            var newID = SelectedValveId;
+            try
+            {
+                valve.SetHardwareID(newID);
+                CurrentValveId = valve.GetHardwareID();
+                OnSaveRequired();
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                ShowError("Timeout (read) when attempting to set valve ID", ex);
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                ShowError("Timeout (write) when attempting to set valve ID", ex);
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                ShowError("Unauthorized access when attempting to set valve ID", ex);
+            }
+        }
+
+        private void RefreshValveId()
+        {
+            try
+            {
+                CurrentValveId = valve.GetHardwareID();
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                ShowError("Timeout (read) when attempting to get valve ID", ex);
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                ShowError("Timeout (write) when attempting to get valve ID", ex);
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                ShowError("Unauthorized access when attempting to get valve ID", ex);
+            }
+        }
+
+        private void ClearValveId()
+        {
+            try
+            {
+                valve.ClearHardwareID();
+                CurrentValveId = valve.GetHardwareID();
+                SelectedValveId = ' ';
+                OnSaveRequired();
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                ShowError("Timeout (read) when attempting to clear valve ID", ex);
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                ShowError("Timeout (write) when attempting to clear valve ID", ex);
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                ShowError("Unauthorized access when attempting to clear valve ID", ex);
+            }
+        }
 
         #endregion
     }
