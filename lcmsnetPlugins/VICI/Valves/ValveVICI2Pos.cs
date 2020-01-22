@@ -32,7 +32,7 @@ namespace LcmsNetPlugins.VICI.Valves
                                  "Valve 2-Position",
                                  "Valves")
     ]*/
-    public class ValveVICI2Pos : ValveVICIBase, IDevice
+    public class ValveVICI2Pos : ValveVICIBase, IDevice, ITwoPositionValve
     {
         // Serial port Settings for EHCA-CE (2-pos actuator):
         //     Baud Rate   9600
@@ -94,6 +94,11 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public TwoPositionState LastSentPosition { get; private set; }
 
+        /// <summary>
+        /// Display string for the Last Measured Position
+        /// </summary>
+        public override string LastMeasuredPositionDisplay => LastMeasuredPosition.GetEnumDescription();
+
         #endregion
 
         #region Methods
@@ -122,6 +127,15 @@ namespace LcmsNetPlugins.VICI.Valves
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the current position of the valve.
+        /// </summary>
+        /// <returns>The position as a display string.</returns>
+        public override string GetPositionDisplay()
+        {
+            return ((TwoPositionState)GetPosition()).GetEnumDescription();
         }
 
         /// <summary>

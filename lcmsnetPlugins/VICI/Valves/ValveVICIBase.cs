@@ -233,6 +233,11 @@ namespace LcmsNetPlugins.VICI.Valves
             private set => this.RaiseAndSetIfChanged(ref versionBackingValue, value);
         }
 
+        /// <summary>
+        /// Display string for the Last Measured Position
+        /// </summary>
+        public abstract string LastMeasuredPositionDisplay { get; }
+
         #endregion
 
         #region Methods
@@ -544,6 +549,90 @@ namespace LcmsNetPlugins.VICI.Valves
             return result;
         }
 
+        protected string GetHardwarePosition()
+        {
+            if (Emulation)
+            {
+                return "";
+            }
+
+            // TODO: Read issues exist with old 2-position valves!
+            var error = ReadCommand("CP", out var hwPosition, 200);
+            if (error != ValveErrors.Success)
+            {
+                switch (error)
+                {
+                    case ValveErrors.UnauthorizedAccess:
+                        throw new ValveExceptionUnauthorizedAccess();
+                    case ValveErrors.TimeoutDuringWrite:
+                        throw new ValveExceptionWriteTimeout();
+                    case ValveErrors.TimeoutDuringRead:
+                        throw new ValveExceptionReadTimeout();
+                }
+            }
+
+            //This should look like
+            //  Position is "B" (2-position)
+            //  Position is = 1 (MultiPosition)
+            // Universal actuator:
+            //  \0CP01 (no hardware ID) or 5CP01 (hardware ID 5) (multiposition)
+            //  2-position unknown/not tested
+            var result = "";
+            var cpPos = hwPosition.IndexOf("CP", StringComparison.OrdinalIgnoreCase);
+            if (cpPos >= 0 && cpPos < 2)
+            {
+                // Universal actuator
+                result = hwPosition.Substring(cpPos + 2).Trim('\r', '\n');
+            }
+            else
+            {
+                var data = hwPosition.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                for (var i = data.Length - 1; i >= 0; i--)
+                {
+                    var x = data[i];
+                    x = x.Replace(" ", "").ToLower();
+                    var loc = x.IndexOf("positionis", StringComparison.OrdinalIgnoreCase);
+                    if (loc >= 0)
+                    {
+                        // Grab the actual position from the string
+                        result = x.Substring(loc + "positionis".Length).Trim('=', '"', '\'');
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        protected ValveErrors SetHardwarePosition(string position, int rotationDelayTimeMs = 200)
+        {
+            if (Emulation)
+            {
+                return ValveErrors.Success;
+            }
+
+            // 'GO' by itself, on universal actuator, will change position (2-position) or advance to the next position (multiposition)
+            var sendError = SendCommand("GO" + position);
+            if (sendError == ValveErrors.UnauthorizedAccess || sendError == ValveErrors.TimeoutDuringWrite)
+            {
+                return sendError;
+            }
+
+            //Wait rotationDelayTimeMs for valve to actually switch before proceeding
+            //System.Threading.Thread.Sleep(rotationDelayTimeMs);
+            //TODO: BLL test this instead using the abort event.
+            if (AbortEvent == null)
+                AbortEvent = new System.Threading.ManualResetEvent(false);
+
+            var waited = System.Threading.WaitHandle.WaitAll(new System.Threading.WaitHandle[] { AbortEvent }, rotationDelayTimeMs);
+            if (waited)
+                return ValveErrors.BadArgument;
+
+            GetPosition();
+
+            return ValveErrors.Success;
+        }
+
         /// <summary>
         /// Send a write-only command via the serial port
         /// </summary>
@@ -668,6 +757,12 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         /// <returns>The position as an int.</returns>
         public abstract int GetPosition();
+
+        /// <summary>
+        /// Gets the current position of the valve.
+        /// </summary>
+        /// <returns>The position as a display string.</returns>
+        public abstract string GetPositionDisplay();
 
         /// <summary>
         /// Returns the name of the device.

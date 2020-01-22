@@ -3,6 +3,8 @@ using System.IO.Ports;
 using System.Threading.Tasks;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
+using LcmsNetData;
+using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.VICI.Valves
@@ -26,6 +28,10 @@ namespace LcmsNetPlugins.VICI.Valves
         //     Handshake   None
 
         #region Members
+
+        private int lastMeasuredPosition;
+        private int numberOfPositions;
+        private int hardwarePositions;
 
         /// <summary>
         /// How long to tell LCMSNet the SetPosition method can take. it is 6  seconds instead of 4 because we verify that
@@ -93,7 +99,11 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// The last measured position of the valve.
         /// </summary>
-        public int LastMeasuredPosition { get; private set; }
+        public int LastMeasuredPosition
+        {
+            get => lastMeasuredPosition;
+            private set => this.RaiseAndSetIfChanged(ref lastMeasuredPosition, value);
+        }
 
         /// <summary>
         /// The last position sent to the valve.
@@ -104,7 +114,26 @@ namespace LcmsNetPlugins.VICI.Valves
         ///
         /// </summary>
         [PersistenceData("NumberOfPositions")]
-        public int NumberOfPositions { get; set; }
+        public int NumberOfPositions
+        {
+            get => numberOfPositions;
+            set => this.RaiseAndSetIfChanged(ref numberOfPositions, value);
+        }
+
+        /// <summary>
+        /// Number of positions reported by the hardware
+        /// </summary>
+        public int HardwarePositions
+        {
+            get => hardwarePositions;
+            private set => this.RaiseAndSetIfChanged(ref hardwarePositions, value);
+        }
+
+        /// <summary>
+        /// Display string for the Last Measured Position
+        /// </summary>
+        public override string LastMeasuredPositionDisplay =>
+            LastMeasuredPosition > 0 ? LastMeasuredPosition.ToString() : "Unknown";
 
         #endregion
 
@@ -116,6 +145,30 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <returns>True on success.</returns>
         public override bool Initialize(ref string errorMessage)
         {
+            if (!Emulation)
+            {
+                // Check version first
+                try
+                {
+                    GetVersion();
+
+                    if (!CheckIsMultiPosition())
+                    {
+                        ApplicationLogger.LogError(1, $"ERROR: Valve reports that it is not a multi-position valve, software configured for {NumberOfPositions} positions! {Name}, COM port {PortName}");
+                    }
+                }
+                catch
+                {
+                    // Suppressing errors here
+                }
+
+                var numPositions = GetNumberOfPositions();
+                if (numPositions > 1 && numPositions != NumberOfPositions)
+                {
+                    ApplicationLogger.LogError(1, $"ERROR: Valve reports {numPositions} positions, software configured for {NumberOfPositions} positions! {Name}, COM port {PortName}");
+                }
+            }
+
             var result = base.Initialize(ref errorMessage);
 
             if (Emulation)
@@ -224,6 +277,16 @@ namespace LcmsNetPlugins.VICI.Valves
             }
 
             return ValveErrors.BadArgument;
+        }
+
+        /// <summary>
+        /// Gets the current position of the valve.
+        /// </summary>
+        /// <returns>The position as a display string.</returns>
+        public override string GetPositionDisplay()
+        {
+            var pos = GetPosition();
+            return pos > 0 ? pos.ToString() : "Unknown";
         }
 
         /// <summary>
@@ -495,6 +558,46 @@ namespace LcmsNetPlugins.VICI.Valves
             }
 
             // TODO: Confirm mode change?
+        }
+
+        public bool CheckIsMultiPosition()
+        {
+            if (Emulation || !IsUniversalActuator)
+            {
+                return true;
+            }
+
+            var readError = ReadCommand("AM", out var modeString);
+            if (readError != ValveErrors.Success)
+            {
+                switch (readError)
+                {
+                    case ValveErrors.UnauthorizedAccess:
+                        throw new ValveExceptionUnauthorizedAccess();
+                    case ValveErrors.TimeoutDuringWrite:
+                        throw new ValveExceptionWriteTimeout();
+                    case ValveErrors.TimeoutDuringRead:
+                        throw new ValveExceptionReadTimeout();
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(modeString))
+            {
+                return true;
+            }
+
+            // AM3 is desired; AM1 or AM2 are 2-position
+            // The output is the same with legacy mode on the universal actuator.
+            var pos = modeString.IndexOf("AM", StringComparison.OrdinalIgnoreCase);
+            if (pos >= 0 && int.TryParse(modeString.Substring(pos + 2, 1), out var mode))
+            {
+                if (mode == 3)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion
