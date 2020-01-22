@@ -26,18 +26,18 @@ namespace LcmsNetPlugins.VICI.Valves
 
         protected override void RegisterDevice(IDevice device)
         {
-            m_valve = device as ValveVICI2Pos;
+            valve = device as ValveVICI2Pos;
 
             //TODO: Throw error!
-            if (m_valve == null)
+            if (valve == null)
                 return;
 
-            m_valve.PositionChanged += OnPosChanged;
-            m_valve.DeviceSaveRequired += Valve_DeviceSaveRequired;
+            valve.PositionChanged += OnPosChanged;
+            valve.DeviceSaveRequired += Valve_DeviceSaveRequired;
 
-            SetBaseDevice(m_valve);
+            SetBaseDevice(valve);
 
-            ComPort = m_valve.Port;
+            ComPort = valve.Port;
         }
 
         #endregion
@@ -52,9 +52,9 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// The valve object
         /// </summary>
-        protected ValveVICI2Pos m_valve;
+        protected ValveVICI2Pos valve;
 
-        //public ValveEventListener m_valveEventListener;
+        //public ValveEventListener ValveEventListener;
 
         #endregion
 
@@ -67,11 +67,11 @@ namespace LcmsNetPlugins.VICI.Valves
         //{
         //    get
         //    {
-        //        return m_valve.Emulation;
+        //        return valve.Emulation;
         //    }
         //    set
         //    {
-        //        m_valve.Emulation = value;
+        //        valve.Emulation = value;
         //    }
         //}
 
@@ -80,18 +80,18 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public override IDevice Device
         {
-            get => m_valve;
+            get => valve;
             set
             {
                 if (!IsInDesignMode)
                 {
-                    //m_valve = (classValveVICI2Pos)value;
+                    //valve = (classValveVICI2Pos)value;
                     RegisterDevice(value);
                     //try
                     //{
                     //    string errorMessage = "";
-                    //    m_valve.Initialize(ref errorMessage);
-                    //    mpropertyGrid_Serial.SelectedObject = m_valve.Port;
+                    //    valve.Initialize(ref errorMessage);
+                    //    mpropertyGrid_Serial.SelectedObject = valve.Port;
                     //}
                     //catch (ValveExceptionReadTimeout ex)
                     //{
@@ -106,7 +106,7 @@ namespace LcmsNetPlugins.VICI.Valves
                     //    ShowError("Unauthorized access when attempting to initialize valve", ex);
                     //}
                 }
-                //m_valveEventListener = new ValveEventListener(m_valve, this);
+                //ValveEventListener = new ValveEventListener(valve, this);
             }
         }
 
@@ -143,18 +143,18 @@ namespace LcmsNetPlugins.VICI.Valves
 
         protected override void ValveControlSelected()
         {
-            UpdatePositionTextBox(m_valve.LastMeasuredPosition);
+            UpdatePositionTextBox(valve.LastMeasuredPosition);
         }
 
         private void SetPositionA()
         {
             try
             {
-                /*Thread p = new Thread(() => m_valve.SetPosition(TwoPositionState.PositionA));
+                /*Thread p = new Thread(() => valve.SetPosition(TwoPositionState.PositionA));
                 p.Start();
                 p = null;*/
-                m_valve.SetPosition(TwoPositionState.PositionA);
-                //UpdatePositionTextBox(m_valve.LastMeasuredPosition);
+                valve.SetPosition(TwoPositionState.PositionA);
+                //UpdatePositionTextBox(valve.LastMeasuredPosition);
             }
             catch (ValveExceptionReadTimeout ex)
             {
@@ -182,11 +182,11 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             try
             {
-                /*Thread p = new Thread(() => m_valve.SetPosition(TwoPositionState.PositionB));
+                /*Thread p = new Thread(() => valve.SetPosition(TwoPositionState.PositionB));
                 p.Start();
                 p = null;*/
-                m_valve.SetPosition(TwoPositionState.PositionB);
-                //UpdatePositionTextBox(m_valve.LastMeasuredPosition);
+                valve.SetPosition(TwoPositionState.PositionB);
+                //UpdatePositionTextBox(valve.LastMeasuredPosition);
             }
             catch (ValveExceptionReadTimeout ex)
             {
@@ -210,7 +210,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             try
             {
-                UpdatePositionTextBox((TwoPositionState)m_valve.GetPosition());
+                UpdatePositionTextBox((TwoPositionState)valve.GetPosition());
             }
             catch (ValveExceptionReadTimeout ex)
             {
@@ -230,7 +230,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             try
             {
-                ValveVersionInfo = m_valve.GetVersion();
+                ValveVersionInfo = valve.GetVersion();
             }
             catch (ValveExceptionReadTimeout ex)
             {
@@ -250,9 +250,9 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             try
             {
-                if (!m_valve.Port.IsOpen)
+                if (!valve.Port.IsOpen)
                 {
-                    m_valve.Port.Open();
+                    valve.Port.Open();
                 }
             }
             catch (NullReferenceException ex)
@@ -269,7 +269,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             try
             {
-                m_valve.Port.Close();
+                valve.Port.Close();
             }
             catch (NullReferenceException ex)
             {
@@ -286,8 +286,8 @@ namespace LcmsNetPlugins.VICI.Valves
             var newID = SelectedValveId;
             try
             {
-                m_valve.SetHardwareID(newID);
-                CurrentValveId = m_valve.GetHardwareID();
+                valve.SetHardwareID(newID);
+                CurrentValveId = valve.GetHardwareID();
                 OnSaveRequired();
             }
             catch (ValveExceptionReadTimeout ex)
@@ -308,7 +308,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             try
             {
-                CurrentValveId = m_valve.GetHardwareID();
+                CurrentValveId = valve.GetHardwareID();
             }
             catch (ValveExceptionReadTimeout ex)
             {
@@ -328,8 +328,8 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             try
             {
-                m_valve.ClearHardwareID();
-                CurrentValveId = m_valve.GetHardwareID();
+                valve.ClearHardwareID();
+                CurrentValveId = valve.GetHardwareID();
                 SelectedValveId = ' ';
                 OnSaveRequired();
             }
@@ -355,7 +355,7 @@ namespace LcmsNetPlugins.VICI.Valves
             try
             {
                 var errorMessage = "";
-                var success = m_valve.Initialize(ref errorMessage);
+                var success = valve.Initialize(ref errorMessage);
 
                 if (success == false)
                     ShowError("Could not initialize the valve. " + errorMessage);
@@ -373,9 +373,9 @@ namespace LcmsNetPlugins.VICI.Valves
                 ShowError("Unauthorized access when attempting to initialize valve", ex);
             }
 
-            ValveVersionInfo = m_valve.Version;
-            CurrentValvePosition = m_valve.LastMeasuredPosition.ToString();
-            CurrentValveId = m_valve.SoftwareID;
+            ValveVersionInfo = valve.Version;
+            CurrentValvePosition = valve.LastMeasuredPosition.ToString();
+            CurrentValveId = valve.SoftwareID;
         }
 
         #endregion

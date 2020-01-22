@@ -8,6 +8,7 @@
 using System;
 using System.IO.Ports;
 using FluidicsSDK.Devices.Valves;
+using LcmsNetData;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.VICI.Valves
@@ -17,21 +18,21 @@ namespace LcmsNetPlugins.VICI.Valves
     [DeviceControl(typeof(SixPortInjectionValveViewModel), "Six-port Injection", "Valves Two-Position")]
     public class ValveVICISixPortInjection: ValveVICI2Pos, ISixPortInjectionValve
     {
-        private double m_volume;
+        private double injectionVolume;
 
          public ValveVICISixPortInjection() : base()
         {
-            m_volume = 0;
+            injectionVolume = 0;
         }
 
         public ValveVICISixPortInjection(SerialPort port) : base(port)
         {
-            m_volume = 0;
+            injectionVolume = 0;
         }
 
         public double GetVolume()
         {
-            return m_volume;
+            return injectionVolume;
         }
 
         public void SetVolume(double volume)
@@ -42,12 +43,13 @@ namespace LcmsNetPlugins.VICI.Valves
         [PersistenceData("InjectionVolume")]
         public double InjectionVolume
         {
-            get => m_volume;
+            get => injectionVolume;
             set
             {
-                m_volume = value;
-
-                InjectionVolumeChanged?.Invoke(this, new EventArgs());
+                if (this.RaiseAndSetIfChangedRetBool(ref injectionVolume, value))
+                {
+                    InjectionVolumeChanged?.Invoke(this, new EventArgs());
+                }
             }
         }
 

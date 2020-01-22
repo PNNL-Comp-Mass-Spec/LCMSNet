@@ -15,20 +15,20 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// The valve's ID.
         /// </summary>
-        private char m_valveID;
+        private char valveID;
 
         /// <summary>
         /// The valve's name
         /// </summary>
-        private string m_name;
+        private string deviceName;
 
         /// <summary>
         /// Holds the status of the device.
         /// </summary>
-        private DeviceStatus m_status;
+        private DeviceStatus status;
 
-        protected static readonly int IDChangeDelayTimems = 325;  //milliseconds
-        protected const int minTimeBetweenCommandsMs = 100; // milliseconds
+        protected static readonly int IDChangeDelayTimeMsec = 325;  //milliseconds
+        protected const int MinTimeBetweenCommandsMs = 100; // milliseconds
 
         #endregion
 
@@ -75,17 +75,17 @@ namespace LcmsNetPlugins.VICI.Valves
                 Handshake = Handshake.None,
                 Parity = Parity.None,
                 ReadTimeout = readTimeout,
-                WriteTimeout = writeTimeout
+                WriteTimeout = writeTimeout,
             };
 
             //
             // Set ID to a space (i.e. nonexistent)
             // NOTE: Spaces are ignored by the controller in sent commands
             //
-            m_valveID = ' ';
+            valveID = ' ';
             Version = "";
 
-            m_name = defaultName;
+            deviceName = defaultName;
         }
 
         /// <summary>
@@ -99,12 +99,12 @@ namespace LcmsNetPlugins.VICI.Valves
 
             //Set ID to a space (i.e. nonexistent)
             //Note: spaces are ignored by the controller in sent commands
-            m_valveID = ' ';
+            valveID = ' ';
             Version = "";
 
             Port = port;
-            //m_name        = classDeviceManager.Manager.CreateUniqueDeviceName("valve");
-            m_name = defaultName;
+            //deviceName        = classDeviceManager.Manager.CreateUniqueDeviceName("valve");
+            deviceName = defaultName;
         }
 
         #endregion
@@ -129,13 +129,13 @@ namespace LcmsNetPlugins.VICI.Valves
                     return DeviceStatus.Initialized;
                 }
 
-                return m_status;
+                return status;
             }
             set
             {
-                if (value != m_status)
+                if (value != status)
                     StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status Changed", this));
-                m_status = value;
+                status = value;
             }
         }
 
@@ -144,10 +144,10 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public string Name
         {
-            get => m_name;
+            get => deviceName;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref deviceName, value))
                 {
                     OnDeviceSaveRequired();
                 }
@@ -207,11 +207,13 @@ namespace LcmsNetPlugins.VICI.Valves
         [PersistenceData("SoftwareID")]
         public char SoftwareID
         {
-            get => m_valveID;
+            get => valveID;
             set
             {
-                m_valveID = value;
-                OnDeviceSaveRequired();
+                if (this.RaiseAndSetIfChangedRetBool(ref valveID, value))
+                {
+                    OnDeviceSaveRequired();
+                }
             }
         }
 
@@ -270,7 +272,7 @@ namespace LcmsNetPlugins.VICI.Valves
             if (Emulation)
             {
                 //Fill in fake ID, version
-                m_valveID = '1';
+                SoftwareID = '1';
                 Version = "Device is in emulation";
                 return true;
             }
@@ -311,7 +313,7 @@ namespace LcmsNetPlugins.VICI.Valves
                 return false;
             }
 
-            System.Threading.Thread.Sleep(minTimeBetweenCommandsMs);
+            System.Threading.Thread.Sleep(MinTimeBetweenCommandsMs);
 
             try
             {
@@ -333,7 +335,7 @@ namespace LcmsNetPlugins.VICI.Valves
                 return false;
             }
 
-            System.Threading.Thread.Sleep(minTimeBetweenCommandsMs);
+            System.Threading.Thread.Sleep(MinTimeBetweenCommandsMs);
 
             try
             {
@@ -390,7 +392,7 @@ namespace LcmsNetPlugins.VICI.Valves
             try
             {
                 // TODO: Universal Actuator: 'VR' is main PCB Version, 'VR2' is serial interface version
-                Port.WriteLine(m_valveID + "VR");
+                Port.WriteLine(SoftwareID + "VR");
             }
             catch (TimeoutException)
             {
@@ -447,7 +449,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
             try
             {
-                Port.WriteLine(m_valveID + "ID");
+                Port.WriteLine(SoftwareID + "ID");
             }
             catch (TimeoutException)
             {
@@ -508,7 +510,7 @@ namespace LcmsNetPlugins.VICI.Valves
             }
 
             //Set the valveID (software ID) to the one we just found.
-            m_valveID = tempID;
+            SoftwareID = tempID;
             return tempID;
         }
 
@@ -541,12 +543,12 @@ namespace LcmsNetPlugins.VICI.Valves
 
                 try
                 {
-                    Port.WriteLine(m_valveID + "ID" + newID);
-                    m_valveID = newID;
+                    Port.WriteLine(SoftwareID + "ID" + newID);
+                    SoftwareID = newID;
 
                     //Wait 325ms for the command to go through
 
-                    System.Threading.Thread.Sleep(IDChangeDelayTimems);
+                    System.Threading.Thread.Sleep(IDChangeDelayTimeMsec);
                 }
                 catch (TimeoutException)
                 {
@@ -576,12 +578,12 @@ namespace LcmsNetPlugins.VICI.Valves
             try
             {
                 // TODO: Correct command for Universal actuator is '*ID*'
-                Port.WriteLine(m_valveID + "ID*");
-                m_valveID = ' ';
+                Port.WriteLine(SoftwareID + "ID*");
+                SoftwareID = ' ';
 
                 //Wait 325ms for the command to go through
 
-                System.Threading.Thread.Sleep(IDChangeDelayTimems);
+                System.Threading.Thread.Sleep(IDChangeDelayTimeMsec);
             }
             catch (TimeoutException)
             {
@@ -624,7 +626,6 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 Port.WriteLine(SoftwareID + command);
             }
-
             catch (TimeoutException)
             {
                 //ApplicationLogger.LogError(0, "Could not send command.  Write timeout.");
@@ -709,7 +710,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <returns></returns>
         public override string ToString()
         {
-            return m_name;
+            return deviceName;
         }
 
         #endregion

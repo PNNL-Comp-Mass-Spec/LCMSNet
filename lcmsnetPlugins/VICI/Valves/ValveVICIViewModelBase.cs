@@ -45,7 +45,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
         #region Members
 
-        //public ValveEventListener m_valveEventListener;
+        //public ValveEventListener ValveEventListener;
 
         protected readonly bool IsInDesignMode = false;
 

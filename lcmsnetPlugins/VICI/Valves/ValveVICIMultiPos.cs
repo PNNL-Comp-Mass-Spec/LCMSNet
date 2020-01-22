@@ -37,7 +37,7 @@ namespace LcmsNetPlugins.VICI.Valves
         //More positions reduces time it takes to rotate, but we can't know how many positions there are
         //Also, as LCEvents are timed in seconds, we round up to 4000ms to ensure that the
         //method isn't killed over 150ms + concurrency delays.
-        private static readonly int m_rotationDelayTimems = 4000;
+        private static readonly int RotationDelayTimeMsec = 4000;
         private const int CONST_DEFAULT_TIMEOUT = 1500;
 
         #endregion
@@ -185,16 +185,16 @@ namespace LcmsNetPlugins.VICI.Valves
                     return ValveErrors.UnauthorizedAccess;
                 }
 
-                //Wait m_rotationDelayTimems for valve to actually switch before proceeding
+                //Wait RotationDelayTimeMsec for valve to actually switch before proceeding
                 //TODO: BLL test this instead using the abort event.
                 if (AbortEvent == null)
                     AbortEvent = new System.Threading.ManualResetEvent(false);
 
-                var waited = System.Threading.WaitHandle.WaitAll(new System.Threading.WaitHandle[] { AbortEvent }, m_rotationDelayTimems);
+                var waited = System.Threading.WaitHandle.WaitAll(new System.Threading.WaitHandle[] { AbortEvent }, RotationDelayTimeMsec);
                 if (waited)
                     return ValveErrors.BadArgument;
 
-                //System.Threading.Thread.Sleep(m_rotationDelayTimems);
+                //System.Threading.Thread.Sleep(RotationDelayTimeMsec);
 
                 //Doublecheck that the position change was correctly executed
                 try
@@ -219,7 +219,7 @@ namespace LcmsNetPlugins.VICI.Valves
                 }
 
                 OnPosChanged(LastMeasuredPosition);
-                //ApplicationLogger.LogMessage(0, Name + " changed position to: " + m_lastMeasuredPosition);
+                //ApplicationLogger.LogMessage(0, Name + " changed position to: " + LastMeasuredPosition);
                 return ValveErrors.Success;
             }
 
@@ -326,6 +326,7 @@ namespace LcmsNetPlugins.VICI.Valves
                     }
                 }
             }
+
             LastMeasuredPosition = -1;
             return -1;
         }
@@ -350,7 +351,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
                 //Wait 325ms for the command to go through
 
-                System.Threading.Thread.Sleep(IDChangeDelayTimems);
+                System.Threading.Thread.Sleep(IDChangeDelayTimeMsec);
             }
             catch (TimeoutException)
             {
@@ -435,6 +436,7 @@ namespace LcmsNetPlugins.VICI.Valves
             NumberOfPositions = tempNumPositions;
             return tempNumPositions;
         }
+
         #endregion
 
         #region Method Editor Enabled Methods
@@ -457,14 +459,14 @@ namespace LcmsNetPlugins.VICI.Valves
             measurementSentPosition.Name        = "Set Position";
             measurementSentPosition.Type        = FinchDataType.Integer;
             measurementSentPosition.Units       = "";
-            measurementSentPosition.Value       = this.m_lastSentPosition.ToString();
+            measurementSentPosition.Value       = this.LastSentPosition.ToString();
             component.Signals.Add(measurementSentPosition);
 
             FinchScalarSignal measurementMeasuredPosition = new FinchScalarSignal();
             measurementMeasuredPosition.Name        = "Measured Position";
             measurementMeasuredPosition.Type        = FinchDataType.Integer;
             measurementMeasuredPosition.Units       = "";
-            measurementMeasuredPosition.Value       = this.m_lastMeasuredPosition.ToString();
+            measurementMeasuredPosition.Value       = this.LastMeasuredPosition.ToString();
             component.Signals.Add(measurementMeasuredPosition);
 
             FinchScalarSignal port = new FinchScalarSignal();

@@ -42,16 +42,8 @@ namespace LcmsNetPlugins.VICI.Valves
         //     Handshake   None
 
         #region Members
-        /// <summary>
-        /// The last measured position of the valve.
-        /// </summary>
-        private TwoPositionState m_lastMeasuredPosition;
-        /// <summary>
-        /// The last sent position to the valve.
-        /// </summary>
-        private TwoPositionState m_lastSentPosition;
 
-        private static readonly int m_rotationDelayTimems = 145;  //milliseconds
+        private static readonly int RotationDelayTimeMsec = 145;  //milliseconds
         private const int CONST_READTIMEOUT = 500;          //milliseconds
         private const int CONST_WRITETIMEOUT = 500;         //milliseconds
         #endregion
@@ -73,8 +65,8 @@ namespace LcmsNetPlugins.VICI.Valves
         public ValveVICI2Pos() : base(CONST_READTIMEOUT, CONST_WRITETIMEOUT, "valve")
         {
             //Set positions to unknown
-            m_lastMeasuredPosition = TwoPositionState.Unknown;
-            m_lastSentPosition = TwoPositionState.Unknown;
+            LastMeasuredPosition = TwoPositionState.Unknown;
+            LastSentPosition = TwoPositionState.Unknown;
         }
 
         /// <summary>
@@ -84,8 +76,8 @@ namespace LcmsNetPlugins.VICI.Valves
         public ValveVICI2Pos(SerialPort port) : base(port, "valve")
         {
             //Set positions to unknown
-            m_lastMeasuredPosition = TwoPositionState.Unknown;
-            m_lastSentPosition = TwoPositionState.Unknown;
+            LastMeasuredPosition = TwoPositionState.Unknown;
+            LastSentPosition = TwoPositionState.Unknown;
         }
 
         #endregion
@@ -93,14 +85,14 @@ namespace LcmsNetPlugins.VICI.Valves
         #region Properties
 
         /// <summary>
-        /// Gets the last measured position of the valve.
+        /// The last measured position of the valve.
         /// </summary>
-        public TwoPositionState LastMeasuredPosition => m_lastMeasuredPosition;
+        public TwoPositionState LastMeasuredPosition { get; private set; }
 
         /// <summary>
-        /// Gets the last position sent to the valve.
+        /// The last position sent to the valve.
         /// </summary>
-        public TwoPositionState LastSentPosition => m_lastSentPosition;
+        public TwoPositionState LastSentPosition { get; private set; }
 
         #endregion
 
@@ -126,7 +118,7 @@ namespace LcmsNetPlugins.VICI.Valves
             if (Emulation)
             {
                 //Fill in fake position
-                m_lastMeasuredPosition = TwoPositionState.PositionA;
+                LastMeasuredPosition = TwoPositionState.PositionA;
             }
 
             return result;
@@ -140,7 +132,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             if (Emulation)
             {
-                return (int)m_lastSentPosition;
+                return (int)LastSentPosition;
             }
 
             //If the serial port is not open, open it
@@ -203,19 +195,20 @@ namespace LcmsNetPlugins.VICI.Valves
 
             if (tempPosition == "A")
             {
-                m_lastMeasuredPosition = TwoPositionState.PositionA;
+                LastMeasuredPosition = TwoPositionState.PositionA;
                 return (int)TwoPositionState.PositionA;
             }
 
             if (tempPosition == "B")
             {
-                m_lastMeasuredPosition = TwoPositionState.PositionB;
+                LastMeasuredPosition = TwoPositionState.PositionB;
                 return (int)TwoPositionState.PositionB;
             }
 
-            m_lastMeasuredPosition = TwoPositionState.Unknown;
+            LastMeasuredPosition = TwoPositionState.Unknown;
             return (int)TwoPositionState.Unknown;
         }
+
         #endregion
 
         #region Method Editor Enabled Methods
@@ -230,23 +223,23 @@ namespace LcmsNetPlugins.VICI.Valves
 //            System.Diagnostics.Debug.WriteLine("\tSetting Position" + newPosition.ToString());
 //#endif
 
-//            if (m_emulation == true)
+//            if (Emulation == true)
 //            {
-//                m_lastSentPosition = m_lastMeasuredPosition = newPosition;
-//                OnPositionChanged(m_lastMeasuredPosition);
+//                LastSentPosition = LastMeasuredPosition = newPosition;
+//                OnPositionChanged(LastMeasuredPosition);
 //                return ValveErrors.Success;
 //            }
 //            // short circuit..if we're already in that position, why bother trying to move to it?
-//            if (newPosition == m_lastMeasuredPosition)
+//            if (newPosition == LastMeasuredPosition)
 //            {
 //                return ValveErrors.Success;
 //            }
 //            //If the serial port is not open, open it
-//            if (!m_serialPort.IsOpen)
+//            if (!serialPort.IsOpen)
 //            {
 //                try
 //                {
-//                    m_serialPort.Open();
+//                    serialPort.Open();
 //                }
 //                catch (UnauthorizedAccessException)
 //                {
@@ -257,14 +250,14 @@ namespace LcmsNetPlugins.VICI.Valves
 //            string cmd = null;
 //            if (newPosition == TwoPositionState.PositionA)
 //            {
-//                m_lastSentPosition = TwoPositionState.PositionA;
-//                cmd = m_valveID.ToString() + "GOA";
+//                LastSentPosition = TwoPositionState.PositionA;
+//                cmd = valveID.ToString() + "GOA";
 //            }
 
 //            else if (newPosition == TwoPositionState.PositionB)
 //            {
-//                m_lastSentPosition = TwoPositionState.PositionB;
-//                cmd = m_valveID.ToString() + "GOB";
+//                LastSentPosition = TwoPositionState.PositionB;
+//                cmd = valveID.ToString() + "GOB";
 //            }
 //            else
 //            {
@@ -273,7 +266,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
 //            try
 //            {
-//                m_serialPort.WriteLine(cmd);
+//                serialPort.WriteLine(cmd);
 //            }
 //            catch (TimeoutException)
 //            {
@@ -288,7 +281,7 @@ namespace LcmsNetPlugins.VICI.Valves
 //            //NOTE: This can be shortened if there are more than 4 ports but still
 //            //      2 positions; see manual page 1 for switching times
 
-//            System.Threading.Thread.Sleep(m_rotationDelayTimems);
+//            System.Threading.Thread.Sleep(RotationDelayTimeMsec);
 
 //            //Doublecheck that the position change was correctly executed
 //            try
@@ -304,13 +297,13 @@ namespace LcmsNetPlugins.VICI.Valves
 //                return ValveErrors.UnauthorizedAccess;
 //            }
 
-//            if (m_lastMeasuredPosition != m_lastSentPosition)
+//            if (LastMeasuredPosition != LastSentPosition)
 //            {
 //                return ValveErrors.ValvePositionMismatch;
 //            }
 //            else
 //            {
-//                OnPositionChanged(m_lastMeasuredPosition);
+//                OnPositionChanged(LastMeasuredPosition);
 //                return ValveErrors.Success;
 //            }
 //        }
@@ -328,12 +321,13 @@ namespace LcmsNetPlugins.VICI.Valves
 
             if (Emulation)
             {
-                m_lastSentPosition = m_lastMeasuredPosition = newPosition;
-                OnPositionChanged(m_lastMeasuredPosition);
+                LastSentPosition = LastMeasuredPosition = newPosition;
+                OnPositionChanged(LastMeasuredPosition);
                 return;
             }
+
             // short circuit..if we're already in that position, why bother trying to move to it?
-            if (newPosition == m_lastMeasuredPosition)
+            if (newPosition == LastMeasuredPosition)
             {
                 return;
             }
@@ -346,13 +340,13 @@ namespace LcmsNetPlugins.VICI.Valves
             string cmd;
             if (newPosition == TwoPositionState.PositionA)
             {
-                m_lastSentPosition = TwoPositionState.PositionA;
+                LastSentPosition = TwoPositionState.PositionA;
                 cmd = SoftwareID + "GOA";
             }
 
             else if (newPosition == TwoPositionState.PositionB)
             {
-                m_lastSentPosition = TwoPositionState.PositionB;
+                LastSentPosition = TwoPositionState.PositionB;
                 cmd = SoftwareID + "GOB";
             }
             else
@@ -366,12 +360,13 @@ namespace LcmsNetPlugins.VICI.Valves
             //NOTE: This can be shortened if there are more than 4 ports but still
             //      2 positions; see manual page 1 for switching times
 
-            System.Threading.Thread.Sleep(m_rotationDelayTimems);
+            System.Threading.Thread.Sleep(RotationDelayTimeMsec);
 
             //Doublecheck that the position change was correctly executed
             GetPosition();
-            OnPositionChanged(m_lastMeasuredPosition);
+            OnPositionChanged(LastMeasuredPosition);
         }
+
         #endregion
 
         /*public override FinchComponentData GetData()
@@ -386,14 +381,14 @@ namespace LcmsNetPlugins.VICI.Valves
               measurementSentPosition.Name = "Set Position";
               measurementSentPosition.Type = FinchDataType.Integer;
               measurementSentPosition.Units = "";
-              measurementSentPosition.Value = this.m_lastSentPosition.ToString();
+              measurementSentPosition.Value = this.LastSentPosition.ToString();
               component.Signals.Add(measurementSentPosition);
 
               FinchScalarSignal measurementMeasuredPosition = new FinchScalarSignal();
               measurementMeasuredPosition.Name = "Measured Position";
               measurementMeasuredPosition.Type = FinchDataType.Integer;
               measurementMeasuredPosition.Units = "";
-              measurementMeasuredPosition.Value = this.m_lastMeasuredPosition.ToString();
+              measurementMeasuredPosition.Value = this.LastMeasuredPosition.ToString();
               component.Signals.Add(measurementMeasuredPosition);
 
               FinchScalarSignal port = new FinchScalarSignal();
