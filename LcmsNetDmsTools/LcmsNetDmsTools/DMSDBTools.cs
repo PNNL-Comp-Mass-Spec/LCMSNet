@@ -1442,7 +1442,10 @@ namespace LcmsNetDmsTools
             var connStr = GetConnectionString();
 
             // Get a data table containing all the users
-            const string sqlCmd = "SELECT Name, [Payroll Num] as Payroll FROM V_Active_Users ORDER BY Name";
+            //const string sqlCmd = "SELECT Name, [Payroll Num] as Payroll FROM V_Active_Users ORDER BY Name";
+            // Don't get all active DMS Users; most of them are not instrument operators
+            // EMSL Users have a separate list
+            const string sqlCmd = "SELECT Name, [Payroll Num] as Payroll FROM V_Active_Instrument_Operators ORDER BY Name";
 
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
