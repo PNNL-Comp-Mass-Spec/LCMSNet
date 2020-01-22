@@ -88,4 +88,14 @@ namespace LcmsNetPlugins.VICI.Valves
         [Description("16")] P16 = 16,
         [Description("Unknown")] Unknown = -1
     }
+
+    public enum RotationMode
+    {
+        [Description("Auto")]
+        A = 0,
+        [Description("Forward")]
+        F = 1,
+        [Description("Reverse")]
+        R = 2,
+    }
 }

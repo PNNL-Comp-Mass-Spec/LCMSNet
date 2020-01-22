@@ -437,6 +437,66 @@ namespace LcmsNetPlugins.VICI.Valves
             return tempNumPositions;
         }
 
+        public RotationMode GetRotationMode()
+        {
+            if (Emulation)
+            {
+                return RotationMode.A;
+            }
+
+            var readError = ReadCommand("SM", out var modeString);
+            if (readError != ValveErrors.Success)
+            {
+                switch (readError)
+                {
+                    case ValveErrors.UnauthorizedAccess:
+                        throw new ValveExceptionUnauthorizedAccess();
+                    case ValveErrors.TimeoutDuringWrite:
+                        throw new ValveExceptionWriteTimeout();
+                    case ValveErrors.TimeoutDuringRead:
+                        throw new ValveExceptionReadTimeout();
+                }
+            }
+
+            // SM = A
+            // SMA (universal actuator)
+
+            modeString = modeString.Replace(" ", "").Replace("=", "");
+            var pos = modeString.IndexOf("SM", StringComparison.OrdinalIgnoreCase);
+            if (pos >= 0)
+            {
+                var modeS = modeString.Substring(pos + 2, 1);
+                if (Enum.TryParse<RotationMode>(modeS, true, out var mode))
+                {
+                    return mode;
+                }
+            }
+
+            return RotationMode.A;
+        }
+
+        public void SetRotationMode(RotationMode newRotationMode)
+        {
+            if (Emulation)
+            {
+                return;
+            }
+
+            var sendError = SendCommand("SM" + newRotationMode.ToString());
+            if (sendError != ValveErrors.Success)
+            {
+                switch (sendError)
+                {
+                    case ValveErrors.UnauthorizedAccess:
+                        throw new ValveExceptionUnauthorizedAccess();
+                    case ValveErrors.TimeoutDuringWrite:
+                        throw new ValveExceptionWriteTimeout();
+                }
+            }
+
+            // TODO: Confirm mode change?
+        }
+
         #endregion
 
         #region Method Editor Enabled Methods
