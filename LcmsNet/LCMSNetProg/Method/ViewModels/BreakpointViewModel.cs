@@ -18,7 +18,7 @@ namespace LcmsNet.Method.ViewModels
 
         public bool IsSet
         {
-            get { return isSet; }
+            get => isSet;
             set
             {
                 if (isSet == value)

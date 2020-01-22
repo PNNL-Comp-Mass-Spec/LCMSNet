@@ -19,8 +19,8 @@ namespace LcmsNet.SampleQueue
         /// <returns></returns>
         public bool CanUndo
         {
-            get { return canUndo; }
-            private set { this.RaiseAndSetIfChanged(ref canUndo, value); }
+            get => canUndo;
+            private set => this.RaiseAndSetIfChanged(ref canUndo, value);
         }
 
         /// <summary>
@@ -29,8 +29,8 @@ namespace LcmsNet.SampleQueue
         /// <returns></returns>
         public bool CanRedo
         {
-            get { return canRedo; }
-            private set { this.RaiseAndSetIfChanged(ref canRedo, value); }
+            get => canRedo;
+            private set => this.RaiseAndSetIfChanged(ref canRedo, value);
         }
 
         public bool IsDirty { get; private set; }

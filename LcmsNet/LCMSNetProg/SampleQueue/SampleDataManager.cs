@@ -64,14 +64,14 @@ namespace LcmsNet.SampleQueue
 
         public bool HasValidColumns
         {
-            get { return hasValidColumns; }
-            private set { this.RaiseAndSetIfChanged(ref hasValidColumns, value); }
+            get => hasValidColumns;
+            private set => this.RaiseAndSetIfChanged(ref hasValidColumns, value);
         }
 
         public bool HasData
         {
-            get { return hasData; }
-            private set { this.RaiseAndSetIfChanged(ref hasData, value); }
+            get => hasData;
+            private set => this.RaiseAndSetIfChanged(ref hasData, value);
         }
 
         #endregion
@@ -108,8 +108,8 @@ namespace LcmsNet.SampleQueue
 
         public bool DMSAvailable
         {
-            get { return dmsAvailable; }
-            private set { this.RaiseAndSetIfChanged(ref dmsAvailable, value); }
+            get => dmsAvailable;
+            private set => this.RaiseAndSetIfChanged(ref dmsAvailable, value);
         }
 
         /// <summary>
@@ -118,8 +118,8 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public bool CycleColumns
         {
-            get { return cycleColumns; }
-            set { this.RaiseAndSetIfChanged(ref cycleColumns, value); }
+            get => cycleColumns;
+            set => this.RaiseAndSetIfChanged(ref cycleColumns, value);
         }
 
         #endregion
@@ -836,7 +836,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private SampleQueue SampleQueue
         {
-            get { return sampleQueue; }
+            get => sampleQueue;
             set
             {
                 sampleQueue = value;
@@ -865,7 +865,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public List<string> AutoSamplerMethods
         {
-            get { return autoSamplerMethods; }
+            get => autoSamplerMethods;
             set
             {
                 autoSamplerMethods = value ?? new List<string>();
@@ -878,7 +878,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public List<string> AutoSamplerTrays
         {
-            get { return autosamplerTrays; }
+            get => autosamplerTrays;
             set
             {
                 //ApplicationLogger.LogMessage(0, "SAMPLE VIEW PROCESSING AUTOSAMPLER TRAYS!");
@@ -892,7 +892,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public List<string> InstrumentMethods
         {
-            get { return instrumentMethods; }
+            get => instrumentMethods;
             set
             {
                 instrumentMethods = value ?? new List<string>();

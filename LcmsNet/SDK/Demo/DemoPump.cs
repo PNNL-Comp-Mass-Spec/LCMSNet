@@ -163,8 +163,8 @@ namespace DemoPluginLibrary
 
         public string Name
         {
-            get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         public string Version
@@ -219,10 +219,7 @@ namespace DemoPluginLibrary
         /// property representing the current flowrate of fluid through the pump
         /// </summary>
         public double Flowrate {
-            get
-            {
-                return m_flowrate;
-            }
+            get => m_flowrate;
             set
             {
                 m_flowrate = value;
@@ -247,10 +244,7 @@ namespace DemoPluginLibrary
         /// </summary>
         public double Pressure
         {
-            get
-            {
-                return m_pressure;
-            }
+            get => m_pressure;
             set
             {
                 m_pressure = value;
@@ -263,10 +257,7 @@ namespace DemoPluginLibrary
         /// </summary>
         public double PercentB
         {
-            get
-            {
-                return m_percentB;
-            }
+            get => m_percentB;
             set
             {
                 m_percentB = value;

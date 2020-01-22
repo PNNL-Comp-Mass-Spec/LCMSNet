@@ -98,10 +98,7 @@ namespace FluidicsSDK.Devices
         public override int CurrentState
         {
             //PAL doesn't have a state as valves do
-            get
-            {
-                return -1;
-            }
+            get => -1;
             set
             {
                 // do nothing

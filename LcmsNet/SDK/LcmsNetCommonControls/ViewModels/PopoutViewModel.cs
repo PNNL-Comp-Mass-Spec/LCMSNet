@@ -46,7 +46,7 @@ namespace LcmsNetCommonControls.ViewModels
         /// </summary>
         public bool Tacked
         {
-            get { return tacked; }
+            get => tacked;
             set
             {
                 this.RaiseAndSetIfChanged(ref tacked, value);
@@ -57,10 +57,7 @@ namespace LcmsNetCommonControls.ViewModels
         /// <summary>
         /// Text to display on the button
         /// </summary>
-        public string TackType
-        {
-            get { return Tacked ? "Untack" : "Tack"; }
-        }
+        public string TackType => Tacked ? "Untack" : "Tack";
 
         //public event EventHandler<TackEventArgs> Tack;
     }

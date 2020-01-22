@@ -165,68 +165,68 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public double FlowRate
         {
-            get { return flowRate; }
-            set { this.RaiseAndSetIfChanged(ref flowRate, value); }
+            get => flowRate;
+            set => this.RaiseAndSetIfChanged(ref flowRate, value);
         }
 
         public double FlowRateRead
         {
-            get { return flowRateRead; }
-            private set { this.RaiseAndSetIfChanged(ref flowRateRead, value); }
+            get => flowRateRead;
+            private set => this.RaiseAndSetIfChanged(ref flowRateRead, value);
         }
 
         //public double MixerVolume
         //{
-        //    get { return mixerVolume; }
-        //    set { this.RaiseAndSetIfChanged(ref mixerVolume, value); }
+        //    get => mixerVolume;
+        //    set => this.RaiseAndSetIfChanged(ref mixerVolume, value);
         //}
 
         //public double MixerVolumeRead
         //{
-        //    get { return mixerVolumeRead; }
-        //    private set { this.RaiseAndSetIfChanged(ref mixerVolumeRead, value); }
+        //    get => mixerVolumeRead;
+        //    private set => this.RaiseAndSetIfChanged(ref mixerVolumeRead, value);
         //}
 
         public double PercentB
         {
-            get { return percentB; }
-            set { this.RaiseAndSetIfChanged(ref percentB, value); }
+            get => percentB;
+            set => this.RaiseAndSetIfChanged(ref percentB, value);
         }
 
         public double PercentBRead
         {
-            get { return percentBRead; }
-            private set { this.RaiseAndSetIfChanged(ref percentBRead, value); }
+            get => percentBRead;
+            private set => this.RaiseAndSetIfChanged(ref percentBRead, value);
         }
 
         public AgilentPumpModes SelectedMode
         {
-            get { return selectedMode; }
-            set { this.RaiseAndSetIfChanged(ref selectedMode, value); }
+            get => selectedMode;
+            set => this.RaiseAndSetIfChanged(ref selectedMode, value);
         }
 
         public double Pressure
         {
-            get { return pressure; }
-            private set { this.RaiseAndSetIfChanged(ref pressure, value); }
+            get => pressure;
+            private set => this.RaiseAndSetIfChanged(ref pressure, value);
         }
 
         public string SelectedMethod
         {
-            get { return selectedMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedMethod, value); }
+            get => selectedMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedMethod, value);
         }
 
         public string SelectedComPort
         {
-            get { return selectedComPort; }
-            set { this.RaiseAndSetIfChanged(ref selectedComPort, value); }
+            get => selectedComPort;
+            set => this.RaiseAndSetIfChanged(ref selectedComPort, value);
         }
 
         public string MethodText
         {
-            get { return methodText; }
-            set { this.RaiseAndSetIfChanged(ref methodText, value); }
+            get => methodText;
+            set => this.RaiseAndSetIfChanged(ref methodText, value);
         }
 
         public PumpDisplayViewModel PumpDisplay => pumpDisplay;
@@ -239,8 +239,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         public override IDevice Device
         {
-            get { return Pump; }
-            set { RegisterDevice(value); }
+            get => Pump;
+            set => RegisterDevice(value);
         }
 
         public AgilentPump Pump
@@ -254,8 +254,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         public bool Emulation
         {
-            get { return Pump.Emulation; }
-            set { Pump.Emulation = value; }
+            get => Pump.Emulation;
+            set => Pump.Emulation = value;
         }
 
         public string NewModuleName

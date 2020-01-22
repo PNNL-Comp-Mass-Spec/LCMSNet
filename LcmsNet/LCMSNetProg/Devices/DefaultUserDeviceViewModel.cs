@@ -31,8 +31,8 @@ namespace LcmsNet.Devices
 
         public bool Running
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
         }
 
         /// <summary>

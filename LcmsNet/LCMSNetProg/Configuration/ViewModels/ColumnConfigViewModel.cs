@@ -96,22 +96,19 @@ namespace LcmsNet.Configuration.ViewModels
 
         public bool ColumnEnabled
         {
-            get { return columnEnabled; }
-            set { this.RaiseAndSetIfChanged(ref columnEnabled, value); }
+            get => columnEnabled;
+            set => this.RaiseAndSetIfChanged(ref columnEnabled, value);
         }
 
-        public int ColumnId
-        {
-            get { return columnId?.Value + 1 ?? 0; }
-        }
+        public int ColumnId => columnId?.Value + 1 ?? 0;
 
         /// <summary>
         /// Gets or sets the data associated with the column.
         /// </summary>
         public ColumnData ColumnData
         {
-            get { return columnData; }
-            private set { this.RaiseAndSetIfChanged(ref columnData, value); }
+            get => columnData;
+            private set => this.RaiseAndSetIfChanged(ref columnData, value);
         }
 
         /// <summary>

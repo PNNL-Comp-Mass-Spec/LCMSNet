@@ -66,8 +66,8 @@ namespace LcmsNet.Simulator.ViewModels
 
         public bool EnableAll
         {
-            get { return enableAll; }
-            set { this.RaiseAndSetIfChanged(ref enableAll, value); }
+            get => enableAll;
+            set => this.RaiseAndSetIfChanged(ref enableAll, value);
         }
 
         public IReadOnlyReactiveList<IFluidicsModelChecker> Checkers => checkers;

@@ -48,8 +48,8 @@ namespace LcmsNetPlugins.Eksigent.Pumps
 
         public IDevice Device
         {
-            get { return m_pump; }
-            set { RegisterDevice(value); }
+            get => m_pump;
+            set => RegisterDevice(value);
         }
 
         public UserControl GetDefaultView()
@@ -75,32 +75,32 @@ namespace LcmsNetPlugins.Eksigent.Pumps
 
         public string SelectedMethod
         {
-            get { return selectedMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedMethod, value); }
+            get => selectedMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedMethod, value);
         }
 
         public int MinChannelNumber
         {
-            get { return minChannelNumber; }
-            private set { this.RaiseAndSetIfChanged(ref minChannelNumber, value); }
+            get => minChannelNumber;
+            private set => this.RaiseAndSetIfChanged(ref minChannelNumber, value);
         }
 
         public int MaxChannelNumber
         {
-            get { return maxChannelNumber; }
-            private set { this.RaiseAndSetIfChanged(ref maxChannelNumber, value); }
+            get => maxChannelNumber;
+            private set => this.RaiseAndSetIfChanged(ref maxChannelNumber, value);
         }
 
         public int ChannelNumber
         {
-            get { return channelNumber; }
-            set { this.RaiseAndSetIfChanged(ref channelNumber, value); }
+            get => channelNumber;
+            set => this.RaiseAndSetIfChanged(ref channelNumber, value);
         }
 
         public string StatusText
         {
-            get { return statusText; }
-            private set { this.RaiseAndSetIfChanged(ref statusText, value); }
+            get => statusText;
+            private set => this.RaiseAndSetIfChanged(ref statusText, value);
         }
 
         public ReactiveUI.ReactiveCommand<Unit, Unit> ShowMethodEditorCommand { get; private set; }

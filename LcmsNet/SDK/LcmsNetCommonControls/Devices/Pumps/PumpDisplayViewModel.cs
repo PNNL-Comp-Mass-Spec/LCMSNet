@@ -43,8 +43,8 @@ namespace LcmsNetCommonControls.Devices.Pumps
         /// </summary>
         public string PumpName
         {
-            get { return pumpName; }
-            private set { this.RaiseAndSetIfChanged(ref pumpName, value); }
+            get => pumpName;
+            private set => this.RaiseAndSetIfChanged(ref pumpName, value);
         }
 
         /// <summary>
@@ -52,8 +52,8 @@ namespace LcmsNetCommonControls.Devices.Pumps
         /// </summary>
         public PlotModel DataPressureMonitorPlot
         {
-            get { return dataPressureMonitorPlot; }
-            private set { this.RaiseAndSetIfChanged(ref dataPressureMonitorPlot, value); }
+            get => dataPressureMonitorPlot;
+            private set => this.RaiseAndSetIfChanged(ref dataPressureMonitorPlot, value);
         }
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace LcmsNetCommonControls.Devices.Pumps
         /// </summary>
         public PlotModel DataFlowMonitorPlot
         {
-            get { return dataFlowMonitorPlot; }
-            private set { this.RaiseAndSetIfChanged(ref dataFlowMonitorPlot, value); }
+            get => dataFlowMonitorPlot;
+            private set => this.RaiseAndSetIfChanged(ref dataFlowMonitorPlot, value);
         }
 
         /// <summary>
@@ -70,8 +70,8 @@ namespace LcmsNetCommonControls.Devices.Pumps
         /// </summary>
         public PlotModel DataBMonitorPlot
         {
-            get { return dataBMonitorPlot; }
-            private set { this.RaiseAndSetIfChanged(ref dataBMonitorPlot, value); }
+            get => dataBMonitorPlot;
+            private set => this.RaiseAndSetIfChanged(ref dataBMonitorPlot, value);
         }
 
         /// <summary>

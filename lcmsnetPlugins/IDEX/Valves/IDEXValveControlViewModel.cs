@@ -45,14 +45,14 @@ namespace LcmsNetPlugins.IDEX.Valves
 
         public IDevice Device
         {
-            get { return m_valve; }
-            set { RegisterDevice(value); }
+            get => m_valve;
+            set => RegisterDevice(value);
         }
 
         public string Name
         {
-            get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         public UserControl GetDefaultView()

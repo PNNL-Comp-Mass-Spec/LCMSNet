@@ -29,14 +29,14 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public int Tray
         {
-            get { return tray; }
-            set { this.RaiseAndSetIfChanged(ref tray, value); }
+            get => tray;
+            set => this.RaiseAndSetIfChanged(ref tray, value);
         }
 
         public int Vial
         {
-            get { return vial; }
-            set { this.RaiseAndSetIfChanged(ref vial, value); }
+            get => vial;
+            set => this.RaiseAndSetIfChanged(ref vial, value);
         }
 
         public void StoreTrayVialToSample()

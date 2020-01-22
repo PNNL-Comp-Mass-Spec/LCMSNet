@@ -18,8 +18,8 @@ namespace LcmsNet.Method
         /// </summary>
         public bool Animate
         {
-            get { return animate; }
-            set { this.RaiseAndSetIfChanged(ref animate, value); }
+            get => animate;
+            set => this.RaiseAndSetIfChanged(ref animate, value);
         }
 
         /// <summary>
@@ -27,8 +27,8 @@ namespace LcmsNet.Method
         /// </summary>
         public int AnimateDelay
         {
-            get { return animateDelay; }
-            set { this.RaiseAndSetIfChanged(ref animateDelay, value); }
+            get => animateDelay;
+            set => this.RaiseAndSetIfChanged(ref animateDelay, value);
         }
 
         /// <summary>
@@ -36,8 +36,8 @@ namespace LcmsNet.Method
         /// </summary>
         public int FrameDelay
         {
-            get { return frameDelay; }
-            set { this.RaiseAndSetIfChanged(ref frameDelay, value); }
+            get => frameDelay;
+            set => this.RaiseAndSetIfChanged(ref frameDelay, value);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

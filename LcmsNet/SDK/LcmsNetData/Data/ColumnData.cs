@@ -155,7 +155,7 @@ namespace LcmsNetData.Data
         /// </summary>
         public bool First
         {
-            get { return m_first; }
+            get => m_first;
             set
             {
                 m_first = value;
@@ -168,7 +168,7 @@ namespace LcmsNetData.Data
         /// </summary>
         public ColumnStatus Status
         {
-            get { return m_status; }
+            get => m_status;
             set
             {
                 //
@@ -188,8 +188,8 @@ namespace LcmsNetData.Data
         /// </summary>
         public int ID
         {
-            get { return m_columnIndex; }
-            set { this.RaiseAndSetIfChanged(ref m_columnIndex, value, nameof(ID)); }
+            get => m_columnIndex;
+            set => this.RaiseAndSetIfChanged(ref m_columnIndex, value, nameof(ID));
         }
 
         /// <summary>
@@ -197,8 +197,8 @@ namespace LcmsNetData.Data
         /// </summary>
         public int SystemID
         {
-            get { return m_systemIndex; }
-            set { m_systemIndex = value; }
+            get => m_systemIndex;
+            set => m_systemIndex = value;
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace LcmsNetData.Data
         /// </summary>
         public string Name
         {
-            get { return m_name; }
+            get => m_name;
             set
             {
                 var oldName = m_name;
@@ -222,7 +222,7 @@ namespace LcmsNetData.Data
         /// </summary>
         public Color Color
         {
-            get { return m_columnColor; }
+            get => m_columnColor;
             set
             {
                 var oldColor = m_columnColor;

@@ -91,50 +91,50 @@ namespace LcmsNet.Method.ViewModels
 
         public string MethodName
         {
-            get { return methodName; }
-            set { this.RaiseAndSetIfChanged(ref methodName, value); }
+            get => methodName;
+            set => this.RaiseAndSetIfChanged(ref methodName, value);
         }
 
         public bool AllowPreOverlap
         {
-            get { return allowPreOverlap; }
-            set { this.RaiseAndSetIfChanged(ref allowPreOverlap, value); }
+            get => allowPreOverlap;
+            set => this.RaiseAndSetIfChanged(ref allowPreOverlap, value);
         }
 
         public bool AllowPostOverlap
         {
-            get { return allowPostOverlap; }
-            set { this.RaiseAndSetIfChanged(ref allowPostOverlap, value); }
+            get => allowPostOverlap;
+            set => this.RaiseAndSetIfChanged(ref allowPostOverlap, value);
         }
 
         public string SelectedSavedMethod
         {
-            get { return selectedSavedMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedSavedMethod, value); }
+            get => selectedSavedMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedSavedMethod, value);
         }
 
         public string SelectedColumn
         {
-            get { return selectedColumn; }
-            set { this.RaiseAndSetIfChanged(ref selectedColumn, value); }
+            get => selectedColumn;
+            set => this.RaiseAndSetIfChanged(ref selectedColumn, value);
         }
 
         public bool CanSave
         {
-            get { return canSave; }
-            private set { this.RaiseAndSetIfChanged(ref canSave, value); }
+            get => canSave;
+            private set => this.RaiseAndSetIfChanged(ref canSave, value);
         }
 
         public bool CanBuild
         {
-            get { return canBuild; }
-            private set { this.RaiseAndSetIfChanged(ref canBuild, value); }
+            get => canBuild;
+            private set => this.RaiseAndSetIfChanged(ref canBuild, value);
         }
 
         public bool CanUpdate
         {
-            get { return canUpdate; }
-            private set { this.RaiseAndSetIfChanged(ref canUpdate, value); }
+            get => canUpdate;
+            private set => this.RaiseAndSetIfChanged(ref canUpdate, value);
         }
 
         public List<LCEvent> LCEvents

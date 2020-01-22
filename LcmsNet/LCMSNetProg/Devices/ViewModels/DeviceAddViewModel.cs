@@ -44,8 +44,8 @@ namespace LcmsNet.Devices.ViewModels
         /// </summary>
         public bool InitializeOnAdd
         {
-            get { return initializeOnAdd; }
-            set { this.RaiseAndSetIfChanged(ref initializeOnAdd, value); }
+            get => initializeOnAdd;
+            set => this.RaiseAndSetIfChanged(ref initializeOnAdd, value);
         }
 
         public IReadOnlyReactiveList<DevicePluginInformation> AddedPlugins => addedPlugins;
@@ -54,8 +54,8 @@ namespace LcmsNet.Devices.ViewModels
 
         public DevicePluginInformation SelectedPlugin
         {
-            get { return selectedPlugin; }
-            set { this.RaiseAndSetIfChanged(ref selectedPlugin, value); }
+            get => selectedPlugin;
+            set => this.RaiseAndSetIfChanged(ref selectedPlugin, value);
         }
 
         /// <summary>

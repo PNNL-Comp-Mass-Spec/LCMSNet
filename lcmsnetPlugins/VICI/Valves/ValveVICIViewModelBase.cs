@@ -65,32 +65,32 @@ namespace LcmsNetPlugins.VICI.Valves
 
         public char SelectedValveId
         {
-            get { return selectedValveId; }
-            set { this.RaiseAndSetIfChanged(ref selectedValveId, value); }
+            get => selectedValveId;
+            set => this.RaiseAndSetIfChanged(ref selectedValveId, value);
         }
 
         public char CurrentValveId
         {
-            get { return currentValveId; }
-            protected set { this.RaiseAndSetIfChanged(ref currentValveId, value); }
+            get => currentValveId;
+            protected set => this.RaiseAndSetIfChanged(ref currentValveId, value);
         }
 
         public string CurrentValvePosition
         {
-            get { return currentValvePosition; }
-            protected set { this.RaiseAndSetIfChanged(ref currentValvePosition, value); }
+            get => currentValvePosition;
+            protected set => this.RaiseAndSetIfChanged(ref currentValvePosition, value);
         }
 
         public string ValveVersionInfo
         {
-            get { return valveVersionInfo; }
-            protected set { this.RaiseAndSetIfChanged(ref valveVersionInfo, value); }
+            get => valveVersionInfo;
+            protected set => this.RaiseAndSetIfChanged(ref valveVersionInfo, value);
         }
 
         public bool ValveControlTabSelected
         {
-            get { return valveControlTabSelected; }
-            set { this.RaiseAndSetIfChanged(ref valveControlTabSelected, value); }
+            get => valveControlTabSelected;
+            set => this.RaiseAndSetIfChanged(ref valveControlTabSelected, value);
         }
 
         /// <summary>
@@ -98,8 +98,8 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public SerialPort ComPort
         {
-            get { return comPort; }
-            protected set { this.RaiseAndSetIfChanged(ref comPort, value); }
+            get => comPort;
+            protected set => this.RaiseAndSetIfChanged(ref comPort, value);
         }
 
         #endregion

@@ -42,7 +42,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("TotalFlow")]
         public double TotalFlow
         {
-            get { return totalFlow; }
+            get => totalFlow;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref totalFlow, value))
@@ -58,7 +58,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("StartPercentA")]
         public double StartPercentA
         {
-            get { return startPercentA; }
+            get => startPercentA;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref startPercentA, value))
@@ -74,7 +74,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("StartPercentB")]
         public double StartPercentB
         {
-            get { return startPercentB; }
+            get => startPercentB;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref startPercentB, value))
@@ -90,7 +90,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("GradientTime")]
         public double GradientTime
         {
-            get { return gradientTime; }
+            get => gradientTime;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref gradientTime, value))
@@ -106,7 +106,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("InitialIsoTime")]
         public double InitialIsoTime
         {
-            get { return initialIsoTime; }
+            get => initialIsoTime;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref initialIsoTime, value))
@@ -122,7 +122,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("FinalIsoTime")]
         public double FinalIsoTime
         {
-            get { return finalIsoTime; }
+            get => finalIsoTime;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref finalIsoTime, value))
@@ -304,8 +304,8 @@ namespace LcmsNetPlugins.ASIpump
         /// </summary>
         public string Name
         {
-            get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
         private string name;
 
@@ -320,8 +320,8 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("PortName")]
         public new string PortName
         {
-            get { return base.PortName; }
-            set { base.PortName = value; }
+            get => base.PortName;
+            set => base.PortName = value;
         }
         /// <summary>
         /// Gets or sets the error type of the last error reported.

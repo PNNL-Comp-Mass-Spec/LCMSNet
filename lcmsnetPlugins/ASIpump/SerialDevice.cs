@@ -25,8 +25,8 @@ namespace LcmsNetPlugins.ASIpump
         protected SerialPort mPort = new SerialPort();
         public SerialPort Port
         {
-            get { return mPort; }
-            set { mPort = value; }
+            get => mPort;
+            set => mPort = value;
         }
 
         public SerialDevice()
@@ -39,15 +39,15 @@ namespace LcmsNetPlugins.ASIpump
         private string mReplyDelimeter = "\r\n";
         public string ReplyDelimeter
         {
-            get { return mReplyDelimeter; }
-            set { mReplyDelimeter = value; }
+            get => mReplyDelimeter;
+            set => mReplyDelimeter = value;
         }
 
         private string mSendDelimeter = "\r\n";
         public string SendDelimeter
         {
-            get { return mSendDelimeter; }
-            set { mSendDelimeter = value; }
+            get => mSendDelimeter;
+            set => mSendDelimeter = value;
         }
 
         private double timeout = 1;
@@ -58,8 +58,8 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("Timeout")]
         public double Timeout
         {
-            get { return timeout; }
-            set { this.RaiseAndSetIfChanged(ref timeout, value); }
+            get => timeout;
+            set => this.RaiseAndSetIfChanged(ref timeout, value);
         }
 
         [Description("Port Name")]
@@ -68,7 +68,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("PortName")]
         public string PortName
         {
-            get { return mPort.PortName; }
+            get => mPort.PortName;
             set
             {
                 if (value != null)
@@ -100,7 +100,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("Handshake")]
         public Handshake Handshake
         {
-            get { return mPort.Handshake; }
+            get => mPort.Handshake;
             set
             {
                 mPort.Handshake = value;
@@ -114,7 +114,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("DTREnable")]
         public bool DtrEnable
         {
-            get { return mPort.DtrEnable; }
+            get => mPort.DtrEnable;
             set
             {
                 mPort.DtrEnable = value;
@@ -128,7 +128,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("RTSEnable")]
         public bool RtsEnable
         {
-            get { return mPort.RtsEnable; }
+            get => mPort.RtsEnable;
             set
             {
                 mPort.RtsEnable = value;
@@ -142,7 +142,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("BaudRate")]
         public int BaudRate
         {
-            get { return mPort.BaudRate; }
+            get => mPort.BaudRate;
             set
             {
                 if (value == 0)
@@ -158,7 +158,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("DataBits")]
         public int DataBits
         {
-            get { return mPort.DataBits; }
+            get => mPort.DataBits;
             set
             {
                 if (value == 0)
@@ -174,7 +174,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("StopBits")]
         public StopBits StopBits
         {
-            get { return mPort.StopBits; }
+            get => mPort.StopBits;
             set
             {
                 if (value == StopBits.None)
@@ -190,7 +190,7 @@ namespace LcmsNetPlugins.ASIpump
         [PersistenceData("Parity")]
         public Parity Parity
         {
-            get { return mPort.Parity; }
+            get => mPort.Parity;
             set
             {
                 mPort.Parity = value;

@@ -27,8 +27,8 @@
         /// </summary>
         public LogLevel ErrorLogLevel
         {
-            get { return ApplicationLogger.ConvertIntToLogLevel(ErrorLevel); }
-            set { ErrorLevel = (int)value; }
+            get => ApplicationLogger.ConvertIntToLogLevel(ErrorLevel);
+            set => ErrorLevel = (int)value;
         }
 
         /// <summary>
@@ -36,8 +36,8 @@
         /// </summary>
         public LogLevel MessageLogLevel
         {
-            get { return ApplicationLogger.ConvertIntToLogLevel(MessageLevel); }
-            set { MessageLevel = (int)value; }
+            get => ApplicationLogger.ConvertIntToLogLevel(MessageLevel);
+            set => MessageLevel = (int)value;
         }
 
         /// <summary>

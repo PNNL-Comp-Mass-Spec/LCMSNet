@@ -157,29 +157,26 @@ namespace FluidicsSDK.Graphic
 
         public List<Point> Points
         {
-            get { return vertices; }
-            set { vertices = value; }
+            get => vertices;
+            set => vertices = value;
         }
 
         public override Point Loc
         {
-            get { return BoundingBox.Location; }
-            set { throw new FluidicsGraphicsError("To change the location of a fluidics polygon, use moveby method"); }
+            get => BoundingBox.Location;
+            set => throw new FluidicsGraphicsError("To change the location of a fluidics polygon, use moveby method");
         }
 
         public override Size Size
         {
-            get { return BoundingBox.Size; }
-            set { throw new InvalidOperationException("Cannot change the size of a polygon directly. Modify its points"); }
+            get => BoundingBox.Size;
+            set => throw new InvalidOperationException("Cannot change the size of a polygon directly. Modify its points");
         }
 
         /// <summary>
         /// The boundaries of the primitive
         /// </summary>
-        public override Rect Bounds
-        {
-            get { return new Rect(BoundingBox.Location, BoundingBox.Size); }
-        }
+        public override Rect Bounds => new Rect(BoundingBox.Location, BoundingBox.Size);
 
         #endregion
     }

@@ -81,8 +81,8 @@ namespace LcmsNetData.Method
         [PersistenceSetting(IgnoreProperty = true)]
         public DateTime ActualStart
         {
-            get { return actualStart; }
-            set { this.RaiseAndSetIfChanged(ref actualStart, value, nameof(ActualStart)); }
+            get => actualStart;
+            set => this.RaiseAndSetIfChanged(ref actualStart, value, nameof(ActualStart));
         }
 
         /// <summary>
@@ -91,8 +91,8 @@ namespace LcmsNetData.Method
         [PersistenceSetting(IgnoreProperty = true)]
         public DateTime ActualEnd
         {
-            get { return actualEnd; }
-            set { this.RaiseAndSetIfChanged(ref actualEnd, value, nameof(ActualEnd)); }
+            get => actualEnd;
+            set => this.RaiseAndSetIfChanged(ref actualEnd, value, nameof(ActualEnd));
         }
 
         /// <summary>

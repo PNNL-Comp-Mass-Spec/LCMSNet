@@ -184,10 +184,7 @@ namespace FluidicsSDK.Base
         /// </summary>
         public Point Loc
         {
-            get
-            {
-                return m_primitive.Loc;
-            }
+            get => m_primitive.Loc;
             set
             {
                 var oldLoc = this.Center;
@@ -204,10 +201,7 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// The boundaries of the primitive
         /// </summary>
-        public Rect Bounds
-        {
-            get { return m_primitive.Bounds; }
-        }
+        public Rect Bounds => m_primitive.Bounds;
 
         /// <summary>
         /// property for determining if the port is selected or not.
@@ -234,14 +228,8 @@ namespace FluidicsSDK.Base
 
         public int Radius
         {
-            get
-            {
-                return m_radius;
-            }
-            private set
-            {
-                m_radius = value;
-            }
+            get => m_radius;
+            private set => m_radius = value;
         }
 
         public string ID { get; set; }

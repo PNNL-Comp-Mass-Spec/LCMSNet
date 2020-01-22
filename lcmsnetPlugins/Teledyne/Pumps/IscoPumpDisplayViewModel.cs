@@ -60,8 +60,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public string PumpName
         {
-            get { return pumpName; }
-            private set { this.RaiseAndSetIfChanged(ref pumpName, value); }
+            get => pumpName;
+            private set => this.RaiseAndSetIfChanged(ref pumpName, value);
         }
 
         /// <summary>
@@ -69,8 +69,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double FlowRate
         {
-            get { return flowRate; }
-            set { this.RaiseAndSetIfChanged(ref flowRate, value); }
+            get => flowRate;
+            set => this.RaiseAndSetIfChanged(ref flowRate, value);
         }
 
         /// <summary>
@@ -78,8 +78,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double Pressure
         {
-            get { return pressure; }
-            set { this.RaiseAndSetIfChanged(ref pressure, value); }
+            get => pressure;
+            set => this.RaiseAndSetIfChanged(ref pressure, value);
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double Volume
         {
-            get { return volume; }
-            set { this.RaiseAndSetIfChanged(ref volume, value); }
+            get => volume;
+            set => this.RaiseAndSetIfChanged(ref volume, value);
         }
 
         /// <summary>
@@ -96,32 +96,32 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double Setpoint
         {
-            get { return setpoint; }
-            set { this.RaiseAndSetIfChanged(ref setpoint, value); }
+            get => setpoint;
+            set => this.RaiseAndSetIfChanged(ref setpoint, value);
         }
 
         public double MinSetpoint
         {
-            get { return minSetpoint; }
-            private set { this.RaiseAndSetIfChanged(ref minSetpoint, value); }
+            get => minSetpoint;
+            private set => this.RaiseAndSetIfChanged(ref minSetpoint, value);
         }
 
         public double MaxSetpoint
         {
-            get { return maxSetpoint; }
-            private set { this.RaiseAndSetIfChanged(ref maxSetpoint, value); }
+            get => maxSetpoint;
+            private set => this.RaiseAndSetIfChanged(ref maxSetpoint, value);
         }
 
         public string SetpointUnits
         {
-            get { return setpointUnits; }
-            private set { this.RaiseAndSetIfChanged(ref setpointUnits, value); }
+            get => setpointUnits;
+            private set => this.RaiseAndSetIfChanged(ref setpointUnits, value);
         }
 
         public string SetpointType
         {
-            get { return setpointType; }
-            private set { this.RaiseAndSetIfChanged(ref setpointType, value); }
+            get => setpointType;
+            private set => this.RaiseAndSetIfChanged(ref setpointType, value);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public IscoOperationMode OperationMode
         {
-            get { return operationMode; }
+            get => operationMode;
             set
             {
                 this.RaiseAndSetIfChanged(ref operationMode, value);
@@ -147,8 +147,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double MaxFlowSp
         {
-            get { return maxFlowSp; }
-            set { this.RaiseAndSetIfChanged(ref maxFlowSp, value); }
+            get => maxFlowSp;
+            set => this.RaiseAndSetIfChanged(ref maxFlowSp, value);
         }
 
         /// <summary>
@@ -156,8 +156,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double MinFlowSp
         {
-            get { return minFlowSp; }
-            set { this.RaiseAndSetIfChanged(ref minFlowSp, value); }
+            get => minFlowSp;
+            set => this.RaiseAndSetIfChanged(ref minFlowSp, value);
         }
 
         /// <summary>
@@ -165,8 +165,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double MaxFlowLimit
         {
-            get { return maxFlowLimit; }
-            set { this.RaiseAndSetIfChanged(ref maxFlowLimit, value); }
+            get => maxFlowLimit;
+            set => this.RaiseAndSetIfChanged(ref maxFlowLimit, value);
         }
 
         /// <summary>
@@ -174,8 +174,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double MaxPressSp
         {
-            get { return maxPressSp; }
-            set { this.RaiseAndSetIfChanged(ref maxPressSp, value); }
+            get => maxPressSp;
+            set => this.RaiseAndSetIfChanged(ref maxPressSp, value);
         }
 
         /// <summary>
@@ -183,8 +183,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double MinPressSp
         {
-            get { return minPressSp; }
-            set { this.RaiseAndSetIfChanged(ref minPressSp, value); }
+            get => minPressSp;
+            set => this.RaiseAndSetIfChanged(ref minPressSp, value);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public IscoProblemStatus ProblemStatus
         {
-            get { return problemStatus; }
+            get => problemStatus;
             set
             {
                 this.RaiseAndSetIfChanged(ref problemStatus, value);
@@ -202,8 +202,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public string ProblemStatusString
         {
-            get { return problemStatusString; }
-            private set { this.RaiseAndSetIfChanged(ref problemStatusString, value); }
+            get => problemStatusString;
+            private set => this.RaiseAndSetIfChanged(ref problemStatusString, value);
         }
 
         #endregion

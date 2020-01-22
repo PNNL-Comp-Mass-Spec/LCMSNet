@@ -34,8 +34,8 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
         private string name;
         public string Name
         {
-            get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         public string Version
@@ -46,10 +46,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
         private DeviceStatus m_status;
         public DeviceStatus Status
         {
-            get
-            {
-                return m_status;
-            }
+            get => m_status;
             set
             {
                 m_status = value;

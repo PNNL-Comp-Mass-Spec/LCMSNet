@@ -105,8 +105,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public bool Emulation
         {
-            get { return m_Emulation; }
-            set { m_Emulation = value; }
+            get => m_Emulation;
+            set => m_Emulation = value;
         }
 
         /// <summary>
@@ -115,8 +115,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         [PersistenceData("PortName")]
         public string PortName
         {
-            get { return m_SerialPort.PortName; }
-            set { m_SerialPort.PortName = value; }
+            get => m_SerialPort.PortName;
+            set => m_SerialPort.PortName = value;
         }
 
         public bool IsOpen()
@@ -130,8 +130,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         [PersistenceData("BaudRate")]
         public int BaudRate
         {
-            get { return m_SerialPort.BaudRate; }
-            set { m_SerialPort.BaudRate = value; }
+            get => m_SerialPort.BaudRate;
+            set => m_SerialPort.BaudRate = value;
         }
 
         /// <summary>
@@ -140,8 +140,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         [PersistenceData("ReadTimeout")]
         public int ReadTimeout
         {
-            get { return m_SerialPort.ReadTimeout; }
-            set { m_SerialPort.ReadTimeout = value; }
+            get => m_SerialPort.ReadTimeout;
+            set => m_SerialPort.ReadTimeout = value;
         }
 
         /// <summary>
@@ -150,8 +150,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         [PersistenceData("WriteTimeout")]
         public int WriteTimeout
         {
-            get { return m_SerialPort.WriteTimeout; }
-            set { m_SerialPort.WriteTimeout = value; }
+            get => m_SerialPort.WriteTimeout;
+            set => m_SerialPort.WriteTimeout = value;
         }
 
         /// <summary>
@@ -165,8 +165,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         [PersistenceData("PumpCount")]
         public int PumpCount
         {
-            get { return m_PumpCount; }
-            set { m_PumpCount = value; }
+            get => m_PumpCount;
+            set => m_PumpCount = value;
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         [PersistenceData("UnitAddress")]
         public int UnitAddress
         {
-            get { return m_UnitAddr; }
+            get => m_UnitAddr;
             set
             {
                 m_UnitAddr = value;
@@ -198,8 +198,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public IscoControlMode ControlMode
         {
-            get { return m_ControlMode; }
-            set { SetControlMode(value); }
+            get => m_ControlMode;
+            set => SetControlMode(value);
         }
 
         /// <summary>
@@ -207,8 +207,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public IscoOperationMode OperationMode
         {
-            get { return m_OpMode; }
-            set { SetOperationMode(value); }
+            get => m_OpMode;
+            set => SetOperationMode(value);
         }
 
         /// <summary>
@@ -2211,7 +2211,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public string Name
         {
-            get { return m_Name; }
+            get => m_Name;
             set
             {
                 if (value != null && this.RaiseAndSetIfChangedRetBool(ref m_Name, value))
@@ -2226,8 +2226,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public string Version
         {
-            get { return m_Version; }
-            set { m_Version = value; }
+            get => m_Version;
+            set => m_Version = value;
         }
 
         /// <summary>
@@ -2235,8 +2235,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public DeviceStatus Status
         {
-            get { return m_Status; }
-            set { m_Status = value; }
+            get => m_Status;
+            set => m_Status = value;
         }
 
         public ManualResetEvent AbortEvent

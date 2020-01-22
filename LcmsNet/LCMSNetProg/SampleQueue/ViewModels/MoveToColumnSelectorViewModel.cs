@@ -29,8 +29,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public int SelectedColumn
         {
-            get { return selectedColumn; }
-            set { this.RaiseAndSetIfChanged(ref selectedColumn, value); }
+            get => selectedColumn;
+            set => this.RaiseAndSetIfChanged(ref selectedColumn, value);
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public bool InsertIntoUnused
         {
-            get { return insertIntoUnused; }
-            set { this.RaiseAndSetIfChanged(ref insertIntoUnused, value); }
+            get => insertIntoUnused;
+            set => this.RaiseAndSetIfChanged(ref insertIntoUnused, value);
         }
 
         #region Commands

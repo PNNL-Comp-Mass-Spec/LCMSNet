@@ -61,26 +61,26 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleControlViewModel SampleControlViewModel
         {
-            get { return sampleControlViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref sampleControlViewModel, value); }
+            get => sampleControlViewModel;
+            private set => this.RaiseAndSetIfChanged(ref sampleControlViewModel, value);
         }
 
         public ColumnManagerViewModel ColumnManagerViewModel
         {
-            get { return columnManagerViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref columnManagerViewModel, value); }
+            get => columnManagerViewModel;
+            private set => this.RaiseAndSetIfChanged(ref columnManagerViewModel, value);
         }
 
         public MethodManagerViewModel MethodManagerViewModel
         {
-            get { return methodManagerViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref methodManagerViewModel, value); }
+            get => methodManagerViewModel;
+            private set => this.RaiseAndSetIfChanged(ref methodManagerViewModel, value);
         }
 
         public SampleDataManager SampleDataManager
         {
-            get { return sampleDataManager; }
-            private set { this.RaiseAndSetIfChanged(ref sampleDataManager, value); }
+            get => sampleDataManager;
+            private set => this.RaiseAndSetIfChanged(ref sampleDataManager, value);
         }
 
         private SynchronizationContext synchronizationContext;
@@ -155,8 +155,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public BitmapSource SequencePreview
         {
-            get { return sequencePreview; }
-            private set { this.RaiseAndSetIfChanged(ref sequencePreview, value); }
+            get => sequencePreview;
+            private set => this.RaiseAndSetIfChanged(ref sequencePreview, value);
         }
 
         private bool isRunButtonEnabled;
@@ -167,32 +167,32 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool IsRunButtonEnabled
         {
-            get { return isRunButtonEnabled; }
-            private set { this.RaiseAndSetIfChanged(ref isRunButtonEnabled, value); }
+            get => isRunButtonEnabled;
+            private set => this.RaiseAndSetIfChanged(ref isRunButtonEnabled, value);
         }
 
         public bool IsStopButtonEnabled
         {
-            get { return isStopButtonEnabled; }
-            private set { this.RaiseAndSetIfChanged(ref isStopButtonEnabled, value); }
+            get => isStopButtonEnabled;
+            private set => this.RaiseAndSetIfChanged(ref isStopButtonEnabled, value);
         }
 
         public SolidColorBrush RunButtonBackColor
         {
-            get { return runButtonBackColor; }
-            private set { this.RaiseAndSetIfChanged(ref runButtonBackColor, value); }
+            get => runButtonBackColor;
+            private set => this.RaiseAndSetIfChanged(ref runButtonBackColor, value);
         }
 
         public SolidColorBrush StopButtonBackColor
         {
-            get { return stopButtonBackColor; }
-            private set { this.RaiseAndSetIfChanged(ref stopButtonBackColor, value); }
+            get => stopButtonBackColor;
+            private set => this.RaiseAndSetIfChanged(ref stopButtonBackColor, value);
         }
 
         public string TitleBarTextAddition
         {
-            get { return titleBarTextAddition; }
-            private set { this.RaiseAndSetIfChanged(ref titleBarTextAddition, value); }
+            get => titleBarTextAddition;
+            private set => this.RaiseAndSetIfChanged(ref titleBarTextAddition, value);
         }
 
         /// <summary>

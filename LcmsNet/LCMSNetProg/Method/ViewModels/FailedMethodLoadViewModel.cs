@@ -68,8 +68,8 @@ namespace LcmsNet.Method.ViewModels
 
         public string FileName
         {
-            get { return fileName; }
-            set { this.RaiseAndSetIfChanged(ref fileName, value); }
+            get => fileName;
+            set => this.RaiseAndSetIfChanged(ref fileName, value);
         }
 
         public ReactiveList<string> Errors => errors;

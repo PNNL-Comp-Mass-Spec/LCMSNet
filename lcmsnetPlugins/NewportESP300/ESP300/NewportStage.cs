@@ -643,8 +643,8 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         public string Name
         {
-            get { return m_name; }
-            set { this.RaiseAndSetIfChanged(ref m_name, value); }
+            get => m_name;
+            set => this.RaiseAndSetIfChanged(ref m_name, value);
         }
         public bool Emulation
         {
@@ -663,8 +663,8 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// </summary>
         public SerialPort Port
         {
-            get { return m_port; }
-            set { this.RaiseAndSetIfChanged(ref m_port, value); }
+            get => m_port;
+            set => this.RaiseAndSetIfChanged(ref m_port, value);
         }
 
         public string Version
@@ -684,14 +684,8 @@ namespace LcmsNetPlugins.Newport.ESP300
         [PersistenceData("NumAxes")]
         public int NumAxes
         {
-            get
-            {
-                return m_numAxes;
-            }
-            set
-            {
-                m_numAxes = value;
-            }
+            get => m_numAxes;
+            set => m_numAxes = value;
         }
 
         /// <summary>
@@ -851,14 +845,8 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// </summary>
         public Dictionary<string, StagePosition> Positions
         {
-            get
-            {
-                return m_positions;
-            }
-            set
-            {
-                m_positions = value;
-            }
+            get => m_positions;
+            set => m_positions = value;
         }
         /// <summary>
         /// Get or Sets the current position of the stage
@@ -866,10 +854,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         [PersistenceData("currentPosition")]
         public string CurrentPos
         {
-            get
-            {
-                return m_position;
-            }
+            get => m_position;
             set
             {
                 m_position = value;

@@ -108,14 +108,14 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool ContainsKeyboardFocus
         {
-            get { return containsKeyboardFocus; }
-            set { this.RaiseAndSetIfChanged(ref containsKeyboardFocus, value); }
+            get => containsKeyboardFocus;
+            set => this.RaiseAndSetIfChanged(ref containsKeyboardFocus, value);
         }
 
         public bool CommandsVisible
         {
-            get { return commandsVisible; }
-            private set { this.RaiseAndSetIfChanged(ref commandsVisible, value); }
+            get => commandsVisible;
+            private set => this.RaiseAndSetIfChanged(ref commandsVisible, value);
         }
 
         public bool ColumnEnabled => columnEnabled != null ? columnEnabled.Value : true;
@@ -143,10 +143,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Number of columns on the left of the DataGrid that cannot be scrolled; columns in this group cannot be hidden
         /// Set to 0 to disable column freezing
         /// </summary>
-        public override int NumFrozenColumns
-        {
-            get { return 0; }
-        }
+        public override int NumFrozenColumns => 0;
 
         #region Members
 
@@ -164,8 +161,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public ColumnData Column
         {
-            get { return m_columnData; }
-            private set { this.RaiseAndSetIfChanged(ref m_columnData, value); }
+            get => m_columnData;
+            private set => this.RaiseAndSetIfChanged(ref m_columnData, value);
         }
 
         #endregion

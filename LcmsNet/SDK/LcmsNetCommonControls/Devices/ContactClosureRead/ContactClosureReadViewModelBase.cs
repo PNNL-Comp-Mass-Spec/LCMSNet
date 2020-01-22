@@ -86,8 +86,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// </summary>
         public double Voltage
         {
-            get { return voltage; }
-            protected set { this.RaiseAndSetIfChanged(ref voltage, value); }
+            get => voltage;
+            protected set => this.RaiseAndSetIfChanged(ref voltage, value);
         }
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// </summary>
         public double AnalogVoltageThreshold
         {
-            get { return analogVoltageThreshold; }
-            set { this.RaiseAndSetIfChanged(ref analogVoltageThreshold, value); }
+            get => analogVoltageThreshold;
+            set => this.RaiseAndSetIfChanged(ref analogVoltageThreshold, value);
         }
 
         /// <summary>
@@ -104,8 +104,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// </summary>
         public double MinimumAnalogVoltage
         {
-            get { return minimumAnalogVoltage; }
-            protected set { this.RaiseAndSetIfChanged(ref minimumAnalogVoltage, value); }
+            get => minimumAnalogVoltage;
+            protected set => this.RaiseAndSetIfChanged(ref minimumAnalogVoltage, value);
         }
 
         /// <summary>
@@ -113,8 +113,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// </summary>
         public double MaximumAnalogVoltage
         {
-            get { return maximumAnalogVoltage; }
-            protected set { this.RaiseAndSetIfChanged(ref maximumAnalogVoltage, value); }
+            get => maximumAnalogVoltage;
+            protected set => this.RaiseAndSetIfChanged(ref maximumAnalogVoltage, value);
         }
 
         /// <summary>
@@ -122,8 +122,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// </summary>
         public bool IsAnalog
         {
-            get { return isAnalog; }
-            protected set { this.RaiseAndSetIfChanged(ref isAnalog, value); }
+            get => isAnalog;
+            protected set => this.RaiseAndSetIfChanged(ref isAnalog, value);
         }
 
         /// <summary>
@@ -131,8 +131,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// </summary>
         public string ReadReport
         {
-            get { return readReport; }
-            protected set { this.RaiseAndSetIfChanged(ref readReport, value); }
+            get => readReport;
+            protected set => this.RaiseAndSetIfChanged(ref readReport, value);
         }
 
         /// <summary>
@@ -140,8 +140,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// </summary>
         public virtual T Port
         {
-            get { return selectedPort; }
-            set { this.RaiseAndSetIfChanged(ref selectedPort, value); }
+            get => selectedPort;
+            set => this.RaiseAndSetIfChanged(ref selectedPort, value);
         }
 
         /// <summary>
@@ -149,8 +149,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// </summary>
         public ContactClosureState Status
         {
-            get { return status; }
-            set { this.RaiseAndSetIfChanged(ref status, value); }
+            get => status;
+            set => this.RaiseAndSetIfChanged(ref status, value);
         }
 
         #endregion

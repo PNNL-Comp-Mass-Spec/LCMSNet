@@ -204,14 +204,14 @@ namespace LcmsNet.Method.ViewModels
 
         public BreakpointViewModel Breakpoint
         {
-            get { return breakpoint; }
-            set { this.RaiseAndSetIfChanged(ref breakpoint, value); }
+            get => breakpoint;
+            set => this.RaiseAndSetIfChanged(ref breakpoint, value);
         }
 
         public string EventNumber
         {
-            get { return eventNumber; }
-            set { this.RaiseAndSetIfChanged(ref eventNumber, value); }
+            get => eventNumber;
+            set => this.RaiseAndSetIfChanged(ref eventNumber, value);
         }
 
         /// <summary>
@@ -219,8 +219,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public IDevice SelectedDevice
         {
-            get { return selectedDevice; }
-            set { this.RaiseAndSetIfChanged(ref selectedDevice, value); }
+            get => selectedDevice;
+            set => this.RaiseAndSetIfChanged(ref selectedDevice, value);
         }
 
         /// <summary>
@@ -228,8 +228,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public LCMethodData SelectedLCMethod
         {
-            get { return selectedLCMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
+            get => selectedLCMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedLCMethod, value);
         }
 
         public IReadOnlyReactiveList<IDevice> DevicesComboBoxOptions => DevicesList;
@@ -240,8 +240,8 @@ namespace LcmsNet.Method.ViewModels
 
         public bool IsSelected
         {
-            get { return isSelected; }
-            set { this.RaiseAndSetIfChanged(ref isSelected, value); }
+            get => isSelected;
+            set => this.RaiseAndSetIfChanged(ref isSelected, value);
         }
 
         /// <summary>
@@ -301,8 +301,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public bool OptimizeWith
         {
-            get { return optimizeWith; }
-            set { this.RaiseAndSetIfChanged(ref optimizeWith, value); }
+            get => optimizeWith;
+            set => this.RaiseAndSetIfChanged(ref optimizeWith, value);
         }
 
         /// <summary>

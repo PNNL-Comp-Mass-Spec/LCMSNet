@@ -60,14 +60,8 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public override IDevice Device
         {
-            get
-            {
-                return m_BrukerStart;
-            }
-            set
-            {
-                RegisterDevice(value);
-            }
+            get => m_BrukerStart;
+            set => RegisterDevice(value);
         }
 
         /// <summary>
@@ -75,14 +69,8 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public bool Emulation
         {
-            get
-            {
-                return m_BrukerStart.Emulation;
-            }
-            set
-            {
-                m_BrukerStart.Emulation = value;
-            }
+            get => m_BrukerStart.Emulation;
+            set => m_BrukerStart.Emulation = value;
         }
 
         #endregion

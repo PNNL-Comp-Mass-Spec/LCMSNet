@@ -68,8 +68,8 @@ namespace LcmsNetPlugins.LabJack
         /// </summary>
         public int LocalID
         {
-            get { return localID; }
-            set { localID = value; }
+            get => localID;
+            set => localID = value;
         }
 
         /// <summary>

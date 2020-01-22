@@ -80,10 +80,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public override IDevice Device
         {
-            get
-            {
-                return m_valve;
-            }
+            get => m_valve;
             set
             {
                 if (!IsInDesignMode)

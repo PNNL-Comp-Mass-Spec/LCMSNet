@@ -25,8 +25,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public LCMethod SelectedLcMethod
         {
-            get { return selectedLcMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedLcMethod, value); }
+            get => selectedLcMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedLcMethod, value);
         }
 
         #region Commands

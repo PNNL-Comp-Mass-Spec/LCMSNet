@@ -18,8 +18,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleData SelectedItem
         {
-            get { return selectedItem; }
-            set { this.RaiseAndSetIfChanged(ref selectedItem, value); }
+            get => selectedItem;
+            set => this.RaiseAndSetIfChanged(ref selectedItem, value);
         }
 
         public bool UserSortable { get; }

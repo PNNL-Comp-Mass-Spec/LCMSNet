@@ -59,31 +59,31 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
         public bool DevicesLocked
         {
-            get { return staticDevicesLocked; }
-            set { this.RaiseAndSetIfChanged(ref staticDevicesLocked, value); }
+            get => staticDevicesLocked;
+            set => this.RaiseAndSetIfChanged(ref staticDevicesLocked, value);
         }
 
         public int ConnectionTransparency
         {
-            get { return connectionTransparency; }
-            set { this.RaiseAndSetIfChanged(ref connectionTransparency, value); }
+            get => connectionTransparency;
+            set => this.RaiseAndSetIfChanged(ref connectionTransparency, value);
         }
 
         public int PortTransparency
         {
-            get { return portTransparency; }
-            set { this.RaiseAndSetIfChanged(ref portTransparency, value); }
+            get => portTransparency;
+            set => this.RaiseAndSetIfChanged(ref portTransparency, value);
         }
 
         public int DeviceTransparency
         {
-            get { return deviceTransparency; }
-            set { this.RaiseAndSetIfChanged(ref deviceTransparency, value); }
+            get => deviceTransparency;
+            set => this.RaiseAndSetIfChanged(ref deviceTransparency, value);
         }
 
         public int ZoomPercent
         {
-            get { return zoomPercent; }
+            get => zoomPercent;
             set
             {
                 value = Math.Max(value, SCALE_MIN);
@@ -97,14 +97,14 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
         public Size DesignPanelSize
         {
-            get { return designPanelSize; }
-            set { this.RaiseAndSetIfChanged(ref designPanelSize, value); }
+            get => designPanelSize;
+            set => this.RaiseAndSetIfChanged(ref designPanelSize, value);
         }
 
         public bool InSelectionMode
         {
-            get { return inSelectionMode; }
-            set { this.RaiseAndSetIfChanged(ref inSelectionMode, value); }
+            get => inSelectionMode;
+            set => this.RaiseAndSetIfChanged(ref inSelectionMode, value);
         }
 
         public event EventHandler RefreshView;

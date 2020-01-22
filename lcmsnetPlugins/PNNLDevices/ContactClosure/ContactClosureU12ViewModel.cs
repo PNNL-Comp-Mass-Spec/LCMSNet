@@ -50,7 +50,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public override LabjackU12OutputPorts Port
         {
-            get { return m_contactClosure.Port; }
+            get => m_contactClosure.Port;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref selectedOutputPort, value) && m_loading == false)
@@ -87,7 +87,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public override IDevice Device
         {
-            get { return m_contactClosure; }
+            get => m_contactClosure;
             set
             {
                 if (value != null)

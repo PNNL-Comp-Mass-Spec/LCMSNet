@@ -70,20 +70,14 @@ namespace LcmsNet.Devices.ViewModels
                 }
             }
 
-            public string Name
-            {
-                get { return name?.Value ?? string.Empty; }
-            }
+            public string Name => name?.Value ?? string.Empty;
 
-            public string Status
-            {
-                get { return status?.Value ?? string.Empty; }
-            }
+            public string Status => status?.Value ?? string.Empty;
 
             public string NameEdit
             {
-                get { return nameEdit; }
-                set { this.RaiseAndSetIfChanged(ref nameEdit, value); }
+                get => nameEdit;
+                set => this.RaiseAndSetIfChanged(ref nameEdit, value);
             }
 
             public DeviceControlData(IDevice device, IDeviceControl viewModel)
@@ -131,8 +125,8 @@ namespace LcmsNet.Devices.ViewModels
         /// </summary>
         public DeviceControlData SelectedDevice
         {
-            get { return selectedDevice; }
-            set { this.RaiseAndSetIfChanged(ref selectedDevice, value); }
+            get => selectedDevice;
+            set => this.RaiseAndSetIfChanged(ref selectedDevice, value);
         }
 
         /// <summary>

@@ -111,8 +111,8 @@ namespace FluidicsSDK.Devices.Valves
 
         public override int CurrentState
         {
-            get { return (int) m_currentState; }
-            set { m_currentState = (TwoPositionState) value; }
+            get => (int) m_currentState;
+            set => m_currentState = (TwoPositionState) value;
         }
 
         #endregion

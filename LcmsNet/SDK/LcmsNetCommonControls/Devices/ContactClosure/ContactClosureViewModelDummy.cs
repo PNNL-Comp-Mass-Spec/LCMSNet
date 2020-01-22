@@ -13,20 +13,11 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
 
     internal class ContactClosureViewModelDummy : ContactClosureViewModelBase<DummyOutputPorts>
     {
-        public override double MinimumVoltage
-        {
-            get { return -5; }
-        }
+        public override double MinimumVoltage => -5;
 
-        public override double MaximumVoltage
-        {
-            get { return 5; }
-        }
+        public override double MaximumVoltage => 5;
 
-        public override int MinimumPulseLength
-        {
-            get { return 0; }
-        }
+        public override int MinimumPulseLength => 0;
 
         public override IDevice Device { get; set; }
 

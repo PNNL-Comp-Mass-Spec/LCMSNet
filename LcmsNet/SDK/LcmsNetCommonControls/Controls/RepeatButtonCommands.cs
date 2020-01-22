@@ -28,8 +28,8 @@ namespace LcmsNetCommonControls.Controls
         /// </summary>
         public ICommand ReleaseCommand
         {
-            get { return (ICommand)GetValue(ReleaseCommandProperty); }
-            set { SetValue(ReleaseCommandProperty, value); }
+            get => (ICommand)GetValue(ReleaseCommandProperty);
+            set => SetValue(ReleaseCommandProperty, value);
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace LcmsNetCommonControls.Controls
         /// </summary>
         public object ReleaseCommandParameter
         {
-            get { return (object)GetValue(ReleaseCommandParameterProperty); }
-            set { SetValue(ReleaseCommandParameterProperty, value); }
+            get => (object)GetValue(ReleaseCommandParameterProperty);
+            set => SetValue(ReleaseCommandParameterProperty, value);
         }
 
         /// <summary>
@@ -46,8 +46,8 @@ namespace LcmsNetCommonControls.Controls
         /// </summary>
         public IInputElement ReleaseCommandTarget
         {
-            get { return (IInputElement)GetValue(ReleaseCommandTargetProperty); }
-            set { SetValue(ReleaseCommandTargetProperty, value); }
+            get => (IInputElement)GetValue(ReleaseCommandTargetProperty);
+            set => SetValue(ReleaseCommandTargetProperty, value);
         }
 
         /// <summary>

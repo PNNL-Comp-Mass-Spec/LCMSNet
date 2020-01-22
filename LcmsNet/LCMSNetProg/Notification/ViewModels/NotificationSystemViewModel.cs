@@ -218,122 +218,122 @@ namespace LcmsNet.Notification.ViewModels
         /// </summary>
         private bool IgnoreEvents
         {
-            get { return ignoreEvents; }
-            set { this.RaiseAndSetIfChanged(ref ignoreEvents, value); }
+            get => ignoreEvents;
+            set => this.RaiseAndSetIfChanged(ref ignoreEvents, value);
         }
 
         public bool SettingsDisabled
         {
-            get { return settingsDisabled; }
-            set { this.RaiseAndSetIfChanged(ref settingsDisabled, value); }
+            get => settingsDisabled;
+            set => this.RaiseAndSetIfChanged(ref settingsDisabled, value);
         }
 
         public bool EventSettingsEnabled
         {
-            get { return eventSettingsEnabled; }
-            set { this.RaiseAndSetIfChanged(ref eventSettingsEnabled, value); }
+            get => eventSettingsEnabled;
+            set => this.RaiseAndSetIfChanged(ref eventSettingsEnabled, value);
         }
 
         public bool MethodSettingEnabled
         {
-            get { return methodSettingEnabled; }
-            set { this.RaiseAndSetIfChanged(ref methodSettingEnabled, value); }
+            get => methodSettingEnabled;
+            set => this.RaiseAndSetIfChanged(ref methodSettingEnabled, value);
         }
 
         public bool EventsListEnabled
         {
-            get { return eventsListEnabled; }
-            set { this.RaiseAndSetIfChanged(ref eventsListEnabled, value); }
+            get => eventsListEnabled;
+            set => this.RaiseAndSetIfChanged(ref eventsListEnabled, value);
         }
 
         public bool ConditionNumberChecked
         {
-            get { return conditionNumberChecked; }
-            set { this.RaiseAndSetIfChanged(ref conditionNumberChecked, value); }
+            get => conditionNumberChecked;
+            set => this.RaiseAndSetIfChanged(ref conditionNumberChecked, value);
         }
 
         public bool ConditionTextChecked
         {
-            get { return conditionTextChecked; }
-            set { this.RaiseAndSetIfChanged(ref conditionTextChecked, value); }
+            get => conditionTextChecked;
+            set => this.RaiseAndSetIfChanged(ref conditionTextChecked, value);
         }
 
         public bool ConditionOccurredChecked
         {
-            get { return conditionOccurredChecked; }
-            set { this.RaiseAndSetIfChanged(ref conditionOccurredChecked, value); }
+            get => conditionOccurredChecked;
+            set => this.RaiseAndSetIfChanged(ref conditionOccurredChecked, value);
         }
 
         public string ConditionTextMatchString
         {
-            get { return conditionTextMatchString; }
-            set { this.RaiseAndSetIfChanged(ref conditionTextMatchString, value); }
+            get => conditionTextMatchString;
+            set => this.RaiseAndSetIfChanged(ref conditionTextMatchString, value);
         }
 
         public bool LogStatusToRemotePath
         {
-            get { return logStatusToRemotePath; }
-            set { this.RaiseAndSetIfChanged(ref logStatusToRemotePath, value); }
+            get => logStatusToRemotePath;
+            set => this.RaiseAndSetIfChanged(ref logStatusToRemotePath, value);
         }
 
         public int RemoteStatusLogInterval
         {
-            get { return remoteStatusLogInterval; }
-            set { this.RaiseAndSetIfChanged(ref remoteStatusLogInterval, value); }
+            get => remoteStatusLogInterval;
+            set => this.RaiseAndSetIfChanged(ref remoteStatusLogInterval, value);
         }
 
         public string RemoteStatusLogPath
         {
-            get { return remoteStatusLogPath; }
-            set { this.RaiseAndSetIfChanged(ref remoteStatusLogPath, value); }
+            get => remoteStatusLogPath;
+            set => this.RaiseAndSetIfChanged(ref remoteStatusLogPath, value);
         }
 
         public string SettingLabelText
         {
-            get { return settingLabelText; }
-            set { this.RaiseAndSetIfChanged(ref settingLabelText, value); }
+            get => settingLabelText;
+            set => this.RaiseAndSetIfChanged(ref settingLabelText, value);
         }
 
         public string DeviceLabelText
         {
-            get { return deviceLabelText; }
-            set { this.RaiseAndSetIfChanged(ref deviceLabelText, value); }
+            get => deviceLabelText;
+            set => this.RaiseAndSetIfChanged(ref deviceLabelText, value);
         }
 
         public double NumberConditionMinimum
         {
-            get { return numberConditionMinimum; }
-            set { this.RaiseAndSetIfChanged(ref numberConditionMinimum, value); }
+            get => numberConditionMinimum;
+            set => this.RaiseAndSetIfChanged(ref numberConditionMinimum, value);
         }
 
         public double NumberConditionMaximum
         {
-            get { return numberConditionMaximum; }
-            set { this.RaiseAndSetIfChanged(ref numberConditionMaximum, value); }
+            get => numberConditionMaximum;
+            set => this.RaiseAndSetIfChanged(ref numberConditionMaximum, value);
         }
 
         public string SelectedDevice
         {
-            get { return selectedDevice; }
-            set { this.RaiseAndSetIfChanged(ref selectedDevice, value); }
+            get => selectedDevice;
+            set => this.RaiseAndSetIfChanged(ref selectedDevice, value);
         }
 
         public DeviceNotificationAction SelectedAction
         {
-            get { return selectedAction; }
-            set { this.RaiseAndSetIfChanged(ref selectedAction, value); }
+            get => selectedAction;
+            set => this.RaiseAndSetIfChanged(ref selectedAction, value);
         }
 
         public string SelectedEvent
         {
-            get { return selectedEvent; }
-            set { this.RaiseAndSetIfChanged(ref selectedEvent, value); }
+            get => selectedEvent;
+            set => this.RaiseAndSetIfChanged(ref selectedEvent, value);
         }
 
         public LCMethod SelectedLCMethod
         {
-            get { return selectedLCMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
+            get => selectedLCMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedLCMethod, value);
         }
 
         public IReadOnlyReactiveList<string> DevicesList => devicesList;

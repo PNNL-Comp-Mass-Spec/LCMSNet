@@ -43,32 +43,32 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public ColumnControlViewModel Column1ViewModel
         {
-            get { return column1ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref column1ViewModel, value); }
+            get => column1ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref column1ViewModel, value);
         }
 
         public ColumnControlViewModel Column2ViewModel
         {
-            get { return column2ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref column2ViewModel, value); }
+            get => column2ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref column2ViewModel, value);
         }
 
         public ColumnControlViewModel Column3ViewModel
         {
-            get { return column3ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref column3ViewModel, value); }
+            get => column3ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref column3ViewModel, value);
         }
 
         public ColumnControlViewModel Column4ViewModel
         {
-            get { return column4ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref column4ViewModel, value); }
+            get => column4ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref column4ViewModel, value);
         }
 
         public ColumnControlViewModel FocusedColumn
         {
-            get { return focusedColumn; }
-            private set { this.RaiseAndSetIfChanged(ref focusedColumn, value); }
+            get => focusedColumn;
+            private set => this.RaiseAndSetIfChanged(ref focusedColumn, value);
         }
 
         public void ClearFocused()

@@ -140,8 +140,8 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual bool Fill
         {
-            get { return m_fill; }
-            set { m_fill = value; }
+            get => m_fill;
+            set => m_fill = value;
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual Color Color
         {
-            get { return m_color; }
+            get => m_color;
             set
             {
                 m_color = value;
@@ -169,7 +169,7 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual Color Highlight
         {
-            get { return m_highlightColor; }
+            get => m_highlightColor;
             set
             {
                 m_highlightColor = value;
@@ -180,7 +180,7 @@ namespace FluidicsSDK.Graphic
 
         public virtual Color ErrorColor
         {
-            get { return m_errorColor; }
+            get => m_errorColor;
             set
             {
                 m_errorColor = value;
@@ -201,7 +201,7 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public virtual Brush FillBrush
         {
-            get { return m_fillBrush; }
+            get => m_fillBrush;
             set
             {
                 m_fillBrush = value;

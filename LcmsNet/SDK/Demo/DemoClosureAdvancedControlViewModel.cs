@@ -27,7 +27,7 @@ namespace DemoPluginLibrary
 
         public override IDevice Device
         {
-            get { return closure; }
+            get => closure;
             set
             {
                 closure = value as DemoClosure;
@@ -40,14 +40,14 @@ namespace DemoPluginLibrary
 
         public int PulseLength
         {
-            get { return pulseLength; }
-            set { this.RaiseAndSetIfChanged(ref pulseLength, value); }
+            get => pulseLength;
+            set => this.RaiseAndSetIfChanged(ref pulseLength, value);
         }
 
         public double Voltage
         {
-            get { return voltage; }
-            set { this.RaiseAndSetIfChanged(ref voltage, value); }
+            get => voltage;
+            set => this.RaiseAndSetIfChanged(ref voltage, value);
         }
 
         public ReactiveUI.ReactiveCommand<Unit, Unit> SendCommand { get; private set; }

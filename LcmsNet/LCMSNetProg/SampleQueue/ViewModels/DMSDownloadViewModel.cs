@@ -54,55 +54,55 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public string WindowTitle
         {
-            get { return windowTitle; }
-            private set { this.RaiseAndSetIfChanged(ref windowTitle, value); }
+            get => windowTitle;
+            private set => this.RaiseAndSetIfChanged(ref windowTitle, value);
         }
 
         public string RequestName
         {
-            get { return requestName; }
-            set { this.RaiseAndSetIfChanged(ref requestName, value); }
+            get => requestName;
+            set => this.RaiseAndSetIfChanged(ref requestName, value);
         }
 
         public string RequestIdStart
         {
-            get { return requestIdStart; }
-            set { this.RaiseAndSetIfChanged(ref requestIdStart, value); }
+            get => requestIdStart;
+            set => this.RaiseAndSetIfChanged(ref requestIdStart, value);
         }
 
         public string RequestIdEnd
         {
-            get { return requestIdEnd; }
-            set { this.RaiseAndSetIfChanged(ref requestIdEnd, value); }
+            get => requestIdEnd;
+            set => this.RaiseAndSetIfChanged(ref requestIdEnd, value);
         }
 
         public string Cart
         {
-            get { return cart; }
-            set { this.RaiseAndSetIfChanged(ref cart, value); }
+            get => cart;
+            set => this.RaiseAndSetIfChanged(ref cart, value);
         }
 
         public string Wellplate
         {
-            get { return wellplate; }
-            set { this.RaiseAndSetIfChanged(ref wellplate, value); }
+            get => wellplate;
+            set => this.RaiseAndSetIfChanged(ref wellplate, value);
         }
 
         public string BatchId
         {
-            get { return batchId; }
-            set { this.RaiseAndSetIfChanged(ref batchId, value); }
+            get => batchId;
+            set => this.RaiseAndSetIfChanged(ref batchId, value);
         }
 
         public string Block
         {
-            get { return block; }
-            set { this.RaiseAndSetIfChanged(ref block, value); }
+            get => block;
+            set => this.RaiseAndSetIfChanged(ref block, value);
         }
 
         public bool UnassignedRequestsOnly
         {
-            get { return unassignedRequestsOnly; }
+            get => unassignedRequestsOnly;
             set
             {
                 this.RaiseAndSetIfChanged(ref unassignedRequestsOnly, value);
@@ -110,15 +110,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        public bool AssignedRequestsOnly
-        {
-            get { return !unassignedRequestsOnly; }
-        }
+        public bool AssignedRequestsOnly => !unassignedRequestsOnly;
 
         public string CartName
         {
-            get { return cartName; }
-            set { this.RaiseAndSetIfChanged(ref cartName, value); }
+            get => cartName;
+            set => this.RaiseAndSetIfChanged(ref cartName, value);
         }
 
         public IReadOnlyReactiveList<string> LcCartComboBoxOptions => lcCartComboBoxOptions;
@@ -127,40 +124,40 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public string CartConfigName
         {
-            get { return cartConfigName; }
-            set { this.RaiseAndSetIfChanged(ref cartConfigName, value); }
+            get => cartConfigName;
+            set => this.RaiseAndSetIfChanged(ref cartConfigName, value);
         }
 
         public IReadOnlyReactiveList<string> LcCartConfigComboBoxOptions => lcCartConfigComboBoxOptions;
 
         public DMSDownloadDataViewModel AvailableRequestData
         {
-            get { return availableRequestData; }
-            private set { this.RaiseAndSetIfChanged(ref availableRequestData, value); }
+            get => availableRequestData;
+            private set => this.RaiseAndSetIfChanged(ref availableRequestData, value);
         }
 
         public bool LoadingData
         {
-            get { return loadingData; }
-            private set { this.RaiseAndSetIfChanged(ref loadingData, value); }
+            get => loadingData;
+            private set => this.RaiseAndSetIfChanged(ref loadingData, value);
         }
 
         public string RequestsFoundString
         {
-            get { return requestsFoundString; }
-            private set { this.RaiseAndSetIfChanged(ref requestsFoundString, value); }
+            get => requestsFoundString;
+            private set => this.RaiseAndSetIfChanged(ref requestsFoundString, value);
         }
 
         public DMSDownloadDataViewModel SelectedRequestData
         {
-            get { return selectedRequestData; }
-            private set { this.RaiseAndSetIfChanged(ref selectedRequestData, value); }
+            get => selectedRequestData;
+            private set => this.RaiseAndSetIfChanged(ref selectedRequestData, value);
         }
 
         private bool BlockingEnabled
         {
-            get { return blockingEnabled; }
-            set { this.RaiseAndSetIfChanged(ref blockingEnabled, value); }
+            get => blockingEnabled;
+            set => this.RaiseAndSetIfChanged(ref blockingEnabled, value);
         }
 
         #endregion

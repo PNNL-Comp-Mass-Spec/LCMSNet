@@ -84,14 +84,8 @@ namespace LcmsNetDmsTools
 
         public string ErrMsg
         {
-            get
-            {
-                return m_ErrMsg;
-            }
-            set
-            {
-                m_ErrMsg = value;
-            }
+            get => m_ErrMsg;
+            set => m_ErrMsg = value;
         }
 
         public string DMSVersion => GetConfigSetting(CONST_DMS_VERSION_KEY, "UnknownVersion");

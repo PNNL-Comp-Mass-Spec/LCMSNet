@@ -73,20 +73,20 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public string CurrentStatus
         {
-            get { return currentStatus; }
-            set { this.RaiseAndSetIfChanged(ref currentStatus, value); }
+            get => currentStatus;
+            set => this.RaiseAndSetIfChanged(ref currentStatus, value);
         }
 
         public string SelectedRandomizer
         {
-            get { return selectedRandomizer; }
-            set { this.RaiseAndSetIfChanged(ref selectedRandomizer, value); }
+            get => selectedRandomizer;
+            set => this.RaiseAndSetIfChanged(ref selectedRandomizer, value);
         }
 
         public bool RandomizationPerformed
         {
-            get { return randomizationPerformed; }
-            set { this.RaiseAndSetIfChanged(ref randomizationPerformed, value); }
+            get => randomizationPerformed;
+            set => this.RaiseAndSetIfChanged(ref randomizationPerformed, value);
         }
 
         public ReactiveCommand<Unit, Unit> RandomizeCommand { get; private set; }

@@ -48,7 +48,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         public override LabjackU3OutputPorts Port
         {
-            get { return m_contactClosure.Port; }
+            get => m_contactClosure.Port;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref selectedOutputPort, value) && m_loading == false)
@@ -85,7 +85,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         public override IDevice Device
         {
-            get { return m_contactClosure; }
+            get => m_contactClosure;
             set
             {
                 if (value != null)

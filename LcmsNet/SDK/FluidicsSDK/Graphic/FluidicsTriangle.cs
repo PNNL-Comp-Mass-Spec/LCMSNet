@@ -165,7 +165,7 @@ namespace FluidicsSDK.Graphic
 
         public override Point Loc
         {
-            get { return m_area.Location; }
+            get => m_area.Location;
             set
             {
                 m_area.Location = value;
@@ -180,17 +180,14 @@ namespace FluidicsSDK.Graphic
 
         public override Size Size
         {
-            get { return m_area.Size; }
-            set { m_area.Size = value; }
+            get => m_area.Size;
+            set => m_area.Size = value;
         }
 
         /// <summary>
         /// The boundaries of the primitive
         /// </summary>
-        public override Rect Bounds
-        {
-            get { return new Rect(m_area.Location, m_area.Size); }
-        }
+        public override Rect Bounds => new Rect(m_area.Location, m_area.Size);
 
         #endregion
     }

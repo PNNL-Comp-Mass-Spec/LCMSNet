@@ -46,14 +46,14 @@ namespace LcmsNet.Devices.Pumps.ViewModels
 
         private int CurrentPump
         {
-            get { return currentPump; }
-            set { this.RaiseAndSetIfChanged(ref currentPump, value); }
+            get => currentPump;
+            set => this.RaiseAndSetIfChanged(ref currentPump, value);
         }
 
         public string PumpName
         {
-            get { return pumpName; }
-            set { this.RaiseAndSetIfChanged(ref pumpName, value); }
+            get => pumpName;
+            set => this.RaiseAndSetIfChanged(ref pumpName, value);
         }
 
         public IReadOnlyReactiveList<MobilePhase> MobilePhases => mobilePhases;

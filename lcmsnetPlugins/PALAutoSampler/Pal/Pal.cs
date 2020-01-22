@@ -187,14 +187,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
-            get
-            {
-                return m_emulation;
-            }
-            set
-            {
-                m_emulation = value;
-            }
+            get => m_emulation;
+            set => m_emulation = value;
         }
 
         /// <summary>
@@ -202,10 +196,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public DeviceStatus Status
         {
-            get
-            {
-                return m_status;
-            }
+            get => m_status;
             set
             {
                 StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
@@ -218,10 +209,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public string Version
         {
-            get
-            {
-                return m_version;
-            }
+            get => m_version;
             set
             {
                 m_version = value;
@@ -234,7 +222,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public string Name
         {
-            get { return m_name; }
+            get => m_name;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
@@ -250,10 +238,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("MethodsFolder")]
         public string MethodsFolder
         {
-            get
-            {
-                return m_methodsFolder;
-            }
+            get => m_methodsFolder;
             set
             {
                 m_methodsFolder = value;
@@ -278,10 +263,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("Method")]
         public string Method
         {
-            get
-            {
-                return m_method;
-            }
+            get => m_method;
             set
             {
                 m_method = value;
@@ -295,10 +277,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("Tray")]
         public string Tray
         {
-            get
-            {
-                return m_tray;
-            }
+            get => m_tray;
             set
             {
                 m_tray = value;
@@ -311,8 +290,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public VialRanges VialRange
         {
-            get { return m_vialRange; }
-            set { this.RaiseAndSetIfChanged(ref m_vialRange, value); }
+            get => m_vialRange;
+            set => this.RaiseAndSetIfChanged(ref m_vialRange, value);
         }
 
         /// <summary>
@@ -321,7 +300,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("VialRange")]
         public int MaxVial
         {
-            get { return (int) VialRange; }
+            get => (int) VialRange;
             set
             {
                 var newVal = Enum.GetValues(typeof(VialRanges)).Cast<int>().Where(x => x >= value).DefaultIfEmpty((int) VialRanges.Well1536).Min();
@@ -342,10 +321,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("Vial")]
         public int Vial
         {
-            get
-            {
-                return m_vial;
-            }
+            get => m_vial;
             set
             {
                 if (ValidateVial(value))
@@ -366,10 +342,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("Volume")]
         public string Volume
         {
-            get
-            {
-                return m_volume;
-            }
+            get => m_volume;
             set
             {
                 m_volume = value;

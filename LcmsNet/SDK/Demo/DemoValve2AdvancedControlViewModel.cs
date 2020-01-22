@@ -31,7 +31,7 @@ namespace DemoPluginLibrary
 
         public override IDevice Device
         {
-            get { return valve; }
+            get => valve;
             set
             {
                 valve = value as DemoValve2;
@@ -47,14 +47,14 @@ namespace DemoPluginLibrary
 
         public EightPositionState SelectedPosition
         {
-            get { return selectedPosition; }
-            set { this.RaiseAndSetIfChanged(ref selectedPosition, value); }
+            get => selectedPosition;
+            set => this.RaiseAndSetIfChanged(ref selectedPosition, value);
         }
 
         public string State
         {
-            get { return state; }
-            set { this.RaiseAndSetIfChanged(ref state, value); }
+            get => state;
+            set => this.RaiseAndSetIfChanged(ref state, value);
         }
 
         public ReactiveUI.ReactiveCommand<Unit, Unit> SetCommand { get; private set; }

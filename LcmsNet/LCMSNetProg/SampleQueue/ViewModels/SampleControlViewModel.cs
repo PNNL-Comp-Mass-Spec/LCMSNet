@@ -29,8 +29,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleViewModel SelectedSample
         {
-            get { return selectedSample; }
-            set { this.RaiseAndSetIfChanged(ref selectedSample, value); }
+            get => selectedSample;
+            set => this.RaiseAndSetIfChanged(ref selectedSample, value);
         }
 
         public ReactiveList<SampleViewModel> SelectedSamples => selectedSamples;
@@ -58,14 +58,14 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool IsViewEnabled
         {
-            get { return isViewEnabled; }
-            protected set { this.RaiseAndSetIfChanged(ref isViewEnabled, value); }
+            get => isViewEnabled;
+            protected set => this.RaiseAndSetIfChanged(ref isViewEnabled, value);
         }
 
         public SolidColorBrush BackColor
         {
-            get { return backColor; }
-            protected set { this.RaiseAndSetIfChanged(ref backColor, value); }
+            get => backColor;
+            protected set => this.RaiseAndSetIfChanged(ref backColor, value);
         }
 
         #endregion
@@ -94,8 +94,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public bool AutoScroll
         {
-            get { return autoScroll; }
-            set { this.RaiseAndSetIfChanged(ref autoScroll, value); }
+            get => autoScroll;
+            set => this.RaiseAndSetIfChanged(ref autoScroll, value);
         }
 
         public bool ItemsSelected => this.itemsSelected?.Value ?? false;
@@ -167,8 +167,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public virtual DMSDownloadViewModel DMSView
         {
-            get { return dmsView; }
-            private set { dmsView = value; }
+            get => dmsView;
+            private set => dmsView = value;
         }
 
         #endregion
@@ -615,87 +615,84 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Number of columns on the left of the DataGrid that cannot be scrolled; columns in this group cannot be hidden
         /// Set to 0 to disable column freezing
         /// </summary>
-        public virtual int NumFrozenColumns
-        {
-            get { return 5; }
-        }
+        public virtual int NumFrozenColumns => 5;
 
         public bool CheckboxColumnVisible
         {
-            get { return checkboxColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref checkboxColumnVisible, value); }
+            get => checkboxColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref checkboxColumnVisible, value);
         }
 
         public bool StatusColumnVisible
         {
-            get { return statusColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref statusColumnVisible, value); }
+            get => statusColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref statusColumnVisible, value);
         }
 
         public bool ColumnIdColumnVisible
         {
-            get { return columnIdColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref columnIdColumnVisible, value); }
+            get => columnIdColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref columnIdColumnVisible, value);
         }
 
         public bool PalTrayColumnVisible
         {
-            get { return palTrayColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref palTrayColumnVisible, value); }
+            get => palTrayColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref palTrayColumnVisible, value);
         }
 
         public bool PalVialColumnVisible
         {
-            get { return palVialColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref palVialColumnVisible, value); }
+            get => palVialColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref palVialColumnVisible, value);
         }
 
         public bool VolumeColumnVisible
         {
-            get { return volumeColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref volumeColumnVisible, value); }
+            get => volumeColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref volumeColumnVisible, value);
         }
 
         public bool LcMethodColumnVisible
         {
-            get { return lcMethodColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref lcMethodColumnVisible, value); }
+            get => lcMethodColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref lcMethodColumnVisible, value);
         }
 
         public bool InstrumentMethodColumnVisible
         {
-            get { return instrumentMethodColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref instrumentMethodColumnVisible, value); }
+            get => instrumentMethodColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref instrumentMethodColumnVisible, value);
         }
 
         public bool DatasetTypeColumnVisible
         {
-            get { return datasetTypeColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref datasetTypeColumnVisible, value); }
+            get => datasetTypeColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref datasetTypeColumnVisible, value);
         }
 
         public bool CartConfigColumnVisible
         {
-            get { return cartConfigColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref cartConfigColumnVisible, value); }
+            get => cartConfigColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref cartConfigColumnVisible, value);
         }
 
         public bool BatchIdColumnVisible
         {
-            get { return batchIdColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref batchIdColumnVisible, value); }
+            get => batchIdColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref batchIdColumnVisible, value);
         }
 
         public bool BlockColumnVisible
         {
-            get { return blockColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref blockColumnVisible, value); }
+            get => blockColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref blockColumnVisible, value);
         }
 
         public bool RunOrderColumnVisible
         {
-            get { return runOrderColumnVisible; }
-            set { this.RaiseAndSetIfChanged(ref runOrderColumnVisible, value); }
+            get => runOrderColumnVisible;
+            set => this.RaiseAndSetIfChanged(ref runOrderColumnVisible, value);
         }
 
         #endregion

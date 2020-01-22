@@ -166,8 +166,8 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         public int MessageLevel
         {
-            get { return messageLevel; }
-            set { this.RaiseAndSetIfChanged(ref messageLevel, value); }
+            get => messageLevel;
+            set => this.RaiseAndSetIfChanged(ref messageLevel, value);
         }
 
         /// <summary>
@@ -175,8 +175,8 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         public int ErrorLevel
         {
-            get { return errorLevel; }
-            set { this.RaiseAndSetIfChanged(ref errorLevel, value); }
+            get => errorLevel;
+            set => this.RaiseAndSetIfChanged(ref errorLevel, value);
         }
 
         /// <summary>
@@ -184,8 +184,8 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         public LogLevel ErrorLogLevel
         {
-            get { return ApplicationLogger.ConvertIntToLogLevel(ErrorLevel); }
-            set { ErrorLevel = (int)value; }
+            get => ApplicationLogger.ConvertIntToLogLevel(ErrorLevel);
+            set => ErrorLevel = (int)value;
         }
 
         /// <summary>
@@ -193,8 +193,8 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         public LogLevel MessageLogLevel
         {
-            get { return ApplicationLogger.ConvertIntToLogLevel(MessageLevel); }
-            set { MessageLevel = (int)value; }
+            get => ApplicationLogger.ConvertIntToLogLevel(MessageLevel);
+            set => MessageLevel = (int)value;
         }
 
         public IReadOnlyReactiveList<string> MessageList => messageList;

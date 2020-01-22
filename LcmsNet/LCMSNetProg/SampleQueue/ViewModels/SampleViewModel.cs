@@ -198,8 +198,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public string RequestNameToolTipText
         {
-            get { return requestNameToolTipText; }
-            private set { this.RaiseAndSetIfChanged(ref requestNameToolTipText, value); }
+            get => requestNameToolTipText;
+            private set => this.RaiseAndSetIfChanged(ref requestNameToolTipText, value);
         }
 
         public string SequenceToolTipText
@@ -216,7 +216,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         private string SequenceToolTipFormat
         {
-            get { return sequenceToolTipFormat; }
+            get => sequenceToolTipFormat;
             set
             {
                 this.RaiseAndSetIfChanged(ref sequenceToolTipFormat, value);
@@ -232,14 +232,11 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool IsChecked
         {
-            get { return isChecked; }
-            set { this.RaiseAndSetIfChanged(ref isChecked, value); }
+            get => isChecked;
+            set => this.RaiseAndSetIfChanged(ref isChecked, value);
         }
 
-        public bool EditAllowed
-        {
-            get { return !Sample.IsSetToRunOrHasRun; }
-        }
+        public bool EditAllowed => !Sample.IsSetToRunOrHasRun;
 
         public string SpecialColumnNumber { get; set; }
 
@@ -326,7 +323,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public string InstrumentMethod
         {
-            get { return Sample.InstrumentData.MethodName; }
+            get => Sample.InstrumentData.MethodName;
             set
             {
                 if (Sample.InstrumentData == null)

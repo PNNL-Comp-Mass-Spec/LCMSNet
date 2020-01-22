@@ -83,10 +83,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public override int CurrentState
         {
-            get
-            {
-                return -1;
-            }
+            get => -1;
             set
             {
             }

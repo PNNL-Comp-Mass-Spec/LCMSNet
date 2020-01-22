@@ -28,7 +28,7 @@ namespace DemoPluginLibrary
 
         public override IDevice Device
         {
-            get { return m_PALdevice; }
+            get => m_PALdevice;
             set
             {
                 m_PALdevice = value as DemoPAL;
@@ -44,14 +44,14 @@ namespace DemoPluginLibrary
 
         public string SelectedMethod
         {
-            get { return selectedMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedMethod, value); }
+            get => selectedMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedMethod, value);
         }
 
         public double Timeout
         {
-            get { return timeout; }
-            set { this.RaiseAndSetIfChanged(ref timeout, value); }
+            get => timeout;
+            set => this.RaiseAndSetIfChanged(ref timeout, value);
         }
 
         public ReactiveUI.ReactiveCommand<Unit, Unit> RunCommand { get; private set; }

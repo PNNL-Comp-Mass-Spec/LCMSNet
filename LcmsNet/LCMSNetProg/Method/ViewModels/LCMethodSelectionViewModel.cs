@@ -52,8 +52,8 @@ namespace LcmsNet.Method.ViewModels
 
         public LCMethod SelectedLCMethod
         {
-            get { return selectedLCMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
+            get => selectedLCMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedLCMethod, value);
         }
 
         /// <summary>

@@ -71,8 +71,8 @@ namespace LcmsNet.Simulator.ViewModels
 
         public string Elapsed
         {
-            get { return elapsed; }
-            private set { this.RaiseAndSetIfChanged(ref elapsed, value); }
+            get => elapsed;
+            private set => this.RaiseAndSetIfChanged(ref elapsed, value);
         }
 
         public event EventHandler RefreshImage;

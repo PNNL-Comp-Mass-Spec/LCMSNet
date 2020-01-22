@@ -684,8 +684,8 @@ namespace LcmsNet.Method
 
         public string Name
         {
-            get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate;

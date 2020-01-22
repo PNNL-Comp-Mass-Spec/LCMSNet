@@ -59,8 +59,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public IscoOperationMode OperationMode
         {
-            get { return m_OpMode; }
-            set { m_OpMode = value; }
+            get => m_OpMode;
+            set => m_OpMode = value;
         }
 
         /// <summary>

@@ -236,7 +236,7 @@ namespace LcmsNet
 
         public string StatusMessage
         {
-            get { return statusMessage; }
+            get => statusMessage;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value))
@@ -249,13 +249,13 @@ namespace LcmsNet
 
         public bool CanSimulate
         {
-            get { return canSimulate; }
-            set { this.RaiseAndSetIfChanged(ref canSimulate, value); }
+            get => canSimulate;
+            set => this.RaiseAndSetIfChanged(ref canSimulate, value);
         }
 
         public bool IsMessageError
         {
-            get { return isMessageError; }
+            get => isMessageError;
             private set
             {
                 this.RaiseAndSetIfChanged(ref isMessageError, value);
@@ -263,15 +263,12 @@ namespace LcmsNet
             }
         }
 
-        public bool IsMessageNormal
-        {
-            get { return !isMessageError; }
-        }
+        public bool IsMessageNormal => !isMessageError;
 
         public bool QueueTabSelected
         {
-            get { return queueTabSelected; }
-            set { this.RaiseAndSetIfChanged(ref queueTabSelected, value); }
+            get => queueTabSelected;
+            set => this.RaiseAndSetIfChanged(ref queueTabSelected, value);
         }
 
         /// <summary>
@@ -293,8 +290,8 @@ namespace LcmsNet
         /// </summary>
         public LogLevel ErrorLogLevel
         {
-            get { return ApplicationLogger.ConvertIntToLogLevel(ErrorLevel); }
-            set { ErrorLevel = (int)value; }
+            get => ApplicationLogger.ConvertIntToLogLevel(ErrorLevel);
+            set => ErrorLevel = (int)value;
         }
 
         /// <summary>
@@ -302,8 +299,8 @@ namespace LcmsNet
         /// </summary>
         public LogLevel MessageLogLevel
         {
-            get { return ApplicationLogger.ConvertIntToLogLevel(MessageLevel); }
-            set { MessageLevel = (int)value; }
+            get => ApplicationLogger.ConvertIntToLogLevel(MessageLevel);
+            set => MessageLevel = (int)value;
         }
 
         #endregion

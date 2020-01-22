@@ -51,14 +51,14 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public LCMethodRenderMode RenderMode
         {
-            get { return renderMode; }
-            set { this.RaiseAndSetIfChanged(ref renderMode, value); }
+            get => renderMode;
+            set => this.RaiseAndSetIfChanged(ref renderMode, value);
         }
 
         public int StartEventIndex
         {
-            get { return index; }
-            set { this.RaiseAndSetIfChanged(ref index, value); }
+            get => index;
+            set => this.RaiseAndSetIfChanged(ref index, value);
         }
 
         public event EventHandler<EventArgs> RefreshView;

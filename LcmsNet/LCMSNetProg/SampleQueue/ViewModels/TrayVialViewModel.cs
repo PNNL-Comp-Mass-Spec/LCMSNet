@@ -70,28 +70,28 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public int TrayNumber
         {
-            get { return trayNumber; }
-            set { this.RaiseAndSetIfChanged(ref trayNumber, value); }
+            get => trayNumber;
+            set => this.RaiseAndSetIfChanged(ref trayNumber, value);
         }
 
         public int SampleCount => FilteredSamples.Count;
 
         public bool ShowUnassigned
         {
-            get { return showUnassigned; }
-            set { this.RaiseAndSetIfChanged(ref showUnassigned, value); }
+            get => showUnassigned;
+            set => this.RaiseAndSetIfChanged(ref showUnassigned, value);
         }
 
         public int AssignVial
         {
-            get { return assignVial; }
-            set { this.RaiseAndSetIfChanged(ref assignVial, value); }
+            get => assignVial;
+            set => this.RaiseAndSetIfChanged(ref assignVial, value);
         }
 
         public int MaxVials
         {
-            get { return maxVials; }
-            set { this.RaiseAndSetIfChanged(ref maxVials, value); }
+            get => maxVials;
+            set => this.RaiseAndSetIfChanged(ref maxVials, value);
         }
 
         #endregion

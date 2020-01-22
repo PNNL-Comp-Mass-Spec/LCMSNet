@@ -46,7 +46,7 @@ namespace DemoPluginLibrary
 
         public override IDevice Device
         {
-            get { return valve; }
+            get => valve;
             set
             {
                 valve = value;
@@ -59,8 +59,8 @@ namespace DemoPluginLibrary
 
         public string State
         {
-            get { return state; }
-            set { this.RaiseAndSetIfChanged(ref state, value); }
+            get => state;
+            set => this.RaiseAndSetIfChanged(ref state, value);
         }
 
         public ReactiveUI.ReactiveCommand<Unit, Unit> SetACommand { get; private set; }

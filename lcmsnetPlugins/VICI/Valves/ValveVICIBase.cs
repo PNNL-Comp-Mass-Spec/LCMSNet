@@ -144,7 +144,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public string Name
         {
-            get { return m_name; }
+            get => m_name;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
@@ -165,7 +165,7 @@ namespace LcmsNetPlugins.VICI.Valves
         [PersistenceData("PortName")]
         public string PortName
         {
-            get { return Port.PortName; }
+            get => Port.PortName;
             set
             {
                 Port.PortName = value;
@@ -179,7 +179,7 @@ namespace LcmsNetPlugins.VICI.Valves
         [PersistenceData("ReadTimeout")]
         public int ReadTimeout
         {
-            get { return Port.ReadTimeout; }
+            get => Port.ReadTimeout;
             set
             {
                 Port.ReadTimeout = value;
@@ -193,7 +193,7 @@ namespace LcmsNetPlugins.VICI.Valves
         [PersistenceData("WriteTimeout")]
         public int WriteTimeout
         {
-            get { return Port.WriteTimeout; }
+            get => Port.WriteTimeout;
             set
             {
                 Port.WriteTimeout = value;
@@ -207,7 +207,7 @@ namespace LcmsNetPlugins.VICI.Valves
         [PersistenceData("SoftwareID")]
         public char SoftwareID
         {
-            get { return m_valveID; }
+            get => m_valveID;
             set
             {
                 m_valveID = value;

@@ -52,8 +52,8 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// </summary>
         public string SelectedMethod
         {
-            get { return selectedMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedMethod, value); }
+            get => selectedMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedMethod, value);
         }
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// </summary>
         public string SampleName
         {
-            get { return sampleName; }
-            set { this.RaiseAndSetIfChanged(ref sampleName, value); }
+            get => sampleName;
+            set => this.RaiseAndSetIfChanged(ref sampleName, value);
         }
 
         /// <summary>
@@ -70,8 +70,8 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// </summary>
         public string Status
         {
-            get { return status; }
-            protected set { this.RaiseAndSetIfChanged(ref status, value); }
+            get => status;
+            protected set => this.RaiseAndSetIfChanged(ref status, value);
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// </summary>
         public string IPAddress
         {
-            get { return ipAddress; }
-            set { this.RaiseAndSetIfChanged(ref ipAddress, value); }
+            get => ipAddress;
+            set => this.RaiseAndSetIfChanged(ref ipAddress, value);
         }
 
         /// <summary>
@@ -88,8 +88,8 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// </summary>
         public int Port
         {
-            get { return port; }
-            set { this.RaiseAndSetIfChanged(ref port, value); }
+            get => port;
+            set => this.RaiseAndSetIfChanged(ref port, value);
         }
 
         #endregion

@@ -296,10 +296,7 @@ namespace FluidicsSDK.Base
         /// </summary>
         public FluidicsDevice InternalConnectionOf
         {
-            get
-            {
-                return m_device;
-            }
+            get => m_device;
             private set
             {
                 if (value != null)

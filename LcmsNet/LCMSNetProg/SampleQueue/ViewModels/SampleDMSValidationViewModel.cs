@@ -66,32 +66,32 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool CanChangeEmslData
         {
-            get { return canChangeEmslData; }
-            private set { this.RaiseAndSetIfChanged(ref canChangeEmslData, value); }
+            get => canChangeEmslData;
+            private set => this.RaiseAndSetIfChanged(ref canChangeEmslData, value);
         }
 
         public bool UsageTypeValid
         {
-            get { return usageTypeValid; }
-            private set { this.RaiseAndSetIfChanged(ref usageTypeValid, value); }
+            get => usageTypeValid;
+            private set => this.RaiseAndSetIfChanged(ref usageTypeValid, value);
         }
 
         public bool ProposalIdValid
         {
-            get { return proposalIdValid; }
-            private set { this.RaiseAndSetIfChanged(ref proposalIdValid, value); }
+            get => proposalIdValid;
+            private set => this.RaiseAndSetIfChanged(ref proposalIdValid, value);
         }
 
         public bool UserListValid
         {
-            get { return userListValid; }
-            private set { this.RaiseAndSetIfChanged(ref userListValid, value); }
+            get => userListValid;
+            private set => this.RaiseAndSetIfChanged(ref userListValid, value);
         }
 
         public bool ExperimentValid
         {
-            get { return experimentValid; }
-            private set { this.RaiseAndSetIfChanged(ref experimentValid, value); }
+            get => experimentValid;
+            private set => this.RaiseAndSetIfChanged(ref experimentValid, value);
         }
 
         /// <summary>
@@ -99,14 +99,11 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public bool IsSampleValid
         {
-            get { return isSampleValid; }
-            private set { this.RaiseAndSetIfChanged(ref isSampleValid, value); }
+            get => isSampleValid;
+            private set => this.RaiseAndSetIfChanged(ref isSampleValid, value);
         }
 
-        public bool SampleNotValid
-        {
-            get { return !isSampleValid; }
-        }
+        public bool SampleNotValid => !isSampleValid;
 
         #endregion
 

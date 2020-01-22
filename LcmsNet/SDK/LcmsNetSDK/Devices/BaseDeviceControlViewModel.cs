@@ -77,8 +77,8 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         public string Name
         {
-            get { return Device?.Name ?? name; }
-            set { this.RaiseAndSetIfChanged(ref name, value, nameof(Name)); }
+            get => Device?.Name ?? name;
+            set => this.RaiseAndSetIfChanged(ref name, value, nameof(Name));
         }
 
         /// <summary>
@@ -92,8 +92,8 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         public string DeviceStatus
         {
-            get { return deviceStatus; }
-            private set { this.RaiseAndSetIfChanged(ref deviceStatus, value, nameof(DeviceStatus)); }
+            get => deviceStatus;
+            private set => this.RaiseAndSetIfChanged(ref deviceStatus, value, nameof(DeviceStatus));
         }
 
         private string name = "";

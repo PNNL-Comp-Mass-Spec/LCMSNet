@@ -42,7 +42,7 @@ namespace LcmsNetPlugins.VICI.Valves
         [PersistenceData("InjectionVolume")]
         public double InjectionVolume
         {
-            get { return m_volume;  }
+            get => m_volume;
             set
             {
                 m_volume = value;

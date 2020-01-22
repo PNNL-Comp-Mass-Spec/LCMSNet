@@ -193,7 +193,7 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         /// </summary>
         public string Name
         {
-            get { return m_name; }
+            get => m_name;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
@@ -216,10 +216,7 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         /// </summary>
         public DeviceStatus Status
         {
-            get
-            {
-                return m_status;
-            }
+            get => m_status;
             set
             {
                 m_status = value;
@@ -932,12 +929,9 @@ namespace LcmsNetPlugins.Eksigent.Pumps
 
         public List<MobilePhase> MobilePhases
         {
-            get { return m_mobilePhases ?? (m_mobilePhases = new List<MobilePhase>()); }
-            set
-            {
-                // DO NOTHING
-                m_mobilePhases = value;
-            }
+            get => m_mobilePhases ?? (m_mobilePhases = new List<MobilePhase>());
+            // DO NOTHING
+            set => m_mobilePhases = value;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

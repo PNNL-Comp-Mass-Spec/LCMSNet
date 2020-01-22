@@ -23,37 +23,37 @@ namespace LcmsNet.Method.ViewModels
 
         public bool IsTimeConversion
         {
-            get { return isTimeConversion; }
-            set { this.RaiseAndSetIfChanged(ref isTimeConversion, value); }
+            get => isTimeConversion;
+            set => this.RaiseAndSetIfChanged(ref isTimeConversion, value);
         }
 
         public bool IsDisplayPrecision
         {
-            get { return isDisplayPrecision; }
-            set { this.RaiseAndSetIfChanged(ref isDisplayPrecision, value); }
+            get => isDisplayPrecision;
+            set => this.RaiseAndSetIfChanged(ref isDisplayPrecision, value);
         }
 
         public int Minutes
         {
-            get { return minutes; }
-            set { this.RaiseAndSetIfChanged(ref minutes, value); }
+            get => minutes;
+            set => this.RaiseAndSetIfChanged(ref minutes, value);
         }
 
         public int Seconds
         {
-            get { return seconds; }
-            set { this.RaiseAndSetIfChanged(ref seconds, value); }
+            get => seconds;
+            set => this.RaiseAndSetIfChanged(ref seconds, value);
         }
 
         public int DecimalPlaces
         {
-            get { return decimalPlaces; }
-            set { this.RaiseAndSetIfChanged(ref decimalPlaces, value); }
+            get => decimalPlaces;
+            set => this.RaiseAndSetIfChanged(ref decimalPlaces, value);
         }
 
         public int TotalSeconds
         {
-            get { return Minutes * 60 + Seconds; }
+            get => Minutes * 60 + Seconds;
             set
             {
                 Minutes = value / 60;

@@ -43,8 +43,8 @@ namespace LcmsNetPlugins.VICI.Valves
 
         public double InjectionVolume
         {
-            get { return injectionVolume; }
-            set { this.RaiseAndSetIfChanged(ref injectionVolume, value); }
+            get => injectionVolume;
+            set => this.RaiseAndSetIfChanged(ref injectionVolume, value);
         }
 
         public ReactiveCommand<Unit, Unit> SetInjectionVolumeCommand { get; private set; }

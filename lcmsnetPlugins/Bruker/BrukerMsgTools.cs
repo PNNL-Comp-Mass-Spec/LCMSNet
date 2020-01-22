@@ -76,8 +76,8 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public string IPAddress
         {
-            get { return m_InstAddress; }
-            set { m_InstAddress = value; }
+            get => m_InstAddress;
+            set => m_InstAddress = value;
         }
 
         /// <summary>
@@ -85,8 +85,8 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public int Port
         {
-            get { return m_InstPort; }
-            set { m_InstPort = value; }
+            get => m_InstPort;
+            set => m_InstPort = value;
         }
 
         #endregion

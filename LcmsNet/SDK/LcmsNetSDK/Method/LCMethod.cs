@@ -80,8 +80,8 @@ namespace LcmsNetSDK.Method
         [PersistenceSetting(IgnoreProperty = true)]
         public List<LCEvent> Events
         {
-            get { return m_events; }
-            set { m_events = value; }
+            get => m_events;
+            set => m_events = value;
         }
 
         /// <summary>
@@ -90,8 +90,8 @@ namespace LcmsNetSDK.Method
         [PersistenceSetting(IgnoreProperty = true)]
         public List<LCEvent> ActualEvents
         {
-            get { return m_actualEvents; }
-            set { m_actualEvents = value; }
+            get => m_actualEvents;
+            set => m_actualEvents = value;
         }
 
         /// <summary>

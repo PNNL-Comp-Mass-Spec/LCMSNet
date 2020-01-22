@@ -124,8 +124,8 @@ namespace LcmsNetPlugins.LabJackU3
         //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
-            get { return m_emulation; }
-            set { m_emulation = value; }
+            get => m_emulation;
+            set => m_emulation = value;
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         public DeviceStatus Status
         {
-            get { return m_status; }
+            get => m_status;
             set
             {
                 if (value != m_status)
@@ -150,7 +150,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         public string Name
         {
-            get { return m_name; }
+            get => m_name;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
@@ -165,7 +165,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         public string Version
         {
-            get { return m_version; }
+            get => m_version;
             set
             {
                 m_version = value;
@@ -179,7 +179,7 @@ namespace LcmsNetPlugins.LabJackU3
         [PersistenceData("Port")]
         public LabjackU3OutputPorts Port
         {
-            get { return m_port; }
+            get => m_port;
             set
             {
                 m_port = value;
@@ -190,8 +190,8 @@ namespace LcmsNetPlugins.LabJackU3
         [PersistenceData("Labjack ID")]
         public int LabJackID
         {
-            get { return m_labjack.LocalID; }
-            set { m_labjack.LocalID = value; }
+            get => m_labjack.LocalID;
+            set => m_labjack.LocalID = value;
         }
 
         #endregion

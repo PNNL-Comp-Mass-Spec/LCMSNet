@@ -23,14 +23,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         #region "Properties"
         public static IscoFlowUnits FlowUnits
         {
-            get { return m_FlowUnits; }
-            set { m_FlowUnits = value; }
+            get => m_FlowUnits;
+            set => m_FlowUnits = value;
         }
 
         public static IscoPressureUnits PressUnits
         {
-            get { return menu_PressUnits; }
-            set { menu_PressUnits = value; }
+            get => menu_PressUnits;
+            set => menu_PressUnits = value;
         }
         #endregion
 

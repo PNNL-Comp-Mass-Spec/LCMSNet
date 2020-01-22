@@ -40,38 +40,38 @@ namespace LcmsNet.Devices.ViewModels
 
         public string Time
         {
-            get { return time; }
-            set { this.RaiseAndSetIfChanged(ref time, value); }
+            get => time;
+            set => this.RaiseAndSetIfChanged(ref time, value);
         }
 
         public string MessageType
         {
-            get { return messageType; }
-            set { this.RaiseAndSetIfChanged(ref messageType, value); }
+            get => messageType;
+            set => this.RaiseAndSetIfChanged(ref messageType, value);
         }
 
         public string Type
         {
-            get { return type; }
-            set { this.RaiseAndSetIfChanged(ref type, value); }
+            get => type;
+            set => this.RaiseAndSetIfChanged(ref type, value);
         }
 
         public string Event
         {
-            get { return eventName; }
-            set { this.RaiseAndSetIfChanged(ref eventName, value); }
+            get => eventName;
+            set => this.RaiseAndSetIfChanged(ref eventName, value);
         }
 
         public string Device
         {
-            get { return device; }
-            set { this.RaiseAndSetIfChanged(ref device, value); }
+            get => device;
+            set => this.RaiseAndSetIfChanged(ref device, value);
         }
 
         public string ProblemDevice
         {
-            get { return problemDevice; }
-            set { this.RaiseAndSetIfChanged(ref problemDevice, value); }
+            get => problemDevice;
+            set => this.RaiseAndSetIfChanged(ref problemDevice, value);
         }
     }
 }

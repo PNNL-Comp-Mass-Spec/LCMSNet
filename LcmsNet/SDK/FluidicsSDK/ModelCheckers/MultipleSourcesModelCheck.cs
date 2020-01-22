@@ -36,20 +36,20 @@ namespace FluidicsSDK.ModelCheckers
 
         public string Name
         {
-            get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         public bool IsEnabled
         {
-            get { return isEnabled; }
-            set { this.RaiseAndSetIfChanged(ref isEnabled, value); }
+            get => isEnabled;
+            set => this.RaiseAndSetIfChanged(ref isEnabled, value);
         }
 
         public ModelStatusCategory Category
         {
-            get { return category; }
-            set { this.RaiseAndSetIfChanged(ref category, value); }
+            get => category;
+            set => this.RaiseAndSetIfChanged(ref category, value);
         }
 
         public IEnumerable<ModelStatus> CheckModel()

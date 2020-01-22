@@ -243,7 +243,7 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         public bool Emulate
         {
-            get { return m_emulateDevices; }
+            get => m_emulateDevices;
             set
             {
                 m_emulateDevices = value;

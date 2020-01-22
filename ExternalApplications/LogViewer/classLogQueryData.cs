@@ -25,44 +25,44 @@ namespace LogViewer
         #region "Properties"
         public string StartTime
         {
-            get { return GetValueIfFound("starttime"); }
-            set { m_QueryParams["starttime"] = value; }
+            get => GetValueIfFound("starttime");
+            set => m_QueryParams["starttime"] = value;
         }
 
         public string StopTime
         {
-            get { return GetValueIfFound("stoptime"); }
-            set { m_QueryParams["stoptime"] = value; }
+            get => GetValueIfFound("stoptime");
+            set => m_QueryParams["stoptime"] = value;
         }
 
         public string Type
         {
-            get { return GetValueIfFound("type"); }
-            set { m_QueryParams["type"] = value; }
+            get => GetValueIfFound("type");
+            set => m_QueryParams["type"] = value;
         }
 
         public string Sample
         {
-            get { return GetValueIfFound("sample"); }
-            set { m_QueryParams["sample"] = value; }
+            get => GetValueIfFound("sample");
+            set => m_QueryParams["sample"] = value;
         }
 
         public string Column
         {
-            get { return GetValueIfFound("column"); }
-            set { m_QueryParams["column"] = value; }
+            get => GetValueIfFound("column");
+            set => m_QueryParams["column"] = value;
         }
 
         public string Device
         {
-            get { return GetValueIfFound("device"); }
-            set { m_QueryParams["device"] = value; }
+            get => GetValueIfFound("device");
+            set => m_QueryParams["device"] = value;
         }
 
         public string Message
         {
-            get { return GetValueIfFound("message"); }
-            set { m_QueryParams["message"] = value; }
+            get => GetValueIfFound("message");
+            set => m_QueryParams["message"] = value;
         }
         #endregion
 

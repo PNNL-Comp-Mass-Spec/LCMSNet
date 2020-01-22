@@ -129,8 +129,8 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         public string Name
         {
-            get { return m_name; }
-            set { this.RaiseAndSetIfChanged(ref m_name, value, nameof(Name)); }
+            get => m_name;
+            set => this.RaiseAndSetIfChanged(ref m_name, value, nameof(Name));
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         public string Version
         {
-            get { return string.Empty; }
+            get => string.Empty;
             set
             {
                 // Pass
@@ -173,7 +173,7 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         public DeviceStatus Status
         {
-            get { return m_status; }
+            get => m_status;
             set
             {
                 m_status = value;

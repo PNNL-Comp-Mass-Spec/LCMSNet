@@ -48,8 +48,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public string Title
         {
-            get { return title; }
-            set { this.RaiseAndSetIfChanged(ref title, value); }
+            get => title;
+            set => this.RaiseAndSetIfChanged(ref title, value);
         }
 
         public AgilentPumpReplyErrorCodes PumpError

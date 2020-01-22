@@ -142,8 +142,8 @@ namespace LcmsNetPlugins.Bruker
         //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
-            get { return m_Emulation; }
-            set { m_Emulation = value; }
+            get => m_Emulation;
+            set => m_Emulation = value;
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public DeviceStatus Status
         {
-            get { return m_status; }
+            get => m_status;
             set
             {
                 if (value != m_status)
@@ -166,8 +166,8 @@ namespace LcmsNetPlugins.Bruker
         [PersistenceData("Port")]
         public int Port
         {
-            get { return mobject_MsgTools.Port; }
-            set { mobject_MsgTools.Port = value; }
+            get => mobject_MsgTools.Port;
+            set => mobject_MsgTools.Port = value;
         }
 
         /// <summary>
@@ -176,8 +176,8 @@ namespace LcmsNetPlugins.Bruker
         [PersistenceData("IPAddress")]
         public string IPAddress
         {
-            get { return mobject_MsgTools.IPAddress; }
-            set { mobject_MsgTools.IPAddress = value; }
+            get => mobject_MsgTools.IPAddress;
+            set => mobject_MsgTools.IPAddress = value;
         }
 
         /// <summary>
@@ -185,8 +185,8 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public bool Running
         {
-            get { return m_Running; }
-            set { m_Running = value; }
+            get => m_Running;
+            set => m_Running = value;
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public string Name
         {
-            get { return m_Name; }
+            get => m_Name;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref m_Name, value))
@@ -209,8 +209,8 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         public string Version
         {
-            get { return m_Version; }
-            set { m_Version = value; }
+            get => m_Version;
+            set => m_Version = value;
         }
 
         #endregion

@@ -25,26 +25,26 @@ namespace LcmsNetPlugins.ASIpump
 
         public AsiPump Pump
         {
-            get { return pump; }
-            set { this.RaiseAndSetIfChanged(ref pump, value); }
+            get => pump;
+            set => this.RaiseAndSetIfChanged(ref pump, value);
         }
 
         public IDevice Device
         {
-            get { return pump; }
-            set { RegisterDevice(value); }
+            get => pump;
+            set => RegisterDevice(value);
         }
 
         public string Name
         {
-            get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         public string PumpLog
         {
-            get { return pumpLog; }
-            set { this.RaiseAndSetIfChanged(ref pumpLog, value); }
+            get => pumpLog;
+            set => this.RaiseAndSetIfChanged(ref pumpLog, value);
         }
 
         public bool Running { get; set; }

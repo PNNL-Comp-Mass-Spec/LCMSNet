@@ -90,7 +90,7 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public override Size Size
         {
-            get { return new Size(0, 0); }
+            get => new Size(0, 0);
             set
             {
                 //ignore
@@ -102,9 +102,8 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public Point Origin
         {
-            get { return m_orig; }
-            set { m_orig = value; }
-
+            get => m_orig;
+            set => m_orig = value;
         }
 
         /// <summary>
@@ -112,13 +111,13 @@ namespace FluidicsSDK.Graphic
         /// </summary>
         public Point Term
         {
-            get { return m_term; }
-            set { m_term = value; }
+            get => m_term;
+            set => m_term = value;
         }
 
         public override Point Loc
         {
-            get { return Origin; }
+            get => Origin;
             set
             {
                 // do nothing
@@ -128,18 +127,12 @@ namespace FluidicsSDK.Graphic
         /// <summary>
         /// The boundaries of the primitive
         /// </summary>
-        public override Rect Bounds
-        {
-            get
-            {
-                //var minX = Math.Min(Origin.X, Term.X);
-                //var minY = Math.Min(Origin.Y, Term.Y);
-                //var maxX = Math.Max(Origin.X, Term.X);
-                //var maxY = Math.Max(Origin.Y, Term.Y);
-                //return new Rect(minX, minY, maxX - minX, maxY - minY);
-                return new Rect(Origin, Term);
-            }
-        }
+        //var minX = Math.Min(Origin.X, Term.X);
+        //var minY = Math.Min(Origin.Y, Term.Y);
+        //var maxX = Math.Max(Origin.X, Term.X);
+        //var maxY = Math.Max(Origin.Y, Term.Y);
+        //return new Rect(minX, minY, maxX - minX, maxY - minY);
+        public override Rect Bounds => new Rect(Origin, Term);
 
         #endregion
     }

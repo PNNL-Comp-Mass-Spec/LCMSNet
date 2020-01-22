@@ -75,8 +75,8 @@ namespace LcmsNetPlugins.VICI.Valves
 
         public string SelectedValvePosition
         {
-            get { return selectedValvePosition; }
-            set { this.RaiseAndSetIfChanged(ref selectedValvePosition, value); }
+            get => selectedValvePosition;
+            set => this.RaiseAndSetIfChanged(ref selectedValvePosition, value);
         }
 
         /// <summary>
@@ -84,14 +84,8 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public bool Emulation
         {
-            get
-            {
-                return m_valve.Emulation;
-            }
-            set
-            {
-                m_valve.Emulation = value;
-            }
+            get => m_valve.Emulation;
+            set => m_valve.Emulation = value;
         }
 
         /// <summary>
@@ -99,10 +93,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public override IDevice Device
         {
-            get
-            {
-                return m_valve;
-            }
+            get => m_valve;
             set
             {
                 if (!IsInDesignMode)

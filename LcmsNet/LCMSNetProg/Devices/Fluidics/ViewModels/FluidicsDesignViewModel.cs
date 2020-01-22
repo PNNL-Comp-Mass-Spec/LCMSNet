@@ -80,7 +80,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
         public bool DevicesLocked
         {
-            get { return devicesLocked; }
+            get => devicesLocked;
             set
             {
                 var oldValue = devicesLocked;
@@ -103,30 +103,30 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             }
         }
 
-        public bool DevicesUnlocked { get { return !devicesLocked; } }
+        public bool DevicesUnlocked => !devicesLocked;
 
         public bool DesignTabSelected
         {
-            get { return designTabSelected; }
-            set { this.RaiseAndSetIfChanged(ref designTabSelected, value); }
+            get => designTabSelected;
+            set => this.RaiseAndSetIfChanged(ref designTabSelected, value);
         }
 
         public FluidicsControlViewModel FluidicsControlVm
         {
-            get { return fluidicsControlVm; }
-            private set { this.RaiseAndSetIfChanged(ref fluidicsControlVm, value); }
+            get => fluidicsControlVm;
+            private set => this.RaiseAndSetIfChanged(ref fluidicsControlVm, value);
         }
 
         public ModelCheckReportsViewModel Reporter
         {
-            get { return reporterVm; }
-            private set { this.RaiseAndSetIfChanged(ref reporterVm, value); }
+            get => reporterVm;
+            private set => this.RaiseAndSetIfChanged(ref reporterVm, value);
         }
 
         public AdvancedDeviceControlPanelViewModel AdvancedDeviceControlPanel
         {
-            get { return advancedDeviceControlPanel; }
-            private set { this.RaiseAndSetIfChanged(ref advancedDeviceControlPanel, value); }
+            get => advancedDeviceControlPanel;
+            private set => this.RaiseAndSetIfChanged(ref advancedDeviceControlPanel, value);
         }
 
         #endregion

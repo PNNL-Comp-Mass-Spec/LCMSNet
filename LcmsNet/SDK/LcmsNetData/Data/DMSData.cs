@@ -240,10 +240,7 @@ namespace LcmsNetData.Data
         public string Experiment
         {
             get => experiment;
-            set
-            {
-                this.RaiseAndSetIfChangedLockCheck(ref experiment, value, LockData, nameof(Experiment));
-            }
+            set => this.RaiseAndSetIfChangedLockCheck(ref experiment, value, LockData, nameof(Experiment));
         }
 
         /// <summary>

@@ -28,8 +28,8 @@ namespace LcmsNetSQLiteTools
         /// <remarks>Starts off as a filename, but is changed to a path by BuildConnectionString</remarks>
         public string CacheName
         {
-            get { return LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME); }
-            private set { LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, value); }
+            get => LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME);
+            private set => LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, value);
         }
 
         public string AppDataFolderName { get; set; }

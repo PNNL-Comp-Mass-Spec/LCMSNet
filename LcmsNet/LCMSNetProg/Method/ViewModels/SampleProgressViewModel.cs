@@ -369,8 +369,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public int PreviewMinutes
         {
-            get { return previewMinutes; }
-            set { this.RaiseAndSetIfChanged(ref previewMinutes, value); }
+            get => previewMinutes;
+            set => this.RaiseAndSetIfChanged(ref previewMinutes, value);
         }
 
         /// <summary>
@@ -378,8 +378,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public int PreviewSeconds
         {
-            get { return previewSeconds; }
-            set { this.RaiseAndSetIfChanged(ref previewSeconds, value); }
+            get => previewSeconds;
+            set => this.RaiseAndSetIfChanged(ref previewSeconds, value);
         }
 
         /// <summary>
@@ -387,8 +387,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public bool RenderCurrent
         {
-            get { return renderCurrent; }
-            set { this.RaiseAndSetIfChanged(ref renderCurrent, value); }
+            get => renderCurrent;
+            set => this.RaiseAndSetIfChanged(ref renderCurrent, value);
         }
 
         /// <summary>
@@ -396,8 +396,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public bool RenderAllEvents
         {
-            get { return renderAllEvents; }
-            set { this.RaiseAndSetIfChanged(ref renderAllEvents, value); }
+            get => renderAllEvents;
+            set => this.RaiseAndSetIfChanged(ref renderAllEvents, value);
         }
 
         /// <summary>
@@ -405,8 +405,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public bool RenderDisplayWindow
         {
-            get { return renderWindow; }
-            set { this.RaiseAndSetIfChanged(ref renderWindow, value); }
+            get => renderWindow;
+            set => this.RaiseAndSetIfChanged(ref renderWindow, value);
         }
 
         #endregion

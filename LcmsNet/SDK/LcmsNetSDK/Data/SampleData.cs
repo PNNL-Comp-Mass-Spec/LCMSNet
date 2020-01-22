@@ -229,7 +229,7 @@ namespace LcmsNetSDK.Data
         [PersistenceSetting(IgnoreProperty = true)]
         public string SampleErrors
         {
-            get { return m_SampleErrors; }
+            get => m_SampleErrors;
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
@@ -252,7 +252,7 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public SampleRunningStatus RunningStatus
         {
-            get { return m_RunningStatus; }
+            get => m_RunningStatus;
             set
             {
                 if (m_RunningStatus == SampleRunningStatus.Complete)
@@ -283,27 +283,21 @@ namespace LcmsNetSDK.Data
         [PersistenceSetting(IgnoreProperty = true)]
         public bool IsDuplicateRequestName
         {
-            get { return m_IsDuplicateRequestName; }
-            set { this.RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value, nameof(IsDuplicateRequestName)); }
+            get => m_IsDuplicateRequestName;
+            set => this.RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value, nameof(IsDuplicateRequestName));
         }
 
         /// <summary>
         /// True when changing the Running status manually is enabled
         /// </summary>
         [PersistenceSetting(IgnoreProperty = true)]
-        public bool HasNotRun
-        {
-            get { return !(RunningStatus == SampleRunningStatus.Complete || RunningStatus == SampleRunningStatus.Running); }
-        }
+        public bool HasNotRun => !(RunningStatus == SampleRunningStatus.Complete || RunningStatus == SampleRunningStatus.Running);
 
         /// <summary>
         /// True when the sample has been set to run or has run
         /// </summary>
         [PersistenceSetting(IgnoreProperty = true)]
-        public bool IsSetToRunOrHasRun
-        {
-            get { return RunningStatus == SampleRunningStatus.WaitingToRun || !HasNotRun; }
-        }
+        public bool IsSetToRunOrHasRun => RunningStatus == SampleRunningStatus.WaitingToRun || !HasNotRun;
 
         /// <summary>
         /// Gets or sets the experiment setup object data.
@@ -317,7 +311,7 @@ namespace LcmsNetSDK.Data
         [PersistenceSetting(IgnoreProperty = true)]
         public LCMethod ActualLCMethod
         {
-            get { return actualMethod; }
+            get => actualMethod;
             private set
             {
                 // Disallow method changes on queued/running/complete samples
@@ -337,7 +331,7 @@ namespace LcmsNetSDK.Data
         [PersistenceSetting(IgnoreProperty = true)]
         public override LCMethodBasic LCMethodBasic
         {
-            get { return LCMethod; }
+            get => LCMethod;
             set
             {
                 if (value is LCMethod newMethod)
@@ -354,7 +348,7 @@ namespace LcmsNetSDK.Data
         [PersistenceSetting(ColumnNamePrefix = "exp.", PropertyGetOverrideMethod = nameof(GetLcMethodToPersist))]
         public LCMethod LCMethod
         {
-            get { return method; }
+            get => method;
             set
             {
                 // Disallow method changes on queued/running/complete samples
@@ -379,8 +373,8 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public long SequenceID
         {
-            get { return m_sequenceNumber; }
-            set { this.RaiseAndSetIfChanged(ref m_sequenceNumber, value, nameof(SequenceID)); }
+            get => m_sequenceNumber;
+            set => this.RaiseAndSetIfChanged(ref m_sequenceNumber, value, nameof(SequenceID));
         }
 
         /// <summary>
@@ -388,7 +382,7 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public double Volume
         {
-            get { return m_volume; }
+            get => m_volume;
             set
             {
                 if (value < CartConfiguration.MinimumVolume)
@@ -408,7 +402,7 @@ namespace LcmsNetSDK.Data
         public override ColumnData ColumnData
         {
             // TODO: Should this just return LCMethod.Column? It would solve a few headaches.
-            get { return base.ColumnData; }
+            get => base.ColumnData;
             set
             {
                 var oldColumn = base.ColumnData;

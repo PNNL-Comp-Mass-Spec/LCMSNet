@@ -129,14 +129,8 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         [PersistenceData("IPAddress")]
         public string Address
         {
-            get
-            {
-                return m_address;
-            }
-            set
-            {
-                m_address = value;
-            }
+            get => m_address;
+            set => m_address = value;
         }
         /// <summary>
         /// Gets or sets the port used to connect to the server.
@@ -144,14 +138,8 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         [PersistenceData("Port")]
         public int Port
         {
-            get
-            {
-                return m_port;
-            }
-            set
-            {
-                m_port = value;
-            }
+            get => m_port;
+            set => m_port = value;
         }
         #endregion
 
@@ -484,7 +472,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// </summary>
         public string Name
         {
-            get { return m_name; }
+            get => m_name;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
@@ -511,10 +499,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// </summary>
         public DeviceStatus Status
         {
-            get
-            {
-                return m_status;
-            }
+            get => m_status;
             set
             {
                 if (value != m_status)

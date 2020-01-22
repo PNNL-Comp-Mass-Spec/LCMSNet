@@ -67,8 +67,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// </summary>
         public int PulseLength
         {
-            get { return pulseLength; }
-            set { this.RaiseAndSetIfChanged(ref pulseLength, value); }
+            get => pulseLength;
+            set => this.RaiseAndSetIfChanged(ref pulseLength, value);
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// </summary>
         public double Voltage
         {
-            get { return voltage; }
-            set { this.RaiseAndSetIfChanged(ref voltage, value); }
+            get => voltage;
+            set => this.RaiseAndSetIfChanged(ref voltage, value);
         }
 
         /// <summary>
@@ -90,8 +90,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// </summary>
         public virtual T Port
         {
-            get { return selectedPort; }
-            set { this.RaiseAndSetIfChanged(ref selectedPort, value); }
+            get => selectedPort;
+            set => this.RaiseAndSetIfChanged(ref selectedPort, value);
         }
 
         #endregion

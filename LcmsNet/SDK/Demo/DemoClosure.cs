@@ -105,8 +105,8 @@ namespace DemoPluginLibrary
         private string name;
         public string Name
         {
-            get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         public string Version

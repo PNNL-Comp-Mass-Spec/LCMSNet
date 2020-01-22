@@ -131,8 +131,8 @@ namespace LcmsNet.Devices
         /// </summary>
         public string Name
         {
-            get { return m_name; }
-            set { this.RaiseAndSetIfChanged(ref m_name, value); }
+            get => m_name;
+            set => this.RaiseAndSetIfChanged(ref m_name, value);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace LcmsNet.Devices
         /// </summary>
         public string Version
         {
-            get { return string.Empty; }
+            get => string.Empty;
             set
             {
                 // Pass
@@ -170,7 +170,7 @@ namespace LcmsNet.Devices
         /// </summary>
         public DeviceStatus Status
         {
-            get { return m_status; }
+            get => m_status;
             set
             {
                 if (value != m_status)

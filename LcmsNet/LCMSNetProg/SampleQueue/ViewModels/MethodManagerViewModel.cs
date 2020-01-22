@@ -65,68 +65,68 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public MethodControlViewModel Method1ViewModel
         {
-            get { return method1ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref method1ViewModel, value); }
+            get => method1ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref method1ViewModel, value);
         }
 
         public MethodControlViewModel Method2ViewModel
         {
-            get { return method2ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref method2ViewModel, value); }
+            get => method2ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref method2ViewModel, value);
         }
 
         public MethodControlViewModel Method3ViewModel
         {
-            get { return method3ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref method3ViewModel, value); }
+            get => method3ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref method3ViewModel, value);
         }
 
         public MethodControlViewModel Method4ViewModel
         {
-            get { return method4ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref method4ViewModel, value); }
+            get => method4ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref method4ViewModel, value);
         }
 
         public MethodControlViewModel Method5ViewModel
         {
-            get { return method5ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref method5ViewModel, value); }
+            get => method5ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref method5ViewModel, value);
         }
 
         public MethodControlViewModel Method6ViewModel
         {
-            get { return method6ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref method6ViewModel, value); }
+            get => method6ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref method6ViewModel, value);
         }
 
         public MethodControlViewModel Method7ViewModel
         {
-            get { return method7ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref method7ViewModel, value); }
+            get => method7ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref method7ViewModel, value);
         }
 
         public MethodControlViewModel Method8ViewModel
         {
-            get { return method8ViewModel; }
-            private set { this.RaiseAndSetIfChanged(ref method8ViewModel, value); }
+            get => method8ViewModel;
+            private set => this.RaiseAndSetIfChanged(ref method8ViewModel, value);
         }
 
         public MethodControlViewModel FocusedMethod
         {
-            get { return focusedMethod; }
-            private set { this.RaiseAndSetIfChanged(ref focusedMethod, value); }
+            get => focusedMethod;
+            private set => this.RaiseAndSetIfChanged(ref focusedMethod, value);
         }
 
         public int MethodsVisible
         {
-            get { return methodsVisible; }
-            set { this.RaiseAndSetIfChanged(ref methodsVisible, value); }
+            get => methodsVisible;
+            set => this.RaiseAndSetIfChanged(ref methodsVisible, value);
         }
 
         public int MaxMethodsVisible
         {
-            get { return maxMethodsVisible; }
-            private set { this.RaiseAndSetIfChanged(ref maxMethodsVisible, value); }
+            get => maxMethodsVisible;
+            private set => this.RaiseAndSetIfChanged(ref maxMethodsVisible, value);
         }
 
         public void ClearFocused()

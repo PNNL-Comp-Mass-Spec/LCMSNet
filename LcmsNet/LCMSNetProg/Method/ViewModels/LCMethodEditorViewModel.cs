@@ -90,8 +90,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public MethodPreviewOptions MethodPreviewOptions
         {
-            get { return methodPreviewOptions; }
-            set { this.RaiseAndSetIfChanged(ref methodPreviewOptions, value); }
+            get => methodPreviewOptions;
+            set => this.RaiseAndSetIfChanged(ref methodPreviewOptions, value);
         }
 
         /// <summary>
@@ -101,20 +101,20 @@ namespace LcmsNet.Method.ViewModels
 
         public LCMethodTimelineViewModel MethodTimelineThroughput
         {
-            get { return methodTimelineThroughput; }
-            set { this.RaiseAndSetIfChanged(ref methodTimelineThroughput, value); }
+            get => methodTimelineThroughput;
+            set => this.RaiseAndSetIfChanged(ref methodTimelineThroughput, value);
         }
 
         public LCMethodStageViewModel AcquisitionStage
         {
-            get { return acquisitionStage; }
-            set { this.RaiseAndSetIfChanged(ref acquisitionStage, value); }
+            get => acquisitionStage;
+            set => this.RaiseAndSetIfChanged(ref acquisitionStage, value);
         }
 
         public LCMethodSelectionViewModel SelectedMethods
         {
-            get { return selectedMethods; }
-            set { this.RaiseAndSetIfChanged(ref selectedMethods, value); }
+            get => selectedMethods;
+            set => this.RaiseAndSetIfChanged(ref selectedMethods, value);
         }
 
         public IReadOnlyReactiveList<LCMethodRenderMode> PreviewModeComboBoxOptions => previewModeComboBoxOptions;

@@ -46,146 +46,146 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool ApplyGroup1
         {
-            get { return applyGroup1; }
-            set { this.RaiseAndSetIfChanged(ref applyGroup1, value); }
+            get => applyGroup1;
+            set => this.RaiseAndSetIfChanged(ref applyGroup1, value);
         }
 
         public bool ApplyGroup2
         {
-            get { return applyGroup2; }
-            set { this.RaiseAndSetIfChanged(ref applyGroup2, value); }
+            get => applyGroup2;
+            set => this.RaiseAndSetIfChanged(ref applyGroup2, value);
         }
 
         public bool ApplyGroup3
         {
-            get { return applyGroup3; }
-            set { this.RaiseAndSetIfChanged(ref applyGroup3, value); }
+            get => applyGroup3;
+            set => this.RaiseAndSetIfChanged(ref applyGroup3, value);
         }
 
         public bool ApplyGroup4
         {
-            get { return applyGroup4; }
-            set { this.RaiseAndSetIfChanged(ref applyGroup4, value); }
+            get => applyGroup4;
+            set => this.RaiseAndSetIfChanged(ref applyGroup4, value);
         }
 
         public LCMethod LCMethodGroup1
         {
-            get { return lcMethodGroup1; }
-            set { this.RaiseAndSetIfChanged(ref lcMethodGroup1, value); }
+            get => lcMethodGroup1;
+            set => this.RaiseAndSetIfChanged(ref lcMethodGroup1, value);
         }
 
         public LCMethod LCMethodGroup2
         {
-            get { return lcMethodGroup2; }
-            set { this.RaiseAndSetIfChanged(ref lcMethodGroup2, value); }
+            get => lcMethodGroup2;
+            set => this.RaiseAndSetIfChanged(ref lcMethodGroup2, value);
         }
 
         public LCMethod LCMethodGroup3
         {
-            get { return lcMethodGroup3; }
-            set { this.RaiseAndSetIfChanged(ref lcMethodGroup3, value); }
+            get => lcMethodGroup3;
+            set => this.RaiseAndSetIfChanged(ref lcMethodGroup3, value);
         }
 
         public LCMethod LCMethodGroup4
         {
-            get { return lcMethodGroup4; }
-            set { this.RaiseAndSetIfChanged(ref lcMethodGroup4, value); }
+            get => lcMethodGroup4;
+            set => this.RaiseAndSetIfChanged(ref lcMethodGroup4, value);
         }
 
         public string InstrumentMethodGroup1
         {
-            get { return instrumentMethodGroup1; }
-            set { this.RaiseAndSetIfChanged(ref instrumentMethodGroup1, value); }
+            get => instrumentMethodGroup1;
+            set => this.RaiseAndSetIfChanged(ref instrumentMethodGroup1, value);
         }
 
         public string InstrumentMethodGroup2
         {
-            get { return instrumentMethodGroup2; }
-            set { this.RaiseAndSetIfChanged(ref instrumentMethodGroup2, value); }
+            get => instrumentMethodGroup2;
+            set => this.RaiseAndSetIfChanged(ref instrumentMethodGroup2, value);
         }
 
         public string InstrumentMethodGroup3
         {
-            get { return instrumentMethodGroup3; }
-            set { this.RaiseAndSetIfChanged(ref instrumentMethodGroup3, value); }
+            get => instrumentMethodGroup3;
+            set => this.RaiseAndSetIfChanged(ref instrumentMethodGroup3, value);
         }
 
         public string InstrumentMethodGroup4
         {
-            get { return instrumentMethodGroup4; }
-            set { this.RaiseAndSetIfChanged(ref instrumentMethodGroup4, value); }
+            get => instrumentMethodGroup4;
+            set => this.RaiseAndSetIfChanged(ref instrumentMethodGroup4, value);
         }
 
         public double VolumeGroup1
         {
-            get { return volumeGroup1; }
-            set { this.RaiseAndSetIfChanged(ref volumeGroup1, value); }
+            get => volumeGroup1;
+            set => this.RaiseAndSetIfChanged(ref volumeGroup1, value);
         }
 
         public double VolumeGroup2
         {
-            get { return volumeGroup2; }
-            set { this.RaiseAndSetIfChanged(ref volumeGroup2, value); }
+            get => volumeGroup2;
+            set => this.RaiseAndSetIfChanged(ref volumeGroup2, value);
         }
 
         public double VolumeGroup3
         {
-            get { return volumeGroup3; }
-            set { this.RaiseAndSetIfChanged(ref volumeGroup3, value); }
+            get => volumeGroup3;
+            set => this.RaiseAndSetIfChanged(ref volumeGroup3, value);
         }
 
         public double VolumeGroup4
         {
-            get { return volumeGroup4; }
-            set { this.RaiseAndSetIfChanged(ref volumeGroup4, value); }
+            get => volumeGroup4;
+            set => this.RaiseAndSetIfChanged(ref volumeGroup4, value);
         }
 
         public string DatasetTypeGroup1
         {
-            get { return datasetTypeGroup1; }
-            set { this.RaiseAndSetIfChanged(ref datasetTypeGroup1, value); }
+            get => datasetTypeGroup1;
+            set => this.RaiseAndSetIfChanged(ref datasetTypeGroup1, value);
         }
 
         public string DatasetTypeGroup2
         {
-            get { return datasetTypeGroup2; }
-            set { this.RaiseAndSetIfChanged(ref datasetTypeGroup2, value); }
+            get => datasetTypeGroup2;
+            set => this.RaiseAndSetIfChanged(ref datasetTypeGroup2, value);
         }
 
         public string DatasetTypeGroup3
         {
-            get { return datasetTypeGroup3; }
-            set { this.RaiseAndSetIfChanged(ref datasetTypeGroup3, value); }
+            get => datasetTypeGroup3;
+            set => this.RaiseAndSetIfChanged(ref datasetTypeGroup3, value);
         }
 
         public string DatasetTypeGroup4
         {
-            get { return datasetTypeGroup4; }
-            set { this.RaiseAndSetIfChanged(ref datasetTypeGroup4, value); }
+            get => datasetTypeGroup4;
+            set => this.RaiseAndSetIfChanged(ref datasetTypeGroup4, value);
         }
 
         public string CartConfigGroup1
         {
-            get { return cartConfigGroup1; }
-            set { this.RaiseAndSetIfChanged(ref cartConfigGroup1, value); }
+            get => cartConfigGroup1;
+            set => this.RaiseAndSetIfChanged(ref cartConfigGroup1, value);
         }
 
         public string CartConfigGroup2
         {
-            get { return cartConfigGroup2; }
-            set { this.RaiseAndSetIfChanged(ref cartConfigGroup2, value); }
+            get => cartConfigGroup2;
+            set => this.RaiseAndSetIfChanged(ref cartConfigGroup2, value);
         }
 
         public string CartConfigGroup3
         {
-            get { return cartConfigGroup3; }
-            set { this.RaiseAndSetIfChanged(ref cartConfigGroup3, value); }
+            get => cartConfigGroup3;
+            set => this.RaiseAndSetIfChanged(ref cartConfigGroup3, value);
         }
 
         public string CartConfigGroup4
         {
-            get { return cartConfigGroup4; }
-            set { this.RaiseAndSetIfChanged(ref cartConfigGroup4, value); }
+            get => cartConfigGroup4;
+            set => this.RaiseAndSetIfChanged(ref cartConfigGroup4, value);
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
@@ -195,10 +195,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public IReadOnlyReactiveList<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
         public string CartConfigError => SampleDataManager.CartConfigOptionsError;
 
-        public double VolumeMinimum
-        {
-            get { return CartConfiguration.MinimumVolume; }
-        }
+        public double VolumeMinimum => CartConfiguration.MinimumVolume;
 
         #endregion
 

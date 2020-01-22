@@ -37,14 +37,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             public double RefillRate
             {
-                get { return refillRate; }
-                set { this.RaiseAndSetIfChanged(ref refillRate, value); }
+                get => refillRate;
+                set => this.RaiseAndSetIfChanged(ref refillRate, value);
             }
 
             public double MaxRefillRate
             {
-                get { return maxRefillRate; }
-                set { this.RaiseAndSetIfChanged(ref maxRefillRate, value); }
+                get => maxRefillRate;
+                set => this.RaiseAndSetIfChanged(ref maxRefillRate, value);
             }
 
             private double refillRate;
@@ -63,20 +63,20 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             public string PumpA
             {
-                get { return pumpA; }
-                set { this.RaiseAndSetIfChanged(ref pumpA, value); }
+                get => pumpA;
+                set => this.RaiseAndSetIfChanged(ref pumpA, value);
             }
 
             public string PumpB
             {
-                get { return pumpB; }
-                set { this.RaiseAndSetIfChanged(ref pumpB, value); }
+                get => pumpB;
+                set => this.RaiseAndSetIfChanged(ref pumpB, value);
             }
 
             public string PumpC
             {
-                get { return pumpC; }
-                set { this.RaiseAndSetIfChanged(ref pumpC, value); }
+                get => pumpC;
+                set => this.RaiseAndSetIfChanged(ref pumpC, value);
             }
 
             public void SetLimit(int pumpIndex, string limit)
@@ -138,68 +138,68 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public string COMPort
         {
-            get { return comPort; }
-            set { this.RaiseAndSetIfChanged(ref comPort, value); }
+            get => comPort;
+            set => this.RaiseAndSetIfChanged(ref comPort, value);
         }
 
         public int UnitAddress
         {
-            get { return unitAddress; }
-            set { this.RaiseAndSetIfChanged(ref unitAddress, value); }
+            get => unitAddress;
+            set => this.RaiseAndSetIfChanged(ref unitAddress, value);
         }
 
         public string Notes
         {
-            get { return notes; }
-            set { this.RaiseAndSetIfChanged(ref notes, value); }
+            get => notes;
+            set => this.RaiseAndSetIfChanged(ref notes, value);
         }
 
         public IscoControlMode ControlMode
         {
-            get { return controlMode; }
-            set { this.RaiseAndSetIfChanged(ref controlMode, value); }
+            get => controlMode;
+            set => this.RaiseAndSetIfChanged(ref controlMode, value);
         }
 
         public IscoOperationMode OperationMode
         {
-            get { return operationMode; }
-            set { this.RaiseAndSetIfChanged(ref operationMode, value); }
+            get => operationMode;
+            set => this.RaiseAndSetIfChanged(ref operationMode, value);
         }
 
         public int PumpCount
         {
-            get { return pumpCount; }
-            set { this.RaiseAndSetIfChanged(ref pumpCount, value); }
+            get => pumpCount;
+            set => this.RaiseAndSetIfChanged(ref pumpCount, value);
         }
 
         public int PortReadTimeout
         {
-            get { return portReadTimeout; }
-            set { this.RaiseAndSetIfChanged(ref portReadTimeout, value); }
+            get => portReadTimeout;
+            set => this.RaiseAndSetIfChanged(ref portReadTimeout, value);
         }
 
         public int PortWriteTimeout
         {
-            get { return portWriteTimeout; }
-            set { this.RaiseAndSetIfChanged(ref portWriteTimeout, value); }
+            get => portWriteTimeout;
+            set => this.RaiseAndSetIfChanged(ref portWriteTimeout, value);
         }
 
         public int PortBaudRate
         {
-            get { return portBaudRate; }
-            set { this.RaiseAndSetIfChanged(ref portBaudRate, value); }
+            get => portBaudRate;
+            set => this.RaiseAndSetIfChanged(ref portBaudRate, value);
         }
 
         public override IDevice Device
         {
-            get { return pump; }
-            set { RegisterDevice(value); }
+            get => pump;
+            set => RegisterDevice(value);
         }
 
         public bool Emulation
         {
-            get { return pump.Emulation; }
-            set { pump.Emulation = value; }
+            get => pump.Emulation;
+            set => pump.Emulation = value;
         }
 
         #endregion

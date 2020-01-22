@@ -135,10 +135,7 @@ namespace FluidicsPack
 
         public override int CurrentState
         {
-            get
-            {
-                return -1;
-            }
+            get => -1;
             set
             {
                 //do nothing

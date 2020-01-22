@@ -30,8 +30,8 @@ namespace LcmsNet.Simulator.ViewModels
 
         public bool BothTacked
         {
-            get { return bothTacked; }
-            set { this.RaiseAndSetIfChanged(ref bothTacked, value); }
+            get => bothTacked;
+            set => this.RaiseAndSetIfChanged(ref bothTacked, value);
         }
 
         private void TackChangeRules(object sender, bool newTackState)

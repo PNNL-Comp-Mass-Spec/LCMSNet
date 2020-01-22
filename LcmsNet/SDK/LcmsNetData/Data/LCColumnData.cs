@@ -34,7 +34,7 @@ namespace LcmsNetData.Data
 
         public string LCColumn
         {
-            get { return m_lcColumn; }
+            get => m_lcColumn;
             set
             {
                 if (m_lcColumn != value)
@@ -49,7 +49,7 @@ namespace LcmsNetData.Data
 
         public string State
         {
-            get { return m_state; }
+            get => m_state;
             set
             {
                 if (m_state != value)

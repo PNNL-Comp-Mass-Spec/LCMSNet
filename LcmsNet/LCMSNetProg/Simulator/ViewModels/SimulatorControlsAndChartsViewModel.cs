@@ -60,7 +60,7 @@ namespace LcmsNet.Simulator.ViewModels
 
         public int SimDelayMs
         {
-            get { return simDelayMs; }
+            get => simDelayMs;
             set
             {
                 var oldValue = simDelayMs;

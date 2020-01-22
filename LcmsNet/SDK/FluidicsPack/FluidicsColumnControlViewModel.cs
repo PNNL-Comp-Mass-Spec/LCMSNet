@@ -38,20 +38,20 @@ namespace FluidicsPack
 
         public string PackingMaterial
         {
-            get { return packingMaterial; }
-            set { this.RaiseAndSetIfChanged(ref packingMaterial, value); }
+            get => packingMaterial;
+            set => this.RaiseAndSetIfChanged(ref packingMaterial, value);
         }
 
         public double InnerDiameter
         {
-            get { return innerDiameter; }
-            set { this.RaiseAndSetIfChanged(ref innerDiameter, value); }
+            get => innerDiameter;
+            set => this.RaiseAndSetIfChanged(ref innerDiameter, value);
         }
 
         public double Length
         {
-            get { return length; }
-            set { this.RaiseAndSetIfChanged(ref length, value); }
+            get => length;
+            set => this.RaiseAndSetIfChanged(ref length, value);
         }
 
         #region IDeviceControl Members
@@ -75,20 +75,14 @@ namespace FluidicsPack
 
         public IDevice Device
         {
-            get
-            {
-                return column;
-            }
-            set
-            {
-                RegisterDevice(value);
-            }
+            get => column;
+            set => RegisterDevice(value);
         }
 
         public string Name
         {
-            get { return name; }
-            set { this.RaiseAndSetIfChanged(ref name, value); }
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         public UserControl GetDefaultView()

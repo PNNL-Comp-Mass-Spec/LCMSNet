@@ -43,74 +43,74 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         public string Axis1MotorStatus
         {
-            get { return axis1MotorStatus; }
-            set { this.RaiseAndSetIfChanged(ref axis1MotorStatus, value); }
+            get => axis1MotorStatus;
+            set => this.RaiseAndSetIfChanged(ref axis1MotorStatus, value);
         }
 
         public string Axis2MotorStatus
         {
-            get { return axis2MotorStatus; }
-            set { this.RaiseAndSetIfChanged(ref axis2MotorStatus, value); }
+            get => axis2MotorStatus;
+            set => this.RaiseAndSetIfChanged(ref axis2MotorStatus, value);
         }
 
         public string Axis3MotorStatus
         {
-            get { return axis3MotorStatus; }
-            set { this.RaiseAndSetIfChanged(ref axis3MotorStatus, value); }
+            get => axis3MotorStatus;
+            set => this.RaiseAndSetIfChanged(ref axis3MotorStatus, value);
         }
 
         public string Axis1Position
         {
-            get { return axis1Position; }
-            set { this.RaiseAndSetIfChanged(ref axis1Position, value); }
+            get => axis1Position;
+            set => this.RaiseAndSetIfChanged(ref axis1Position, value);
         }
 
         public string Axis2Position
         {
-            get { return axis2Position; }
-            set { this.RaiseAndSetIfChanged(ref axis2Position, value); }
+            get => axis2Position;
+            set => this.RaiseAndSetIfChanged(ref axis2Position, value);
         }
 
         public string Axis3Position
         {
-            get { return axis3Position; }
-            set { this.RaiseAndSetIfChanged(ref axis3Position, value); }
+            get => axis3Position;
+            set => this.RaiseAndSetIfChanged(ref axis3Position, value);
         }
 
         public string SelectedPosition
         {
-            get { return selectedPosition; }
-            set { this.RaiseAndSetIfChanged(ref selectedPosition, value); }
+            get => selectedPosition;
+            set => this.RaiseAndSetIfChanged(ref selectedPosition, value);
         }
 
         public string CurrentPosition
         {
-            get { return currentPosition; }
-            set { this.RaiseAndSetIfChanged(ref currentPosition, value); }
+            get => currentPosition;
+            set => this.RaiseAndSetIfChanged(ref currentPosition, value);
         }
 
         public string NewPosition
         {
-            get { return newPosition; }
-            set { this.RaiseAndSetIfChanged(ref newPosition, value); }
+            get => newPosition;
+            set => this.RaiseAndSetIfChanged(ref newPosition, value);
         }
 
         public bool ControlsTabSelected
         {
-            get { return controlsTabSelected; }
-            set { this.RaiseAndSetIfChanged(ref controlsTabSelected, value); }
+            get => controlsTabSelected;
+            set => this.RaiseAndSetIfChanged(ref controlsTabSelected, value);
         }
 
         public NewportStage NewportStage
         {
-            get { return newportStage; }
-            private set { this.RaiseAndSetIfChanged(ref newportStage, value); }
+            get => newportStage;
+            private set => this.RaiseAndSetIfChanged(ref newportStage, value);
         }
 
         public override IDevice Device
         {
-            get { return NewportStage; }
-            set { RegisterDevice(value); }
+            get => NewportStage;
+            set => RegisterDevice(value);
         }
 
         #endregion

@@ -23,10 +23,7 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         public override int CurrentState
         {
-            get
-            {
-                return 0;
-            }
+            get => 0;
             set
             {
             }

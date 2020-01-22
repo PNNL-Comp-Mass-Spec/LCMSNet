@@ -35,10 +35,7 @@ namespace LcmsNet.Method.Views
         }
 
         // Provide a required override for the VisualChildrenCount property.
-        protected override int VisualChildrenCount
-        {
-            get { return _children.Count; }
-        }
+        protected override int VisualChildrenCount => _children.Count;
 
         // Provide a required override for the GetVisualChild method.
         protected override Visual GetVisualChild(int index)

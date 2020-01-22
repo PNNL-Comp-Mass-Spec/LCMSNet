@@ -55,8 +55,8 @@ namespace LcmsNet.Method.ViewModels
 
         public string PreviewLabelText
         {
-            get { return previewLabelText; }
-            set { this.RaiseAndSetIfChanged(ref previewLabelText, value); }
+            get => previewLabelText;
+            set => this.RaiseAndSetIfChanged(ref previewLabelText, value);
         }
 
         public int MinSeconds
@@ -67,7 +67,7 @@ namespace LcmsNet.Method.ViewModels
 
         public int Minutes
         {
-            get { return minutes; }
+            get => minutes;
             set
             {
                 if (minutes != value)
@@ -96,7 +96,7 @@ namespace LcmsNet.Method.ViewModels
 
         public int Seconds
         {
-            get { return seconds; }
+            get => seconds;
             set
             {
                 if (value == 60)
@@ -115,14 +115,14 @@ namespace LcmsNet.Method.ViewModels
 
         public SampleProgressViewModel SampleProgress
         {
-            get { return sampleProgress; }
-            set { this.RaiseAndSetIfChanged(ref sampleProgress, value); }
+            get => sampleProgress;
+            set => this.RaiseAndSetIfChanged(ref sampleProgress, value);
         }
 
         public SampleProgressViewModel SampleProgressFull
         {
-            get { return sampleProgressFull; }
-            set { this.RaiseAndSetIfChanged(ref sampleProgressFull, value); }
+            get => sampleProgressFull;
+            set => this.RaiseAndSetIfChanged(ref sampleProgressFull, value);
         }
 
         /// <summary>

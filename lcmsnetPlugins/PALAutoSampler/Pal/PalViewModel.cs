@@ -118,13 +118,13 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         public string SelectedMethod
         {
-            get { return selectedMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedMethod, value); }
+            get => selectedMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedMethod, value);
         }
 
         public string SelectedTray
         {
-            get { return selectedTray; }
+            get => selectedTray;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref selectedTray, value) && Pal.TrayNamesAndMaxVials.TryGetValue(value, out var maxTrayVial))
@@ -140,60 +140,60 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         public int MaxVialForTray
         {
-            get { return maxVialForTray; }
-            set { this.RaiseAndSetIfChanged(ref maxVialForTray, value); }
+            get => maxVialForTray;
+            set => this.RaiseAndSetIfChanged(ref maxVialForTray, value);
         }
 
         public int VialNumber
         {
-            get { return vialNumber; }
-            set { this.RaiseAndSetIfChanged(ref vialNumber, value); }
+            get => vialNumber;
+            set => this.RaiseAndSetIfChanged(ref vialNumber, value);
         }
 
         public int Volume
         {
-            get { return volume; }
-            set { this.RaiseAndSetIfChanged(ref volume, value); }
+            get => volume;
+            set => this.RaiseAndSetIfChanged(ref volume, value);
         }
 
         public string StatusText
         {
-            get { return statusText; }
-            set { this.RaiseAndSetIfChanged(ref statusText, value); }
+            get => statusText;
+            set => this.RaiseAndSetIfChanged(ref statusText, value);
         }
 
         public string SelectedPortName
         {
-            get { return selectedPortName; }
-            set { this.RaiseAndSetIfChanged(ref selectedPortName, value); }
+            get => selectedPortName;
+            set => this.RaiseAndSetIfChanged(ref selectedPortName, value);
         }
 
         public string TrayNamesAndMaxVialFormatted {
-            get { return trayNamesAndMaxVialFormatted; }
-            private set { this.RaiseAndSetIfChanged(ref trayNamesAndMaxVialFormatted, value); }
+            get => trayNamesAndMaxVialFormatted;
+            private set => this.RaiseAndSetIfChanged(ref trayNamesAndMaxVialFormatted, value);
         }
 
         public string SelectVialsInput
         {
-            get { return selectVialsInput; }
-            set { this.RaiseAndSetIfChanged(ref selectVialsInput, value); }
+            get => selectVialsInput;
+            set => this.RaiseAndSetIfChanged(ref selectVialsInput, value);
         }
 
         public string SelectVialsTray
         {
-            get { return selectVialsTray; }
-            set { this.RaiseAndSetIfChanged(ref selectVialsTray, value); }
+            get => selectVialsTray;
+            set => this.RaiseAndSetIfChanged(ref selectVialsTray, value);
         }
 
         public string SelectVialsOutput
         {
-            get { return selectVialsOutput; }
-            private set { this.RaiseAndSetIfChanged(ref selectVialsOutput, value); }
+            get => selectVialsOutput;
+            private set => this.RaiseAndSetIfChanged(ref selectVialsOutput, value);
         }
 
         public bool MonitorStatus
         {
-            get { return monitorStatus; }
+            get => monitorStatus;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref monitorStatus, value))
@@ -205,14 +205,14 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         public string TimeReport
         {
-            get { return timeReport; }
-            set { this.RaiseAndSetIfChanged(ref timeReport, value); }
+            get => timeReport;
+            set => this.RaiseAndSetIfChanged(ref timeReport, value);
         }
 
         public Pal Pal
         {
-            get { return pal; }
-            private set { this.RaiseAndSetIfChanged(ref pal, value); }
+            get => pal;
+            private set => this.RaiseAndSetIfChanged(ref pal, value);
         }
 
         public int MaxVial => (int) (Pal?.VialRange ?? VialRanges.Well96);
@@ -223,7 +223,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public override bool Running
         {
-            get { return false; }
+            get => false;
             set { }
         }
 
@@ -232,8 +232,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public bool Emulation
         {
-            get { return Pal.Emulation; }
-            set { Pal.Emulation = value; }
+            get => Pal.Emulation;
+            set => Pal.Emulation = value;
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public override IDevice Device
         {
-            get { return Pal; }
+            get => Pal;
             set
             {
                 Pal = value as Pal;

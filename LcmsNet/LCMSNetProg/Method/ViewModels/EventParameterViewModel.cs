@@ -35,17 +35,17 @@ namespace LcmsNet.Method.ViewModels
         private string parameterLabel = "";
 
         public ParameterTypeEnum ParameterType { get; private set; }
-        public bool ShowComboBox { get { return ParameterType == ParameterTypeEnum.Enum; } }
-        public bool ShowNumericUpDown { get { return ParameterType == ParameterTypeEnum.Numeric; } }
-        public bool ShowTextBox { get { return ParameterType == ParameterTypeEnum.Text; } }
-        public bool ShowCheckBox { get { return ParameterType == ParameterTypeEnum.Boolean; } }
+        public bool ShowComboBox => ParameterType == ParameterTypeEnum.Enum;
+        public bool ShowNumericUpDown => ParameterType == ParameterTypeEnum.Numeric;
+        public bool ShowTextBox => ParameterType == ParameterTypeEnum.Text;
+        public bool ShowCheckBox => ParameterType == ParameterTypeEnum.Boolean;
 
         public event EventHandler EventChanged;
 
         public string ParameterLabel
         {
-            get { return parameterLabel; }
-            set { this.RaiseAndSetIfChanged(ref parameterLabel, value); }
+            get => parameterLabel;
+            set => this.RaiseAndSetIfChanged(ref parameterLabel, value);
         }
 
         public object ParameterValue
@@ -108,7 +108,7 @@ namespace LcmsNet.Method.ViewModels
 
         public object SelectedOption
         {
-            get { return selectedOption; }
+            get => selectedOption;
             set
             {
                 var oldValue = selectedOption;
@@ -155,7 +155,7 @@ namespace LcmsNet.Method.ViewModels
 
         public string TextValue
         {
-            get { return textValue; }
+            get => textValue;
             set
             {
                 var oldValue = textValue;
@@ -178,7 +178,7 @@ namespace LcmsNet.Method.ViewModels
 
         public double NumberValue
         {
-            get { return numberValue; }
+            get => numberValue;
             set
             {
                 var oldValue = numberValue;
@@ -192,19 +192,19 @@ namespace LcmsNet.Method.ViewModels
 
         public double NumberMinimum
         {
-            get { return numberMinimum; }
-            set { this.RaiseAndSetIfChanged(ref numberMinimum, value); }
+            get => numberMinimum;
+            set => this.RaiseAndSetIfChanged(ref numberMinimum, value);
         }
 
         public double NumberMaximum
         {
-            get { return numberMaximum; }
-            set { this.RaiseAndSetIfChanged(ref numberMaximum, value); }
+            get => numberMaximum;
+            set => this.RaiseAndSetIfChanged(ref numberMaximum, value);
         }
 
         public int DecimalPlaces
         {
-            get { return decimalPlaces; }
+            get => decimalPlaces;
             set
             {
                 var oldValue = decimalPlaces;
@@ -217,15 +217,9 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        public string NumberFormat
-        {
-            get { return $"F{DecimalPlaces}"; }
-        }
+        public string NumberFormat => $"F{DecimalPlaces}";
 
-        public double Increment
-        {
-            get { return 1.0 / Math.Pow(10, DecimalPlaces); }
-        }
+        public double Increment => 1.0 / Math.Pow(10, DecimalPlaces);
 
         #endregion
 
@@ -235,7 +229,7 @@ namespace LcmsNet.Method.ViewModels
 
         public bool BoolValue
         {
-            get { return boolValue; }
+            get => boolValue;
             set
             {
                 var oldValue = boolValue;

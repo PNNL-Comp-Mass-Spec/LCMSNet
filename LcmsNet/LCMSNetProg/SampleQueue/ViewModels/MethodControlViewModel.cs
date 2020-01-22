@@ -27,8 +27,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public LCMethod SelectedLCMethod
         {
-            get { return selectedLCMethod; }
-            set { this.RaiseAndSetIfChanged(ref selectedLCMethod, value); }
+            get => selectedLCMethod;
+            set => this.RaiseAndSetIfChanged(ref selectedLCMethod, value);
         }
 
         /// <summary>
@@ -101,20 +101,20 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool ContainsKeyboardFocus
         {
-            get { return containsKeyboardFocus; }
-            set { this.RaiseAndSetIfChanged(ref containsKeyboardFocus, value); }
+            get => containsKeyboardFocus;
+            set => this.RaiseAndSetIfChanged(ref containsKeyboardFocus, value);
         }
 
         public bool CommandsVisible
         {
-            get { return commandsVisible; }
-            private set { this.RaiseAndSetIfChanged(ref commandsVisible, value); }
+            get => commandsVisible;
+            private set => this.RaiseAndSetIfChanged(ref commandsVisible, value);
         }
 
         public bool MethodVisible
         {
-            get { return methodVisible; }
-            set { this.RaiseAndSetIfChanged(ref methodVisible, value); }
+            get => methodVisible;
+            set => this.RaiseAndSetIfChanged(ref methodVisible, value);
         }
 
         private void SetBackground()
@@ -143,10 +143,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Number of columns on the left of the DataGrid that cannot be scrolled; columns in this group cannot be hidden
         /// Set to 0 to disable column freezing
         /// </summary>
-        public override int NumFrozenColumns
-        {
-            get { return 0; }
-        }
+        public override int NumFrozenColumns => 0;
 
         #region Commands
 

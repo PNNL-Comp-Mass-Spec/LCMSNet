@@ -116,7 +116,7 @@ namespace LcmsNetSDK.Method
         /// </summary>
         public TimeSpan Duration
         {
-            get { return mtimespan_duration; }
+            get => mtimespan_duration;
             set
             {
                 if (value.TotalSeconds < 0)
@@ -202,8 +202,8 @@ namespace LcmsNetSDK.Method
 
         public bool BreakPoint
         {
-            get { return MethodData.BreakPoint; }
-            private set { MethodData.BreakPoint = value; }
+            get => MethodData.BreakPoint;
+            private set => MethodData.BreakPoint = value;
         }
 
         #endregion

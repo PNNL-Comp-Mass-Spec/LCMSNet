@@ -44,8 +44,8 @@ namespace LcmsNetData.Data
         /// </summary>
         public string MethodName
         {
-            get { return methodName; }
-            set { this.RaiseAndSetIfChanged(ref methodName, value, nameof(MethodName)); }
+            get => methodName;
+            set => this.RaiseAndSetIfChanged(ref methodName, value, nameof(MethodName));
         }
 
         /// <summary>

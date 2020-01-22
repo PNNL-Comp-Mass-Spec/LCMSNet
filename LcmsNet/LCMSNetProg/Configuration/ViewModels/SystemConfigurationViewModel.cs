@@ -75,7 +75,7 @@ namespace LcmsNet.Configuration.ViewModels
 
         public double MinVolume
         {
-            get { return minVolume; }
+            get => minVolume;
             set
             {
                 var oldValue = minVolume;
@@ -89,25 +89,25 @@ namespace LcmsNet.Configuration.ViewModels
 
         public string TriggerLocation
         {
-            get { return triggerLocation; }
-            set { this.RaiseAndSetIfChanged(ref triggerLocation, value); }
+            get => triggerLocation;
+            set => this.RaiseAndSetIfChanged(ref triggerLocation, value);
         }
 
         public string PdfPath
         {
-            get { return pdfPath; }
-            set { this.RaiseAndSetIfChanged(ref pdfPath, value); }
+            get => pdfPath;
+            set => this.RaiseAndSetIfChanged(ref pdfPath, value);
         }
 
         public string CartName
         {
-            get { return cartName; }
-            set { this.RaiseAndSetIfChanged(ref cartName, value); }
+            get => cartName;
+            set => this.RaiseAndSetIfChanged(ref cartName, value);
         }
 
         public string CartConfigName
         {
-            get { return cartConfigName; }
+            get => cartConfigName;
             set
             {
                 var oldValue = cartConfigName;
@@ -121,7 +121,7 @@ namespace LcmsNet.Configuration.ViewModels
 
         public string TimeZone
         {
-            get { return timeZone; }
+            get => timeZone;
             set
             {
                 var oldValue = timeZone;
@@ -135,13 +135,13 @@ namespace LcmsNet.Configuration.ViewModels
 
         public string InstrumentName
         {
-            get { return instrumentName; }
-            set { this.RaiseAndSetIfChanged(ref instrumentName, value); }
+            get => instrumentName;
+            set => this.RaiseAndSetIfChanged(ref instrumentName, value);
         }
 
         public string SeparationType
         {
-            get { return separationType; }
+            get => separationType;
             set {
                 var oldValue = separationType;
                 this.RaiseAndSetIfChanged(ref separationType, value);
@@ -154,50 +154,50 @@ namespace LcmsNet.Configuration.ViewModels
 
         public string InstrumentOperator
         {
-            get { return instrumentOperator; }
-            set { this.RaiseAndSetIfChanged(ref instrumentOperator, value); }
+            get => instrumentOperator;
+            set => this.RaiseAndSetIfChanged(ref instrumentOperator, value);
         }
 
         public ColumnConfigViewModel Column1ViewModel
         {
-            get { return column1ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref column1ViewModel, value); }
+            get => column1ViewModel;
+            set => this.RaiseAndSetIfChanged(ref column1ViewModel, value);
         }
 
         public ColumnConfigViewModel Column2ViewModel
         {
-            get { return column2ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref column2ViewModel, value); }
+            get => column2ViewModel;
+            set => this.RaiseAndSetIfChanged(ref column2ViewModel, value);
         }
 
         public ColumnConfigViewModel Column3ViewModel
         {
-            get { return column3ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref column3ViewModel, value); }
+            get => column3ViewModel;
+            set => this.RaiseAndSetIfChanged(ref column3ViewModel, value);
         }
 
         public ColumnConfigViewModel Column4ViewModel
         {
-            get { return column4ViewModel; }
-            set { this.RaiseAndSetIfChanged(ref column4ViewModel, value); }
+            get => column4ViewModel;
+            set => this.RaiseAndSetIfChanged(ref column4ViewModel, value);
         }
 
         public bool SpecialColumnEnabled
         {
-            get { return specialColumnEnabled; }
-            set { this.RaiseAndSetIfChanged(ref specialColumnEnabled, value); }
+            get => specialColumnEnabled;
+            set => this.RaiseAndSetIfChanged(ref specialColumnEnabled, value);
         }
 
         public bool InstrumentNameNotSaved
         {
-            get { return instrumentNameNotSaved; }
-            private set { this.RaiseAndSetIfChanged(ref instrumentNameNotSaved, value); }
+            get => instrumentNameNotSaved;
+            private set => this.RaiseAndSetIfChanged(ref instrumentNameNotSaved, value);
         }
 
         public bool OperatorNotSaved
         {
-            get { return operatorNotSaved; }
-            private set { this.RaiseAndSetIfChanged(ref operatorNotSaved, value); }
+            get => operatorNotSaved;
+            private set => this.RaiseAndSetIfChanged(ref operatorNotSaved, value);
         }
 
         public IReadOnlyReactiveList<string> TimeZoneComboBoxOptions => timeZoneComboBoxOptions;

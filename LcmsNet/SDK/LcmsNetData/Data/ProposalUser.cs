@@ -30,7 +30,7 @@ namespace LcmsNetData.Data
 
         public int UserID
         {
-            get { return m_userID; }
+            get => m_userID;
             set
             {
                 if (m_userID != value)
@@ -45,7 +45,7 @@ namespace LcmsNetData.Data
 
         public string UserName
         {
-            get { return m_userName; }
+            get => m_userName;
             set
             {
                 if (m_userName != value)

@@ -474,7 +474,7 @@ namespace FluidicsSDK.Base
         /// </summary>
         public virtual Point Loc
         {
-            get { return m_loc; }
+            get => m_loc;
             protected set
             {
                 var oldLoc = m_loc;
@@ -532,7 +532,7 @@ namespace FluidicsSDK.Base
         /// </summary>
         public virtual Color Color
         {
-            get { return m_primitives[PRIMARY_PRIMITIVE].Color; }
+            get => m_primitives[PRIMARY_PRIMITIVE].Color;
             set
             {
                 foreach (var prim in m_primitives)
@@ -553,8 +553,8 @@ namespace FluidicsSDK.Base
         /// </summary>
         public virtual IDevice IDevice
         {
-            get { return m_lcmsDevice; }
-            protected set { m_lcmsDevice = value; }
+            get => m_lcmsDevice;
+            protected set => m_lcmsDevice = value;
         }
 
         /// <summary>
@@ -562,8 +562,8 @@ namespace FluidicsSDK.Base
         /// </summary>
         public virtual Color Highlight
         {
-            get { return m_primitives[PRIMARY_PRIMITIVE].Color; }
-            set { m_primitives[PRIMARY_PRIMITIVE].Color = value; }
+            get => m_primitives[PRIMARY_PRIMITIVE].Color;
+            set => m_primitives[PRIMARY_PRIMITIVE].Color = value;
         }
 
         /// <summary>

@@ -58,14 +58,8 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         public int LocalID
         {
-            get
-            {
-                return m_localID;
-            }
-            set
-            {
-                m_localID = value;
-            }
+            get => m_localID;
+            set => m_localID = value;
         }
 
         /// <summary>

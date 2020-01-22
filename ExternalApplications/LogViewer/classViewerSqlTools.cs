@@ -35,7 +35,7 @@ namespace LogViewer
         #region "Properties"
             public string DataFileNamePath
             {
-                get { return m_DataFileNamePath; }
+                get => m_DataFileNamePath;
                 set
                 {
                     m_DataFileNamePath = value;

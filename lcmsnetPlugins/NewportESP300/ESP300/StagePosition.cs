@@ -26,14 +26,8 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// <returns></returns>
         public float this[int axis]
         {
-            get
-            {
-                return m_coordinates[axis];
-            }
-            set
-            {
-                m_coordinates[axis] = value;
-            }
+            get => m_coordinates[axis];
+            set => m_coordinates[axis] = value;
         }
 
         /// <summary>

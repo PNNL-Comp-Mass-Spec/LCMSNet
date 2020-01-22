@@ -67,7 +67,7 @@ namespace LcmsNetData.Data
         [PersistenceSetting(ColumnNamePrefix = "Ins.")]
         public InstrumentInfo InstrumentData
         {
-            get { return instrumentData; }
+            get => instrumentData;
             set
             {
                 var oldValue = instrumentData;
@@ -98,8 +98,8 @@ namespace LcmsNetData.Data
         [PersistenceSetting(IgnoreProperty = true)]
         public virtual LCMethodBasic LCMethodBasic
         {
-            get { return methodBasic; }
-            set { this.RaiseAndSetIfChanged(ref methodBasic, value, nameof(LCMethodBasic)); }
+            get => methodBasic;
+            set => this.RaiseAndSetIfChanged(ref methodBasic, value, nameof(LCMethodBasic));
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace LcmsNetData.Data
         [PersistenceSetting(ColumnNamePrefix = "DMS.")]
         public DMSData DmsData
         {
-            get { return dmsData; }
+            get => dmsData;
             set
             {
                 var oldValue = dmsData;
@@ -133,7 +133,7 @@ namespace LcmsNetData.Data
         [PersistenceSetting(ColumnNamePrefix = "PAL.")]
         public PalData PAL
         {
-            get { return palData; }
+            get => palData;
             set
             {
                 var oldValue = palData;
@@ -157,8 +157,8 @@ namespace LcmsNetData.Data
         /// </summary>
         public virtual ColumnData ColumnData
         {
-            get { return columnData; }
-            set { this.RaiseAndSetIfChanged(ref columnData, value, nameof(ColumnData)); }
+            get => columnData;
+            set => this.RaiseAndSetIfChanged(ref columnData, value, nameof(ColumnData));
         }
 
         /// <summary>

@@ -55,8 +55,8 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
         /// </summary>
         public override IDevice Device
         {
-            get { return m_netStart; }
-            set { RegisterDevice(value); }
+            get => m_netStart;
+            set => RegisterDevice(value);
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
         /// </summary>
         public bool Emulation
         {
-            get { return m_netStart.Emulation; }
-            set { m_netStart.Emulation = value; }
+            get => m_netStart.Emulation;
+            set => m_netStart.Emulation = value;
         }
 
         #endregion

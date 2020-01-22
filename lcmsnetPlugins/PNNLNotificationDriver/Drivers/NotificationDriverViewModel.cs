@@ -34,14 +34,8 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
 
         public IDevice Device
         {
-            get
-            {
-                return m_driver;
-            }
-            set
-            {
-                RegisterDevice(value);
-            }
+            get => m_driver;
+            set => RegisterDevice(value);
         }
 
         public UserControl GetDefaultView()

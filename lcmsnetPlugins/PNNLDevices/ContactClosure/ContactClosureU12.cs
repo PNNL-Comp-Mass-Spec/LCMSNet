@@ -136,8 +136,8 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
-            get { return m_emulation; }
-            set { m_emulation = value; }
+            get => m_emulation;
+            set => m_emulation = value;
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public DeviceStatus Status
         {
-            get { return m_status; }
+            get => m_status;
             set
             {
                 if (value != m_status)
@@ -162,7 +162,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public string Name
         {
-            get { return m_name; }
+            get => m_name;
             set
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
@@ -177,7 +177,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public string Version
         {
-            get { return m_version; }
+            get => m_version;
             set
             {
                 m_version = value;
@@ -191,7 +191,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         [PersistenceData("Port")]
         public LabjackU12OutputPorts Port
         {
-            get { return m_port; }
+            get => m_port;
             set
             {
                 m_port = value;
@@ -202,8 +202,8 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         [PersistenceData("Labjack ID")]
         public int LabJackID
         {
-            get { return m_labjack.LocalID; }
-            set { m_labjack.LocalID = value; }
+            get => m_labjack.LocalID;
+            set => m_labjack.LocalID = value;
         }
 
         #endregion

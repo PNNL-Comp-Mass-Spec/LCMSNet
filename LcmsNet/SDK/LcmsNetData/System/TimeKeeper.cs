@@ -197,7 +197,7 @@ namespace LcmsNetData.System
 
         public TimeZoneInfo TimeZone
         {
-            get { return m_current_timezone; }
+            get => m_current_timezone;
             set
             {
                 m_current_timezone = value;

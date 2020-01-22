@@ -39,11 +39,8 @@ namespace FluidicsPack
 
         public override int CurrentState
         {
-            get
-            {
-                //pumps don't have a state of this kind.
-                return -1;
-            }
+            //pumps don't have a state of this kind.
+            get => -1;
             set
             {
                 //do nothing

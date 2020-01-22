@@ -98,7 +98,7 @@ namespace LcmsNetData.Data
         /// </summary>
         public int Well
         {
-            get { return well; }
+            get => well;
             set
             {
                 if (value < CONST_MIN_WELLPLATE || CONST_MAX_WELLPLATE < value)
@@ -116,8 +116,8 @@ namespace LcmsNetData.Data
         /// </summary>
         public string PALTray
         {
-            get { return palTray; }
-            set { this.RaiseAndSetIfChanged(ref palTray, value, nameof(PALTray)); }
+            get => palTray;
+            set => this.RaiseAndSetIfChanged(ref palTray, value, nameof(PALTray));
         }
 
         /// <summary>

@@ -100,8 +100,8 @@ namespace LcmsNetData.Configuration
         /// </summary>
         public static string CartName
         {
-            get { return LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME); }
-            set { LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTNAME, value); }
+            get => LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
+            set => LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTNAME, value);
         }
 
         /// <summary>
@@ -109,8 +109,8 @@ namespace LcmsNetData.Configuration
         /// </summary>
         public static string CartConfigName
         {
-            get { return LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME); }
-            set { LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTCONFIGNAME, value); }
+            get => LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
+            set => LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTCONFIGNAME, value);
         }
 
         public static double MinimumVolume
@@ -120,7 +120,7 @@ namespace LcmsNetData.Configuration
                 var volume = LCMSSettings.GetParameter(LCMSSettings.PARAM_MINIMUMVOLUME, 0.0);
                 return Math.Max(volume, MinimumSampleVolume);
             }
-            set { LCMSSettings.SetParameter(LCMSSettings.PARAM_MINIMUMVOLUME, value.ToString(CultureInfo.InvariantCulture)); }
+            set => LCMSSettings.SetParameter(LCMSSettings.PARAM_MINIMUMVOLUME, value.ToString(CultureInfo.InvariantCulture));
         }
 
         #endregion

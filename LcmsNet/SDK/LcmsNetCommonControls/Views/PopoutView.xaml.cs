@@ -92,8 +92,8 @@ namespace LcmsNetCommonControls.Views
         /// </summary>
         public HorizontalAlignment HorizontalButtonAlignment
         {
-            get { return (HorizontalAlignment)GetValue(HorizontalButtonAlignmentProperty); }
-            set { SetValue(HorizontalButtonAlignmentProperty, value); }
+            get => (HorizontalAlignment)GetValue(HorizontalButtonAlignmentProperty);
+            set => SetValue(HorizontalButtonAlignmentProperty, value);
         }
 
         /// <summary>
@@ -101,8 +101,8 @@ namespace LcmsNetCommonControls.Views
         /// </summary>
         public VerticalAlignment VerticalButtonAlignment
         {
-            get { return (VerticalAlignment)GetValue(VerticalButtonAlignmentProperty); }
-            set { SetValue(VerticalButtonAlignmentProperty, value); }
+            get => (VerticalAlignment)GetValue(VerticalButtonAlignmentProperty);
+            set => SetValue(VerticalButtonAlignmentProperty, value);
         }
 
         /// <summary>
@@ -110,8 +110,8 @@ namespace LcmsNetCommonControls.Views
         /// </summary>
         public bool OverlayButton
         {
-            get { return (bool)GetValue(OverlayButtonProperty); }
-            set { SetValue(OverlayButtonProperty, value); }
+            get => (bool)GetValue(OverlayButtonProperty);
+            set => SetValue(OverlayButtonProperty, value);
         }
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace LcmsNetCommonControls.Views
         /// </summary>
         public int ButtonGridRow
         {
-            get { return (int)GetValue(ButtonGridRowProperty); }
-            private set { SetValue(ButtonGridRowProperty, value); }
+            get => (int)GetValue(ButtonGridRowProperty);
+            private set => SetValue(ButtonGridRowProperty, value);
         }
 
         /// <summary>
@@ -128,8 +128,8 @@ namespace LcmsNetCommonControls.Views
         /// </summary>
         public int ButtonGridColumn
         {
-            get { return (int)GetValue(ButtonGridColumnProperty); }
-            private set { SetValue(ButtonGridColumnProperty, value); }
+            get => (int)GetValue(ButtonGridColumnProperty);
+            private set => SetValue(ButtonGridColumnProperty, value);
         }
 
         /// <summary>
@@ -137,8 +137,8 @@ namespace LcmsNetCommonControls.Views
         /// </summary>
         public bool PreferVerticalBorder
         {
-            get { return (bool)GetValue(PreferVerticalBorderProperty); }
-            set { SetValue(PreferVerticalBorderProperty, value); }
+            get => (bool)GetValue(PreferVerticalBorderProperty);
+            set => SetValue(PreferVerticalBorderProperty, value);
         }
 
         /// <summary>
@@ -146,8 +146,8 @@ namespace LcmsNetCommonControls.Views
         /// </summary>
         public string Title
         {
-            get { return (string)GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
         }
 
         /// <summary>
@@ -155,8 +155,8 @@ namespace LcmsNetCommonControls.Views
         /// </summary>
         public double WindowWidth
         {
-            get { return (double)GetValue(WindowWidthProperty); }
-            set { SetValue(WindowWidthProperty, value); }
+            get => (double)GetValue(WindowWidthProperty);
+            set => SetValue(WindowWidthProperty, value);
         }
 
         /// <summary>
@@ -164,8 +164,8 @@ namespace LcmsNetCommonControls.Views
         /// </summary>
         public double WindowHeight
         {
-            get { return (double)GetValue(WindowHeightProperty); }
-            set { SetValue(WindowHeightProperty, value); }
+            get => (double)GetValue(WindowHeightProperty);
+            set => SetValue(WindowHeightProperty, value);
         }
 
         private static void UpdatePositioning(DependencyObject d, DependencyPropertyChangedEventArgs e)
