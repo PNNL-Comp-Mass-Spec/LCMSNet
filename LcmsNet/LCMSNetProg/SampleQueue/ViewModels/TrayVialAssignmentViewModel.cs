@@ -48,7 +48,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Properties"
 
-        public ReactiveCommand<Unit, Unit> ApplyChangesCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ApplyChangesCommand { get; }
 
         public List<SampleData> SampleList { get; private set; }
 
@@ -60,13 +60,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         private List<string> trayNames; // List of tray names used by PAL on this cart
 
-        public TrayVialViewModel TrayUnassigned { get; private set; }
-        public TrayVialViewModel Tray1 { get; private set; }
-        public TrayVialViewModel Tray2 { get; private set; }
-        public TrayVialViewModel Tray3 { get; private set; }
-        public TrayVialViewModel Tray4 { get; private set; }
-        public TrayVialViewModel Tray5 { get; private set; }
-        public TrayVialViewModel Tray6 { get; private set; }
+        public TrayVialViewModel TrayUnassigned { get; }
+        public TrayVialViewModel Tray1 { get; }
+        public TrayVialViewModel Tray2 { get; }
+        public TrayVialViewModel Tray3 { get; }
+        public TrayVialViewModel Tray4 { get; }
+        public TrayVialViewModel Tray5 { get; }
+        public TrayVialViewModel Tray6 { get; }
 
         #endregion
 

@@ -221,17 +221,17 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets whether the method has performance data that should be associated with it or not.
         /// </summary>
-        public bool HasPerformanceData { get; private set; }
+        public bool HasPerformanceData { get; }
 
         /// <summary>
         /// Gets the name of the data provider that provides data for a given control.
         /// </summary>
-        public string DataProvider { get; private set; }
+        public string DataProvider { get; }
 
         /// <summary>
         /// Gets the data provider index.
         /// </summary>
-        public int DataProviderIndex { get; private set; }
+        public int DataProviderIndex { get; }
 
         /// <summary>
         /// Gets or sets whether this method has discreet states.

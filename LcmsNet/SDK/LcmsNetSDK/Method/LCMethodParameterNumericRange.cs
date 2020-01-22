@@ -20,10 +20,10 @@ namespace LcmsNetSDK.Method
             Name = parameterName;
         }
 
-        public double Minimum { get; private set; }
+        public double Minimum { get; }
 
-        public double Maximum { get; private set; }
+        public double Maximum { get; }
 
-        public string Name { get; private set; }
+        public string Name { get; }
     }
 }

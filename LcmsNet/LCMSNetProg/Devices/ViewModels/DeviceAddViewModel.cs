@@ -117,7 +117,7 @@ namespace LcmsNet.Devices.ViewModels
 
     public class PluginCategoryData
     {
-        public string Category { get; private set; }
+        public string Category { get; }
 
         public ReactiveList<DevicePluginInformation> Plugins => plugins;
 

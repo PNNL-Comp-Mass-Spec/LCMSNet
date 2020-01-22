@@ -34,7 +34,7 @@ namespace LcmsNet.Method.ViewModels
 
         private string parameterLabel = "";
 
-        public ParameterTypeEnum ParameterType { get; private set; }
+        public ParameterTypeEnum ParameterType { get; }
         public bool ShowComboBox => ParameterType == ParameterTypeEnum.Enum;
         public bool ShowNumericUpDown => ParameterType == ParameterTypeEnum.Numeric;
         public bool ShowTextBox => ParameterType == ParameterTypeEnum.Text;

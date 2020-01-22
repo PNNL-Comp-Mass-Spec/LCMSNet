@@ -110,8 +110,8 @@ namespace LcmsNetPlugins.VICI.Valves
             }
         }
 
-        public ReactiveCommand<Unit, Unit> SetPositionACommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetPositionBCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetPositionACommand { get; }
+        public ReactiveCommand<Unit, Unit> SetPositionBCommand { get; }
 
         #endregion
 

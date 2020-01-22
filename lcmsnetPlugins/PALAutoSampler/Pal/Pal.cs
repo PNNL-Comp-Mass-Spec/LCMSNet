@@ -354,27 +354,15 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// Gets or sets the serial port which the PAL is connected to.
         /// </summary>
         [PersistenceData("Port")]
-        public string PortName
-        {
-            get;
-            set;
-        }
+        public string PortName { get; set; }
 
         /// <summary>
         /// Gets or sets the delay when polling for system status in seconds
         /// </summary>
         [PersistenceData("StatusPollDelay")]
-        public int StatusPollDelay
-        {
-            get;
-            set;
-        }
+        public int StatusPollDelay { get; set; }
 
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.Component;
 

@@ -507,14 +507,12 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                 m_status = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the abort event used to abort an I/O operation.
         /// </summary>
-        public System.Threading.ManualResetEvent AbortEvent
-        {
-            get;
-            set;
-        }
+        public System.Threading.ManualResetEvent AbortEvent { get; set; }
+
         #endregion
 
         #region IDevice Methods
@@ -654,11 +652,8 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         }
 
         #region IDevice Members
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+
+        public DeviceErrorStatus ErrorType { get; set; }
         public DeviceType DeviceType => DeviceType.Component;
 
         #endregion

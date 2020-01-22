@@ -98,23 +98,15 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     /// <summary>
     /// Gets or sets the error type for a given device.
     /// </summary>
-    DeviceErrorStatus ErrorType
-    {
-        get;
-        set;
-    }
+    DeviceErrorStatus ErrorType { get; set; }
     /// <summary>
     /// Gets or sets the device type.
     /// </summary>
-    DeviceType DeviceType
-    {
-        get;
-    }
+    DeviceType DeviceType { get; }
     /// <summary>
     /// Gets or sets whether the device is emulation mode or not.
     /// </summary>
-    bool Emulation
-    { get; set; }
+    bool Emulation { get; set; }
     #endregion
 }
 */

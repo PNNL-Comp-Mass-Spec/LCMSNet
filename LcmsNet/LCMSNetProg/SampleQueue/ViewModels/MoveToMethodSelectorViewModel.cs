@@ -31,8 +31,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedLcMethod, value);
         }
 
-        public ReactiveCommand<Unit, Unit> OkCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> OkCommand { get; }
+        public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
         private void CloseCleanup()
         {

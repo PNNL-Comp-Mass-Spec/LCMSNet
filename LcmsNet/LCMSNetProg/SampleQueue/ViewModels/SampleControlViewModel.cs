@@ -100,7 +100,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool ItemsSelected => this.itemsSelected?.Value ?? false;
 
-        public SampleDataManager SampleDataManager { get; private set; }
+        public SampleDataManager SampleDataManager { get; }
 
         #endregion
 
@@ -810,7 +810,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public class SampleScrollChangeEventArgs : EventArgs
         {
-            public SampleViewModel SampleToShow { get; private set; }
+            public SampleViewModel SampleToShow { get; }
 
             public SampleScrollChangeEventArgs(SampleViewModel sampleToShow)
             {

@@ -325,14 +325,12 @@ namespace LcmsNetPlugins.LabJackU3
         }
 
         #region IDevice Members
+
         /// <summary>
         /// Gets or sets the error type of last error.
         /// </summary>
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
+
         /// <summary>
         /// Gets or sets the device type.
         /// </summary>

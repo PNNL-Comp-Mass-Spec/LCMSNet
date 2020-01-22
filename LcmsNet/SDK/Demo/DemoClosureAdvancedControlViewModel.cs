@@ -50,7 +50,7 @@ namespace DemoPluginLibrary
             set => this.RaiseAndSetIfChanged(ref voltage, value);
         }
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SendCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> SendCommand { get; }
 
         public override UserControl GetDefaultView()
         {

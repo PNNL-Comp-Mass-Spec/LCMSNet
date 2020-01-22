@@ -52,10 +52,6 @@ namespace FluidicsSDK.Devices
         }
 
         // property for type of closure (bruker, network start, etc)
-        public string ClosureType
-        {
-            get;
-            set;
-        }
+        public string ClosureType { get; set; }
     }
 }

@@ -178,11 +178,7 @@ namespace FluidicsSDK.Devices.Valves
             ChangePosition(false);
         }
 
-        public double Volume
-        {
-            get;
-            set;
-        }
+        public double Volume { get; set; }
 
         public override event EventHandler<FluidicsDevChangeEventArgs> DeviceChanged;
     }

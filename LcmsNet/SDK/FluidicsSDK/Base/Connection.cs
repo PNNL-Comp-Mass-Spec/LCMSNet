@@ -270,26 +270,17 @@ namespace FluidicsSDK.Base
         /// <summary>
         ///  This is used to make connections that are invisible.
         /// </summary>
-        public bool Transparent
-        {
-            get;
-            set;
-        }
+        public bool Transparent { get; set; }
+
         /// <summary>
         /// Property determining the Inbound port
         /// </summary>
-        public Port P1
-        {
-            get;
-        }
+        public Port P1 { get; }
 
         /// <summary>
         /// Property determing the Outbound port.
         /// </summary>
-        public Port P2
-        {
-            get;
-        }
+        public Port P2 { get; }
 
         /// <summary>
         /// Property to determine if this is a connection internal to a device
@@ -323,11 +314,7 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// Property to determine if the connection is selected or not.
         /// </summary>
-        public bool Selected
-        {
-            get;
-            set;
-        }
+        public bool Selected { get; set; }
 
         /// <summary>
         /// ID to identify connection
@@ -337,29 +324,17 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// Internal volume of the connection
         /// </summary>
-        public double Volume
-        {
-            get;
-            set;
-        }
+        public double Volume { get; set; }
 
         /// <summary>
         /// length property of connection
         /// </summary>
-        public double Length
-        {
-            get;
-            set;
-        }
+        public double Length { get; set; }
 
         /// <summary>
         /// diameter of the connection
         /// </summary>
-        public double Diameter
-        {
-            get;
-            set;
-        }
+        public double Diameter { get; set; }
 
         public ConnectionStyles ConnectionStyle { get; set; }
 

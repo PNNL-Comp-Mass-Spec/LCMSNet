@@ -36,6 +36,6 @@ namespace LcmsNet.Devices.ViewModels
             }
         }
 
-        public ReactiveCommand<Unit, Unit> ClearCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ClearCommand { get; }
     }
 }

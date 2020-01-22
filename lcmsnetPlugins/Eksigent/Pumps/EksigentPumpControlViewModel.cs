@@ -113,17 +113,17 @@ namespace LcmsNetPlugins.Eksigent.Pumps
             private set => this.RaiseAndSetIfChanged(ref statusText, value);
         }
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowMethodEditorCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowDirectControlCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowMobilePhasesCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> UpdateMethodsCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> StartPumpCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> StopPumpCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowIntrumentConfigCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowAdvancedSettingsCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowDiagnosticsCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowMainWindowCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowAlertsCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowMethodEditorCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowDirectControlCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowMobilePhasesCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> UpdateMethodsCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> StartPumpCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> StopPumpCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowIntrumentConfigCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowAdvancedSettingsCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowDiagnosticsCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowMainWindowCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ShowAlertsCommand { get; }
 
         #region Pump Event Handlers
 

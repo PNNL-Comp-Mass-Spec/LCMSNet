@@ -296,30 +296,30 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         #region Commands
 
-        public ReactiveCommand<Unit, Unit> SetFlowRateCommand { get; private set; }
-        public ReactiveCommand<Unit, double> ReadFlowRateCommand { get; private set; }
-        //public ReactiveCommand<Unit, Unit> SetMixerVolumeCommand { get; private set; }
-        //public ReactiveCommand<Unit, double> ReadMixerVolumeCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetPercentBCommand { get; private set; }
-        public ReactiveCommand<Unit, double> ReadPercentBCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetModeCommand { get; private set; }
-        public ReactiveCommand<Unit, double> ReadPressureCommand { get; private set; }
-        public CombinedReactiveCommand<Unit, double> ReadAllCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> PumpOnCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> PumpOffCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> PurgePumpCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StartPumpCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StopPumpCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetComPortCommand { get; private set; }
-        public ReactiveCommand<Unit, string> ReadMethodFromPumpCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> LoadMethodsCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SaveMethodCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetModuleDateCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetModuleNameCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RefreshInfoCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> IdentifyCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetFlowRateCommand { get; }
+        public ReactiveCommand<Unit, double> ReadFlowRateCommand { get; }
+        //public ReactiveCommand<Unit, Unit> SetMixerVolumeCommand { get; }
+        //public ReactiveCommand<Unit, double> ReadMixerVolumeCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetPercentBCommand { get; }
+        public ReactiveCommand<Unit, double> ReadPercentBCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetModeCommand { get; }
+        public ReactiveCommand<Unit, double> ReadPressureCommand { get; }
+        public CombinedReactiveCommand<Unit, double> ReadAllCommand { get; }
+        public ReactiveCommand<Unit, Unit> PumpOnCommand { get; }
+        public ReactiveCommand<Unit, Unit> PumpOffCommand { get; }
+        public ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; }
+        public ReactiveCommand<Unit, Unit> PurgePumpCommand { get; }
+        public ReactiveCommand<Unit, Unit> StartPumpCommand { get; }
+        public ReactiveCommand<Unit, Unit> StopPumpCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetComPortCommand { get; }
+        public ReactiveCommand<Unit, string> ReadMethodFromPumpCommand { get; }
+        public ReactiveCommand<Unit, Unit> LoadMethodsCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveMethodCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetModuleDateCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetModuleNameCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshInfoCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; }
+        public ReactiveCommand<Unit, Unit> IdentifyCommand { get; }
 
         #endregion
 

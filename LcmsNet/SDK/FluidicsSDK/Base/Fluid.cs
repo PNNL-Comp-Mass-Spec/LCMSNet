@@ -12,11 +12,6 @@ namespace FluidicsSDK.Base
 {
     public abstract class Fluid
     {
-        #region Members
-        #endregion
-
-        #region Constructors
-
         protected Fluid()
         {
             FluidColor = Colors.Black;
@@ -24,36 +19,16 @@ namespace FluidicsSDK.Base
             Location = null;
         }
 
-        #endregion
+        public Color FluidColor { get; }
 
-        #region Methods
+        public string Name { get; }
+
+        public FluidicsDevice Location { get; set; }
 
         // Move from current device to next device.
         public void Move(FluidicsDevice device)
         {
             Location = device;
         }
-        #endregion
-
-        #region Properties
-        public Color FluidColor
-        {
-            get;
-            private set;
-        }
-
-        public string Name
-        {
-            get;
-            private set;
-        }
-
-        public FluidicsDevice Location
-        {
-            get;
-            set;
-        }
-
-        #endregion
     }
 }

@@ -39,8 +39,8 @@ namespace LcmsNet.Devices.ViewModels
 
         public class DeviceGroup : IEquatable<DeviceGroup>, IDisposable
         {
-            public string Name { get; private set; }
-            public AdvancedDeviceGroupControlViewModel Content { get; private set; }
+            public string Name { get; }
+            public AdvancedDeviceGroupControlViewModel Content { get; }
 
             public DeviceGroup(string name)
             {

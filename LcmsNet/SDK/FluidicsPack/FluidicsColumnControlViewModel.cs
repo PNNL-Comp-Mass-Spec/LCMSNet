@@ -55,23 +55,12 @@ namespace FluidicsPack
         }
 
         #region IDeviceControl Members
-        public event EventHandler<string> NameChanged
-        {
-            add { }
-            remove { }
-        }
 
-        public event Action SaveRequired
-        {
-            add { }
-            remove { }
-        }
+        public event EventHandler<string> NameChanged;
 
-        public bool Running
-        {
-            get;
-            set;
-        }
+        public event Action SaveRequired;
+
+        public bool Running { get; set; }
 
         public IDevice Device
         {

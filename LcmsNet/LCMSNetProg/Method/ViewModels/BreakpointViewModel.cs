@@ -14,7 +14,7 @@ namespace LcmsNet.Method.ViewModels
 
         private bool isSet;
 
-        public ReactiveCommand<Unit, bool> ClickCommand { get; private set; }
+        public ReactiveCommand<Unit, bool> ClickCommand { get; }
 
         public bool IsSet
         {
@@ -39,6 +39,6 @@ namespace LcmsNet.Method.ViewModels
             IsSet = set;
         }
 
-        public bool IsSet { get; private set; }
+        public bool IsSet { get; }
     }
 }

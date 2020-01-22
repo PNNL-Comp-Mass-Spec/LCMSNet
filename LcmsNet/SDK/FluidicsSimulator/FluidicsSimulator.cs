@@ -33,20 +33,12 @@ namespace FluidicsSimulator
         /// <summary>
         /// LC Event
         /// </summary>
-        public LCEvent Event
-        {
-            get;
-            set;
-        }
+        public LCEvent Event { get; set; }
 
         /// <summary>
         /// Elapsed time
         /// </summary>
-        public TimeSpan SimulatedTimeElapsed
-        {
-            get;
-            set;
-        }
+        public TimeSpan SimulatedTimeElapsed { get; set; }
     }
 
     /// <summary>
@@ -523,61 +515,37 @@ namespace FluidicsSimulator
         /// <summary>
         /// gets or sets if the simulator is to stop on model status changes
         /// </summary>
-        public bool StopOnModelStatusChange
-        {
-            get;
-            set;
-        }
+        public bool StopOnModelStatusChange { get; set; }
 
         /// <summary>
         /// gets or sets what level of status change the simulator should stop on, if it's stopping on status changes
         /// </summary>
-        public WantedStatusChanges StopOnStatusLevel
-        {
-            get;
-            set;
-        }
+        public WantedStatusChanges StopOnStatusLevel { get; set; }
 
         /// <summary>
         /// gets or sets what level of status changes the simulator should report at the end of the simulation.
         /// </summary>
-        public WantedStatusChanges CategoriesRequested
-        {
-            get;
-            set;
-        }
+        public WantedStatusChanges CategoriesRequested { get; set; }
 
         /// <summary>
         /// gets or sets if simulator is at a breakpoint.
         /// </summary>
-        public bool AtBreakPoint
-        {
-            private set;
-            get;
-        }
+        public bool AtBreakPoint { get; private set; }
 
         /// <summary>
         /// gets if simulator is ready to take a step.
         /// </summary>
-        public bool IsReady
-        {
-            private set;
-            get;
-        }
+        public bool IsReady { get; private set; }
 
         /// <summary>
         /// gets if a simulation is in progress
         /// </summary>
-        public bool InProgress { private set; get; }
+        public bool InProgress { get; private set; }
 
         /// <summary>
         /// get or set the speed of of simulation in milliseconds
         /// </summary>
-        public int SimulationSpeed
-        {
-            get;
-            set;
-        }
+        public int SimulationSpeed { get; set; }
 
         /// <summary>
         /// get instance of the fluidics simulator.

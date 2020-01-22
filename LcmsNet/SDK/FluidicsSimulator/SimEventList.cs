@@ -15,8 +15,6 @@ namespace FluidicsSimulator
     /// </summary>
     public class SimEventList : List<LCEvent>, IComparable
     {
-
-        #region methods
         /// <summary>
         /// Just to make sure that this list can't be instantiated without a time...this is private
         /// </summary>
@@ -35,6 +33,8 @@ namespace FluidicsSimulator
             this.Time = time;
         }
 
+        public DateTime Time { get; set; }
+
         /// <summary>
         /// IComparable interface required, used to define the lists position in the SortedSet
         /// </summary>
@@ -45,16 +45,5 @@ namespace FluidicsSimulator
             var otherLst = (SimEventList)other;
             return this.Time.CompareTo(otherLst.Time);
         }
-
-        #endregion
-
-        #region properties
-        public DateTime Time
-        {
-            get;
-            set;
-        }
-
-        #endregion
     }
 }

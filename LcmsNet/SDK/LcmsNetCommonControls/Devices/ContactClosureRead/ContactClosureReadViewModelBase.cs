@@ -79,7 +79,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// <summary>
         /// Command to read the signal
         /// </summary>
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ReadStatusCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> ReadStatusCommand { get; }
 
         /// <summary>
         /// The voltage at the input

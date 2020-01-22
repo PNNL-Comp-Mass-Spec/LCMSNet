@@ -105,10 +105,10 @@ namespace LcmsNetPlugins.ASIpump
             Pump.Send("Bpr p");
         }
 
-        public ReactiveCommand<Unit, Unit> ConnectCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RunCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> AbortCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> GetPosACommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> GetPosBCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ConnectCommand { get; }
+        public ReactiveCommand<Unit, Unit> RunCommand { get; }
+        public ReactiveCommand<Unit, Unit> AbortCommand { get; }
+        public ReactiveCommand<Unit, Unit> GetPosACommand { get; }
+        public ReactiveCommand<Unit, Unit> GetPosBCommand { get; }
     }
 }

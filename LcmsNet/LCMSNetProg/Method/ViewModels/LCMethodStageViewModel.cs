@@ -515,7 +515,7 @@ namespace LcmsNet.Method.ViewModels
                 Name = methodName;
             }
 
-            public string Name { get; private set; }
+            public string Name { get; }
         }
 
         #region Event List Control for Adding, Deleting, Moving, and Rendering LC-Events

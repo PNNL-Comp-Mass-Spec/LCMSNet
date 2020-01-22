@@ -56,8 +56,8 @@ namespace LcmsNet.Devices.ViewModels
             private ObservableAsPropertyHelper<string> status;
             private string nameEdit = "";
 
-            public IDevice Device { get; private set; }
-            public IDeviceControl ViewModel { get; private set; }
+            public IDevice Device { get; }
+            public IDeviceControl ViewModel { get; }
 
             public System.Windows.Controls.UserControl View
             {
@@ -140,9 +140,9 @@ namespace LcmsNet.Devices.ViewModels
 
         public Color NotSelectedColor { get; set; }
 
-        public ReactiveCommand<Unit, Unit> RenameDeviceCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ClearErrorCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RenameDeviceCommand { get; }
+        public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClearErrorCommand { get; }
 
         private async Task InitializeSelectedDevice()
         {

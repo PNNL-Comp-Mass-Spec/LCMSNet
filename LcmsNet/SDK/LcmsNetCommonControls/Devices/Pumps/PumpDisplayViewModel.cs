@@ -220,22 +220,22 @@ namespace LcmsNetCommonControls.Devices.Pumps
             /// <summary>
             /// The timestamp
             /// </summary>
-            public DateTime Time { get; private set; }
+            public DateTime Time { get; }
 
             /// <summary>
             /// Pressure
             /// </summary>
-            public double Pressure { get; private set; }
+            public double Pressure { get; }
 
             /// <summary>
             /// Flow
             /// </summary>
-            public double Flow { get; private set; }
+            public double Flow { get; }
 
             /// <summary>
             /// Percent B
             /// </summary>
-            public double PercentB { get; private set; }
+            public double PercentB { get; }
 
             /// <summary>
             /// Constructor

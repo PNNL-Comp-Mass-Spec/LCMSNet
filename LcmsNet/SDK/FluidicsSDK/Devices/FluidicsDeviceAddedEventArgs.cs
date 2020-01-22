@@ -15,6 +15,6 @@ namespace FluidicsSDK.Devices
         /// <summary>
         /// Gets the device that was added.
         /// </summary>
-        public FluidicsDevice Device { get; private set; }
+        public FluidicsDevice Device { get; }
     }
 }

@@ -47,11 +47,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref insertIntoUnused, value);
         }
 
-        public ReactiveCommand<Unit, Unit> Column1Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> Column2Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> Column3Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> Column4Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> Column1Command { get; }
+        public ReactiveCommand<Unit, Unit> Column2Command { get; }
+        public ReactiveCommand<Unit, Unit> Column3Command { get; }
+        public ReactiveCommand<Unit, Unit> Column4Command { get; }
+        public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
         private void CloseCleanup()
         {

@@ -63,9 +63,9 @@ namespace DemoPluginLibrary
             set => this.RaiseAndSetIfChanged(ref state, value);
         }
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetACommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SetBCommand { get; private set; }
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> SetACommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> SetBCommand { get; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshCommand { get; }
 
         public override UserControl GetDefaultView()
         {

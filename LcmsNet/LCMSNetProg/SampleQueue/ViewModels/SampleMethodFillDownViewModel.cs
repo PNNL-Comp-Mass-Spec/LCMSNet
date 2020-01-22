@@ -201,13 +201,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region ReactiveCommands
 
-        public ReactiveCommand<Unit, Unit> ApplyLCMethodCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ApplyInstrumentMethodCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ApplyVolumeCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ApplyDatasetTypeCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ApplyCartConfigCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ApplyAllCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> CloseWindowCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> ApplyLCMethodCommand { get; }
+        public ReactiveCommand<Unit, Unit> ApplyInstrumentMethodCommand { get; }
+        public ReactiveCommand<Unit, Unit> ApplyVolumeCommand { get; }
+        public ReactiveCommand<Unit, Unit> ApplyDatasetTypeCommand { get; }
+        public ReactiveCommand<Unit, Unit> ApplyCartConfigCommand { get; }
+        public ReactiveCommand<Unit, Unit> ApplyAllCommand { get; }
+        public ReactiveCommand<Unit, Unit> CloseWindowCommand { get; }
 
         #endregion
 

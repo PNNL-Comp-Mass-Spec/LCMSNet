@@ -10,8 +10,8 @@ namespace LcmsNet.Method
             Except = innerEx;
         }
 
-        public int ColumnID { get; private set; }
+        public int ColumnID { get; }
 
-        public Exception Except { get; private set; }
+        public Exception Except { get; }
     }
 }

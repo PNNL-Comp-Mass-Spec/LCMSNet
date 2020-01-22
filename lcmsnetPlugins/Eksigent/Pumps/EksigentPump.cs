@@ -146,43 +146,28 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         #region Properties
 
         [PersistenceData("TotalMonitoringMinutes")]
-        public int TotalMonitoringMinutesDataToKeep
-        {
-            get;
-            set;
-        }
+        public int TotalMonitoringMinutesDataToKeep { get; set; }
+
         [PersistenceData("TotalMonitoringSecondsElapsed")]
-        public int TotalMonitoringSecondElapsed
-        {
-            get;
-            set;
-        }
+        public int TotalMonitoringSecondElapsed { get; set; }
+
         /// <summary>
         /// Gets or sets the value to wait for the instrument to go into a valid state before starting a run.
         /// </summary>
         [PersistenceData("PrepareTimeout")]
-        public int PrepareTimeout
-        {
-            get;
-            set;
-        }
+        public int PrepareTimeout { get; set; }
+
         /// <summary>
         /// Path to the methods folder.
         /// </summary>
         [PersistenceData("MethodsFolder")]
-        public string MethodsFolder
-        {
-            get;
-            set;
-        }
+        public string MethodsFolder { get; set; }
+
         /// <summary>
         /// Gets or sets the list of method names available.
         /// </summary>
-        public List<string> Methods
-        {
-            get;
-            set;
-        }
+        public List<string> Methods { get; set; }
+
         #endregion
 
         private string m_name;
@@ -202,14 +187,12 @@ namespace LcmsNetPlugins.Eksigent.Pumps
                 }
             }
         }
+
         /// <summary>
         /// Gets or sets the version of this interface
         /// </summary>
-        public string Version
-        {
-            get;
-            set;
-        }
+        public string Version { get; set; }
+
         private DeviceStatus m_status;
         /// <summary>
         /// Gets or sets Current Status of device
@@ -223,22 +206,17 @@ namespace LcmsNetPlugins.Eksigent.Pumps
                 StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
             }
         }
+
         /// <summary>
         /// Gets or sets the event used to synchronize on wait handles from other control objects.
         /// </summary>
-        public System.Threading.ManualResetEvent AbortEvent
-        {
-            get;
-            set;
-        }
+        public System.Threading.ManualResetEvent AbortEvent { get; set; }
+
         /// <summary>
         /// Gets or sets the error type status.
         /// </summary>
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
+
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
@@ -247,11 +225,8 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
         /// </summary>
-        public bool Emulation
-        {
-            get;
-            set;
-        }
+        public bool Emulation { get; set; }
+
         public List<string> GetMethods()
         {
             GetMethodsFromFolder(MethodsFolder);

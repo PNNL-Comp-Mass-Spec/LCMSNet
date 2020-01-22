@@ -8,10 +8,6 @@ namespace FluidicsPack
 {
     public abstract class FluidicsComponentBase : IDevice
     {
-
-
-        #region IDevice Members
-
         private string name;
         public string Name
         {
@@ -19,23 +15,11 @@ namespace FluidicsPack
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        public string Version
-        {
-            get;
-            set;
-        }
+        public string Version { get; set; }
 
-        public DeviceStatus Status
-        {
-            get;
-            set;
-        }
+        public DeviceStatus Status { get; set; }
 
-        public System.Threading.ManualResetEvent AbortEvent
-        {
-            get;
-            set;
-        }
+        public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
         public bool Initialize(ref string errorMessage)
         {
@@ -80,20 +64,11 @@ namespace FluidicsPack
         public event EventHandler DeviceSaveRequired;
 #pragma warning restore 0067
 
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.Fluidics;
 
-        public bool Emulation
-        {
-            get;
-            set;
-        }
-        #endregion
+        public bool Emulation { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

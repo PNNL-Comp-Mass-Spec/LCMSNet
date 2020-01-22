@@ -47,6 +47,6 @@ namespace LcmsNet.Notification
             Notifier = notifier;
         }
 
-        public INotifier Notifier { get; private set; }
+        public INotifier Notifier { get; }
     }
 }

@@ -39,7 +39,7 @@ namespace LcmsNetCommonControls.ViewModels
         /// <summary>
         /// Command to tack or untack this control's view
         /// </summary>
-        public ReactiveCommand<Unit, bool> TackUnTackCommand { get; private set; }
+        public ReactiveCommand<Unit, bool> TackUnTackCommand { get; }
 
         /// <summary>
         /// If the control is tacked or not

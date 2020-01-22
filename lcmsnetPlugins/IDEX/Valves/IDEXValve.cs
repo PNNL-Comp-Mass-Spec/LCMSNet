@@ -37,29 +37,17 @@ namespace LcmsNetPlugins.IDEX.Valves
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        public string Version
-        {
-            get;
-            set;
-        }
-        public DeviceStatus Status
-        {
-            get;
-            set;
-        }
-        public System.Threading.ManualResetEvent AbortEvent
-        {
-            get;
-            set;
-        }
+        public string Version { get; set; }
+
+        public DeviceStatus Status { get; set; }
+
+        public System.Threading.ManualResetEvent AbortEvent { get; set; }
+
         /// <summary>
         /// Gets the error type.
         /// </summary>
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
+
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
@@ -68,11 +56,8 @@ namespace LcmsNetPlugins.IDEX.Valves
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
         /// </summary>
-        public bool Emulation
-        {
-            get;
-            set;
-        }
+        public bool Emulation { get; set; }
+
         public bool Initialize(ref string errorMessage)
         {
             return true;

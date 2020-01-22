@@ -38,11 +38,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        public string Version
-        {
-            get;
-            set;
-        }
+        public string Version { get; set; }
         private DeviceStatus m_status;
         public DeviceStatus Status
         {
@@ -53,19 +49,14 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
                 StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(m_status, "Status", this));
             }
         }
-        public System.Threading.ManualResetEvent AbortEvent
-        {
-            get;
-            set;
-        }
+
+        public System.Threading.ManualResetEvent AbortEvent { get; set; }
+
         /// <summary>
         /// Gets the error type.
         /// </summary>
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
+
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
@@ -74,11 +65,8 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
         /// </summary>
-        public bool Emulation
-        {
-            get;
-            set;
-        }
+        public bool Emulation { get; set; }
+
         /// <summary>
         /// Initializes the failure injector.
         /// </summary>

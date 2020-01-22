@@ -47,7 +47,7 @@ namespace LcmsNetPlugins.VICI.Valves
             set => this.RaiseAndSetIfChanged(ref injectionVolume, value);
         }
 
-        public ReactiveCommand<Unit, Unit> SetInjectionVolumeCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetInjectionVolumeCommand { get; }
 
         public override UserControl GetDefaultView()
         {

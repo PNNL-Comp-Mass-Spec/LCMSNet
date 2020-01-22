@@ -16,6 +16,6 @@ namespace FluidicsSDK.Devices
             Value = value;
         }
 
-        public T Value { get; private set; }
+        public T Value { get; }
     }
 }

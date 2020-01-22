@@ -15,6 +15,6 @@ namespace LcmsNetSDK.Devices
         /// <summary>
         /// Gets the status message.
         /// </summary>
-        public string Message { get; private set; }
+        public string Message { get; }
     }
 }

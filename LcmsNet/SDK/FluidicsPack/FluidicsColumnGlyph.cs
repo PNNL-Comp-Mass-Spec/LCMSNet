@@ -140,10 +140,6 @@ namespace FluidicsPack
             return "";
         }
 
-        public override int CurrentState
-        {
-            get;
-            set;
-        }
+        public override int CurrentState { get; set; }
     }
 }

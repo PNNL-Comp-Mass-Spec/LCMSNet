@@ -57,16 +57,16 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         ///
         /// </summary>
-        public int RunningQueueTotal { get; private set; }
+        public int RunningQueueTotal { get; }
 
         /// <summary>
         ///
         /// </summary>
-        public int CompleteQueueTotal { get; private set; }
+        public int CompleteQueueTotal { get; }
 
         /// <summary>
         ///
         /// </summary>
-        public int WaitingQueueTotal { get; private set; }
+        public int WaitingQueueTotal { get; }
     }
 }

@@ -83,7 +83,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// <summary>
         /// Command to trigger a pulse
         /// </summary>
-        public ReactiveUI.ReactiveCommand<Unit, Unit> SendPulseCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> SendPulseCommand { get; }
 
         /// <summary>
         /// Gets or sets the output port of the device.

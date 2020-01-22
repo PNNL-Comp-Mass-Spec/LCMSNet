@@ -38,11 +38,11 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public class BlockErrorData
         {
-            public int Batch { get; private set; }
-            public int Block { get; private set; }
-            public int Column { get; private set; }
-            public string DatasetName { get; private set; }
-            public string MethodName { get; private set; }
+            public int Batch { get; }
+            public int Block { get; }
+            public int Column { get; }
+            public string DatasetName { get; }
+            public string MethodName { get; }
 
             public BlockErrorData(int batch, int block, int column, string datasetName, string methodName)
             {

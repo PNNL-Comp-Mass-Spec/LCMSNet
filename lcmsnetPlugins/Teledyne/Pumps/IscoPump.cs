@@ -2239,11 +2239,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             set => m_Status = value;
         }
 
-        public ManualResetEvent AbortEvent
-        {
-            get;
-            set;
-        }
+        public ManualResetEvent AbortEvent { get; set; }
 
         /// <summary>
         /// Error type for device

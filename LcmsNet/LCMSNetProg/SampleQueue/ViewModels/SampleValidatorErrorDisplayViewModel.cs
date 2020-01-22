@@ -34,8 +34,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public class ErrorData
         {
-            public SampleData Sample { get; private set; }
-            public SampleValidationError Error { get; private set; }
+            public SampleData Sample { get; }
+            public SampleValidationError Error { get; }
 
             public ErrorData(SampleData sample, SampleValidationError error)
             {

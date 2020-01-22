@@ -50,8 +50,8 @@ namespace LcmsNet.Devices.ViewModels
 
     public class DeviceErrorData : ReactiveObject
     {
-        public string DeviceName { get; private set; }
-        public string Error { get; private set; }
+        public string DeviceName { get; }
+        public string Error { get; }
 
         public DeviceErrorData(string deviceName, string error)
         {

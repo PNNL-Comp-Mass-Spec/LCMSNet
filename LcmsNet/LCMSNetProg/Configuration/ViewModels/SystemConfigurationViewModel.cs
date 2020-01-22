@@ -216,10 +216,10 @@ namespace LcmsNet.Configuration.ViewModels
 
         #region Commands
 
-        public ReactiveCommand<Unit, Unit> SetInstrumentCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetOperatorCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ReloadCartDataCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> BrowsePdfPathCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetInstrumentCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetOperatorCommand { get; }
+        public ReactiveCommand<Unit, Unit> ReloadCartDataCommand { get; }
+        public ReactiveCommand<Unit, Unit> BrowsePdfPathCommand { get; }
 
         #endregion
 

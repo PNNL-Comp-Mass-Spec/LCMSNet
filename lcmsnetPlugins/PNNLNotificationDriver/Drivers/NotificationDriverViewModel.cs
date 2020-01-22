@@ -18,7 +18,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
             InjectFailureCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InjectFailure()));
         }
 
-        public ReactiveCommand<Unit, Unit> InjectFailureCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> InjectFailureCommand { get; }
 
         private void InjectFailure()
         {

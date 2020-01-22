@@ -54,7 +54,7 @@ namespace DemoPluginLibrary
             set => this.RaiseAndSetIfChanged(ref timeout, value);
         }
 
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RunCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> RunCommand { get; }
 
         public override UserControl GetDefaultView()
         {

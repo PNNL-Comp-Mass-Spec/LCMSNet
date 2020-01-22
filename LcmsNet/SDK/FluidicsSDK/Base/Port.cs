@@ -155,29 +155,17 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// property for determining parent device of the port
         /// </summary>
-        public FluidicsDevice ParentDevice
-        {
-            get;
-            private set;
-        }
+        public FluidicsDevice ParentDevice { get; private set; }
 
         /// <summary>
         /// property to determine if the port is a source of a fluid into the system.
         /// </summary>
-        public bool Source
-        {
-            get;
-            set;
-        }
+        public bool Source { get; set; }
 
         /// <summary>
         /// property to determine if the port is a fluid sink out of the system.
         /// </summary>
-        public bool Sink
-        {
-            get;
-            set;
-        }
+        public bool Sink { get; set; }
 
         /// <summary>
         /// property to determine location of the port on screen.
@@ -206,11 +194,7 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// property for determining if the port is selected or not.
         /// </summary>
-        public bool Selected
-        {
-            get;
-            set;
-        }
+        public bool Selected { get; set; }
 
         /// <summary>
         /// property for getting the center of the port.

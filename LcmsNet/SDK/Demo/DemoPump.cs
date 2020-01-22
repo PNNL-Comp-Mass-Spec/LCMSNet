@@ -167,37 +167,17 @@ namespace DemoPluginLibrary
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        public string Version
-        {
-            get;
-            set;
-        }
+        public string Version { get; set; }
 
-        public DeviceStatus Status
-        {
-            get;
-            set;
-        }
+        public DeviceStatus Status { get; set; }
 
-        public System.Threading.ManualResetEvent AbortEvent
-        {
-            get;
-            set;
-        }
+        public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.Component;
 
-        public bool Emulation
-        {
-            get;
-            set;
-        }
+        public bool Emulation { get; set; }
 
 
         public double GetFlowRate()
@@ -264,14 +244,12 @@ namespace DemoPluginLibrary
                 PercentBChanged?.Invoke(this, new PumpEventArgs<double>(PercentB));
             }
         }
+
         /// <summary>
         /// Gets or sets the list of mobile phases associated with the pump.
         /// </summary>
-        public List<MobilePhase> MobilePhases
-        {
-            get;
-            set;
-        }
+        public List<MobilePhase> MobilePhases { get; set; }
+
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;

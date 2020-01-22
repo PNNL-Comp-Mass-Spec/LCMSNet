@@ -26,16 +26,8 @@ namespace FluidicsSDK.Base
             Message = message;
         }
 
-        public Point? OldLocation
-        {
-            get;
-            private set;
-        }
+        public Point? OldLocation { get; }
 
-        public string Message
-        {
-            get;
-            private set;
-        }
+        public string Message { get; }
     }
 }

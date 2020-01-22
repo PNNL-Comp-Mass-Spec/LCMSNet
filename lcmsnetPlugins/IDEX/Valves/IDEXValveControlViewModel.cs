@@ -32,8 +32,8 @@ namespace LcmsNetPlugins.IDEX.Valves
             m_valve = device as IDEXValve;
         }
 
-        public ReactiveCommand<Unit, Unit> InjectFailureCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> InjectStatusCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> InjectFailureCommand { get; }
+        public ReactiveCommand<Unit, Unit> InjectStatusCommand { get; }
 
         #region IDeviceControl Members
 #pragma warning disable 67

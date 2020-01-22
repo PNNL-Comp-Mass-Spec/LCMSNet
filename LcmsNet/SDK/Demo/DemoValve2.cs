@@ -127,11 +127,7 @@ namespace DemoPluginLibrary
         #region Properties
         public DeviceType DeviceType => DeviceType.Component;
 
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
 
         private string name;
 
@@ -141,29 +137,13 @@ namespace DemoPluginLibrary
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        public string Version
-        {
-            get;
-            set;
-        }
+        public string Version { get; set; }
 
-        public DeviceStatus Status
-        {
-            get;
-            set;
-        }
+        public DeviceStatus Status { get; set; }
 
-        public System.Threading.ManualResetEvent AbortEvent
-        {
-            get;
-            set;
-        }
+        public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
-        public bool Emulation
-        {
-            get;
-            set;
-        }
+        public bool Emulation { get; set; }
 
         public int Position { get; set; }
 

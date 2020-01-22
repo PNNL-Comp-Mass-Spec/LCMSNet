@@ -15,6 +15,6 @@ namespace LcmsNet.Method
             DeviceName = deviceName;
         }
 
-        public string DeviceName { get; private set; }
+        public string DeviceName { get; }
     }
 }

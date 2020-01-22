@@ -49,7 +49,7 @@ namespace LcmsNet.Reporting
 
         #region Button Handler Events
 
-        public ReactiveCommand<Unit, Unit> CreateReportCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> CreateReportCommand { get; }
 
         /// <summary>
         ///

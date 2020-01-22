@@ -19,6 +19,6 @@ namespace LcmsNetSDK.Devices
         /// <summary>
         /// Gets the name of the setting.
         /// </summary>
-        public string SettingName { get; private set; }
+        public string SettingName { get; }
     }
 }

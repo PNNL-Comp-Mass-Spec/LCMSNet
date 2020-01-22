@@ -305,6 +305,6 @@ namespace LcmsNet.Method.ViewModels
             Name = methodName;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; }
     }
 }

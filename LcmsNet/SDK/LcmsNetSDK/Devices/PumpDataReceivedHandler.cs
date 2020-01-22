@@ -21,14 +21,14 @@ namespace LcmsNetSDK.Devices
             PercentB = percentB;
         }
 
-        public IPump Pump { get; private set; }
+        public IPump Pump { get; }
 
-        public List<DateTime> Time { get; private set; }
+        public List<DateTime> Time { get; }
 
-        public List<double> Pressure { get; private set; }
+        public List<double> Pressure { get; }
 
-        public List<double> Flowrate { get; private set; }
+        public List<double> Flowrate { get; }
 
-        public List<double> PercentB { get; private set; }
+        public List<double> PercentB { get; }
     }
 }

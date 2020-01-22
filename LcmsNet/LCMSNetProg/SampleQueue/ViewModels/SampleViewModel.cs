@@ -21,7 +21,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #endregion
 
-        public SampleData Sample { get; private set; }
+        public SampleData Sample { get; }
 
         [Obsolete("For WPF Design time use only.", true)]
         public SampleViewModel()

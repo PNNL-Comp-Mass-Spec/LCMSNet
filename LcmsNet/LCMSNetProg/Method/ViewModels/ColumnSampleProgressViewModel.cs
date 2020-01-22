@@ -225,6 +225,6 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Gets the preview image for the sample progress
         /// </summary>
-        public BitmapSource PreviewImage { get; private set; }
+        public BitmapSource PreviewImage { get; }
     }
 }

@@ -44,21 +44,21 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Stored procedure return code
         /// </summary>
-        public int ReturnCode { get; private set; }
+        public int ReturnCode { get; }
 
         // End property
 
         /// <summary>
         /// Name of stored procedure that returned error
         /// </summary>
-        public string ProcName { get; private set; }
+        public string ProcName { get; }
 
         // End property
 
         /// <summary>
         /// Error message returned by stored procedure
         /// </summary>
-        public string ErrMessage { get; private set; }
+        public string ErrMessage { get; }
 
         // End property
 

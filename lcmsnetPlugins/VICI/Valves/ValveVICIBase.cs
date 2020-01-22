@@ -742,11 +742,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
         }
 
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.Component;
 

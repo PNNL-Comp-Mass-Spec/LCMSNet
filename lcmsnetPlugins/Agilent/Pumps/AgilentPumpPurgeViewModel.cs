@@ -74,16 +74,16 @@ namespace LcmsNetPlugins.Agilent.Pumps
             Title = "Purge Pumps " + Pump.Name;
         }
 
-        public ReactiveCommand<Unit, bool> SetA1Command { get; private set; }
-        public ReactiveCommand<Unit, bool> SetA2Command { get; private set; }
-        public ReactiveCommand<Unit, bool> SetB1Command { get; private set; }
-        public ReactiveCommand<Unit, bool> SetB2Command { get; private set; }
-        public ReactiveCommand<Unit, AgilentPumpReplyErrorCodes> AbortPurgesCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> PumpOnCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> PumpOffCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; private set; }
-        public ReactiveCommand<Unit, bool> RefreshPurgeSettingsCommand { get; private set; }
-        public ReactiveCommand<Unit, AgilentPumpReplyErrorCodes> PurgeCommand { get; private set; }
+        public ReactiveCommand<Unit, bool> SetA1Command { get; }
+        public ReactiveCommand<Unit, bool> SetA2Command { get; }
+        public ReactiveCommand<Unit, bool> SetB1Command { get; }
+        public ReactiveCommand<Unit, bool> SetB2Command { get; }
+        public ReactiveCommand<Unit, AgilentPumpReplyErrorCodes> AbortPurgesCommand { get; }
+        public ReactiveCommand<Unit, Unit> PumpOnCommand { get; }
+        public ReactiveCommand<Unit, Unit> PumpOffCommand { get; }
+        public ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; }
+        public ReactiveCommand<Unit, bool> RefreshPurgeSettingsCommand { get; }
+        public ReactiveCommand<Unit, AgilentPumpReplyErrorCodes> PurgeCommand { get; }
 
         private async Task<AgilentPumpReplyErrorCodes> StartPumpPurge()
         {

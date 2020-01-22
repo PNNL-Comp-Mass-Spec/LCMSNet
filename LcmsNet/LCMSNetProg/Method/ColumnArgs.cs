@@ -16,6 +16,6 @@ namespace LcmsNet.Method
             Sample = data;
         }
 
-        public SampleData Sample { get; private set; }
+        public SampleData Sample { get; }
     }
 }

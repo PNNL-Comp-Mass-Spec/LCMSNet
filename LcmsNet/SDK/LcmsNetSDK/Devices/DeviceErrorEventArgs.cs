@@ -54,7 +54,7 @@ namespace LcmsNetSDK.Devices
         /// <summary>
         /// Device
         /// </summary>
-        public IDevice Device { get; private set; }
+        public IDevice Device { get; }
 
         /// <summary>
         /// Notification string

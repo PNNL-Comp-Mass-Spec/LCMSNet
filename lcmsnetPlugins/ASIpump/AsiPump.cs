@@ -272,18 +272,13 @@ namespace LcmsNetPlugins.ASIpump
         #endregion
 
         #region Properties
+
         [PersistenceData("TotalMonitoringMinutes")]
-        public int TotalMonitoringMinutesDataToKeep
-        {
-            get;
-            set;
-        }
+        public int TotalMonitoringMinutesDataToKeep { get; set; }
+
         [PersistenceData("TotalMonitoringSecondsElapsed")]
-        public int TotalMonitoringSecondElapsed
-        {
-            get;
-            set;
-        }
+        public int TotalMonitoringSecondElapsed { get; set; }
+
         /// <summary>
         /// Gets or sets the Emulation state.
         /// </summary>
@@ -323,14 +318,12 @@ namespace LcmsNetPlugins.ASIpump
             get => base.PortName;
             set => base.PortName = value;
         }
+
         /// <summary>
         /// Gets or sets the error type of the last error reported.
         /// </summary>
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
+
         /// <summary>
         /// Gets the system device type.
         /// </summary>
@@ -339,11 +332,8 @@ namespace LcmsNetPlugins.ASIpump
         /// <summary>
         /// Gets or sets the abort event for scheduling.
         /// </summary>
-        public System.Threading.ManualResetEvent AbortEvent
-        {
-            get;
-            set;
-        }
+        public System.Threading.ManualResetEvent AbortEvent { get; set; }
+
         #endregion
 
         #region Methods
@@ -609,11 +599,7 @@ namespace LcmsNetPlugins.ASIpump
 
         #region IPump Members
 
-        public List<MobilePhase> MobilePhases
-        {
-            get;
-            set;
-        }
+        public List<MobilePhase> MobilePhases { get; set; }
 
         #endregion
     }

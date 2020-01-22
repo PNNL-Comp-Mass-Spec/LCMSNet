@@ -28,24 +28,24 @@ namespace LcmsNetSDK.Devices
         {
         }
 
-        public INotifier Notifier { get; private set; }
+        public INotifier Notifier { get; }
 
         #region Properties
 
         /// <summary>
         /// Gets the device status.
         /// </summary>
-        public DeviceStatus Status { get; private set; }
+        public DeviceStatus Status { get; }
 
         /// <summary>
         /// Gets or sets the message.
         /// </summary>
-        public string Message { get; private set; }
+        public string Message { get; }
 
         /// <summary>
         /// Notification string
         /// </summary>
-        public string Notification { get; private set; }
+        public string Notification { get; }
 
         /// <summary>
         /// How the event should be logged

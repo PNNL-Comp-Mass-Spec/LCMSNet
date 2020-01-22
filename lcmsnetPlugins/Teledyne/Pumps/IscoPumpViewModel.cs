@@ -41,9 +41,9 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public class RefillData : ReactiveObject
         {
-            public string PumpName { get; private set; }
+            public string PumpName { get; }
             public string PumpLabel => PumpName + ":";
-            public int PumpIndex { get; private set; }
+            public int PumpIndex { get; }
 
             public double RefillRate
             {
@@ -69,7 +69,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public class LimitData : ReactiveObject
         {
-            public string LimitName { get; private set; }
+            public string LimitName { get; }
 
             public string PumpA
             {
@@ -216,15 +216,15 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         #region Commands
 
-        public ReactiveCommand<Unit, Unit> SetControlModeCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StartAllCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StopAllCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetAllFlowCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetAllPressureCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RefillAllCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> UpdateDisplaysCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetPortSettingsCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetOperationModeCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SetControlModeCommand { get; }
+        public ReactiveCommand<Unit, Unit> StartAllCommand { get; }
+        public ReactiveCommand<Unit, Unit> StopAllCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetAllFlowCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetAllPressureCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefillAllCommand { get; }
+        public ReactiveCommand<Unit, Unit> UpdateDisplaysCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetPortSettingsCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetOperationModeCommand { get; }
 
         #endregion
 

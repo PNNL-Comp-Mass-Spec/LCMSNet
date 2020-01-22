@@ -646,17 +646,10 @@ namespace LcmsNetPlugins.Newport.ESP300
             get => m_name;
             set => this.RaiseAndSetIfChanged(ref m_name, value);
         }
-        public bool Emulation
-        {
-            get;
-            set;
-        }
 
-        public DeviceStatus Status
-        {
-            get;
-            set;
-        }
+        public bool Emulation { get; set; }
+
+        public DeviceStatus Status { get; set; }
 
         /// <summary>
         /// Gets or Sets the serial communications port associated with this ESP300.
@@ -667,11 +660,7 @@ namespace LcmsNetPlugins.Newport.ESP300
             set => this.RaiseAndSetIfChanged(ref m_port, value);
         }
 
-        public string Version
-        {
-            get;
-            set;
-        }
+        public string Version { get; set; }
 
         /// <summary>
         /// Gets the status of the serial port
@@ -926,11 +915,7 @@ namespace LcmsNetPlugins.Newport.ESP300
             return true;
         }
 
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.Component;
 

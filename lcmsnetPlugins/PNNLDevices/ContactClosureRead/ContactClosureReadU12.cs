@@ -495,14 +495,12 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         }
 
         #region IDevice Members
+
         /// <summary>
         /// Gets or sets the error type of last error.
         /// </summary>
-        public DeviceErrorStatus ErrorType
-        {
-            get;
-            set;
-        }
+        public DeviceErrorStatus ErrorType { get; set; }
+
         /// <summary>
         /// Gets or sets the device type.
         /// </summary>

@@ -102,17 +102,17 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// <summary>
         /// Command to refresh the methods list
         /// </summary>
-        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshMethodsCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> RefreshMethodsCommand { get; }
 
         /// <summary>
         /// Command to start acquisition
         /// </summary>
-        public ReactiveUI.ReactiveCommand<Unit, Unit> StartAcquisitionCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> StartAcquisitionCommand { get; }
 
         /// <summary>
         /// Command to stop acquisition
         /// </summary>
-        public ReactiveUI.ReactiveCommand<Unit, Unit> StopAcquisitionCommand { get; private set; }
+        public ReactiveUI.ReactiveCommand<Unit, Unit> StopAcquisitionCommand { get; }
 
         #endregion
 

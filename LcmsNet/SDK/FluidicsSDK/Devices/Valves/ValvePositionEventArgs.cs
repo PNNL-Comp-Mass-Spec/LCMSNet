@@ -12,6 +12,6 @@ namespace FluidicsSDK.Devices.Valves
         {
             Position = position;
         }
-        public T Position { get; private set; }
+        public T Position { get; }
     }
 }

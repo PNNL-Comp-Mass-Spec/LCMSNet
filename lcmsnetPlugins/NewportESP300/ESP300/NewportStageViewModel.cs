@@ -141,30 +141,30 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         #region Commands
 
-        public ReactiveCommand<Unit, Unit> RefreshPositionCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis1ForwardCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis2ForwardCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis3ForwardCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis1BackwardCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis2BackwardCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis3BackwardCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis1ForwardReleaseCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis2ForwardReleaseCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis3ForwardReleaseCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis1BackwardReleaseCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis2BackwardReleaseCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis3BackwardReleaseCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ResetToHomePositionCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> GoToSelectedPositionCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> DeletePositionCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SetPositionCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis1MotorPowerCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis2MotorPowerCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> Axis3MotorPowerCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> GetErrorsCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ClearErrorsCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> OpenPortCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ClosePortCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshPositionCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis1ForwardCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis2ForwardCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis3ForwardCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis1BackwardCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis2BackwardCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis3BackwardCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis1ForwardReleaseCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis2ForwardReleaseCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis3ForwardReleaseCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis1BackwardReleaseCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis2BackwardReleaseCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis3BackwardReleaseCommand { get; }
+        public ReactiveCommand<Unit, Unit> ResetToHomePositionCommand { get; }
+        public ReactiveCommand<Unit, Unit> GoToSelectedPositionCommand { get; }
+        public ReactiveCommand<Unit, Unit> DeletePositionCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetPositionCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis1MotorPowerCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis2MotorPowerCommand { get; }
+        public ReactiveCommand<Unit, Unit> Axis3MotorPowerCommand { get; }
+        public ReactiveCommand<Unit, Unit> GetErrorsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClearErrorsCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenPortCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClosePortCommand { get; }
 
         #endregion
 

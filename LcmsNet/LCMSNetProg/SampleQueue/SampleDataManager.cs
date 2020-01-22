@@ -1667,7 +1667,7 @@ namespace LcmsNet.SampleQueue
         public static IReadOnlyReactiveList<string> PalTrayOptions => palTrayOptions;
 
         // If null, no error retrieving the cart config names from the database; otherwise, the error that occurred
-        public static string CartConfigOptionsError { get; private set; }
+        public static string CartConfigOptionsError { get; }
 
         static SampleDataManager()
         {

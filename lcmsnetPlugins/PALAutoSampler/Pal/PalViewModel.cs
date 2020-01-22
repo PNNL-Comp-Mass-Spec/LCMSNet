@@ -271,14 +271,14 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         #region Commands
 
-        public ReactiveCommand<Unit, Unit> RefreshMethodListCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RunMethodCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StopMethodCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ApplyPortNameCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SelectVialsCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ResetPalCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> FullResetPalCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RefreshMethodListCommand { get; }
+        public ReactiveCommand<Unit, Unit> RunMethodCommand { get; }
+        public ReactiveCommand<Unit, Unit> StopMethodCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; }
+        public ReactiveCommand<Unit, Unit> ApplyPortNameCommand { get; }
+        public ReactiveCommand<Unit, Unit> SelectVialsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ResetPalCommand { get; }
+        public ReactiveCommand<Unit, Unit> FullResetPalCommand { get; }
 
         private async Task SelectVials()
         {
