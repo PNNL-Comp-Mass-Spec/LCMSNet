@@ -21,8 +21,18 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             controlModesComboBoxOptions = new ReactiveList<IscoControlMode>(Enum.GetValues(typeof(IscoControlMode)).Cast<IscoControlMode>());
             operationModeComboBoxOptions = new ReactiveList<IscoOperationMode>(Enum.GetValues(typeof(IscoOperationMode)).Cast<IscoOperationMode>());
             controlModesComboBoxOptions.Remove(IscoControlMode.External); // External is not an option...
-            SetupCommands();
+
             PropertyChanged += PumpIscoViewModel_PropertyChanged;
+
+            SetControlModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetControlMode));
+            StartAllCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(StartAllPumps));
+            StopAllCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(StopAllPumps));
+            SetAllFlowCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetAllFlow));
+            SetAllPressureCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetAllPressure));
+            RefillAllCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefillAll));
+            UpdateDisplaysCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshPumpDisplays));
+            SetPortSettingsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetPortProperties));
+            SetOperationModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetOperationMode));
         }
 
         #endregion
@@ -215,19 +225,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         public ReactiveCommand<Unit, Unit> UpdateDisplaysCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> SetPortSettingsCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> SetOperationModeCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            SetControlModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetControlMode()));
-            StartAllCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartAllPumps()));
-            StopAllCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopAllPumps()));
-            SetAllFlowCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetAllFlow()));
-            SetAllPressureCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetAllPressure()));
-            RefillAllCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefillAll()));
-            UpdateDisplaysCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshPumpDisplays()));
-            SetPortSettingsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPortProperties()));
-            SetOperationModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetOperationMode()));
-        }
 
         #endregion
 

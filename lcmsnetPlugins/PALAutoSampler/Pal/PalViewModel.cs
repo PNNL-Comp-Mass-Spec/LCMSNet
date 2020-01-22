@@ -29,9 +29,16 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
             vialRangeComboBoxOptions = new ReactiveList<VialRanges>(Enum.GetValues(typeof(VialRanges)).Cast<VialRanges>());
 
-            SetupCommands();
-
             this.PropertyChanged += PalViewModel_PropertyChanged;
+
+            RefreshMethodListCommand = ReactiveCommand.CreateFromTask(RefreshMethods);
+            RunMethodCommand = ReactiveCommand.CreateFromTask(RunMethod);
+            StopMethodCommand = ReactiveCommand.CreateFromTask(StopMethod);
+            RefreshStatusCommand = ReactiveCommand.CreateFromTask(RefreshStatus);
+            ApplyPortNameCommand = ReactiveCommand.Create(ApplyPortName);
+            SelectVialsCommand = ReactiveCommand.CreateFromTask(SelectVials);
+            ResetPalCommand = ReactiveCommand.CreateFromTask(ResetPal);
+            FullResetPalCommand = ReactiveCommand.CreateFromTask(FullyResetPal);
         }
 
         ~PalViewModel()
@@ -272,18 +279,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         public ReactiveCommand<Unit, Unit> SelectVialsCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> ResetPalCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> FullResetPalCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            RefreshMethodListCommand = ReactiveCommand.CreateFromTask(() => RefreshMethods());
-            RunMethodCommand = ReactiveCommand.CreateFromTask(() => RunMethod());
-            StopMethodCommand = ReactiveCommand.CreateFromTask(() => StopMethod());
-            RefreshStatusCommand = ReactiveCommand.CreateFromTask(() => RefreshStatus());
-            ApplyPortNameCommand = ReactiveCommand.Create(() => ApplyPortName());
-            SelectVialsCommand = ReactiveCommand.CreateFromTask(() => SelectVials());
-            ResetPalCommand = ReactiveCommand.CreateFromTask(() => ResetPal());
-            FullResetPalCommand = ReactiveCommand.CreateFromTask(() => FullyResetPal());
-        }
 
         private async Task SelectVials()
         {

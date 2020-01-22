@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Windows.Controls;
 using LcmsNet.Method;
@@ -14,9 +15,9 @@ namespace LcmsNet.Reporting
         private readonly string logPath;
         private readonly LCMethodManager methodManager;
 
+        [Obsolete("For WPF Design-time use only", true)]
         public CreateErrorReportViewModel()
         {
-            SetupCommands();
         }
 
         public CreateErrorReportViewModel(LCMethodManager manager, string logPath, List<ContentControl> controls)
@@ -37,7 +38,7 @@ namespace LcmsNet.Reporting
                 }
             }
 
-            SetupCommands();
+            CreateReportCommand = ReactiveCommand.Create(CreateReport);
         }
 
         private readonly ReactiveList<LCMethod> lcMethodsList = new ReactiveList<LCMethod>();
@@ -49,11 +50,6 @@ namespace LcmsNet.Reporting
         #region Button Handler Events
 
         public ReactiveCommand<Unit, Unit> CreateReportCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            CreateReportCommand = ReactiveCommand.Create(() => CreateReport());
-        }
 
         /// <summary>
         ///

@@ -95,38 +95,15 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="queue">Sample queue to provide interface to.</param>
         public SampleManagerViewModel(SampleQueue queue)
         {
-            Initialize(queue);
-            synchronizationContext = SynchronizationContext.Current;
-        }
-
-        /// <summary>
-        /// Default constructor for design time use.
-        /// </summary>
-        [Obsolete("For WPF Design time use only.", true)]
-        public SampleManagerViewModel()
-        {
-        }
-
-        #endregion
-
-        #region "methods"
-
-        /// <summary>
-        /// Initialization code.
-        /// </summary>
-        /// <param name="queue"></param>
-        private void Initialize(SampleQueue queue)
-        {
             dmsView = new DMSDownloadViewModel();
             sampleQueue = queue;
-            SetupCommands();
 
             if (sampleQueue != null)
             {
                 sampleQueue.SamplesWaitingToRun += m_sampleQueue_SamplesWaitingToRun;
             }
 
-            // Load up the data to the appropiate sub-controls.
+            // Load up the data to the appropriate sub-controls.
             SampleDataManager = new SampleDataManager(sampleQueue);
             SampleControlViewModel = new SampleControlViewModel(dmsView, SampleDataManager);
             ColumnManagerViewModel = new ColumnManagerViewModel(dmsView, SampleDataManager);
@@ -141,7 +118,38 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             // This is the text that is appended to the application title bar
             TitleBarTextAddition = "Sample Queue - " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME);
+
+            synchronizationContext = SynchronizationContext.Current;
+
+            UndoCommand = ReactiveCommand.Create(() =>
+            {
+                using (SampleControlViewModel.Samples.SuppressChangeNotifications())
+                {
+                    this.sampleQueue.Undo();
+                }
+            }, this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
+            RedoCommand = ReactiveCommand.Create(() =>
+            {
+                using (SampleControlViewModel.Samples.SuppressChangeNotifications())
+                {
+                    this.sampleQueue.Redo();
+                }
+            }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
+            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
+            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue(), this.WhenAnyValue(x => x.IsStopButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
         }
+
+        /// <summary>
+        /// Default constructor for design time use.
+        /// </summary>
+        [Obsolete("For WPF Design time use only.", true)]
+        public SampleManagerViewModel()
+        {
+        }
+
+        #endregion
+
+        #region "methods"
 
         public void PreviewAvailable(object sender, Method.ViewModels.SampleProgressPreviewArgs e)
         {
@@ -194,6 +202,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             get => titleBarTextAddition;
             private set => this.RaiseAndSetIfChanged(ref titleBarTextAddition, value);
         }
+
+        public ReactiveCommand<Unit, Unit> UndoCommand { get; }
+        public ReactiveCommand<Unit, Unit> RedoCommand { get; }
+        public ReactiveCommand<Unit, Unit> RunQueueCommand { get; }
+        public ReactiveCommand<Unit, Unit> StopQueueCommand { get; }
 
         /// <summary>
         ///
@@ -588,31 +601,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void FixScrollPosition(object obj)
         {
             SampleControlViewModel.RestoreUserUIState();
-        }
-
-        public ReactiveCommand<Unit, Unit> UndoCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RedoCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RunQueueCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StopQueueCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            UndoCommand = ReactiveCommand.Create(() =>
-            {
-                using (SampleControlViewModel.Samples.SuppressChangeNotifications())
-                {
-                    this.sampleQueue.Undo();
-                }
-            }, this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
-            RedoCommand = ReactiveCommand.Create(() =>
-            {
-                using (SampleControlViewModel.Samples.SuppressChangeNotifications())
-                {
-                    this.sampleQueue.Redo();
-                }
-            }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
-            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
-            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue(), this.WhenAnyValue(x => x.IsStopButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
         }
     }
 }

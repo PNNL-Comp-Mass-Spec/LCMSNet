@@ -12,9 +12,13 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public IscoPumpDisplayViewModel()
         {
-            SetupCommands();
             this.WhenAnyValue(x => x.MinFlowSp, x => x.MaxFlowSp, x => x.MinPressSp, x => x.MaxPressSp).Subscribe(x => UpdateSetpointLimits());
             UpdateSetpointLimits();
+
+            SetSetpointCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ChangeSetpoint));
+            StartPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(StartPumpOperation));
+            StopPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(StopPumpOperation));
+            RefillCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Refill));
         }
 
         public IscoPumpDisplayViewModel(int index) : this()
@@ -208,6 +212,15 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         #endregion
 
+        #region Commands
+
+        public ReactiveCommand<Unit, Unit> SetSetpointCommand { get; }
+        public ReactiveCommand<Unit, Unit> StartPumpCommand { get; }
+        public ReactiveCommand<Unit, Unit> StopPumpCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefillCommand { get; }
+
+        #endregion
+
         #region "Methods"
 
         /// <summary>
@@ -371,23 +384,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         private void StopPumpOperation()
         {
             StopPump?.Invoke(this, pumpIndex);
-        }
-
-        #endregion
-
-        #region Commands
-
-        public ReactiveCommand<Unit, Unit> SetSetpointCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StartPumpCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StopPumpCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RefillCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            SetSetpointCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ChangeSetpoint()));
-            StartPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPumpOperation()));
-            StopPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopPumpOperation()));
-            RefillCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Refill()));
         }
 
         #endregion

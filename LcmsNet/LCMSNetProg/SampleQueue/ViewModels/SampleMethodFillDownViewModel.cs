@@ -209,17 +209,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveCommand<Unit, Unit> ApplyAllCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> CloseWindowCommand { get; private set; }
 
-        private void SetupCommands()
-        {
-            ApplyLCMethodCommand = ReactiveCommand.Create(() => this.LCMethodFillDown());
-            ApplyInstrumentMethodCommand = ReactiveCommand.Create(() => this.InstrumentMethodFillDown());
-            ApplyVolumeCommand = ReactiveCommand.Create(() => this.VolumeFillDown());
-            ApplyDatasetTypeCommand = ReactiveCommand.Create(() => this.DatasetTypeFillDown());
-            ApplyCartConfigCommand = ReactiveCommand.Create(() => this.CartConfigFillDown());
-            ApplyAllCommand = ReactiveCommand.Create(() => this.ApplyAllFillDown());
-            CloseWindowCommand = ReactiveCommand.Create(() => this.CloseWindow());
-        }
-
         #endregion
 
         #region Properties
@@ -238,7 +227,13 @@ namespace LcmsNet.SampleQueue.ViewModels
                 return;
             }
 
-            SetupCommands();
+            ApplyLCMethodCommand = ReactiveCommand.Create(LCMethodFillDown);
+            ApplyInstrumentMethodCommand = ReactiveCommand.Create(InstrumentMethodFillDown);
+            ApplyVolumeCommand = ReactiveCommand.Create(VolumeFillDown);
+            ApplyDatasetTypeCommand = ReactiveCommand.Create(DatasetTypeFillDown);
+            ApplyCartConfigCommand = ReactiveCommand.Create(CartConfigFillDown);
+            ApplyAllCommand = ReactiveCommand.Create(ApplyAllFillDown);
+            CloseWindowCommand = ReactiveCommand.Create(CloseWindow);
 
             // Set initial dropdown values
             EnsureItemsAreSelected();

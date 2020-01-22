@@ -30,7 +30,10 @@ namespace LcmsNet.Method.ViewModels
             BindingOperations.EnableCollectionSynchronization(MethodsComboBoxOptions, methodsComboBoxOptionsLock);
             BindingOperations.EnableCollectionSynchronization(SelectedListLCMethods, selectedLcMethodNamesLock);
 
-            SetupCommands();
+            AddCommand = ReactiveCommand.Create(() => AddMethodToList(), this.WhenAnyValue(x => x.SelectedLCMethod, x => x.listSelectedLcMethods.Count).Select(x => !this.listSelectedLcMethods.Contains(SelectedLCMethod)));
+            RemoveCommand = ReactiveCommand.Create(() => RemoveSelectedMethods(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
+            MoveUpCommand = ReactiveCommand.Create(() => MoveSelectedItemsUp(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
+            MoveDownCommand = ReactiveCommand.Create(() => MoveSelectedItemsDown(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
         }
 
         /// <summary>
@@ -66,6 +69,11 @@ namespace LcmsNet.Method.ViewModels
         /// LC Methods currently selected in the listbox for manipulation
         /// </summary>
         public ReactiveList<LCMethod> SelectedListLCMethods => selectedListLcMethods;
+
+        public ReactiveCommand<Unit, Unit> AddCommand { get; }
+        public ReactiveCommand<Unit, Unit> RemoveCommand { get; }
+        public ReactiveCommand<Unit, Unit> MoveUpCommand { get; }
+        public ReactiveCommand<Unit, Unit> MoveDownCommand { get; }
 
         #region Events and Delegates
 
@@ -290,18 +298,5 @@ namespace LcmsNet.Method.ViewModels
         }
 
         #endregion
-
-        public ReactiveCommand<Unit, Unit> AddCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RemoveCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveUpCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveDownCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            AddCommand = ReactiveCommand.Create(() => AddMethodToList(), this.WhenAnyValue(x => x.SelectedLCMethod, x => x.listSelectedLcMethods.Count).Select(x => !this.listSelectedLcMethods.Contains(SelectedLCMethod)));
-            RemoveCommand = ReactiveCommand.Create(() => RemoveSelectedMethods(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
-            MoveUpCommand = ReactiveCommand.Create(() => MoveSelectedItemsUp(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
-            MoveDownCommand = ReactiveCommand.Create(() => MoveSelectedItemsDown(), this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
-        }
     }
 }

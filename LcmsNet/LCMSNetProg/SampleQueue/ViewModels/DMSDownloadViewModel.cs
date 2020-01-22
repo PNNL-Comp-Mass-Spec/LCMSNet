@@ -25,6 +25,36 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public string DMSConnStr { get; set; }
 
+        /// <summary>
+        /// Command for FIND button to load available request list from DMS
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> FindCommand { get; }
+
+        /// <summary>
+        /// Command for MoveDown button to move requests from Available Requests to Requests To Run list
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> MoveDownCommand { get; }
+
+        /// <summary>
+        /// Command for MoveUp button to move requests from Requests To Run to Available Requests list
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> MoveUpCommand { get; }
+
+        /// <summary>
+        /// Command for OK button to tell calling form that new DMS data is available
+        /// </summary>
+        public ReactiveCommand<Unit, bool> OkCommand { get; }
+
+        /// <summary>
+        /// Command to trigger list of carts in combo boxes to be updated
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> RefreshCartInfoCommand { get; }
+
+        /// <summary>
+        /// Command to sort available requests by batch, block, and run order
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> SortByBatchBlockRunOrderCommand { get; }
+
         #endregion
 
         #region "Class variables"
@@ -162,59 +192,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #endregion
 
-        #region "Event Handlers"
-
-        /// <summary>
-        /// Command for FIND button to load available request list from DMS
-        /// </summary>
-        public ReactiveCommand<Unit, Unit> FindCommand { get; protected set; }
-
-        /// <summary>
-        /// Command for MoveDown button to move requests from Available Requests to Requests To Run list
-        /// </summary>
-        public ReactiveCommand<Unit, Unit> MoveDownCommand { get; protected set; }
-
-        /// <summary>
-        /// Command for MoveUp button to move requests from Requests To Run to Available Requests list
-        /// </summary>
-        public ReactiveCommand<Unit, Unit> MoveUpCommand { get; protected set; }
-
-        /// <summary>
-        /// Command for OK button to tell calling form that new DMS data is available
-        /// </summary>
-        public ReactiveCommand<Unit, bool> OkCommand { get; protected set; }
-
-        /// <summary>
-        /// Command to trigger list of carts in combo boxes to be updated
-        /// </summary>
-        public ReactiveCommand<Unit, Unit> RefreshCartInfoCommand { get; protected set; }
-
-        /// <summary>
-        /// Command to sort available requests by batch, block, and run order
-        /// </summary>
-        public ReactiveCommand<Unit, Unit> SortByBatchBlockRunOrderCommand { get; protected set; }
-
-        private void SetupCommands()
-        {
-            FindCommand = ReactiveCommand.CreateFromTask(FindDmsRequests);
-            MoveDownCommand = ReactiveCommand.Create(MoveRequestsToRunList);
-            MoveUpCommand = ReactiveCommand.Create(RemoveRequestsFromRunList);
-            OkCommand = ReactiveCommand.Create(UpdateDMSCartAssignment);
-            RefreshCartInfoCommand = ReactiveCommand.Create(RefreshCartInfo);
-            SortByBatchBlockRunOrderCommand = ReactiveCommand.CreateFromTask(SortByBatchBlockRunOrder, this.WhenAnyValue(x => x.BlockingEnabled));
-        }
-
-        /// <summary>
-        /// Causes list of carts in combo boxes to be updated
-        /// </summary>
-        private void RefreshCartInfo()
-        {
-            RefreshCartList();
-            RefreshCartConfigList();
-        }
-
-        #endregion
-
         #region "Methods"
 
         /// <summary>
@@ -230,7 +207,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             // Initialize form controls
             InitFormControls();
-            SetupCommands();
+
+            FindCommand = ReactiveCommand.CreateFromTask(FindDmsRequests);
+            MoveDownCommand = ReactiveCommand.Create(MoveRequestsToRunList);
+            MoveUpCommand = ReactiveCommand.Create(RemoveRequestsFromRunList);
+            OkCommand = ReactiveCommand.Create(UpdateDMSCartAssignment);
+            RefreshCartInfoCommand = ReactiveCommand.Create(RefreshCartInfo);
+            SortByBatchBlockRunOrderCommand = ReactiveCommand.CreateFromTask(SortByBatchBlockRunOrder, this.WhenAnyValue(x => x.BlockingEnabled));
         }
 
         /// <summary>
@@ -271,6 +254,15 @@ namespace LcmsNet.SampleQueue.ViewModels
                 // No cart name is assigned, user will need to select one
                 CartName = "";
             }
+        }
+
+        /// <summary>
+        /// Causes list of carts in combo boxes to be updated
+        /// </summary>
+        private void RefreshCartInfo()
+        {
+            RefreshCartList();
+            RefreshCartConfigList();
         }
 
         /// <summary>

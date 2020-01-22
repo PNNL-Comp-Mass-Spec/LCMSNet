@@ -30,7 +30,9 @@ namespace LcmsNet.Devices.ViewModels
                 addedPlugins.Add(devices[7]);
                 SelectedPlugins.Add(devices[2]);
             }
-            SetupCommands();
+
+            AddCommand = ReactiveCommand.Create(() => AddSelectedNode(), this.WhenAnyValue(x => x.SelectedPlugin, x => x.addedPlugins).Select(x => x.Item1 != null && !x.Item2.Any(y => y.DisplayName.Equals(x.Item1.DisplayName))));
+            RemoveCommand = ReactiveCommand.Create(() => RemoveSelectedItems(), this.WhenAnyValue(x => x.SelectedPlugins.Count).Select(x => x > 0));
         }
 
         private bool initializeOnAdd = false;
@@ -57,6 +59,9 @@ namespace LcmsNet.Devices.ViewModels
             get => selectedPlugin;
             set => this.RaiseAndSetIfChanged(ref selectedPlugin, value);
         }
+
+        public ReactiveCommand<Unit, Unit> AddCommand { get; }
+        public ReactiveCommand<Unit, Unit> RemoveCommand { get; }
 
         /// <summary>
         /// Adds the supplied plugins to the check box list.
@@ -107,15 +112,6 @@ namespace LcmsNet.Devices.ViewModels
                     addedPlugins.RemoveAll(SelectedPlugins);
                 }
             }
-        }
-
-        public ReactiveCommand<Unit, Unit> AddCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RemoveCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            AddCommand = ReactiveCommand.Create(() => AddSelectedNode(), this.WhenAnyValue(x => x.SelectedPlugin, x => x.addedPlugins).Select(x => x.Item1 != null && !x.Item2.Any(y => y.DisplayName.Equals(x.Item1.DisplayName))));
-            RemoveCommand = ReactiveCommand.Create(() => RemoveSelectedItems(), this.WhenAnyValue(x => x.SelectedPlugins.Count).Select(x => x > 0));
         }
     }
 

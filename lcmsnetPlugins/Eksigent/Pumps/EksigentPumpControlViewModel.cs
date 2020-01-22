@@ -15,7 +15,17 @@ namespace LcmsNetPlugins.Eksigent.Pumps
     {
         public EksigentPumpControlViewModel()
         {
-            SetupCommands();
+            ShowMethodEditorCommand = ReactiveUI.ReactiveCommand.Create(ShowMethodMenu);
+            ShowDirectControlCommand = ReactiveUI.ReactiveCommand.Create(ShowDirectControl);
+            ShowMobilePhasesCommand = ReactiveUI.ReactiveCommand.Create(ShowMobilePhaseMenu);
+            UpdateMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(UpdateMethods));
+            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(StartPump));
+            StopPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(StopPump));
+            ShowIntrumentConfigCommand = ReactiveUI.ReactiveCommand.Create(ShowInstrumentConfig);
+            ShowAdvancedSettingsCommand = ReactiveUI.ReactiveCommand.Create(ShowAdvancedSettings);
+            ShowDiagnosticsCommand = ReactiveUI.ReactiveCommand.Create(ShowDiagnosticsMenu);
+            ShowMainWindowCommand = ReactiveUI.ReactiveCommand.Create(ShowMainWindow);
+            ShowAlertsCommand = ReactiveUI.ReactiveCommand.Create(ShowAlertsMenu);
         }
 
         public void RegisterDevice(IDevice device)
@@ -46,13 +56,13 @@ namespace LcmsNetPlugins.Eksigent.Pumps
 
         #region IDeviceControl Members
 
-        public IDevice Device
+        public override IDevice Device
         {
             get => m_pump;
             set => RegisterDevice(value);
         }
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new EksigentPumpControlView();
         }
@@ -114,21 +124,6 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         public ReactiveUI.ReactiveCommand<Unit, Unit> ShowDiagnosticsCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> ShowMainWindowCommand { get; private set; }
         public ReactiveUI.ReactiveCommand<Unit, Unit> ShowAlertsCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            ShowMethodEditorCommand = ReactiveUI.ReactiveCommand.Create(() => ShowMethodMenu());
-            ShowDirectControlCommand = ReactiveUI.ReactiveCommand.Create(() => ShowDirectControl());
-            ShowMobilePhasesCommand = ReactiveUI.ReactiveCommand.Create(() => ShowMobilePhaseMenu());
-            UpdateMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => UpdateMethods()));
-            StartPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()));
-            StopPumpCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopPump()));
-            ShowIntrumentConfigCommand = ReactiveUI.ReactiveCommand.Create(() => ShowInstrumentConfig());
-            ShowAdvancedSettingsCommand = ReactiveUI.ReactiveCommand.Create(() => ShowAdvancedSettings());
-            ShowDiagnosticsCommand = ReactiveUI.ReactiveCommand.Create(() => ShowDiagnosticsMenu());
-            ShowMainWindowCommand = ReactiveUI.ReactiveCommand.Create(() => ShowMainWindow());
-            ShowAlertsCommand = ReactiveUI.ReactiveCommand.Create(() => ShowAlertsMenu());
-        }
 
         #region Pump Event Handlers
 

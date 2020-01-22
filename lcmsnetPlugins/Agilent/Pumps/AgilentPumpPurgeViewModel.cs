@@ -16,7 +16,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public AgilentPumpPurgeViewModel()
         {
             Title = "Purge Pumps Unknown";
-            SetupCommands();
             Pump = new AgilentPump(true);
             Pump.Emulation = true;
         }
@@ -30,7 +29,18 @@ namespace LcmsNetPlugins.Agilent.Pumps
             Pump = pump;
             Pump.DeviceSaveRequired += Pump_DeviceSaveRequired;
             Title = "Purge Pumps " + Pump.Name;
-            SetupCommands();
+
+            SetA1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelA1)));
+            SetA2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelA2)));
+            SetB1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelB1)));
+            SetB2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelB2)));
+            AbortPurgesCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.AbortPurges(0)));
+            PumpOnCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.On));
+            PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
+            PumpStandbyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Standby));
+            RefreshPurgeSettingsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.LoadPurgeData()));
+            PurgeCommand = ReactiveCommand.CreateFromTask(StartPumpPurge, this.WhenAnyValue(x => x.Pump.PumpState, x => x.Pump.PumpStatus.NotReadyState, x => x.Pump.PumpStatus.NotReadyReasons)
+                .Select(x => x.Item1 != PumpState.Off && x.Item1 != PumpState.Standby && (x.Item2 == AgilentPumpStateNotReady.READY || x.Item3.HasFlag(AgilentPumpNotReadyStates.Flow_Init))));
         }
 
         /// <summary>
@@ -74,21 +84,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; private set; }
         public ReactiveCommand<Unit, bool> RefreshPurgeSettingsCommand { get; private set; }
         public ReactiveCommand<Unit, AgilentPumpReplyErrorCodes> PurgeCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            SetA1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelA1)));
-            SetA2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelA2)));
-            SetB1Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelB1)));
-            SetB2Command = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPurgeData(ChannelB2)));
-            AbortPurgesCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.AbortPurges(0)));
-            PumpOnCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.On));
-            PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Off));
-            PumpStandbyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.Pump.PumpState).Select(x => x != PumpState.Standby));
-            RefreshPurgeSettingsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.LoadPurgeData()));
-            PurgeCommand = ReactiveCommand.CreateFromTask(StartPumpPurge, this.WhenAnyValue(x => x.Pump.PumpState, x => x.Pump.PumpStatus.NotReadyState, x => x.Pump.PumpStatus.NotReadyReasons)
-                .Select(x => x.Item1 != PumpState.Off && x.Item1 != PumpState.Standby && (x.Item2 == AgilentPumpStateNotReady.READY || x.Item3.HasFlag(AgilentPumpNotReadyStates.Flow_Init))));
-        }
 
         private async Task<AgilentPumpReplyErrorCodes> StartPumpPurge()
         {

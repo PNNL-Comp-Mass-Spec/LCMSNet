@@ -27,41 +27,44 @@ namespace LcmsNet.Simulator.ViewModels
             simInstance.EventSimulated += SimInstance_EventExecuting;
             simInstance.SimulationComplete += SimInstance_SimulationComplete;
 
-            selectedMethods = new LCMethodSelectionViewModel();
-            selectedMethods.MethodAdded += SelectedMethods_MethodAdded;
-            selectedMethods.MethodDeleted += SelectedMethods_MethodDeleted;
-            selectedMethods.MethodUpdated += SelectedMethods_MethodUpdated;
+            SelectedMethods = new LCMethodSelectionViewModel();
+            SelectedMethods.MethodAdded += SelectedMethods_MethodAdded;
+            SelectedMethods.MethodDeleted += SelectedMethods_MethodDeleted;
+            SelectedMethods.MethodUpdated += SelectedMethods_MethodUpdated;
 
-            reporter = new ModelCheckReportsViewModel(FluidicsModerator.Moderator);
-            ganttChartTimelineVm = new LCMethodTimelineViewModel();
-            ganttChartTimelineVm.RenderMode = LCMethodRenderMode.Column;
-            conversationChartTimelineVm = new LCMethodTimelineViewModel();
-            conversationChartTimelineVm.RenderMode = LCMethodRenderMode.Conversation;
+            Reporter = new ModelCheckReportsViewModel(FluidicsModerator.Moderator);
+            GanttChartTimelineVm = new LCMethodTimelineViewModel();
+            GanttChartTimelineVm.RenderMode = LCMethodRenderMode.Column;
+            ConversationChartTimelineVm = new LCMethodTimelineViewModel();
+            ConversationChartTimelineVm.RenderMode = LCMethodRenderMode.Conversation;
 
-            reporterPopoutVm = new PopoutViewModel(reporter);
-            ganttChartTimelinePopoutVm = new PopoutViewModel(ganttChartTimelineVm);
-            conversationChartTimelinePopoutVm = new PopoutViewModel(conversationChartTimelineVm);
+            ReporterPopoutVm = new PopoutViewModel(Reporter);
+            GanttChartTimelinePopoutVm = new PopoutViewModel(GanttChartTimelineVm);
+            ConversationChartTimelinePopoutVm = new PopoutViewModel(ConversationChartTimelineVm);
 
-            SetupCommands();
+            ResetCommand = ReactiveCommand.Create(Reset);
+            PauseCommand = ReactiveCommand.Create(Pause);
+            PlayCommand = ReactiveCommand.Create(Play);
+            StepCommand = ReactiveCommand.Create(Step);
+            StopCommand = ReactiveCommand.Create(Stop);
         }
 
         private DateTime startTime;
         private readonly FluidicsSimulator.FluidicsSimulator simInstance;
-        private readonly LCMethodSelectionViewModel selectedMethods;
-        private readonly ModelCheckReportsViewModel reporter;
-        private readonly LCMethodTimelineViewModel ganttChartTimelineVm;
-        private readonly LCMethodTimelineViewModel conversationChartTimelineVm;
-        private readonly PopoutViewModel reporterPopoutVm;
-        private readonly PopoutViewModel ganttChartTimelinePopoutVm;
-        private readonly PopoutViewModel conversationChartTimelinePopoutVm;
 
-        public LCMethodSelectionViewModel SelectedMethods => selectedMethods;
-        public ModelCheckReportsViewModel Reporter => reporter;
-        public LCMethodTimelineViewModel GanttChartTimelineVm => ganttChartTimelineVm;
-        public LCMethodTimelineViewModel ConversationChartTimelineVm => conversationChartTimelineVm;
-        public PopoutViewModel ReporterPopoutVm => reporterPopoutVm;
-        public PopoutViewModel GanttChartTimelinePopoutVm => ganttChartTimelinePopoutVm;
-        public PopoutViewModel ConversationChartTimelinePopoutVm => conversationChartTimelinePopoutVm;
+        public LCMethodSelectionViewModel SelectedMethods { get; }
+        public ModelCheckReportsViewModel Reporter { get; }
+        public LCMethodTimelineViewModel GanttChartTimelineVm { get; }
+        public LCMethodTimelineViewModel ConversationChartTimelineVm { get; }
+        public PopoutViewModel ReporterPopoutVm { get; }
+        public PopoutViewModel GanttChartTimelinePopoutVm { get; }
+        public PopoutViewModel ConversationChartTimelinePopoutVm { get; }
+
+        public ReactiveCommand<Unit, Unit> ResetCommand { get; }
+        public ReactiveCommand<Unit, Unit> PauseCommand { get; }
+        public ReactiveCommand<Unit, Unit> PlayCommand { get; }
+        public ReactiveCommand<Unit, Unit> StepCommand { get; }
+        public ReactiveCommand<Unit, Unit> StopCommand { get; }
 
         /// <summary>
         /// Aligns then renders the methods selected from the user interface.
@@ -72,7 +75,7 @@ namespace LcmsNet.Simulator.ViewModels
             try
             {
                 var optimizer = new LCMethodOptimizer();
-                var methods = selectedMethods.SelectedMethods;
+                var methods = SelectedMethods.SelectedMethods;
 
                 if (methods.Count > 0)
                 {
@@ -170,7 +173,7 @@ namespace LcmsNet.Simulator.ViewModels
 
         private void SimInstance_EventExecuting(object sender, SimulatedEventArgs e)
         {
-            var methods = selectedMethods.SelectedMethods;
+            var methods = SelectedMethods.SelectedMethods;
             var index = -1;
             var count = 0;
             var optimizer = new LCMethodOptimizer();
@@ -224,7 +227,7 @@ namespace LcmsNet.Simulator.ViewModels
         private void PrepSim()
         {
             var optimizer = new LCMethodOptimizer();
-            var methodsToRun = selectedMethods.SelectedMethods;
+            var methodsToRun = SelectedMethods.SelectedMethods;
             optimizer.AlignMethods(methodsToRun);
             RenderThroughput(methodsToRun);
             simInstance.PrepSimulation(methodsToRun);
@@ -259,21 +262,6 @@ namespace LcmsNet.Simulator.ViewModels
                 return ConfirmNoEmulation();
             }
             return true;
-        }
-
-        public ReactiveCommand<Unit, Unit> ResetCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> PauseCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> PlayCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StepCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> StopCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            ResetCommand = ReactiveCommand.Create(() => this.Reset());
-            PauseCommand = ReactiveCommand.Create(() => this.Pause());
-            PlayCommand = ReactiveCommand.Create(() => this.Play());
-            StepCommand = ReactiveCommand.Create(() => this.Step());
-            StopCommand = ReactiveCommand.Create(() => this.Stop());
         }
     }
 }

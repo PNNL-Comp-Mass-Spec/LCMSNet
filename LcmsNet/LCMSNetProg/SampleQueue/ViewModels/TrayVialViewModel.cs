@@ -44,9 +44,18 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
                 return x.Tray == TrayNumber;
             }, signalReset: this.WhenAnyValue(x => x.ShowUnassigned));
-            SetupCommands();
 
             FilteredSamples.WhenAnyValue(x => x.Count).Subscribe(x => this.RaisePropertyChanged(nameof(SampleCount)));
+
+            AssignSelectedToVialCommand = ReactiveCommand.Create(() => AssignSelectedToVial(this.AssignVial), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            AutoAssignVialsCommand = ReactiveCommand.Create(AutoAssignVials, this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray1Command = ReactiveCommand.Create(() => UpdateTrayAssignment(1), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray2Command = ReactiveCommand.Create(() => UpdateTrayAssignment(2), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray3Command = ReactiveCommand.Create(() => UpdateTrayAssignment(3), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray4Command = ReactiveCommand.Create(() => UpdateTrayAssignment(4), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray5Command = ReactiveCommand.Create(() => UpdateTrayAssignment(5), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray6Command = ReactiveCommand.Create(() => UpdateTrayAssignment(6), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToUnassignedCommand = ReactiveCommand.Create(() => UpdateTrayAssignment(0), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
         }
 
         #endregion
@@ -93,6 +102,16 @@ namespace LcmsNet.SampleQueue.ViewModels
             get => maxVials;
             set => this.RaiseAndSetIfChanged(ref maxVials, value);
         }
+
+        public ReactiveCommand<Unit, Unit> AssignSelectedToVialCommand { get; }
+        public ReactiveCommand<Unit, Unit> AutoAssignVialsCommand { get; }
+        public ReactiveCommand<Unit, Unit> MoveToTray1Command { get; }
+        public ReactiveCommand<Unit, Unit> MoveToTray2Command { get; }
+        public ReactiveCommand<Unit, Unit> MoveToTray3Command { get; }
+        public ReactiveCommand<Unit, Unit> MoveToTray4Command { get; }
+        public ReactiveCommand<Unit, Unit> MoveToTray5Command { get; }
+        public ReactiveCommand<Unit, Unit> MoveToTray6Command { get; }
+        public ReactiveCommand<Unit, Unit> MoveToUnassignedCommand { get; }
 
         #endregion
 
@@ -157,28 +176,5 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         #endregion
-
-        public ReactiveCommand<Unit, Unit> AssignSelectedToVialCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> AutoAssignVialsCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveToTray1Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveToTray2Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveToTray3Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveToTray4Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveToTray5Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveToTray6Command { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveToUnassignedCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            AssignSelectedToVialCommand = ReactiveCommand.Create(() => this.AssignSelectedToVial(this.AssignVial), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            AutoAssignVialsCommand = ReactiveCommand.Create(() => this.AutoAssignVials(), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray1Command = ReactiveCommand.Create(() => this.UpdateTrayAssignment(1), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray2Command = ReactiveCommand.Create(() => this.UpdateTrayAssignment(2), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray3Command = ReactiveCommand.Create(() => this.UpdateTrayAssignment(3), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray4Command = ReactiveCommand.Create(() => this.UpdateTrayAssignment(4), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray5Command = ReactiveCommand.Create(() => this.UpdateTrayAssignment(5), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray6Command = ReactiveCommand.Create(() => this.UpdateTrayAssignment(6), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToUnassignedCommand = ReactiveCommand.Create(() => this.UpdateTrayAssignment(0), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-        }
     }
 }

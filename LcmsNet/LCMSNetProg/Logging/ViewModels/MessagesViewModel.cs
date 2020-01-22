@@ -21,7 +21,9 @@ namespace LcmsNet.Logging.ViewModels
             lockMessageList = new object();
             lockErrorList = new object();
             BindingOperations.EnableCollectionSynchronization(MessageList, lockMessageList);
-            SetupCommands();
+
+            AcknowledgeErrorsCommand = ReactiveCommand.Create(this.AcknowledgeErrors);
+            ClearMessagesCommand = ReactiveCommand.Create(ClearMessages);
         }
 
         /// <summary>
@@ -126,19 +128,6 @@ namespace LcmsNet.Logging.ViewModels
             }
         }
 
-        #region Commands
-
-        public ReactiveCommand<Unit, Unit> AcknowledgeErrorsCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ClearMessagesCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            AcknowledgeErrorsCommand = ReactiveCommand.Create(() => this.AcknowledgeErrors());
-            ClearMessagesCommand = ReactiveCommand.Create(() => ClearMessages());
-        }
-
-        #endregion
-
         #region Members
 
         /// <summary>
@@ -199,6 +188,9 @@ namespace LcmsNet.Logging.ViewModels
 
         public IReadOnlyReactiveList<string> MessageList => messageList;
         public IReadOnlyReactiveList<string> ErrorMessages => errorMessages;
+
+        public ReactiveCommand<Unit, Unit> AcknowledgeErrorsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClearMessagesCommand { get; }
 
         #endregion
     }

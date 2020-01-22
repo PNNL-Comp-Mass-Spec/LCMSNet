@@ -63,7 +63,17 @@ namespace LcmsNet.Method.ViewModels
             BindingOperations.EnableCollectionSynchronization(ColumnComboBoxOptions, columnComboBoxOptionsLock);
             BindingOperations.EnableCollectionSynchronization(LCMethodEvents, lcMethodEventsLock);
 
-            SetupCommands();
+            LoadMethodCommand = ReactiveCommand.Create(LoadMethods);
+            SaveMethodCommand = ReactiveCommand.Create(SaveSelectedMethod, this.WhenAnyValue(x => x.CanSave));
+            SaveAllMethodsCommand = ReactiveCommand.Create(SaveMethods, this.WhenAnyValue(x => x.CanSave));
+            BuildMethodCommand = ReactiveCommand.Create(BuildSelectedMethod, this.WhenAnyValue(x => x.CanBuild));
+            UpdateMethodCommand = ReactiveCommand.Create(UpdateSelectedMethod, this.WhenAnyValue(x => x.CanUpdate));
+            AddEventCommand = ReactiveCommand.Create(AddEvent);
+            RemoveEventCommand = ReactiveCommand.Create(DeleteEvent);
+            MoveEventUpCommand = ReactiveCommand.Create(MoveEventUp);
+            MoveEventDownCommand = ReactiveCommand.Create(MoveEventDown);
+            SelectAllCommand = ReactiveCommand.Create(() => SetAllEventSelect(true));
+            DeselectAllCommand = ReactiveCommand.Create(() => SetAllEventSelect(false));
 
             this.WhenAnyValue(x => x.SelectedColumn, x => x.AllowPreOverlap, x => x.AllowPostOverlap).Subscribe(x => this.OnEventChanged());
             this.WhenAnyValue(x => x.SelectedSavedMethod).Subscribe(x => this.SelectedSavedMethodChanged());
@@ -164,6 +174,18 @@ namespace LcmsNet.Method.ViewModels
         /// Gets or sets what folder path the methods are stored in.
         /// </summary>
         public string MethodFolderPath { get; set; }
+
+        public ReactiveCommand<Unit, Unit> LoadMethodCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveMethodCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveAllMethodsCommand { get; }
+        public ReactiveCommand<Unit, Unit> BuildMethodCommand { get; }
+        public ReactiveCommand<Unit, Unit> UpdateMethodCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddEventCommand { get; }
+        public ReactiveCommand<Unit, Unit> RemoveEventCommand { get; }
+        public ReactiveCommand<Unit, Unit> MoveEventUpCommand { get; }
+        public ReactiveCommand<Unit, Unit> MoveEventDownCommand { get; }
+        public ReactiveCommand<Unit, Unit> SelectAllCommand { get; }
+        public ReactiveCommand<Unit, Unit> DeselectAllCommand { get; }
 
         bool Manager_MethodUpdated(object sender, LCMethod method)
         {
@@ -935,32 +957,5 @@ namespace LcmsNet.Method.ViewModels
         }
 
         #endregion
-
-        public ReactiveCommand<Unit, Unit> LoadMethodCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SaveMethodCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SaveAllMethodsCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> BuildMethodCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> UpdateMethodCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> AddEventCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RemoveEventCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveEventUpCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveEventDownCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SelectAllCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> DeselectAllCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            LoadMethodCommand = ReactiveCommand.Create(() => LoadMethods());
-            SaveMethodCommand = ReactiveCommand.Create(() => SaveSelectedMethod(), this.WhenAnyValue(x => x.CanSave));
-            SaveAllMethodsCommand = ReactiveCommand.Create(() => SaveMethods(), this.WhenAnyValue(x => x.CanSave));
-            BuildMethodCommand = ReactiveCommand.Create(() => BuildSelectedMethod(), this.WhenAnyValue(x => x.CanBuild));
-            UpdateMethodCommand = ReactiveCommand.Create(() => UpdateSelectedMethod(), this.WhenAnyValue(x => x.CanUpdate));
-            AddEventCommand = ReactiveCommand.Create(() => AddEvent());
-            RemoveEventCommand = ReactiveCommand.Create(() => DeleteEvent());
-            MoveEventUpCommand = ReactiveCommand.Create(() => MoveEventUp());
-            MoveEventDownCommand = ReactiveCommand.Create(() => MoveEventDown());
-            SelectAllCommand = ReactiveCommand.Create(() => SetAllEventSelect(true));
-            DeselectAllCommand = ReactiveCommand.Create(() => SetAllEventSelect(false));
-        }
     }
 }

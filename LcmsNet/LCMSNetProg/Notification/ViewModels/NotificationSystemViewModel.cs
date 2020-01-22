@@ -103,7 +103,11 @@ namespace LcmsNet.Notification.ViewModels
             this.WhenAnyValue(x => x.SelectedAction).Subscribe(x => this.SetAction());
             this.WhenAnyValue(x => x.SelectedLCMethod).Subscribe(x => this.SetMethod());
 
-            SetupCommands();
+            SaveCommand = ReactiveCommand.Create(SaveNotificationFile);
+            EnableCommand = ReactiveCommand.Create(Enable, this.WhenAnyValue(x => x.SettingsDisabled).Select(x => x));
+            DisableCommand = ReactiveCommand.Create(Disable, this.WhenAnyValue(x => x.SettingsDisabled).Select(x => !x));
+            IgnoreSettingCommand = ReactiveCommand.Create(() => SelectedAction = DeviceNotificationAction.Ignore, this.WhenAnyValue(x => x.SelectedAction).Select(x => x != DeviceNotificationAction.Ignore));
+            IgnoreAllCommand = ReactiveCommand.Create(IgnoreAll, this.WhenAnyValue(x => x.assignedEventsList.Count).Select(x => x > 0));
         }
 
         ~NotificationSystemViewModel()
@@ -341,6 +345,16 @@ namespace LcmsNet.Notification.ViewModels
         public IReadOnlyReactiveList<string> AssignedEventsList => assignedEventsList;
         public IReadOnlyReactiveList<DeviceNotificationAction> ActionsComboBoxOptions => actionsComboBoxOptions;
         public IReadOnlyReactiveList<LCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
+
+        #endregion
+
+        #region Commands
+
+        public ReactiveCommand<Unit, Unit> SaveCommand { get; }
+        public ReactiveCommand<Unit, Unit> EnableCommand { get; }
+        public ReactiveCommand<Unit, Unit> DisableCommand { get; }
+        public ReactiveCommand<Unit, DeviceNotificationAction> IgnoreSettingCommand { get; }
+        public ReactiveCommand<Unit, Unit> IgnoreAllCommand { get; }
 
         #endregion
 
@@ -1005,25 +1019,6 @@ namespace LcmsNet.Notification.ViewModels
 
                 EventSettingsEnabled = false;
             }
-        }
-
-        #endregion
-
-        #region Commands
-
-        public ReactiveCommand<Unit, Unit> SaveCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> EnableCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> DisableCommand { get; private set; }
-        public ReactiveCommand<Unit, DeviceNotificationAction> IgnoreSettingCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> IgnoreAllCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            SaveCommand = ReactiveCommand.Create(() => SaveNotificationFile());
-            EnableCommand = ReactiveCommand.Create(() => Enable(), this.WhenAnyValue(x => x.SettingsDisabled).Select(x => x));
-            DisableCommand = ReactiveCommand.Create(() => Disable(), this.WhenAnyValue(x => x.SettingsDisabled).Select(x => !x));
-            IgnoreSettingCommand = ReactiveCommand.Create(() => SelectedAction = DeviceNotificationAction.Ignore, this.WhenAnyValue(x => x.SelectedAction).Select(x => x != DeviceNotificationAction.Ignore));
-            IgnoreAllCommand = ReactiveCommand.Create(() => IgnoreAll(), this.WhenAnyValue(x => x.assignedEventsList.Count).Select(x => x > 0));
         }
 
         #endregion

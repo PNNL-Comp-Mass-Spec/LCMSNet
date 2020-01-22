@@ -14,8 +14,32 @@ namespace LcmsNetPlugins.Newport.ESP300
     {
         public NewportStageViewModel()
         {
-            SetupCommands();
             PropertyChanged += NewportStageViewModel_PropertyChanged;
+
+            RefreshPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshPosition));
+            Axis1ForwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis1FwdPress));
+            Axis2ForwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis2FwdPress));
+            Axis3ForwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis3FwdPress));
+            Axis1ForwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis1FwdRelease));
+            Axis2ForwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis2FwdRelease));
+            Axis3ForwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis3FwdRelease));
+            Axis1BackwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis1BackPress));
+            Axis2BackwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis2BackPress));
+            Axis3BackwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis3BackPress));
+            Axis1BackwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis1BackRelease));
+            Axis2BackwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis2BackRelease));
+            Axis3BackwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Axis3BackRelease));
+            ResetToHomePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ResetToHome));
+            GoToSelectedPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(GoToSelectedPosition));
+            DeletePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RemovePosition));
+            SetPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetPosition));
+            Axis1MotorPowerCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ToggleAxis1Motor));
+            Axis2MotorPowerCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ToggleAxis2Motor));
+            Axis3MotorPowerCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ToggleAxis3Motor));
+            GetErrorsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(GetErrors));
+            ClearErrorsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ClearErrors));
+            OpenPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(OpenPort));
+            ClosePortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ClosePort));
         }
 
         #region Members
@@ -141,34 +165,6 @@ namespace LcmsNetPlugins.Newport.ESP300
         public ReactiveCommand<Unit, Unit> ClearErrorsCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> OpenPortCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> ClosePortCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            RefreshPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshPosition()));
-            Axis1ForwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1FwdPress()));
-            Axis2ForwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2FwdPress()));
-            Axis3ForwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3FwdPress()));
-            Axis1ForwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1FwdRelease()));
-            Axis2ForwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2FwdRelease()));
-            Axis3ForwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3FwdRelease()));
-            Axis1BackwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1BackPress()));
-            Axis2BackwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2BackPress()));
-            Axis3BackwardCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3BackPress()));
-            Axis1BackwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis1BackRelease()));
-            Axis2BackwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis2BackRelease()));
-            Axis3BackwardReleaseCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Axis3BackRelease()));
-            ResetToHomePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ResetToHome()));
-            GoToSelectedPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GoToSelectedPosition()));
-            DeletePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RemovePosition()));
-            SetPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPosition()));
-            Axis1MotorPowerCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis1Motor()));
-            Axis2MotorPowerCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis2Motor()));
-            Axis3MotorPowerCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ToggleAxis3Motor()));
-            GetErrorsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GetErrors()));
-            ClearErrorsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearErrors()));
-            OpenPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
-            ClosePortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
-        }
 
         #endregion
 

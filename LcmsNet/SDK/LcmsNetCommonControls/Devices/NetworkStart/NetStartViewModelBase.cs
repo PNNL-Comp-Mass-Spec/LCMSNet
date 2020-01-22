@@ -19,7 +19,10 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// </summary>
         public NetStartViewModelBase()
         {
-            SetupCommands();
+            RefreshMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshMethods));
+            StartAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(StartAcquisition));
+            StopAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(StopAcquisition));
+
             this.PropertyChanged += OnPropertyChanged;
         }
 
@@ -110,13 +113,6 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// Command to stop acquisition
         /// </summary>
         public ReactiveUI.ReactiveCommand<Unit, Unit> StopAcquisitionCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            RefreshMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshMethods()));
-            StartAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartAcquisition()));
-            StopAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StopAcquisition()));
-        }
 
         #endregion
 

@@ -15,7 +15,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         public MoveToMethodSelectorViewModel()
         {
             SelectedLcMethod = null;
-            SetupCommands();
+
+            OkCommand = ReactiveCommand.Create(CloseCleanup);
+            CancelCommand = ReactiveCommand.Create(CloseCleanup);
         }
 
         private LCMethod selectedLcMethod;
@@ -29,22 +31,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedLcMethod, value);
         }
 
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> OkCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> CancelCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            OkCommand = ReactiveCommand.Create(new Action(() => CloseCleanup()));
-            CancelCommand = ReactiveCommand.Create(new Action(() => CloseCleanup()));
-        }
 
         private void CloseCleanup()
         {
 
         }
-
-        #endregion
     }
 }

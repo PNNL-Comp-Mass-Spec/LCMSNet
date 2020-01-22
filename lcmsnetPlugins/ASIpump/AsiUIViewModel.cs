@@ -11,7 +11,11 @@ namespace LcmsNetPlugins.ASIpump
     {
         public AsiUIViewModel()
         {
-            SetupCommands();
+            ConnectCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Connect));
+            RunCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Run));
+            AbortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(Abort));
+            GetPosACommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(GetPositionA));
+            GetPosBCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(GetPositionB));
         }
 
 #pragma warning disable 67
@@ -106,14 +110,5 @@ namespace LcmsNetPlugins.ASIpump
         public ReactiveCommand<Unit, Unit> AbortCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> GetPosACommand { get; private set; }
         public ReactiveCommand<Unit, Unit> GetPosBCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            ConnectCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Connect()));
-            RunCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Run()));
-            AbortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Abort()));
-            GetPosACommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GetPositionA()));
-            GetPosBCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => GetPositionB()));
-        }
     }
 }

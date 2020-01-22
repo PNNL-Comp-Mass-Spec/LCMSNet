@@ -32,6 +32,11 @@ namespace LcmsNet.Configuration.ViewModels
 
             Initialize();
 
+            SetInstrumentCommand = ReactiveCommand.Create(SaveInstrument);
+            SetOperatorCommand = ReactiveCommand.Create(SaveOperator);
+            ReloadCartDataCommand = ReactiveCommand.Create(ReloadData);
+            BrowsePdfPathCommand = ReactiveCommand.Create(BrowsePdfPath);
+
             mIsLoading = false;
         }
 
@@ -216,14 +221,6 @@ namespace LcmsNet.Configuration.ViewModels
         public ReactiveCommand<Unit, Unit> ReloadCartDataCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> BrowsePdfPathCommand { get; private set; }
 
-        private void SetupCommands()
-        {
-            SetInstrumentCommand = ReactiveCommand.Create(() => this.SaveInstrument());
-            SetOperatorCommand = ReactiveCommand.Create(() => this.SaveOperator());
-            ReloadCartDataCommand = ReactiveCommand.Create(() => this.ReloadData());
-            BrowsePdfPathCommand = ReactiveCommand.Create(() => this.BrowsePdfPath());
-        }
-
         #endregion
 
         #region "Methods"
@@ -285,8 +282,6 @@ namespace LcmsNet.Configuration.ViewModels
             this.WhenAnyValue(x => x.SpecialColumnEnabled).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, (!x).ToString()));
             OperatorNotSaved = false;
             InstrumentNameNotSaved = false;
-
-            SetupCommands();
         }
 
         private void BrowsePdfPath()

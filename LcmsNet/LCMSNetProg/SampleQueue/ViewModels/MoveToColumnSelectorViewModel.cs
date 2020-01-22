@@ -18,7 +18,12 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             SelectedColumn = CONST_NO_COLUMN_SELECTED;
             InsertIntoUnused = true;
-            SetupCommands();
+
+            Column1Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 0));
+            Column2Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 1));
+            Column3Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 2));
+            Column4Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 3));
+            CancelCommand = ReactiveCommand.Create(new Action(CloseCleanup));
         }
 
         private int selectedColumn;
@@ -42,28 +47,15 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref insertIntoUnused, value);
         }
 
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> Column1Command { get; private set; }
         public ReactiveCommand<Unit, Unit> Column2Command { get; private set; }
         public ReactiveCommand<Unit, Unit> Column3Command { get; private set; }
         public ReactiveCommand<Unit, Unit> Column4Command { get; private set; }
         public ReactiveCommand<Unit, Unit> CancelCommand { get; private set; }
 
-        private void SetupCommands()
-        {
-            Column1Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 0));
-            Column2Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 1));
-            Column3Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 2));
-            Column4Command = ReactiveCommand.Create(new Action(() => SelectedColumn = 3));
-            CancelCommand = ReactiveCommand.Create(new Action(() => CloseCleanup()));
-        }
-
         private void CloseCleanup()
         {
 
         }
-
-        #endregion
     }
 }

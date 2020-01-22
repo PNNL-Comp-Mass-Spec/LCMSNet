@@ -26,7 +26,9 @@ namespace LcmsNet.Devices.ViewModels
             SelectedColor = Colors.Red;
             NotSelectedColor = Colors.Black;
 
-            SetupCommands();
+            RenameDeviceCommand = ReactiveCommand.Create(RenameSelectedDevice, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
+            InitializeDeviceCommand = ReactiveCommand.CreateFromTask(InitializeSelectedDevice, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
+            ClearErrorCommand = ReactiveCommand.Create(ClearSelectedDeviceError, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
 
             // Once an item is added to the device controls, automatically make the first one the "Selected device" if one hasn't been previously set.
             this.WhenAnyValue(x => x.deviceControls, x => x.SelectedDevice, x => x.deviceControls.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
@@ -141,13 +143,6 @@ namespace LcmsNet.Devices.ViewModels
         public ReactiveCommand<Unit, Unit> RenameDeviceCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> ClearErrorCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            RenameDeviceCommand = ReactiveCommand.Create(RenameSelectedDevice, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
-            InitializeDeviceCommand = ReactiveCommand.CreateFromTask(InitializeSelectedDevice, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
-            ClearErrorCommand = ReactiveCommand.Create(ClearSelectedDeviceError, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
-        }
 
         private async Task InitializeSelectedDevice()
         {

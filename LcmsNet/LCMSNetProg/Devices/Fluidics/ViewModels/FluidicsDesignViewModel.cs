@@ -35,8 +35,17 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             fluidicsMod.ScaleWorldView(1);
             fluidicsMod.ModelChanged += FluidicsModelChanged;
 
-            SetupCommands();
             this.WhenAnyValue(x => x.DesignTabSelected).Where(x => x).Subscribe(x => FluidicsControlVm.Refresh());
+
+            LoadCommand = ReactiveCommand.Create(LoadHardware, this.WhenAnyValue(x => x.DevicesUnlocked));
+            SaveCommand = ReactiveCommand.Create(() => SaveConfiguration(), this.WhenAnyValue(x => x.DevicesUnlocked));
+            SaveAsCommand = ReactiveCommand.Create(SaveHardwareAs, this.WhenAnyValue(x => x.DevicesUnlocked));
+            LockUnlockCommand = ReactiveCommand.Create(() => DevicesLocked = !DevicesLocked);
+            InitializeCommand = ReactiveCommand.Create(InitializeDevices, this.WhenAnyValue(x => x.DevicesUnlocked));
+            AddCommand = ReactiveCommand.Create(AddDeviceToDeviceManager, this.WhenAnyValue(x => x.DevicesUnlocked));
+            RemoveCommand = ReactiveCommand.Create(RemoveDevice, this.WhenAnyValue(x => x.DevicesUnlocked));
+            ConnectCommand = ReactiveCommand.Create(ConnectDevices, this.WhenAnyValue(x => x.DevicesUnlocked));
+            RefreshCommand = ReactiveCommand.Create(Refresh);
         }
 
         public void Dispose()
@@ -128,6 +137,20 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             get => advancedDeviceControlPanel;
             private set => this.RaiseAndSetIfChanged(ref advancedDeviceControlPanel, value);
         }
+
+        #endregion
+
+        #region Commands
+
+        public ReactiveCommand<Unit, Unit> LoadCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveAsCommand { get; }
+        public ReactiveCommand<Unit, bool> LockUnlockCommand { get; }
+        public ReactiveCommand<Unit, Unit> InitializeCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddCommand { get; }
+        public ReactiveCommand<Unit, Unit> RemoveCommand { get; }
+        public ReactiveCommand<Unit, Unit> ConnectCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
 
         #endregion
 
@@ -542,33 +565,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             {
                 ShowError(ex);
             }
-        }
-
-        #endregion
-
-        #region Commands
-
-        public ReactiveCommand<Unit, Unit> LoadCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SaveCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> SaveAsCommand { get; private set; }
-        public ReactiveCommand<Unit, bool> LockUnlockCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> InitializeCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> AddCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RemoveCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> ConnectCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> RefreshCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            LoadCommand = ReactiveCommand.Create(() => this.LoadHardware(), this.WhenAnyValue(x => x.DevicesUnlocked));
-            SaveCommand = ReactiveCommand.Create(() => this.SaveConfiguration(), this.WhenAnyValue(x => x.DevicesUnlocked));
-            SaveAsCommand = ReactiveCommand.Create(() => this.SaveHardwareAs(), this.WhenAnyValue(x => x.DevicesUnlocked));
-            LockUnlockCommand = ReactiveCommand.Create(() => DevicesLocked = !DevicesLocked);
-            InitializeCommand = ReactiveCommand.Create(() => this.InitializeDevices(), this.WhenAnyValue(x => x.DevicesUnlocked));
-            AddCommand = ReactiveCommand.Create(() => this.AddDeviceToDeviceManager(), this.WhenAnyValue(x => x.DevicesUnlocked));
-            RemoveCommand = ReactiveCommand.Create(() => this.RemoveDevice(), this.WhenAnyValue(x => x.DevicesUnlocked));
-            ConnectCommand = ReactiveCommand.Create(() => this.ConnectDevices(), this.WhenAnyValue(x => x.DevicesUnlocked));
-            RefreshCommand = ReactiveCommand.Create(() => this.Refresh());
         }
 
         #endregion

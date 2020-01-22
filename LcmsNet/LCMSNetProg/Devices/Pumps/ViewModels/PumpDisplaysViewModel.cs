@@ -35,7 +35,9 @@ namespace LcmsNet.Devices.Pumps.ViewModels
             DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
             CurrentPump = 0;
-            SetupCommands();
+
+            MoveLeftCommand = ReactiveCommand.Create(() => this.MoveLeft(), this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x - 1 && x - 1 < pumps.Count));
+            MoveRightCommand = ReactiveCommand.Create(() => this.MoveRight(), this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x + 1 && x + 1 < pumps.Count));
         }
 
         private int currentPump;
@@ -59,6 +61,9 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         public IReadOnlyReactiveList<MobilePhase> MobilePhases => mobilePhases;
 
         public IReadOnlyReactiveList<PumpDisplayViewModel> PumpMonitorDisplays => pumpMonitorDisplays;
+
+        public ReactiveCommand<Unit, Unit> MoveLeftCommand { get; }
+        public ReactiveCommand<Unit, Unit> MoveRightCommand { get; }
 
         private void MoveLeft()
         {
@@ -182,14 +187,5 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         }
 
         #endregion
-
-        public ReactiveCommand<Unit, Unit> MoveLeftCommand { get; private set; }
-        public ReactiveCommand<Unit, Unit> MoveRightCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            MoveLeftCommand = ReactiveCommand.Create(() => this.MoveLeft(), this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x - 1 && x - 1 < pumps.Count));
-            MoveRightCommand = ReactiveCommand.Create(() => this.MoveRight(), this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x + 1 && x + 1 < pumps.Count));
-        }
     }
 }

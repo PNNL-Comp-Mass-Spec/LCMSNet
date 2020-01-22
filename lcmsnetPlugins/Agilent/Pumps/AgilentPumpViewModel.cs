@@ -39,7 +39,35 @@ namespace LcmsNetPlugins.Agilent.Pumps
             pumpFirmware = this.WhenAnyValue(x => x.Pump, x => x.Pump.PumpFirmware).Select(x => x.Item2).ToProperty(this, nameof(PumpFirmware), "", true, RxApp.MainThreadScheduler);
             pumpState = this.WhenAnyValue(x => x.Pump, x => x.Pump.PumpState).Select(x => x.Item2).ToProperty(this, nameof(PumpState), PumpState.Unknown, true, RxApp.MainThreadScheduler);
 
-            SetupCommands();
+            SetFlowRateCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetFlowRate(FlowRate)));
+            ReadFlowRateCommand = ReactiveCommand.Create(() => FlowRateRead = Pump.GetActualFlow());
+            //SetMixerVolumeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMixerVolume(MixerVolume)));
+            //ReadMixerVolumeCommand = ReactiveCommand.Create(() => MixerVolumeRead = Pump.GetMixerVolume());
+            SetPercentBCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPercentB(PercentB)));
+            ReadPercentBCommand = ReactiveCommand.Create(() => PercentBRead = Pump.GetPercentB());
+            SetModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMode(SelectedMode)));
+            ReadPressureCommand = ReactiveCommand.Create(() => Pressure = Pump.GetPressure());
+            ReadAllCommand = ReactiveCommand.CreateCombined(new[] { ReadFlowRateCommand, ReadPercentBCommand, ReadPressureCommand });
+            PumpOnCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.On));
+            PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.Off));
+            PumpStandbyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.Standby));
+            PurgePumpCommand = ReactiveCommand.Create(PurgePump);
+            StartPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(StartPump), this.WhenAnyValue(x => x.PumpState, x => x.PumpStatus.NotReadyState).Select(x => x.Item1 != PumpState.Off && x.Item1 != PumpState.Standby && x.Item2 == AgilentPumpStateNotReady.READY));
+            StopPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StopMethod()));
+            SetComPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetComPortName));
+            ReadMethodFromPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = Pump.RetrieveMethod()));
+            LoadMethodsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(LoadMethods));
+            SaveMethodCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SaveMethod));
+            SetModuleDateCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleDateTime()));
+            SetModuleNameCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleName(NewModuleName)), this.WhenAnyValue(x => x.PumpInfo.ModuleName, x => x.NewModuleName).Select(x => !string.Equals(x.Item1, x.Item2) && x.Item2.Length <= 30));
+            RefreshInfoCommand = ReactiveCommand.Create(() => Pump.GetPumpInformation());
+            RefreshStatusCommand = ReactiveCommand.Create(() =>
+            {
+                Pump.GetPumpStatus();
+                Pump.GetPumpState();
+            });
+            IdentifyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.Identify()));
+
             timer = new Timer(TimerTick, this, 1000, 1000);
             NewModuleName = "";
         }
@@ -292,38 +320,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public ReactiveCommand<Unit, Unit> RefreshInfoCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> IdentifyCommand { get; private set; }
-
-        private void SetupCommands()
-        {
-            SetFlowRateCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetFlowRate(FlowRate)));
-            ReadFlowRateCommand = ReactiveCommand.Create(() => FlowRateRead = Pump.GetActualFlow());
-            //SetMixerVolumeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMixerVolume(MixerVolume)));
-            //ReadMixerVolumeCommand = ReactiveCommand.Create(() => MixerVolumeRead = Pump.GetMixerVolume());
-            SetPercentBCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetPercentB(PercentB)));
-            ReadPercentBCommand = ReactiveCommand.Create(() => PercentBRead = Pump.GetPercentB());
-            SetModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetMode(SelectedMode)));
-            ReadPressureCommand = ReactiveCommand.Create(() => Pressure = Pump.GetPressure());
-            ReadAllCommand = ReactiveCommand.CreateCombined(new [] {ReadFlowRateCommand, ReadPercentBCommand, ReadPressureCommand});
-            PumpOnCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.On));
-            PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.Off));
-            PumpStandbyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.Standby));
-            PurgePumpCommand = ReactiveCommand.Create(() => PurgePump());
-            StartPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => StartPump()), this.WhenAnyValue(x => x.PumpState, x => x.PumpStatus.NotReadyState).Select(x => x.Item1 != PumpState.Off && x.Item1 != PumpState.Standby && x.Item2 == AgilentPumpStateNotReady.READY));
-            StopPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StopMethod()));
-            SetComPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetComPortName()));
-            ReadMethodFromPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = Pump.RetrieveMethod()));
-            LoadMethodsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => LoadMethods()));
-            SaveMethodCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SaveMethod()));
-            SetModuleDateCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleDateTime()));
-            SetModuleNameCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleName(NewModuleName)), this.WhenAnyValue(x => x.PumpInfo.ModuleName, x => x.NewModuleName).Select(x => !string.Equals(x.Item1, x.Item2) && x.Item2.Length <= 30));
-            RefreshInfoCommand = ReactiveCommand.Create(() => Pump.GetPumpInformation());
-            RefreshStatusCommand = ReactiveCommand.Create(() =>
-            {
-                Pump.GetPumpStatus();
-                Pump.GetPumpState();
-            });
-            IdentifyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.Identify()));
-        }
 
         #endregion
 
