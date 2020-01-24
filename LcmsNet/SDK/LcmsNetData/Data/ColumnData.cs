@@ -20,7 +20,6 @@ namespace LcmsNetData.Data
         {
             m_name = "NOTSET";
             m_columnIndex = 0;
-            m_systemIndex = 0;
             m_status = ColumnStatus.Idle;
             m_first = false;
         }
@@ -36,7 +35,6 @@ namespace LcmsNetData.Data
             newColumnData.First = First;
             newColumnData.Status = Status;
             newColumnData.ID = ID;
-            newColumnData.SystemID = SystemID;
             newColumnData.Name = Name;
             newColumnData.Color = Color;
 
@@ -79,11 +77,6 @@ namespace LcmsNetData.Data
         /// Name of the column
         /// </summary>
         private string m_name;
-
-        /// <summary>
-        /// System index of the column.
-        /// </summary>
-        private int m_systemIndex;
 
         /// <summary>
         /// Status of the column
@@ -193,15 +186,6 @@ namespace LcmsNetData.Data
         }
 
         /// <summary>
-        /// Gets or sets the system index.
-        /// </summary>
-        public int SystemID
-        {
-            get => m_systemIndex;
-            set => m_systemIndex = value;
-        }
-
-        /// <summary>
         /// Gets or sets the name of the column.
         /// </summary>
         public string Name
@@ -247,7 +231,7 @@ namespace LcmsNetData.Data
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return m_columnIndex == other.m_columnIndex && m_systemIndex == other.m_systemIndex && string.Equals(m_name, other.m_name) && m_columnColor.Equals(other.m_columnColor);
+            return m_columnIndex == other.m_columnIndex && string.Equals(m_name, other.m_name) && m_columnColor.Equals(other.m_columnColor);
         }
 
         public override bool Equals(object obj)
@@ -263,7 +247,6 @@ namespace LcmsNetData.Data
             unchecked
             {
                 var hashCode = m_columnIndex;
-                hashCode = (hashCode * 397) ^ m_systemIndex;
                 hashCode = (hashCode * 397) ^ (m_name != null ? m_name.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ m_columnColor.GetHashCode();
                 return hashCode;
