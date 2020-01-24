@@ -348,7 +348,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             if (sample == null)
                 return false;
 
-            var methodName = sample.InstrumentData.MethodName;
+            var methodName = sample.InstrumentMethod;
             var sampleName = sample.DmsData.DatasetName;
 
             try

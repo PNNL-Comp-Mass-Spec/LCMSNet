@@ -122,7 +122,7 @@ namespace LcmsNet.SampleQueue.IO
             // Acquisition element. These will be blank or zero for now
             var acquisitionElement = AddElementNoAttributes("Acquisition", ParentElement);
             // No return type needed, since these elements don't have any children
-            AddElementWithTypeAttribute("Method", acquisitionElement, "String", InpSample.InstrumentData.MethodName);
+            AddElementWithTypeAttribute("Method", acquisitionElement, "String", InpSample.InstrumentMethod);
 
             // DMS element
             var dmsElement = AddElementNoAttributes("DMS", ParentElement);

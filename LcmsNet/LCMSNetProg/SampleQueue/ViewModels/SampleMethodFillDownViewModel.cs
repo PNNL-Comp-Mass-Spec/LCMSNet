@@ -432,8 +432,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var i = 0;
             foreach (var sample in Samples)
             {
-                sample.InstrumentData = new InstrumentInfo();
-                sample.InstrumentData.MethodName = methods[i];
+                sample.InstrumentMethod = methods[i];
                 i++;
                 // mod?
                 if (i >= methods.Count)

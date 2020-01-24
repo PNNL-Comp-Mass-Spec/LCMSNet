@@ -463,7 +463,7 @@ namespace LcmsNet.SampleQueue
                 return prop.Equals(nameof(obj.RequestName)) ||
                        prop.Equals(nameof(obj.Sample.DmsData)) ||
                        prop.Equals(nameof(obj.Sample.PAL)) ||
-                       prop.Equals(nameof(obj.Sample.InstrumentData)) ||
+                       prop.Equals(nameof(obj.Sample.InstrumentMethod)) ||
                        prop.Equals(nameof(obj.ColumnNumber)) ||
                        prop.Equals(nameof(obj.InstrumentMethod)) ||
                        prop.Equals(nameof(obj.Sample.LCMethod)) ||

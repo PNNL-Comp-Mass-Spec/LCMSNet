@@ -284,7 +284,7 @@ namespace LcmsNetPlugins.Bruker
             m_DeviceError = false;
             string msg;
             var sampleName = sample.DmsData.DatasetName + ".d";
-            var methodName = sample.InstrumentData.MethodName;
+            var methodName = sample.InstrumentMethod;
 
             // Check for acquistion already in progress
             if (m_AcquisitionInProgress)

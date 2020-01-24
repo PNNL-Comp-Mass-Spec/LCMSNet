@@ -121,7 +121,7 @@ namespace LcmsNetSDK.Data
             newSample.UniqueID = this.UniqueID;
             newSample.LCMethod = this.LCMethod;
             newSample.actualMethod = this.actualMethod?.Clone() as LCMethod;
-            newSample.InstrumentData = this.InstrumentData?.Clone() as InstrumentInfo;
+            newSample.InstrumentMethod = this.InstrumentMethod;
             if (!string.IsNullOrWhiteSpace(Operator))
             {
                 newSample.Operator = this.Operator;
@@ -512,14 +512,6 @@ namespace LcmsNetSDK.Data
         #endregion
 
         #region "PropertyChanged" event handlers
-
-        private void InstrumentDataChanged(object sender, PropertyChangedEventArgs args)
-        {
-            if (args.PropertyName.Equals(nameof(InstrumentData.MethodName)))
-            {
-                OnPropertyChanged(nameof(InstrumentData));
-            }
-        }
 
         private void DmsDataChanged(object sender, PropertyChangedEventArgs args)
         {

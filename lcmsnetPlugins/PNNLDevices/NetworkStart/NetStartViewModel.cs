@@ -137,7 +137,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
             var sample = new SampleData
             {
                 DmsData = { DatasetName = SampleName },
-                InstrumentData = {MethodName = methodName}
+                InstrumentMethod = methodName
             };
 
             m_netStart.StartAcquisition(20, sample);

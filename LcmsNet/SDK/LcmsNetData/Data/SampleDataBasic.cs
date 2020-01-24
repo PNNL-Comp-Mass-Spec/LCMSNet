@@ -12,7 +12,7 @@ namespace LcmsNetData.Data
 
             PAL = new PalData();
             columnData = new ColumnData();
-            InstrumentData = new InstrumentInfo();
+            InstrumentMethod = "";
             methodBasic = null;
         }
 
@@ -53,37 +53,22 @@ namespace LcmsNetData.Data
         private LCMethodBasic methodBasic;
 
         /// <summary>
-        /// Instrument info.
+        /// Instrument method.
         /// </summary>
-        private InstrumentInfo instrumentData;
+        private string instrumentMethod;
 
         #endregion
 
         #region "Properties"
 
         /// <summary>
-        /// Gets or sets the instrument object data.
+        /// Gets or sets the instrument method.
         /// </summary>
-        [PersistenceSetting(ColumnNamePrefix = "Ins.")]
-        public InstrumentInfo InstrumentData
+        [PersistenceSetting(ColumnName = "Ins.MethodName")]
+        public string InstrumentMethod
         {
-            get => instrumentData;
-            set
-            {
-                var oldValue = instrumentData;
-                if (this.RaiseAndSetIfChangedRetBool(ref instrumentData, value, nameof(InstrumentData)))
-                {
-                    if (oldValue != null)
-                    {
-                        oldValue.PropertyChanged -= InstrumentDataChanged;
-                    }
-
-                    if (value != null)
-                    {
-                        value.PropertyChanged += InstrumentDataChanged;
-                    }
-                }
-            }
+            get => instrumentMethod;
+            set => this.RaiseAndSetIfChanged(ref instrumentMethod, value, nameof(InstrumentMethod));
         }
 
         /// <summary>
@@ -201,14 +186,6 @@ namespace LcmsNetData.Data
         #endregion
 
         #region "PropertyChanged" event handlers
-
-        private void InstrumentDataChanged(object sender, PropertyChangedEventArgs args)
-        {
-            if (args.PropertyName.Equals(nameof(InstrumentData.MethodName)))
-            {
-                OnPropertyChanged(nameof(InstrumentData));
-            }
-        }
 
         private void DmsDataChanged(object sender, PropertyChangedEventArgs args)
         {

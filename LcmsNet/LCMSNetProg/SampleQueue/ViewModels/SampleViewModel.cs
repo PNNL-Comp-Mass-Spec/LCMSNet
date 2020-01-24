@@ -55,8 +55,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 this.CheckDatasetName();
             });
 
-            this.WhenAnyValue(x => x.Sample.InstrumentData).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
-            this.WhenAnyValue(x => x.Sample.InstrumentData.MethodName).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
+            this.WhenAnyValue(x => x.Sample.InstrumentMethod).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
 
             this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).Subscribe(x => this.CheckDatasetName());
 
@@ -74,7 +73,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             this.WhenAnyValue(x => x.Sample.DmsData.Block).Subscribe(x => this.RaisePropertyChanged(nameof(IsBlockedSample)));
 
-            Sample.WhenAnyValue(x => x.InstrumentData, x => x.PAL, x => x.DmsData, x => x.LCMethod)
+            Sample.WhenAnyValue(x => x.InstrumentMethod, x => x.PAL, x => x.DmsData, x => x.LCMethod)
                 .Subscribe(x => this.RaisePropertyChanged(nameof(Sample)));
 
             Sample.WhenAnyValue(x => x.ActualLCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(LcMethodCueBannerText)));
@@ -323,16 +322,12 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public string InstrumentMethod
         {
-            get => Sample.InstrumentData.MethodName;
+            get => Sample.InstrumentMethod;
             set
             {
-                if (Sample.InstrumentData == null)
+                if (!object.Equals(Sample.InstrumentMethod, value))
                 {
-                    Sample.InstrumentData = new InstrumentInfo();
-                }
-                if (!object.Equals(Sample.InstrumentData.MethodName, value))
-                {
-                    Sample.InstrumentData.MethodName = value;
+                    Sample.InstrumentMethod = value;
                     this.RaisePropertyChanged();
                 }
             }
