@@ -24,7 +24,7 @@ namespace LcmsNetData.Data
     [Serializable]
     public class InstrumentInfo : IEquatable<InstrumentInfo>, INotifyPropertyChangedExt, ICloneable
     {
-        private string methodName;
+        private string captureMethod;
 
         #region "Properties"
 
@@ -42,10 +42,10 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Gets or sets the name of the method used to capture data from this instrument
         /// </summary>
-        public string MethodName
+        public string CaptureMethod
         {
-            get => methodName;
-            set => this.RaiseAndSetIfChanged(ref methodName, value, nameof(MethodName));
+            get => captureMethod;
+            set => this.RaiseAndSetIfChanged(ref captureMethod, value, nameof(CaptureMethod));
         }
 
         /// <summary>
@@ -74,16 +74,16 @@ namespace LcmsNetData.Data
         /// <returns></returns>
         public object Clone()
         {
-            var newInstrumentData = new InstrumentInfo();
+            var newInstrumentInfo = new InstrumentInfo();
 
-            newInstrumentData.DMSName = DMSName;
-            newInstrumentData.CommonName = CommonName;
-            newInstrumentData.MethodName = MethodName;
-            newInstrumentData.Status = Status;
-            newInstrumentData.HostName = HostName;
-            newInstrumentData.SharePath = SharePath;
+            newInstrumentInfo.DMSName = DMSName;
+            newInstrumentInfo.CommonName = CommonName;
+            newInstrumentInfo.CaptureMethod = CaptureMethod;
+            newInstrumentInfo.Status = Status;
+            newInstrumentInfo.HostName = HostName;
+            newInstrumentInfo.SharePath = SharePath;
 
-            return newInstrumentData;
+            return newInstrumentInfo;
         }
 
         #region Methods

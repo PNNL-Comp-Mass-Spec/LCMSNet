@@ -1218,7 +1218,7 @@ namespace LcmsNetDmsTools
                         {
                             DMSName = reader["Instrument"].CastDBValTo<string>(),
                             CommonName = reader["NameAndUsage"].CastDBValTo<string>(),
-                            MethodName = reader["CaptureMethod"].CastDBValTo<string>(),
+                            CaptureMethod = reader["CaptureMethod"].CastDBValTo<string>(),
                             Status = reader["Status"].CastDBValTo<string>(),
                             HostName = reader["HostName"].CastDBValTo<string>(),
                             SharePath = reader["SharePath"].CastDBValTo<string>()
