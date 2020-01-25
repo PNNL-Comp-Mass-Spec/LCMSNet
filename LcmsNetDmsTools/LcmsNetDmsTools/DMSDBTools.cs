@@ -1162,6 +1162,8 @@ namespace LcmsNetDmsTools
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
+            var deDupDictionary = new Dictionary<string, string>();
+
             using (cn)
             using (var cmd = cn.CreateCommand())
             {
@@ -1177,10 +1179,10 @@ namespace LcmsNetDmsTools
                             Created = reader["Created"].CastDBValTo<DateTime>(),
                             Experiment = reader["Experiment"].CastDBValTo<string>(),
                             ID = reader["ID"].CastDBValTo<int>(),
-                            Organism = reader["Organism"].CastDBValTo<string>(),
-                            Reason = reader["Reason"].CastDBValTo<string>(),
+                            Organism = reader["Organism"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                            Reason = reader["Reason"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                             Request = reader["Request"].CastDBValTo<int>(),
-                            Researcher = reader["Researcher"].CastDBValTo<string>()
+                            Researcher = reader["Researcher"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary)
                         };
                     }
                 }
@@ -1360,6 +1362,8 @@ namespace LcmsNetDmsTools
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
+            var deDupDictionary = new Dictionary<string, string>();
+
             using (cn)
             using (var cmd = cn.CreateCommand())
             {
@@ -1374,16 +1378,16 @@ namespace LcmsNetDmsTools
                         {
                             DmsData =
                             {
-                                DatasetType = reader["Type"].CastDBValTo<string>(),
-                                Experiment = reader["Experiment"].CastDBValTo<string>(),
-                                EMSLProposalID = reader["Proposal ID"].CastDBValTo<string>(),
+                                DatasetType = reader["Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                Experiment = reader["Experiment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                EMSLProposalID = reader["Proposal ID"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 RequestID = reader["Request"].CastDBValTo<int>(),
                                 RequestName = reader["Name"].CastDBValTo<string>(),
-                                WorkPackage = reader["Work Package"].CastDBValTo<string>(),
-                                EMSLUsageType = reader["Usage Type"].CastDBValTo<string>(),
-                                UserList = reader["EUS Users"].CastDBValTo<string>(),
-                                CartName = reader["Cart"].CastDBValTo<string>(),
-                                Comment = reader["Comment"].CastDBValTo<string>(),
+                                WorkPackage = reader["Work Package"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                EMSLUsageType = reader["Usage Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                UserList = reader["EUS Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                CartName = reader["Cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                Comment = reader["Comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 MRMFileID = reader["MRMFileID"].CastDBValTo<int>(),
                                 Block = reader["Block"].CastDBValTo<int>(),
                                 RunOrder = reader["RunOrder"].CastDBValTo<int>(),
@@ -1510,6 +1514,8 @@ namespace LcmsNetDmsTools
                 throw new Exception(cn.FailedConnectionAttemptMessage);
             }
 
+            var deDupDictionary = new Dictionary<string, string>();
+
             using (cn)
             using (var cmd = cn.CreateCommand())
             {
@@ -1522,12 +1528,12 @@ namespace LcmsNetDmsTools
                     {
                         yield return new WorkPackageInfo(
                             reader["Charge_Code"].CastDBValTo<string>()?.Trim(),
-                            reader["State"].CastDBValTo<string>()?.Trim(),
-                            reader["SubAccount"].CastDBValTo<string>()?.Trim(),
-                            reader["WorkBreakdownStructure"].CastDBValTo<string>()?.Trim(),
-                            reader["Title"].CastDBValTo<string>()?.Trim(),
-                            reader["Owner_PRN"].CastDBValTo<string>()?.Trim(),
-                            reader["Owner_Name"].CastDBValTo<string>()?.Trim());
+                            reader["State"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
+                            reader["SubAccount"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
+                            reader["WorkBreakdownStructure"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
+                            reader["Title"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
+                            reader["Owner_PRN"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
+                            reader["Owner_Name"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary));
                     }
                 }
             }

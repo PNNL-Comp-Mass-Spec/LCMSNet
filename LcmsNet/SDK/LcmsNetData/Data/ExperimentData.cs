@@ -65,12 +65,14 @@ namespace LcmsNetData.Data
         //    set => this.RaiseAndSetIfChanged(ref comment, value);
         //}
 
+        [PersistenceSetting(IsUniqueColumn = true)]
         public int ID
         {
             get => id;
             set => this.RaiseAndSetIfChanged(ref id, value);
         }
 
+        [PersistenceSetting(IsUniqueColumn = true)]
         public string Experiment
         {
             get => experimentName;
@@ -103,6 +105,7 @@ namespace LcmsNetData.Data
             set => this.RaiseAndSetIfChanged(ref created, value);
         }
 
+        [PersistenceSetting(IsUniqueColumn = true)]
         public int Request
         {
             get => request;

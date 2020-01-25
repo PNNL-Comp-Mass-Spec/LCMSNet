@@ -37,6 +37,7 @@
         /// <summary>
         /// Charge code for this work package
         /// </summary>
+        [PersistenceSetting(IsUniqueColumn = true)]
         public string ChargeCode { get; set; }
 
         /// <summary>

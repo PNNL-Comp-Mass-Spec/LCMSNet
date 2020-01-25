@@ -20,12 +20,6 @@ namespace LcmsNetData.Data
     /// </summary>
     public class SampleQueryData
     {
-        #region "Constants"
-
-        readonly string CMD_BASE = "SELECT * FROM V_Scheduled_Run_Export";
-
-        #endregion
-
         #region "Class variables"
 
         /// <summary>
@@ -152,6 +146,7 @@ namespace LcmsNetData.Data
         /// <returns></returns>
         public string BuildSqlString()
         {
+            const string cmdBase = "SELECT * FROM V_Scheduled_Run_Export";
             var queryBldr = new StringBuilder();
 
             // Note that minimum request ID is auto-defined as 0 in the constructor
@@ -173,11 +168,11 @@ namespace LcmsNetData.Data
             if (queryBldr.Length == 0)
             {
                 // No filters, just order the results
-                return CMD_BASE + " ORDER BY Name";
+                return cmdBase + " ORDER BY Name";
             }
 
             // Filters are defined
-            return CMD_BASE + " WHERE " + queryBldr + " ORDER BY Name";
+            return cmdBase + " WHERE " + queryBldr + " ORDER BY Name";
 
         }
 

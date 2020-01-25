@@ -31,12 +31,14 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Instrument name as used in DMS
         /// </summary>
+        [PersistenceSetting(IsUniqueColumn = true)]
         public string DMSName { get; set; }
 
         /// <summary>
         /// User-friendly name used for pick lists
         /// </summary>
         /// <remarks>Instrument name, then a space, then the instrument description</remarks>
+        [PersistenceSetting(IsUniqueColumn = true)]
         public string CommonName { get; set; }
 
         /// <summary>
@@ -58,6 +60,7 @@ namespace LcmsNetData.Data
         /// Gets or sets the name of the computer that holds the data for the instrument
         /// </summary>
         /// <remarks>May contain a domain suffix, for example VPro02.bionet</remarks>
+        [PersistenceSetting(IsUniqueColumn = true)]
         public string HostName { get; set; }
 
         /// <summary>

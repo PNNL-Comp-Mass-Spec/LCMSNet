@@ -114,7 +114,7 @@ namespace LcmsNetSQLiteTools
             if (propType.IsValueType || propType.IsEnum || propType == typeof(string))
             {
                 // Built-in direct handling: read or assign, with some error checking
-                yield return new PropertyColumnMapping(settings.ColumnName, propType, x =>
+                yield return new PropertyColumnMapping(settings.ColumnName, propType, settings.IsUniqueColumn, x =>
                 {
                     if (x.GetType() != type)
                     {
@@ -164,7 +164,7 @@ namespace LcmsNetSQLiteTools
                 var objectMappings = GetPropertyColumnMapping(propType);
                 foreach (var mapping in objectMappings)
                 {
-                    yield return new PropertyColumnMapping($"{settings.ColumnNamePrefix}{mapping.Key}", mapping.Value.PropertyType, x =>
+                    yield return new PropertyColumnMapping($"{settings.ColumnNamePrefix}{mapping.Key}", mapping.Value.PropertyType, mapping.Value.IsUniqueColumn, x =>
                     {
                         if (x.GetType() != type)
                         {
@@ -316,19 +316,31 @@ namespace LcmsNetSQLiteTools
             public Action<object, object> SetProperty { get; }
 
             /// <summary>
+            /// Is property is marked as a column with unique values
+            /// </summary>
+            public bool IsUniqueColumn { get; }
+
+            /// <summary>
+            /// True if the property type is string and the property is not marked as a unique value
+            /// </summary>
+            public bool DoStringDeDuplication => PropertyType == typeof(string) && !IsUniqueColumn;
+
+            /// <summary>
             /// Constructor
             /// </summary>
             /// <param name="columnName">SQLite table column name</param>
             /// <param name="propertyType">Type of the property, for conversion handling</param>
+            /// <param name="isUniqueColumn">If the column has a 'unique' constraint, or other reason to believe that duplicates never occur</param>
             /// <param name="readProperty">Method for reading the property</param>
             /// <param name="setProperty">Method for setting the property</param>
-            public PropertyColumnMapping(string columnName, Type propertyType,
+            public PropertyColumnMapping(string columnName, Type propertyType, bool isUniqueColumn,
                 Func<object, object> readProperty, Action<object, object> setProperty)
             {
                 ColumnName = columnName;
                 PropertyType = propertyType;
                 ReadProperty = readProperty;
                 SetProperty = setProperty;
+                IsUniqueColumn = isUniqueColumn;
             }
         }
     }

@@ -29,6 +29,11 @@ namespace LcmsNetData.Data
         public string PropertyGetOverrideMethod { get; set; }
 
         /// <summary>
+        /// For special read handling: Supply the name of the method to use for reading the value (preferably using the "nameof(...)" compiler method). Needs to have a unique name, no parameters, and return the same type as the property.
+        /// </summary>
+        public bool IsUniqueColumn { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public PersistenceSettingAttribute()
@@ -37,6 +42,7 @@ namespace LcmsNetData.Data
             ColumnName = null;
             ColumnNamePrefix = null;
             PropertyGetOverrideMethod = null;
+            IsUniqueColumn = false;
         }
 
         /// <summary>

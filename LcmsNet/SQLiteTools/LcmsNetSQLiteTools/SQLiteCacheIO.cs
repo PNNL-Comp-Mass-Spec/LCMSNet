@@ -961,7 +961,6 @@ namespace LcmsNetSQLiteTools
             // Get table containing cached data
             var sqlStr = "SELECT * FROM " + tableName;
 
-
             using (var connection = GetConnection(connString))
             using (var command = connection.CreateCommand())
             {
@@ -989,6 +988,7 @@ namespace LcmsNetSQLiteTools
                 }
 
                 KeyValuePair<int, Action<object, object>>[] columnMappings = null;
+                var deDupDictionary = new Dictionary<string, string>();
 
                 // Return the data; less likely to encounter exceptions here.
                 // For each row (representing properties and values for one sample), create a string dictionary
@@ -1008,7 +1008,12 @@ namespace LcmsNetSQLiteTools
                             {
                                 var columnName = reader.GetName(i);
                                 var properName = nameMappings[columnName.ToLower()];
-                                var setMethod = typeMappings[properName].SetProperty;
+                                var setProp = typeMappings[properName].SetProperty;
+                                var setMethod = setProp;
+                                if (typeMappings[properName].DoStringDeDuplication)
+                                {
+                                    setMethod = (obj, val) => setProp(obj, (val as string).LimitStringDuplication(deDupDictionary));
+                                }
                                 columnMappings[i] = new KeyValuePair<int, Action<object, object>>(i, setMethod);
                                 columnSetOrder[i] = i;
 

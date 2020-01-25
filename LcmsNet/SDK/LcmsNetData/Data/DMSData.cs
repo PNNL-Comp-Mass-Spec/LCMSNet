@@ -201,6 +201,7 @@ namespace LcmsNetData.Data
         /// Name of request in DMS. Becomes sample name in LCMS and forms part
         /// of dataset name sample after run
         /// </summary>
+        [PersistenceSetting(IsUniqueColumn = true)]
         public string RequestName
         {
             get => requestName;
@@ -219,6 +220,7 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Gets or sets the name of the dataset after editing the request name.
         /// </summary>
+        [PersistenceSetting(IsUniqueColumn = true)]
         public string DatasetName
         {
             get => datasetName;
@@ -228,6 +230,7 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Numeric ID of request in DMS
         /// </summary>
+        [PersistenceSetting(IsUniqueColumn = true)]
         public int RequestID
         {
             get => requestId;
