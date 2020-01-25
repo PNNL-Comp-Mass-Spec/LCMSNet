@@ -40,7 +40,6 @@ using System.ComponentModel;
 using LcmsNetData;
 using LcmsNetData.Configuration;
 using LcmsNetData.Data;
-using LcmsNetData.Method;
 using LcmsNetData.System;
 using LcmsNetSDK.Method;
 
@@ -50,7 +49,7 @@ namespace LcmsNetSDK.Data
     /// Class to hold data for one sample (more specifically, one instrument dataset)
     /// </summary>
     [Serializable]
-    public class SampleData : SampleDataBasic, ICloneable, IEquatable<SampleData>
+    public class SampleData : ISampleData, ITriggerFilePalData, IRequestedRunDataWithPalData, ICloneable, IEquatable<SampleData>, INotifyPropertyChangedExt
     {
         #region Delegate Definitions
 
@@ -72,7 +71,12 @@ namespace LcmsNetSDK.Data
         {
         }
 
-        public override SampleDataBasic GetNewNonDummy()
+        ISampleData ISampleData.GetNewNonDummy()
+        {
+            return GetNewNonDummy();
+        }
+
+        public SampleData GetNewNonDummy()
         {
             return new SampleData(false);
         }
@@ -84,12 +88,17 @@ namespace LcmsNetSDK.Data
         public SampleData(bool isDummySample)
         {
             IsDummySample = isDummySample;
+            DmsData = new DMSData();
+
+            PAL = new PalData();
+            columnData = new ColumnData();
+            InstrumentMethod = "";
 
             //
             // Set the default column to the first column,
             // and sequence number to non-existent.
             //
-            m_sequenceNumber = -1;
+            sequenceNumber = -1;
 
             LCMethod = null;
             Volume = CartConfiguration.MinimumSampleVolume;
@@ -114,9 +123,9 @@ namespace LcmsNetSDK.Data
             var newSample = new SampleData(this.IsDummySample);
 
             newSample.DmsData = this.DmsData?.Clone() as DMSData;
-            newSample.m_sequenceNumber = this.m_sequenceNumber;
+            newSample.sequenceNumber = this.sequenceNumber;
             newSample.PAL = this.PAL?.Clone() as PalData;
-            newSample.m_volume = this.m_volume;
+            newSample.volume = this.volume;
             newSample.ColumnData = this.ColumnData?.Clone() as ColumnData;
             newSample.UniqueID = this.UniqueID;
             newSample.LCMethod = this.LCMethod;
@@ -126,11 +135,11 @@ namespace LcmsNetSDK.Data
             {
                 newSample.Operator = this.Operator;
             }
-            newSample.m_IsDuplicateRequestName = this.m_IsDuplicateRequestName;
-            newSample.m_SampleErrors = this.m_SampleErrors;
+            newSample.isDuplicateRequestName = this.isDuplicateRequestName;
+            newSample.sampleErrors = this.sampleErrors;
 
             // The ability to set some properties is keyed on the value of this property, so set it last.
-            newSample.m_RunningStatus = this.m_RunningStatus;
+            newSample.runningStatus = this.runningStatus;
 
             return newSample;
         }
@@ -193,12 +202,12 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Sequence order of the sample to run.
         /// </summary>
-        private long m_sequenceNumber;
+        private long sequenceNumber;
 
         /// <summary>
         /// Volume of sample to inject.
         /// </summary>
-        private double m_volume;
+        private double volume;
 
         /// <summary>
         /// LC Method that controls all of the hardware via the scheduling interface - UI consistent version.
@@ -211,16 +220,36 @@ namespace LcmsNetSDK.Data
         private LCMethod actualMethod;
 
         /// <summary>
+        /// DMS Data structure.
+        /// </summary>
+        private DMSData dmsData;
+
+        /// <summary>
+        /// Pal Data reference.
+        /// </summary>
+        private PalData palData;
+
+        /// <summary>
+        /// Information regarding what column the sample is to be, or did run on.
+        /// </summary>
+        private ColumnData columnData;
+
+        /// <summary>
+        /// Instrument method.
+        /// </summary>
+        private string instrumentMethod;
+
+        /// <summary>
         /// Status of the sample running on a column thread or waiting in a queue.
         /// </summary>
-        private SampleRunningStatus m_RunningStatus;
+        private SampleRunningStatus runningStatus;
 
         /// <summary>
         /// If the sample's request name is a duplicate
         /// </summary>
-        private bool m_IsDuplicateRequestName = false;
+        private bool isDuplicateRequestName = false;
 
-        private string m_SampleErrors = null;
+        private string sampleErrors = null;
 
         #endregion
 
@@ -229,14 +258,14 @@ namespace LcmsNetSDK.Data
         [PersistenceSetting(IgnoreProperty = true)]
         public string SampleErrors
         {
-            get => m_SampleErrors;
+            get => sampleErrors;
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     value = null; // For UI purposes, we want this to be null if it is blank (because it then prevents appearance of the tooltip).
                 }
-                this.RaiseAndSetIfChanged(ref m_SampleErrors, value, nameof(SampleErrors));
+                this.RaiseAndSetIfChanged(ref sampleErrors, value, nameof(SampleErrors));
             }
         }
 
@@ -252,10 +281,10 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public SampleRunningStatus RunningStatus
         {
-            get => m_RunningStatus;
+            get => runningStatus;
             set
             {
-                if (m_RunningStatus == SampleRunningStatus.Complete)
+                if (runningStatus == SampleRunningStatus.Complete)
                 {
                     OnPropertyChanged(nameof(RunningStatus));
                     return;
@@ -263,7 +292,7 @@ namespace LcmsNetSDK.Data
                 // Set it if it changed, and only raise the other propertyChanged notifications if it changed
                 var oldHasNotRun = HasNotRun;
                 var oldIsSetToRun = IsSetToRunOrHasRun;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_RunningStatus, value, nameof(RunningStatus)))
+                if (this.RaiseAndSetIfChangedRetBool(ref runningStatus, value, nameof(RunningStatus)))
                 {
                     if (oldHasNotRun != HasNotRun)
                     {
@@ -283,8 +312,8 @@ namespace LcmsNetSDK.Data
         [PersistenceSetting(IgnoreProperty = true)]
         public bool IsDuplicateRequestName
         {
-            get => m_IsDuplicateRequestName;
-            set => this.RaiseAndSetIfChanged(ref m_IsDuplicateRequestName, value, nameof(IsDuplicateRequestName));
+            get => isDuplicateRequestName;
+            set => this.RaiseAndSetIfChanged(ref isDuplicateRequestName, value, nameof(IsDuplicateRequestName));
         }
 
         /// <summary>
@@ -300,10 +329,64 @@ namespace LcmsNetSDK.Data
         public bool IsSetToRunOrHasRun => RunningStatus == SampleRunningStatus.WaitingToRun || !HasNotRun;
 
         /// <summary>
-        /// Gets or sets the experiment setup object data.
+        /// Gets or sets the instrument method.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
-        public override LCMethodBasic ActualLCMethodBasic => ActualLCMethod;
+        [PersistenceSetting(ColumnName = "Ins.MethodName")]
+        public string InstrumentMethod
+        {
+            get => instrumentMethod;
+            set => this.RaiseAndSetIfChanged(ref instrumentMethod, value, nameof(InstrumentMethod));
+        }
+
+        /// <summary>
+        /// Gets or sets the list of data downloaded from DMS for this sample
+        /// </summary>
+        [PersistenceSetting(ColumnNamePrefix = "DMS.")]
+        public DMSData DmsData
+        {
+            get => dmsData;
+            set
+            {
+                var oldValue = dmsData;
+                if (this.RaiseAndSetIfChangedRetBool(ref dmsData, value, nameof(DmsData)))
+                {
+                    if (oldValue != null)
+                    {
+                        oldValue.PropertyChanged -= DmsDataChanged;
+                    }
+
+                    if (value != null)
+                    {
+                        value.PropertyChanged += DmsDataChanged;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the pal data associated with this sample.
+        /// </summary>
+        [PersistenceSetting(ColumnNamePrefix = "PAL.")]
+        public PalData PAL
+        {
+            get => palData;
+            set
+            {
+                var oldValue = palData;
+                if (this.RaiseAndSetIfChangedRetBool(ref palData, value, nameof(PAL)))
+                {
+                    if (oldValue != null)
+                    {
+                        oldValue.PropertyChanged -= PalDataChanged;
+                    }
+
+                    if (value != null)
+                    {
+                        value.PropertyChanged += PalDataChanged;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the experiment object data.
@@ -322,23 +405,6 @@ namespace LcmsNetSDK.Data
 
                 actualMethod = value;
                 this.RaisePropertyChanged(nameof(ActualLCMethod));
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the experiment setup object data.
-        /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
-        public override LCMethodBasic LCMethodBasic
-        {
-            get => LCMethod;
-            set
-            {
-                if (value is LCMethod newMethod)
-                {
-                    LCMethod = newMethod;
-                }
-                this.RaisePropertyChanged();
             }
         }
 
@@ -373,8 +439,8 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public long SequenceID
         {
-            get => m_sequenceNumber;
-            set => this.RaiseAndSetIfChanged(ref m_sequenceNumber, value, nameof(SequenceID));
+            get => sequenceNumber;
+            set => this.RaiseAndSetIfChanged(ref sequenceNumber, value, nameof(SequenceID));
         }
 
         /// <summary>
@@ -382,7 +448,7 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public double Volume
         {
-            get => m_volume;
+            get => volume;
             set
             {
                 if (value < CartConfiguration.MinimumVolume)
@@ -391,7 +457,7 @@ namespace LcmsNetSDK.Data
                     this.RaisePropertyChanged(nameof(Volume));
                     return;
                 }
-                this.RaiseAndSetIfChanged(ref m_volume, value, nameof(Volume));
+                this.RaiseAndSetIfChanged(ref volume, value, nameof(Volume));
             }
         }
 
@@ -399,13 +465,13 @@ namespace LcmsNetSDK.Data
         /// Gets or sets the column data this sample is/was run on.
         /// </summary>
         [PersistenceSetting(ColumnNamePrefix = "Col.")]
-        public override ColumnData ColumnData
+        public ColumnData ColumnData
         {
             // TODO: Should this just return LCMethod.Column? It would solve a few headaches.
-            get => base.ColumnData;
+            get => columnData;
             set
             {
-                var oldColumn = base.ColumnData;
+                var oldColumn = columnData;
                 if (!EqualityComparer<ColumnData>.Default.Equals(oldColumn, value))
                 {
                     if (oldColumn != null)
@@ -413,7 +479,7 @@ namespace LcmsNetSDK.Data
                         oldColumn.NameChanged -= m_columnData_NameChanged;
                     }
 
-                    base.ColumnData = value;
+                    columnData = value;
 
                     if (value != null)
                     {
@@ -424,6 +490,11 @@ namespace LcmsNetSDK.Data
                 }
             }
         }
+
+        /// <summary>
+        /// Operator performing LC run
+        /// </summary>
+        public string Operator { get; set; }
 
         /// <summary>
         /// Wipes out the current <see cref="ActualLCMethod"/>, and replaces it with a clone of the parameter (or a clone of <see cref="LCMethod"/>)
@@ -483,11 +554,31 @@ namespace LcmsNetSDK.Data
 
         /// <inheritdoc />
         [PersistenceSetting(IgnoreProperty = true)]
-        public override string InstrumentName => LCMSSettings.GetParameter(LCMSSettings.PARAM_INSTNAME);
+        public virtual DateTime RunStart => ActualLCMethod?.ActualStart ?? DateTime.MinValue;
 
         /// <inheritdoc />
         [PersistenceSetting(IgnoreProperty = true)]
-        public override string SeparationType => LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE);
+        public virtual DateTime RunFinish => ActualLCMethod?.ActualEnd ?? DateTime.MinValue;
+
+        /// <inheritdoc />
+        [PersistenceSetting(IgnoreProperty = true)]
+        public virtual string ColumnName => ColumnData.Name;
+
+        /// <inheritdoc />
+        [PersistenceSetting(IgnoreProperty = true)]
+        public string InstrumentName => LCMSSettings.GetParameter(LCMSSettings.PARAM_INSTNAME);
+
+        /// <inheritdoc />
+        [PersistenceSetting(IgnoreProperty = true)]
+        public string SeparationType => LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE);
+
+        /// <inheritdoc />
+        [PersistenceSetting(IgnoreProperty = true)]
+        public virtual string CaptureSubdirectoryPath => "";
+
+        /// <inheritdoc />
+        [PersistenceSetting(IgnoreProperty = true)]
+        public virtual string InterestRating => "Unreviewed";
 
         #endregion
 
@@ -556,6 +647,18 @@ namespace LcmsNetSDK.Data
         public override int GetHashCode()
         {
             return UniqueID.GetHashCode();
+        }
+
+        #endregion
+
+        #region "INotifyPropertyChanged implementation"
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion

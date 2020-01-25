@@ -1348,7 +1348,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        private IEnumerable<T> ReadRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
+        private IEnumerable<T> ReadRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : IRequestedRunData, new()
         {
             var connStr = GetConnectionString();
 
@@ -1396,13 +1396,16 @@ namespace LcmsNetDmsTools
                             }
                         };
 
-                        var wellNumber = reader["Well Number"].CastDBValTo<string>();
-                        tmpDMSData.PAL.Well = ConvertWellStringToInt(wellNumber);
+                        if (tmpDMSData is IRequestedRunDataWithPalData palData)
+                        {
+                            var wellNumber = reader["Well Number"].CastDBValTo<string>();
+                            palData.PAL.Well = ConvertWellStringToInt(wellNumber);
 
-                        tmpDMSData.PAL.WellPlate = reader["Wellplate Number"].CastDBValTo<string>();
+                            palData.PAL.WellPlate = reader["Wellplate Number"].CastDBValTo<string>();
 
-                        if (string.IsNullOrWhiteSpace(tmpDMSData.PAL.WellPlate) || tmpDMSData.PAL.WellPlate == "na")
-                            tmpDMSData.PAL.WellPlate = "";
+                            if (string.IsNullOrWhiteSpace(palData.PAL.WellPlate) || palData.PAL.WellPlate == "na")
+                                palData.PAL.WellPlate = "";
+                        }
 
                         yield return tmpDMSData;
                     }
@@ -1688,7 +1691,7 @@ namespace LcmsNetDmsTools
         /// Gets a list of samples (essentially requested runs) from DMS
         /// </summary>
         /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
-        public IEnumerable<T> GetRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : SampleDataBasic, new()
+        public IEnumerable<T> GetRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : IRequestedRunData, new()
         {
             try
             {

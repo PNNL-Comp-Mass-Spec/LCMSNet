@@ -1007,7 +1007,13 @@ namespace LcmsNetSQLiteTools
                             for (var i = 0; i < columnCount; i++)
                             {
                                 var columnName = reader.GetName(i);
-                                var properName = nameMappings[columnName.ToLower()];
+                                if (!nameMappings.TryGetValue(columnName.ToLower(), out var tempName))
+                                {
+                                    // The property that populated the column no longer exists. Report an error and continue.
+                                    ApplicationLogger.LogError(LogLevel.Warning, $"Could not find the property to store data from column {columnName} in SQLite table {tableName}!");
+                                    continue;
+                                }
+                                var properName = tempName;
                                 var setProp = typeMappings[properName].SetProperty;
                                 var setMethod = setProp;
                                 if (typeMappings[properName].DoStringDeDuplication)
@@ -1031,7 +1037,7 @@ namespace LcmsNetSQLiteTools
                         var data = objectCreator();
 
                         // Populate the properties from the cache
-                        foreach (var column in columnMappings)
+                        foreach (var column in columnMappings.Where(x => x.Value != null))
                         {
                             var value = reader[column.Key];
                             var setMethod = column.Value;

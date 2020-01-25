@@ -112,7 +112,7 @@ namespace LcmsNetData.Logging
                 // Write the message to the log file
                 WriteToLogFile(msgStr.ToString());
             }
-                // ReSharper disable once EmptyGeneralCatchClause
+            // ReSharper disable once EmptyGeneralCatchClause
             catch
             {
                 // if something dies...oh well..

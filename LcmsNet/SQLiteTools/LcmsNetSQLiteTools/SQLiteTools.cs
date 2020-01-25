@@ -182,7 +182,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <returns>List containing queue data</returns>
-        public static IEnumerable<T> GetQueueFromCache<T>(DatabaseTableTypes tableType) where T : SampleDataBasic, new()
+        public static IEnumerable<T> GetQueueFromCache<T>(DatabaseTableTypes tableType) where T : ISampleData, new()
         {
             return GetQueueFromCache<T>(tableType, ConnString);
         }
@@ -194,16 +194,11 @@ namespace LcmsNetSQLiteTools
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <param name="connectionString">Cache connection string</param>
         /// <returns>List containing queue data</returns>
-        public static IEnumerable<T> GetQueueFromCache<T>(DatabaseTableTypes tableType, string connectionString) where T : SampleDataBasic, new()
+        public static IEnumerable<T> GetQueueFromCache<T>(DatabaseTableTypes tableType, string connectionString) where T : ISampleData, new()
         {
-            if (typeof(T) == typeof(SampleDataBasic))
-            {
-                ApplicationLogger.LogError(0, "Cannot populate list of SampleDataBasic objects from database!");
-                return Enumerable.Empty<T>();
-            }
-
+            var exampleObject = new T();
             // All finished, so return
-            return Cache.ReadMultiColumnDataFromCache(tableType, () => (T)(new T().GetNewNonDummy()), connectionString);
+            return Cache.ReadMultiColumnDataFromCache(tableType, () => (T)(exampleObject.GetNewNonDummy()), connectionString);
         }
 
         /// <summary>
@@ -584,7 +579,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="queueData">List of SampleData containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
-        public static void SaveQueueToCache<T>(IEnumerable<T> queueData, DatabaseTableTypes tableType) where T : SampleDataBasic, new()
+        public static void SaveQueueToCache<T>(IEnumerable<T> queueData, DatabaseTableTypes tableType) where T : ISampleData, new()
         {
             SaveQueueToCache(queueData, tableType, ConnString);
         }
@@ -596,14 +591,8 @@ namespace LcmsNetSQLiteTools
         /// <param name="queueData">List containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         /// <param name="connStr">Connection string for database file</param>
-        public static void SaveQueueToCache<T>(IEnumerable<T> queueData, DatabaseTableTypes tableType, string connStr) where T : SampleDataBasic, new()
+        public static void SaveQueueToCache<T>(IEnumerable<T> queueData, DatabaseTableTypes tableType, string connStr) where T : ISampleData, new()
         {
-            if (typeof(T) == typeof(SampleDataBasic))
-            {
-                ApplicationLogger.LogError(0, "Cannot write list of SampleDataBasic objects to database!");
-                return;
-            }
-
             Cache.SaveMultiColumnListToCache(tableType, queueData, connStr);
         }
 

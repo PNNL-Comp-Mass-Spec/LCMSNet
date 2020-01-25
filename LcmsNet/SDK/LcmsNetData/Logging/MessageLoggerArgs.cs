@@ -1,5 +1,4 @@
 ﻿using System;
-using LcmsNetData.Data;
 
 namespace LcmsNetData.Logging
 {
@@ -16,19 +15,19 @@ namespace LcmsNetData.Logging
         public MessageLoggerArgs(string message)
         {
             Message = message;
-            Sample = null;
+            ErrorObject = null;
         }
 
         /// <summary>
         /// Constructor that takes the error message.
         /// </summary>
         /// <param name="message">Error message</param>
-        /// <param name="sample"></param>
+        /// <param name="errorObject"></param>
         [Obsolete("Use constructor with logLevel and default parameters", true)]
-        public MessageLoggerArgs(string message, SampleDataBasic sample)
+        public MessageLoggerArgs(string message, object errorObject)
         {
             Message = message;
-            Sample = sample;
+            ErrorObject = errorObject;
         }
 
         /// <summary>
@@ -36,12 +35,12 @@ namespace LcmsNetData.Logging
         /// </summary>
         /// <param name="logLevel">Error logging level</param>
         /// <param name="message">Error message</param>
-        /// <param name="sample"></param>
-        public MessageLoggerArgs(int logLevel, string message, SampleDataBasic sample = null)
+        /// <param name="errorObject"></param>
+        public MessageLoggerArgs(int logLevel, string message, object errorObject = null)
         {
             LogLevel = logLevel;
             Message = message;
-            Sample = sample;
+            ErrorObject = errorObject;
         }
 
         public int LogLevel { get; }
@@ -54,6 +53,6 @@ namespace LcmsNetData.Logging
         /// <summary>
         /// Gets the sample data associated with this method.
         /// </summary>
-        public SampleDataBasic Sample { get; }
+        public object ErrorObject { get; }
     }
 }

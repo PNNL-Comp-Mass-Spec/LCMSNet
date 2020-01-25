@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using LcmsNetData.Data;
 
 namespace LcmsNetData.Logging
 {
@@ -70,10 +69,10 @@ namespace LcmsNetData.Logging
         /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered (0 is most important, 5 is least important)</param>
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception</param>
-        /// <param name="sample">Data for a sample</param>
-        public static void LogError(int errorLevel, string message, Exception ex = null, SampleDataBasic sample = null)
+        /// <param name="errorObject">Data for a sample</param>
+        public static void LogError(int errorLevel, string message, Exception ex = null, object errorObject = null)
         {
-            var args = new ErrorLoggerArgs(errorLevel, message, ex, sample);
+            var args = new ErrorLoggerArgs(errorLevel, message, ex, errorObject);
 
             if (loggingStopped || !loggingRunner.AddItem(args))
             {
@@ -88,10 +87,10 @@ namespace LcmsNetData.Logging
         /// <param name="errorLevel">Level of the error message so more verbose errors can be filtered</param>
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception</param>
-        /// <param name="sample">Data for a sample</param>
-        public static void LogError(LogLevel errorLevel, string message, Exception ex = null, SampleDataBasic sample = null)
+        /// <param name="errorObject">Data for a sample</param>
+        public static void LogError(LogLevel errorLevel, string message, Exception ex = null, object errorObject = null)
         {
-            LogError((int)errorLevel, message, ex, sample);
+            LogError((int)errorLevel, message, ex, errorObject);
         }
 
         /// <summary>
@@ -99,14 +98,14 @@ namespace LcmsNetData.Logging
         /// </summary>
         /// <param name="messageLevel">Level of the message so more verbose messages can be filtered (0 is most important, 5 is least important)</param>
         /// <param name="message">Message to log</param>
-        /// <param name="sample">Sample data</param>
+        /// <param name="errorObject">Sample data</param>
         /// <remarks>
         /// When MessageLevel is 0, only critical errors are logged
         /// When MessageLevel is 5, all messages are logged
         /// </remarks>
-        public static void LogMessage(int messageLevel, string message, SampleDataBasic sample = null)
+        public static void LogMessage(int messageLevel, string message, object errorObject = null)
         {
-            var args = new MessageLoggerArgs(messageLevel, message, sample);
+            var args = new MessageLoggerArgs(messageLevel, message, errorObject);
 
             if (loggingStopped || !loggingRunner.AddItem(args))
             {
@@ -120,14 +119,14 @@ namespace LcmsNetData.Logging
         /// </summary>
         /// <param name="messageLevel">Level of the message so more verbose messages can be filtered</param>
         /// <param name="message">Message to log</param>
-        /// <param name="sample">Sample data</param>
+        /// <param name="errorObject">Sample data</param>
         /// <remarks>
         /// When MessageLevel is 0, only critical errors are logged
         /// When MessageLevel is 5, all messages are logged
         /// </remarks>
-        public static void LogMessage(LogLevel messageLevel, string message, SampleDataBasic sample = null)
+        public static void LogMessage(LogLevel messageLevel, string message, object errorObject = null)
         {
-            LogMessage((int)messageLevel, message, sample);
+            LogMessage((int)messageLevel, message, errorObject);
         }
 
         private static void FireLogging(MessageLoggerArgs args)

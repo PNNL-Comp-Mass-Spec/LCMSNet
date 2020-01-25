@@ -51,13 +51,14 @@
     <Compile Include="Data\ConvertVialPosition.cs" />
     <Compile Include="Data\ExperimentData.cs" />
     <Compile Include="Data\InstrumentInfo.cs" />
+    <Compile Include="Data\IRequestedRunData.cs" />
+    <Compile Include="Data\ISampleData.cs" />
     <Compile Include="Data\ITriggerFileData.cs" />
     <Compile Include="Data\LCColumnData.cs" />
     <Compile Include="Data\MRMFileData.cs" />
     <Compile Include="Data\PalData.cs" />
     <Compile Include="Data\PersistenceSettingAttribute.cs" />
     <Compile Include="Data\ProposalUser.cs" />
-    <Compile Include="Data\SampleDataBasic.cs" />
     <Compile Include="Data\SampleQueryData.cs" />
     <Compile Include="Data\SampleRunningStatus.cs" />
     <Compile Include="Data\DMSData.cs" />
@@ -78,7 +79,6 @@
     <Compile Include="Logging\MessageLoggerArgs.cs" />
     <Compile Include="Logging\ThreadedLogger.cs" />
     <Compile Include="MessageBoxDisplayExtension.cs" />
-    <Compile Include="Method\LCMethodBasic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemInformationReporter.cs" />
     <Compile Include="System\PersistDataPaths.cs" />

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using LcmsNetData;
 using LcmsNetData.Data;
-using LcmsNetData.Method;
 
 namespace LcmsNetSDK.Method
 {
@@ -11,7 +12,7 @@ namespace LcmsNetSDK.Method
     /// A method is a collection of LC-Events that define physical actions used to pipeline the control in an experiment.
     /// </summary>
     [Serializable]
-    public class LCMethod : LCMethodBasic, ICloneable, IEquatable<LCMethod>
+    public class LCMethod : ICloneable, IEquatable<LCMethod>, INotifyPropertyChangedExt
     {
         /// <summary>
         /// Number indicating that a sample has not run.
@@ -26,8 +27,8 @@ namespace LcmsNetSDK.Method
             Column = -1;
             AllowPostOverlap = true;
             AllowPreOverlap = true;
-            m_events = new List<LCEvent>();
-            m_actualEvents = new List<LCEvent>();
+            events = new List<LCEvent>();
+            actualEvents = new List<LCEvent>();
             Name = "";
             CurrentEventNumber = CONST_CURRENT_EVENT_NOT_RUN;
             IsSpecialMethod = false;
@@ -42,25 +43,107 @@ namespace LcmsNetSDK.Method
         [OnDeserializing]
         private void InitializedNonSerialized(StreamingContext context)
         {
-            m_events = new List<LCEvent>();
-            m_actualEvents = new List<LCEvent>();
+            events = new List<LCEvent>();
+            actualEvents = new List<LCEvent>();
         }
 
         #region Members
 
         /// <summary>
+        /// Start time of the method
+        /// </summary>
+        [NonSerialized] private DateTime startTime;
+
+        /// <summary>
+        /// Duration of the method.
+        /// </summary>
+        [NonSerialized] private TimeSpan methodDuration;
+
+        /// <summary>
+        /// End date only calculated at call of End property to get around serialization issues.
+        /// </summary>
+        private DateTime endTime;
+
+        /// <summary>
+        /// Actual start time of the method
+        /// </summary>
+        [NonSerialized] private DateTime actualStart;
+
+        /// <summary>
+        /// Actual end time of the method
+        /// </summary>
+        [NonSerialized] private DateTime actualEnd;
+
+        /// <summary>
         /// List of LC-events.
         /// </summary>
-        [NonSerialized] private List<LCEvent> m_events;
+        [NonSerialized] private List<LCEvent> events;
 
         /// <summary>
         /// List of LC-events whose values should reflect the actual start times and durations for an LC-Event.
         /// </summary>
-        [NonSerialized] private List<LCEvent> m_actualEvents;
+        [NonSerialized] private List<LCEvent> actualEvents;
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the duration for this action.
+        /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
+        public TimeSpan Duration => methodDuration;
+
+        /// <summary>
+        /// Gets the end time of the action.
+        /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
+        public DateTime End
+        {
+            get
+            {
+                endTime = Start.Add(methodDuration);
+                return endTime;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the Method.
+        /// </summary>
+        [PersistenceSetting(ColumnName = "ExperimentName")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets the start time of this action.
+        /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
+        public DateTime Start => startTime;
+
+        /// <summary>
+        /// Gets the actual start of the sample.
+        /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
+        public DateTime ActualStart
+        {
+            get => actualStart;
+            set => this.RaiseAndSetIfChanged(ref actualStart, value, nameof(ActualStart));
+        }
+
+        /// <summary>
+        /// Gets the actual end time of the sample.
+        /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
+        public DateTime ActualEnd
+        {
+            get => actualEnd;
+            set => this.RaiseAndSetIfChanged(ref actualEnd, value, nameof(ActualEnd));
+        }
+
+        /// <summary>
+        /// Gets the actual duration of the experiment that was run.
+        /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
+        public TimeSpan ActualDuration => ActualEnd.Subtract(ActualStart);
 
         /// <summary>
         /// Gets or sets the method for a
@@ -80,8 +163,8 @@ namespace LcmsNetSDK.Method
         [PersistenceSetting(IgnoreProperty = true)]
         public List<LCEvent> Events
         {
-            get => m_events;
-            set => m_events = value;
+            get => events;
+            set => events = value;
         }
 
         /// <summary>
@@ -90,8 +173,8 @@ namespace LcmsNetSDK.Method
         [PersistenceSetting(IgnoreProperty = true)]
         public List<LCEvent> ActualEvents
         {
-            get => m_actualEvents;
-            set => m_actualEvents = value;
+            get => actualEvents;
+            set => actualEvents = value;
         }
 
         /// <summary>
@@ -130,6 +213,20 @@ namespace LcmsNetSDK.Method
         #region Methods
 
         /// <summary>
+        /// Set the method start time and duration
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="duration"></param>
+        protected void SetStartTimeAndDuration(DateTime start, TimeSpan duration)
+        {
+            startTime = start;
+            methodDuration = duration;
+            OnPropertyChanged(nameof(Start));
+            OnPropertyChanged(nameof(Duration));
+            OnPropertyChanged(nameof(End));
+        }
+
+        /// <summary>
         /// Writes the required data for this event to the path provided.
         /// </summary>
         /// <param name="directoryPath">Path of directory to write data to.</param>
@@ -138,7 +235,7 @@ namespace LcmsNetSDK.Method
             //
             // For each event, we tell the device to write the required used data.
             //
-            foreach (var lcEvent in m_events)
+            foreach (var lcEvent in events)
             {
                 //
                 // Only write this if we have performance data for this method....
@@ -157,7 +254,7 @@ namespace LcmsNetSDK.Method
         /// Sets the start time for the method and updates the internal event start times.
         /// </summary>
         /// <param name="start">Time to start the method.</param>
-        public override void SetStartTime(DateTime start)
+        public void SetStartTime(DateTime start)
         {
             //
             // Update the start time and cascade the calculation so that
@@ -215,7 +312,7 @@ namespace LcmsNetSDK.Method
                 Name = Name
             };
 
-            if (m_events != null)
+            if (events != null)
             {
                 foreach (var lcEvent in Events)
                 {
@@ -271,6 +368,18 @@ namespace LcmsNetSDK.Method
                 hashCode = (hashCode * 397) ^ Events.Distinct().Aggregate(0, (x, y) => x.GetHashCode() ^ y.GetHashCode());
                 return hashCode;
             }
+        }
+
+        #endregion
+
+        #region "INotifyPropertyChanged implementation"
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion

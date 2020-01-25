@@ -75,7 +75,7 @@ namespace LcmsNetDmsTools
         /// <param name="sample"></param>
         /// <returns>True if valid, false if invalid</returns>
         [Obsolete("Use IsSampleValidDetailed to report why it failed")]
-        public bool IsSampleValid(SampleDataBasic sample)
+        public bool IsSampleValid(IRequestedRunData sample)
         {
             var data = sample.DmsData;
 
@@ -123,7 +123,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="sample"></param>
         /// <returns>True if valid, false if invalid</returns>
-        public DMSSampleValidatorErrors IsSampleValidDetailed(SampleDataBasic sample)
+        public DMSSampleValidatorErrors IsSampleValidDetailed(IRequestedRunData sample)
         {
             var data = sample.DmsData;
 
@@ -234,7 +234,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsEMSLProposalIDValid(SampleDataBasic sample)
+        public static bool IsEMSLProposalIDValid(IRequestedRunData sample)
         {
             var data = sample.DmsData;
 
@@ -256,7 +256,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsEMSLUserValid(SampleDataBasic sample)
+        public static bool IsEMSLUserValid(IRequestedRunData sample)
         {
             var data = sample.DmsData;
 
@@ -278,7 +278,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsEMSLUsageTypeValid(SampleDataBasic sample)
+        public static bool IsEMSLUsageTypeValid(IRequestedRunData sample)
         {
             var data = sample.DmsData;
 
@@ -297,7 +297,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsExperimentNameValid(SampleDataBasic sample)
+        public static bool IsExperimentNameValid(IRequestedRunData sample)
         {
             var data = sample.DmsData;
 
@@ -316,7 +316,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsCartConfigValid(SampleDataBasic sample)
+        public static bool IsCartConfigValid(IRequestedRunData sample)
         {
             var data = sample.DmsData;
 

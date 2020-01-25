@@ -1,5 +1,4 @@
 ﻿using System;
-using LcmsNetData.Data;
 
 namespace LcmsNetData.Logging
 {
@@ -23,10 +22,10 @@ namespace LcmsNetData.Logging
         /// Constructor that takes the error message.
         /// </summary>
         /// <param name="message">Error message</param>
-        /// <param name="sample"></param>
+        /// <param name="errorObject"></param>
         [Obsolete("Use constructor with logLevel and default parameters", true)]
-        public ErrorLoggerArgs(string message, SampleDataBasic sample) :
-            base(message, sample)
+        public ErrorLoggerArgs(string message, object errorObject) :
+            base(message, errorObject)
         {
             Exception = null;
         }
@@ -48,10 +47,10 @@ namespace LcmsNetData.Logging
         /// </summary>
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception found</param>
-        /// <param name="sample"></param>
+        /// <param name="errorObject"></param>
         [Obsolete("Use constructor with logLevel and default parameters", true)]
-        public ErrorLoggerArgs(string message, Exception ex, SampleDataBasic sample) :
-            base(message, sample)
+        public ErrorLoggerArgs(string message, Exception ex, object errorObject) :
+            base(message, errorObject)
         {
             Exception = ex;
         }
@@ -62,8 +61,8 @@ namespace LcmsNetData.Logging
         /// <param name="logLevel">Error logging level</param>
         /// <param name="message">Error message</param>
         /// <param name="ex">Exception found</param>
-        /// <param name="sample"></param>
-        public ErrorLoggerArgs(int logLevel, string message, Exception ex = null, SampleDataBasic sample = null) : base(logLevel, message, sample)
+        /// <param name="errorObject"></param>
+        public ErrorLoggerArgs(int logLevel, string message, Exception ex = null, object errorObject = null) : base(logLevel, message, errorObject)
         {
             Exception = ex;
         }
