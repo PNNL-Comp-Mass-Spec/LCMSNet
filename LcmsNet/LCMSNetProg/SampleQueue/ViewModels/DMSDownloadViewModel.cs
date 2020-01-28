@@ -516,7 +516,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Tests downloaded samples to determine if any have blocking enabled
         /// </summary>
         /// <param name="inputData">List containing downloaded samples</param>
-        /// <returns>TRUE if any samples have blcoking enabled; otherwise FALSE</returns>
+        /// <returns>TRUE if any samples have blocking enabled; otherwise FALSE</returns>
         private bool IsBlockingEnabled(List<SampleData> inputData)
         {
             foreach (var testSample in inputData)

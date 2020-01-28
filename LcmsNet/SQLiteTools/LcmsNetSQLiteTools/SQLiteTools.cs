@@ -509,12 +509,12 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
-                var firstTimeLookupedSelectedSepType = LCMSSettings.GetParameter(LCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE);
+                var firstTimeLookupSelectedSepType = LCMSSettings.GetParameter(LCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE);
 
                 var isFirstTime = true;
-                if (!string.IsNullOrWhiteSpace(firstTimeLookupedSelectedSepType))
+                if (!string.IsNullOrWhiteSpace(firstTimeLookupSelectedSepType))
                 {
-                    isFirstTime = Convert.ToBoolean(firstTimeLookupedSelectedSepType);
+                    isFirstTime = Convert.ToBoolean(firstTimeLookupSelectedSepType);
                 }
 
                 if (!isFirstTime)

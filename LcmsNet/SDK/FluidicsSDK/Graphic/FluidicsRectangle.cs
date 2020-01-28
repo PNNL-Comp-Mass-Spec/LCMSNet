@@ -34,7 +34,7 @@ namespace FluidicsSDK.Graphic
         /// <param name="g">a DrawingContext object</param>
         /// <param name="alpha">an integer representing the alpha value to draw the rectangle at</param>
         /// <param name="scale">a float representing the scale to draw the rectangle at</param>
-        /// <param name="selected">a bool representing if the rectangle is hilighted or not</param>
+        /// <param name="selected">a bool representing if the rectangle is highlighted or not</param>
         /// <param name="error"></param>
         public override void Render(DrawingContext g, byte alpha, float scale, bool selected, bool error)
         {

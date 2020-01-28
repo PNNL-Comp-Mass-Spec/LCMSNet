@@ -31,7 +31,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     /// <returns>True if initialization successful.  False if initialization failed.</returns>
     bool Initialize(ref string errorMessage)
     {
-        // intialization code goes here
+        // initialization code goes here
         return true;
     }
     /// <summary>

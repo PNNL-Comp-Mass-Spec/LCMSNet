@@ -34,7 +34,7 @@ namespace FluidicsSDK.Managers
         /// <param name="device">an IDevice object</param>
         public void Add(IDevice device)
         {
-            // Make sure someone doesnt add this device twice....
+            // Make sure someone doesn't add this device twice....
             foreach (var fdevice in m_devices)
             {
                 if (fdevice.IDevice == device)
@@ -96,7 +96,7 @@ namespace FluidicsSDK.Managers
         /// </summary>
         /// <param name="g">a System.Windows.Media DrawingContext object</param>
         /// <param name="alpha">an integer representing the alpha value to draw the devices with</param>
-        /// <param name="scale">a float repsenting how much to scale the devices by</param>
+        /// <param name="scale">a float representing how much to scale the devices by</param>
         public void Render(DrawingContext g, byte alpha, float scale)
         {
             foreach (var device in m_devices)
@@ -173,7 +173,7 @@ namespace FluidicsSDK.Managers
         }
 
         /// <summary>
-        /// confirm selection of a fluidics device, allows selection hilighting for user
+        /// confirm selection of a fluidics device, allows selection highlighting for user
         /// </summary>
         /// <param name="device">a classFluidicsDevice object</param>
         /// <param name="mouse_location">location the mouse was clicked at</param>
@@ -183,7 +183,7 @@ namespace FluidicsSDK.Managers
         }
 
         /// <summary>
-        /// deslect specified device
+        /// deselect specified device
         /// </summary>
         /// <param name="device">a classFluidicsDevice object</param>
         internal void Deselect(FluidicsDevice device)
@@ -250,7 +250,7 @@ namespace FluidicsSDK.Managers
         /// find a device by it's associated IDevice
         /// </summary>
         /// <param name="device">the IDevice to search for</param>
-        /// <returns>a fluidics device reprsenting the IDevice, or null if one is not found in the list of active devices</returns>
+        /// <returns>a fluidics device representing the IDevice, or null if one is not found in the list of active devices</returns>
         public FluidicsDevice FindDevice(IDevice device)
         {
             FluidicsDevice fdevice = null;

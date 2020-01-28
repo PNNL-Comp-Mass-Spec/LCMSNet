@@ -16,11 +16,11 @@ namespace FluidicsSimulator
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="evnt"></param>
+        /// <param name="lcEvent"></param>
         /// <param name="elapsed"></param>
-        public SimulatedEventArgs(LCEvent evnt, TimeSpan elapsed)
+        public SimulatedEventArgs(LCEvent lcEvent, TimeSpan elapsed)
         {
-            Event = evnt;
+            Event = lcEvent;
             SimulatedTimeElapsed = elapsed;
         }
 
@@ -78,7 +78,7 @@ namespace FluidicsSimulator
         private SortedSet<SimEventList> m_simulationQueue;
 
         /// <summary>
-        /// The list that the simulator is currently exectuing(or stepping through)
+        /// The list that the simulator is currently executing(or stepping through)
         /// </summary>
         private SimEventList m_runningEvents;
 
@@ -120,7 +120,7 @@ namespace FluidicsSimulator
         /// </summary>
         public void Simulate()
         {
-            // acitvate the timer let it and the Step() method do the heavy lifting.
+            // activate the timer let it and the Step() method do the heavy lifting.
             if (!InProgress && IsReady)
             {
                 InProgress = !InProgress;
@@ -315,8 +315,8 @@ namespace FluidicsSimulator
                 return currentEvent;
             }
 
-            // If the current step doesnt have events, we need to pull from the simulation queue
-            // and then make sure we remove it from the queue so we dont actually re-run the events again
+            // If the current step doesn't have events, we need to pull from the simulation queue
+            // and then make sure we remove it from the queue so we don't actually re-run the events again
             if (m_runningEvents == null)
             {
                 m_runningEvents = m_simulationQueue.Min;
@@ -340,7 +340,7 @@ namespace FluidicsSimulator
             if (m_runningEvents == null)
                 return null;
 
-            // Now if we have 3 events to occur at the same time, we want to pull the first (order doesnt matter since they
+            // Now if we have 3 events to occur at the same time, we want to pull the first (order doesn't matter since they
             // resolve at the same time t,
             // then we update the running list, so if there are more events to execute, they will be picked up next step
             // otherwise, we set the value of the running list to null, so that the next time step t will occur.

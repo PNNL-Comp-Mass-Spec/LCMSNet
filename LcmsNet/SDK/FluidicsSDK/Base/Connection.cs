@@ -10,7 +10,7 @@ namespace FluidicsSDK.Base
     {
         #region Members
         // the list of line primitives that make up the device
-        private List<GraphicsPrimitive> m_prims;
+        private List<GraphicsPrimitive> graphicPrimitives;
 
         // the device the connection belongs to, if it is a connection internal to a device.
         private FluidicsDevice m_device;
@@ -37,7 +37,7 @@ namespace FluidicsSDK.Base
         {
             //assign the availableId to this, and then increment it so the next class gets availableId+1 as its id.
             m_id = availableId++;
-            m_prims = new List<GraphicsPrimitive>();
+            graphicPrimitives = new List<GraphicsPrimitive>();
             ConnectionStyle = ConnectionStyles.Standard;
             //TODO: Improve line start and end points so they touch the edge of the port circle at the proper points for the direction
             //that the line will go.
@@ -57,7 +57,7 @@ namespace FluidicsSDK.Base
             from.AddConnection(m_id, this);
             to.AddConnection(m_id, this);
             ConnectionStyle = style ?? ConnectionStyles.Standard;
-            m_prims = SetupLines(from, to);
+            graphicPrimitives = SetupLines(from, to);
             P1 = from;
             P2 = to;
             InternalConnectionOf = device;
@@ -109,7 +109,7 @@ namespace FluidicsSDK.Base
         {
             if (!Transparent)
             {
-                foreach (var singleLine in m_prims)
+                foreach (var singleLine in graphicPrimitives)
                 {
                     var line = (FluidicsLine)singleLine;
                     line.Render(g, alpha, scale, Selected, false);
@@ -136,14 +136,14 @@ namespace FluidicsSDK.Base
                 {
                     midPoint = new Point(P2.Center.X, P1.Center.Y);
                 }
-                var lineA = m_prims[0] as FluidicsLine;
+                var lineA = graphicPrimitives[0] as FluidicsLine;
                 if (lineA != null)
                 {
                     lineA.Origin = P1.Center;
                     lineA.Term = midPoint;
                 }
 
-                var lineB = m_prims[1] as FluidicsLine;
+                var lineB = graphicPrimitives[1] as FluidicsLine;
                 if (lineB != null)
                 {
                     lineB.Origin = midPoint;
@@ -152,7 +152,7 @@ namespace FluidicsSDK.Base
             }
             else
             {
-                var line = m_prims[0] as FluidicsLine;
+                var line = graphicPrimitives[0] as FluidicsLine;
                 if (line != null)
                 {
                     line.Origin = P1.Center;
@@ -202,7 +202,7 @@ namespace FluidicsSDK.Base
             //check to see if the point is on any of the lines that make up the connection
             if (!Transparent) // if the connection is transparent, we don't want to be able to select it
             {
-                foreach (var singleLine in m_prims)
+                foreach (var singleLine in graphicPrimitives)
                 {
                     var line = (FluidicsLine)singleLine;
                     var existsOnPoint = line.Contains(location, MAX_VARIANCE);
@@ -248,8 +248,8 @@ namespace FluidicsSDK.Base
                 {
                     ConnectionStyle = ConnectionStyles.Standard;
                 }
-                m_prims.Clear();
-                m_prims = SetupLines(P1, P2);
+                graphicPrimitives.Clear();
+                graphicPrimitives = SetupLines(P1, P2);
             }
         }
 
@@ -304,7 +304,7 @@ namespace FluidicsSDK.Base
         {
             set
             {
-                foreach (var prim in m_prims)
+                foreach (var prim in graphicPrimitives)
                 {
                     prim.Color = value;
                 }

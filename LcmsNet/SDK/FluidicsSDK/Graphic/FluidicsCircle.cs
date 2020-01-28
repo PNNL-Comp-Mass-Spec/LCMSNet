@@ -29,8 +29,8 @@ namespace FluidicsSDK.Graphic
         /// <summary>
         /// class constructor
         /// </summary>
-        /// <param name="loc">a Point representing the cirlces location on screen</param>
-        /// <param name="color">a Color to represent the cirlce</param>
+        /// <param name="loc">a Point representing the circles location on screen</param>
+        /// <param name="color">a Color to represent the circle</param>
         /// <param name="fillBrush">a Color to represent the color to fill the circle with</param>
         /// <param name="radius">an integer representing the radius of the circle, defaults to 5</param>
         /// <param name="fill">a bool determining if the circle should be filled with the fillColor</param>
@@ -103,7 +103,7 @@ namespace FluidicsSDK.Graphic
         #region Properties
 
         /// <summary>
-        /// Property determing the location of the circle on screen
+        /// Property determining the location of the circle on screen
         /// </summary>
         public override Point Loc
         {

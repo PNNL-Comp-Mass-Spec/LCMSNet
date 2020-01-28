@@ -521,7 +521,7 @@ namespace LcmsNet.Method.ViewModels
         #region Event List Control for Adding, Deleting, Moving, and Rendering LC-Events
 
         /// <summary>
-        /// Re-renderes the event list.
+        /// Re-renders the event list.
         /// </summary>
         private void RenderEventList()
         {

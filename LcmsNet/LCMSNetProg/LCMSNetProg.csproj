@@ -257,7 +257,7 @@
     <Compile Include="SampleQueue\IO\MethodFileTools.cs" />
     <Compile Include="SampleQueue\IO\MRMFileExporter.cs" />
     <Compile Include="SampleQueue\IO\QueueExportCSV.cs" />
-    <Compile Include="SampleQueue\IO\QueueExportExcalCSV.cs" />
+    <Compile Include="SampleQueue\IO\QueueExportXcaliburCSV.cs" />
     <Compile Include="SampleQueue\IO\QueueExportSQLite.cs" />
     <Compile Include="SampleQueue\IO\QueueExportXML.cs" />
     <Compile Include="SampleQueue\IO\QueueImportSQLite.cs" />

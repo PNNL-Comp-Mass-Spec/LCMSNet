@@ -12,7 +12,7 @@ namespace FluidicsSDK.Base
         #region Members
         //fluids currently passing through port/being injected/whatever.
         private List<Fluid> m_fluids;
-        //graphics primitive repsenting the port
+        //graphics primitive representing the port
         private FluidicsCircle m_primitive;
         private int m_radius;
         private const int MAX_PIXEL_VARIANCE = 7;

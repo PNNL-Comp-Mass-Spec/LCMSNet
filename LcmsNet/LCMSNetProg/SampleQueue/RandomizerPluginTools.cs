@@ -28,7 +28,7 @@ namespace LcmsNet.SampleQueue
                 return RetDict;
             }
 
-            // Load each dll and determine if it implmements IRandomizerInterface
+            // Load each dll and determine if it implements IRandomizerInterface
             foreach (var dllName in dllFiles)
             {
                 //Load the assembly

@@ -47,7 +47,7 @@ namespace FluidicsSDK.Graphic
         private Pen m_errorPen;
 
         private const int PEN_WIDTH = 4;
-        private static readonly Color DEFAULT_HILIGHT = Colors.DarkGray;
+        private static readonly Color DEFAULT_HIGHLIGHT = Colors.DarkGray;
         private static readonly Color DEFAULT_COLOR = Colors.Black;
         private static readonly Color DEFAULT_ERROR = Colors.Red;
 
@@ -63,7 +63,7 @@ namespace FluidicsSDK.Graphic
             m_fill = true;
             m_color = DEFAULT_COLOR;
             m_drawingPen = new Pen(new SolidColorBrush(m_color), PEN_WIDTH);
-            m_highlightColor = DEFAULT_HILIGHT;
+            m_highlightColor = DEFAULT_HIGHLIGHT;
             m_highlightPen = new Pen(new SolidColorBrush(m_highlightColor), PEN_WIDTH);
             m_errorColor = DEFAULT_ERROR;
             m_errorPen = new Pen(new SolidColorBrush(m_errorColor), PEN_WIDTH);
@@ -95,7 +95,7 @@ namespace FluidicsSDK.Graphic
             m_color = myColor ?? DEFAULT_COLOR;
             m_fillBrush = fillbrush;
             m_drawingPen = new Pen(new SolidColorBrush(m_color), PEN_WIDTH);
-            m_highlightColor = DEFAULT_HILIGHT;
+            m_highlightColor = DEFAULT_HIGHLIGHT;
             m_highlightPen = new Pen(new SolidColorBrush(m_highlightColor), PEN_WIDTH);
             m_errorColor = Colors.Red;
             m_errorPen = new Pen(new SolidColorBrush(m_errorColor), PEN_WIDTH);

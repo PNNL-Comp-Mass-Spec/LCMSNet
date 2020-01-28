@@ -21,7 +21,7 @@ namespace LcmsnetUnitTest
         /// Setup methods and optimizer for use in tests.
         /// </summary>
         [SetUp]
-        public void SetupOptmizerAndMethodsForOptimizerTests()
+        public void SetupOptimizerAndMethodsForOptimizerTests()
         {
             optimizer = new LCMethodOptimizer();
 
@@ -103,7 +103,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPosition", 1.00, string.Empty, -1, false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
             optimizer.AlignMethods(methods);
@@ -146,7 +146,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPosition", 1.00, string.Empty, -1, false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
             optimizer.AlignMethods(methods);
@@ -186,7 +186,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPosition", 1.00, string.Empty, -1, false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 1;
             optimizer.AlignMethods(methods);
@@ -231,7 +231,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1, false);
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPosition", 1.00, string.Empty, -1, false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
             optimizer.AlignMethods(methods);

@@ -118,7 +118,7 @@ namespace LcmsNetPlugins.LabJackU3
 
         public virtual void CC_DeviceSaveRequired(object sender, EventArgs e)
         {
-            //Propogate this event
+            //Propagate this event
             OnSaveRequired();
         }
 

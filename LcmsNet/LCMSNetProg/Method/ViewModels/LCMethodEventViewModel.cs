@@ -566,7 +566,7 @@ namespace LcmsNet.Method.ViewModels
         }
 
         /// <summary>
-        /// Reflects the given device and puts the method and parameter information in the appropiate combo boxes.
+        /// Reflects the given device and puts the method and parameter information in the appropriate combo boxes.
         /// </summary>
         public static List<LCMethodData> ReflectDevice(IDevice device)
         {
@@ -634,10 +634,7 @@ namespace LcmsNet.Method.ViewModels
                                     // type for it.
                                     if (paramInfo.ParameterType.IsEnum)
                                     {
-                                        var aenums = Enum.GetValues(paramInfo.ParameterType);
-                                        var enums = new object[aenums.Length];
-                                        aenums.CopyTo(enums, 0);
-                                        value = enums[0];
+                                        value = Enum.GetValues(paramInfo.ParameterType).GetValue(0);
                                     }
 
                                     // If the control is not null, then we can add it to display.

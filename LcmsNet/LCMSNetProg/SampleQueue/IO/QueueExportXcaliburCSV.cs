@@ -8,9 +8,9 @@ using LcmsNetSDK.Data;
 namespace LcmsNet.SampleQueue.IO
 {
     /// <summary>
-    /// Exports specified queue to CSV file specifically tailored to Excalibur import
+    /// Exports specified queue to CSV file specifically tailored to Xcalibur import
     /// </summary>
-    class QueueExportExcalCSV : ISampleQueueWriter
+    class QueueExportXcaliburCSV : ISampleQueueWriter
     {
 
         #region "Methods"

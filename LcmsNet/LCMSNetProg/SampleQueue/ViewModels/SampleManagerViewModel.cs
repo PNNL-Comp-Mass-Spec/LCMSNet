@@ -377,7 +377,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             // This tells anyone else using the samples to STOP!
             // For the scheduler this would tell him to stop first
-            // so that he can move the samples appropiately.
+            // so that he can move the samples appropriately.
             Stop?.Invoke(this, new EventArgs());
 
             // Moves the samples from the running queue back onto the
@@ -425,7 +425,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
 
                 // Of course if we have an error, we just want to display and alert the user.
-                // But we don't let them continue, they must edit their queue and make it appropiate
+                // But we don't let them continue, they must edit their queue and make it appropriate
                 // before running.
                 if (errors.Count > 0)
                 {
@@ -586,7 +586,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
-                ISampleQueueWriter writer = new QueueExportExcalCSV();
+                ISampleQueueWriter writer = new QueueExportXcaliburCSV();
                 ExportQueue(saveDialog.FileName, writer);
             }
         }

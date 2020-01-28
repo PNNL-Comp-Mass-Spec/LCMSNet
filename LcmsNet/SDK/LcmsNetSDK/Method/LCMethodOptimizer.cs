@@ -242,7 +242,7 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Takes a set of LC method data and constructs a series of LC events spacing them out appropiately with timing.
+        /// Takes a set of LC method data and constructs a series of LC events spacing them out appropriately with timing.
         /// </summary>
         /// <param name="methods">Method selections to convert into events.</param>
         /// <returns>List of LC-events to perform as part of an overall method.</returns>
@@ -293,7 +293,7 @@ namespace LcmsNetSDK.Method
                     // This tells any optimizer or scheduler that the event has discreet parameters.
                     //
                     // This is useful if we are trying to optimize two methods that use the same valve, but
-                    // dont require it to change the state.
+                    // don't require it to change the state.
                     //
                     lcEvent.HasDiscreteStates = data.MethodAttribute.HasDiscreteParameters;
 
@@ -483,13 +483,13 @@ namespace LcmsNetSDK.Method
                     if (aligneeEvent.Device != null)
                     {
                         //
-                        // If the baseline does not have the key, then dont worry about aligning this method
+                        // If the baseline does not have the key, then don't worry about aligning this method
                         //
                         if (baselineDeviceHash.ContainsKey(aligneeEvent.Device))
                         {
                             var deviceEvents = baselineDeviceHash[aligneeEvent.Device];
                             //
-                            // If there are no events for this device, then we dont need to worry about alignment.
+                            // If there are no events for this device, then we don't need to worry about alignment.
                             //
                             if (deviceEvents.Count > 0)
                             {
@@ -607,7 +607,7 @@ namespace LcmsNetSDK.Method
             }
 
             //System.Diagnostics.Debug.WriteLine("checking for overlap allowances...");
-            // Easy alignment scenarious -- don't allow anything to overlap!
+            // Easy alignment scenarios -- don't allow anything to overlap!
             if (!baselineMethods[k].AllowPostOverlap || !aligneeMethod.AllowPreOverlap)
             {
                 //System.Diagnostics.Debug.WriteLine(string.Format("Pre or Post Overlap not allowed, setting start time of Method: {0} to end of method at index {1} plus ten seconds", aligneeMethod.Name, k));
@@ -619,8 +619,8 @@ namespace LcmsNetSDK.Method
 
             var lastOverlap = k;
             // So the bottom line is, we are searching for the method j that provides the start of our comparisons.
-            // We also restrict the number of total columns that we can run on so we dont get BS overlap -- could do this.
-            // but the structure of the way this works doesnt allow for that.  The only way for this to happen is to have
+            // We also restrict the number of total columns that we can run on so we don't get BS overlap -- could do this.
+            // but the structure of the way this works doesn't allow for that.  The only way for this to happen is to have
             // more columns that is available for scheduling.
             for (j = k; j >= 0; j--)
             {
@@ -659,7 +659,7 @@ namespace LcmsNetSDK.Method
                 if (IsMethodOverlapping(baselineMethods[j], aligneeMethod))
                 {
                     //
-                    // Align, but dont reset the start time of the alignee method, just add to it to perform any alignment.
+                    // Align, but don't reset the start time of the alignee method, just add to it to perform any alignment.
                     //
                     var alignmentOccurred = AlignMethods(baselineMethods[j],
                         aligneeMethod,

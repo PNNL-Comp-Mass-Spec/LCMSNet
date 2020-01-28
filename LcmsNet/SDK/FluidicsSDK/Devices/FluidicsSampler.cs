@@ -109,7 +109,7 @@ namespace FluidicsSDK.Devices
         {
             get
             {
-                // get the primitve with the highest value for location + size in both width and height
+                // get the primitive with the highest value for location + size in both width and height
                 var width = m_primitives.Max(x => x.Loc.X + x.Size.Width);
                 var height = m_primitives.Max(x => x.Loc.Y + x.Size.Height);
                 //subtract the smallest x and y from respective measures

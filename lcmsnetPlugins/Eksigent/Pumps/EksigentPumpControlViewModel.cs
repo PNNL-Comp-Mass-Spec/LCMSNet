@@ -158,7 +158,7 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         }
 
         /// <summary>
-        /// Updates the list box with the appropiate method names.
+        /// Updates the list box with the appropriate method names.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>

@@ -535,7 +535,7 @@ namespace FluidicsSDK
         /// <summary>
         /// remove connections that connect to the specified port
         /// </summary>
-        /// <param name="port">a classport to remove connections from</param>
+        /// <param name="port">a port to remove connections from</param>
         public void RemoveConnections(Port port)
         {
             BeginModelSuspension();

@@ -28,7 +28,7 @@ namespace LcmsnetUnitTest
             var now = DateTime.UtcNow;
             var timeKeeperTime = TimeKeeper.Instance.Now;
             var nowAet = TimeZoneInfo.ConvertTimeFromUtc(now, aet);
-            // timekeeper time should be waaay different from aet time as it's set to pst.
+            // timekeeper time should be waaay different from set time as it's set to pst.
             // but mathematically, they would be the same(or close to the same) so we check the strings
             // to see if they actually are different
             Assert.IsFalse(nowAet.ToString(CultureInfo.InvariantCulture) == timeKeeperTime.ToString(CultureInfo.InvariantCulture));

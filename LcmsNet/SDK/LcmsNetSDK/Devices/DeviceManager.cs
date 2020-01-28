@@ -128,7 +128,7 @@ namespace LcmsNetSDK.Devices
         /// <summary>
         /// Fired when status changes for the device manager.
         /// </summary>
-        public event EventHandler<DeviceManagerStatusArgs> InitialzingDevice;
+        public event EventHandler<DeviceManagerStatusArgs> InitializingDevice;
 
         /// <summary>
         /// Fired when new plugins are loaded.
@@ -370,10 +370,10 @@ namespace LcmsNetSDK.Devices
                 // for emulation mode at startup/initialization.
                 device.Emulation = m_emulateDevices;
 
-                // Get all writeable properties.
+                // Get all writable properties.
                 var properties = type.GetProperties();
 
-                // Then map them so we dont have to do a N^2 search to set a value.
+                // Then map them so we don't have to do a N^2 search to set a value.
                 var propertyMap = new Dictionary<string, PropertyInfo>();
                 foreach (var property in properties)
                 {
@@ -516,7 +516,7 @@ namespace LcmsNetSDK.Devices
                     var attributes = property.GetCustomAttributes(
                         typeof (PersistenceDataAttribute),
                         true);
-                    // Make sure the propety is tagged to be persisted.
+                    // Make sure the property is tagged to be persisted.
                     if (attributes.Length < 1)
                         continue;
 
@@ -723,7 +723,7 @@ namespace LcmsNetSDK.Devices
         /// Creates a new device based on the plug-in information.
         /// </summary>
         /// <param name="plugin">Device plug-in used to create a new device.</param>
-        /// <param name="initialize">Indicates whether to initialize the device if added succesfully </param>
+        /// <param name="initialize">Indicates whether to initialize the device if added successfully </param>
         /// <returns>True if successful, False if it fails.</returns>
         public bool AddDevice(DevicePluginInformation plugin, bool initialize)
         {
@@ -835,7 +835,7 @@ namespace LcmsNetSDK.Devices
         /// <returns></returns>
         public bool InitializeDevice(IDevice device)
         {
-            InitialzingDevice?.Invoke(this, new DeviceManagerStatusArgs("Initializing " + device.Name));
+            InitializingDevice?.Invoke(this, new DeviceManagerStatusArgs("Initializing " + device.Name));
             try
             {
                 var errorMessage = "";
@@ -845,7 +845,7 @@ namespace LcmsNetSDK.Devices
                     device.Status = DeviceStatus.Error;
                     // We wrap error details in the event args class so that it can also be used via a delegate
                     // And then shove it into an exception class.  this way we force the
-                    // caller to handle any exception, but allow them to propogate to any observers.
+                    // caller to handle any exception, but allow them to propagate to any observers.
                     var args = new DeviceErrorEventArgs(
                         errorMessage,
                         null,
@@ -863,14 +863,14 @@ namespace LcmsNetSDK.Devices
             catch (Exception ex)
             {
                 device.Status = DeviceStatus.Error;
-                var args = new DeviceErrorEventArgs("Error intializing device.",
+                var args = new DeviceErrorEventArgs("Error initializing device.",
                     ex,
                     DeviceErrorStatus.ErrorAffectsAllColumns,
                     device);
                 throw new DeviceInitializationException(args);
             }
 
-            InitialzingDevice?.Invoke(this, new DeviceManagerStatusArgs("Finished initializing " + device.Name));
+            InitializingDevice?.Invoke(this, new DeviceManagerStatusArgs("Finished initializing " + device.Name));
 
             return true;
         }

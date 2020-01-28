@@ -24,9 +24,9 @@ namespace LcmsNet.SampleQueue.IO
         {
             // Make a copy of the data list, so that the rest of the app doesn't get screwed up by the sort
             var sortedData = new List<SampleData>();
-            foreach (var currSample in data)
+            foreach (var currentSample in data)
             {
-                var tmpSample = (SampleData) currSample.Clone();
+                var tmpSample = (SampleData)currentSample.Clone();
                 sortedData.Add(tmpSample);
             }
 

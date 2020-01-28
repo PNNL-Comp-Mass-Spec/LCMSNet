@@ -19,7 +19,7 @@ namespace LcmsNetSDK.Logging
         public static DbLogger Instance { get; } = new DbLogger();
 
         /// <summary>
-        /// Private default constructor to prevent external instanciation
+        /// Private default constructor to prevent external instantiation
         /// </summary>
         private DbLogger()
         {
@@ -216,14 +216,14 @@ namespace LcmsNetSDK.Logging
                 sqlCmdBlder.Append("'" + sample.ColumnData.ID + "',");
                 if (sample.ActualLCMethod != null)
                 {
-                    var eventIndx = sample.ActualLCMethod.CurrentEventNumber;
-                    if (eventIndx < 0 || eventIndx >= sample.ActualLCMethod.Events.Count)
+                    var eventIndex = sample.ActualLCMethod.CurrentEventNumber;
+                    if (eventIndex < 0 || eventIndex >= sample.ActualLCMethod.Events.Count)
                     {
                         sqlCmdBlder.Append("'',");
                     }
                     else
                     {
-                        sqlCmdBlder.Append("'" + sample.ActualLCMethod.Events[eventIndx].Device.Name + "',");
+                        sqlCmdBlder.Append("'" + sample.ActualLCMethod.Events[eventIndex].Device.Name + "',");
                     }
                 }
             }
@@ -465,7 +465,7 @@ namespace LcmsNetSDK.Logging
         /// Retrieves a data table from a SQLite database
         /// </summary>
         /// <param name="cmdStr">SQL command to execute</param>
-        /// <returns>A DataTable containing data specfied by <paramref name="cmdStr"/></returns>
+        /// <returns>A DataTable containing data specified by <paramref name="cmdStr"/></returns>
         private DataTable GetSQLiteDataTable(string cmdStr)
         {
             var returnTable = new DataTable();

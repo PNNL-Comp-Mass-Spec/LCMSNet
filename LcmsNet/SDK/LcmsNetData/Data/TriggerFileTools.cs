@@ -210,7 +210,7 @@ namespace LcmsNetData.Data
             var appPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH);
             var localTriggerFolderPath = Path.Combine(appPath, "TriggerFiles");
 
-            // If local folder doen't exist, then create it
+            // If local folder doesn't exist, then create it
             if (!Directory.Exists(localTriggerFolderPath))
             {
                 try
@@ -259,7 +259,7 @@ namespace LcmsNetData.Data
             // Check for presence of local trigger file directory
             var localFolderPath = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), "TriggerFiles");
 
-            // If local folder doen't exist, then there are no local trigger files
+            // If local folder doesn't exist, then there are no local trigger files
             if (!Directory.Exists(localFolderPath)) return false;
 
             var triggerFiles = Directory.GetFiles(localFolderPath);
@@ -299,7 +299,7 @@ namespace LcmsNetData.Data
             // Move the local files to the remote server
             var remoteFolderPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_TRIGGERFILEFOLDER);
 
-            // Verfiy remote folder connection exists
+            // Verify remote folder connection exists
             if (!Directory.Exists(remoteFolderPath))
             {
                 var msg = "MoveLocalTriggerFiles: Unable to connect to remote folder " + remoteFolderPath;

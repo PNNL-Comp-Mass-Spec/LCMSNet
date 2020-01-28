@@ -25,12 +25,12 @@ namespace LcmsNet.SampleQueue
     public enum enumColumnDataHandling
     {
         /// <summary>
-        /// Resorts the samples to the appropiate columns.
+        /// Resorts the samples to the appropriate columns.
         /// </summary>
         Resort,
 
         /// <summary>
-        /// Distributes samples across columns appropiately.
+        /// Distributes samples across columns appropriately.
         /// </summary>
         CreateUnused,
 
@@ -118,7 +118,7 @@ namespace LcmsNet.SampleQueue
         #region Constants
 
         /// <summary>
-        /// Defualt new sample name.
+        /// Default new sample name.
         /// </summary>
         private const string CONST_DEFAULT_SAMPLENAME = "blank";
 
@@ -561,7 +561,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Retrives the next sample to run.
+        /// Retrieves the next sample to run.
         /// </summary>
         /// <returns>A reference to the next sample to run.
         /// Null if there are no samples to run.</returns>
@@ -1023,7 +1023,7 @@ namespace LcmsNet.SampleQueue
         /// Adds a sample to the list of waiting samples.
         /// </summary>
         /// <param name="sampleList">List of samples to add.</param>
-        /// <param name="distributeSamplesEvenlyAcrossColumns">Tells the queue operation whether to distribute samples on other columnds</param>
+        /// <param name="distributeSamplesEvenlyAcrossColumns">Tells the queue operation whether to distribute samples on other columns</param>
         /// <returns>True if addition was a success.  False if addition failed.</returns>
         public bool QueueSamples(IEnumerable<SampleData> sampleList,
             enumColumnDataHandling distributeSamplesEvenlyAcrossColumns)
@@ -1729,7 +1729,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Puts the sample on the running queue and starts if the operator has appened this sample to an
+        /// Puts the sample on the running queue and starts if the operator has appended this sample to an
         /// already running queue.
         /// </summary>
         /// <param name="sample">Sample to run.</param>
@@ -1801,7 +1801,7 @@ namespace LcmsNet.SampleQueue
                 if (m_runningQueue.Count > 0 && m_nextAvailableSample > 0)
                 {
                     Debug.WriteLine("Optimizing sample against running queue.");
-                    // We arent the first ones on the queue, but we are running,
+                    // We aren't the first ones on the queue, but we are running,
                     // so we need to hurry up and go!
                     realSample.ActualLCMethod.SetStartTime(next);
                     optimizer.AlignSamples(m_runningQueue, realSample);
@@ -2234,7 +2234,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Saves the queue to the appropiate object.
+        /// Saves the queue to the appropriate object.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="writer"></param>
@@ -2244,7 +2244,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Saves the queue to the appropiate object.
+        /// Saves the queue to the appropriate object.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="writer"></param>

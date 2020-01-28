@@ -11,12 +11,12 @@
         Fatal = 0,
 
         /// <summary>
-        /// Errors that don't cause program shutdown, but are undesireable and probably should be shown to the user
+        /// Errors that don't cause program shutdown, but are undesirable and probably should be shown to the user
         /// </summary>
         Error = 1,
 
         /// <summary>
-        /// Warnings or anamolies in program execution that might be of interest
+        /// Warnings or anomalies in program execution that might be of interest
         /// </summary>
         Warning = 2,
 

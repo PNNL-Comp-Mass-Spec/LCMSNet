@@ -23,7 +23,7 @@ namespace LcmsNetSDK.Method
 
         /// <summary>
         /// Gets or sets the time to add to the relative method
-        /// to properly start the above method relative to ourself
+        /// to properly start the above method relative to this event
         /// </summary>
         public TimeSpan RelativeStartTime { get; private set; }
     }

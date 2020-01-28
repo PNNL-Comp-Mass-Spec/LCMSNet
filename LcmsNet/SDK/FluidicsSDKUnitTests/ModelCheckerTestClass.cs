@@ -81,7 +81,7 @@ namespace FluidicsSDKUnitTests
         }
 
         /// <summary>
-        /// Test that muliple sources doesn't find multiple sources where no path intersection exists
+        /// Test that multiple sources doesn't find multiple sources where no path intersection exists
         /// </summary>
         [Test]
         public void TestE()

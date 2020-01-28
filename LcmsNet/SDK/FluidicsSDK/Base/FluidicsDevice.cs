@@ -27,7 +27,7 @@ namespace FluidicsSDK.Base
         private Point m_loc;
         // the IDevice this fluidicsdevice controls
         private IDevice m_lcmsDevice;
-        // dictionary of actions that can be taken by this device, keyed by the primitves that
+        // dictionary of actions that can be taken by this device, keyed by the primitives that
         // activate them
         private readonly Dictionary<GraphicsPrimitive, Action> m_actions;
         //list of primitives that are associated with actions..aka controls.
@@ -441,8 +441,8 @@ namespace FluidicsSDK.Base
         /// <summary>
         ///  all fluidics devices should be able to determine if they contain a specified point within their bounds
         /// </summary>
-        /// <param name="location">a Point specifying the location to be checkeda against</param>
-        /// <returns>a bool determing if the device contains that location</returns>
+        /// <param name="location">a Point specifying the location to be checked against</param>
+        /// <returns>a bool determining if the device contains that location</returns>
         public virtual bool Contains(Point location)
         {
             var inDevice = false;
@@ -558,7 +558,7 @@ namespace FluidicsSDK.Base
         }
 
         /// <summary>
-        /// property for determining the color the device is hilighted by
+        /// property for determining the color the device is highlighted by
         /// </summary>
         public virtual Color Highlight
         {

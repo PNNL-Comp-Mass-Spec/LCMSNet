@@ -98,11 +98,11 @@ namespace LcmsNet.SampleQueue.IO
             }
 
             // Stuff the return list with IDs and return
-            foreach (var currSampleID in SampleIDList)
+            foreach (var currentSampleID in SampleIDList)
             {
                 // If current sample has an MRM file associated with it, get the ID
                 int fileID;
-                var success = idDict.TryGetValue(currSampleID, out fileID);
+                var success = idDict.TryGetValue(currentSampleID, out fileID);
                 if (success)
                 {
                     if (!retList.Contains(fileID.ToString()))
@@ -116,7 +116,7 @@ namespace LcmsNet.SampleQueue.IO
         }
 
         /// <summary>
-        /// Gets specified MRM filea
+        /// Gets specified MRM files
         /// </summary>
         /// <param name="filesToGet">Dictionary containing IDs of files to get</param>
         /// <returns>List with file names and data</returns>
@@ -223,19 +223,19 @@ namespace LcmsNet.SampleQueue.IO
         //   Dictionary<int, string> returnList = new Dictionary<int, string>();
         //   foreach (SampleData sample in InpList)
         //   {
-        //      int tmpIndx = sample.DmsData.MRMFileID;
+        //      int tmpIndex = sample.DmsData.MRMFileID;
         //      // Check to see if the sample has a file download required
-        //      if (tmpIndx == 0)
+        //      if (tmpIndex == 0)
         //      {
         //         // No file download required
         //         continue;
         //      }
 
         //      // Check to see if this file is already in the list of files to download
-        //      if (!returnList.ContainsKey(tmpIndx))
+        //      if (!returnList.ContainsKey(tmpIndex))
         //      {
         //         // File is not already in list, so add it
-        //         returnList.Add(tmpIndx, tmpIndx.ToString());
+        //         returnList.Add(tmpIndex, tmpIndex.ToString());
         //      }
         //   }
         //   // Return the list of files to download

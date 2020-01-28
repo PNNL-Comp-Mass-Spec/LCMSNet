@@ -19,9 +19,9 @@ namespace LcmsNet.Devices
             var document = new XmlDocument();
             var rootElement = document.CreateElement("Devices");
 
-            var notiferSetting = document.CreateElement("SystemSettings");
-            notiferSetting.SetAttribute("Ignore", configuration.IgnoreNotifications.ToString());
-            rootElement.AppendChild(notiferSetting);
+            var notifierSetting = document.CreateElement("SystemSettings");
+            notifierSetting.SetAttribute("Ignore", configuration.IgnoreNotifications.ToString());
+            rootElement.AppendChild(notifierSetting);
 
             foreach (var device in configuration)
             {
@@ -66,7 +66,7 @@ namespace LcmsNet.Devices
             }
             catch (UnauthorizedAccessException ex)
             {
-                throw new Exception("You do not have authorization to save the notificationa file.",
+                throw new Exception("You do not have authorization to save the notifications file.",
                     ex);
             }
         }

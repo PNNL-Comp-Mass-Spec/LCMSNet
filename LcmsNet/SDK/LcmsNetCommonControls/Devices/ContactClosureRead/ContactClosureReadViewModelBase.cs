@@ -136,7 +136,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         }
 
         /// <summary>
-        /// Gets or sets the intput port of the device.
+        /// Gets or sets the input port of the device.
         /// </summary>
         public virtual T Port
         {

@@ -18,9 +18,9 @@ namespace LcmsNet.Devices
         private const string CONST_CONNECTIONS_HEADER_TAG = "[Connections]";
 
         /// <summary>
-        /// Delimeter of file.
+        /// Delimiter of file.
         /// </summary>
-        private const string CONST_DELIMETER = " = ";
+        private const string CONST_DELIMITER = " = ";
 
         #region IDeviceConfigurationReader Members
 
@@ -67,11 +67,11 @@ namespace LcmsNet.Devices
 
                 var deviceName = "";
                 var data = new Dictionary<string, object>();
-                var delimeter = new[] {CONST_DELIMETER};
+                var delimiter = new[] {CONST_DELIMITER};
                 for (var j = startIndex + 1; j < lastIndex; j++)
                 {
                     var line = configLines[j];
-                    var lineData = line.Split(delimeter, StringSplitOptions.RemoveEmptyEntries);
+                    var lineData = line.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
                     if (lineData.Length == 2)
                     {
                         data.Add(lineData[0], lineData[1]);

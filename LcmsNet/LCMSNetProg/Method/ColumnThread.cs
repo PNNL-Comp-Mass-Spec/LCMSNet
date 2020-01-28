@@ -185,7 +185,7 @@ namespace LcmsNet.Method
                     method.ActualEvents.Add(actualEvent);
                     var lcEvent = methodEvents[eventNumber];
 
-                    // This determines when the next event should start.  Since the events are layed out in time
+                    // This determines when the next event should start.  Since the events are laid out in time
                     // we know it should start by the lcEvent.End date time value.  This helps correct for any
                     // straying events that may be a ms or two off.
                     var next = lcEvent.End;
@@ -198,8 +198,8 @@ namespace LcmsNet.Method
                         if (lcEvent.MethodAttribute.RequiresSampleInput)
                             lcEvent.Parameters[lcEvent.MethodAttribute.SampleParameterIndex] = m_sampleData;
 
-                        // Try to execute the event, if it doesnt work, then we capture
-                        // all relevant information and propogate it back out...At this time
+                        // Try to execute the event, if it doesn't work, then we capture
+                        // all relevant information and propagate it back out...At this time
                         // if an error occurs we are done executing on this column.
                         if (lcEvent.Duration.TotalMilliseconds > 1)
                             success = ExecuteEvent(lcEvent);

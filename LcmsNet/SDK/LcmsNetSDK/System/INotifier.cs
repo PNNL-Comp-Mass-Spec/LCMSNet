@@ -6,7 +6,7 @@ using LcmsNetSDK.Devices;
 namespace LcmsNetSDK.System
 {
     /// <summary>
-    /// Inteface used to notify the system when something bad has happened (or status)
+    /// Interface used to notify the system when something bad has happened (or status)
     /// </summary>
     public interface INotifier : INotifyPropertyChangedExt
     {

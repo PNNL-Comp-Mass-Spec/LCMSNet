@@ -10,7 +10,7 @@ namespace LcmsNet.IO
             return File.Exists(path);
         }
 
-        public static string UniqifyFileName(string path, string extension)
+        public static string GetUniqueFileName(string path, string extension)
         {
             var count = 1;
             var uniqueName = new StringBuilder();

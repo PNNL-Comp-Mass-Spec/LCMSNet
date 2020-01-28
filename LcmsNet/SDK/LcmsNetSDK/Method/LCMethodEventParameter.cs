@@ -48,7 +48,7 @@ namespace LcmsNetSDK.Method
         public void AddParameter(object parameter, ILCEventParameter editControl, string name, string dataProviderName)
         {
             // We use the private set.
-            // Private so that the lists are only gauranteed to be synchronized.
+            // Private so that the lists are only guaranteed to be synchronized.
             Values.Add(parameter);
             Controls.Add(editControl);
             Names.Add(name);

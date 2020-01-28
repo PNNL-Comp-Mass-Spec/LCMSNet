@@ -34,7 +34,7 @@ namespace FluidicsSDK.Graphic
         /// <param name="g">a DrawingContext object</param>
         /// <param name="alpha">an integer representing the alpha value to draw the line with</param>
         /// <param name="scale">a float determining how much to scale the line by</param>
-        /// <param name="selected">bool determining if the line is drawn hilighted or not</param>
+        /// <param name="selected">bool determining if the line is drawn highlighted or not</param>
         /// <param name="error"></param>
         public override void Render(DrawingContext g, byte alpha, float scale, bool selected, bool error)
         {
@@ -60,9 +60,9 @@ namespace FluidicsSDK.Graphic
 
         public override bool Contains(Point location, int max_variance)
         {
-            //basic linear algebra, check that the crossproduct is between -MAX_PIXEL_VARIANCE and MAX_PIXEL_VARIANCE, this way users don't
+            //basic linear algebra, check that the cross-product is between -MAX_PIXEL_VARIANCE and MAX_PIXEL_VARIANCE, this way users don't
             //have to click 100% precisely on pixels, that the dot product is > 0, and that the dot product is less than the squared distance
-            //between point1 and point2. if the user click meets these critera, they've clicked on the connection. Also, modify the values by the scale
+            //between point1 and point2. if the user click meets these criteria, they've clicked on the connection. Also, modify the values by the scale
             //to ensure they can select while scaled.
             double crossProduct = ((location.Y - Origin.Y) * (Term.X - Origin.X)) - ((location.X - Origin.X) * (Term.Y - Origin.Y));
             double dotProduct = ((location.X - Origin.X) * (Term.X - Origin.X)) + ((location.Y - Origin.Y) * (Term.Y - Origin.Y));
@@ -107,7 +107,7 @@ namespace FluidicsSDK.Graphic
         }
 
         /// <summary>
-        ///  Property for the Terminiation point of the line
+        ///  Property for the Termination point of the line
         /// </summary>
         public Point Term
         {

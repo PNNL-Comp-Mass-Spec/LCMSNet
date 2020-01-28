@@ -45,7 +45,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="methods">Samples to analyze</param>
         /// <param name="start">Starting time.</param>
         /// <param name="duration">Duration.</param>
-        protected void FindTimeExtremas(List<LCMethod> methods, out DateTime start, out TimeSpan duration)
+        protected void FindTimeExtrema(List<LCMethod> methods, out DateTime start, out TimeSpan duration)
         {
             start = DateTime.MaxValue;
             var end = DateTime.MinValue;
@@ -123,7 +123,7 @@ namespace LcmsNet.Method.Drawing
         public float PixelPadding { get; set; }
 
         /// <summary>
-        /// Gets or sets the spacing in Pixels between two timeline tickmarks
+        /// Gets or sets the spacing in Pixels between two timeline tick marks
         /// </summary>
         public float TimelinePixelSpacing { get; set; }
 
@@ -213,7 +213,7 @@ namespace LcmsNet.Method.Drawing
             // Loop drawing the ticks...
             while (currentTime - totalTime <= 0 && pixelTime > 0)
             {
-                // Now we have to conver the x value (time = currentTime) into pixels...err
+                // Now we have to convert the x value (time = currentTime) into pixels...err
                 var x = bounds.X + (currentTime * ppt);
 
                 // Draw a tick
@@ -431,7 +431,7 @@ namespace LcmsNet.Method.Drawing
 
                 var eventBounds = new Rect(x, y, eventWidth, bounds.Height);
 
-                // Find the color mapping, if it doesnt exist
+                // Find the color mapping, if it doesn't exist
                 //     then we assign a gradient gray color to it
                 // We also may want to show progress in the event...so here we only fill if it's the current event
                 var color = Colors.LightGray;
@@ -556,7 +556,7 @@ namespace LcmsNet.Method.Drawing
                 // Find the start and end times of the samples
                 DateTime methodStart;
                 TimeSpan methodDuration;
-                FindTimeExtremas(methods, out methodStart, out methodDuration);
+                FindTimeExtrema(methods, out methodStart, out methodDuration);
 
                 // Then calculate the number of pixels per second to use.
                 var pixelsPerSecond = Convert.ToSingle(bounds.Width - bounds.X) /

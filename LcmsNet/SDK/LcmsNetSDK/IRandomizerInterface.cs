@@ -4,7 +4,7 @@ using LcmsNetSDK.Data;
 namespace LcmsNetSDK
 {
     /// <summary>
-    /// Inteface for sample run order randomizer
+    /// Interface for sample run order randomizer
     /// </summary>
     public interface IRandomizerInterface
     {

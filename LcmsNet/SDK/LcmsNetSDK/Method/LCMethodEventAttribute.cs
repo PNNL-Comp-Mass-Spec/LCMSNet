@@ -4,7 +4,7 @@ namespace LcmsNetSDK.Method
 {
     /// <summary>
     /// Defines the attribute the scheduling algorithm and method handler will use to determine what methods to call
-    /// while runnning a LC method.
+    /// while running a LC method.
     /// </summary>
     public class LCMethodEventAttribute : Attribute
     {

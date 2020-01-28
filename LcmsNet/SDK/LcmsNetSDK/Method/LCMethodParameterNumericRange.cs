@@ -3,7 +3,7 @@
 namespace LcmsNetSDK.Method
 {
     /// <summary>
-    /// Class for specifying a range of a paramter
+    /// Class for specifying a range of a parameter
     /// </summary>
     public class LCMethodParameterNumericRange : Attribute
     {

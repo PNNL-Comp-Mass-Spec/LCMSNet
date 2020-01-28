@@ -14,7 +14,7 @@ namespace LcmsNet.Devices
         private const string CONST_CONNECTION_HEADER_TAG = "[Connections]";
 
         /// <summary>
-        /// Delimeter of file.
+        /// Delimiter of file.
         /// </summary>
         private const string CONST_DELIMITER = " = ";
 

@@ -350,10 +350,10 @@ namespace LcmsNet.Configuration.ViewModels
         /// </summary>
         private void LoadApplicationSettings()
         {
-            //mcheckBox_createTriggerFiles.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATETRIGGERFILES, false));
-            //mcheckBox_copyTriggerFiles.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYTRIGGERFILES, false));
-            //mcheckBox_createMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATEMETHODFOLDERS, false));
-            //mcheckBox_copyMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS, false));
+            //checkBox_createTriggerFiles.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATETRIGGERFILES, false));
+            //checkBox_copyTriggerFiles.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYTRIGGERFILES, false));
+            //checkBox_createMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATEMETHODFOLDERS, false));
+            //checkBox_copyMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS, false));
         }
 
         /// <summary>
@@ -382,12 +382,12 @@ namespace LcmsNet.Configuration.ViewModels
             dmsUserList.Add(tmpUser.PayrollNum, tmpUser);
 
             // Add users to dictionary from user list
-            foreach (var currUser in userList)
+            foreach (var user in userList)
             {
-                var data = string.Format("{0} - ({1})", currUser.UserName,
-                    currUser.PayrollNum);
+                var data = string.Format("{0} - ({1})", user.UserName,
+                    user.PayrollNum);
 
-                dmsUserList.Add(data, currUser);
+                dmsUserList.Add(data, user);
             }
 
             // Now add user list to combo box

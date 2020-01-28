@@ -218,7 +218,7 @@ namespace LcmsNet.Method.ViewModels
             if (SelectedListLCMethods.Count < 1) return;
 
             // Otherwise, we'll sort this out using an array to locally copy the
-            // items, then clear and readd them in the suited array as they are ordered.
+            // items, then clear and re-add them in the suited array as they are ordered.
             var names = ListSelectedLCMethods.ToList();
 
             // The top will be the lowest index the guy can move to.
@@ -262,7 +262,7 @@ namespace LcmsNet.Method.ViewModels
             if (SelectedListLCMethods.Count < 1) return;
 
             // Otherwise, we'll sort this out using an array to locally copy the
-            // items, then clear and readd them in the suited array as they are ordered.
+            // items, then clear and re-add them in the suited array as they are ordered.
             var names = listSelectedLcMethods.ToList();
 
             // The top will be the highest index the guy can move to.

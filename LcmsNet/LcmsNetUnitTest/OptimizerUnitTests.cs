@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using DemoPluginLibrary;
-using LcmsNet.Method;
 using LcmsNetSDK.Method;
 using NUnit.Framework;
 
@@ -117,7 +116,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1,
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPosition", 1.00, string.Empty, -1,
                 false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
@@ -160,7 +159,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1,
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPosition", 1.00, string.Empty, -1,
                 false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 1;
@@ -231,7 +230,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1,
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPosition", 1.00, string.Empty, -1,
                 false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;
@@ -258,7 +257,7 @@ namespace LcmsnetUnitTest
             methods[1].Events[0].ParameterNames[0] = "SetPosition";
             methods[1].Events[0].Parameters = new object[1];
             methods[1].Events[0].Parameters[0] = 2;
-            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPostion", 1.00, string.Empty, -1,
+            methods[1].Events[0].MethodAttribute = new LCMethodEventAttribute("SetPosition", 1.00, string.Empty, -1,
                 false);
             methods[1].Events[0].Method = valve.GetType().GetMethod("SetPosition");
             methods[1].Column = 0;

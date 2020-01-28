@@ -120,7 +120,7 @@ namespace PDFGenerator
         /// <summary>
         /// create a formatted paragraph of device data
         /// </summary>
-        /// <param name="devices">Tuples of strings contaning device names, status, and error types</param>
+        /// <param name="devices">Tuples of strings containing device names, status, and error types</param>
         /// <returns>a formatted string of device data</returns>
         private static string CreateDeviceString(List<IDevice> devices)
         {

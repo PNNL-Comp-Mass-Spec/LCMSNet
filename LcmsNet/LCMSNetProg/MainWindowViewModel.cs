@@ -377,7 +377,7 @@ namespace LcmsNet
             LCMSSettings.SetParameter(LCMSSettings.PARAM_SEPARATIONTYPE, SQLiteTools.GetDefaultSeparationType());
 
             // Initialize the hardware
-            DeviceManager.Manager.InitialzingDevice += Manager_InitialzingDevice;
+            DeviceManager.Manager.InitializingDevice += Manager_InitializingDevice;
             if (LCMSSettings.GetParameter(LCMSSettings.PARAM_INITIALIZEHARDWAREONSTARTUP, false))
             {
                 ApplicationLogger.LogMessage(0, "Initializing hardware.");
@@ -650,7 +650,7 @@ namespace LcmsNet
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Manager_InitialzingDevice(object sender, DeviceManagerStatusArgs e)
+        private void Manager_InitializingDevice(object sender, DeviceManagerStatusArgs e)
         {
             ApplicationLogger.LogMessage(-1, e.Message);
         }
@@ -798,7 +798,7 @@ namespace LcmsNet
                             MethodFileTools.MoveLocalMethodFiles();
                         }
                         var filePath =
-                            FileUtilities.UniqifyFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
+                            FileUtilities.GetUniqueFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
                         pdfGen.WritePDF(filePath, sample.DmsData.DatasetName, sample,
                             CartConfiguration.NumberOfEnabledColumns.ToString(), CartConfiguration.Columns,
                             DeviceManager.Manager.Devices, configImage);

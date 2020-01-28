@@ -179,9 +179,9 @@ namespace LcmsNet.Simulator.ViewModels
             var optimizer = new LCMethodOptimizer();
             optimizer.AlignMethods(methods);
             var queue = FluidicsSimulator.FluidicsSimulator.BuildEventList(methods, methods[0].Start);
-            foreach (var lst in queue)
+            foreach (var list in queue)
             {
-                if (lst.Exists(evnt => evnt.Name == e.Event.Name && evnt.Start == e.Event.Start))
+                if (list.Exists(lcEvent => lcEvent.Name == e.Event.Name && lcEvent.Start == e.Event.Start))
                 {
                     index = count;
                 }

@@ -10,9 +10,9 @@ namespace LcmsNetData
         public static string BuildSystemInformation()
         {
             var name = "[SystemInfo]\r\n";
-            name += string.Format("Machine Name = {0}\r\n", Environment.MachineName);
-            name += string.Format("CartName = {0}\r\n", LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME));
-            name += string.Format("CartConfigName = {0}\r\n", LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME));
+            name += $"Machine Name = {Environment.MachineName}\r\n";
+            name += $"CartName = {LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME)}\r\n";
+            name += $"CartConfigName = {LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME)}\r\n";
             try
             {
                 var hostName = Dns.GetHostName();
@@ -23,7 +23,7 @@ namespace LcmsNetData
                 {
                     if (address.AddressFamily == AddressFamily.InterNetwork)
                     {
-                        name += string.Format("IPAddress{0} = {1}\r\n", i++, address);
+                        name += $"IPAddress{i++} = {address}\r\n";
                     }
                 }
                 name = name.TrimEnd('\r', '\n');
@@ -36,19 +36,19 @@ namespace LcmsNetData
 
         public static string BuildApplicationInformation()
         {
-            var assem = Assembly.GetEntryAssembly();
-            var assemName = assem.GetName();
-            var ver = assemName.Version;
+            var assembly = Assembly.GetEntryAssembly();
+            var assemblyName = assembly.GetName();
+            var ver = assemblyName.Version;
             var name = "[ApplicationInfo]\r\n";
-            name += string.Format("Application {0}\r\nVersion {1}\r\n", assemName.Name, ver);
+            name += $"Application {assemblyName.Name}\r\nVersion {ver}\r\n";
 
             var os = Environment.OSVersion;
             ver = os.Version;
-            name += string.Format("Operating System: {0} ({1})\r\n", os.VersionString, ver);
+            name += $"Operating System: {os.VersionString} ({ver})\r\n";
 
-            name += string.Format("Computer Name: {0}\r\n", Environment.MachineName);
+            name += $"Computer Name: {Environment.MachineName}\r\n";
             ver = Environment.Version;
-            name += string.Format("CLR Version {0}\r\n", ver);
+            name += $"CLR Version {ver}\r\n";
 
             return name;
         }

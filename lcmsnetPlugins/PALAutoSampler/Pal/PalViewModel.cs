@@ -304,7 +304,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             }
         }
 
-        private void PalOnPropertyChanged(object sendero, PropertyChangedEventArgs e)
+        private void PalOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals(nameof(Pal.VialRange)))
             {

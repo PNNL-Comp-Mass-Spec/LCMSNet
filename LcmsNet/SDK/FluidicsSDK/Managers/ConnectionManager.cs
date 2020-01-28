@@ -139,7 +139,7 @@ namespace FluidicsSDK.Managers
         /// </summary>
         /// <param name="g">a System.Windows.Media DrawingContext object</param>
         /// <param name="alpha">an integer representing the requested alpha value to draw the connections with</param>
-        /// <param name="scale">a float repsenting how much to scale the connections by</param>
+        /// <param name="scale">a float representing how much to scale the connections by</param>
         public void Render(DrawingContext g, byte alpha, float scale)
         {
             foreach (var connection in m_connections)
@@ -169,7 +169,7 @@ namespace FluidicsSDK.Managers
         }
 
         /// <summary>
-        /// Confirm selection of the specified classConnection, allows selection hilighting for user
+        /// Confirm selection of the specified classConnection, allows selection highlighting for user
         /// </summary>
         /// <param name="connection">a classConnection object</param>
         internal void ConfirmSelect(Connection connection)

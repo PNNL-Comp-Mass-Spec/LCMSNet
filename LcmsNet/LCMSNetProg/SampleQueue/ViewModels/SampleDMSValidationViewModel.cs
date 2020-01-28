@@ -31,7 +31,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleDMSValidationViewModel(SampleData sample)
         {
-            // Make sure the sample is valid so we dont get an exception later when we try to edit it.
+            // Make sure the sample is valid so we don't get an exception later when we try to edit it.
             if (sample == null)
                 throw new Exception("The sample was null and cannot be displayed.");
 

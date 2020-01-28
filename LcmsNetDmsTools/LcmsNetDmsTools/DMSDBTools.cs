@@ -610,18 +610,18 @@ namespace LcmsNetDmsTools
 
             // Modify the byte array by shifting alternating bytes up or down and convert back to char, and add to output string
             var retStr = "";
-            for (var byteCntr = 0; byteCntr < pwdBytes.Length; byteCntr++)
+            for (var byteCounter = 0; byteCounter < pwdBytes.Length; byteCounter++)
             {
-                if ((byteCntr % 2) == 0)
+                if ((byteCounter % 2) == 0)
                 {
-                    pwdBytes[byteCntr] += 1;
+                    pwdBytes[byteCounter] += 1;
                 }
                 else
                 {
-                    pwdBytes[byteCntr] -= 1;
+                    pwdBytes[byteCounter] -= 1;
                 }
-                pwdCharsAdj[byteCntr] = (char)pwdBytes[byteCntr];
-                retStr += pwdCharsAdj[byteCntr].ToString(CultureInfo.InvariantCulture);
+                pwdCharsAdj[byteCounter] = (char)pwdBytes[byteCounter];
+                retStr += pwdCharsAdj[byteCounter].ToString(CultureInfo.InvariantCulture);
             }
             return retStr;
         }
@@ -1175,10 +1175,10 @@ namespace LcmsNetDmsTools
             }
         }
 
-        private IEnumerable<MRMFileData> ReadMRMFilesFromDMS(string fileIndxList)
+        private IEnumerable<MRMFileData> ReadMRMFilesFromDMS(string fileIndexList)
         {
             var connStr = GetConnectionString();
-            var sqlCmd = "SELECT File_Name, Contents FROM T_Attachments WHERE ID IN (" + fileIndxList + ")";
+            var sqlCmd = "SELECT File_Name, Contents FROM T_Attachments WHERE ID IN (" + fileIndexList + ")";
 
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
@@ -1622,9 +1622,9 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Adds data for block of MRM files to file data list
         /// </summary>
-        /// <param name="fileIndxList">Comma-separated list of file indices needing data</param>
+        /// <param name="fileIndexList">Comma-separated list of file indices needing data</param>
         /// <param name="fileData">ist of file names and contents; new data will be appended to this list</param>
-        public void GetMRMFilesFromDMS(string fileIndxList, List<MRMFileData> fileData)
+        public void GetMRMFilesFromDMS(string fileIndexList, List<MRMFileData> fileData)
         {
             if (fileData == null)
             {
@@ -1634,7 +1634,7 @@ namespace LcmsNetDmsTools
             // Get the data from DMS
             try
             {
-                fileData.AddRange(ReadMRMFilesFromDMS(fileIndxList));
+                fileData.AddRange(ReadMRMFilesFromDMS(fileIndexList));
             }
             catch (Exception ex)
             {
@@ -1677,7 +1677,7 @@ namespace LcmsNetDmsTools
         /// Updates the cart assignment in DMS
         /// </summary>
         /// <param name="requestList">Comma-delimited string of request ID's (must be less than 8000 chars long)</param>
-        /// <param name="cartName">Name of cart to assign (ignored for removing aasignment)</param>
+        /// <param name="cartName">Name of cart to assign (ignored for removing assignment)</param>
         /// <param name="cartConfigName">Name of cart config name to assign</param>
         /// <param name="updateMode">TRUE for updating assignment; FALSE to clear assignment</param>
         /// <returns>TRUE for success; FALSE for error</returns>

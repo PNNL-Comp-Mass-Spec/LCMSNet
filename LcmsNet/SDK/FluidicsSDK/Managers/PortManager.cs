@@ -61,7 +61,7 @@ namespace FluidicsSDK.Managers
             PortChanged?.Invoke(this, new PortChangedEventArgs<Port>());
         }
         /// <summary>
-        /// remove a port from the lsit of ports managed
+        /// remove a port from the list of ports managed
         /// </summary>
         /// <param name="port">a classPort object</param>
         public void RemovePort(Port port)

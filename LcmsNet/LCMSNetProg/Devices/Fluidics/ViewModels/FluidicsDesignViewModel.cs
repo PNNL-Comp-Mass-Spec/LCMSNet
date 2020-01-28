@@ -100,7 +100,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                     FluidicsControlVm.DevicesLocked = devicesLocked;
                     if (devicesLocked)
                     {
-                        // Locked, we want the unlock button to be pressable to unlock.
+                        // Locked, we want the unlock button to be enabled to unlock.
                         ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_USER, "The designer has been locked.");
                     }
                     else

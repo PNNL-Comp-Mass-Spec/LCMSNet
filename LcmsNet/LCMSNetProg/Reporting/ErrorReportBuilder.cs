@@ -49,7 +49,7 @@ namespace LcmsNet.Reporting
                 now.Minute,
                 now.Second);
 
-            var didCreate = CreateAppropiatePaths(BasePath, newPath);
+            var didCreate = CreateAppropriatePaths(BasePath, newPath);
             if (!didCreate)
             {
                 return null;
@@ -199,10 +199,10 @@ namespace LcmsNet.Reporting
         }
 
         /// <summary>
-        /// Creates the appropiate directories.
+        /// Creates the appropriate directories.
         /// </summary>
         /// <returns></returns>
-        private bool CreateAppropiatePaths(string basePath, string newPath)
+        private bool CreateAppropriatePaths(string basePath, string newPath)
         {
             if (!Directory.Exists(basePath))
             {

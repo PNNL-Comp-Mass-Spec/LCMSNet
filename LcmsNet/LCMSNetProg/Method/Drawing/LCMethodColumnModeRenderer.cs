@@ -111,7 +111,7 @@ namespace LcmsNet.Method.Drawing
                 // Find the start and end times of the samples so we can scale everything accordingly.
                 DateTime methodStart;
                 TimeSpan methodDuration;
-                FindTimeExtremas(methods, out methodStart, out methodDuration);
+                FindTimeExtrema(methods, out methodStart, out methodDuration);
 
                 foreach (var method in methods)
                 {

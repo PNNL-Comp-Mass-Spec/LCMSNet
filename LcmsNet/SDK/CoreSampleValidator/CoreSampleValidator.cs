@@ -42,7 +42,7 @@ namespace CoreSampleValidator
                         // VALIDATE THE DEVICE!!!
                         var device = lcEvent.Device;
 
-                        // Make sure the device is not null and somehow snuck in
+                        // Make sure the device is not null (it shouldn't be, but...)
                         if (device != null)
                         {
                             // Make sure the device exists in the configuration correctly!
@@ -84,7 +84,7 @@ namespace CoreSampleValidator
             {
                 var block = sample.DmsData.Block;
                 var batch = sample.DmsData.Batch;
-                // If the items are blocked, then they need to run on one column.  For batched samples we dont care.
+                // If the items are blocked, then they need to run on one column.  For batched samples we don't care.
                 if (block < 1)
                 {
                     continue;

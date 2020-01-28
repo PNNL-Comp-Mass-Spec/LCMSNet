@@ -38,7 +38,7 @@
         public const string CONST_LC_METHOD_FOLDER = "LCMethods";
 
         /// <summary>
-        /// Deterministic or non-deministic events.
+        /// Deterministic or non-deterministic events.
         /// </summary>
         public const string CONST_IS_EVENT_INDETERMINANT = "Indeterminant";
 

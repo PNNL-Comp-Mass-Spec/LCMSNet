@@ -375,7 +375,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         }
 
         /// <summary>
-        /// Internal error handler that propogates the error message to listening objects.
+        /// Internal error handler that propagates the error message to listening objects.
         /// </summary>
         private void HandleError(string message)
         {
@@ -393,7 +393,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         }
 
         /// <summary>
-        /// Internal error handler that propogates the error message to listening objects.
+        /// Internal error handler that propagates the error message to listening objects.
         /// </summary>
         private void HandleError(string message, Exception ex)
         {

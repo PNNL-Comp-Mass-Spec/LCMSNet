@@ -52,13 +52,13 @@ namespace LcmsNet.SampleQueue.IO
                 InpSamples.Count().ToString());
 
             // Loop through the queue and add nodes for each queued sample
-            var itemCntr = 1;
+            var itemCounter = 1;
             foreach (var currentSample in InpSamples)
             {
-                var itemNum = "Item" + itemCntr.ToString("0000");
+                var itemNum = "Item" + itemCounter.ToString("0000");
                 var currentElement = AddElementNoAttributes(itemNum, queueSettingsElement);
                 AddOneSample(currentSample, currentElement);
-                itemCntr++;
+                itemCounter++;
             }
 
             // Add Auto Refill checkbox node. Return value not needed because node has no children

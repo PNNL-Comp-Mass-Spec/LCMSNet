@@ -120,7 +120,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
 
         public virtual void CC_DeviceSaveRequired(object sender, EventArgs e)
         {
-            //Propogate this event
+            //Propagate this event
             OnSaveRequired();
         }
 

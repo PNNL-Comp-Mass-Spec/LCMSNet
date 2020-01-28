@@ -369,7 +369,7 @@ namespace LcmsNet.Method
                 Trace.Flush();
                 Exception exVal = null;
                 var error = ex != null;
-                SampleData sampVal = null;
+                SampleData sampleValue = null;
                 if (ex != null)
                 {
                     exVal = ex;
@@ -377,16 +377,16 @@ namespace LcmsNet.Method
 
                 if (sample != null)
                 {
-                    sampVal = sample;
+                    sampleValue = sample;
                 }
 
                 if (!error)
                 {
-                    ApplicationLogger.LogMessage(level, message, sampVal);
+                    ApplicationLogger.LogMessage(level, message, sampleValue);
                 }
                 else
                 {
-                    ApplicationLogger.LogError(level, message, exVal, sampVal);
+                    ApplicationLogger.LogError(level, message, exVal, sampleValue);
                 }
             }
         }
