@@ -1,12 +1,4 @@
-﻿/*********************************************************************************************************
- * Written by Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute
- * Created 10/7/2013
- *
- ********************************************************************************************************/
-
-namespace FluidicsSDK.Devices
+﻿namespace FluidicsSDK.Devices
 {
     /// <summary>
     /// Interface to control a pump

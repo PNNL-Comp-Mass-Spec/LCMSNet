@@ -1,18 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 01/07/2009
-//
-// Updates:
-// - 1/16/2009 (BLL) Added starting, cancelling queue operations with associated events.
-// - 2/12/2009 (DAC) Added method for saving queue to SQLite database
-// - 3/17/2009 (BLL) Generates unique ID's and sample ID's
-// - 5/18/2010 (DAC) Modified for queue export to SQLite file and CSV file
-//
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;

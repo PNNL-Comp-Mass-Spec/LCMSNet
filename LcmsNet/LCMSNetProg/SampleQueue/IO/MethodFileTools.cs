@@ -1,12 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche, Christopher Walters for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2010, Battelle Memorial Institute
-// Created 03/01/2010
-//
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using LcmsNet.Method;

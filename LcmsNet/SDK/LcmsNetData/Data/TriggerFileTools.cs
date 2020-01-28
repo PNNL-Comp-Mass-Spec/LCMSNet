@@ -1,15 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 12/03/2009
-//
-// Updates:
-// -  02/22/2011 (DAC) - Removed Run Finish UTC param to fix problem with data import in DMS
-// -  02/23/2011 (DAC) - Changed Operator output field to use settings value instead of sample value
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.Globalization;
 using System.IO;
 using System.Xml;

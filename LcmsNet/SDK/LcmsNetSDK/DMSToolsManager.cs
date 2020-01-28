@@ -1,11 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Christopher Walters for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2014, Battelle Memorial Institute
-// Created 09/11/2014
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;

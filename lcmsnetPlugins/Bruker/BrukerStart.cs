@@ -1,14 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2010, Battelle Memorial Institute
-// Created 02/19/2010
-//
-// Updates:
-// - 06/29/2010 (DAC) - Added details for Bruker operation
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;

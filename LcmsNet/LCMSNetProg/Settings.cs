@@ -1,12 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2010, Battelle Memorial Institute
-// Created 08/20/2010
-//
-//*********************************************************************************************************
-
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
 
 namespace LcmsNet.Properties

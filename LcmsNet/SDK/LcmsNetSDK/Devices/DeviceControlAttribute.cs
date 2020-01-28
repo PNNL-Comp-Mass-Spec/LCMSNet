@@ -10,7 +10,7 @@ namespace LcmsNetSDK.Devices
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="deviceControlType"></param>
         /// <param name="fluidicsDeviceType"></param>

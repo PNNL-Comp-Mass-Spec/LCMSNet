@@ -1,15 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche, Christopher Walters for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2010, Battelle Memorial Institute
-// Created 02/03/2010
-//
-// Updates:
-// - 10/13/2010 (DAC) - Corrected error reporting bug
-// - 09/30/2014 (CJW) - Minor bugs fixed.
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;

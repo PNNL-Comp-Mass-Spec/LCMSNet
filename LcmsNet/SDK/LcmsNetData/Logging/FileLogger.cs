@@ -1,17 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 03/30/2009
-//
-// Updates:
-// - 04/16/2009: BLL
-//         Made file logging class static so it can be used at program startup
-//         Changed file log name to include hhmmss using a flag to indicate whether the file exists.
-//
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Threading;

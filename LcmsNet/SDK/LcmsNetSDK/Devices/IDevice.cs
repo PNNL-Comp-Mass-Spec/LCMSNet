@@ -1,16 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 08/17/2009
-//
-// Updates:
-// - 9/14/2009 (BLL) Added device save and load settings method to XML.
-// - 1/18/2010 (BLL) Added the ManualResetEvent that the device can use to synchronize with scheduling objects.
-//
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.Threading;
 using LcmsNetSDK.System;
 

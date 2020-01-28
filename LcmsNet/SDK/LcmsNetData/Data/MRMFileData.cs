@@ -1,12 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 04/02/2009
-//
-//*********************************************************************************************************
-
-namespace LcmsNetData.Data
+﻿namespace LcmsNetData.Data
 {
     /// <summary>
     /// Holds MRM file data downloaded from DMS

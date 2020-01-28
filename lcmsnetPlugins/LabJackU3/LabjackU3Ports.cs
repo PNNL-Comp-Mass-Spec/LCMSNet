@@ -1,12 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Christopher Walters for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 1/7/2014
-//
-//*********************************************************************************************************
-
-namespace LcmsNetPlugins.LabJackU3
+﻿namespace LcmsNetPlugins.LabJackU3
 {
     /// <summary>
     /// All available ports on the Labjack U3

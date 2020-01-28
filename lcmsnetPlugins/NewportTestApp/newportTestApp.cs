@@ -1,10 +1,4 @@
-﻿/*********************************************************************************************************
- * Written by Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2013 Battle Memorial Institute *
- *
- *********************************************************************************************************/
-using System;
+﻿using System;
 using LcmsNetPlugins.Newport.ESP300;
 
 namespace NewportTestApp

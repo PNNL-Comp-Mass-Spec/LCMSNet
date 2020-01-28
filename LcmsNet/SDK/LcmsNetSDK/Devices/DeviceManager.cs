@@ -1,12 +1,4 @@
-﻿/*********************************************************************************************************
- * Written by Brian LaMarche, Dave Clark, John Ryan for the US Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2009, Battelle Memorial Institute
- * Created 06/19/2009
- *
- *********************************************************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;

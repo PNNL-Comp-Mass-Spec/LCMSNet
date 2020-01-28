@@ -1,14 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 01/21/2009
-//
-// Updates:
-// - 03/10/2010 (DAC) - Added wellplate field, changed vial field to well
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.ComponentModel;
 
 namespace LcmsNetData.Data

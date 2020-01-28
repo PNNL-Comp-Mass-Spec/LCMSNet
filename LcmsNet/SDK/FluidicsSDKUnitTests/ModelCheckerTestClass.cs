@@ -1,12 +1,4 @@
-﻿/*********************************************************************************************************
- * Written by Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2014 Battle Memorial Institute
- * Created 6/2/2014
- *
- *********************************************************************************************************/
-
-using System.Linq;
+﻿using System.Linq;
 using FluidicsSDK.Managers;
 using FluidicsSDK.ModelCheckers;
 using NUnit.Framework;

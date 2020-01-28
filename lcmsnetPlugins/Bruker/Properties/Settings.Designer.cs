@@ -9,20 +9,20 @@
 //------------------------------------------------------------------------------
 
 namespace LcmsNetPlugins.Bruker.Properties {
-    
-    
+
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
+
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
+
         public static Settings Default {
             get {
                 return defaultInstance;
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("D:\\Methods")]
@@ -31,7 +31,7 @@ namespace LcmsNetPlugins.Bruker.Properties {
                 return ((string)(this["BrukerMethodFolderLocalName"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("D:\\Data_BrukerTest\\BrukerTest")]
@@ -40,7 +40,7 @@ namespace LcmsNetPlugins.Bruker.Properties {
                 return ((string)(this["BrukerOutputFolderLocalName"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7005")]
@@ -49,7 +49,7 @@ namespace LcmsNetPlugins.Bruker.Properties {
                 return ((int)(this["BrukerInstPort"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\\\\prismdev3.emsl.pnl.gov\\ProteomicsData")]
@@ -58,7 +58,7 @@ namespace LcmsNetPlugins.Bruker.Properties {
                 return ((string)(this["BrukerOutputFolderShareName"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("prismdev3.emsl.pnl.gov")]
@@ -67,7 +67,7 @@ namespace LcmsNetPlugins.Bruker.Properties {
                 return ((string)(this["BrukerInstNetName"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\\\\prismdev3.emsl.pnl.gov\\Methods")]

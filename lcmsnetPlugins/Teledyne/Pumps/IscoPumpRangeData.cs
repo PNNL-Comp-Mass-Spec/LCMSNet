@@ -1,12 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2011, Battelle Memorial Institute
-// Created 03/24/2011
-//
-//*********************************************************************************************************
-
-namespace LcmsNetPlugins.Teledyne.Pumps
+﻿namespace LcmsNetPlugins.Teledyne.Pumps
 {
     /// <summary>
     /// Holds data from a the response to a RANGE command
@@ -47,5 +39,5 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 MaxVolume = 102.96D;
             }
         #endregion
-    }   
+    }
 }

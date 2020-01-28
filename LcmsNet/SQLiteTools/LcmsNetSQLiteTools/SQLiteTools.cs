@@ -1,24 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 02/10/2009
-//
-// Updates
-// - 02/12/2009 (DAC) - Added methods for retrieving cached queue
-// - 02/19/2009 (DAC) - Incorporated renamed exceptions
-// - 02/23/2009 (DAC) - Reworked queue saving to reduce future coding
-// - 02/24/2009 (DAC) - Added storage and retrieval of DMS parameters
-// - 03/03/2009 (DAC) - Modified constructor to fix form designer issue, added method overloads
-//                      for queue ops to specify a database file other than the cache file
-// - 03/10/2009 (DAC) - Added function to replace SQLite-incompatible characters
-// - 04/01/2009 (DAC) - Added file logging for exceptions
-// - 05/18/2010 (DAC) - Added error logging; Modified for queue import/export using SQLite
-// - 04/17/2013 (FCT) - Added Proposal Users list with a a cross reference list of their UID to the PIDs of proposals they've worked.
-//
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using LcmsNetData;

@@ -17,7 +17,7 @@ namespace LcmsNetSDK.Method
         /// <param name="operationTime">The total operation time required by method to execute in milliseconds.  Methods must be guaranteed to execute within this range.</param>
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
-        /// <param name="hasPerformanceData"></param>        
+        /// <param name="hasPerformanceData"></param>
         public LCMethodEventAttribute(string methodName,
             double operationTime,
             string dataProvider,
@@ -47,7 +47,7 @@ namespace LcmsNetSDK.Method
         /// <param name="hasDiscreteStates"></param>
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
-        /// <param name="hasPerformanceData"></param>        
+        /// <param name="hasPerformanceData"></param>
         public LCMethodEventAttribute(string methodName,
             double operationTime,
             bool hasDiscreteStates,
@@ -77,7 +77,7 @@ namespace LcmsNetSDK.Method
         /// <param name="timeout">Use when the timeout should be specified by the user in the first parameter</param>
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
-        /// <param name="hasPerformanceData"></param>        
+        /// <param name="hasPerformanceData"></param>
         public LCMethodEventAttribute(string methodName,
             MethodOperationTimeoutType timeout,
             string dataProvider,
@@ -109,7 +109,7 @@ namespace LcmsNetSDK.Method
         /// <param name="operationTime">The total operation time required by method to execute in milliseconds.  Methods must be guaranteed to execute within this range.</param>
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
-        /// <param name="hasPerformanceData"></param>        
+        /// <param name="hasPerformanceData"></param>
         public LCMethodEventAttribute(string methodName,
             bool isSampleSpecific,
             int sampleParameterIndex,
@@ -145,7 +145,7 @@ namespace LcmsNetSDK.Method
         /// <param name="timeoutType"></param>
         /// <param name="isSampleSpecific">Flag indicating that the sample contains information about how to run the method.</param>
         /// <param name="sampleParameterIndex"></param>
-        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>        
+        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
         public LCMethodEventAttribute(string methodName,
@@ -186,7 +186,7 @@ namespace LcmsNetSDK.Method
         /// <param name="discreteStates"></param>
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
-        /// <param name="hasPerformanceData">Flag indicating whether this method has performance data or not.</param>        
+        /// <param name="hasPerformanceData">Flag indicating whether this method has performance data or not.</param>
         public LCMethodEventAttribute(string methodName,
             bool isSampleSpecific,
             int sampleParameterIndex,

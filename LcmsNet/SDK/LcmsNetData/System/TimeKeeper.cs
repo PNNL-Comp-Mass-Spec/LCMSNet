@@ -1,12 +1,4 @@
-﻿/*********************************************************************************************************
- * Written by Christopher Walters for U.S. Department of Energy
- * Pacific Northwest National Laboratory, Richland, WA
- * Copyright 2014 Battle Memorial Institute
- * Created 7/1/2014
- *
- ********************************************************************************************************/
-
-using System;
+﻿using System;
 using System.Globalization;
 
 namespace LcmsNetData.System

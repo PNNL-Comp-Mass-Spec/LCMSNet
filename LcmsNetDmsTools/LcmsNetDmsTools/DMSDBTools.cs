@@ -1,34 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 01/07/2009
-//
-// Updates
-// - 01/26/2009 (DAC) - Added error handling for database errors. Removed excess "using" statements
-// - 02/03/2009 (DAC) - Added methods for accessing additional data per Brian request
-// - 02/04/2009 (DAC) - Changed DMS request retrieval to ruturn List<SampleData>
-// - 02/19/2009 (DAC) - Incorporated renamed exceptions
-// - 02/24/2009 (DAC) - Changed to cache downloaded data in SQLite database
-// - 03/09/2009 (DAC) - Added download of DMS Comment field
-// - 03/27/2009 (DAC) - Converted LINQ queries to ADO.Net due to terrible error handling by LINQ
-// - 03/31/2009 (DAC) - Implemented file logging for exceptions
-// - 04/02/2009 (DAC) - Implemented MRM file download tools
-// - 04/09/2009 (DAC) - Added retrieval and caching of column lists
-// - 05/12/2009 (DAC) - Added download of blocking and run order values
-// - 08/11/2009 (DAC) - Added download of request batch number
-// - 12/01/2009 (DAC) - Modified to accomodate changing vial from string to int
-// - 02/18/2010 (DAC) - Modified to streamline generation of sample request query
-// - 07/28/2010 (DAC) - Added conversion of alpha well/vial to integer
-// - 12/08/2010 (DAC) - Modified DMS connection string to use name/password authentication
-// - 04/30/2013 (FCT) - Modified get carts sql command string to include "No_Cart" in the results.
-// - 05/22/2014 (MEM) - Replace Select * with selection of specific columns
-// - 09/11/2014 (CJW) - Modified to be an MEF Extension for lcmsnet
-// - 09/17/2014 (CJW) - Modified to use a stand-alone configuration file instead of the LcmsNet app configuration file.
-// - 05/22/2015 (MEM) - Auto-create PrismDMS.config if missing
-// - 07/30/2015 (MEM) - Add option to load dataset names
-//*********************************************************************************************************
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;

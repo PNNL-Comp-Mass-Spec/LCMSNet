@@ -1,12 +1,4 @@
-﻿
-//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2010, Battelle Memorial Institute
-// Created 02/08/2010
-//
-//*********************************************************************************************************
-using System;
+﻿using System;
 using System.Text;
 using System.Data;
 using System.Data.SQLite;
@@ -61,7 +53,7 @@ namespace LogViewer
                 var andNeeded = false;
 
                 var sqlBldr = new StringBuilder("SELECT * FROM T_LogData");
-                
+
                 // Check to see if there are any parameters to add to a WHERE clause
                 if (!queryData.OneParamHasValue()) { return sqlBldr.ToString(); }
 
@@ -160,7 +152,7 @@ namespace LogViewer
 
                 // Return the completed statement
                 return sqlBldr.ToString();
-            }   
+            }
 
             /// <summary>
             /// Gets all the log entries in the db file
@@ -181,7 +173,7 @@ namespace LogViewer
                 {
                     throw new classLogViewerDataException("Exception getting log data", ex);
                 }
-            }   
+            }
 
             /// <summary>
             /// Gets the datatable resulting from an SQL query
@@ -215,7 +207,7 @@ namespace LogViewer
                 }
                 // Everything worked, so return the table
                 return returnTable;
-            }   
+            }
         #endregion
-    }   
+    }
 }

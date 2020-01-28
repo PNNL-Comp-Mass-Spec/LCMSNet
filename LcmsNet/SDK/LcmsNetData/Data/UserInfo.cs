@@ -1,15 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 02/04/2009
-//
-// Updates
-// - 02/24/2009 (DAC) - Now inherits from classDataClassBase
-//
-//*********************************************************************************************************
-
-namespace LcmsNetData.Data
+﻿namespace LcmsNetData.Data
 {
     /// <summary>
     /// Class to hold data about LcmsNet users

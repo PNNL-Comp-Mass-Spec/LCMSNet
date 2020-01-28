@@ -9,20 +9,20 @@
 //------------------------------------------------------------------------------
 
 namespace LcmsNet.Properties {
-    
-    
+
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
+
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
+
         public static Settings Default {
             get {
                 return defaultInstance;
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Plugins")]
@@ -31,7 +31,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["PluginFolder"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\PAL\\Cycle Composer\\HTS PAL")]
@@ -40,7 +40,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["PalMethodsFolder"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("tcp://proto-10.pnl.gov:61616")]
@@ -49,7 +49,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["BrokerURI"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DAC.Control")]
@@ -58,7 +58,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["CmdQueueName"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DAC.Status")]
@@ -67,7 +67,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["StatusTopicName"]));
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("BabyRuth")]
@@ -79,7 +79,7 @@ namespace LcmsNet.Properties {
                 this["InstName"] = value;
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("20")]
@@ -88,7 +88,7 @@ namespace LcmsNet.Properties {
                 return ((int)(this["InstResponseTime"]));
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("LC-ISCO-Standard")]
@@ -100,7 +100,7 @@ namespace LcmsNet.Properties {
                 this["SeparationType"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -112,7 +112,7 @@ namespace LcmsNet.Properties {
                 this["Operator"] = value;
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("(none)")]
@@ -121,7 +121,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["CartName"]));
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Unknown_Cart_Config")]
@@ -133,7 +133,7 @@ namespace LcmsNet.Properties {
                 this["CartConfigName"] = value;
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -142,7 +142,7 @@ namespace LcmsNet.Properties {
                 return ((bool)(this["InitializeHardwareOnStartup"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -151,7 +151,7 @@ namespace LcmsNet.Properties {
                 return ((bool)(this["CreateMethodFolders"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("D:\\Methods")]
@@ -160,7 +160,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["BrukerMethodFolderLocalName"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("D:\\Data_BrukerTest\\BrukerTest")]
@@ -169,7 +169,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["BrukerOutputFolderLocalName"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7005")]
@@ -178,7 +178,7 @@ namespace LcmsNet.Properties {
                 return ((int)(this["BrukerInstPort"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\\\\prismdev3.emsl.pnl.gov\\ProteomicsData")]
@@ -187,7 +187,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["BrukerOutputFolderShareName"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("prismdev3.emsl.pnl.gov")]
@@ -196,7 +196,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["BrukerInstNetName"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\\\\prismdev3.emsl.pnl.gov\\Methods")]
@@ -205,7 +205,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["BrukerMethodFolderShareName"]));
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("LCMSCache.que")]
@@ -217,7 +217,7 @@ namespace LcmsNet.Properties {
                 this["CacheFileName"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("NOTSET")]
@@ -229,7 +229,7 @@ namespace LcmsNet.Properties {
                 this["ColumnName0"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("NOTSET")]
@@ -241,7 +241,7 @@ namespace LcmsNet.Properties {
                 this["ColumnName1"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("NOTSET")]
@@ -253,7 +253,7 @@ namespace LcmsNet.Properties {
                 this["ColumnName2"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("NOTSET")]
@@ -265,7 +265,7 @@ namespace LcmsNet.Properties {
                 this["ColumnName3"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -277,7 +277,7 @@ namespace LcmsNet.Properties {
                 this["ColumnDisabled0"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -289,7 +289,7 @@ namespace LcmsNet.Properties {
                 this["ColumnDisabled1"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -301,7 +301,7 @@ namespace LcmsNet.Properties {
                 this["ColumnDisabled2"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -313,7 +313,7 @@ namespace LcmsNet.Properties {
                 this["ColumnDisabled3"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -325,7 +325,7 @@ namespace LcmsNet.Properties {
                 this["ColumnDisabledSpecial"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -337,7 +337,7 @@ namespace LcmsNet.Properties {
                 this["ValidateSamplesForDMS"] = value;
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
@@ -346,7 +346,7 @@ namespace LcmsNet.Properties {
                 return ((int)(this["LoggingErrorLevel"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
@@ -355,7 +355,7 @@ namespace LcmsNet.Properties {
                 return ((int)(this["LoggingMsgLevel"]));
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.0.0.0")]
@@ -367,7 +367,7 @@ namespace LcmsNet.Properties {
                 this["applicationVersion"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
@@ -379,7 +379,7 @@ namespace LcmsNet.Properties {
                 this["NotificationWriteTimeMinutes"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("SystemHealth")]
@@ -391,7 +391,7 @@ namespace LcmsNet.Properties {
                 this["NotificationDirectoryPath"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("notifications.xml")]
@@ -403,7 +403,7 @@ namespace LcmsNet.Properties {
                 this["NotificationFilePath"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -415,7 +415,7 @@ namespace LcmsNet.Properties {
                 this["NotificationShouldNotify"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -427,7 +427,7 @@ namespace LcmsNet.Properties {
                 this["FirstTime"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\\\\proto-5\\BionetXfer\\LCMSNetErrorReports")]
@@ -439,7 +439,7 @@ namespace LcmsNet.Properties {
                 this["ErrorPath"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://prismsupport.bionet/finchingest/update")]
@@ -451,7 +451,7 @@ namespace LcmsNet.Properties {
                 this["FinchServerURL"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -463,7 +463,7 @@ namespace LcmsNet.Properties {
                 this["ShouldDisplayQueue"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -475,7 +475,7 @@ namespace LcmsNet.Properties {
                 this["ShouldDisplayPumps"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -487,7 +487,7 @@ namespace LcmsNet.Properties {
                 this["ShouldDisplayConfig"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("5")]
@@ -499,7 +499,7 @@ namespace LcmsNet.Properties {
                 this["MinimumVolume"] = value;
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\\\\proto-5\\BionetXfer\\run_complete_trigger")]
@@ -508,7 +508,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["TriggerFileFolder"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -517,7 +517,7 @@ namespace LcmsNet.Properties {
                 return ((bool)(this["CopyTriggerFiles"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -526,7 +526,7 @@ namespace LcmsNet.Properties {
                 return ((bool)(this["CopyMethodFolders"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -535,7 +535,7 @@ namespace LcmsNet.Properties {
                 return ((bool)(this["EmulationEnabled"]));
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\\\\proto-5\\BionetXfer\\PDF_Methods")]
@@ -547,7 +547,7 @@ namespace LcmsNet.Properties {
                 this["PdfPath"] = value;
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -556,7 +556,7 @@ namespace LcmsNet.Properties {
                 return ((string)(this["AdminMode"]));
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -568,7 +568,7 @@ namespace LcmsNet.Properties {
                 this["TimeZone"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -580,7 +580,7 @@ namespace LcmsNet.Properties {
                 this["DMSTool"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]

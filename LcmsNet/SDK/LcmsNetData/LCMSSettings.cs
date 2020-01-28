@@ -1,17 +1,4 @@
-﻿//*********************************************************************************************************
-// Written by Dave Clark for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 01/13/2009
-//
-// Updates:
-// - 03/24/2014 (Christopher Walters) -Added static event for when a setting is changd.
-// - 02/04/2009 (DAC) - Converted methods to static
-// - 08/31/2010 (DAC) - Changes resulting from move part of configuraton to LcmsNet namespace
-//
-//*********************************************************************************************************
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace LcmsNetData
