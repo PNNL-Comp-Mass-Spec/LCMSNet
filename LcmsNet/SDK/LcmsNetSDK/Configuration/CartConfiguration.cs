@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using LcmsNetData.Data;
+using LcmsNetData;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetData.Configuration
+namespace LcmsNetSDK.Configuration
 {
     /// <summary>
     /// Class that encapsulates the configuration of the cart from

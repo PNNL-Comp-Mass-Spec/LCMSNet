@@ -2,8 +2,9 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Windows.Media;
+using LcmsNetData;
 
-namespace LcmsNetData.Data
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Class that manages all of the information about a given column

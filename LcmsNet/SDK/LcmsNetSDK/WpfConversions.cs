@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 
-namespace LcmsNetData
+namespace LcmsNetSDK
 {
     /// <summary>
     /// Utility functions for WPF, particularly for conversions from WinForms formatting values to WPF formatting values

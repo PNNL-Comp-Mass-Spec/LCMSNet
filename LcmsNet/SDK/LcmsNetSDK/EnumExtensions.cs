@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace LcmsNetData
+namespace LcmsNetSDK
 {
     /// <summary>
     /// Extensions for enum types

@@ -4,7 +4,6 @@ using System.Text;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using LcmsNetData;
-using LcmsNetData.Data;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;

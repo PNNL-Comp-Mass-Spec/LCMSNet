@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using LcmsNetData;
-using LcmsNetData.Configuration;
 using LcmsNetData.Data;
 using LcmsNetData.System;
+using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Method;
 
 namespace LcmsNetSDK.Data

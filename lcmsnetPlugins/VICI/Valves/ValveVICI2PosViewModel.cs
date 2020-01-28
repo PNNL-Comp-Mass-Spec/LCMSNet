@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 

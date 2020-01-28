@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Media;
-using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;

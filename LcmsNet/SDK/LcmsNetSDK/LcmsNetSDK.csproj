@@ -47,6 +47,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\CartConfiguration.cs" />
+    <Compile Include="Data\ColumnData.cs" />
+    <Compile Include="Data\ColumnStatus.cs" />
     <Compile Include="Data\IDMSValidator.cs" />
     <Compile Include="Data\IDMSValidatorMetaData.cs" />
     <Compile Include="Data\IDmsMetaData.cs" />
@@ -54,6 +57,7 @@
     <Compile Include="Data\IMethodWriter.cs" />
     <Compile Include="Data\MobilePhase.cs" />
     <Compile Include="Data\SampleData.cs" />
+    <Compile Include="Data\SampleRunningStatus.cs" />
     <Compile Include="Devices\BaseDeviceControlViewModel.cs" />
     <Compile Include="Devices\DeviceConfiguration.cs" />
     <Compile Include="Devices\DeviceControlAttribute.cs" />
@@ -77,6 +81,7 @@
     <Compile Include="Devices\PersistenceDataAttribute.cs" />
     <Compile Include="Devices\PumpDataReceivedHandler.cs" />
     <Compile Include="Devices\TimerDevice.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="Experiment\ISampleValidator.cs" />
     <Compile Include="Experiment\ISampleValidatorMetaData.cs" />
     <Compile Include="Experiment\SampleValidResult.cs" />
@@ -106,6 +111,7 @@
     <Compile Include="ModelStatus.cs" />
     <Compile Include="ModelStatusChangeEventArgs.cs" />
     <Compile Include="PlugInDisplayNameAttribute.cs" />
+    <Compile Include="WpfConversions.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.SQLite.Core">

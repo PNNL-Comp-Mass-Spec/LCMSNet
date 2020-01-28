@@ -11,7 +11,6 @@ using System.Windows.Media.Imaging;
 using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetData;
-using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;

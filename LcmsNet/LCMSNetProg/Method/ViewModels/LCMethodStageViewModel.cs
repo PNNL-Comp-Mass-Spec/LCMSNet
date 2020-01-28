@@ -6,10 +6,10 @@ using System.Reactive;
 using System.Windows;
 using System.Windows.Data;
 using LcmsNetData;
-using LcmsNetData.Configuration;
-using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 

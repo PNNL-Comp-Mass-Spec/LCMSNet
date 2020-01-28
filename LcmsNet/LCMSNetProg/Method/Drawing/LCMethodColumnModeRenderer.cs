@@ -6,8 +6,8 @@ using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK;
 using LcmsNetData;
-using LcmsNetData.Configuration;
-using LcmsNetData.Data;
+using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 

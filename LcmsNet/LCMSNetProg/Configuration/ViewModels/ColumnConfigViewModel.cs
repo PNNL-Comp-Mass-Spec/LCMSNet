@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
-using LcmsNetData.Data;
 using LcmsNetData.Logging;
+using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.Configuration.ViewModels

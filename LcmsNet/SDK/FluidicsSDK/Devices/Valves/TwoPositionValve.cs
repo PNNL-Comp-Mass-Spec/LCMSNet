@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
-using LcmsNetData;
+using LcmsNetSDK;
 
 namespace FluidicsSDK.Devices.Valves
 {

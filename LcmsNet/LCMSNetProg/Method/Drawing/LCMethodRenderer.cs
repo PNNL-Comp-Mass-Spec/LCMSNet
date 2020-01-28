@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;

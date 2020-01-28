@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using LcmsNetData.Configuration;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
+using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Experiment;

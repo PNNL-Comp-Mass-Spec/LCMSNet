@@ -1,4 +1,4 @@
-﻿namespace LcmsNetData.Data
+﻿namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Enumeration describing the status of a sample.
