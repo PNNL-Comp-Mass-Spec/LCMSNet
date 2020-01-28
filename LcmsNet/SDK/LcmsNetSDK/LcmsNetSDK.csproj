@@ -79,7 +79,6 @@
     <Compile Include="Devices\TimerDevice.cs" />
     <Compile Include="Experiment\ISampleValidator.cs" />
     <Compile Include="Experiment\ISampleValidatorMetaData.cs" />
-    <Compile Include="Experiment\LCExperimentData.cs" />
     <Compile Include="Experiment\SampleValidResult.cs" />
     <Compile Include="Experiment\SampleValidationError.cs" />
     <Compile Include="Experiment\SampleValidationErrorType.cs" />
