@@ -275,13 +275,10 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestR()
         {
-            var cols = new List<LCColumnData>();
-            var col = new LCColumnData
-            {
-                LCColumn = "ColTest1"
-            };
+            var cols = new List<string>();
+            var col = "ColTest1";
             cols.Add(col);
-            SQLiteTools.SaveEntireLCColumnListToCache(cols);
+            SQLiteTools.SaveColumnListToCache(cols);
         }
 
         /// <summary>
@@ -290,9 +287,9 @@ namespace LcmsNetSQLiteToolsUnitTests
         [Test]
         public void TestS()
         {
-            var cols = SQLiteTools.GetEntireLCColumnList().ToList();
+            var cols = SQLiteTools.GetColumnList(false).ToList();
             Assert.AreEqual(1, cols.Count);
-            Assert.IsTrue(cols[0].LCColumn == "ColTest1");
+            Assert.IsTrue(cols[0] == "ColTest1");
         }
     }
 }

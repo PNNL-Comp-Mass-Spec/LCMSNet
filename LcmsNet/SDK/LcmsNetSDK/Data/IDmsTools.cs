@@ -19,7 +19,6 @@ namespace LcmsNetSDK.Data
         void GetCartListFromDMS();
         void GetColumnListFromDMS();
         void GetDatasetTypeListFromDMS();
-        void GetEntireColumnListListFromDMS();
         void GetExperimentListFromDMS();
         void GetInstrumentListFromDMS();
 

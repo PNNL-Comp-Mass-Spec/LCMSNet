@@ -823,29 +823,6 @@ namespace LcmsNetDmsTools
             }
         }
 
-        public void GetEntireColumnListListFromDMS()
-        {
-            try
-            {
-                var lcColumns = ReadLcColumnsFromDMS();
-
-                try
-                {
-                    SQLiteTools.SaveEntireLCColumnListToCache(lcColumns);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing LC Column data list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting experiment list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
         /// <summary>
         /// Gets a list of separation types from DMS and stores it in cache
         /// </summary>
@@ -1104,40 +1081,6 @@ namespace LcmsNetDmsTools
                         yield return new CartConfigInfo(
                             reader["Cart_Config_Name"].CastDBValTo<string>(),
                             reader["Cart_Name"].CastDBValTo<string>());
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<LCColumnData> ReadLcColumnsFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            // This view will return all columns, even retired ones
-            const string sqlCmd = "SELECT [State], [ColumnNumber] FROM V_LCMSNet_Column_Export";
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return new LCColumnData
-                        {
-                            LCColumn = reader["Column Number"].CastDBValTo<string>(),
-                            State = reader["State"].CastDBValTo<string>()
-                        };
                     }
                 }
             }

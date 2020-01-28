@@ -61,7 +61,6 @@ namespace LcmsNetSQLiteTools
         private static readonly List<UserInfo> userInfo = new List<UserInfo>(0);
         private static readonly List<InstrumentInfo> instrumentInfo = new List<InstrumentInfo>(0);
         private static readonly List<ExperimentData> experimentsData = new List<ExperimentData>(0);
-        private static readonly List<LCColumnData> lcColumns = new List<LCColumnData>(0);
         private static readonly List<ProposalUser> proposalUsers = new List<ProposalUser>(0);
         private static readonly Dictionary<string, List<UserIDPIDCrossReferenceEntry>> proposalIdIndexedReferenceList = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>(0);
 
@@ -491,11 +490,6 @@ namespace LcmsNetSQLiteTools
             }
         }
 
-        public static IEnumerable<LCColumnData> GetEntireLCColumnList()
-        {
-            return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.LCColumnList, () => new LCColumnData(), lcColumns, false);
-        }
-
         /// <summary>
         /// Retrieves the cached cart configuration name
         /// </summary>
@@ -636,11 +630,6 @@ namespace LcmsNetSQLiteTools
             {
                 UpdateProposalIdIndexReferenceList(pidIndexedReferenceList);
             }
-        }
-
-        public static void SaveEntireLCColumnListToCache(IEnumerable<LCColumnData> lcColumnList)
-        {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.LCColumnList, lcColumnList, lcColumns);
         }
 
         /// <summary>
