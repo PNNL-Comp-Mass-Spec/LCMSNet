@@ -4,60 +4,66 @@ using System.ComponentModel;
 namespace LcmsNetData.Data
 {
     [Serializable]
-    public class ProposalUser : INotifyPropertyChanged
+    public class ProposalUser : IEquatable<ProposalUser>, INotifyPropertyChangedExt
     {
-        #region Events
+        private int userID;
+        private string userName;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
-
-        #region Methods
-
-        private void OnPropertyChanged(string propertyName)
+        public ProposalUser(int userId, string userName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            UserID = userId;
+            UserName = userName;
+        }
+
+        public ProposalUser()
+        {
+        }
+
+        public int UserID
+        {
+            get => userID;
+            set => this.RaiseAndSetIfChanged(ref userID, value);
+        }
+
+        public string UserName
+        {
+            get => userName;
+            set => this.RaiseAndSetIfChanged(ref userName, value);
         }
 
         public override string ToString()
         {
-            return m_userID + ": " + (string.IsNullOrWhiteSpace(m_userName) ? "Undefined user" : m_userName);
+            return userID + ": " + (string.IsNullOrWhiteSpace(userName) ? "Undefined user" : userName);
         }
 
-        #endregion
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        #region Properties
-
-        public int UserID
+        public void OnPropertyChanged(string propertyName)
         {
-            get => m_userID;
-            set
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public bool Equals(ProposalUser other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return userID == other.userID && userName == other.userName;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ProposalUser) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
             {
-                if (m_userID != value)
-                {
-                    m_userID = value;
-                    OnPropertyChanged("UserID");
-                }
+                return (userID * 397) ^ (userName != null ? userName.GetHashCode() : 0);
             }
         }
-
-        private int m_userID;
-
-        public string UserName
-        {
-            get => m_userName;
-            set
-            {
-                if (m_userName != value)
-                {
-                    m_userName = value;
-                    OnPropertyChanged("UserName");
-                }
-            }
-        }
-
-        private string m_userName;
-
-        #endregion
     }
 }

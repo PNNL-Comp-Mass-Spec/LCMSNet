@@ -932,14 +932,8 @@ namespace LcmsNetDmsTools
                     if (!pUser.UserId.HasValue || string.IsNullOrWhiteSpace(pUser.ProposalId) || string.IsNullOrWhiteSpace(pUser.UserName))
                         continue;
 
-                    var user = new ProposalUser();
-                    var crossReference = new UserIDPIDCrossReferenceEntry();
-
-                    user.UserID = pUser.UserId.Value;
-                    user.UserName = pUser.UserName;
-
-                    crossReference.PID = pUser.ProposalId;
-                    crossReference.UserID = pUser.UserId.Value;
+                    var user = new ProposalUser(pUser.UserId.Value, pUser.UserName);
+                    var crossReference = new UserIDPIDCrossReferenceEntry(pUser.UserId.Value, pUser.ProposalId);
 
                     if (!userMap.ContainsKey(user.UserID))
                     {
