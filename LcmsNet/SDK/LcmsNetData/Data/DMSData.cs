@@ -45,7 +45,7 @@ namespace LcmsNetData.Data
             RunOrder = -1;
             SelectedToRun = false;
             EMSLUsageType = "";
-            UserList = "";
+            EMSLProposalUser = "";
             WorkPackage = "";
         }
 
@@ -71,7 +71,7 @@ namespace LcmsNetData.Data
             RunOrder = -1;
             SelectedToRun = false;
             EMSLUsageType = "";
-            UserList = "";
+            EMSLProposalUser = "";
             WorkPackage = "";
         }
 
@@ -98,7 +98,7 @@ namespace LcmsNetData.Data
             newDmsData.RunOrder = RunOrder;
             newDmsData.SelectedToRun = SelectedToRun;
             newDmsData.EMSLUsageType = EMSLUsageType;
-            newDmsData.UserList = UserList;
+            newDmsData.EMSLProposalUser = EMSLProposalUser;
             newDmsData.WorkPackage = WorkPackage;
             newDmsData.LockData = LockData;
 
@@ -123,7 +123,7 @@ namespace LcmsNetData.Data
             RunOrder = other.RunOrder;
             SelectedToRun = other.SelectedToRun;
             EMSLUsageType = other.EMSLUsageType;
-            UserList = other.UserList;
+            EMSLProposalUser = other.EMSLProposalUser;
             WorkPackage = other.WorkPackage;
             LockData = other.LockData;
         }
@@ -162,7 +162,7 @@ namespace LcmsNetData.Data
         private string workPackage;
         private string emslUsageType;
         private string emslProposalId;
-        private string userList;
+        private string emslProposalUser;
         private string experiment;
         private int block;
         private int runOrder;
@@ -285,10 +285,10 @@ namespace LcmsNetData.Data
         /// <summary>
         /// EUS user list
         /// </summary>
-        public string UserList
+        public string EMSLProposalUser
         {
-            get => userList;
-            set => this.RaiseAndSetIfChangedLockCheck(ref userList, value, LockData, nameof(UserList));
+            get => emslProposalUser;
+            set => this.RaiseAndSetIfChangedLockCheck(ref emslProposalUser, value, LockData, nameof(EMSLProposalUser));
         }
 
         /// <summary>

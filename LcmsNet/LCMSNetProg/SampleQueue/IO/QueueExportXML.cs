@@ -120,7 +120,7 @@ namespace LcmsNet.SampleQueue.IO
             AddElementWithTypeAttribute("Experiment", dmsElement, "String", InpSample.DmsData.Experiment);
             AddElementWithTypeAttribute("EMSLProposalID", dmsElement, "String", InpSample.DmsData.EMSLProposalID);
             AddElementWithTypeAttribute("EMSLUsageType", dmsElement, "String", InpSample.DmsData.EMSLUsageType);
-            AddElementWithTypeAttribute("EMSLUser", dmsElement, "String", InpSample.DmsData.UserList);
+            AddElementWithTypeAttribute("EMSLUser", dmsElement, "String", InpSample.DmsData.EMSLProposalUser);
         }
 
         /// <summary>

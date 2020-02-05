@@ -41,7 +41,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             UpdateUserInterface();
 
             this.WhenAnyValue(x => x.IsSampleValid).Subscribe(x => this.RaisePropertyChanged(nameof(SampleNotValid)));
-            Sample.DmsData.WhenAnyValue(x => x.DatasetName, x => x.EMSLUsageType, x => x.EMSLProposalID, x => x.UserList, x => x.Experiment)
+            Sample.DmsData.WhenAnyValue(x => x.DatasetName, x => x.EMSLUsageType, x => x.EMSLProposalID, x => x.EMSLProposalUser, x => x.Experiment)
                 .Subscribe(x => this.UpdateUserInterface());
         }
 
@@ -119,7 +119,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (itemSelector == null)
             {
                 return string.IsNullOrWhiteSpace(Sample.DmsData.EMSLUsageType) && string.IsNullOrWhiteSpace(Sample.DmsData.EMSLProposalID) &&
-                       string.IsNullOrWhiteSpace(Sample.DmsData.UserList) && string.IsNullOrWhiteSpace(Sample.DmsData.Experiment);
+                       string.IsNullOrWhiteSpace(Sample.DmsData.EMSLProposalUser) && string.IsNullOrWhiteSpace(Sample.DmsData.Experiment);
             }
 
             return string.IsNullOrWhiteSpace(itemSelector(this));

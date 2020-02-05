@@ -958,6 +958,11 @@ namespace LcmsNetSQLiteTools
                 nameMappings.Add("dms.proposalid", eusPid);
             }
 
+            if (nameMappings.TryGetValue("dms.emslproposaluser", out var eusUser) && !nameMappings.ContainsKey("dms.userlist"))
+            {
+                nameMappings.Add("dms.userlist", eusUser);
+            }
+
             // Get table containing cached data
             var sqlStr = "SELECT * FROM " + tableName;
 

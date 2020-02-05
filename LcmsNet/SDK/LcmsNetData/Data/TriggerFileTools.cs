@@ -79,19 +79,19 @@ namespace LcmsNetData.Data
             // confuse DMS with EMSL related data when the requests are already fulfilled.
             //
             var usage = "";
-            var userList = "";
+            var user = "";
             var proposal = "";
             if (sample.DmsData.RequestID <= 0)
             {
                 proposal = sample.DmsData.EMSLProposalID;
                 usage = sample.DmsData.EMSLUsageType;
-                userList = sample.DmsData.UserList;
+                user = sample.DmsData.EMSLProposalUser;
             }
 
             AddParam(rootElement, "Request", sample.DmsData.RequestID.ToString());
             AddParam(rootElement, "EMSL Proposal ID", proposal);
             AddParam(rootElement, "EMSL Usage Type", usage);
-            AddParam(rootElement, "EMSL Users List", userList);
+            AddParam(rootElement, "EMSL Users List", user);
             AddParam(rootElement, "Run Start", sample.RunStart.ToString("MM/dd/yyyy HH:mm:ss"));
             AddParam(rootElement, "Run Finish", sample.RunFinish.ToString("MM/dd/yyyy HH:mm:ss"));
             // Removed to fix date comparison problems during DMS data import

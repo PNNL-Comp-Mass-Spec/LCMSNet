@@ -21,9 +21,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public SampleDMSValidatorDisplayViewModel() : this(new List<SampleData>(1))
         {
-            samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 1234567,   EMSLUsageType = "CAP_DEV", UserList = "(none1)", Experiment = "TestExp1", EMSLProposalID = "5" } }, true, false, false, true, true, true));
-            samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 12345678,  EMSLUsageType = "CAP_DEV", UserList = "(none2)", Experiment = "TestExp2", EMSLProposalID = "6" } }, false, true, true, false, false, true));
-            samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 123456789, EMSLUsageType = "CAP_DEV", UserList = "(none3)", Experiment = "TestExp3", EMSLProposalID = "7" } }, true, true, false, true, true, false));
+            samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 1234567,   EMSLUsageType = "CAP_DEV", EMSLProposalUser = "(none1)", Experiment = "TestExp1", EMSLProposalID = "5" } }, true, false, false, true, true, true));
+            samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 12345678,  EMSLUsageType = "CAP_DEV", EMSLProposalUser = "(none2)", Experiment = "TestExp2", EMSLProposalID = "6" } }, false, true, true, false, false, true));
+            samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 123456789, EMSLUsageType = "CAP_DEV", EMSLProposalUser = "(none3)", Experiment = "TestExp3", EMSLProposalID = "7" } }, true, true, false, true, true, false));
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     //sample.Sample.DmsData.RequestID = sourceItem.Sample.DmsData.RequestID; // This number is only valid for a single sample. Do not copy it down.
                     sample.Sample.DmsData.EMSLUsageType = sourceItem.Sample.DmsData.EMSLUsageType;
                     sample.Sample.DmsData.EMSLProposalID = sourceItem.Sample.DmsData.EMSLProposalID;
-                    sample.Sample.DmsData.UserList = sourceItem.Sample.DmsData.UserList;
+                    sample.Sample.DmsData.EMSLProposalUser = sourceItem.Sample.DmsData.EMSLProposalUser;
                     sample.Sample.DmsData.Experiment = sourceItem.Sample.DmsData.Experiment;
                 }
             }
@@ -153,8 +153,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                         assigner = (source, target) => target.Sample.DmsData.EMSLProposalID = source.Sample.DmsData.EMSLProposalID;
                         break;
                     case FillDownSelection.EmslUsers:
-                        selector = x => x.Sample.DmsData.UserList;
-                        assigner = (source, target) => target.Sample.DmsData.UserList = source.Sample.DmsData.UserList;
+                        selector = x => x.Sample.DmsData.EMSLProposalUser;
+                        assigner = (source, target) => target.Sample.DmsData.EMSLProposalUser = source.Sample.DmsData.EMSLProposalUser;
                         break;
                     case FillDownSelection.Experiment:
                         selector = x => x.Sample.DmsData.Experiment;

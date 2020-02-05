@@ -574,7 +574,7 @@ namespace LcmsNetSDK.Data
                 args.PropertyName.Equals(nameof(DmsData.CartConfigName)) || args.PropertyName.Equals(nameof(DmsData.DatasetType)) ||
                 args.PropertyName.Equals(nameof(DmsData.RunOrder)) || args.PropertyName.Equals(nameof(DmsData.Batch)) ||
                 args.PropertyName.Equals(nameof(DmsData.Block)) || args.PropertyName.Equals(nameof(DmsData.EMSLUsageType)) ||
-                args.PropertyName.Equals(nameof(DmsData.UserList)) || args.PropertyName.Equals(nameof(DmsData.Experiment)) ||
+                args.PropertyName.Equals(nameof(DmsData.EMSLProposalUser)) || args.PropertyName.Equals(nameof(DmsData.Experiment)) ||
                 args.PropertyName.Equals(nameof(DmsData.RequestID)) || args.PropertyName.Equals(nameof(DmsData.EMSLProposalID)))
             {
                 OnPropertyChanged(nameof(DmsData));

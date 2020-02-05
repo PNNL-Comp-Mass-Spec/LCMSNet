@@ -151,8 +151,8 @@ namespace LcmsNet.SampleQueue.IO
             // DMS EMSLUsageType (DMSData.EMSLUsageType)
             retData.DmsData.EMSLUsageType = GetNodeValue(itemNode, "DMS/EMSLUsageType");
 
-            // DMS EMSLUser (DMSData.UserList)
-            retData.DmsData.UserList = GetNodeValue(itemNode, "DMS/EMSLUser");
+            // DMS EMSLUser (DMSData.EMSLProposalUser)
+            retData.DmsData.EMSLProposalUser = GetNodeValue(itemNode, "DMS/EMSLUser");
 
             // It's all in, so return
             return retData;

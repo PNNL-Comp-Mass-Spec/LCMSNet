@@ -31,7 +31,7 @@
             <DataGridTextColumn Header="Request Name" Binding="{Binding DmsData.RequestName}" IsReadOnly="True" />
             <DataGridTextColumn Header="Request #" Binding="{Binding DmsData.RequestID}" IsReadOnly="True" />
             <DataGridTextColumn Header="Cart" Binding="{Binding DmsData.CartName}" IsReadOnly="True" />
-            <DataGridTextColumn Header="EMSL User" Binding="{Binding DmsData.UserList}" IsReadOnly="True" />
+            <DataGridTextColumn Header="EMSL User" Binding="{Binding DmsData.EMSLProposalUser}" IsReadOnly="True" />
             <DataGridTextColumn Header="Usage Type" Binding="{Binding DmsData.EMSLUsageType}" IsReadOnly="True" />
             <DataGridTextColumn Header="Batch" Binding="{Binding DmsData.Batch}" IsReadOnly="True" />
             <DataGridTextColumn Header="Block" Binding="{Binding DmsData.Block}" IsReadOnly="True" />

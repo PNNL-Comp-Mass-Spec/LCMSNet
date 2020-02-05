@@ -116,7 +116,7 @@
                     <GridViewColumn Header="EMSL User(s)" Width="95">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Width="80" Name="EmslUsers" Text="{Binding Sample.DmsData.UserList}" IsEnabled="{Binding CanChangeEmslData}" KeyUp="UIElement_OnKeyUp" ContextMenu="{StaticResource TextboxContextMenu}">
+                                <TextBox Width="80" Name="EmslUsers" Text="{Binding Sample.DmsData.EMSLProposalUser}" IsEnabled="{Binding CanChangeEmslData}" KeyUp="UIElement_OnKeyUp" ContextMenu="{StaticResource TextboxContextMenu}">
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">
                                             <Style.Triggers>

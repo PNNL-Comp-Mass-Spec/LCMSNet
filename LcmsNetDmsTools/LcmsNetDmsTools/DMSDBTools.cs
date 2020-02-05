@@ -1292,7 +1292,7 @@ namespace LcmsNetDmsTools
                                 RequestName = reader["Name"].CastDBValTo<string>(),
                                 WorkPackage = reader["Work Package"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 EMSLUsageType = reader["Usage Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                UserList = reader["EUS Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                EMSLProposalUser = reader["EUS Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 CartName = reader["Cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 Comment = reader["Comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 MRMFileID = reader["MRMFileID"].CastDBValTo<int>(),

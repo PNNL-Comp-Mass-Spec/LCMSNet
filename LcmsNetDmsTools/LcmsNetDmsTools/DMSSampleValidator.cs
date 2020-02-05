@@ -91,7 +91,7 @@ namespace LcmsNetDmsTools
                 {
                     return false;
                 }
-                if (string.IsNullOrEmpty(data.UserList.Replace(" ","")))
+                if (string.IsNullOrEmpty(data.EMSLProposalUser.Replace(" ","")))
                 {
                     return false;
                 }
@@ -141,7 +141,7 @@ namespace LcmsNetDmsTools
                 {
                     errors |= DMSSampleValidatorErrors.EUSProposalIDEmpty;
                 }
-                if (string.IsNullOrEmpty(data.UserList.Replace(" ", "")))
+                if (string.IsNullOrEmpty(data.EMSLProposalUser.Replace(" ", "")))
                 {
                     errors |= DMSSampleValidatorErrors.EUSUserListEmpty;
                 }
@@ -264,7 +264,7 @@ namespace LcmsNetDmsTools
             {
                 if (data.EMSLUsageType.ToUpper() == CONST_EMSL_USAGE_TYPE)
                 {
-                    if (string.IsNullOrEmpty(data.UserList.Replace(" ","")))
+                    if (string.IsNullOrEmpty(data.EMSLProposalUser.Replace(" ","")))
                     {
                         return false;
                     }
