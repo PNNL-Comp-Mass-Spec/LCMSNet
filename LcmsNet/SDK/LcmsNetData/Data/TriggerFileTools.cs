@@ -55,7 +55,8 @@ namespace LcmsNetData.Data
             AddParam(rootElement, "Dataset Name", sample.DmsData.DatasetName);
             AddParam(rootElement, "Experiment Name", TrimWhitespace(sample.DmsData.Experiment));
             AddParam(rootElement, "Instrument Name", TrimWhitespace(sample.InstrumentName));
-            AddParam(rootElement, "Capture Subfolder", TrimWhitespace(sample.CaptureSubdirectoryPath));
+            AddParam(rootElement, "Capture Share Name", TrimWhitespace(sample.CaptureShareName));
+            AddParam(rootElement, "Capture Subdirectory", TrimWhitespace(sample.CaptureSubdirectoryPath));
             AddParam(rootElement, "Separation Type", TrimWhitespace(sample.SeparationType));
             AddParam(rootElement, "LC Cart Name", TrimWhitespace(sample.DmsData.CartName));
             AddParam(rootElement, "LC Cart Config", TrimWhitespace(sample.DmsData.CartConfigName));

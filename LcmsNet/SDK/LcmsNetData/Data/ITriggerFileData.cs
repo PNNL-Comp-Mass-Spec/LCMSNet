@@ -43,6 +43,11 @@ namespace LcmsNetData.Data
         string Operator { get; }
 
         /// <summary>
+        /// Name of the shared directory used to access the dataset. If empty, the instrument default (in DMS) is used.
+        /// </summary>
+        string CaptureShareName { get; }
+
+        /// <summary>
         /// Subdirectory containing the dataset
         /// </summary>
         string CaptureSubdirectoryPath { get; }

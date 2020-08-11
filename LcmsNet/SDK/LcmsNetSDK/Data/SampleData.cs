@@ -538,6 +538,10 @@ namespace LcmsNetSDK.Data
 
         /// <inheritdoc />
         [PersistenceSetting(IgnoreProperty = true)]
+        public virtual string CaptureShareName => "";
+
+        /// <inheritdoc />
+        [PersistenceSetting(IgnoreProperty = true)]
         public virtual string CaptureSubdirectoryPath => "";
 
         /// <inheritdoc />
