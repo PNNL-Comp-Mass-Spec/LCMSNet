@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Windows.Controls;
-using LcmsNet.Method;
 using LcmsNetData;
 using LcmsNetSDK.Method;
 using ReactiveUI;
@@ -29,7 +28,7 @@ namespace LcmsNet.Reporting
             this.logPath = logPath;
             this.controls = controls;
 
-            foreach (var method in methodManager.Methods.Values)
+            foreach (var method in methodManager.AllLCMethods)
             {
                 if (!lcMethodsList.Contains(method))
                 {
@@ -77,13 +76,12 @@ namespace LcmsNet.Reporting
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        private bool MethodManager_MethodRemoved(object sender, LCMethod method)
+        private void MethodManager_MethodRemoved(object sender, LCMethod method)
         {
             if (!lcMethodsList.Contains(method))
-                return true;
+                return;
 
             lcMethodsList.Remove(method);
-            return true;
         }
 
         /// <summary>
@@ -92,13 +90,12 @@ namespace LcmsNet.Reporting
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        private bool MethodManager_MethodAdded(object sender, LCMethod method)
+        private void MethodManager_MethodAdded(object sender, LCMethod method)
         {
             if (lcMethodsList.Contains(method))
-                return true;
+                return;
 
             lcMethodsList.Add(method);
-            return true;
         }
 
         #endregion

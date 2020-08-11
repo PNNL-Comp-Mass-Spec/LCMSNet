@@ -5,13 +5,13 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
-using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -490,13 +490,13 @@ namespace LcmsNet.SampleQueue.ViewModels
                     var sample = data.Clone() as SampleData;
                     if (sample?.LCMethod?.Name != null)
                     {
-                        if (LCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                        if (LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
                         {
                             // Because sample clones are deep copies, we cannot trust that
                             // every object in the sample is serializable...so...we are stuck
                             // making sure we re-hash the method using the name which
                             // is copied during the serialization.
-                            sample.LCMethod = LCMethodManager.Manager.Methods[sample.LCMethod.Name];
+                            sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(sample.LCMethod.Name);
                         }
                     }
                     samplesToRandomize.Add(sample);

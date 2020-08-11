@@ -187,7 +187,7 @@ namespace LcmsNet.Method.ViewModels
         public ReactiveCommand<Unit, Unit> SelectAllCommand { get; }
         public ReactiveCommand<Unit, Unit> DeselectAllCommand { get; }
 
-        bool Manager_MethodUpdated(object sender, LCMethod method)
+        private void Manager_MethodUpdated(object sender, LCMethod method)
         {
             //only stages that already have this method loaded should reload it.
             if (MethodName == method.Name && !triggeredUpdate)
@@ -198,10 +198,9 @@ namespace LcmsNet.Method.ViewModels
             {
                 triggeredUpdate = false;
             }
-            return true;
         }
 
-        public bool Manager_MethodRemoved(object sender, LCMethod method)
+        private void Manager_MethodRemoved(object sender, LCMethod method)
         {
             if (method != null)
             {
@@ -211,10 +210,9 @@ namespace LcmsNet.Method.ViewModels
                     ComboBoxSavedItemsRemoveItem(method.Name);
                 }
             }
-            return true;
         }
 
-        public bool Manager_MethodAdded(object sender, LCMethod method)
+        private void Manager_MethodAdded(object sender, LCMethod method)
         {
             if (method != null)
             {
@@ -224,7 +222,6 @@ namespace LcmsNet.Method.ViewModels
                     ComboBoxSavedItemsAddItem(method.Name);
                 }
             }
-            return true;
         }
 
         public void ComboBoxSavedItemsRemoveItem(string name)
@@ -244,12 +241,7 @@ namespace LcmsNet.Method.ViewModels
         /// <returns></returns>
         private LCMethod FindMethods(string name)
         {
-            LCMethod method = null;
-            if (LCMethodManager.Manager.Methods.ContainsKey(name))
-            {
-                method = LCMethodManager.Manager.Methods[name];
-            }
-            return method;
+            return LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(name);
         }
 
         /// <summary>
@@ -439,7 +431,7 @@ namespace LcmsNet.Method.ViewModels
             //currentMethod = method;
 
             // Register the method
-            LCMethodManager.Manager.AddMethod(method);
+            LCMethodManager.Manager.AddOrUpdateMethod(method);
             OnEventChanged();
         }
 
@@ -936,7 +928,7 @@ namespace LcmsNet.Method.ViewModels
 
             if (method != null)
             {
-                LCMethodManager.Manager.AddMethod(method);
+                LCMethodManager.Manager.AddOrUpdateMethod(method);
             }
         }
 

@@ -218,7 +218,6 @@
     <Compile Include="Method\LCMethodDeviceArgs.cs" />
     <Compile Include="Method\LCMethodFactory.cs" />
     <Compile Include="Method\LCMethodReader.cs" />
-    <Compile Include="Method\LCMethodManager.cs" />
     <Compile Include="Method\LCMethodScheduler.cs" />
     <Compile Include="Method\LCMethodWriter.cs" />
     <Compile Include="Method\LCMethodBuilder.cs" />

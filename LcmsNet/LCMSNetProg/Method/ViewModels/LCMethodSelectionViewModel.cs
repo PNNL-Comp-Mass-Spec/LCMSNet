@@ -108,7 +108,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to remove.</param>
         /// <returns>True always, that the method was removed.</returns>
-        private bool Manager_MethodRemoved(object sender, LCMethod method)
+        private void Manager_MethodRemoved(object sender, LCMethod method)
         {
             // Finds and removes the method in the listbox
             foreach (var removeMethod in listSelectedLcMethods.Where(lcMethod => lcMethod.Name.Equals(method.Name)).ToList())
@@ -125,8 +125,6 @@ namespace LcmsNet.Method.ViewModels
             // For the users benefit, lets make sure the last item added is displayed in the list
             if (methodsComboBoxOptions.Count > 0)
                 SelectedLCMethod = methodsComboBoxOptions.First();
-
-            return true;
         }
 
         /// <summary>
@@ -135,10 +133,10 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to add.</param>
         /// <returns>True if a method was added, false if the method was null.</returns>
-        private bool Manager_MethodAdded(object sender, LCMethod method)
+        private void Manager_MethodAdded(object sender, LCMethod method)
         {
             if (method == null)
-                return false;
+                return;
 
             // Update the combo box so that the method has the right number of events,
             // OR add the method if it does not exist.
@@ -170,8 +168,6 @@ namespace LcmsNet.Method.ViewModels
             // Otherwise, don't select an item since the user may have already selected an item.
             if (MethodsComboBoxOptions.Count > 0)
                 SelectedLCMethod = MethodsComboBoxOptions.First();
-
-            return true;
         }
 
         /// <summary>

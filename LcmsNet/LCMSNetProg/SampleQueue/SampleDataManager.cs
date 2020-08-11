@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using LcmsNet.Method;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetData;
 using LcmsNetData.Data;
@@ -661,10 +660,9 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="method"></param>
-        /// <returns></returns>
-        private bool Manager_MethodRemoved(object sender, LCMethod method)
+        private void Manager_MethodRemoved(object sender, LCMethod method)
         {
-            return RemoveMethod(method);
+            RemoveMethod(method);
         }
 
         /// <summary>
@@ -700,7 +698,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="sender"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        private bool Manager_MethodUpdated(object sender, LCMethod method)
+        private void Manager_MethodUpdated(object sender, LCMethod method)
         {
             // Update the samples first, then update the methods list.
             var samples = SampleQueue.GetWaitingQueue();
@@ -722,12 +720,10 @@ namespace LcmsNet.SampleQueue
             var success = AddOrUpdateLCMethod(method);
             if (!success)
             {
-                return false;
+                return;
             }
 
             SampleQueue.UpdateSamples(updateSamples);
-
-            return true;
         }
 
         /// <summary>
@@ -735,13 +731,12 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="method"></param>
-        /// <returns></returns>
-        private bool Manager_MethodAdded(object sender, LCMethod method)
+        private void Manager_MethodAdded(object sender, LCMethod method)
         {
             var success = AddOrUpdateLCMethod(method);
             if (!success)
             {
-                return false;
+                return;
             }
 
             // If we just added a sample, we want to make sure the samples have a method selected.
@@ -754,8 +749,6 @@ namespace LcmsNet.SampleQueue
 
                 SampleQueue.UpdateAllSamples();
             }
-
-            return true;
         }
 
         #endregion
@@ -978,7 +971,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private void ShowLCSeparationMethods()
         {
-            SetLCMethods(LCMethodManager.Manager.Methods.Values);
+            SetLCMethods(LCMethodManager.Manager.AllLCMethods);
         }
 
         #endregion

@@ -8,7 +8,6 @@ using System.Threading;
 using System.Windows;
 using FluidicsSDK;
 using LcmsNet.Devices;
-using LcmsNet.Method;
 using LcmsNet.Properties;
 using LcmsNetData.Logging;
 using LcmsNetSDK;
@@ -76,13 +75,9 @@ namespace LcmsNet.Notification.ViewModels
             NotificationBroadcaster.Manager.Removed += Manager_Removed;
 
             // Add any existing methods.
-            var methods = LCMethodManager.Manager.Methods;
-            if (methods.Count > 0)
+            foreach (var method in LCMethodManager.Manager.AllLCMethods)
             {
-                foreach (var key in methods.Keys)
-                {
-                    Manager_MethodAdded(this, methods[key]);
-                }
+                Manager_MethodAdded(this, method);
             }
 
             // Synch methods
@@ -422,32 +417,29 @@ namespace LcmsNet.Notification.ViewModels
 
         #region Method Manager Events
 
-        private bool Manager_MethodUpdated(object sender, LCMethod method)
+        private void Manager_MethodUpdated(object sender, LCMethod method)
         {
             if (methodsComboBoxOptions.Contains(method))
             {
                 var index = methodsComboBoxOptions.IndexOf(method);
                 methodsComboBoxOptions[index] = method;
             }
-            return true;
         }
 
-        private bool Manager_MethodRemoved(object sender, LCMethod method)
+        private void Manager_MethodRemoved(object sender, LCMethod method)
         {
             if (methodsComboBoxOptions.Contains(method))
             {
                 methodsComboBoxOptions.Remove(method);
             }
-            return true;
         }
 
-        private bool Manager_MethodAdded(object sender, LCMethod method)
+        private void Manager_MethodAdded(object sender, LCMethod method)
         {
             if (!methodsComboBoxOptions.Contains(method))
             {
                 methodsComboBoxOptions.Add(method);
             }
-            return true;
         }
 
         #endregion

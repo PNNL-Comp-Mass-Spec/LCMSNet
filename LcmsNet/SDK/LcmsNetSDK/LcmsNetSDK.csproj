@@ -98,6 +98,7 @@
     <Compile Include="Method\LCMethodData.cs" />
     <Compile Include="Method\LCMethodEventAttribute.cs" />
     <Compile Include="Method\LCMethodEventParameter.cs" />
+    <Compile Include="Method\LCMethodManager.cs" />
     <Compile Include="Method\LCMethodOptimizer.cs" />
     <Compile Include="Method\LCMethodParameterNumericRange.cs" />
     <Compile Include="Method\MethodOperationTimeoutType.cs" />

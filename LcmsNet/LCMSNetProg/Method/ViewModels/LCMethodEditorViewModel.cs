@@ -275,7 +275,7 @@ namespace LcmsNet.Method.ViewModels
 
             if (method != null)
             {
-                LCMethodManager.Manager.AddMethod(method);
+                LCMethodManager.Manager.AddOrUpdateMethod(method);
             }
         }
 

@@ -31,13 +31,15 @@ namespace LcmsNetSDK.Data
         /// <returns></returns>
         public object Clone()
         {
-            var newColumnData = new ColumnData();
+            var newColumnData = new ColumnData
+            {
+                First = First,
+                Status = Status,
+                ID = ID,
+                Name = Name,
+                Color = Color
+            };
 
-            newColumnData.First = First;
-            newColumnData.Status = Status;
-            newColumnData.ID = ID;
-            newColumnData.Name = Name;
-            newColumnData.Color = Color;
 
             return newColumnData;
         }
@@ -46,7 +48,7 @@ namespace LcmsNetSDK.Data
 
         public override string ToString()
         {
-            return string.Format("ID = {0} Name = {1}", ID, Name);
+            return $"ID = {ID} Name = {Name}";
         }
 
         #region Delegate Definitions

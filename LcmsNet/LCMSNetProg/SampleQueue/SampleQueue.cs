@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using LcmsNet.Method;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetData;
 using LcmsNetData.Logging;
@@ -653,7 +652,7 @@ namespace LcmsNet.SampleQueue
                         sample = queue[queue.Count - 1].Clone() as SampleData;
                         if (sample?.LCMethod?.Name != null)
                         {
-                            if (LCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                            if (LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
                             {
                                 //
                                 // Because sample clones are deep copies, we cannot trust that
@@ -661,7 +660,7 @@ namespace LcmsNet.SampleQueue
                                 // making sure we re-hash the method using the name which
                                 // is copied during the serialization.
                                 //
-                                sample.LCMethod = LCMethodManager.Manager.Methods[sample.LCMethod.Name];
+                                sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(sample.LCMethod.Name);
                             }
                         }
                     }
@@ -1687,10 +1686,10 @@ namespace LcmsNet.SampleQueue
                     sample.LCMethod = new LCMethod();
                 }
 
-                var containsMethod = LCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name);
+                var containsMethod = LCMethodManager.Manager.MethodExists(sample.LCMethod.Name);
                 if (containsMethod)
                 {
-                    sample.LCMethod = LCMethodManager.Manager.Methods[sample.LCMethod.Name];
+                    sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(sample.LCMethod.Name);
                 }
 
                 sample.CloneLCMethod();
@@ -1780,10 +1779,10 @@ namespace LcmsNet.SampleQueue
                     continue;
                 }
 
-                var containsMethod = LCMethodManager.Manager.Methods.ContainsKey(realSample.LCMethod.Name);
+                var containsMethod = LCMethodManager.Manager.MethodExists(realSample.LCMethod.Name);
                 if (containsMethod)
                 {
-                    realSample.LCMethod = LCMethodManager.Manager.Methods[realSample.LCMethod.Name];
+                    realSample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(realSample.LCMethod.Name);
                 }
 
                 realSample.CloneLCMethod();
@@ -2149,13 +2148,13 @@ namespace LcmsNet.SampleQueue
                     sample.RunningStatus = SampleRunningStatus.Complete;
                     m_uniqueID.Add(sample.UniqueID);
 
-                    if (sample.LCMethod != null && LCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                    if (sample.LCMethod != null && LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
                     {
                         var name = sample.LCMethod.Name;
                         sample.LCMethod = null; // Wipe it out
                         // Don't use a clone here, this assigned method will be replaced before it is ever used
                         // We need reference equality for the UI view
-                        sample.LCMethod = LCMethodManager.Manager.Methods[name];
+                        sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(name);
                     }
                     else
                     {
@@ -2182,13 +2181,13 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var sample in waitingSamples) // m_waitingQueue)
             {
-                if (sample.LCMethod != null && LCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                if (sample.LCMethod != null && LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
                 {
                     var name = sample.LCMethod.Name;
                     sample.LCMethod = null; // Wipe it out
                     // Don't use a clone here, this assigned method will be replaced before it is ever used
                     // We need reference equality for the UI view
-                    sample.LCMethod = LCMethodManager.Manager.Methods[name];
+                    sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(name);
 
                     if (sample.LCMethod != null && sample.LCMethod.Column >= 0)
                     {
@@ -2297,13 +2296,13 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var sample in waitingSamples)
             {
-                if (sample.LCMethod != null && LCMethodManager.Manager.Methods.ContainsKey(sample.LCMethod.Name))
+                if (sample.LCMethod != null && LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
                 {
                     var name = sample.LCMethod.Name;
                     sample.LCMethod = null; // Wipe it out
                     // Don't use a clone here, this assigned method will be replaced before it is ever used
                     // We need reference equality for the UI view
-                    sample.LCMethod = LCMethodManager.Manager.Methods[name];
+                    sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(name);
 
                     if (sample.LCMethod != null)
                     {

@@ -18,6 +18,8 @@ namespace LcmsNet.Method
     /// </summary>
     public class LCMethodReader
     {
+        private const string CONST_METHOD_EXTENSION = "*.xml";
+
         #region Events and Delegates
 
         /// <summary>
@@ -29,6 +31,84 @@ namespace LcmsNet.Method
         public delegate bool DelegateValidateDevice(object sender, LCMethodDeviceArgs args);
 
         #endregion
+
+        /// <summary>
+        /// Loads a method from the path provided.
+        /// </summary>
+        /// <param name="filePath">Path to load method from</param>
+        /// <param name="errors"></param>
+        private static void LoadMethod(string filePath, ref List<Exception> errors)
+        {
+            //bool retValue = false;
+
+            var reader = new LCMethodReader();
+            LCMethod method;
+            try
+            {
+                method = reader.ReadMethod(filePath, errors);
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(0, "Could not load method from " + filePath, ex);
+                throw;
+            }
+
+            //
+            // If the method failed to load...then...return false
+            //
+            if (method == null)
+                throw new Exception("The method was not able to be read.");
+
+            // Figure out if the method exists.
+            if (LCMethodManager.Manager.MethodExists(method.Name))
+            {
+                //TODO: Figure out what to do if a duplicate method exists.
+                var errorMessage = $"The user method name from {filePath} conflicts with another method.";
+                ApplicationLogger.LogMessage(0, errorMessage);
+                throw new Exception(errorMessage);
+            }
+            //
+            // Otherwise, add the method so it can be registered with appropriate objects
+            //
+            LCMethodManager.Manager.AddOrUpdateMethod(method);
+        }
+
+        /// <summary>
+        /// Loads methods stored in path.  Top-level directory only.
+        /// </summary>
+        /// <param name="path">Path to load methods from.</param>
+        /// <returns>True if successful</returns>
+        public static Dictionary<string, List<Exception>> LoadMethods(string path)
+        {
+            var errors = new Dictionary<string, List<Exception>>();
+
+            //
+            // Find each file in the directory
+            //
+            var filePaths = Directory.GetFiles(path, CONST_METHOD_EXTENSION, SearchOption.TopDirectoryOnly);
+            foreach (var filePath in filePaths)
+            {
+                try
+                {
+                    var methodErrors = new List<Exception>();
+                    LoadMethod(filePath, ref methodErrors);
+
+                    if (methodErrors.Count > 0)
+                    {
+                        errors.Add(filePath, methodErrors);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    errors.Add(filePath, new List<Exception> { exception });
+
+                    ApplicationLogger.LogError(0,
+                        "An unhandled exception occurred when reading a user method.",
+                        exception);
+                }
+            }
+            return errors;
+        }
 
         public LCMethodReader()
         {
