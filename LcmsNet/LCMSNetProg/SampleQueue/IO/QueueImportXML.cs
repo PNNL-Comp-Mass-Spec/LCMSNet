@@ -126,9 +126,7 @@ namespace LcmsNet.SampleQueue.IO
 
             // Separation Method (Experiment.ExperimentName)
             var methodName = GetNodeValue(itemNode, "Separation/Method");
-            retData.LCMethod = new LCMethod {
-                Name = methodName
-            };
+            retData.LCMethodName = methodName;
 
             // Acquisition Method (InstrumentMethod)
             retData.InstrumentMethod = GetNodeValue(itemNode, "Acquisition/Method");

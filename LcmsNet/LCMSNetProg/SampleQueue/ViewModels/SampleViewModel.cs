@@ -4,7 +4,6 @@ using System.Windows.Media;
 using LcmsNetData.Data;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -34,7 +33,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             columnData = this.WhenAnyValue(x => x.Sample.ColumnIndex).Select(x => CartConfiguration.Columns[x]).ToProperty(this, x => x.ColumnData);
 
-            this.WhenAnyValue(x => x.Sample.ColumnIndex, x => x.Sample.LCMethod).Subscribe(x =>
+            this.WhenAnyValue(x => x.Sample.ColumnIndex, x => x.Sample.LCMethodName).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(ColumnNumber));
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
@@ -71,18 +70,18 @@ namespace LcmsNet.SampleQueue.ViewModels
                     x => x.Sample.DmsData.CartConfigName, x => x.Sample.DmsData.DatasetType, x => x.Sample.PAL.PALTray, x => x.Sample.PAL.Well)
                 .Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
             this.WhenAnyValue(x => x.Sample.SequenceID, x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.LCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethod)));
+            this.WhenAnyValue(x => x.Sample.LCMethodName).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethodName)));
 
             this.WhenAnyValue(x => x.Sample.DmsData.Block).Subscribe(x => this.RaisePropertyChanged(nameof(IsBlockedSample)));
 
-            Sample.WhenAnyValue(x => x.InstrumentMethod, x => x.PAL, x => x.DmsData, x => x.LCMethod)
+            Sample.WhenAnyValue(x => x.InstrumentMethod, x => x.PAL, x => x.DmsData, x => x.LCMethodName)
                 .Subscribe(x => this.RaisePropertyChanged(nameof(Sample)));
 
             Sample.WhenAnyValue(x => x.ActualLCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(LcMethodCueBannerText)));
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
-        public IReadOnlyReactiveList<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
+        public IReadOnlyReactiveList<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
         public IReadOnlyReactiveList<string> DatasetTypeComboBoxOptions => SampleDataManager.DatasetTypeOptions;
         public IReadOnlyReactiveList<string> PalTrayComboBoxOptions => SampleDataManager.PalTrayOptions;
         public IReadOnlyReactiveList<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
@@ -209,7 +208,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(SequenceToolTipFormat))
                 {
-                    return string.Format(SequenceToolTipFormat, Sample.ActualLCMethod.Start, Sample.ActualLCMethod.End, Sample.ActualLCMethod.ActualStart, Sample.ActualLCMethod.ActualEnd);
+                    return string.Format(SequenceToolTipFormat, Sample.ActualLCMethod?.Start, Sample.ActualLCMethod?.End, Sample.ActualLCMethod?.ActualStart, Sample.ActualLCMethod?.ActualEnd);
                 }
                 return null;
             }
@@ -345,7 +344,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 if (Sample.IsSetToRunOrHasRun)
                 {
-                    return Sample.ActualLCMethod.Name;
+                    if (Sample.ActualLCMethod != null)
+                    {
+                        return Sample.ActualLCMethod.Name;
+                    }
+
+                    return Sample.LCMethodName;
                 }
 
                 return "Select";

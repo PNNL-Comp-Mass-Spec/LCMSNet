@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Experiment;
+using LcmsNetSDK.Method;
 
 namespace CoreSampleValidator
 {
@@ -24,20 +25,20 @@ namespace CoreSampleValidator
             var errors = new List<SampleValidationError>();
 
             // Validate the LC-Method
-            if (sample.ActualLCMethod == null)
+            if (string.IsNullOrWhiteSpace(sample.LCMethodName) || !LCMethodManager.Manager.TryGetLCMethod(sample.LCMethodName, out var method))
             {
                 errors.Add(new SampleValidationError("The LC-Method was not selected.", SampleValidationErrorType.LCMethodNotSelected));
             }
             else
             {
                 var manager = DeviceManager.Manager;
-                if (sample.ActualLCMethod.Events.Count < 1)
+                if (method.Events.Count < 1)
                 {
                     errors.Add(new SampleValidationError("The LC-Method was not selected or does not contain any events.", SampleValidationErrorType.LCMethodHasNoEvents));
                 }
                 else
                 {
-                    foreach (var lcEvent in sample.ActualLCMethod.Events)
+                    foreach (var lcEvent in method.Events)
                     {
                         // VALIDATE THE DEVICE!!!
                         var device = lcEvent.Device;
@@ -53,15 +54,15 @@ namespace CoreSampleValidator
                             else if (!manager.Devices.Contains(device))
                             {
                                 errors.Add(new SampleValidationError(
-                                                    string.Format("The device {0} in the LC-Method does not exist.  Make sure the method is valid.", device.Name),
-                                                    SampleValidationErrorType.DeviceDoesNotExist));
+                                    $"The device {device.Name} in the LC-Method does not exist.  Make sure the method is valid.",
+                                    SampleValidationErrorType.DeviceDoesNotExist));
                             }
                         }
                         else
                         {
                             errors.Add(new SampleValidationError(
-                                                string.Format("The LC-Method {0} is invalid. Make sure the method is built correctly. ", sample.ActualLCMethod.Name),
-                                                SampleValidationErrorType.LCMethodIncorrect));
+                                $"The LC-Method {method.Name} is invalid. Make sure the method is built correctly. ",
+                                SampleValidationErrorType.LCMethodIncorrect));
                         }
                     }
                 }
@@ -107,9 +108,9 @@ namespace CoreSampleValidator
             foreach (var itemKey in tempDictionary.Keys)
             {
                 // Iterate over the blocks
-                var tempSamples   = tempDictionary[itemKey];
-                var method                = tempSamples[0].ActualLCMethod;
-                var columnID                        = tempSamples[0].ColumnIndex;
+                var tempSamples = tempDictionary[itemKey];
+                var method = tempSamples[0].LCMethodName;
+                var columnID = tempSamples[0].ColumnIndex;
 
                 // Find a mis match between any of the columns. By communicative property
                 // we only need to use one of the column id values to do this and perform a
@@ -117,7 +118,7 @@ namespace CoreSampleValidator
                 for (var i = 1; i < tempSamples.Count; i++)
                 {
                     // Make sure we also look at the sample method ... this is important.
-                    if (tempSamples[i].ColumnIndex != columnID || method.Name != tempSamples[i].ActualLCMethod.Name)
+                    if (tempSamples[i].ColumnIndex != columnID || method != tempSamples[i].LCMethodName)
                     {
                         badSamples.AddRange(tempSamples);
                         break;

@@ -20,9 +20,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public IReadOnlyReactiveList<SampleViewModel> FilteredSamples => filteredSamples;
 
-        // Local "wrapper" around the static class options, for data binding purposes
-        public IReadOnlyReactiveList<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
-
         private readonly ObservableAsPropertyHelper<string> columnHeader;
 
         public string ColumnHeader => this.columnHeader?.Value ?? string.Empty;
@@ -220,11 +217,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 if (FilteredSamples.Count > 0)
                 {
-                    newData.LCMethod = FilteredSamples.ToList().Last().Sample.LCMethod;
+                    newData.LCMethodName = FilteredSamples.ToList().Last().Sample.LCMethodName;
                 }
                 else
                 {
-                    newData.LCMethod = null;
+                    newData.LCMethodName = null;
                 }
                 newData.ColumnIndex = Column.ID;
             }
@@ -333,7 +330,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     foreach (var sample in samples)
                     {
                         // ids.Add(sample.UniqueID);
-                        sample.LCMethod = method;
+                        sample.LCMethodName = method.Name;
                         sample.ColumnIndex = CartConfiguration.Columns[column].ID;
                     }
 

@@ -650,19 +650,6 @@ namespace LcmsNet.SampleQueue
                     if (queue.Count > 0)
                     {
                         sample = queue[queue.Count - 1].Clone() as SampleData;
-                        if (sample?.LCMethod?.Name != null)
-                        {
-                            if (LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
-                            {
-                                //
-                                // Because sample clones are deep copies, we cannot trust that
-                                // every object in the sample is serializable...so...we are stuck
-                                // making sure we re-hash the method using the name which
-                                // is copied during the serialization.
-                                //
-                                sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(sample.LCMethod.Name);
-                            }
-                        }
                     }
                     else
                     {
@@ -1682,18 +1669,10 @@ namespace LcmsNet.SampleQueue
             {
                 var next = TimeKeeper.Instance.Now.Add(new TimeSpan(0, 0, 10));
 
-                if (sample.LCMethod == null)
+                if (sample.LCMethodName == null)
                 {
-                    sample.LCMethod = new LCMethod();
+                    sample.LCMethodName = "";
                 }
-
-                var containsMethod = LCMethodManager.Manager.MethodExists(sample.LCMethod.Name);
-                if (containsMethod)
-                {
-                    sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(sample.LCMethod.Name);
-                }
-
-                sample.CloneLCMethod();
 
                 if (sample.ActualLCMethod == null)
                 {
@@ -1766,7 +1745,7 @@ namespace LcmsNet.SampleQueue
                 }
                 m_waitingQueue.Remove(realSample);
 
-                if (realSample.LCMethod == null)
+                if (realSample.LCMethodName == null)
                 {
                     var requestOrDatasetName = "?";
                     if (realSample.DmsData != null)
@@ -1780,13 +1759,7 @@ namespace LcmsNet.SampleQueue
                     continue;
                 }
 
-                var containsMethod = LCMethodManager.Manager.MethodExists(realSample.LCMethod.Name);
-                if (containsMethod)
-                {
-                    realSample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(realSample.LCMethod.Name);
-                }
-
-                realSample.CloneLCMethod();
+                sample.SetActualLcMethod();
 
                 if (realSample.ActualLCMethod == null)
                 {
@@ -1862,7 +1835,6 @@ namespace LcmsNet.SampleQueue
                 m_runningQueue.Remove(realSample);
                 m_waitingQueue.Insert(0, realSample);
 
-                realSample.CloneLCMethod();
                 realSample.RunningStatus = SampleRunningStatus.Queued;
                 validSamples.Add(realSample);
             }
@@ -2149,17 +2121,12 @@ namespace LcmsNet.SampleQueue
                     sample.RunningStatus = SampleRunningStatus.Complete;
                     m_uniqueID.Add(sample.UniqueID);
 
-                    if (sample.LCMethod != null && LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
+                    sample.SetActualLcMethod();
+                    if (LcmsNetSDK.Method.LCMethodManager.Manager.TryGetLCMethod(sample.LCMethodName, out var method))
                     {
-                        var name = sample.LCMethod.Name;
-                        sample.LCMethod = null; // Wipe it out
-                        // Don't use a clone here, this assigned method will be replaced before it is ever used
-                        // We need reference equality for the UI view
-                        sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(name);
-                    }
-                    else
-                    {
-                        sample.LCMethod = null;
+                        // reset the column data.
+                        var column = CartConfiguration.Columns[method.Column];
+                        sample.ColumnIndex = column.ID;
                     }
 
                     if (sample.UniqueID >= m_sampleIndex)
@@ -2173,7 +2140,7 @@ namespace LcmsNet.SampleQueue
             //
             // Loads the samples and creates unique sequence ID's and unique id's
             //
-            var waitingSamples = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.WaitingQueue);
+            var waitingSamples = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.WaitingQueue).ToList();
 
             //
             // Update the Waiting Sample queue with the right LC-Methods.  This makes sure
@@ -2182,23 +2149,11 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var sample in waitingSamples) // m_waitingQueue)
             {
-                if (sample.LCMethod != null && LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
+                if (LcmsNetSDK.Method.LCMethodManager.Manager.TryGetLCMethod(sample.LCMethodName, out var method))
                 {
-                    var name = sample.LCMethod.Name;
-                    sample.LCMethod = null; // Wipe it out
-                    // Don't use a clone here, this assigned method will be replaced before it is ever used
-                    // We need reference equality for the UI view
-                    sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(name);
-
-                    if (sample.LCMethod != null && sample.LCMethod.Column >= 0)
-                    {
-                        // reset the column data.
-                        sample.ColumnIndex = sample.LCMethod.Column;
-                    }
-                }
-                else
-                {
-                    sample.LCMethod = new LCMethod();
+                    // reset the column data.
+                    var column = CartConfiguration.Columns[method.Column];
+                    sample.ColumnIndex = column.ID;
                 }
 
                 if (sample.UniqueID >= m_sampleIndex)
@@ -2268,51 +2223,10 @@ namespace LcmsNet.SampleQueue
             var waitingSamples = reader.ReadSamples(path);
 
             //
-            // We need to assign the column data information to the samples
-            // since columns have not been assigned.
-            //
-            //var index = 0;
-            //if (m_waitingQueue.Count > 0)
-            //{
-            //    index = m_columnOrders.IndexOf(m_waitingQueue[m_waitingQueue.Count - 1].ColumnData) + 1;
-            //}
-            //else
-            //{
-            //    index = m_columnOrders.IndexOf(m_columnOrders[0]);
-            //}
-
-            //
-            // For all the entries in the new list of samples...add some column information back into it.
-            //
-            //foreach (SampleData data in waitingSamples)
-            //{
-            //    classColumnData columnData = m_columnOrders[index % m_columnOrders.Count];
-            //    data.ColumnData            = columnData;
-            //    index++;
-            //}
-
-            //
             // Make sure the method references are created
             //
             foreach (var sample in waitingSamples)
             {
-                if (sample.LCMethod != null && LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
-                {
-                    var name = sample.LCMethod.Name;
-                    sample.LCMethod = null; // Wipe it out
-                    // Don't use a clone here, this assigned method will be replaced before it is ever used
-                    // We need reference equality for the UI view
-                    sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(name);
-
-                    if (sample.LCMethod != null)
-                    {
-                        var columnID = sample.LCMethod.Column;
-                        if (columnID > 0)
-                        {
-                            sample.ColumnIndex = columnID;
-                        }
-                    }
-                }
                 sample.DmsData.CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
                 if (sample.UniqueID >= m_sampleIndex)
                 {

@@ -482,8 +482,8 @@ namespace LcmsNet.Method
                     if (dataClone == null)
                     {
                         dataClone = new SampleData();
-                        dataClone.LCMethod = data.LCMethod;
-                        dataClone.CloneLCMethod(data.ActualLCMethod);
+                        dataClone.LCMethodName = data.LCMethodName;
+                        dataClone.SetActualLcMethod();
                         dataClone.RunningStatus = data.RunningStatus;
                     }
 

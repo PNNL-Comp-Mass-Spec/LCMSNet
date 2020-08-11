@@ -63,7 +63,7 @@ namespace LcmsNetSDK.Data
             //
             sequenceNumber = -1;
 
-            LCMethod = null;
+            LCMethodName = "";
             Volume = CartConfiguration.MinimumSampleVolume;
             //
             // Default state is always to be queued but not waiting to run.
@@ -91,7 +91,7 @@ namespace LcmsNetSDK.Data
             newSample.volume = this.volume;
             newSample.ColumnIndex = this.ColumnIndex;
             newSample.UniqueID = this.UniqueID;
-            newSample.LCMethod = this.LCMethod;
+            newSample.LCMethodName = this.LCMethodName;
             newSample.actualMethod = this.actualMethod?.Clone() as LCMethod;
             newSample.InstrumentMethod = this.InstrumentMethod;
             if (!string.IsNullOrWhiteSpace(Operator))
@@ -176,7 +176,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// LC Method that controls all of the hardware via the scheduling interface - UI consistent version.
         /// </summary>
-        private LCMethod method;
+        private string methodName;
 
         /// <summary>
         /// LC Method that controls all of the hardware via the scheduling interface.
@@ -367,18 +367,17 @@ namespace LcmsNetSDK.Data
                     return;
                 }
 
-                actualMethod = value;
-                this.RaisePropertyChanged(nameof(ActualLCMethod));
+                this.RaiseAndSetIfChanged(ref actualMethod, value, nameof(ActualLCMethod));
             }
         }
 
         /// <summary>
         /// Gets or sets the experiment setup object data.
         /// </summary>
-        [PersistenceSetting(ColumnNamePrefix = "exp.", PropertyGetOverrideMethod = nameof(GetLcMethodToPersist))]
-        public LCMethod LCMethod
+        [PersistenceSetting(ColumnName = "exp.ExperimentName", PropertyGetOverrideMethod = nameof(GetLcMethodToPersist))]
+        public string LCMethodName
         {
-            get => method;
+            get => methodName;
             set
             {
                 // Disallow method changes on queued/running/complete samples
@@ -387,9 +386,10 @@ namespace LcmsNetSDK.Data
                     return;
                 }
 
-                if (this.RaiseAndSetIfChangedRetBool(ref method, value, nameof(LCMethod)))
+                if (this.RaiseAndSetIfChangedRetBool(ref methodName, value, nameof(LCMethod)))
                 {
-                    CloneLCMethod();
+                    var method = LCMethodManager.Manager.GetLCMethodByName(value);
+
                     if (method != null && method.Column != ColumnIndex && method.Column >= 0)
                     {
                         ColumnIndex = method.Column;
@@ -440,23 +440,6 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public string Operator { get; set; }
 
-        /// <summary>
-        /// Wipes out the current <see cref="ActualLCMethod"/>, and replaces it with a clone of the parameter (or a clone of <see cref="LCMethod"/>)
-        /// </summary>
-        /// <param name="methodToClone">Method to be cloned to <see cref="ActualLCMethod"/>; if null, <see cref="LCMethod"/> cloned.</param>
-        public void CloneLCMethod(LCMethod methodToClone = null)
-        {
-            if (methodToClone == null)
-            {
-                methodToClone = method;
-            }
-            if (methodToClone == null)
-            {
-                ActualLCMethod = new LCMethod();
-                return;
-            }
-            ActualLCMethod = methodToClone.Clone() as LCMethod;
-        }
         /// <summary>
         /// Gets or sets the unique ID for a sample.
         /// Unique ID for this sample not related to request name or sequence ID.
@@ -514,17 +497,33 @@ namespace LcmsNetSDK.Data
 
         #region "Methods"
 
-        private LCMethod GetLcMethodToPersist()
+        public void SetActualLcMethod()
         {
-            var methodToExport = new LCMethod();
+            if (string.IsNullOrWhiteSpace(LCMethodName))
+            {
+                return;
+            }
+
+            var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodName);
+            // Force a change and refresh, by setting the backing value to null first.
+            actualMethod = null;
+            if (method != null && LCMethodName.Equals(method.Name))
+            {
+                ActualLCMethod = (LCMethod) method.Clone();
+            }
+        }
+
+        private string GetLcMethodToPersist()
+        {
+            var methodToExport = "";
             if (ActualLCMethod != null && RunningStatus == SampleRunningStatus.Complete)
             {
                 // Store the actual LCMethod rather than the current version of it
-                methodToExport = ActualLCMethod;
+                methodToExport = ActualLCMethod.Name;
             }
-            else if (LCMethod != null)
+            else if (LCMethodName != null)
             {
-                methodToExport = LCMethod;
+                methodToExport = LCMethodName;
             }
 
             return methodToExport;

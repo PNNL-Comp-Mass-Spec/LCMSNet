@@ -100,9 +100,9 @@ namespace LcmsNet.SampleQueue.IO
             var separationElement = AddElementNoAttributes("Separation", ParentElement);
             // No return type needed, since these elements don't have any children
             var name = "";
-            if (InpSample.LCMethod != null)
+            if (InpSample.LCMethodName != null)
             {
-                name = InpSample.LCMethod.Name;
+                name = InpSample.LCMethodName;
             }
             AddElementWithTypeAttribute("Method", separationElement, "String", name);
 

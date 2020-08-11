@@ -70,7 +70,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             // Using signalReset to force an update when the selected LC Method changes
             filteredSamples =
-                SampleDataManager.Samples.CreateDerivedCollection(x => x, x => SelectedLCMethod == null || SelectedLCMethod.Equals(x.Sample.LCMethod),
+                SampleDataManager.Samples.CreateDerivedCollection(x => x, x => SelectedLCMethod == null || SelectedLCMethod.Name.Equals(x.Sample.LCMethodName),
                     signalReset: this.WhenAnyValue(x => x.SelectedLCMethod));
 
             CheckboxColumnVisible = false;
@@ -172,9 +172,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var newData = base.AddNewSample(insertIntoUnused);
 
-            if (newData != null && !newData.LCMethod.Equals(this.SelectedLCMethod))
+            if (newData != null && !newData.LCMethodName.Equals(SelectedLCMethod.Name))
             {
-                newData.LCMethod = this.SelectedLCMethod;
+                newData.LCMethodName = SelectedLCMethod.Name;
             }
 
             return newData;
@@ -192,7 +192,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // We don't add to our list first so the manager can verify the sample and
             // make sure we don't have duplicates.
             foreach (var sample in samples)
-                sample.LCMethod = this.SelectedLCMethod;
+                sample.LCMethodName = SelectedLCMethod.Name;
 
             base.AddSamplesToManager(samples, insertIntoUnused);
         }
@@ -249,7 +249,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var samples = new List<SampleData>();
                 foreach (var sample in selectedSamples)
                 {
-                    if (sample.RunningStatus == SampleRunningStatus.Queued && !method.Equals(sample.LCMethod))
+                    if (sample.RunningStatus == SampleRunningStatus.Queued && !method.Equals(sample.LCMethodName))
                     {
                         samples.Add(sample);
                     }
@@ -266,7 +266,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     foreach (var sample in samples)
                     {
                         // ids.Add(sample.UniqueID);
-                        sample.LCMethod = method;
+                        sample.LCMethodName = method;
                     }
 
                     // TODO: The below code was what would do the moving into unused samples, long disabled Should it be deleted?.

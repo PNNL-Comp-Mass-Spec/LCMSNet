@@ -45,7 +45,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             FocusedMethod = method1ViewModel;
 
-            SampleDataManager.LcMethodOptions.Changed.Subscribe(x => this.SetMaxMethodsVisible());
+            SampleDataManager.LcMethodNameOptions.WhenAnyValue(x => x.Count).Subscribe(x => this.SetMaxMethodsVisible());
             SetMaxMethodsVisible();
             this.WhenAnyValue(x => x.MethodsVisible).Subscribe(x => this.SetMethodVisibility());
             SetMethodVisibility();
@@ -143,7 +143,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         private void SetMaxMethodsVisible()
         {
-            MaxMethodsVisible = Math.Min(SampleDataManager.LcMethodOptions.Count + 1, 8);
+            MaxMethodsVisible = Math.Min(SampleDataManager.LcMethodNameOptions.Count + 1, 8);
             MethodsVisible = Math.Max(MethodsVisible, MaxMethodsVisible);
         }
 

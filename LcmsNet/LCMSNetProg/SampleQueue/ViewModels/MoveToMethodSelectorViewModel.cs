@@ -1,13 +1,11 @@
-﻿using System;
-using System.Reactive;
-using LcmsNetSDK.Method;
+﻿using System.Reactive;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
 {
     public class MoveToMethodSelectorViewModel : ReactiveObject
     {
-        public IReadOnlyReactiveList<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
+        public IReadOnlyReactiveList<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
 
         /// <summary>
         /// Default constructor.
@@ -20,12 +18,12 @@ namespace LcmsNet.SampleQueue.ViewModels
             CancelCommand = ReactiveCommand.Create(CloseCleanup);
         }
 
-        private LCMethod selectedLcMethod;
+        private string selectedLcMethod;
 
         /// <summary>
         /// Gets or sets the column the user selected to move samples to.  This value is zero-based.
         /// </summary>
-        public LCMethod SelectedLcMethod
+        public string SelectedLcMethod
         {
             get => selectedLcMethod;
             set => this.RaiseAndSetIfChanged(ref selectedLcMethod, value);

@@ -508,7 +508,7 @@ namespace LcmsNet
                             dummySample.ColumnIndex = CartConfiguration.Columns[columnID].ID;
                         }
 
-                        dummySample.LCMethod = e.Method;
+                        dummySample.LCMethodName = e.Method.Name;
                         sampleQueue.RunNext(dummySample);
 
 
@@ -533,7 +533,7 @@ namespace LcmsNet
                         {
                             stupidSample.ColumnIndex = CartConfiguration.Columns[columnID].ID;
                         }
-                        stupidSample.LCMethod = e.Method;
+                        stupidSample.LCMethodName = e.Method.Name;
                         sampleQueue.RunNext(stupidSample);
 
                         ApplicationLogger.LogError(0,

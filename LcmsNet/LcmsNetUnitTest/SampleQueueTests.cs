@@ -90,10 +90,15 @@ namespace LcmsnetUnitTest
             lcEvent.ParameterNames[0] = "rate";
             lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
+            var testLcMethod = new LCMethod()
+            {
+                Name = "TestLCMethodQueueAddToQueue",
+                Column = 0
+            };
+            testLcMethod.Events.Add(lcEvent);
+            LCMethodManager.Manager.AddOrUpdateMethod(testLcMethod);
 
-            sampleA.LCMethod = new LCMethod();
-            sampleA.LCMethod.Events.Add(lcEvent);
-            sampleA.LCMethod.Column = 0;
+            sampleA.LCMethodName = testLcMethod.Name;
             sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
@@ -101,11 +106,7 @@ namespace LcmsnetUnitTest
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
-            var lcEvent2 = lcEvent.Clone() as LCEvent;
-
-            sampleB.LCMethod = new LCMethod();
-            sampleB.LCMethod.Events.Add(lcEvent2);
-            sampleB.LCMethod.Column = 0;
+            sampleA.LCMethodName = testLcMethod.Name;
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
@@ -142,10 +143,15 @@ namespace LcmsnetUnitTest
             lcEvent.ParameterNames[0] = "rate";
             lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
+            var testLcMethod = new LCMethod()
+            {
+                Name = "TestLCMethodSampleQueueQuery",
+                Column = 0
+            };
+            testLcMethod.Events.Add(lcEvent);
+            LCMethodManager.Manager.AddOrUpdateMethod(testLcMethod);
 
-            sampleA.LCMethod = new LCMethod();
-            sampleA.LCMethod.Events.Add(lcEvent);
-            sampleA.LCMethod.Column = 0;
+            sampleA.LCMethodName = testLcMethod.Name;
             sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
@@ -153,11 +159,7 @@ namespace LcmsnetUnitTest
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
-            var lcEvent2 = lcEvent.Clone() as LCEvent;
-
-            sampleB.LCMethod = new LCMethod();
-            sampleB.LCMethod.Events.Add(lcEvent2);
-            sampleB.LCMethod.Column = 0;
+            sampleA.LCMethodName = testLcMethod.Name;
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
@@ -206,10 +208,15 @@ namespace LcmsnetUnitTest
             lcEvent.ParameterNames[0] = "rate";
             lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
+            var testLcMethod = new LCMethod()
+            {
+                Name = "TestLCMethodQueueReturnCorrectSample",
+                Column = 0
+            };
+            testLcMethod.Events.Add(lcEvent);
+            LCMethodManager.Manager.AddOrUpdateMethod(testLcMethod);
 
-            sampleA.LCMethod = new LCMethod();
-            sampleA.LCMethod.Events.Add(lcEvent);
-            sampleA.LCMethod.Column = 0;
+            sampleA.LCMethodName = testLcMethod.Name;
             sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
@@ -217,11 +224,7 @@ namespace LcmsnetUnitTest
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
-            var lcEvent2 = lcEvent.Clone() as LCEvent;
-
-            sampleB.LCMethod = new LCMethod();
-            sampleB.LCMethod.Events.Add(lcEvent2);
-            sampleB.LCMethod.Column = 0;
+            sampleA.LCMethodName = testLcMethod.Name;
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;

@@ -18,10 +18,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         private bool applyGroup2;
         private bool applyGroup3;
         private bool applyGroup4;
-        private LCMethod lcMethodGroup1;
-        private LCMethod lcMethodGroup2;
-        private LCMethod lcMethodGroup3;
-        private LCMethod lcMethodGroup4;
+        private string lcMethodGroup1;
+        private string lcMethodGroup2;
+        private string lcMethodGroup3;
+        private string lcMethodGroup4;
         private string instrumentMethodGroup1;
         private string instrumentMethodGroup2;
         private string instrumentMethodGroup3;
@@ -67,25 +67,25 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref applyGroup4, value);
         }
 
-        public LCMethod LCMethodGroup1
+        public string LCMethodGroup1
         {
             get => lcMethodGroup1;
             set => this.RaiseAndSetIfChanged(ref lcMethodGroup1, value);
         }
 
-        public LCMethod LCMethodGroup2
+        public string LCMethodGroup2
         {
             get => lcMethodGroup2;
             set => this.RaiseAndSetIfChanged(ref lcMethodGroup2, value);
         }
 
-        public LCMethod LCMethodGroup3
+        public string LCMethodGroup3
         {
             get => lcMethodGroup3;
             set => this.RaiseAndSetIfChanged(ref lcMethodGroup3, value);
         }
 
-        public LCMethod LCMethodGroup4
+        public string LCMethodGroup4
         {
             get => lcMethodGroup4;
             set => this.RaiseAndSetIfChanged(ref lcMethodGroup4, value);
@@ -188,7 +188,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
-        public IReadOnlyReactiveList<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
+        public IReadOnlyReactiveList<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
         public IReadOnlyReactiveList<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
         public IReadOnlyReactiveList<string> DatasetTypeComboBoxOptions => SampleDataManager.DatasetTypeOptions;
         public IReadOnlyReactiveList<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
@@ -360,19 +360,23 @@ namespace LcmsNet.SampleQueue.ViewModels
             var methods = new List<LCMethod>();
             if (ApplyGroup1)
             {
-                methods.Add(LCMethodGroup1);
+                var method = LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup1);
+                methods.Add(method);
             }
             if (ApplyGroup2)
             {
-                methods.Add(LCMethodGroup2);
+                var method = LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup2);
+                methods.Add(method);
             }
             if (ApplyGroup3)
             {
-                methods.Add(LCMethodGroup3);
+                var method = LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup3);
+                methods.Add(method);
             }
             if (ApplyGroup4)
             {
-                methods.Add(LCMethodGroup4);
+                var method = LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup4);
+                methods.Add(method);
             }
             if (methods.Count < 1)
                 return;
@@ -389,7 +393,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                         samples.ColumnIndex = CartConfiguration.Columns[tempMethod.Column].ID;
                     }
                 }
-                samples.LCMethod = tempMethod;
+                samples.LCMethodName = tempMethod.Name;
 
                 i++;
                 // mod?

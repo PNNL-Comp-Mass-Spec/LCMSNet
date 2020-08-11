@@ -11,7 +11,6 @@ using LcmsNet.SampleQueue.Views;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -403,7 +402,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 foreach (var data in samples)
                 {
-                    data.ActualLCMethod.SetStartTime(TimeKeeper.Instance.Now);
+                    data.SetActualLcMethod();
+                    data.ActualLCMethod?.SetStartTime(TimeKeeper.Instance.Now);
                     //DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)));
                 }
 
@@ -488,17 +488,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 if (data != null && data.RunningStatus == SampleRunningStatus.Queued)
                 {
                     var sample = data.Clone() as SampleData;
-                    if (sample?.LCMethod?.Name != null)
-                    {
-                        if (LCMethodManager.Manager.MethodExists(sample.LCMethod.Name))
-                        {
-                            // Because sample clones are deep copies, we cannot trust that
-                            // every object in the sample is serializable...so...we are stuck
-                            // making sure we re-hash the method using the name which
-                            // is copied during the serialization.
-                            sample.LCMethod = LCMethodManager.Manager.GetLCMethodByName(sample.LCMethod.Name);
-                        }
-                    }
                     samplesToRandomize.Add(sample);
                 }
             }

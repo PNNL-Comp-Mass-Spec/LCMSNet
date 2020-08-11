@@ -233,7 +233,7 @@
             <DataGridTemplateColumn Header="LC Method" MinWidth="80" Visibility="{Binding Data.LcMethodColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <ComboBox x:Name="LCMethodSelect" SelectedItem="{Binding Sample.LCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding LcMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" cueBannerOverlay:CueBannerService.ShowCueBannerOnComboBoxUnmatch="True" cueBannerOverlay:CueBannerService.CueBanner="{Binding LcMethodCueBannerText}" />
+                        <ComboBox x:Name="LCMethodSelect" SelectedItem="{Binding Sample.LCMethodName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding LcMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" cueBannerOverlay:CueBannerService.ShowCueBannerOnComboBoxUnmatch="True" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>

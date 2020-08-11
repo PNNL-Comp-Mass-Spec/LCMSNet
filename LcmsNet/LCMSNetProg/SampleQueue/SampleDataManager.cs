@@ -426,7 +426,7 @@ namespace LcmsNet.SampleQueue
                        prop.Equals(nameof(obj.Sample.InstrumentMethod)) ||
                        prop.Equals(nameof(obj.ColumnNumber)) ||
                        prop.Equals(nameof(obj.InstrumentMethod)) ||
-                       prop.Equals(nameof(obj.Sample.LCMethod)) ||
+                       prop.Equals(nameof(obj.Sample.LCMethodName)) ||
                        prop.Equals(nameof(obj.Sample.SequenceID));
             }).Throttle(TimeSpan.FromSeconds(.25))
             .Subscribe(x => this.ChangeMade(x.Sender));
@@ -602,7 +602,7 @@ namespace LcmsNet.SampleQueue
                     isValid = false;
                 }
 
-                if (string.IsNullOrWhiteSpace(sampleToCheck.LCMethod.Name))
+                if (string.IsNullOrWhiteSpace(sampleToCheck.LCMethodName))
                 {
                     // LC Method not defined
                     isValid = false;
@@ -666,14 +666,14 @@ namespace LcmsNet.SampleQueue
             var updateSamples = new List<SampleData>();
             foreach (var sample in samples)
             {
-                if (sample.LCMethod != null && sample.LCMethod.Name == method.Name)
+                if (sample.LCMethodName != null && sample.LCMethodName == method.Name)
                 {
                     var newColID = method.Column;
                     if (newColID >= 0)
                     {
                         sample.ColumnIndex = CartConfiguration.Columns[newColID].ID;
                     }
-                    sample.LCMethod = method;
+                    sample.LCMethodName = method.Name;
                     updateSamples.Add(sample);
                 }
             }
@@ -705,7 +705,7 @@ namespace LcmsNet.SampleQueue
             {
                 foreach (var sample in Samples)
                 {
-                    sample.Sample.LCMethod = method;
+                    sample.Sample.LCMethodName = method.Name;
                 }
 
                 SampleQueue.UpdateAllSamples();
@@ -1086,7 +1086,7 @@ namespace LcmsNet.SampleQueue
             };
 
             // Make sure we copy the column data.  If it's null, then it's probably a special method.
-            if (sampleToCopy.ColumnIndex > -1 && sampleToCopy.ColumnIndex < CartConfiguration.Columns.Count)
+            if (sampleToCopy.ColumnIndex > -1)
             {
                 var id = sampleToCopy.ColumnIndex;
                 if (id < CartConfiguration.Columns.Count && id >= 0)
@@ -1104,15 +1104,15 @@ namespace LcmsNet.SampleQueue
             // Then we make sure that even if the column data is null, we want to
             // make sure the column is pertinent to the method, since what column we run on depends
             // on what method we are trying to run.
-            if (sampleToCopy.LCMethod != null)
+            if (sampleToCopy.LCMethodName != null)
             {
-                newSample.LCMethod = sampleToCopy.LCMethod.Clone() as LCMethod;
-                if (newSample.ActualLCMethod != null && newSample.LCMethod.Column >= 0)
+                newSample.LCMethodName = sampleToCopy.LCMethodName;
+                if (LCMethodManager.Manager.TryGetLCMethod(newSample.LCMethodName, out var method))
                 {
-                    var id = newSample.LCMethod.Column;
+                    var id = method.Column;
                     if (id < CartConfiguration.Columns.Count && id >= 0)
                     {
-                        newSample.ColumnIndex = newSample.LCMethod.Column;
+                        newSample.ColumnIndex = method.Column;
                     }
                     else
                     {
@@ -1123,7 +1123,7 @@ namespace LcmsNet.SampleQueue
             }
             else
             {
-                newSample.LCMethod = new LCMethod();
+                newSample.LCMethodName = "";
             }
 
             // Clear out any DMS information from the blank
@@ -1613,6 +1613,7 @@ namespace LcmsNet.SampleQueue
         private static readonly ReactiveList<string> palTrayOptions = new ReactiveList<string>();
 
         public static IReadOnlyReactiveList<LCMethod> LcMethodOptions => lcMethodOptions;
+        public static IReadOnlyReactiveList<string> LcMethodNameOptions { get; }
         public static IReadOnlyReactiveList<string> InstrumentMethodOptions => instrumentMethodOptions;
         public static IReadOnlyReactiveList<string> DatasetTypeOptions => datasetTypeOptions;
         public static IReadOnlyReactiveList<string> CartConfigOptions => cartConfigOptions;
@@ -1690,6 +1691,8 @@ namespace LcmsNet.SampleQueue
                 MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
+
+            LcMethodNameOptions = LcMethodOptions.CreateDerivedCollection(x => x.Name);
         }
 
         private static void SetPalTrays(IEnumerable<string> trays)
