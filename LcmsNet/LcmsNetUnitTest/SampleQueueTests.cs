@@ -91,10 +91,10 @@ namespace LcmsnetUnitTest
             lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
 
-            sampleA.ColumnData.ID = 0;
             sampleA.LCMethod = new LCMethod();
             sampleA.LCMethod.Events.Add(lcEvent);
             sampleA.LCMethod.Column = 0;
+            sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
             sampleA.DmsData.DatasetType = "HMS";
@@ -103,10 +103,10 @@ namespace LcmsnetUnitTest
 
             var lcEvent2 = lcEvent.Clone() as LCEvent;
 
-            sampleB.ColumnData.ID = 0;
             sampleB.LCMethod = new LCMethod();
             sampleB.LCMethod.Events.Add(lcEvent2);
             sampleB.LCMethod.Column = 0;
+            sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
             sampleB.DmsData.DatasetType = "HMS";
@@ -143,10 +143,10 @@ namespace LcmsnetUnitTest
             lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
 
-            sampleA.ColumnData.ID = 0;
             sampleA.LCMethod = new LCMethod();
             sampleA.LCMethod.Events.Add(lcEvent);
             sampleA.LCMethod.Column = 0;
+            sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
             sampleA.DmsData.DatasetType = "HMS";
@@ -155,10 +155,10 @@ namespace LcmsnetUnitTest
 
             var lcEvent2 = lcEvent.Clone() as LCEvent;
 
-            sampleB.ColumnData.ID = 0;
             sampleB.LCMethod = new LCMethod();
             sampleB.LCMethod.Events.Add(lcEvent2);
             sampleB.LCMethod.Column = 0;
+            sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
             sampleB.DmsData.DatasetType = "HMS";
@@ -207,10 +207,10 @@ namespace LcmsnetUnitTest
             lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
 
-            sampleA.ColumnData.ID = 0;
             sampleA.LCMethod = new LCMethod();
             sampleA.LCMethod.Events.Add(lcEvent);
             sampleA.LCMethod.Column = 0;
+            sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
             sampleA.DmsData.DatasetType = "HMS";
@@ -219,10 +219,10 @@ namespace LcmsnetUnitTest
 
             var lcEvent2 = lcEvent.Clone() as LCEvent;
 
-            sampleB.ColumnData.ID = 0;
             sampleB.LCMethod = new LCMethod();
             sampleB.LCMethod.Events.Add(lcEvent2);
             sampleB.LCMethod.Column = 0;
+            sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
             sampleB.DmsData.DatasetType = "HMS";

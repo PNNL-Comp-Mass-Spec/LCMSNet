@@ -199,10 +199,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_Queued",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
@@ -214,10 +211,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_Running",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Running,
                 SampleErrors = "",
@@ -229,10 +223,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_Waiting",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.WaitingToRun,
                 SampleErrors = "",
@@ -244,10 +235,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_Error",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Error,
                 SampleErrors = "",
@@ -259,10 +247,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_ErrorBlocked",
                     Block = 1,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Error,
                 SampleErrors = "",
@@ -274,10 +259,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_Stopped",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Stopped,
                 SampleErrors = "",
@@ -289,10 +271,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_StoppedBlocked",
                     Block = 1,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Stopped,
                 SampleErrors = "",
@@ -304,10 +283,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_Complete",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Complete,
                 SampleErrors = "",
@@ -319,10 +295,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_Disabled_Column",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Disabled,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
@@ -334,10 +307,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_" + SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME,
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
@@ -349,10 +319,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_HasErrorData",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "This is an error!",
@@ -364,10 +331,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design_Dataset_Duplicate",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = true,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
@@ -379,10 +343,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = "Design Dataset Bad Name",
                     Block = 0,
                 },
-                ColumnData = new ColumnData()
-                {
-                    Status = ColumnStatus.Idle,
-                },
+                ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
@@ -710,7 +671,7 @@ namespace LcmsNet.SampleQueue
                     var newColID = method.Column;
                     if (newColID >= 0)
                     {
-                        sample.ColumnData = CartConfiguration.Columns[newColID];
+                        sample.ColumnIndex = CartConfiguration.Columns[newColID].ID;
                     }
                     sample.LCMethod = method;
                     updateSamples.Add(sample);
@@ -1053,7 +1014,7 @@ namespace LcmsNet.SampleQueue
                 // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
                 foreach (var s in samplesList)
                 {
-                    s.Sample.ColumnData = CartConfiguration.Columns[s.Sample.ColumnData.ID];
+                    s.Sample.ColumnIndex = CartConfiguration.Columns[s.Sample.ColumnIndex].ID;
                 }
             }
         }
@@ -1074,7 +1035,7 @@ namespace LcmsNet.SampleQueue
                 // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
                 foreach (var s in samplesList)
                 {
-                    s.Sample.ColumnData = CartConfiguration.Columns[s.Sample.ColumnData.ID];
+                    s.Sample.ColumnIndex = CartConfiguration.Columns[s.Sample.ColumnIndex].ID;
                 }
             }
         }
@@ -1125,16 +1086,16 @@ namespace LcmsNet.SampleQueue
             };
 
             // Make sure we copy the column data.  If it's null, then it's probably a special method.
-            if (sampleToCopy.ColumnData != null)
+            if (sampleToCopy.ColumnIndex > -1 && sampleToCopy.ColumnIndex < CartConfiguration.Columns.Count)
             {
-                var id = sampleToCopy.ColumnData.ID;
+                var id = sampleToCopy.ColumnIndex;
                 if (id < CartConfiguration.Columns.Count && id >= 0)
                 {
-                    newSample.ColumnData = CartConfiguration.Columns[sampleToCopy.ColumnData.ID];
+                    newSample.ColumnIndex = CartConfiguration.Columns[sampleToCopy.ColumnIndex].ID;
                 }
                 else
                 {
-                    newSample.ColumnData = CartConfiguration.Columns[0];
+                    newSample.ColumnIndex = CartConfiguration.Columns[0].ID;
                     ApplicationLogger.LogError(1,
                         string.Format("The column data from the previous sample has an invalid column ID: {0}", id));
                 }
@@ -1151,14 +1112,12 @@ namespace LcmsNet.SampleQueue
                     var id = newSample.LCMethod.Column;
                     if (id < CartConfiguration.Columns.Count && id >= 0)
                     {
-                        newSample.ColumnData = CartConfiguration.Columns[newSample.LCMethod.Column];
+                        newSample.ColumnIndex = newSample.LCMethod.Column;
                     }
                     else
                     {
-                        newSample.ColumnData = CartConfiguration.Columns[0];
-                        ApplicationLogger.LogError(1,
-                            string.Format(
-                                "The column data from the previous sample's method has an invalid column ID: {0}", id));
+                        newSample.ColumnIndex = CartConfiguration.Columns[0].ID;
+                        ApplicationLogger.LogError(1, $"The column data from the previous sample's method has an invalid column ID: {id}");
                     }
                 }
             }

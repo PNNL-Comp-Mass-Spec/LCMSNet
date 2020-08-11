@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Windows.Media;
 using LcmsNetData.Data;
+using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using ReactiveUI;
@@ -31,13 +32,15 @@ namespace LcmsNet.SampleQueue.ViewModels
             Sample = sample;
             isChecked = Sample.IsSetToRunOrHasRun;
 
-            this.WhenAnyValue(x => x.Sample.ColumnData, x => x.Sample.LCMethod).Subscribe(x =>
+            columnData = this.WhenAnyValue(x => x.Sample.ColumnIndex).Select(x => CartConfiguration.Columns[x]).ToProperty(this, x => x.ColumnData);
+
+            this.WhenAnyValue(x => x.Sample.ColumnIndex, x => x.Sample.LCMethod).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(ColumnNumber));
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
-            this.WhenAnyValue(x => x.Sample.ColumnData.ID).Subscribe(x => this.RaisePropertyChanged(nameof(ColumnNumber)));
-            this.WhenAnyValue(x => x.Sample.ColumnData.Color).Select(x => new SolidColorBrush(x)).ToProperty(this, x => x.ColumnNumberBgColor, out columnNumberBgColor, Brushes.RoyalBlue);
+            this.WhenAnyValue(x => x.Sample.ColumnIndex).Subscribe(x => this.RaisePropertyChanged(nameof(ColumnNumber)));
+            this.WhenAnyValue(x => x.ColumnData.Color).Select(x => new SolidColorBrush(x)).ToProperty(this, x => x.ColumnNumberBgColor, out columnNumberBgColor, Brushes.RoyalBlue);
 
             this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).Subscribe(x => this.IsChecked = x);
             this.WhenAnyValue(x => x.Sample.RunningStatus).Subscribe(x =>
@@ -234,6 +237,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref isChecked, value);
         }
 
+        private readonly ObservableAsPropertyHelper<ColumnData> columnData;
+
+        public ColumnData ColumnData => columnData.Value;
+
         public bool EditAllowed => !Sample.IsSetToRunOrHasRun;
 
         public string SpecialColumnNumber { get; set; }
@@ -246,7 +253,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     return SpecialColumnNumber;
                 }
-                return (Sample.ColumnData.ID + CONST_COLUMN_INDEX_OFFSET).ToString();
+                return (Sample.ColumnIndex + CONST_COLUMN_INDEX_OFFSET).ToString();
             }
         }
 

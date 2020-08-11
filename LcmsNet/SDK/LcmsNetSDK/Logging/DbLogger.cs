@@ -213,7 +213,7 @@ namespace LcmsNetSDK.Logging
             if (args.ErrorObject != null && args.ErrorObject is SampleData sample)
             {
                 sqlCmdBlder.Append("'" + sample.DmsData.DatasetName + "',");
-                sqlCmdBlder.Append("'" + sample.ColumnData.ID + "',");
+                sqlCmdBlder.Append("'" + sample.ColumnIndex + "',");
                 if (sample.ActualLCMethod != null)
                 {
                     var eventIndex = sample.ActualLCMethod.CurrentEventNumber;
@@ -266,7 +266,7 @@ namespace LcmsNetSDK.Logging
             if (args.ErrorObject != null && args.ErrorObject is SampleData sample)
             {
                 sqlCmdBlder.Append("'" + sample.DmsData.DatasetName + "',");
-                sqlCmdBlder.Append("'" + sample.ColumnData.ID + "',"); // Add column here
+                sqlCmdBlder.Append("'" + sample.ColumnIndex + "',"); // Add column here
                 if (sample.ActualLCMethod != null && sample.ActualLCMethod.CurrentEventNumber >= 0)
                 {
                     if (sample.ActualLCMethod.Events.Count > 0)

@@ -103,7 +103,7 @@ namespace LcmsNet.SampleQueue.IO
             // Add the data for each sample
             foreach (var sample in samples)
             {
-                var colNum = sample.ColumnData.ID + 1;
+                var colNum = sample.ColumnIndex + 1;
                 strBld.Append("\"" + sample.DmsData.DatasetName + "\",");
                 strBld.Append("\"" + sample.DmsData.RequestID + "\",");
                 strBld.Append("\"" + colNum + "\",");

@@ -74,7 +74,7 @@ namespace LcmsNet.Method.ViewModels
                 return;
             }
 
-            var columnID = sample.ColumnData.ID;
+            var columnID = sample.ColumnIndex;
             if (sample.ActualLCMethod.IsSpecialMethod)
             {
                 columnID = CONST_TOTAL_COLUMNS;
@@ -95,7 +95,7 @@ namespace LcmsNet.Method.ViewModels
                 return;
             }
 
-            var columnID = sample.ColumnData.ID;
+            var columnID = sample.ColumnIndex;
             if (sample.ActualLCMethod.IsSpecialMethod)
             {
                 columnID = CONST_TOTAL_COLUMNS;
@@ -116,7 +116,7 @@ namespace LcmsNet.Method.ViewModels
         {
             if (sample != null)
             {
-                var columnID = sample.ColumnData.ID;
+                var columnID = sample.ColumnIndex;
                 if (sample.ActualLCMethod.IsSpecialMethod)
                 {
                     columnID = CONST_TOTAL_COLUMNS;

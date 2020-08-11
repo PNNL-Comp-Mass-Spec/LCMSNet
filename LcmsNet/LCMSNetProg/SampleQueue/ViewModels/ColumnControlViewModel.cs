@@ -67,7 +67,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, ColumnData columnData, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
-            filteredSamples = SampleDataManager.Samples.CreateDerivedCollection(x => x, x => Column == null || Column.Equals(x.Sample.ColumnData));
+            filteredSamples = SampleDataManager.Samples.CreateDerivedCollection(x => x, x => Column == null || Column.ID == x.Sample.ColumnIndex);
 
             this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
                 .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")
@@ -216,7 +216,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var newData = base.AddNewSample(insertIntoUnused);
 
-            if (newData != null && !newData.ColumnData.Equals(this.Column))
+            if (newData != null && newData.ColumnIndex != Column.ID)
             {
                 if (FilteredSamples.Count > 0)
                 {
@@ -226,7 +226,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     newData.LCMethod = null;
                 }
-                newData.ColumnData = this.Column;
+                newData.ColumnIndex = Column.ID;
             }
 
             return newData;
@@ -244,7 +244,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // We don't add to our list first so the manager can verify the sample and
             // make sure we don't have duplicates.
             foreach (var sample in samples)
-                sample.ColumnData = m_columnData;
+                sample.ColumnIndex = m_columnData.ID;
 
             base.AddSamplesToManager(samples, insertIntoUnused);
         }
@@ -305,7 +305,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var samples = new List<SampleData>();
                 foreach (var sample in selectedSamples)
                 {
-                    if (sample.RunningStatus == SampleRunningStatus.Queued && column != sample.ColumnData.ID)
+                    if (sample.RunningStatus == SampleRunningStatus.Queued && column != sample.ColumnIndex)
                     {
                         samples.Add(sample);
                     }
@@ -334,7 +334,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     {
                         // ids.Add(sample.UniqueID);
                         sample.LCMethod = method;
-                        sample.ColumnData = CartConfiguration.Columns[column];
+                        sample.ColumnIndex = CartConfiguration.Columns[column].ID;
                     }
 
                     // TODO: The below code was what would do the moving into unused samples, long disabled Should it be deleted?.

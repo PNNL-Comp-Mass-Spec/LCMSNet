@@ -32,7 +32,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             using (badSamples.SuppressChangeNotifications())
             {
-                badSamples.AddRange(samples.Select(sample => new BlockErrorData(sample.DmsData.Batch, sample.DmsData.Block, sample.ColumnData.ID + 1, sample.DmsData.DatasetName, sample.LCMethod.Name)));
+                badSamples.AddRange(samples.Select(sample => new BlockErrorData(sample.DmsData.Batch, sample.DmsData.Block, sample.ColumnIndex + 1, sample.DmsData.DatasetName, sample.LCMethod.Name)));
             }
         }
 

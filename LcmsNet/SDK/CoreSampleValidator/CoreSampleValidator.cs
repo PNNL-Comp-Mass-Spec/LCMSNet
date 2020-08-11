@@ -109,7 +109,7 @@ namespace CoreSampleValidator
                 // Iterate over the blocks
                 var tempSamples   = tempDictionary[itemKey];
                 var method                = tempSamples[0].ActualLCMethod;
-                var columnID                        = tempSamples[0].ColumnData.ID;
+                var columnID                        = tempSamples[0].ColumnIndex;
 
                 // Find a mis match between any of the columns. By communicative property
                 // we only need to use one of the column id values to do this and perform a
@@ -117,7 +117,7 @@ namespace CoreSampleValidator
                 for (var i = 1; i < tempSamples.Count; i++)
                 {
                     // Make sure we also look at the sample method ... this is important.
-                    if (tempSamples[i].ColumnData.ID != columnID || method.Name != tempSamples[i].ActualLCMethod.Name)
+                    if (tempSamples[i].ColumnIndex != columnID || method.Name != tempSamples[i].ActualLCMethod.Name)
                     {
                         badSamples.AddRange(tempSamples);
                         break;

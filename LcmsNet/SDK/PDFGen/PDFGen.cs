@@ -241,7 +241,7 @@ namespace PDFGenerator
             string[] eTime = {"End Time:", sample.ActualLCMethod.End.ToLongTimeString() + " " + sample.ActualLCMethod.End.ToLongDateString()};
             var endFormatted = FormatString(FieldWidths, eTime);
 
-            string[] cd = { "Column:", sample.ColumnData.Name };
+            string[] cd = { "Column:", sample.ColumnName };
             var columnString = FormatString(FieldWidths, cd);
 
             string[] lcm = { "LCMethod:", sample.ActualLCMethod.Name };

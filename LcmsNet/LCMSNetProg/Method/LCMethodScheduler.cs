@@ -430,7 +430,7 @@ namespace LcmsNet.Method
                 return;
             }
 
-            var sampleColumnID = data.ColumnData.ID;
+            var sampleColumnID = data.ColumnIndex;
 
             // Make sure we don't need to put this on the last column.
             if (data.ActualLCMethod.IsSpecialMethod)
@@ -455,12 +455,12 @@ namespace LcmsNet.Method
                     data = m_sampleQueue.NextSampleStart();
                     Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, EXPECTED START = {2}",
                         data.DmsData.DatasetName,
-                        data.ColumnData.ID + 1, data.ActualLCMethod.Start),
+                        data.ColumnIndex + 1, data.ActualLCMethod.Start),
                         CONST_VERBOSE_LEAST, null, data);
+
                     //
                     // Hold on to a copy of the sample
                     //
-
                     if (data.ActualLCMethod.Events.Count > 0)
                     {
                         // Original code that relies on events firing properly

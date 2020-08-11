@@ -382,11 +382,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 var tempMethod = methods[i];
 
-                if (tempMethod.Column != samples.ColumnData.ID)
+                if (tempMethod.Column != samples.ColumnIndex)
                 {
                     if (tempMethod.Column >= 0)
                     {
-                        samples.ColumnData = CartConfiguration.Columns[tempMethod.Column];
+                        samples.ColumnIndex = CartConfiguration.Columns[tempMethod.Column].ID;
                     }
                 }
                 samples.LCMethod = tempMethod;

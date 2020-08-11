@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using LcmsNetData;
 using LcmsNetData.Data;
@@ -55,7 +54,7 @@ namespace LcmsNetSDK.Data
             DmsData = new DMSData();
 
             PAL = new PalData();
-            columnData = new ColumnData();
+            columnIndex = 0;
             InstrumentMethod = "";
 
             //
@@ -90,7 +89,7 @@ namespace LcmsNetSDK.Data
             newSample.sequenceNumber = this.sequenceNumber;
             newSample.PAL = this.PAL?.Clone() as PalData;
             newSample.volume = this.volume;
-            newSample.ColumnData = this.ColumnData?.Clone() as ColumnData;
+            newSample.ColumnIndex = this.ColumnIndex;
             newSample.UniqueID = this.UniqueID;
             newSample.LCMethod = this.LCMethod;
             newSample.actualMethod = this.actualMethod?.Clone() as LCMethod;
@@ -114,10 +113,11 @@ namespace LcmsNetSDK.Data
         {
             var cartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
             var columnName = "";
+            var column = CartConfiguration.Columns[sample.ColumnIndex];
 
-            if (!String.IsNullOrEmpty(sample.ColumnData?.Name))
+            if (!string.IsNullOrEmpty(column.Name))
             {
-                columnName = sample.ColumnData.Name;
+                columnName = column.Name;
             }
 
             return cartName + "_" + columnName;
@@ -134,7 +134,7 @@ namespace LcmsNetSDK.Data
             var dateName = now.ToString("ddMMMyy");
 
             var cartColumn = BuildCartColumnName(sample);
-            var name = string.Format("_{0}_{1}", dateName, cartColumn);
+            var name = $"_{dateName}_{cartColumn}";
 
             var containsInfoAlready = oldName.Contains(cartColumn);
             if (!containsInfoAlready)
@@ -196,7 +196,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Information regarding what column the sample is to be, or did run on.
         /// </summary>
-        private ColumnData columnData;
+        private int columnIndex;
 
         /// <summary>
         /// Instrument method.
@@ -390,9 +390,9 @@ namespace LcmsNetSDK.Data
                 if (this.RaiseAndSetIfChangedRetBool(ref method, value, nameof(LCMethod)))
                 {
                     CloneLCMethod();
-                    if (method != null && (method.Column != ColumnData.ID || method.Name != ColumnData.Name) && method.Column >= 0)
+                    if (method != null && method.Column != ColumnIndex && method.Column >= 0)
                     {
-                        ColumnData = CartConfiguration.Columns[method.Column];
+                        ColumnIndex = method.Column;
                     }
                 }
             }
@@ -428,31 +428,11 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Gets or sets the column data this sample is/was run on.
         /// </summary>
-        [PersistenceSetting(ColumnNamePrefix = "Col.")]
-        public ColumnData ColumnData
+        [PersistenceSetting(ColumnName = "Col.ID")]
+        public int ColumnIndex
         {
-            // TODO: Should this just return LCMethod.Column? It would solve a few headaches.
-            get => columnData;
-            set
-            {
-                var oldColumn = columnData;
-                if (!EqualityComparer<ColumnData>.Default.Equals(oldColumn, value))
-                {
-                    if (oldColumn != null)
-                    {
-                        oldColumn.NameChanged -= m_columnData_NameChanged;
-                    }
-
-                    columnData = value;
-
-                    if (value != null)
-                    {
-                        value.NameChanged += m_columnData_NameChanged;
-                    }
-
-                    this.RaisePropertyChanged();
-                }
-            }
+            get => columnIndex;
+            set => this.RaiseAndSetIfChanged(ref columnIndex, value);
         }
 
         /// <summary>
@@ -477,35 +457,6 @@ namespace LcmsNetSDK.Data
             }
             ActualLCMethod = methodToClone.Clone() as LCMethod;
         }
-
-        void m_columnData_NameChanged(object sender, string name, string oldName)
-        {
-            if (DmsData == null || oldName == "")
-                return;
-
-            var cartName = "";
-            if (DmsData.CartName != null)
-            {
-                cartName = DmsData.CartName;
-            }
-            var cartColumn = cartName + "_" + oldName;
-
-            // Make sure we actually have a cart and column name.
-            var length = oldName.Length;
-            if (DmsData.CartName != null)
-                length += DmsData.CartName.Length;
-
-            if (length < 1)
-                return;
-
-            var contains = DmsData.DatasetName.Contains(cartColumn);
-            if (contains)
-            {
-                var cartColumnNew = BuildCartColumnName(this);
-                DmsData.DatasetName = DmsData.DatasetName.Replace(cartColumn, cartColumnNew);
-            }
-        }
-
         /// <summary>
         /// Gets or sets the unique ID for a sample.
         /// Unique ID for this sample not related to request name or sequence ID.
@@ -526,7 +477,18 @@ namespace LcmsNetSDK.Data
 
         /// <inheritdoc />
         [PersistenceSetting(IgnoreProperty = true)]
-        public virtual string ColumnName => ColumnData.Name;
+        public virtual string ColumnName
+        {
+            get
+            {
+                if (ColumnIndex > -1 && ColumnIndex < CartConfiguration.Columns.Count)
+                {
+                    return CartConfiguration.Columns[ColumnIndex].Name;
+                }
+
+                return "";
+            }
+        }
 
         /// <inheritdoc />
         [PersistenceSetting(IgnoreProperty = true)]

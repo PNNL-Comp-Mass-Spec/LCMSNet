@@ -505,7 +505,7 @@ namespace LcmsNet
 
                         if (columnID >= 0)
                         {
-                            dummySample.ColumnData = CartConfiguration.Columns[columnID];
+                            dummySample.ColumnIndex = CartConfiguration.Columns[columnID].ID;
                         }
 
                         dummySample.LCMethod = e.Method;
@@ -531,7 +531,7 @@ namespace LcmsNet
                         var stupidSample = new SampleData();
                         if (columnID >= 0)
                         {
-                            stupidSample.ColumnData = CartConfiguration.Columns[columnID];
+                            stupidSample.ColumnIndex = CartConfiguration.Columns[columnID].ID;
                         }
                         stupidSample.LCMethod = e.Method;
                         sampleQueue.RunNext(stupidSample);
@@ -730,8 +730,8 @@ namespace LcmsNet
                     lcMethod = sample.ActualLCMethod;
                     lcEvent = lcMethod.Events[lcMethod.CurrentEventNumber];
                     message = string.Format("Sample Event: Column={0}: ColumnID={1}: Device={2}.{3}: Sample={4}",
-                        sample.ColumnData.ID + 1,
-                        sample.ColumnData.Name,
+                        sample.ColumnIndex + 1,
+                        CartConfiguration.Columns[sample.ColumnIndex].Name,
                         lcEvent.Device.Name,
                         lcEvent.Name,
                         sample.DmsData.DatasetName);

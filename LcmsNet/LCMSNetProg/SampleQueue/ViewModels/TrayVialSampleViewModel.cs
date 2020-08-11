@@ -25,7 +25,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleData Sample => sample;
 
-        public int ColumnId => Sample.ColumnData.ID + 1;
+        public int ColumnId => Sample.ColumnIndex + 1;
 
         public int Tray
         {

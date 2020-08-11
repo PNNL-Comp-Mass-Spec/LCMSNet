@@ -327,17 +327,17 @@ namespace LcmsNet.SampleQueue
                 if (m_waitingQueue.Count > 0)
                 {
                     var data = m_waitingQueue[m_waitingQueue.Count - 1];
-                    index = m_columnOrders.IndexOf(data.ColumnData);
+                    index = data.ColumnIndex;
                 }
                 else
                 {
                     if (m_runningQueue.Count > 0)
                     {
-                        index = m_columnOrders.IndexOf(m_runningQueue[m_runningQueue.Count - 1].ColumnData);
+                        index = m_runningQueue[m_runningQueue.Count - 1].ColumnIndex;
                     }
                     else if (m_completeQueue.Count > 0)
                     {
-                        index = m_columnOrders.IndexOf(m_completeQueue[m_completeQueue.Count - 1].ColumnData);
+                        index = m_completeQueue[m_completeQueue.Count - 1].ColumnIndex;
                     }
                 }
                 //
@@ -438,7 +438,7 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == m_integrateName && column.ID == sample.ColumnData.ID)
+                if (sample.DmsData.DatasetName == m_integrateName && column.ID == sample.ColumnIndex)
                 {
                     return true;
                 }
@@ -550,7 +550,7 @@ namespace LcmsNet.SampleQueue
             var unusedSamples = new List<SampleData>();
             foreach (var sample in queue)
             {
-                if (sample.DmsData.DatasetName == m_integrateName && sample.ColumnData == column)
+                if (sample.DmsData.DatasetName == m_integrateName && sample.ColumnIndex == column.ID)
                 {
                     unusedSamples.Add(sample);
                 }
@@ -609,7 +609,7 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var data in queue)
             {
-                var col = data.ColumnData;
+                var col = CartConfiguration.Columns[data.ColumnIndex];
                 if (sampleHistogram.ContainsKey(col))
                 {
                     sampleHistogram[col].Add(data);
@@ -678,7 +678,7 @@ namespace LcmsNet.SampleQueue
                     sampleToAdd.DmsData.DatasetName = m_integrateName;
                     sampleToAdd.DmsData.Block = 0; // It's an unused sample, so don't copy this information.
                     sampleToAdd.DmsData.Batch = 0;
-                    sampleToAdd.ColumnData = col;
+                    sampleToAdd.ColumnIndex = col.ID;
                     sampleToAdd.UniqueID = GenerateUniqueID();
                     data.Add(sampleToAdd);
                 }
@@ -970,7 +970,7 @@ namespace LcmsNet.SampleQueue
             {
                 var unusedSample = m_waitingQueue[i];
                 if (unusedSample.DmsData.DatasetName.Contains(m_integrateName) &&
-                    unusedSample.ColumnData == column)
+                    unusedSample.ColumnIndex == column.ID)
                 {
                     var sample = samples[0];
                     samples.RemoveAt(0);
@@ -1057,7 +1057,8 @@ namespace LcmsNet.SampleQueue
                     {
                         added = true;
                         sample.UniqueID = GenerateUniqueID();
-                        sampleHistogram[sample.ColumnData].Add(sample);
+                        var col = CartConfiguration.Columns[sample.ColumnIndex];
+                        sampleHistogram[col].Add(sample);
                         // tempQueue.Add(sample);
                     }
                 }
@@ -1326,7 +1327,7 @@ namespace LcmsNet.SampleQueue
             var uniqueList = new List<long>();
             foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == m_integrateName && sample.ColumnData == column)
+                if (sample.DmsData.DatasetName == m_integrateName && sample.ColumnIndex == column.ID)
                 {
                     uniqueList.Add(sample.UniqueID);
                 }
@@ -1400,20 +1401,20 @@ namespace LcmsNet.SampleQueue
 
             if (m_runningQueue.Count > 0)
             {
-                index = m_columnOrders.IndexOf(m_runningQueue[m_runningQueue.Count - 1].ColumnData) + 1;
+                index = m_runningQueue[m_runningQueue.Count - 1].ColumnIndex + 1;
             }
             else if (m_completeQueue.Count > 0)
             {
                 lock (m_completeQueue)
                 {
-                    index = m_columnOrders.IndexOf(m_completeQueue[m_completeQueue.Count - 1].ColumnData) + 1;
+                    index = m_completeQueue[m_completeQueue.Count - 1].ColumnIndex + 1;
                 }
             }
 
             foreach (var data in m_waitingQueue)
             {
                 var columnData = m_columnOrders[index % m_columnOrders.Count];
-                data.ColumnData = columnData;
+                data.ColumnIndex = columnData.ID;
                 index++;
             }
         }
@@ -2192,8 +2193,7 @@ namespace LcmsNet.SampleQueue
                     if (sample.LCMethod != null && sample.LCMethod.Column >= 0)
                     {
                         // reset the column data.
-                        var column = CartConfiguration.Columns[sample.LCMethod.Column];
-                        sample.ColumnData = column;
+                        sample.ColumnIndex = sample.LCMethod.Column;
                     }
                 }
                 else
@@ -2259,7 +2259,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Saves the queue to the appropiate object.
+        /// Saves the queue to the appropriate object.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="reader"></param>
@@ -2271,15 +2271,15 @@ namespace LcmsNet.SampleQueue
             // We need to assign the column data information to the samples
             // since columns have not been assigned.
             //
-            var index = 0;
-            if (m_waitingQueue.Count > 0)
-            {
-                index = m_columnOrders.IndexOf(m_waitingQueue[m_waitingQueue.Count - 1].ColumnData) + 1;
-            }
-            else
-            {
-                index = m_columnOrders.IndexOf(m_columnOrders[0]);
-            }
+            //var index = 0;
+            //if (m_waitingQueue.Count > 0)
+            //{
+            //    index = m_columnOrders.IndexOf(m_waitingQueue[m_waitingQueue.Count - 1].ColumnData) + 1;
+            //}
+            //else
+            //{
+            //    index = m_columnOrders.IndexOf(m_columnOrders[0]);
+            //}
 
             //
             // For all the entries in the new list of samples...add some column information back into it.
@@ -2309,7 +2309,7 @@ namespace LcmsNet.SampleQueue
                         var columnID = sample.LCMethod.Column;
                         if (columnID > 0)
                         {
-                            sample.ColumnData = CartConfiguration.Columns[columnID];
+                            sample.ColumnIndex = columnID;
                         }
                     }
                 }
@@ -2324,7 +2324,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Saves the queue to the appropiate object.
+        /// Saves the queue to the appropriate object.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="reader"></param>
@@ -2340,7 +2340,7 @@ namespace LcmsNet.SampleQueue
             foreach (var data in waitingSamples)
             {
                 data.DmsData.CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
-                data.ColumnData = column;
+                data.ColumnIndex = column.ID;
             }
 
             QueueSamples(waitingSamples, enumColumnDataHandling.LeaveAlone);
