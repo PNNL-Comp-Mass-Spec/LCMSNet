@@ -106,16 +106,15 @@ namespace LcmsNetData.System
                 return programDataPath;
             }
 
+            Directory.CreateDirectory(programDataPath);
+
             // Ensure that the needed directory tree exists
-            if (!Directory.Exists(programDataPath))
+            var oldDataDir = GetDirectoryLoadPath(directorySubPath);
+
+            if (Directory.Exists(oldDataDir))
             {
-                var oldDataDir = GetDirectoryLoadPath(directorySubPath);
-                Directory.CreateDirectory(programDataPath);
-                if (Directory.Exists(oldDataDir))
-                {
-                    // copy files over, since we don't read both directories...
-                    CopyDirectory(oldDataDir, programDataPath);
-                }
+                // copy files over, since we don't want to read both directories...
+                CopyDirectory(oldDataDir, programDataPath);
             }
 
             return programDataPath;
