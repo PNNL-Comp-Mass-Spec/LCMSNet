@@ -209,30 +209,35 @@ namespace LcmsNetData.Data
 
             // Write trigger file to local folder
             var appPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH);
-            var localTriggerFolderPath = Path.Combine(appPath, "TriggerFiles");
+            var localTriggerFolder = new DirectoryInfo(Path.Combine(appPath, "TriggerFiles"));
 
-            // If local folder doesn't exist, then create it
-            if (!Directory.Exists(localTriggerFolderPath))
+            // If local folder doesn't exist, create it
+            if (!localTriggerFolder.Exists)
             {
                 try
                 {
-                    /**/
-                    // TODO: this line is here for upgrade compatibility - if the folder does not exist in ProgramData, but does in ProgramFiles, this will copy all existing contents.
-                    var loader = PersistDataPaths.GetDirectorySavePath("TriggerFiles");
-                    /*/
-                    // TODO: This line needs to be uncommented when the above is removed.
-                    Directory.CreateDirectory(localTriggerFolderPath);
-                    /**/
+                    // This line is here for upgrade compatibility
+                    // If the folder does not exist in ProgramData, but does in ProgramFiles, this will copy all existing contents.
+                    var programDataPath = PersistDataPaths.GetDirectorySavePath("TriggerFiles");
+
+                    // Note: programDataPath should match localTriggerFolder.FullName
+
+                    localTriggerFolder.Refresh();
+                    if (!localTriggerFolder.Exists)
+                    {
+                        localTriggerFolder.Create();
+                    }
                 }
                 catch (Exception ex)
                 {
+                    ErrorMessages.Add(string.Format("Exception creating local trigger file folder: {0}", ex.Message));
                     ApplicationLogger.LogError(0, "Exception creating local trigger file folder", ex);
                     return string.Empty;
                 }
             }
 
             // Create the trigger file on the local computer
-            var localTriggerFilePath = Path.Combine(localTriggerFolderPath, outFileName);
+            var localTriggerFilePath = Path.Combine(localTriggerFolder.FullName, outFileName);
             try
             {
                 var outputFile = new FileStream(localTriggerFilePath, FileMode.Create, FileAccess.Write);
