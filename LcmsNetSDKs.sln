@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidicsSimulator", "LcmsNet\SDK\FluidicsSimulator\FluidicsSimulator.csproj", "{36D7F168-8910-4126-A2C8-F0C78398D64D}"
 EndProject
@@ -31,6 +31,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoPluginLibrary", "LcmsNet\SDK\Demo\DemoPluginLibrary.csproj", "{36381F3A-1CA7-4C8B-B99C-035B3C4E84F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetCommonControls", "LcmsNet\SDK\LcmsNetCommonControls\LcmsNetCommonControls.csproj", "{176AACC9-480E-4425-BA4B-40BB7B8A2E04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetData", "LcmsNet\SDK\LcmsNetData\LcmsNetData.csproj", "{09993D8A-15CA-413E-BC48-EC80D399136A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +80,10 @@ Global
 		{176AACC9-480E-4425-BA4B-40BB7B8A2E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{176AACC9-480E-4425-BA4B-40BB7B8A2E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{176AACC9-480E-4425-BA4B-40BB7B8A2E04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09993D8A-15CA-413E-BC48-EC80D399136A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09993D8A-15CA-413E-BC48-EC80D399136A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09993D8A-15CA-413E-BC48-EC80D399136A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09993D8A-15CA-413E-BC48-EC80D399136A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
