@@ -58,7 +58,6 @@ Source: LCMSNetProg\bin\x86\Release\OxyPlot*.dll;                              D
 Source: LCMSNetProg\bin\x86\Release\Reactive*.dll;                             DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\Splat*.dll;                                DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\System.Data.SQLite.dll;                    DestDir: "{app}";          Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\Release\System.Drawing.Primitives.dll;             DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\System.Reactive*.dll;                      DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\Xceed.Wpf*.dll;                            DestDir: "{app}";          Flags: ignoreversion
 
