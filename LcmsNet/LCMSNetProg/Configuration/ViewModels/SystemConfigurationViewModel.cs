@@ -191,7 +191,19 @@ namespace LcmsNet.Configuration.ViewModels
         public bool SpecialColumnEnabled
         {
             get => specialColumnEnabled;
-            set => this.RaiseAndSetIfChanged(ref specialColumnEnabled, value);
+            set
+            {
+                // Don't allow disabling if this is the last column that was still enabled
+                if (value || CartConfiguration.NumberOfEnabledColumns > 0)
+                {
+                    this.RaiseAndSetIfChanged(ref specialColumnEnabled, value);
+                }
+                else
+                {
+                    // Trigger UI refresh of the unchanged value.
+                    this.RaisePropertyChanged();
+                }
+            }
         }
 
         public bool InstrumentNameNotSaved

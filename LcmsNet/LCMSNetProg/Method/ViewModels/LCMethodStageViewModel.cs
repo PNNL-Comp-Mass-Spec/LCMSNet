@@ -333,12 +333,12 @@ namespace LcmsNet.Method.ViewModels
         {
             var column = -1;
 
-            if (SelectedColumn == null)
+            if (string.IsNullOrWhiteSpace(SelectedColumn))
             {
                 return column;
             }
 
-            var key = SelectedColumn.ToString();
+            var key = SelectedColumn;
             if (checkBoxToColumnDataMap.ContainsKey(key))
             {
                 column = checkBoxToColumnDataMap[key].ID;
@@ -358,13 +358,28 @@ namespace LcmsNet.Method.ViewModels
             if (CartConfiguration.Columns == null)
                 return;
 
-            foreach (var column in CartConfiguration.Columns)
+            foreach (var column in CartConfiguration.Columns.Where(x => x.Status != ColumnStatus.Disabled))
             {
                 var id = (column.ID + 1).ToString();
                 checkBoxToColumnDataMap.Add(id, column);
                 columnComboBoxOptions.Add(id);
+
+                if (string.IsNullOrWhiteSpace(SelectedColumn))
+                {
+                    SelectedColumn = id;
+                }
             }
-            columnComboBoxOptions.Add("Special/All");
+
+            if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true))
+            {
+                const string specialColName = "Special/All";
+                columnComboBoxOptions.Add(specialColName);
+
+                if (string.IsNullOrWhiteSpace(SelectedColumn))
+                {
+                    SelectedColumn = specialColName;
+                }
+            }
         }
 
         public bool IsColumnSelected()

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Media;
+using LcmsNetData;
 using LcmsNetData.Logging;
+using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using ReactiveUI;
 
@@ -58,7 +60,16 @@ namespace LcmsNet.Configuration.ViewModels
                     }
                     else
                     {
-                        columnData.Status = ColumnStatus.Disabled;
+                        // Don't allow disabling if this is the last column that was still enabled
+                        if (CartConfiguration.NumberOfEnabledColumns == 1 &&
+                            LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true))
+                        {
+                            ColumnEnabled = true;
+                        }
+                        else
+                        {
+                            columnData.Status = ColumnStatus.Disabled;
+                        }
                     }
                 }
             });
