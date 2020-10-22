@@ -10,6 +10,17 @@ namespace LcmsNetSDK.Method
     {
         #region Constructors
 
+        private LCMethodEventAttribute()
+        {
+            IgnoreLeftoverTime = false;
+            SampleParameterIndex = -1;
+            RequiresSampleInput = false;
+            OperationTime = -1;
+            TimeoutType = MethodOperationTimeoutType.Attribute;
+            HasDiscreteParameters = false;
+            DataProviderIndex = -1;
+        }
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -18,20 +29,13 @@ namespace LcmsNetSDK.Method
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
-        public LCMethodEventAttribute(string methodName,
-            double operationTime,
-            string dataProvider,
-            int dataProviderIndex,
-            bool hasPerformanceData)
+        public LCMethodEventAttribute(string methodName, double operationTime, string dataProvider,
+            int dataProviderIndex, bool hasPerformanceData) : this()
         {
             HasPerformanceData = hasPerformanceData;
             Name = methodName;
-            SampleParameterIndex = -1;
-            RequiresSampleInput = false;
             OperationTime = operationTime;
-            HasDiscreteParameters = false;
 
-            DataProviderIndex = -1;
             if (string.IsNullOrEmpty(dataProvider) == false)
             {
                 DataProvider = dataProvider;
@@ -48,26 +52,11 @@ namespace LcmsNetSDK.Method
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
-        public LCMethodEventAttribute(string methodName,
-            double operationTime,
-            bool hasDiscreteStates,
-            string dataProvider,
-            int dataProviderIndex,
-            bool hasPerformanceData)
+        public LCMethodEventAttribute(string methodName, double operationTime, bool hasDiscreteStates,
+            string dataProvider, int dataProviderIndex, bool hasPerformanceData)
+            : this(methodName, operationTime, dataProvider, dataProviderIndex, hasPerformanceData)
         {
-            HasPerformanceData = hasPerformanceData;
-            Name = methodName;
-            SampleParameterIndex = -1;
-            RequiresSampleInput = false;
-            OperationTime = operationTime;
             HasDiscreteParameters = hasDiscreteStates;
-
-            DataProviderIndex = -1;
-            if (string.IsNullOrEmpty(dataProvider) == false)
-            {
-                DataProvider = dataProvider;
-                DataProviderIndex = dataProviderIndex;
-            }
         }
 
         /// <summary>
@@ -78,21 +67,13 @@ namespace LcmsNetSDK.Method
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
-        public LCMethodEventAttribute(string methodName,
-            MethodOperationTimeoutType timeout,
-            string dataProvider,
-            int dataProviderIndex,
-            bool hasPerformanceData)
+        public LCMethodEventAttribute(string methodName, MethodOperationTimeoutType timeout,
+            string dataProvider, int dataProviderIndex, bool hasPerformanceData) : this()
         {
             HasPerformanceData = hasPerformanceData;
             Name = methodName;
-            SampleParameterIndex = -1;
-            RequiresSampleInput = false;
-            OperationTime = -1;
             TimeoutType = timeout;
-            HasDiscreteParameters = false;
 
-            DataProviderIndex = -1;
             if (string.IsNullOrEmpty(dataProvider) == false)
             {
                 DataProvider = dataProvider;
@@ -110,32 +91,15 @@ namespace LcmsNetSDK.Method
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
-        public LCMethodEventAttribute(string methodName,
-            bool isSampleSpecific,
-            int sampleParameterIndex,
-            double operationTime,
-            string dataProvider,
-            int dataProviderIndex,
-            bool hasPerformanceData)
+        public LCMethodEventAttribute(string methodName, bool isSampleSpecific, int sampleParameterIndex,
+            double operationTime, string dataProvider, int dataProviderIndex, bool hasPerformanceData)
+            : this(methodName, operationTime, dataProvider, dataProviderIndex, hasPerformanceData)
         {
             if (isSampleSpecific && sampleParameterIndex < 0)
                 throw new Exception("The SampleParameterIndex cannot be negative");
 
-            HasPerformanceData = hasPerformanceData;
-            Name = methodName;
             RequiresSampleInput = isSampleSpecific;
             SampleParameterIndex = sampleParameterIndex;
-            OperationTime = operationTime;
-            TimeoutType = MethodOperationTimeoutType.Attribute;
-            HasDiscreteParameters = false;
-
-
-            DataProviderIndex = -1;
-            if (string.IsNullOrEmpty(dataProvider) == false)
-            {
-                DataProvider = dataProvider;
-                DataProviderIndex = dataProviderIndex;
-            }
         }
 
         /// <summary>
@@ -148,32 +112,16 @@ namespace LcmsNetSDK.Method
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
-        public LCMethodEventAttribute(string methodName,
-            MethodOperationTimeoutType timeoutType,
-            bool isSampleSpecific,
-            int sampleParameterIndex,
-            string dataProvider,
-            int dataProviderIndex,
+        public LCMethodEventAttribute(string methodName, MethodOperationTimeoutType timeoutType,
+            bool isSampleSpecific, int sampleParameterIndex, string dataProvider, int dataProviderIndex,
             bool hasPerformanceData)
+            : this(methodName, timeoutType, dataProvider, dataProviderIndex, hasPerformanceData)
         {
             if (isSampleSpecific && sampleParameterIndex < 0)
                 throw new Exception("The SampleParameterIndex cannot be negative");
 
-            HasPerformanceData = hasPerformanceData;
-            Name = methodName;
             RequiresSampleInput = isSampleSpecific;
             SampleParameterIndex = sampleParameterIndex;
-            OperationTime = -1;
-            TimeoutType = timeoutType;
-            HasDiscreteParameters = false;
-
-
-            DataProviderIndex = -1;
-            if (string.IsNullOrEmpty(dataProvider) == false)
-            {
-                DataProvider = dataProvider;
-                DataProviderIndex = dataProviderIndex;
-            }
         }
 
         /// <summary>
@@ -187,31 +135,12 @@ namespace LcmsNetSDK.Method
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData">Flag indicating whether this method has performance data or not.</param>
-        public LCMethodEventAttribute(string methodName,
-            bool isSampleSpecific,
-            int sampleParameterIndex,
-            double operationTime,
-            bool discreteStates,
-            string dataProvider,
-            int dataProviderIndex,
+        public LCMethodEventAttribute(string methodName, bool isSampleSpecific, int sampleParameterIndex,
+            double operationTime, bool discreteStates, string dataProvider, int dataProviderIndex,
             bool hasPerformanceData)
+            : this(methodName, isSampleSpecific, sampleParameterIndex, operationTime, dataProvider, dataProviderIndex, hasPerformanceData)
         {
-            if (isSampleSpecific && sampleParameterIndex < 0)
-                throw new Exception("The SampleParameterIndex cannot be negative");
-            HasPerformanceData = hasPerformanceData;
-            Name = methodName;
-            RequiresSampleInput = isSampleSpecific;
-            SampleParameterIndex = sampleParameterIndex;
-            OperationTime = operationTime;
-            TimeoutType = MethodOperationTimeoutType.Attribute;
             HasDiscreteParameters = discreteStates;
-
-            DataProviderIndex = -1;
-            if (string.IsNullOrEmpty(dataProvider) == false)
-            {
-                DataProvider = dataProvider;
-                DataProviderIndex = dataProviderIndex;
-            }
         }
 
         #endregion
@@ -247,6 +176,8 @@ namespace LcmsNetSDK.Method
         /// Gets or sets the total operation time required by method to execute in seconds.  Methods must be guaranteed to execute within this range.
         /// </summary>
         public double OperationTime { get; set; }
+
+        public bool IgnoreLeftoverTime { get; set; }
 
         /// <summary>
         /// Gets or sets the index of the sample parameter.

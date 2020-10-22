@@ -220,8 +220,17 @@ namespace LcmsNetSDK.Method
         protected void SetStartTimeAndDuration(DateTime start, TimeSpan duration)
         {
             startTime = start;
-            methodDuration = duration;
+            SetDuration(duration);
             OnPropertyChanged(nameof(Start));
+        }
+
+        /// <summary>
+        /// Set the method duration
+        /// </summary>
+        /// <param name="duration"></param>
+        private void SetDuration(TimeSpan duration)
+        {
+            methodDuration = duration;
             OnPropertyChanged(nameof(Duration));
             OnPropertyChanged(nameof(End));
         }
@@ -274,6 +283,26 @@ namespace LcmsNetSDK.Method
 
             SetStartTimeAndDuration(start, duration);
             //System.Diagnostics.Debug.WriteLine(string.Format("Method {0} start time: {1} end time {2}", this.Name, start, this.End));
+        }
+
+        /// <summary>
+        /// Update the method event times and duration. Used when the duration of a single event is changed during the run.
+        /// </summary>
+        public void UpdateMethodEventTimes()
+        {
+            // Update the start time and cascade the calculation so that
+            // the event times are all updated allowing us to calculate
+            // the duration and end time of the entire method.
+            UpdateEventTimes(Start);
+
+            // Calculate the duration of the method.
+            var duration = TimeSpan.Zero;
+            if (Events.Count > 0)
+            {
+                duration = Events[Events.Count - 1].End.Subtract(Start);
+            }
+
+            SetDuration(duration);
         }
 
         /// <summary>

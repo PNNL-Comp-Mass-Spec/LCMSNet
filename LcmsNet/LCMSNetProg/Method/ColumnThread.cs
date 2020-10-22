@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Threading;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
+using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
@@ -215,8 +216,7 @@ namespace LcmsNet.Method
                         ex = exThrown;
                         success = false;
                         finished = TimeKeeper.Instance.Now;
-                        Print(
-                            string.Format(
+                        Print(string.Format(
                                 "\t{0} COLUMN-{1} {5}.{4} EVENT TERMINATED an Exception was thrown: {2} Stack Trace:{3}",
                                 finished,
                                 m_columnId, // 1  COL ID
@@ -240,44 +240,57 @@ namespace LcmsNet.Method
                     if (success)
                     {
                         actualEvent.HadError = false;
-                        //
-                        // Here we'll wait enough time so that
-                        // we don't run the next event before its scheduled start.  This is flow control.
-                        //
-                        var timer = new TimerDevice();
-                        var span = next.Subtract(TimeKeeper.Instance.Now);
-                        var totalMilliseconds = 0;
-                        try
+
+                        // Allow skipping the remaining time in the timeout when:
+                        //  * The event type permits it
+                        //  AND:
+                        //     * Only have one column (method pre/post overlap not possible)
+                        //     OR:
+                        //     * Current method does not allow pre/post overlap
+                        var skipRemainingTime = lcEvent.MethodAttribute.IgnoreLeftoverTime && (CartConfiguration.NumberOfEnabledColumns == 1 || (!method.AllowPostOverlap && !method.AllowPreOverlap));
+
+                        if (!skipRemainingTime)
                         {
-                            totalMilliseconds = Convert.ToInt32(span.TotalMilliseconds);
+                            // Here we'll wait enough time so that we don't run the next event before its scheduled start.  This is flow control.
+                            var timer = new TimerDevice();
+                            var span = next.Subtract(TimeKeeper.Instance.Now);
+                            var totalMilliseconds = 0;
+                            try
+                            {
+                                totalMilliseconds = Convert.ToInt32(span.TotalMilliseconds);
+                            }
+                            catch (OverflowException ex2)
+                            {
+                                ApplicationLogger.LogError(0, "TIMEROVERFLOW: " + ex2.Message, ex2);
+                            }
+
+                            if (totalMilliseconds > 2)
+                            {
+                                Print(string.Format("\t\t{0} COLUMN-{1} WAITING:{2}",
+                                        finished,
+                                        m_columnId, // 1  COL ID
+                                        span.TotalMilliseconds),
+                                    CONST_VERBOSE_EVENTS);
+                                //var timerStart = TimeKeeper.Instance.Now;
+                                //System.Threading.Tasks.Task.Run(() => WriteTimeoutLog("timeout start: " + timerStart.ToString("h")));
+                                timer.WaitMilliseconds(totalMilliseconds, m_abortEvent);
+                                //var timerEnd = TimeKeeper.Instance.Now.Ticks;
+                                //System.Threading.Tasks.Task.Run(() => WriteTimeoutLog("waitTimer end: " + timerEnd.ToString("h")));
+                                // Calculate the statistics of how long it took to run.
+                            }
+
+                            finished = TimeKeeper.Instance.Now;
                         }
-                        catch (OverflowException ex2)
+                        else
                         {
-                            ApplicationLogger.LogError(0, "TIMEROVERFLOW: " + ex2.Message, ex2);
+                            finished = TimeKeeper.Instance.Now;
+                            lcEvent.Duration = finished.Subtract(actualEvent.Start);
+                            method.UpdateMethodEventTimes();
                         }
-                        if (totalMilliseconds > 2)
-                        {
-                            Print(string.Format("\t\t{0} COLUMN-{1} WAITING:{2}",
-                                                finished,
-                                                m_columnId, // 1  COL ID
-                                                span.TotalMilliseconds),
-                                  CONST_VERBOSE_EVENTS);
-                            var timerStart = TimeKeeper.Instance.Now;
-                            //System.Threading.Tasks.Task.Run(() => WriteTimeoutLog("timeout start: " + timerStart.ToString("h")));
-                            timer.WaitMilliseconds(totalMilliseconds, m_abortEvent);
-                            var timerEnd = TimeKeeper.Instance.Now.Ticks;
-                            //System.Threading.Tasks.Task.Run(() => WriteTimeoutLog("waitTimer end: " + timerEnd.ToString("h")));
-                            // Calculate the statistics of how long it took to run.
-                        }
-                        finished = TimeKeeper.Instance.Now;
                     }
                     else
                     {
-                        //
-                        // Well, we had an error (exception or expected) and we don't care why, we just want to
-                        // gracefully notify people in charge, and exit.
-                        //
-
+                        // Well, we had an error (exception or expected) and we don't care why, we just want to gracefully notify people in charge, and exit.
                         lcEvent.Device.Status = DeviceStatus.Error;
                         m_sampleData = null;
                         if (ex == null)

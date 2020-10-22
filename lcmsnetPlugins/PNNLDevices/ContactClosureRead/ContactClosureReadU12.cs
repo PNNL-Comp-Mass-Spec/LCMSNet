@@ -269,7 +269,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Read", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true)]
         public bool ReadStatusAuto(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             var closureState = ReadStateAuto(timeout, target);
@@ -282,7 +282,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read Digital", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Read Digital", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true)]
         public bool ReadStatusDigital(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             return ReadStatusDigital(timeout, m_port, target);
@@ -295,7 +295,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <param name="port">The LabJack port</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read Port Digital", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Read Port Digital", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true)]
         public bool ReadStatusDigital(double timeout, LabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             var closureState = ReadStateDigital(timeout, port, target);
@@ -311,7 +311,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <param name="voltage">The midpoint voltage - readVoltage >= voltage will be "closed" state</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read Analog", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Read Analog", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true)]
         public bool ReadStatusAnalog(double timeout, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             return ReadStatusAnalog(timeout, m_port, voltage, target);
@@ -326,7 +326,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
         /// <param name="voltage">The midpoint voltage - readVoltage >= voltage will be "closed" state</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read Port Analog", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Read Port Analog", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true)]
         public bool ReadStatusAnalog(double timeout, LabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             var closureState = ReadStateAnalog(timeout, port, voltage, target);
@@ -386,7 +386,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
                 closureState = state.Equals(0) ? ContactClosureState.Open : ContactClosureState.Closed;
                 while (TimeKeeper.Instance.Now < endTime && !target.HasFlag(closureState))
                 {
-                    Thread.Sleep(TimeSpan.FromMilliseconds(200));
+                    Thread.Sleep(TimeSpan.FromMilliseconds(100));
                     state = m_labjack.Read(port);
                     closureState = state.Equals(0) ? ContactClosureState.Open : ContactClosureState.Closed;
                 }

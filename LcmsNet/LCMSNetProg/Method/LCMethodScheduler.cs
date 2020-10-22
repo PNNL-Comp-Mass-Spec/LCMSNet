@@ -444,6 +444,15 @@ namespace LcmsNet.Method
                 //
                 //TimeSpan startSpan = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(data.LCMethod.Start);
 
+                if (!data.ActualLCMethod.AllowPreOverlap && !data.ActualLCMethod.AllowPostOverlap && !m_columnWorkers.Any(x => x.IsBusy))
+                {
+                    // No method overlap is allowed, so if we are "early" on time, it's because we had some early-continue events in the previously ran method.
+                    if (TimeKeeper.Instance.Now.AddSeconds(15) < data.ActualLCMethod.Start)
+                    {
+                        data.ActualLCMethod.SetStartTime(TimeKeeper.Instance.Now.AddSeconds(10));
+                    }
+                }
+
                 //
                 // If we have a positive integer, then that means the lcmethod's start time is good enough
                 // basically, we want to ensure that a method doesn't start before it's expected start time
@@ -478,16 +487,18 @@ namespace LcmsNet.Method
                     data.ActualLCMethod.CurrentEventNumber = 0;
                     data.ActualLCMethod.ActualEnd = DateTime.MaxValue;
                     data.ActualLCMethod.ActualStart = TimeKeeper.Instance.Now;
-                    var dataClone = data.Clone() as SampleData;
-                    if (dataClone == null)
-                    {
-                        dataClone = new SampleData();
-                        dataClone.LCMethodName = data.LCMethodName;
-                        dataClone.SetActualLcMethod();
-                        dataClone.RunningStatus = data.RunningStatus;
-                    }
-
-                    samples[sampleColumnID] = dataClone;
+                    samples[sampleColumnID] = data;
+                    // This is an alternate option to the above line, but has undesired side effects (like unlinking what is shown in the progress UI from what is actually running)
+                    //var dataClone = data.Clone() as SampleData;
+                    //if (dataClone == null)
+                    //{
+                    //    dataClone = new SampleData();
+                    //    dataClone.LCMethodName = data.LCMethodName;
+                    //    dataClone.SetActualLcMethod();
+                    //    dataClone.RunningStatus = data.RunningStatus;
+                    //}
+                    //
+                    //samples[sampleColumnID] = dataClone;
 
                     m_columnWorkers[sampleColumnID].RunWorkerAsync(new ColumnArgs(data));
                 }
