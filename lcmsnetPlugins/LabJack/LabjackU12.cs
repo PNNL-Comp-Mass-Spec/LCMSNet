@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace LcmsNetPlugins.LabJack
@@ -24,6 +25,8 @@ namespace LcmsNetPlugins.LabJack
         private const string CONST_DIGITAL_PREFIX = "D";
         private const string CONST_IO_PREFIX = "IO";
         private const int CONST_ERROR_INVALIDINPUT = 40;
+        private static readonly Dictionary<int, object> lockObjects = new Dictionary<int, object>(1);
+        private static readonly object dictionaryLock = new object();
 
         #endregion
 
@@ -37,6 +40,14 @@ namespace LcmsNetPlugins.LabJack
             localID = 0;
             FirmwareVersion = 0;
             DriverVersion = 0;
+
+            lock (dictionaryLock)
+            {
+                if (!lockObjects.ContainsKey(localID))
+                {
+                    lockObjects.Add(localID, new object());
+                }
+            }
         }
 
         /// <summary>
@@ -48,6 +59,14 @@ namespace LcmsNetPlugins.LabJack
             localID = labjackID;
             FirmwareVersion = 0;
             DriverVersion = 0;
+
+            lock (dictionaryLock)
+            {
+                if (!lockObjects.ContainsKey(localID))
+                {
+                    lockObjects.Add(localID, new object());
+                }
+            }
         }
 
         #endregion
@@ -77,6 +96,24 @@ namespace LcmsNetPlugins.LabJack
         #endregion
 
         #region Methods
+
+        private object GetLockObject()
+        {
+            if (lockObjects.TryGetValue(localID, out var lockObj))
+            {
+                return lockObj;
+            }
+
+            lock (dictionaryLock)
+            {
+                if (!lockObjects.ContainsKey(localID))
+                {
+                    lockObjects.Add(localID, new object());
+                }
+            }
+
+            return lockObjects[localID];
+        }
 
         /// <summary>
         /// General method for writing to a port
@@ -178,7 +215,11 @@ namespace LcmsNetPlugins.LabJack
             var overVoltage = 0;
             var voltage = 0.0f;
 
-            var result = LabJackU12Wrapper.EAnalogIn(ref localID, 0, channel, 0, ref overVoltage, ref voltage);
+            var result = 0;
+            lock (GetLockObject())
+            {
+                result = LabJackU12Wrapper.EAnalogIn(ref localID, 0, channel, 0, ref overVoltage, ref voltage);
+            }
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -211,11 +252,17 @@ namespace LcmsNetPlugins.LabJack
 
             if (channel == 0)
             {
-                result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, voltage, 0.0f);
+                lock (GetLockObject())
+                {
+                    result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, voltage, 0.0f);
+                }
             }
             else if (channel == 1)
             {
-                result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, 0.0f, voltage);
+                lock (GetLockObject())
+                {
+                    result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, 0.0f, voltage);
+                }
             }
             else
             {
@@ -251,7 +298,12 @@ namespace LcmsNetPlugins.LabJack
         {
             var state = 0;
 
-            var result = LabJackU12Wrapper.EDigitalIn(ref localID, 0, channel, 1, ref state);
+            var result = 0;
+            lock (GetLockObject())
+            {
+                result = LabJackU12Wrapper.EDigitalIn(ref localID, 0, channel, 1, ref state);
+            }
+
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -280,7 +332,12 @@ namespace LcmsNetPlugins.LabJack
         {
             var state = 0;
 
-            var result = LabJackU12Wrapper.EDigitalIn(ref localID, 0, channel, 0, ref state);
+            var result = 0;
+            lock (GetLockObject())
+            {
+                result = LabJackU12Wrapper.EDigitalIn(ref localID, 0, channel, 0, ref state);
+            }
+
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -310,7 +367,12 @@ namespace LcmsNetPlugins.LabJack
         /// <returns>The error message, if applicable</returns>
         private int WriteDigital(int channel, int state)
         {
-            var result = LabJackU12Wrapper.EDigitalOut(ref localID, 0, channel, 1, state);
+            var result = 0;
+            lock (GetLockObject())
+            {
+                result = LabJackU12Wrapper.EDigitalOut(ref localID, 0, channel, 1, state);
+            }
+
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -339,7 +401,12 @@ namespace LcmsNetPlugins.LabJack
         /// <returns>The error message, if applicable</returns>
         private int WriteIO(int channel, int state)
         {
-            var result = LabJackU12Wrapper.EDigitalOut(ref localID, 0, channel, 0, state);
+            var result = 0;
+            lock (GetLockObject())
+            {
+                result = LabJackU12Wrapper.EDigitalOut(ref localID, 0, channel, 0, state);
+            }
+
             if (result != 0)
             {
                 var error = GetErrorString(result);
@@ -354,7 +421,12 @@ namespace LcmsNetPlugins.LabJack
         /// <returns>The driver version, as a float</returns>
         public float GetDriverVersion()
         {
-            var tempVersion = LabJackU12Wrapper.GetDriverVersion();
+            var tempVersion = 0f;
+            lock (GetLockObject())
+            {
+                tempVersion = LabJackU12Wrapper.GetDriverVersion();
+            }
+
             DriverVersion = tempVersion;
             if (Math.Abs(tempVersion) < float.Epsilon)
             {
@@ -371,7 +443,12 @@ namespace LcmsNetPlugins.LabJack
         public string GetErrorString(int errorCode)
         {
             var tempBuilder = new StringBuilder(100);
-            LabJackU12Wrapper.GetErrorString(errorCode, tempBuilder);
+
+            lock (GetLockObject())
+            {
+                LabJackU12Wrapper.GetErrorString(errorCode, tempBuilder);
+            }
+
             return (tempBuilder.ToString());
         }
 
@@ -381,9 +458,14 @@ namespace LcmsNetPlugins.LabJack
         /// <returns>The firmware version, as a float</returns>
         public float GetFirmwareVersion()
         {
-            var tempVersion = LabJackU12Wrapper.GetFirmwareVersion(ref localID);
+            var tempVersion = 0f;
+            lock (GetLockObject())
+            {
+                tempVersion = LabJackU12Wrapper.GetFirmwareVersion(ref localID);
+            }
+
             FirmwareVersion = tempVersion;
-            return (tempVersion);
+            return tempVersion;
         }
 
         /// <summary>
@@ -394,7 +476,11 @@ namespace LcmsNetPlugins.LabJack
         private void ThrowErrorMessage(string msg, int errorCode)
         {
             var errorString = new StringBuilder(50);
-            LabJackU12Wrapper.GetErrorString(errorCode, errorString);
+            lock (GetLockObject())
+            {
+                LabJackU12Wrapper.GetErrorString(errorCode, errorString);
+            }
+
             throw new LabjackU12Exception(msg + ":\r\n\r\n" + errorString);
         }
 
