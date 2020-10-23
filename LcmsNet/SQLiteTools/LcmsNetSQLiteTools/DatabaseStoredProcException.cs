@@ -1,5 +1,7 @@
 ﻿using System;
 
+// ReSharper disable UnusedMember.Global
+
 namespace LcmsNetSQLiteTools
 {
     /// <summary>
@@ -20,6 +22,18 @@ namespace LcmsNetSQLiteTools
             ProcName = SPName;
             ReturnCode = RetCode;
             ErrMessage = ErrMsg;
+        }
+
+        public DatabaseStoredProcException()
+        {
+        }
+
+        public DatabaseStoredProcException(string message) : base(message)
+        {
+        }
+
+        public DatabaseStoredProcException(string message, Exception innerException) : base(message, innerException)
+        {
         }
 
         #endregion

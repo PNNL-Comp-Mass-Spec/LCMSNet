@@ -1,5 +1,7 @@
 ﻿using System;
 
+// ReSharper disable UnusedMember.Global
+
 namespace LcmsNetSQLiteTools
 {
     /// <summary>
@@ -9,6 +11,14 @@ namespace LcmsNetSQLiteTools
     {
         public DatabaseDataException(string message, Exception ex) :
             base(message, ex)
+        {
+        }
+
+        public DatabaseDataException()
+        {
+        }
+
+        public DatabaseDataException(string message) : base(message)
         {
         }
     }
