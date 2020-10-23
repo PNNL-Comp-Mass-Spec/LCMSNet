@@ -14,10 +14,19 @@
         SeparationTypeSelected,
         DatasetTypeList,
         InstrumentList,
-        ColumnList, // Active LC Columns
+        /// <summary>
+        /// Active LC Columns
+        /// </summary>
+        ColumnList,
         ExperimentList,
-        PUserList, // A User that's in a Proposal
-        PReferenceList, // A cross reference of the PUser and a Proposal
+        /// <summary>
+        /// A User that's associated with a Proposal
+        /// </summary>
+        PUserList,
+        /// <summary>
+        /// A cross reference of the PUser and a Proposal
+        /// </summary>
+        PReferenceList,
         DatasetList,
         CartConfigNameList,
         CartConfigNameSelected,

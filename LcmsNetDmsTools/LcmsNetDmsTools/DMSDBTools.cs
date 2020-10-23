@@ -13,6 +13,8 @@ using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
 
+// ReSharper disable UnusedMember.Global
+
 namespace LcmsNetDmsTools
 {
     /// <summary>
@@ -23,6 +25,8 @@ namespace LcmsNetDmsTools
     // Deprecated export: [ExportMetadata("Version", "1.0")]
     public class DMSDBTools : IDisposable
     {
+        // Ignore Spelling: typeof, DMSPwd, SqlConnection, ini, yyyy-MM-dd, Wellplate, usernames, utf, xmlns, xs, T_Secondary_Sep, unallowable, subaccount
+
         #region "Class variables"
         string m_ErrMsg = "";
 
@@ -1009,16 +1013,6 @@ namespace LcmsNetDmsTools
             var connStr = GetConnectionString();
 
             // Get a list containing all active cart configuration names
-            //  SELECT Cart_Config_ID,
-            //         Cart_Config_Name,
-            //         Cart_Name,
-            //         Description,
-            //         Autosampler,
-            //         Pumps,
-            //         Dataset_Usage_Count,
-            //         Dataset_Usage_Last_Year,
-            //         Cart_Config_State
-            //    FROM V_LC_Cart_Config_Export
             const string sqlCmd =
                 "SELECT Cart_Config_Name, Cart_Name " +
                 "FROM V_LC_Cart_Config_Export " +
@@ -1393,18 +1387,6 @@ namespace LcmsNetDmsTools
             var connStr = GetConnectionString();
 
             // Get a list containing all active work packages
-            // SELECT TOP(1000) [Charge_Code]
-            //     ,[State]
-            //     ,[SubAccount]
-            //     ,[WorkBreakdownStructure]
-            //     ,[Title]
-            //     ,[Usage_SamplePrep]
-            //     ,[Usage_RequestedRun]
-            //     ,[Owner_PRN]
-            //     ,[Owner_Name]
-            //     ,[Setup_Date]
-            //     ,[SortKey]
-            // FROM[DMS5].[dbo].[V_Charge_Code_Export]
 
             // Filters:
             // * Only get the last 6 years
@@ -1617,7 +1599,7 @@ namespace LcmsNetDmsTools
         /// Adds data for block of MRM files to file data list
         /// </summary>
         /// <param name="fileIndexList">Comma-separated list of file indices needing data</param>
-        /// <param name="fileData">ist of file names and contents; new data will be appended to this list</param>
+        /// <param name="fileData">List of file names and contents; new data will be appended to this list</param>
         public void GetMRMFilesFromDMS(string fileIndexList, List<MRMFileData> fileData)
         {
             if (fileData == null)

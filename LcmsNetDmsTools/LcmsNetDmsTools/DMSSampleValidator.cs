@@ -53,6 +53,8 @@ namespace LcmsNetDmsTools
     // Deprecated export: [ExportMetadata("RequiredDMSToolVersion", "1.0")]
     public class DMSSampleValidator
     {
+        // Ignore Spelling: typeof, Validator
+
         public List<string> CartConfigNamesValidForCart = new List<string>();
 
         public DMSSampleValidator()

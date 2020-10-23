@@ -11,6 +11,8 @@ namespace LcmsNetSQLiteTools
 {
     internal class PropertyToColumnMapping
     {
+        // Ignore Spelling: nullable
+
         private readonly Dictionary<Type, Dictionary<string, PropertyColumnMapping>> propertyColumnMappings = new Dictionary<Type, Dictionary<string, PropertyColumnMapping>>();
         private readonly Dictionary<Type, Dictionary<string, string>> propertyColumnNameMappings = new Dictionary<Type, Dictionary<string, string>>();
 

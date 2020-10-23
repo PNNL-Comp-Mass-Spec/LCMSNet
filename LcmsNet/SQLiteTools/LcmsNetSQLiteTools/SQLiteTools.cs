@@ -5,10 +5,14 @@ using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
 
+// ReSharper disable UnusedMember.Global
+
 namespace LcmsNetSQLiteTools
 {
     public class SQLiteTools
     {
+        // Ignore Spelling: configs
+
         #region Properties
 
         public static string ConnString => Cache.ConnString;
@@ -226,7 +230,7 @@ namespace LcmsNetSQLiteTools
                     cartConfigList.Add(config.CartConfigName);
                 }
 
-                // Add the unknown configs last.
+                // Add the unknown configs
                 var unknownConfigs = configList
                     .Where(x => x.CartName.StartsWith("unknown", StringComparison.OrdinalIgnoreCase))
                     .OrderBy(x => x.CartConfigName).Select(x => x.CartConfigName).ToList();

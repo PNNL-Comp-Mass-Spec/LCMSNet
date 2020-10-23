@@ -338,7 +338,7 @@ namespace LcmsNetData.Data
 
                 if (success && fi.Exists)
                 {
-                    // Move the file into a subfolder so that it doesn't get processed the next time the program starts
+                    // Move the file into a subdirectory so that it doesn't get processed the next time the program starts
                     try
                     {
                         var diLocalArchiveFolder =

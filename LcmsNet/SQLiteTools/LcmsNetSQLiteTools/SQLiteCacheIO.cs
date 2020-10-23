@@ -13,6 +13,9 @@ namespace LcmsNetSQLiteTools
 {
     internal class SQLiteCacheIO : IDisposable
     {
+        // ReSharper disable once CommentTypo
+        // Ignore Spelling: pragma, sqlite, sql
+
         private SQLiteConnection storedConnection;
         private string lastConnectionString = "";
 
@@ -508,7 +511,7 @@ namespace LcmsNetSQLiteTools
         /// </summary>
         /// <param name="cmdStr">SQL command to execute</param>
         /// <param name="connStr">Connection string for SQLite database file</param>
-        /// <returns>A DataTable containing data specified by CmdStr</returns>
+        /// <returns>A DataTable containing data specified by the SQL command</returns>
         /// <remarks>Works well, but it also uses more memory and processing time vs. reading directly to the output object</remarks>
         private DataTable GetSQLiteDataTable(string cmdStr, string connStr)
         {
@@ -737,6 +740,7 @@ namespace LcmsNetSQLiteTools
             }
             else
             {
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 if (tableExists && !tableFormatGood)
                 {
                     if (!dropOnMismatch)

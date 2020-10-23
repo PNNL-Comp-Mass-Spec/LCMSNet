@@ -8,6 +8,8 @@ namespace LcmsNetDmsTools
     /// </summary>
     internal static class ExtensionMethods
     {
+        // Ignore Spelling: Lcms, de-duplication
+
         /// <summary>
         /// Simple cast that handles DBNull
         /// </summary>

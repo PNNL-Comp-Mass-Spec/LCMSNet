@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using LcmsNetData.Data;
 
+// ReSharper disable UnusedMember.Global
+
 namespace LcmsNetSQLiteTools
 {
     public class SQLiteCacheDefaultData
