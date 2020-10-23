@@ -567,14 +567,14 @@ namespace LcmsNetSQLiteTools
             sb.Append("CREATE TABLE ");
             sb.Append(tableName + "(");
 
-            var nocaseAppend = "";
+            var textToAppend = "";
             if (caseInsensitive)
             {
-                nocaseAppend = " COLLATE NOCASE";
+                textToAppend = " COLLATE NOCASE";
             }
 
             // Create column names for each key, which is same as property name in queue being saved
-            sb.Append(string.Join(",", colNames.Select(x => $"'{x}' TEXT{nocaseAppend}")));
+            sb.Append(string.Join(",", colNames.Select(x => $"'{x}' TEXT{textToAppend}")));
 
             if (!string.IsNullOrWhiteSpace(primaryKeyColumn))
             {
@@ -1240,15 +1240,15 @@ namespace LcmsNetSQLiteTools
         /// Read a single-column list from the cache, handling management of an in-memory list
         /// </summary>
         /// <param name="memoryCache"></param>
-        /// <param name="tabletype">DatabaseTableTypes specifying type of table to retrieve</param>
+        /// <param name="tableType">DatabaseTableTypes specifying type of table to retrieve</param>
         /// <param name="force"></param>
         /// <returns>List containing cached data</returns>
-        public IEnumerable<string> ReadSingleColumnListFromCache(DatabaseTableTypes tabletype, List<string> memoryCache, bool force = false)
+        public IEnumerable<string> ReadSingleColumnListFromCache(DatabaseTableTypes tableType, List<string> memoryCache, bool force = false)
         {
             var data = (IEnumerable<string>)memoryCache;
             if (memoryCache.Count == 0 || force || AlwaysRead)
             {
-                data = ReadSingleColumnListFromCache(tabletype);
+                data = ReadSingleColumnListFromCache(tableType);
 
                 memoryCache.Clear();
                 if (AlwaysRead)

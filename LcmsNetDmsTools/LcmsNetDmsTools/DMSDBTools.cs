@@ -1512,9 +1512,9 @@ namespace LcmsNetDmsTools
             var dmsConnectionString = GetConnectionString();
 
             // Remove the password from the connection string
-            var passwordStartindex = dmsConnectionString.IndexOf(";Password", StringComparison.InvariantCultureIgnoreCase);
-            if (passwordStartindex > 0)
-                dmsConnectionString = dmsConnectionString.Substring(0, passwordStartindex);
+            var passwordStartIndex = dmsConnectionString.IndexOf(";Password", StringComparison.InvariantCultureIgnoreCase);
+            if (passwordStartIndex > 0)
+                dmsConnectionString = dmsConnectionString.Substring(0, passwordStartIndex);
 
             ReportProgress("Loading data from DMS (" + dmsConnectionString + ") and storing in " + cacheFilePath, 0, stepCountTotal);
 
