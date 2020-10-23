@@ -645,7 +645,12 @@ namespace LcmsNetSQLiteTools
         /// <param name="dropOnMismatch">If true, the table exists, and the column names don't match property names, drops and re-creates the table</param>
         /// <param name="clearExisting">If true and the table exists, the existing data will be truncated</param>
         /// <returns>True if table exists and is readable</returns>
-        private bool PrepareMultiColumnTable(string tableName, string connStr, List<PropertyToColumnMapping.PropertyColumnMapping> mappings, bool dropOnMismatch = true, bool clearExisting = true)
+        private bool PrepareMultiColumnTable(
+            string tableName,
+            string connStr,
+            IEnumerable<PropertyToColumnMapping.PropertyColumnMapping> mappings,
+            bool dropOnMismatch = true,
+            bool clearExisting = true)
         {
             // Verify table exists, and column names are correct; if not, create it; Otherwise, clear it
             var tableExists = VerifyTableExists(tableName, connStr);
@@ -713,7 +718,7 @@ namespace LcmsNetSQLiteTools
 
             // If table exists, clear it. Otherwise create one
             var tableFormatGood = VerifyTableFormat(tableName, connStr, sqlCreateCmd);
-            var tableExists = VerifyTableExists(tableName, ConnString, out _, out int rowCount, true);
+            var tableExists = VerifyTableExists(tableName, ConnString, out _, out _, false);
             if (tableExists && tableFormatGood)
             {
                 if (!clearExisting)
@@ -782,7 +787,7 @@ namespace LcmsNetSQLiteTools
             var tableName = GetTableName(tableType);
 
             // If table exists, clear it. Otherwise create one
-            if (!VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
+            if (!VerifyTableExists(tableName, ConnString, out _, out var rowCount, true))
             {
                 if (!PrepareSingleColumnTable(tableType, ConnString, false, false))
                 {
@@ -796,20 +801,12 @@ namespace LcmsNetSQLiteTools
             }
         }
 
-        private void CheckMultiColumnCacheTable<T>(DatabaseTableTypes tableType, IEnumerable<T> defaultData)
+        private void CheckMultiColumnCacheTable<T>(DatabaseTableTypes tableType)
         {
             var tableName = GetTableName(tableType);
-            if (!VerifyTableExists(tableName, ConnString, out _, out int rowCount, true))
+            if (!VerifyTableExists(tableName, ConnString, out _, out _, false))
             {
-                if (!PrepareMultiColumnTable(tableName, ConnString, typeof(T), false, false))
-                {
-                    rowCount = -1;
-                }
-            }
-
-            if (rowCount < 1)
-            {
-                //SaveMultiColumnListToCache(tableType, defaultData, true);
+                PrepareMultiColumnTable(tableName, ConnString, typeof(T), false, false);
             }
         }
 
@@ -875,11 +872,11 @@ namespace LcmsNetSQLiteTools
             CheckSingleColumnCacheTable(DatabaseTableTypes.SeparationTypeList, writeData.SeparationTypes);
             CheckSingleColumnCacheTable(DatabaseTableTypes.DatasetTypeList, writeData.DatasetTypes);
             CheckSingleColumnCacheTable(DatabaseTableTypes.ColumnList, writeData.ColumnNames);
-            CheckMultiColumnCacheTable(DatabaseTableTypes.InstrumentList, writeData.InstrumentInfo);
-            CheckMultiColumnCacheTable(DatabaseTableTypes.UserList, writeData.Users);
-            CheckMultiColumnCacheTable(DatabaseTableTypes.ExperimentList, writeData.Experiments);
-            CheckMultiColumnCacheTable(DatabaseTableTypes.PUserList, new List<ProposalUser>());
-            CheckMultiColumnCacheTable(DatabaseTableTypes.PReferenceList, new List<UserIDPIDCrossReferenceEntry>());
+            CheckMultiColumnCacheTable<InstrumentInfo>(DatabaseTableTypes.InstrumentList);
+            CheckMultiColumnCacheTable<UserInfo>(DatabaseTableTypes.UserList);
+            CheckMultiColumnCacheTable<ExperimentData>(DatabaseTableTypes.ExperimentList);
+            CheckMultiColumnCacheTable<ProposalUser>(DatabaseTableTypes.PUserList);
+            CheckMultiColumnCacheTable<UserIDPIDCrossReferenceEntry>(DatabaseTableTypes.PReferenceList);
         }
 
         /// <summary>
