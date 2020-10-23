@@ -9,7 +9,7 @@ using LcmsNetData.Logging;
 
 namespace LcmsNetSQLiteTools
 {
-    public class SQLiteTools
+    public static class SQLiteTools
     {
         // Ignore Spelling: configs
 
@@ -80,10 +80,6 @@ namespace LcmsNetSQLiteTools
         #region Instance
 
         private static SQLiteCacheIO Cache { get; }
-
-        private SQLiteTools()
-        {
-        }
 
         public static IDisposable GetDisposable()
         {

@@ -94,15 +94,14 @@ namespace LcmsNetDmsTools
 
         #region "Events"
 
-        public event ProgressEventHandler ProgressEvent;
+        public event EventHandler<ProgressEventArgs> ProgressEvent;
 
         public void OnProgressUpdate(ProgressEventArgs e)
         {
             if (ProgressEvent == null)
-                Console.WriteLine(e.CurrentTask + @": " + e.PercentComplete);
+                Console.WriteLine(e.CurrentTask + ": " + e.PercentComplete);
             else
                 ProgressEvent.Invoke(this, e);
-
         }
 
         #endregion
@@ -243,7 +242,7 @@ namespace LcmsNetDmsTools
                 }
 
                 closeConnectionOnDispose = true;
-                IsValid = connection != null && connection.State == ConnectionState.Open;
+                IsValid = connection?.State == ConnectionState.Open;
             }
 
             /// <summary>
@@ -255,7 +254,7 @@ namespace LcmsNetDmsTools
             {
                 connection = existingConnection;
                 closeConnectionOnDispose = false;
-                IsValid = connection != null && connection.State == ConnectionState.Open;
+                IsValid = connection?.State == ConnectionState.Open;
                 FailedConnectionAttemptMessage = failedConnectionAttemptMessage;
             }
 
@@ -302,7 +301,7 @@ namespace LcmsNetDmsTools
                 ValidationType = ValidationType.Schema,
                 ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema
             };
-            readerSettings.ValidationEventHandler += settings_ValidationEventHandler;
+            readerSettings.ValidationEventHandler += SettingsValidationEventHandler;
 
             var folderPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             if (string.IsNullOrEmpty(folderPath))
@@ -333,7 +332,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        private void settings_ValidationEventHandler(object sender, ValidationEventArgs e)
+        private void SettingsValidationEventHandler(object sender, ValidationEventArgs e)
         {
             if (e.Severity == XmlSeverityType.Error)
             {
@@ -472,6 +471,7 @@ namespace LcmsNetDmsTools
         /// <param name="connStr">DMS connection string</param>
         /// <returns>DataTable containing requested data</returns>
         /// <remarks>This tends to use more memory than directly reading and parsing data.</remarks>
+        [Obsolete("Unused")]
         private DataTable GetDataTable(string cmdStr, string connStr)
         {
             var returnTable = new DataTable();
@@ -611,11 +611,11 @@ namespace LcmsNetDmsTools
             {
                 if ((byteCounter % 2) == 0)
                 {
-                    pwdBytes[byteCounter] += 1;
+                    pwdBytes[byteCounter]++;
                 }
                 else
                 {
-                    pwdBytes[byteCounter] -= 1;
+                    pwdBytes[byteCounter]--;
                 }
                 pwdCharsAdj[byteCounter] = (char)pwdBytes[byteCounter];
                 retStr += pwdCharsAdj[byteCounter].ToString(CultureInfo.InvariantCulture);
@@ -753,7 +753,6 @@ namespace LcmsNetDmsTools
                 ErrMsg = "Exception getting dataset list";
                 ApplicationLogger.LogError(0, ErrMsg, ex);
             }
-
         }
 
         /// <summary>
@@ -1453,7 +1452,6 @@ namespace LcmsNetDmsTools
                         cmd.CommandText = $"SELECT TOP(1) * FROM {tableName}";
                         cmd.ExecuteScalar(); // TODO: Test the returned value? (for what?)
                     }
-
                 }
             }
             catch (Exception ex)
@@ -1500,9 +1498,9 @@ namespace LcmsNetDmsTools
             string cacheFilePath;
 
             if (equalsIndex > 0 && equalsIndex < sqLiteConnectionString.Length - 1)
-                cacheFilePath = @"SQLite cache file path: " + sqLiteConnectionString.Substring(equalsIndex + 1);
+                cacheFilePath = "SQLite cache file path: " + sqLiteConnectionString.Substring(equalsIndex + 1);
             else
-                cacheFilePath = @"SQLite cache file path: " + sqLiteConnectionString;
+                cacheFilePath = "SQLite cache file path: " + sqLiteConnectionString;
 
             var dmsConnectionString = GetConnectionString();
 
@@ -1562,7 +1560,7 @@ namespace LcmsNetDmsTools
                 ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
 
                 GetDatasetListFromDMS();
-                stepCountCompleted += DATASET_STEPS;
+                // stepCountCompleted += DATASET_STEPS;
             }
 
             ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);

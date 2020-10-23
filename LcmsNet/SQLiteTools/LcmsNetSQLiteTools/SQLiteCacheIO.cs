@@ -276,7 +276,7 @@ namespace LcmsNetSQLiteTools
             try
             {
                 // Get a list of database tables matching the specified table name
-                var tableMatches = (long) ExecuteSQLiteCommandScalar(sqlString, connStr);
+                var tableMatches = (long)ExecuteSQLiteCommandScalar(sqlString, connStr);
                 if (tableMatches < 1)
                 {
                     return false;
@@ -306,7 +306,7 @@ namespace LcmsNetSQLiteTools
                 //}
 
                 // Cast to long (because the object will be a boxed long) and then to int.
-                columnCount = (int)(long) ExecuteSQLiteCommandScalar(colCountSql, connStr);
+                columnCount = (int)(long)ExecuteSQLiteCommandScalar(colCountSql, connStr);
             }
             catch (Exception ex)
             {
@@ -327,7 +327,7 @@ namespace LcmsNetSQLiteTools
             try
             {
                 // Cast to long (because the object will be a boxed long) and then to int.
-                rowCount = (int)(long) ExecuteSQLiteCommandScalar(rowCountSql, connStr);
+                rowCount = (int)(long)ExecuteSQLiteCommandScalar(rowCountSql, connStr);
             }
             catch (Exception ex)
             {
@@ -358,12 +358,7 @@ namespace LcmsNetSQLiteTools
                     return false;
                 }
 
-                if (createText.Equals(createCommand, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-
-                return false;
+                return createText.Equals(createCommand, StringComparison.OrdinalIgnoreCase);
             }
             catch (Exception ex)
             {
@@ -513,6 +508,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="connStr">Connection string for SQLite database file</param>
         /// <returns>A DataTable containing data specified by the SQL command</returns>
         /// <remarks>Works well, but it also uses more memory and processing time vs. reading directly to the output object</remarks>
+        [Obsolete("Unused")]
         private DataTable GetSQLiteDataTable(string cmdStr, string connStr)
         {
             var returnTable = new DataTable();
@@ -564,8 +560,7 @@ namespace LcmsNetSQLiteTools
         private string BuildGenericCreateTableCmd(string tableName, IEnumerable<string> colNames, string primaryKeyColumn, bool caseInsensitive = false)
         {
             var sb = new StringBuilder();
-            sb.Append("CREATE TABLE ");
-            sb.Append(tableName + "(");
+            sb.AppendFormat("CREATE TABLE {0} (", tableName);
 
             var textToAppend = "";
             if (caseInsensitive)
@@ -578,7 +573,7 @@ namespace LcmsNetSQLiteTools
 
             if (!string.IsNullOrWhiteSpace(primaryKeyColumn))
             {
-                sb.Append(", PRIMARY KEY('" + primaryKeyColumn + "')");
+                sb.AppendFormat(", PRIMARY KEY('{0}')", primaryKeyColumn);
             }
 
             // Terminate the string and return
@@ -610,7 +605,7 @@ namespace LcmsNetSQLiteTools
             {
                 var columnName = "" + Enum.GetName(typeof(DatabaseTableTypes), tableType);
                 if (columnName.EndsWith("List", StringComparison.OrdinalIgnoreCase) &&
-                    !columnName.ToLower().Contains("name"))
+                    columnName.IndexOf("name", StringComparison.OrdinalIgnoreCase) < 0)
                 {
                     columnName = columnName.Substring(0, columnName.Length - 4) + "Name";
                 }
@@ -883,9 +878,9 @@ namespace LcmsNetSQLiteTools
         /// Read the data for a list from the cache, handling the in-memory cache appropriately
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="memoryCache"></param>
         /// <param name="tableType"></param>
         /// <param name="newObjectCreator"></param>
+        /// <param name="memoryCache"></param>
         /// <param name="force"></param>
         /// <returns></returns>
         public IEnumerable<T> ReadMultiColumnDataFromCache<T>(DatabaseTableTypes tableType, Func<T> newObjectCreator, List<T> memoryCache, bool force = false)
@@ -1092,8 +1087,8 @@ namespace LcmsNetSQLiteTools
         /// Store the contents of a list in the specified table
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="dataList">list of data to be stored</param>
         /// <param name="tableType">table the data is to be stored in</param>
+        /// <param name="dataList">list of data to be stored</param>
         /// <param name="connStr">Connection string; used for export/save as</param>
         public void SaveMultiColumnListToCache<T>(DatabaseTableTypes tableType, IEnumerable<T> dataList, string connStr)
         {
@@ -1150,9 +1145,9 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Generic method for saving a single column list to the cache db
         /// </summary>
+        /// <param name="tableType">enumTableNames specifying table name suffix</param>
         /// <param name="listData">List of data for storing in table</param>
         /// <param name="memoryCache">List used for in-memory cache of contents</param>
-        /// <param name="tableType">enumTableNames specifying table name suffix</param>
         public void SaveSingleColumnListToCache(DatabaseTableTypes tableType, IEnumerable<string> listData, List<string> memoryCache)
         {
             // Refresh the in-memory list with the new data
@@ -1229,15 +1224,15 @@ namespace LcmsNetSQLiteTools
                 command.Parameters.Add(new SQLiteParameter(":DatasetName", datasetName));
                 var result = command.ExecuteScalar();
                 // We always expect a result, because COUNT(*) returns 0 for no-match
-                return (long) result > 0;
+                return (long)result > 0;
             }
         }
 
         /// <summary>
         /// Read a single-column list from the cache, handling management of an in-memory list
         /// </summary>
-        /// <param name="memoryCache"></param>
         /// <param name="tableType">DatabaseTableTypes specifying type of table to retrieve</param>
+        /// <param name="memoryCache"></param>
         /// <param name="force"></param>
         /// <returns>List containing cached data</returns>
         public IEnumerable<string> ReadSingleColumnListFromCache(DatabaseTableTypes tableType, List<string> memoryCache, bool force = false)

@@ -20,7 +20,7 @@ namespace LcmsNetDmsTools
         {
             if (value == null || value == DBNull.Value)
             {
-                return default(T);
+                return default;
             }
 
             return (T) value;
