@@ -179,7 +179,7 @@ namespace LcmsNetDmsTools
                 return "";
             }
 
-            if (errors.HasFlag(DMSSampleValidatorErrors.UsageTypeNotSet))
+            if ((errors & DMSSampleValidatorErrors.UsageTypeNotSet) != 0)
             {
                 if (errorDetails.Length > 0)
                 {
@@ -187,7 +187,7 @@ namespace LcmsNetDmsTools
                 }
                 errorDetails.Append("Usage type is not set for sample. Set Usage Type. (DMS Edit)");
             }
-            if (errors.HasFlag(DMSSampleValidatorErrors.EUSProposalIDEmpty))
+            if ((errors & DMSSampleValidatorErrors.EUSProposalIDEmpty) != 0)
             {
                 if (errorDetails.Length > 0)
                 {
@@ -195,7 +195,7 @@ namespace LcmsNetDmsTools
                 }
                 errorDetails.Append("EUS Proposal ID is empty. Provide a Proposal ID. (DMS Edit)");
             }
-            if (errors.HasFlag(DMSSampleValidatorErrors.EUSUserListEmpty))
+            if ((errors & DMSSampleValidatorErrors.EUSUserListEmpty) != 0)
             {
                 if (errorDetails.Length > 0)
                 {
@@ -203,7 +203,7 @@ namespace LcmsNetDmsTools
                 }
                 errorDetails.Append("EUS User list is empty. Provide a User list. (DMS Edit)");
             }
-            if (errors.HasFlag(DMSSampleValidatorErrors.LCCartNotSet))
+            if ((errors & DMSSampleValidatorErrors.LCCartNotSet) != 0)
             {
                 if (errorDetails.Length > 0)
                 {
@@ -211,7 +211,7 @@ namespace LcmsNetDmsTools
                 }
                 errorDetails.Append("LC Cart is not set. Set LC Cart. (Configuration)");
             }
-            if (errors.HasFlag(DMSSampleValidatorErrors.LCCartConfigNotSet))
+            if ((errors & DMSSampleValidatorErrors.LCCartConfigNotSet) != 0)
             {
                 if (errorDetails.Length > 0)
                 {
@@ -219,7 +219,7 @@ namespace LcmsNetDmsTools
                 }
                 errorDetails.Append("LC Cart Config is not set. Set LC Cart Config.");
             }
-            if (errors.HasFlag(DMSSampleValidatorErrors.LCCartConfigNotValidForCart))
+            if ((errors & DMSSampleValidatorErrors.LCCartConfigNotValidForCart) != 0)
             {
                 if (errorDetails.Length > 0)
                 {
