@@ -165,7 +165,7 @@ namespace LcmsNetSQLiteTools
         private class SQLiteConnectionWrapper : IDisposable
         {
             private readonly SQLiteConnection connection;
-            private readonly bool closeConnectionOnDispose = true;
+            private readonly bool closeConnectionOnDispose;
 
             /// <summary>
             /// Open a new connection, which will get closed on Dispose().
@@ -478,7 +478,7 @@ namespace LcmsNetSQLiteTools
         /// <returns>An object returned by the SQLite command - the value of the first row and column of the table; may be null.</returns>
         private object ExecuteSQLiteCommandScalar(string cmdStr, string connStr)
         {
-            object value = null;
+            object value;
             using (var connection = GetConnection(connStr))
             using (var command = connection.CreateCommand())
             {
@@ -547,7 +547,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="inpData">String list containing property names</param>
         /// <param name="tableName">Name of table to create</param>
         /// <returns>String consisting of a complete CREATE TABLE SQL statement</returns>
-        private string BuildCreatePropTableCmd(List<string> inpData, string tableName)
+        private string BuildCreatePropTableCmd(IEnumerable<string> inpData, string tableName)
         {
             // Create column names for each key, which is same as property name in queue being saved
             return $"CREATE TABLE {tableName}({string.Join(",", inpData.Select(x => $"'{x}' TEXT"))})";

@@ -131,12 +131,12 @@ namespace LcmsNetDmsTools
 
         #region Instance
 
-        private SqlConnection connection = null;
+        private SqlConnection connection;
         private string lastConnectionString = "";
         private DateTime lastConnectionAttempt = DateTime.MinValue;
         private readonly TimeSpan minTimeBetweenConnectionAttempts = TimeSpan.FromSeconds(30);
         private readonly TimeSpan connectionTimeoutTime = TimeSpan.FromSeconds(60);
-        private Timer connectionTimeoutTimer = null;
+        private Timer connectionTimeoutTimer;
         private string failedConnectionAttemptMessage = "";
 
         private void ConnectionTimeoutActions(object sender)
@@ -217,10 +217,8 @@ namespace LcmsNetDmsTools
                 connection.Close();
                 return new SqlConnectionWrapper(connString);
             }
-            else
-            {
-                return new SqlConnectionWrapper(connection, failedConnectionAttemptMessage);
-            }
+
+            return new SqlConnectionWrapper(connection, failedConnectionAttemptMessage);
         }
 
         /// <summary>
@@ -229,7 +227,7 @@ namespace LcmsNetDmsTools
         private class SqlConnectionWrapper : IDisposable
         {
             private readonly SqlConnection connection;
-            private readonly bool closeConnectionOnDispose = true;
+            private readonly bool closeConnectionOnDispose;
             public string FailedConnectionAttemptMessage { get; }
 
             /// <summary>
@@ -1557,7 +1555,7 @@ namespace LcmsNetDmsTools
                 ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
 
                 GetExperimentListFromDMS();
-                stepCountCompleted = stepCountCompleted + EXPERIMENT_STEPS;
+                stepCountCompleted += EXPERIMENT_STEPS;
             }
 
             if (loadDatasets)
@@ -1569,7 +1567,7 @@ namespace LcmsNetDmsTools
                 ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
 
                 GetDatasetListFromDMS();
-                stepCountCompleted = stepCountCompleted + DATASET_STEPS;
+                stepCountCompleted += DATASET_STEPS;
             }
 
             ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);
