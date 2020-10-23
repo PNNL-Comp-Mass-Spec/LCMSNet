@@ -329,7 +329,7 @@ namespace LcmsNetDmsTools
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
-                        if (string.Equals(reader.GetAttribute("dmssetting"), "true", StringComparison.CurrentCultureIgnoreCase))
+                        if (string.Equals(reader.GetAttribute("DmsSetting"), "true", StringComparison.OrdinalIgnoreCase))
                         {
                             var settingName = reader.Name.Remove(0, 2);
                             // Add/update the configuration item

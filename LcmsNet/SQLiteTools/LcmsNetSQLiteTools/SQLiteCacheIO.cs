@@ -1032,9 +1032,9 @@ namespace LcmsNetSQLiteTools
                                 columnMappings[i] = new KeyValuePair<int, Action<object, object>>(i, setMethod);
                                 columnSetOrder[i] = i;
 
-                                if (properName.ToLower().Contains("runningstatus"))
+                                if (properName.IndexOf("RunningStatus", StringComparison.OrdinalIgnoreCase) >= 0)
                                 {
-                                    // Always process runningstatus last
+                                    // Always process running status last
                                     columnSetOrder[i] = int.MaxValue;
                                 }
                             }

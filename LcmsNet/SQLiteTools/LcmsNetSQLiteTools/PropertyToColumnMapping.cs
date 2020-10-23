@@ -160,7 +160,7 @@ namespace LcmsNetSQLiteTools
                 yield break;
             }
 
-            if (propType.IsClass && propType.FullName.ToLower().StartsWith("lcmsnet"))
+            if (propType.IsClass && propType.FullName != null && propType.FullName.StartsWith("LCMSNet", StringComparison.OrdinalIgnoreCase))
             {
                 // LCMSNet class: generate the mapping, with cascading through sub-objects
                 var objectMappings = GetPropertyColumnMapping(propType);
