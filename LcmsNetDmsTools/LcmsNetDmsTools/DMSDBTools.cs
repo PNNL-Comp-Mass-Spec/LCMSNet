@@ -1195,11 +1195,11 @@ namespace LcmsNetDmsTools
             }
         }
 
-        private struct DmsProposalUserEntry
+        private readonly struct DmsProposalUserEntry
         {
-            public int? UserId;
-            public string UserName;
-            public string ProposalId;
+            public readonly int? UserId;
+            public readonly string UserName;
+            public readonly string ProposalId;
 
             public DmsProposalUserEntry(int? userId, string userName, string proposalId)
             {

@@ -102,7 +102,7 @@ namespace LcmsNetSQLiteTools
 
         #region Private Methods
 
-        private static void UpdateProposalIdIndexReferenceList(Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
+        private static void UpdateProposalIdIndexReferenceList(IReadOnlyDictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
         {
             if (Cache.AlwaysRead)
             {

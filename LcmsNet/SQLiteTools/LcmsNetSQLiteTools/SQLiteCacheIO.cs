@@ -21,7 +21,7 @@ namespace LcmsNetSQLiteTools
 
         private string cacheFullPath;
 
-        private PropertyToColumnMapping propToColumnMap = new PropertyToColumnMapping();
+        private readonly PropertyToColumnMapping propToColumnMap = new PropertyToColumnMapping();
 
         #region Properties
 
@@ -382,7 +382,7 @@ namespace LcmsNetSQLiteTools
         /// <param name="connStr"></param>
         /// <param name="fieldNames"></param>
         /// <returns></returns>
-        private bool TableColumnNamesMatched(string tableName, string connStr, List<string> fieldNames)
+        private bool TableColumnNamesMatched(string tableName, string connStr, IReadOnlyCollection<string> fieldNames)
         {
             var namesList = GetTableColumnNames(tableName, connStr, out var columnCount);
             if (columnCount != fieldNames.Count || namesList.Count == 0)
