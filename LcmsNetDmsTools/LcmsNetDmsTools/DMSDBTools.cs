@@ -866,18 +866,18 @@ namespace LcmsNetDmsTools
         }
 
         /// <summary>
-        /// Gets a list of active users from DMS and stores it in cache
+        /// Obtain the list of instrument operators from DMS and store this list in the cache
         /// </summary>
-        private void GetUserListFromDMS()
+        private void GetInstrumentOperatorsFromDMS()
         {
             try
             {
-                var dmsUsers = ReadUsersFromDMS();
+                var operators = ReadInstrumentOperatorsFromDMS();
 
                 // Store data in cache
                 try
                 {
-                    SQLiteTools.SaveUserListToCache(dmsUsers);
+                    SQLiteTools.SaveUserListToCache(operators);
                 }
                 catch (Exception ex)
                 {
@@ -1345,14 +1345,13 @@ namespace LcmsNetDmsTools
             }
         }
 
-        private IEnumerable<UserInfo> ReadUsersFromDMS()
+        private IEnumerable<UserInfo> ReadInstrumentOperatorsFromDMS()
         {
             var connStr = GetConnectionString();
 
-            // Get a data table containing all the users
-            //const string sqlCmd = "SELECT Name, [Payroll Num] as Payroll FROM V_Active_Users ORDER BY Name";
-            // Don't get all active DMS Users; most of them are not instrument operators
-            // EMSL Users have a separate list
+            // Get the instrument operator names and usernames
+            // Switched from V_Active_Users to V_Active_Instrument_Operators in January 2020
+            // Note that EMSL Users have a separate list
             const string sqlCmd = "SELECT Name, [Payroll Num] as Payroll FROM V_Active_Instrument_Operators ORDER BY Name";
 
             var cn = GetConnection(connStr);
@@ -1539,8 +1538,8 @@ namespace LcmsNetDmsTools
             ReportProgress("Loading work packages", 6, stepCountTotal);
             GetWorkPackagesFromDMS();
 
-            ReportProgress("Loading users", 7, stepCountTotal);
-            GetUserListFromDMS();
+            ReportProgress("Loading operators", 7, stepCountTotal);
+            GetInstrumentOperatorsFromDMS();
 
             ReportProgress("Loading LC columns", 8, stepCountTotal);
             GetColumnListFromDMS();
