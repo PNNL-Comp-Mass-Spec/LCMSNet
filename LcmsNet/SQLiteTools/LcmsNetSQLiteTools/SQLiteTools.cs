@@ -183,17 +183,6 @@ namespace LcmsNetSQLiteTools
         /// <summary>
         /// Wrapper around generic retrieval method specifically for cart lists
         /// </summary>
-        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
-        /// <returns>List containing cart names</returns>
-        [Obsolete("Use GetCartNameList that does not have parameter force (since force is not used)")]
-        public static IEnumerable<string> GetCartNameList(bool force)
-        {
-            return GetCartNameList();
-        }
-
-        /// <summary>
-        /// Wrapper around generic retrieval method specifically for cart lists
-        /// </summary>
         /// <returns>List containing cart names</returns>
         public static IEnumerable<string> GetCartNameList()
         {
