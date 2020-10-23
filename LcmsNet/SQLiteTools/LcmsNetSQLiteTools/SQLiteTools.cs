@@ -217,7 +217,7 @@ namespace LcmsNetSQLiteTools
                 cacheData = new Dictionary<string, List<string>>();
 
                 // Read the data from the cache
-                var configList = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.CartConfigNameList, () => new CartConfigInfo());
+                var configList = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.CartConfigNameList, () => new CartConfigInfo()).ToList();
 
                 // Transform the data, and allow "unknown" cart configs for all carts
                 foreach (var config in configList)
