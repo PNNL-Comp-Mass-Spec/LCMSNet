@@ -17,20 +17,20 @@ using LcmsNet.Method.ViewModels;
 namespace LcmsNet.Method.Views
 {
     /// <summary>
-    /// Interaction logic for EventParameterView.xaml
+    /// Interaction logic for EventParameterNumericView.xaml
     /// </summary>
-    public partial class EventParameterView : UserControl
+    public partial class EventParameterNumericView : UserControl
     {
-        public EventParameterView()
+        public EventParameterNumericView()
         {
             InitializeComponent();
         }
 
         private void ConversionButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (this.DataContext is EventParameterViewModel epvm)
+            if (this.DataContext is EventParameterNumericViewModel epnvm)
             {
-                var conversionVM = new ConvertToolViewModel(Convert.ToInt32(epvm.NumberValue), epvm.DecimalPlaces);
+                var conversionVM = new ConvertToolViewModel(Convert.ToInt32(epnvm.NumberValue), epnvm.DecimalPlaces);
                 var conversion = new ConvertToolWindow();
                 conversion.DataContext = conversionVM;
 
@@ -45,10 +45,10 @@ namespace LcmsNet.Method.Views
                     switch (conversionVM.ConversionType)
                     {
                         case ConversionType.Time:
-                            epvm.NumberValue = Math.Min(epvm.NumberMaximum, Math.Max(epvm.NumberMinimum, conversionVM.TotalSeconds));
+                            epnvm.NumberValue = Math.Min(epnvm.NumberMaximum, Math.Max(epnvm.NumberMinimum, conversionVM.TotalSeconds));
                             break;
                         case ConversionType.Precision:
-                            epvm.DecimalPlaces = conversionVM.DecimalPlaces;
+                            epnvm.DecimalPlaces = conversionVM.DecimalPlaces;
                             break;
                         default:
                             break;

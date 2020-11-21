@@ -61,7 +61,7 @@ namespace LcmsNet.Method.ViewModels
 
             // Handle user interface events to display context of method editors
             this.WhenAnyValue(x => x.SelectedDevice).Subscribe(x => this.SelectedDeviceChanged());
-            this.WhenAnyValue(x => x.SelectedLCEvent).Subscribe(x => this.SelectedMethodChanged());
+            this.WhenAnyValue(x => x.SelectedLCEvent).Subscribe(x => this.SelectedMethodEventChanged());
             this.WhenAnyValue(x => x.OptimizeWith).Subscribe(x => this.OptimizeForChanged());
             Breakpoint.BreakpointChanged += Breakpoint_Changed;
 
@@ -194,7 +194,7 @@ namespace LcmsNet.Method.ViewModels
         private IDevice selectedDevice = null;
         private LCMethodEventData selectedLCEvent = null;
         private readonly ReactiveList<LCMethodEventData> methodsComboBoxOptions = new ReactiveList<LCMethodEventData>();
-        private readonly ReactiveList<EventParameterViewModel> eventParameterList = new ReactiveList<EventParameterViewModel>();
+        private readonly ReactiveList<ILCEventParameter> eventParameterList = new ReactiveList<ILCEventParameter>();
         private bool isSelected = false;
         private readonly ObservableAsPropertyHelper<bool> devicesComboBoxEnabled;
 
@@ -234,7 +234,7 @@ namespace LcmsNet.Method.ViewModels
 
         public IReadOnlyReactiveList<IDevice> DevicesComboBoxOptions => DevicesList;
         public IReadOnlyReactiveList<LCMethodEventData> MethodsComboBoxOptions => methodsComboBoxOptions;
-        public IReadOnlyReactiveList<EventParameterViewModel> EventParameterList => eventParameterList;
+        public IReadOnlyReactiveList<ILCEventParameter> EventParameterList => eventParameterList;
         public bool DevicesComboBoxEnabled => devicesComboBoxEnabled.Value && EventUnlocked;
         public bool EventUnlocked { get; }
 
@@ -416,7 +416,7 @@ namespace LcmsNet.Method.ViewModels
             if (methodsComboBoxOptions.Count > 0)
             {
                 SelectedLCEvent = methodsComboBoxOptions[0];
-                UpdateSelectedMethod();
+                UpdateSelectedMethodEvent();
             }
         }
 
@@ -451,7 +451,7 @@ namespace LcmsNet.Method.ViewModels
             var parameters = methodEvent.Parameters;
 
             // This readjusts the number of parameters that are sample specific
-            var count = parameters.Controls.Count * 2;
+            var count = parameters.ViewModels.Count * 2;
             var indexOfSampleData = methodEvent.MethodEventAttribute.SampleParameterIndex;
 
             // Update the style so we have the right spacing
@@ -463,18 +463,17 @@ namespace LcmsNet.Method.ViewModels
             //}
 
             // Add the controls to the mpanel_parameter controls
-            for (var j = 0; j < parameters.Controls.Count; j++)
+            for (var j = 0; j < parameters.ViewModels.Count; j++)
             {
                 if (j != indexOfSampleData)
                 {
                     // Get the name of the parameter
                     var name = parameters.Names[j];
 
-                    // Get the control for the parameter
-                    var control = parameters.Controls[j];
+                    // Get the ViewModel for the parameter
+                    var vm = parameters.ViewModels[j];
 
                     // Construct the description for the parameter
-                    var vm = control as EventParameterViewModel;
                     vm.ParameterLabel = name;
 
                     // Add the control itself
@@ -507,7 +506,7 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        private void UpdateSelectedMethod()
+        private void UpdateSelectedMethodEvent()
         {
             // Update the user interface.
             var method = SelectedLCEvent;
@@ -615,7 +614,7 @@ namespace LcmsNet.Method.ViewModels
                                 else if (string.IsNullOrEmpty(attr.DataProvider) == false && i == attr.DataProviderIndex)
                                 {
                                     // Figure out what index to adjust the data provider for.
-                                    var combo = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum, paramInfo.ParameterType);
+                                    var combo = new EventParameterEnumViewModel();
 
                                     // Register the event to automatically get new data when the data provider has new stuff.
                                     device.RegisterDataProvider(attr.DataProvider, combo.FillData);
@@ -680,32 +679,33 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static EventParameterViewModel GetEventParametersFromType(Type t)
+        public static ILCEventParameter GetEventParametersFromType(Type t)
         {
-            EventParameterViewModel control = null;
+            ILCEventParameter control = null;
 
             if (t.IsEnum)
             {
                 // Add the parameters to the combo box before we do anything.
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum, t);
-                using (control.ComboBoxOptions.SuppressChangeNotifications())
+                var enumControl = new EventParameterEnumViewModel();
+                control = enumControl;
+                using (enumControl.ComboBoxOptions.SuppressChangeNotifications())
                 {
                     // Grab the enumeration values for the parameter
-                    control.FillData(null, Enum.GetValues(t).Cast<object>().ToList());
+                    enumControl.FillData(null, Enum.GetValues(t).Cast<object>().ToList());
                 }
-                control.SelectedOption = control.ComboBoxOptions.FirstOrDefault();
+                enumControl.SelectedOption = enumControl.ComboBoxOptions.FirstOrDefault();
             }
             else if (NumericTypes.Contains(t))
             {
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Numeric, t);
+                control = new EventParameterNumericViewModel(t);
             }
             else if (typeof(string) == t)
             {
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Text, t);
+                control = new EventParameterTextViewModel();
             }
             else if (typeof(bool) == t)
             {
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Boolean, t);
+                control = new EventParameterBoolViewModel();
             }
 
             return control;
@@ -743,11 +743,11 @@ namespace LcmsNet.Method.ViewModels
         }
 
         /// <summary>
-        /// Handles when the user selects a new method for the current device.
+        /// Handles when the user selects a new method event for the current device.
         /// </summary>
-        private void SelectedMethodChanged()
+        private void SelectedMethodEventChanged()
         {
-            UpdateSelectedMethod();
+            UpdateSelectedMethodEvent();
             OnEventChanged();
         }
 

@@ -8,6 +8,8 @@ namespace LcmsNetSDK.Method
     /// </summary>
     public interface ILCEventParameter
     {
+        string ParameterLabel { get; set; }
+
         /// <summary>
         /// Gets the value set by the user.
         /// </summary>

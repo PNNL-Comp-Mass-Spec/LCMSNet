@@ -46,9 +46,9 @@ namespace LcmsNetSDK.Method
         /// </summary>
         public void BuildEvent()
         {
-            for (var i = 0; i < Parameters.Controls.Count; i++)
+            for (var i = 0; i < Parameters.ViewModels.Count; i++)
             {
-                var control = Parameters.Controls[i];
+                var control = Parameters.ViewModels[i];
 
                 //
                 // Grab the controls value to be used later on

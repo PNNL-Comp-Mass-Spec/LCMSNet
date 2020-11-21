@@ -157,7 +157,10 @@
     <Compile Include="Method\ViewModels\BreakpointViewModel.cs" />
     <Compile Include="Method\ViewModels\ColumnSampleProgressViewModel.cs" />
     <Compile Include="Method\ViewModels\ConvertToolViewModel.cs" />
-    <Compile Include="Method\ViewModels\EventParameterViewModel.cs" />
+    <Compile Include="Method\ViewModels\EventParameterBoolViewModel.cs" />
+    <Compile Include="Method\ViewModels\EventParameterEnumViewModel.cs" />
+    <Compile Include="Method\ViewModels\EventParameterNumericViewModel.cs" />
+    <Compile Include="Method\ViewModels\EventParameterTextViewModel.cs" />
     <Compile Include="Method\ViewModels\FailedMethodLoadViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodEditorViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodEventViewModel.cs" />
@@ -176,8 +179,17 @@
       <DependentUpon>ConvertToolWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Method\Views\DrawingVisualHost.cs" />
-    <Compile Include="Method\Views\EventParameterView.xaml.cs">
-      <DependentUpon>EventParameterView.xaml</DependentUpon>
+    <Compile Include="Method\Views\EventParameterBoolView.xaml.cs">
+      <DependentUpon>EventParameterBoolView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\EventParameterEnumView.xaml.cs">
+      <DependentUpon>EventParameterEnumView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\EventParameterNumericView.xaml.cs">
+      <DependentUpon>EventParameterNumericView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Method\Views\EventParameterTextView.xaml.cs">
+      <DependentUpon>EventParameterTextView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Method\Views\FailedMethodLoadWindow.xaml.cs">
       <DependentUpon>FailedMethodLoadWindow.xaml</DependentUpon>
@@ -621,7 +633,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Method\Views\EventParameterView.xaml">
+    <Page Include="Method\Views\EventParameterBoolView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\EventParameterEnumView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\EventParameterNumericView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Method\Views\EventParameterTextView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

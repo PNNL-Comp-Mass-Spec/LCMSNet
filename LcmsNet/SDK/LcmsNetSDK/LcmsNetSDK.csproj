@@ -91,7 +91,7 @@
     <Compile Include="Logging\DbLogger.cs" />
     <Compile Include="Logging\DbLoggerException.cs" />
     <Compile Include="Logging\IDeviceHealthWriter.cs" />
-    <Compile Include="Method\IParameter.cs" />
+    <Compile Include="Method\ILCEventParameter.cs" />
     <Compile Include="Method\InvalidTimeSpanException.cs" />
     <Compile Include="Method\LCEvent.cs" />
     <Compile Include="Method\LCMethod.cs" />

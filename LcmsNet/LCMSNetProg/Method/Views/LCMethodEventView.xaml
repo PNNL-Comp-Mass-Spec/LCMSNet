@@ -27,16 +27,25 @@
         <StackPanel DockPanel.Dock="Right" Background="{Binding EventBackColor}" Visibility="{Binding EventUnlocked, Converter={StaticResource BoolToVis}}">
         </StackPanel>
         <ItemsControl ItemsSource="{Binding EventParameterList}">
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type viewModels:EventParameterBoolViewModel}">
+                    <views:EventParameterBoolView DataContext="{Binding BindsDirectlyToSource=True}" />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModels:EventParameterEnumViewModel}">
+                    <views:EventParameterEnumView DataContext="{Binding BindsDirectlyToSource=True}" />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModels:EventParameterNumericViewModel}">
+                    <views:EventParameterNumericView DataContext="{Binding BindsDirectlyToSource=True}" />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModels:EventParameterTextViewModel}">
+                    <views:EventParameterTextView DataContext="{Binding BindsDirectlyToSource=True}" />
+                </DataTemplate>
+            </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <views:EventParameterView DataContext="{Binding BindsDirectlyToSource=True}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
         </ItemsControl>
     </DockPanel>
 </UserControl>
