@@ -1,77 +1,47 @@
-﻿using System.Collections.Generic;
-
-namespace LcmsNetSDK.Method
+﻿namespace LcmsNetSDK.Method
 {
-    /// <summary>
-    /// Class that pairs parameter values with controls and their names for editing them.
-    /// </summary>
     public class LCMethodEventParameter
     {
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public LCMethodEventParameter()
-        {
-            Values = new List<object>();
-            ViewModels = new List<ILCEventParameter>();
-            Names = new List<string>();
-            DataProviderNames = new List<string>();
-        }
-
-        /// <summary>
-        /// Gets the names of each parameter.
-        /// </summary>
-        public List<string> Names { get; }
-
-        /// <summary>
-        /// Gets the values to use with the method.
-        /// </summary>
-        public List<object> Values { get; }
-
-        /// <summary>
-        /// Gets the list of ViewModels to edit the values.
-        /// </summary>
-        public List<ILCEventParameter> ViewModels { get; }
-
-        /// <summary>
-        /// List of data provider names.
-        /// </summary>
-        public List<string> DataProviderNames { get; }
-
-        /// <summary>
-        /// Adds a parameter value to the list of parameters and it's associated editing control.
-        /// </summary>
-        /// <param name="parameter">Parameter value to add.</param>
-        /// <param name="editViewModel">Edit ViewModel to use.</param>
+        /// <param name="value">Parameter value to add.</param>
+        /// <param name="viewModel">Edit ViewModel to use.</param>
         /// <param name="name"></param>
         /// <param name="dataProviderName">Name of the data provider to use.</param>
-        public void AddParameter(object parameter, ILCEventParameter editViewModel, string name, string dataProviderName)
+        public LCMethodEventParameter(string name, object value, ILCEventParameter viewModel, string dataProviderName)
         {
-            // We use the private set.
-            // Private so that the lists are only guaranteed to be synchronized.
-            Values.Add(parameter);
-            ViewModels.Add(editViewModel);
-            Names.Add(name);
-            DataProviderNames.Add(dataProviderName);
+            Name = name;
+            Value = value;
+            ViewModel = viewModel;
+            DataProviderName = dataProviderName;
         }
+
+        /// <summary>
+        /// Parameter name
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Parameter value to use with the event method
+        /// </summary>
+        public object Value { get; set; }
+
+        /// <summary>
+        /// ViewModel for editing the value
+        /// </summary>
+        public ILCEventParameter ViewModel { get; }
+
+        /// <summary>
+        /// Data provider name associated with the value options
+        /// </summary>
+        public string DataProviderName { get; }
 
         public override string ToString()
         {
-            var data = "";
-
-            foreach (var value in Values)
+            if (Value == null)
             {
-                if (value != null)
-                {
-                    data += value + ", ";
-                }
-                else
-                {
-                    data += ", -Not Set -, ";
-                }
+                return "- Not Set -";
             }
-            data = data.TrimEnd(',', ' ');
-            return data;
+
+            return Value.ToString();
         }
     }
 }

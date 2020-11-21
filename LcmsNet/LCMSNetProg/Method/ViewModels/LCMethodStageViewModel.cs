@@ -579,7 +579,7 @@ namespace LcmsNet.Method.ViewModels
             var eventData = "";
             if (deviceEvent.SelectedMethod?.MethodEventAttribute != null)
             {
-                eventData = string.Format("{0} - {1}", deviceEvent.SelectedMethod.Device.Name, deviceEvent.SelectedMethod.MethodEventAttribute.Name, deviceEvent.SelectedMethod.Parameters);
+                eventData = string.Format("{0} - {1}", deviceEvent.SelectedMethod.Device.Name, deviceEvent.SelectedMethod.MethodEventAttribute.Name, string.Join(", ", deviceEvent.SelectedMethod.Parameters));
             }
             ApplicationLogger.LogMessage(6, "Control event added - " + eventData);
             eventsList.Add(deviceEvent);
@@ -598,7 +598,7 @@ namespace LcmsNet.Method.ViewModels
 
             foreach (var lcEvent in method.Events)
             {
-                var parameters = new LCMethodEventParameter();
+                var parameters = new List<LCMethodEventParameter>();
                 for (var i = 0; i < lcEvent.Parameters.Length; i++)
                 {
                     var parameter = lcEvent.Parameters[i];
@@ -622,7 +622,7 @@ namespace LcmsNet.Method.ViewModels
                         }
                     }
 
-                    parameters.AddParameter(parameter, vm, name, lcEvent.MethodAttribute.DataProvider);
+                    parameters.Add(new LCMethodEventParameter(name, parameter, vm, lcEvent.MethodAttribute.DataProvider));
                 }
 
                 var data = new LCMethodEventData(lcEvent.Device, lcEvent.Method, lcEvent.MethodAttribute, parameters)
@@ -699,16 +699,15 @@ namespace LcmsNet.Method.ViewModels
                 var indexOfLastDeleted = eventsList.IndexOf(deviceEvent);
                 var data = deviceEvent.SelectedMethod;
                 var device = deviceEvent.SelectedDevice;
-                var parameter = data.Parameters;
 
-                for (var i = 0; i < parameter.Names.Count; i++)
+                foreach (var parameter in data.Parameters)
                 {
-                    var combo = parameter.ViewModels[i] as EventParameterEnumViewModel;
+                    var combo = parameter.ViewModel as EventParameterEnumViewModel;
 
                     if (combo == null)
                         continue;
 
-                    var key = parameter.DataProviderNames[i];
+                    var key = parameter.DataProviderName;
 
                     if (key == null)
                         continue;

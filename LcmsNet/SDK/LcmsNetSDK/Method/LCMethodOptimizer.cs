@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
@@ -278,11 +279,8 @@ namespace LcmsNetSDK.Method
                     lcEvent.MethodAttribute = data.MethodEventAttribute;
                     lcEvent.OptimizeWith = data.OptimizeWith;
 
-                    var parameters = new object[data.Parameters.Values.Count];
-                    data.Parameters.Values.CopyTo(parameters, 0);
-
-                    var parameterNames = new string[data.Parameters.Names.Count];
-                    data.Parameters.Names.CopyTo(parameterNames, 0);
+                    var parameters = data.Parameters.Select(x => x.Value).ToArray();
+                    var parameterNames = data.Parameters.Select(x => x.Name).ToArray();
 
                     lcEvent.Parameters = parameters;
                     lcEvent.ParameterNames = parameterNames;
@@ -308,11 +306,10 @@ namespace LcmsNetSDK.Method
                         // Construct a new instance of the timer since timers are only for waiting
                         // and not for device control.
                         //
-                        var newTimer = new TimerDevice();
-                        newTimer.Name = timer.Name;
+                        var newTimer = new TimerDevice { Name = timer.Name };
                         lcEvent.Device = newTimer;
                         lcEvent.Duration = new TimeSpan(0, 0, 0,
-                            Convert.ToInt32(Convert.ToDouble(data.Parameters.Values[0])));
+                            Convert.ToInt32(Convert.ToDouble(data.Parameters[0].Value)));
                     }
                     else
                     {
@@ -324,7 +321,7 @@ namespace LcmsNetSDK.Method
                         //
                         if (data.MethodEventAttribute.TimeoutType == MethodOperationTimeoutType.Parameter)
                         {
-                            time = Convert.ToInt32(data.Parameters.Values[0]);
+                            time = Convert.ToInt32(data.Parameters[0].Value);
                         }
                         else if (data.MethodEventAttribute.TimeoutType == MethodOperationTimeoutType.CallMethod)
                         {
@@ -340,7 +337,7 @@ namespace LcmsNetSDK.Method
                                 throw new NotSupportedException("Developer Error!!! Valid Timeout Calculation Method not found, device is " + data.Device.GetType() + ", method supplied is " + data.MethodEventAttribute.TimeoutCalculationMethod);
                             }
 
-                            var methodParameters = data.Parameters.Values.ToArray();
+                            var methodParameters = data.Parameters.Select(x => x.Value).ToArray();
                             if (timeMethod.GetParameters().Length != methodParameters.Length)
                             {
                                 throw new NotSupportedException("Developer Error!!! Valid Timeout Calculation Method not found (parameter count), device is " + data.Device.GetType() + ", method supplied is " + data.MethodEventAttribute.TimeoutCalculationMethod);

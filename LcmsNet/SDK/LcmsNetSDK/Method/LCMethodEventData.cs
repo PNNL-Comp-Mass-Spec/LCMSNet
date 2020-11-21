@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using LcmsNetSDK.Devices;
 
@@ -29,7 +30,7 @@ namespace LcmsNetSDK.Method
         public LCMethodEventData(IDevice device,
             MethodInfo info,
             LCMethodEventAttribute attr,
-            LCMethodEventParameter parameter)
+            IReadOnlyList<LCMethodEventParameter> parameter)
         {
             Method = info;
             Parameters = parameter;
@@ -46,14 +47,14 @@ namespace LcmsNetSDK.Method
         /// </summary>
         public void BuildEvent()
         {
-            for (var i = 0; i < Parameters.ViewModels.Count; i++)
+            foreach (var parameter in Parameters)
             {
-                var vm = Parameters.ViewModels[i];
+                var vm = parameter.ViewModel;
 
                 // Grab the ViewModels value to be used later on
                 if (vm != null)
                 {
-                    Parameters.Values[i] = vm.ParameterValue;
+                    parameter.Value = vm.ParameterValue;
                 }
             }
         }
@@ -82,19 +83,16 @@ namespace LcmsNetSDK.Method
 
         public LCMethodEventData Clone()
         {
-            var parameters = new LCMethodEventParameter();
-            parameters.Names.AddRange(Parameters.Names);
-            parameters.Values.AddRange(Parameters.Values);
-            parameters.DataProviderNames.AddRange(Parameters.DataProviderNames);
-            foreach (var parameterVm in Parameters.ViewModels)
+            var parameters = new List<LCMethodEventParameter>();
+            foreach (var parameter in Parameters)
             {
-                var vm = parameterVm?.CreateDuplicate();
+                var vm = parameter.ViewModel?.CreateDuplicate();
                 if (vm is ILCEventParameterWithDataProvider dpvm)
                 {
                     Device.RegisterDataProvider(MethodEventAttribute.DataProvider, dpvm.FillData);
                 }
 
-                parameters.ViewModels.Add(vm);
+                parameters.Add(new LCMethodEventParameter(parameter.Name, parameter.Value, vm, parameter.DataProviderName));
             }
 
             var copy = new LCMethodEventData(Device, Method, MethodEventAttribute, parameters);
@@ -126,9 +124,9 @@ namespace LcmsNetSDK.Method
         public LCMethodEventAttribute MethodEventAttribute { get; set; }
 
         /// <summary>
-        /// Gets or sets the parameter values.
+        /// Gets the parameter values.
         /// </summary>
-        public LCMethodEventParameter Parameters { get; set; }
+        public IReadOnlyList<LCMethodEventParameter> Parameters { get; }
 
         /// <summary>
         /// Gets or sets whether this event is part of the optimization step.

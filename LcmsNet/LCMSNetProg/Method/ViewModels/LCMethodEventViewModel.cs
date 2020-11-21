@@ -451,7 +451,7 @@ namespace LcmsNet.Method.ViewModels
             var parameters = methodEvent.Parameters;
 
             // This readjusts the number of parameters that are sample specific
-            var count = parameters.ViewModels.Count * 2;
+            var count = parameters.Count * 2;
             var indexOfSampleData = methodEvent.MethodEventAttribute.SampleParameterIndex;
 
             // Update the style so we have the right spacing
@@ -463,15 +463,16 @@ namespace LcmsNet.Method.ViewModels
             //}
 
             // Add the controls to the mpanel_parameter controls
-            for (var j = 0; j < parameters.ViewModels.Count; j++)
+            for (var j = 0; j < parameters.Count; j++)
             {
                 if (j != indexOfSampleData)
                 {
+                    var parameter = parameters[j];
                     // Get the name of the parameter
-                    var name = parameters.Names[j];
+                    var name = parameter.Name;
 
                     // Get the ViewModel for the parameter
-                    var vm = parameters.ViewModels[j];
+                    var vm = parameter.ViewModel;
 
                     // Construct the description for the parameter
                     vm.ParameterLabel = name;
@@ -479,7 +480,7 @@ namespace LcmsNet.Method.ViewModels
                     // Add the control itself
                     eventParameterList.Add(vm);
 
-                    vm.ParameterValue = parameters.Values[j];
+                    vm.ParameterValue = parameter.Value;
                     vm.EventChanged += param_EventChanged;
                 }
             }
@@ -590,7 +591,7 @@ namespace LcmsNet.Method.ViewModels
                     {
                         // Grab the parameters used for this method
                         var info = method.GetParameters();
-                        var parameters = new LCMethodEventParameter();
+                        var parameters = new List<LCMethodEventParameter>();
 
                         // Here we are looking to see if the method has a parameter
                         // that requires a data provider.
@@ -610,7 +611,7 @@ namespace LcmsNet.Method.ViewModels
                                 // other data to be loaded.
                                 if (attr.RequiresSampleInput && i == attr.SampleParameterIndex)
                                 {
-                                    parameters.AddParameter(null, null, paramInfo.Name, attr.DataProvider);
+                                    parameters.Add(new LCMethodEventParameter(paramInfo.Name, null, null, attr.DataProvider));
                                 }
                                 else if (string.IsNullOrEmpty(attr.DataProvider) == false && i == attr.DataProviderIndex)
                                 {
@@ -623,7 +624,7 @@ namespace LcmsNet.Method.ViewModels
                                     // Set the data if we have it, otherwise, cross your fingers batman!
                                     if (combo.ComboBoxOptions.Count > 0)
                                         value = combo.ComboBoxOptions[0];
-                                    parameters.AddParameter(value, vm, paramInfo.Name, attr.DataProvider);
+                                    parameters.Add(new LCMethodEventParameter(paramInfo.Name, value, vm, attr.DataProvider));
                                 }
                                 else
                                 {
@@ -642,7 +643,7 @@ namespace LcmsNet.Method.ViewModels
                                     // And well you're SOL.
                                     if (vm != null)
                                     {
-                                        parameters.AddParameter(value, vm, paramInfo.Name, attr.DataProvider);
+                                        parameters.Add(new LCMethodEventParameter(paramInfo.Name, value, vm, attr.DataProvider));
                                     }
                                 }
                                 i++;
