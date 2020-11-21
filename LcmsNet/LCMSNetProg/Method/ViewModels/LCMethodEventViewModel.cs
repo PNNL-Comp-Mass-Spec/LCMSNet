@@ -615,7 +615,7 @@ namespace LcmsNet.Method.ViewModels
                                 else if (string.IsNullOrEmpty(attr.DataProvider) == false && i == attr.DataProviderIndex)
                                 {
                                     // Figure out what index to adjust the data provider for.
-                                    var combo = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum);
+                                    var combo = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum, paramInfo.ParameterType);
 
                                     // Register the event to automatically get new data when the data provider has new stuff.
                                     device.RegisterDataProvider(attr.DataProvider, combo.FillData);
@@ -687,7 +687,7 @@ namespace LcmsNet.Method.ViewModels
             if (t.IsEnum)
             {
                 // Add the parameters to the combo box before we do anything.
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum);
+                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum, t);
                 using (control.ComboBoxOptions.SuppressChangeNotifications())
                 {
                     // Grab the enumeration values for the parameter
@@ -697,15 +697,15 @@ namespace LcmsNet.Method.ViewModels
             }
             else if (NumericTypes.Contains(t))
             {
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Numeric);
+                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Numeric, t);
             }
             else if (typeof(string) == t)
             {
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Text);
+                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Text, t);
             }
             else if (typeof(bool) == t)
             {
-                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Boolean);
+                control = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Boolean, t);
             }
 
             return control;

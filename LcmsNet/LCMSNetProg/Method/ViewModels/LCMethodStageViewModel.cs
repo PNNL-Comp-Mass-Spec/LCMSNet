@@ -609,7 +609,7 @@ namespace LcmsNet.Method.ViewModels
                     if (lcEvent.MethodAttribute.DataProviderIndex == i)
                     {
                         // Figure out what index to adjust the data provider for.
-                        var combo = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum);
+                        var combo = new EventParameterViewModel(EventParameterViewModel.ParameterTypeEnum.Enum, parameter.GetType());
 
                         // Register the event to automatically get new data when the data provider has new stuff.
                         lcEvent.Device.RegisterDataProvider(lcEvent.MethodAttribute.DataProvider, combo.FillData);

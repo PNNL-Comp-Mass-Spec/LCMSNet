@@ -25,11 +25,14 @@ namespace LcmsNet.Method.ViewModels
         {
         }
 
-        public EventParameterViewModel(ParameterTypeEnum type)
+        public EventParameterViewModel(ParameterTypeEnum paramType, Type type)
         {
-            ParameterType = type;
+            ParameterType = paramType;
             NumberMinimum = 0.0;
             NumberMaximum = 10000000000.0;
+            Type = type;
+
+            CanShowDecimals = paramType == ParameterTypeEnum.Numeric && (type == typeof(double) || type == typeof(float));
         }
 
         private string parameterLabel = "";
@@ -41,6 +44,8 @@ namespace LcmsNet.Method.ViewModels
         public bool ShowCheckBox => ParameterType == ParameterTypeEnum.Boolean;
 
         public event EventHandler EventChanged;
+
+        public Type Type { get; }
 
         public string ParameterLabel
         {
@@ -57,7 +62,7 @@ namespace LcmsNet.Method.ViewModels
                     case ParameterTypeEnum.Enum:
                         return SelectedOption;
                     case ParameterTypeEnum.Numeric:
-                        return NumberValue;
+                        return Convert.ChangeType(NumberValue, Type);
                     case ParameterTypeEnum.Text:
                         return TextValue;
                     case ParameterTypeEnum.Boolean:
@@ -202,12 +207,18 @@ namespace LcmsNet.Method.ViewModels
             set => this.RaiseAndSetIfChanged(ref numberMaximum, value);
         }
 
+        public bool CanShowDecimals { get; }
+
         public int DecimalPlaces
         {
             get => decimalPlaces;
             set
             {
                 var oldValue = decimalPlaces;
+                if (!CanShowDecimals)
+                {
+                    value = 0;
+                }
                 this.RaiseAndSetIfChanged(ref decimalPlaces, value);
                 if (oldValue != decimalPlaces)
                 {
