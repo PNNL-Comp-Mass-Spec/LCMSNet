@@ -11,7 +11,7 @@ namespace LcmsNet.Method.ViewModels
 {
     public delegate void DelegateLCMethodEventOptimize(object sender, bool optimize);
 
-    public delegate void DelegateLCMethodEventLocked(object sender, bool enabled, LCMethodData methodData);
+    public delegate void DelegateLCMethodEventLocked(object sender, bool enabled, LCMethodEventData methodData);
 
     /// <summary>
     /// LC-Method User Interface for building an LC-Method.
@@ -23,7 +23,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// List of device methods and parameters to use.
         /// </summary>
-        private static readonly Dictionary<IDevice, List<LCMethodData>> DeviceMappings = new Dictionary<IDevice, List<LCMethodData>>();
+        private static readonly Dictionary<IDevice, List<LCMethodEventData>> DeviceMappings = new Dictionary<IDevice, List<LCMethodEventData>>();
 
         private static readonly ReactiveList<IDevice> DevicesList = new ReactiveList<IDevice>();
 
@@ -61,7 +61,7 @@ namespace LcmsNet.Method.ViewModels
 
             // Handle user interface events to display context of method editors
             this.WhenAnyValue(x => x.SelectedDevice).Subscribe(x => this.SelectedDeviceChanged());
-            this.WhenAnyValue(x => x.SelectedLCMethod).Subscribe(x => this.SelectedMethodChanged());
+            this.WhenAnyValue(x => x.SelectedLCEvent).Subscribe(x => this.SelectedMethodChanged());
             this.WhenAnyValue(x => x.OptimizeWith).Subscribe(x => this.OptimizeForChanged());
             Breakpoint.BreakpointChanged += Breakpoint_Changed;
 
@@ -80,7 +80,7 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         /// <param name="methodData"></param>
         /// <param name="locked"></param>
-        public LCMethodEventViewModel(LCMethodData methodData, bool locked) : this(1)
+        public LCMethodEventViewModel(LCMethodEventData methodData, bool locked) : this(1)
         {
             SelectedDevice = methodData.Device;
             // Every device is a reference held in the device manager...except for the timer
@@ -112,9 +112,9 @@ namespace LcmsNet.Method.ViewModels
             if (locked)
             {
                 // Create a dummy classLCMethodData
-                var tempObj = new LCMethodData(null, null, new LCMethodEventAttribute("Unlock", 0.0, "", 0, false), null);
+                var tempObj = new LCMethodEventData(null, null, new LCMethodEventAttribute("Unlock", 0.0, "", 0, false), null);
                 methodsComboBoxOptions.Add(tempObj);
-                SelectedLCMethod = tempObj;
+                SelectedLCEvent = tempObj;
             }
             else
             {
@@ -124,13 +124,13 @@ namespace LcmsNet.Method.ViewModels
                 // with the method we previously selected. This way we preserve the parameter values etc.
                 var index = FindMethodIndex(methodData);
                 methodsComboBoxOptions[index] = methodData;
-                SelectedLCMethod = methodData;
+                SelectedLCEvent = methodData;
 
-                LoadMethodParameters(methodData);
+                LoadMethodEventParameters(methodData);
             }
 
             IsLockingEvent = locked;
-            this.methodData = methodData;
+            this.methodEventData = methodData;
         }
 
         /// <summary>
@@ -152,28 +152,28 @@ namespace LcmsNet.Method.ViewModels
 
         ~LCMethodEventViewModel()
         {
-            if (methodData != null)
+            if (methodEventData != null)
             {
-                methodData.BreakPointEvent -= BreakPointEvent_Handler;
-                methodData.Simulated -= Simulated_Handler;
-                methodData.SimulatingEvent -= Simulating_Handler;
+                methodEventData.BreakPointEvent -= BreakPointEvent_Handler;
+                methodEventData.Simulated -= Simulated_Handler;
+                methodEventData.SimulatingEvent -= Simulating_Handler;
             }
         }
 
         void Breakpoint_Changed(object sender, BreakpointArgs e)
         {
-            if (methodData != null)
-                methodData.BreakPoint = e.IsSet;
+            if (methodEventData != null)
+                methodEventData.BreakPoint = e.IsSet;
         }
 
-        private int FindMethodIndex(LCMethodData method)
+        private int FindMethodIndex(LCMethodEventData method)
         {
             var i = 0;
             foreach (var data in MethodsComboBoxOptions)
             {
                 if (data != null)
                 {
-                    if (data.MethodAttribute.Name.Equals(method.MethodAttribute.Name))
+                    if (data.MethodEventAttribute.Name.Equals(method.MethodEventAttribute.Name))
                         return i;
                 }
                 i++;
@@ -186,14 +186,14 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Method data that has been selected to be displayed.
         /// </summary>
-        private LCMethodData methodData;
+        private LCMethodEventData methodEventData;
 
         private BreakpointViewModel breakpoint;
         private string eventNumber = "1";
         private bool optimizeWith = false;
         private IDevice selectedDevice = null;
-        private LCMethodData selectedLCMethod = null;
-        private readonly ReactiveList<LCMethodData> methodsComboBoxOptions = new ReactiveList<LCMethodData>();
+        private LCMethodEventData selectedLCEvent = null;
+        private readonly ReactiveList<LCMethodEventData> methodsComboBoxOptions = new ReactiveList<LCMethodEventData>();
         private readonly ReactiveList<EventParameterViewModel> eventParameterList = new ReactiveList<EventParameterViewModel>();
         private bool isSelected = false;
         private readonly ObservableAsPropertyHelper<bool> devicesComboBoxEnabled;
@@ -224,16 +224,16 @@ namespace LcmsNet.Method.ViewModels
         }
 
         /// <summary>
-        /// The selected method
+        /// The selected method event
         /// </summary>
-        public LCMethodData SelectedLCMethod
+        public LCMethodEventData SelectedLCEvent
         {
-            get => selectedLCMethod;
-            set => this.RaiseAndSetIfChanged(ref selectedLCMethod, value);
+            get => selectedLCEvent;
+            set => this.RaiseAndSetIfChanged(ref selectedLCEvent, value);
         }
 
         public IReadOnlyReactiveList<IDevice> DevicesComboBoxOptions => DevicesList;
-        public IReadOnlyReactiveList<LCMethodData> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public IReadOnlyReactiveList<LCMethodEventData> MethodsComboBoxOptions => methodsComboBoxOptions;
         public IReadOnlyReactiveList<EventParameterViewModel> EventParameterList => eventParameterList;
         public bool DevicesComboBoxEnabled => devicesComboBoxEnabled.Value && EventUnlocked;
         public bool EventUnlocked { get; }
@@ -247,27 +247,27 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Gets the method selected to run by the user.
         /// </summary>
-        public LCMethodData SelectedMethod
+        public LCMethodEventData SelectedMethod
         {
             get
             {
-                if (methodData != null)
+                if (methodEventData != null)
                 {
                     // Link the method to a device
-                    methodData.Device = SelectedDevice;
-                    methodData.OptimizeWith = OptimizeWith;
-                    methodData.BreakPoint = Breakpoint.IsSet;
+                    methodEventData.Device = SelectedDevice;
+                    methodEventData.OptimizeWith = OptimizeWith;
+                    methodEventData.BreakPoint = Breakpoint.IsSet;
 
                     // Make sure that we build the method so that the values are updated
                     // from the control used to interface them....
-                    methodData.BuildMethod();
+                    methodEventData.BuildEvent();
 
-                    methodData.BreakPointEvent += BreakPointEvent_Handler;
-                    methodData.Simulated += Simulated_Handler;
-                    methodData.SimulatingEvent += Simulating_Handler;
+                    methodEventData.BreakPointEvent += BreakPointEvent_Handler;
+                    methodEventData.Simulated += Simulated_Handler;
+                    methodEventData.SimulatingEvent += Simulating_Handler;
                 }
 
-                return methodData;
+                return methodEventData;
             }
         }
 
@@ -288,7 +288,7 @@ namespace LcmsNet.Method.ViewModels
                 {
                     return Brushes.Yellow;
                 }
-                if (methodData != null && methodData.BreakPoint)
+                if (methodEventData != null && methodEventData.BreakPoint)
                 {
                     return Brushes.Maroon;
                 }
@@ -415,7 +415,7 @@ namespace LcmsNet.Method.ViewModels
 
             if (methodsComboBoxOptions.Count > 0)
             {
-                SelectedLCMethod = methodsComboBoxOptions[0];
+                SelectedLCEvent = methodsComboBoxOptions[0];
                 UpdateSelectedMethod();
             }
         }
@@ -423,11 +423,11 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Displays the given device method names and selected controls.
         /// </summary>
-        /// <param name="method"></param>
-        private void LoadMethodParameters(LCMethodData method)
+        /// <param name="methodEvent"></param>
+        private void LoadMethodEventParameters(LCMethodEventData methodEvent)
         {
             // Make sure the device is not null
-            if (method == null)
+            if (methodEvent == null)
                 return;
 
             // Clear out the combo-box
@@ -448,11 +448,11 @@ namespace LcmsNet.Method.ViewModels
             //mpanel_parameters.ColumnStyles.Clear();
 
             // If the method requires sample input then we just ignore adding any controls.
-            var parameters = method.Parameters;
+            var parameters = methodEvent.Parameters;
 
             // This readjusts the number of parameters that are sample specific
             var count = parameters.Controls.Count * 2;
-            var indexOfSampleData = method.MethodAttribute.SampleParameterIndex;
+            var indexOfSampleData = methodEvent.MethodEventAttribute.SampleParameterIndex;
 
             // Update the style so we have the right spacing
             //var percent = 100.0F / Convert.ToSingle(count);
@@ -510,22 +510,22 @@ namespace LcmsNet.Method.ViewModels
         private void UpdateSelectedMethod()
         {
             // Update the user interface.
-            var method = SelectedLCMethod;
-            if (method != methodData)
+            var method = SelectedLCEvent;
+            if (method != methodEventData)
             {
-                if (methodData != null)
+                if (methodEventData != null)
                 {
-                    methodData.BreakPointEvent -= BreakPointEvent_Handler;
-                    methodData.Simulated -= Simulated_Handler;
+                    methodEventData.BreakPointEvent -= BreakPointEvent_Handler;
+                    methodEventData.Simulated -= Simulated_Handler;
                 }
-                methodData = method;
+                methodEventData = method;
                 if (method != null)
                 {
-                    methodData.BreakPointEvent += BreakPointEvent_Handler;
-                    methodData.Simulated += Simulated_Handler;
+                    methodEventData.BreakPointEvent += BreakPointEvent_Handler;
+                    methodEventData.Simulated += Simulated_Handler;
                     if (SelectedDevice != null)
                     {
-                        LoadMethodParameters(methodData);
+                        LoadMethodEventParameters(methodEventData);
                     }
                 }
             }
@@ -568,7 +568,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Reflects the given device and puts the method and parameter information in the appropriate combo boxes.
         /// </summary>
-        public static List<LCMethodData> ReflectDevice(IDevice device)
+        public static List<LCMethodEventData> ReflectDevice(IDevice device)
         {
             if (device == null)
                 throw new NullReferenceException("Device cannot be null.");
@@ -576,7 +576,7 @@ namespace LcmsNet.Method.ViewModels
             var type = device.GetType();
 
             // List of method editing pairs
-            var methodPairs = new List<LCMethodData>();
+            var methodPairs = new List<LCMethodEventData>();
 
             // We are trying to enumerate all the methods for this device building their method-parameter pairs.
             foreach (var method in type.GetMethods())
@@ -652,7 +652,7 @@ namespace LcmsNet.Method.ViewModels
                         // Construct the new method from what we found
                         // during the reflection phase and add it to the list of
                         // possible methods to call for this device.
-                        var newMethod = new LCMethodData(device, method, attr, parameters);
+                        var newMethod = new LCMethodEventData(device, method, attr, parameters);
                         methodPairs.Add(newMethod);
                     }
                 }
@@ -757,8 +757,8 @@ namespace LcmsNet.Method.ViewModels
         private void OptimizeForChanged()
         {
             UseForOptimization?.Invoke(this, OptimizeWith);
-            if (methodData != null)
-                methodData.OptimizeWith = OptimizeWith;
+            if (methodEventData != null)
+                methodEventData.OptimizeWith = OptimizeWith;
             OnEventChanged();
         }
 

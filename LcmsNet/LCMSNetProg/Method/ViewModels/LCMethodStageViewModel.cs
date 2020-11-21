@@ -152,7 +152,7 @@ namespace LcmsNet.Method.ViewModels
             get
             {
                 // Grab the selected method items from the user interfaces
-                var data = new List<LCMethodData>();
+                var data = new List<LCMethodEventData>();
                 foreach (var lcEvent in eventsList)
                 {
                     data.Add(lcEvent.SelectedMethod);
@@ -577,9 +577,9 @@ namespace LcmsNet.Method.ViewModels
             deviceEvent.EventChanged += deviceEvent_EventChanged;
 
             var eventData = "";
-            if (deviceEvent.SelectedMethod?.MethodAttribute != null)
+            if (deviceEvent.SelectedMethod?.MethodEventAttribute != null)
             {
-                eventData = string.Format("{0} - {1}", deviceEvent.SelectedMethod.Device.Name, deviceEvent.SelectedMethod.MethodAttribute.Name, deviceEvent.SelectedMethod.Parameters);
+                eventData = string.Format("{0} - {1}", deviceEvent.SelectedMethod.Device.Name, deviceEvent.SelectedMethod.MethodEventAttribute.Name, deviceEvent.SelectedMethod.Parameters);
             }
             ApplicationLogger.LogMessage(6, "Control event added - " + eventData);
             eventsList.Add(deviceEvent);
@@ -626,7 +626,7 @@ namespace LcmsNet.Method.ViewModels
                     parameters.AddParameter(parameter, control, name, lcEvent.MethodAttribute.DataProvider);
                 }
 
-                var data = new LCMethodData(lcEvent.Device, lcEvent.Method, lcEvent.MethodAttribute, parameters)
+                var data = new LCMethodEventData(lcEvent.Device, lcEvent.Method, lcEvent.MethodAttribute, parameters)
                     { OptimizeWith = lcEvent.OptimizeWith };
 
                 // Construct an event.  We send false as locked because its not a locking event.
@@ -666,7 +666,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="sender"></param>
         /// <param name="enabled"></param>
         /// <param name="method"></param>
-        void deviceEvent_Lock(object sender, bool enabled, LCMethodData method)
+        void deviceEvent_Lock(object sender, bool enabled, LCMethodEventData method)
         {
             if (!enabled)
                 return;

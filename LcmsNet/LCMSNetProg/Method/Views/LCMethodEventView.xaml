@@ -20,7 +20,7 @@
         <views:BreakpointView DockPanel.Dock="Left" Margin="3" DataContext="{Binding Breakpoint}" />
         <CheckBox DockPanel.Dock="Left" VerticalAlignment="Center" Margin="3" Background="Silver" IsChecked="{Binding IsSelected}" />
         <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DevicesComboBoxOptions}" IsEnabled="{Binding DevicesComboBoxEnabled}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-        <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedLCMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" IsEnabled="{Binding EventUnlocked}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+        <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedLCEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" IsEnabled="{Binding EventUnlocked}" cueBannerOverlay:CueBannerService.CueBanner="Select" ToolTip="{Binding SelectedLCEvent.MethodEventAttribute.EventDescription}" />
         <CheckBox DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" ToolTip="Optimize" Background="{Binding EventBackColor}" Visibility="{Binding EventUnlocked, Converter={StaticResource BoolToVis}}" IsChecked="{Binding OptimizeWith}">
             <Image Source="{StaticResource HighlighterImage}" />
         </CheckBox>

@@ -163,7 +163,7 @@ namespace LcmsNetSDK.Method
         public int DataProviderIndex { get; }
 
         /// <summary>
-        /// Gets or sets whether this method has discreet states.
+        /// Gets or sets whether this method has discrete states.
         /// </summary>
         public bool HasDiscreteParameters { get; set; }
 

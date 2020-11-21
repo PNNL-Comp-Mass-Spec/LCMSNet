@@ -246,7 +246,7 @@ namespace LcmsNetSDK.Method
         /// </summary>
         /// <param name="methods">Method selections to convert into events.</param>
         /// <returns>List of LC-events to perform as part of an overall method.</returns>
-        public static List<LCEvent> ConstructEvents(List<LCMethodData> methods)
+        public static List<LCEvent> ConstructEvents(List<LCMethodEventData> methods)
         {
             //DateTime startTime = DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
             var startTime = TimeKeeper.Instance.Now;
@@ -274,7 +274,7 @@ namespace LcmsNetSDK.Method
                     lcEvent = new LCEvent();
                     lcEvent.Device = data.Device;
                     lcEvent.Method = data.Method;
-                    lcEvent.MethodAttribute = data.MethodAttribute;
+                    lcEvent.MethodAttribute = data.MethodEventAttribute;
                     lcEvent.OptimizeWith = data.OptimizeWith;
 
                     var parameters = new object[data.Parameters.Values.Count];
@@ -286,16 +286,16 @@ namespace LcmsNetSDK.Method
                     lcEvent.Parameters = parameters;
                     lcEvent.ParameterNames = parameterNames;
                     lcEvent.Start = startTime.Add(span);
-                    lcEvent.Name = data.MethodAttribute.Name;
+                    lcEvent.Name = data.MethodEventAttribute.Name;
                     lcEvent.MethodData = data;
 
                     //
-                    // This tells any optimizer or scheduler that the event has discreet parameters.
+                    // This tells any optimizer or scheduler that the event has discrete parameters.
                     //
                     // This is useful if we are trying to optimize two methods that use the same valve, but
                     // don't require it to change the state.
                     //
-                    lcEvent.HasDiscreteStates = data.MethodAttribute.HasDiscreteParameters;
+                    lcEvent.HasDiscreteStates = data.MethodEventAttribute.HasDiscreteParameters;
 
                     //
                     // Check to see if the device is a timer so we can space out the events
@@ -315,13 +315,13 @@ namespace LcmsNetSDK.Method
                     }
                     else
                     {
-                        var time = Convert.ToInt32(data.MethodAttribute.OperationTime);
+                        var time = Convert.ToInt32(data.MethodEventAttribute.OperationTime);
 
                         //
                         // Check to see if the operation time is specified by the first parameter of the
                         // method.
                         //
-                        if (data.MethodAttribute.TimeoutType == MethodOperationTimeoutType.Parameter)
+                        if (data.MethodEventAttribute.TimeoutType == MethodOperationTimeoutType.Parameter)
                         {
                             time = Convert.ToInt32(data.Parameters.Values[0]);
                         }
@@ -332,6 +332,7 @@ namespace LcmsNetSDK.Method
                             //
                             time = CONST_REQUIRED_LC_EVENT_SPACING_SECONDS;
                         }
+
                         lcEvent.Duration = new TimeSpan(0, 0, 0, time);
                     }
 

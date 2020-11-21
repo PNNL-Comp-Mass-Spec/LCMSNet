@@ -15,21 +15,25 @@ namespace LcmsNetSDK.Method
     }
 
     /// <summary>
-    /// Class that holds the selected method and the value to pass for the parameters.
+    /// Class that holds the selected event and the value to pass for the parameters.
     /// </summary>
-    public class LCMethodData
+    public class LCMethodEventData
     {
         /// <summary>
-        /// Constructor that takes a method, and the value to call it with.
+        /// Constructor that takes a event, and the value to call it with.
         /// </summary>
-        public LCMethodData(IDevice device,
+        /// <param name="device"></param>
+        /// <param name="info">The info object about the method used by the event</param>
+        /// <param name="attr"></param>
+        /// <param name="parameter"></param>
+        public LCMethodEventData(IDevice device,
             MethodInfo info,
             LCMethodEventAttribute attr,
             LCMethodEventParameter parameter)
         {
             Method = info;
             Parameters = parameter;
-            MethodAttribute = attr;
+            MethodEventAttribute = attr;
             Device = device;
         }
 
@@ -38,9 +42,9 @@ namespace LcmsNetSDK.Method
         public event EventHandler SimulatingEvent;
 
         /// <summary>
-        /// Builds the method by grabbing the values stored in the ILCEventParameter objects.
+        /// Builds the event by grabbing the values stored in the ILCEventParameter objects.
         /// </summary>
-        public void BuildMethod()
+        public void BuildEvent()
         {
             for (var i = 0; i < Parameters.Controls.Count; i++)
             {
@@ -80,12 +84,12 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Returns the name of the method in human readable form.
+        /// Returns the name of the method/event in human readable form.
         /// </summary>
-        /// <returns>Name of the method</returns>
+        /// <returns>Name of the method/event</returns>
         public override string ToString()
         {
-            return string.IsNullOrWhiteSpace(MethodAttribute.Name) ? "Undefined method" : MethodAttribute.Name;
+            return string.IsNullOrWhiteSpace(MethodEventAttribute.Name) ? "Undefined method/event" : MethodEventAttribute.Name;
         }
 
         #region Properties
@@ -100,7 +104,7 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets or sets the method attribute information for this method.
         /// </summary>
-        public LCMethodEventAttribute MethodAttribute { get; set; }
+        public LCMethodEventAttribute MethodEventAttribute { get; set; }
 
         /// <summary>
         /// Gets or sets the parameter values.
