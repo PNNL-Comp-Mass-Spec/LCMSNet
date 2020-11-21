@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Threading;
 using System.Threading.Tasks;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetData;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
 namespace LcmsNetPlugins.VICI.Valves
 {
@@ -39,12 +41,13 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public const int LC_EVENT_SET_POSITION_TIME_SECONDS = 6;
 
-        //Model EMTCA-CE can take up to 3150(1161+(999*2)ms to rotate if only 4 positions are set
+        //Model EMTCA-CE can take up to 3150(1161+(999*2)ms to rotate if only 4 positions are set (and set to only rotate in one direction)
         //More positions reduces time it takes to rotate, but we can't know how many positions there are
         //Also, as LCEvents are timed in seconds, we round up to 4000ms to ensure that the
         //method isn't killed over 150ms + concurrency delays.
         // TODO: Universal actuator has "TM" command to notify how long the previous move took - should use it to calculate this delay time.
         private static readonly int RotationDelayTimeMsec = 4000;
+        private static readonly int StepRotationDelayTimeMsec = 1170; // max rotation time for a single step for a 4-port valve.
         private const int CONST_DEFAULT_TIMEOUT = 1500;
 
         #endregion
@@ -198,15 +201,16 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <param name="position">The new position.</param>
         public ValveErrors SetPosition(int position)
         {
-            var newPosition = Convert.ToInt32(position);
+            if (position == LastMeasuredPosition)
+            {
+                return ValveErrors.Success;
+            }
+
+            var newPosition = position;
             if (Emulation)
             {
                 LastSentPosition = LastMeasuredPosition = newPosition;
                 OnPosChanged(newPosition);
-                return ValveErrors.Success;
-            }
-            if(position == LastMeasuredPosition)
-            {
                 return ValveErrors.Success;
             }
 
@@ -239,6 +243,163 @@ namespace LcmsNetPlugins.VICI.Valves
             }
 
             return ValveErrors.BadArgument;
+        }
+
+        [LCMethodEvent("Step Full Cycles", MethodOperationTimeoutType.CallMethod, "", -1, false, EventDescription = "Cycle the valve through cycleCount full rotations, with a set time in each position (includes move time)", IgnoreLeftoverTime = true, TimeoutCalculationMethod = nameof(CalculateFullCycleSteppedTime))]
+        public ValveErrors FullCycleStepped(int cycleCount, int delayEachStepSeconds)
+        {
+            if (cycleCount == 0)
+            {
+                return ValveErrors.Success;
+            }
+
+            var endPosition = LastMeasuredPosition;
+
+            var result = ValveErrors.BadArgument;
+            for (var i = 0; i < cycleCount; i++)
+            {
+                for (var j = 0; j < NumberOfPositions; j++)
+                {
+                    result = StepPosition(delayEachStepSeconds);
+                    if (result != ValveErrors.Success)
+                    {
+                        break;
+                    }
+                }
+
+                if (result != ValveErrors.Success)
+                {
+                    break;
+                }
+            }
+
+            if (LastMeasuredPosition != endPosition && result == ValveErrors.Success)
+            {
+                result = ValveErrors.ValvePositionMismatch;
+            }
+
+            return result;
+        }
+
+        public int CalculateFullCycleSteppedTime(int cycleCount, int delayEachStepSeconds)
+        {
+            var msDelay = Math.Max(delayEachStepSeconds * 1000, StepRotationDelayTimeMsec);
+            // Tolerance: add in an extra step
+            var msTotal = msDelay * NumberOfPositions * cycleCount + msDelay;
+            return (int)Math.Ceiling(msTotal / 1000.0);
+        }
+
+        public ValveErrors StepToPosition(int endPosition, int delayEachStepSeconds)
+        {
+            // TODO: should this instead allow a full cycle?
+            if (endPosition == LastMeasuredPosition)
+            {
+                return ValveErrors.Success;
+            }
+
+            var result = ValveErrors.BadArgument;
+            while (LastMeasuredPosition != endPosition)
+            {
+                result = StepPosition(delayEachStepSeconds);
+                if (result != ValveErrors.Success)
+                {
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        public int CalculateStepToPositionTime(int endPosition, int delayEachStepSeconds)
+        {
+            var msDelay = Math.Max(delayEachStepSeconds * 1000, StepRotationDelayTimeMsec);
+            // Tolerance: add in an extra step
+            var msTotal = msDelay * (NumberOfPositions + 1);
+            return (int)Math.Ceiling(msTotal / 1000.0);
+        }
+
+        [LCMethodEvent("Step N Positions", MethodOperationTimeoutType.CallMethod, "", -1, false, EventDescription = "Step the valve the specified number of times, with a set time in each position (includes move time)", IgnoreLeftoverTime = true, TimeoutCalculationMethod = nameof(CalculateStepNPositionsTime))]
+        public ValveErrors StepNPositions(int stepCount, int delayEachStepSeconds)
+        {
+            if (stepCount <= 0)
+            {
+                return ValveErrors.Success;
+            }
+
+            var result = ValveErrors.BadArgument;
+            for (var i = 0; i < stepCount; i++)
+            {
+                result = StepPosition(delayEachStepSeconds);
+                if (result != ValveErrors.Success)
+                {
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        public int CalculateStepNPositionsTime(int stepCount, int delayEachStepSeconds)
+        {
+            var msDelay = Math.Max(delayEachStepSeconds * 1000, StepRotationDelayTimeMsec);
+            // Tolerance: add in an extra step
+            var msTotal = msDelay * (stepCount + 1);
+            return (int) Math.Ceiling(msTotal / 1000.0);
+        }
+
+        private ValveErrors StepPosition(int delaySeconds)
+        {
+            var newPosition = LastMeasuredPosition + 1;
+            if (newPosition > NumberOfPositions)
+            {
+                newPosition = 1;
+            }
+
+            if (Emulation)
+            {
+                LastSentPosition = LastMeasuredPosition = newPosition;
+                OnPosChanged(newPosition);
+                Thread.Sleep(delaySeconds * 1000);
+                return ValveErrors.Success;
+            }
+
+            // TODO: Set the rotationalDelayTimeMs based on the number of positions, and then wait positions changed + 1 for it to change?
+            // TODO: Hard challenge is dealing with valves that are configured with unidirectional movement
+            // TODO: Math for setting the delay for bidirectional movement: Math.Min(Math.Abs(oldPos - newPos), (oldPos + newPos) % numPositions) * rotationalDelayTimeMs
+            // TODO: Read the rotation mode;
+            // TODO: If Auto, use the above math; if not:
+            // TODO: clockwise/Forward: ((newPos - oldPos + numPositions) % numPositions) * rotationalDelayTimeMs
+            // TODO: counter-clockwise/Reverse: ((oldPos - newPos + numPositions) % numPositions) * rotationalDelayTimeMs
+
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+
+            LastSentPosition = newPosition;
+            //var sendError = SetHardwarePosition(newPosition.ToString(), RotationDelayTimeMsec);
+            // 'GO' by itself, on universal actuator, will change position (2-position) or advance to the next position (multiposition)
+            // Also, using 'GO' it may allow the user to step the valve in reverse direction by setting the move direction via the SM command or manual remote menu
+            var sendError = SetHardwarePosition("", StepRotationDelayTimeMsec);
+            if (sendError != ValveErrors.Success)
+            {
+                return sendError;
+            }
+
+            if (LastMeasuredPosition != LastSentPosition)
+            {
+                //ApplicationLogger.LogError(0, "Could not set position.  Valve did not move to intended position.");
+                return ValveErrors.ValvePositionMismatch;
+            }
+
+            OnPosChanged(LastMeasuredPosition);
+
+            sw.Stop();
+            var remainingMs = delaySeconds * 1000 - (int)sw.ElapsedMilliseconds;
+            if (remainingMs > 0)
+            {
+                System.Threading.Thread.Sleep(remainingMs);
+            }
+
+            //ApplicationLogger.LogMessage(0, Name + " changed position to: " + LastMeasuredPosition);
+            return ValveErrors.Success;
         }
 
         /// <summary>
