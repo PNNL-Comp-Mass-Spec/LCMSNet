@@ -36,7 +36,7 @@ namespace LcmsNetSDK.Data
         void LoadCacheFromDMS(bool shouldLoadExperiment);
         bool UpdateDMSCartAssignment(string requestList, string cartName, string cartConfigName, bool updateMode);
 
-        event ProgressEventHandler ProgressEvent;
+        event EventHandler<ProgressEventArgs> ProgressEvent;
 
         void OnProgressUpdate(ProgressEventArgs e);
 

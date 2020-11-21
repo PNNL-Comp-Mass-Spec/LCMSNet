@@ -94,7 +94,7 @@ namespace LcmsNetDmsTools
 
         #region "Events"
 
-        public event ProgressEventHandler ProgressEvent;
+        public event EventHandler<ProgressEventArgs> ProgressEvent;
 
         public void OnProgressUpdate(ProgressEventArgs e)
         {

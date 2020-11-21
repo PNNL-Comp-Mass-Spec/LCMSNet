@@ -2,9 +2,6 @@
 
 namespace LcmsNetData
 {
-    public delegate void MessageEventHandler(object sender, MessageEventArgs e);
-    public delegate void ProgressEventHandler(object sender, ProgressEventArgs e);
-
     public class MessageEventArgs : EventArgs
     {
         public readonly string Message;
