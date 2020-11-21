@@ -76,7 +76,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         private const string CONST_DEFAULT_CONFIG_FILEPATH = "HardwareConfig.ini";
 
         private bool devicesLocked;
-        private bool designTabSelected = true;
+        private bool designTabSelected = false;
         private FluidicsControlViewModel fluidicsControlVm;
         private ModelCheckReportsViewModel reporterVm;
         private AdvancedDeviceControlPanelViewModel advancedDeviceControlPanel;
