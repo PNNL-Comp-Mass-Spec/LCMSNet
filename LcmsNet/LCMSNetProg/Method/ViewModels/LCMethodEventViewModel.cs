@@ -517,7 +517,8 @@ namespace LcmsNet.Method.ViewModels
                     methodEventData.BreakPointEvent -= BreakPointEvent_Handler;
                     methodEventData.Simulated -= Simulated_Handler;
                 }
-                methodEventData = method;
+                // Create a clone of the method event so that we don't accidentally link multiple events together (same data) until the method is reloaded.
+                methodEventData = method?.Clone();
                 if (method != null)
                 {
                     methodEventData.BreakPointEvent += BreakPointEvent_Handler;
@@ -601,7 +602,7 @@ namespace LcmsNet.Method.ViewModels
                             var i = 0;
                             foreach (var paramInfo in info)
                             {
-                                ILCEventParameter control = null;
+                                ILCEventParameter vm = null;
                                 object value = null;
 
                                 // If the method editor has to use sample data then
@@ -618,16 +619,16 @@ namespace LcmsNet.Method.ViewModels
 
                                     // Register the event to automatically get new data when the data provider has new stuff.
                                     device.RegisterDataProvider(attr.DataProvider, combo.FillData);
-                                    control = combo;
+                                    vm = combo;
                                     // Set the data if we have it, otherwise, cross your fingers batman!
                                     if (combo.ComboBoxOptions.Count > 0)
                                         value = combo.ComboBoxOptions[0];
-                                    parameters.AddParameter(value, control, paramInfo.Name, attr.DataProvider);
+                                    parameters.AddParameter(value, vm, paramInfo.Name, attr.DataProvider);
                                 }
                                 else
                                 {
                                     // Get a control to display
-                                    control = GetEventParametersFromType(paramInfo.ParameterType);
+                                    vm = GetEventParametersFromType(paramInfo.ParameterType);
 
                                     // We need to get a default value, so just ask the
                                     // type for it.
@@ -639,9 +640,9 @@ namespace LcmsNet.Method.ViewModels
                                     // If the control is not null, then we can add it to display.
                                     // If it is null, then it is of a type we know nothing about.
                                     // And well you're SOL.
-                                    if (control != null)
+                                    if (vm != null)
                                     {
-                                        parameters.AddParameter(value, control, paramInfo.Name, attr.DataProvider);
+                                        parameters.AddParameter(value, vm, paramInfo.Name, attr.DataProvider);
                                     }
                                 }
                                 i++;

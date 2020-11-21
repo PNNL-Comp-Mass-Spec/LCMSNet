@@ -36,7 +36,7 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// List of data provider names.
         /// </summary>
-        public List<string> DataProviderNames { get; set; }
+        public List<string> DataProviderNames { get; }
 
         /// <summary>
         /// Adds a parameter value to the list of parameters and it's associated editing control.

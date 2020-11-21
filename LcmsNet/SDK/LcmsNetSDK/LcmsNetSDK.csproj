@@ -95,8 +95,8 @@
     <Compile Include="Method\InvalidTimeSpanException.cs" />
     <Compile Include="Method\LCEvent.cs" />
     <Compile Include="Method\LCMethod.cs" />
-    <Compile Include="Method\LCMethodData.cs" />
     <Compile Include="Method\LCMethodEventAttribute.cs" />
+    <Compile Include="Method\LCMethodEventData.cs" />
     <Compile Include="Method\LCMethodEventParameter.cs" />
     <Compile Include="Method\LCMethodManager.cs" />
     <Compile Include="Method\LCMethodOptimizer.cs" />

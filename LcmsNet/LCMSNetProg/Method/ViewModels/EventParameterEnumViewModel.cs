@@ -6,7 +6,7 @@ using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels
 {
-    public class EventParameterEnumViewModel : ReactiveObject, ILCEventParameter
+    public class EventParameterEnumViewModel : ReactiveObject, ILCEventParameterWithDataProvider
     {
         private string parameterLabel = "";
         private object selectedOption;
@@ -50,23 +50,24 @@ namespace LcmsNet.Method.ViewModels
         public IReadOnlyReactiveList<object> ComboBoxOptions => comboBoxOptions;
 
         /// <summary>
-        /// Event method for storing objects in the list view.
+        /// Method for storing objects in the list view.
         /// </summary>
-        /// <param name="sender"></param>
+        /// <param name="sender">This parameter is needed for 'IDevice.RegisterDataProvider' support</param>
         /// <param name="data"></param>
-        public void FillData(object sender, List<object> data)
+        public void FillData(object sender, IReadOnlyList<object> data)
         {
-            comboBoxOptions.Clear();
-            if (data == null || data.Count < 1)
-                return;
+            using (comboBoxOptions.SuppressChangeNotifications())
+            {
+                comboBoxOptions.Clear();
+
+                if (data == null || data.Count < 1)
+                    return;
+
+                comboBoxOptions.AddRange(data);
+            }
 
             if (data.Count > 0)
             {
-                using (comboBoxOptions.SuppressChangeNotifications())
-                {
-                    comboBoxOptions.AddRange(data);
-                }
-
                 if (SelectedOption == null || !comboBoxOptions.Contains(SelectedOption))
                 {
                     SelectedOption = comboBoxOptions.FirstOrDefault();
@@ -75,6 +76,13 @@ namespace LcmsNet.Method.ViewModels
         }
 
         public event EventHandler EventChanged;
+
+        public ILCEventParameter CreateDuplicate()
+        {
+            var copy = new EventParameterEnumViewModel();
+            copy.FillData(null, ComboBoxOptions);
+            return copy;
+        }
 
         /// <summary>
         /// Fires the event changed event.

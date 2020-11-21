@@ -48,15 +48,12 @@ namespace LcmsNetSDK.Method
         {
             for (var i = 0; i < Parameters.ViewModels.Count; i++)
             {
-                var control = Parameters.ViewModels[i];
+                var vm = Parameters.ViewModels[i];
 
-                //
-                // Grab the controls value to be used later on
-                //
-                var parameterControl = control as ILCEventParameter;
-                if (parameterControl != null)
+                // Grab the ViewModels value to be used later on
+                if (vm != null)
                 {
-                    Parameters.Values[i] = parameterControl.ParameterValue;
+                    Parameters.Values[i] = vm.ParameterValue;
                 }
             }
         }
@@ -81,6 +78,28 @@ namespace LcmsNetSDK.Method
         {
             Executing = true;
             SimulatingEvent?.Invoke(this, new EventArgs());
+        }
+
+        public LCMethodEventData Clone()
+        {
+            var parameters = new LCMethodEventParameter();
+            parameters.Names.AddRange(Parameters.Names);
+            parameters.Values.AddRange(Parameters.Values);
+            parameters.DataProviderNames.AddRange(Parameters.DataProviderNames);
+            foreach (var parameterVm in Parameters.ViewModels)
+            {
+                var vm = parameterVm?.CreateDuplicate();
+                if (vm is ILCEventParameterWithDataProvider dpvm)
+                {
+                    Device.RegisterDataProvider(MethodEventAttribute.DataProvider, dpvm.FillData);
+                }
+
+                parameters.ViewModels.Add(vm);
+            }
+
+            var copy = new LCMethodEventData(Device, Method, MethodEventAttribute, parameters);
+
+            return copy;
         }
 
         /// <summary>

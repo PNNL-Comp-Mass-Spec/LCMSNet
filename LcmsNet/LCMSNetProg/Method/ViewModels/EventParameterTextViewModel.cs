@@ -37,6 +37,11 @@ namespace LcmsNet.Method.ViewModels
 
         public event EventHandler EventChanged;
 
+        public ILCEventParameter CreateDuplicate()
+        {
+            return new EventParameterTextViewModel();
+        }
+
         /// <summary>
         /// Fires the event changed event.
         /// </summary>

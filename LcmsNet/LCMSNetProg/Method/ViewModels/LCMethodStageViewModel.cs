@@ -600,11 +600,10 @@ namespace LcmsNet.Method.ViewModels
             {
                 var parameters = new LCMethodEventParameter();
                 for (var i = 0; i < lcEvent.Parameters.Length; i++)
-
                 {
                     var parameter = lcEvent.Parameters[i];
                     var name = lcEvent.ParameterNames[i];
-                    ILCEventParameter control = null;
+                    ILCEventParameter vm = null;
 
                     if (lcEvent.MethodAttribute.DataProviderIndex == i)
                     {
@@ -613,27 +612,27 @@ namespace LcmsNet.Method.ViewModels
 
                         // Register the event to automatically get new data when the data provider has new stuff.
                         lcEvent.Device.RegisterDataProvider(lcEvent.MethodAttribute.DataProvider, combo.FillData);
-                        control = combo;
+                        vm = combo;
                     }
                     else
                     {
                         if (parameter != null)
                         {
-                            control = LCMethodEventViewModel.GetEventParametersFromType(parameter.GetType());
+                            vm = LCMethodEventViewModel.GetEventParametersFromType(parameter.GetType());
                         }
                     }
 
-                    parameters.AddParameter(parameter, control, name, lcEvent.MethodAttribute.DataProvider);
+                    parameters.AddParameter(parameter, vm, name, lcEvent.MethodAttribute.DataProvider);
                 }
 
                 var data = new LCMethodEventData(lcEvent.Device, lcEvent.Method, lcEvent.MethodAttribute, parameters)
                     { OptimizeWith = lcEvent.OptimizeWith };
 
                 // Construct an event.  We send false as locked because its not a locking event.
-                var controlEvent = new LCMethodEventViewModel(data, false);
-                controlEvent.SetBreakPoint(lcEvent.BreakPoint);
-                AddNewEvent(controlEvent);
-                controlEvent.UpdateEventNum(EventIndex(controlEvent) + 1);
+                var eventVm = new LCMethodEventViewModel(data, false);
+                eventVm.SetBreakPoint(lcEvent.BreakPoint);
+                AddNewEvent(eventVm);
+                eventVm.UpdateEventNum(EventIndex(eventVm) + 1);
             }
             // Then set all the check boxes accordingly.
             if (method.Column < 0)
