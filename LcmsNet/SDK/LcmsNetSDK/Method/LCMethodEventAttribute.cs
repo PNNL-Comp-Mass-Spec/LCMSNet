@@ -177,6 +177,9 @@ namespace LcmsNetSDK.Method
         /// </summary>
         public double OperationTime { get; set; }
 
+        /// <summary>
+        /// Flag that, if set, signifies to the timer that it can continue with the next event as soon as the current event exits
+        /// </summary>
         public bool IgnoreLeftoverTime { get; set; }
 
         /// <summary>
@@ -188,6 +191,11 @@ namespace LcmsNetSDK.Method
         /// Gets or sets whether the method requires sample data.
         /// </summary>
         public bool RequiresSampleInput { get; set; }
+
+        /// <summary>
+        /// The Description text displayed if the user hovers over the event in the GUI.
+        /// </summary>
+        public string EventDescription { get; set; }
 
         /// <summary>
         /// Gets the name of the method.
