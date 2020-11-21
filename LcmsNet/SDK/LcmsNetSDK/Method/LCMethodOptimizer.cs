@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
 using LcmsNetSDK.Data;
@@ -324,6 +325,29 @@ namespace LcmsNetSDK.Method
                         if (data.MethodEventAttribute.TimeoutType == MethodOperationTimeoutType.Parameter)
                         {
                             time = Convert.ToInt32(data.Parameters.Values[0]);
+                        }
+                        else if (data.MethodEventAttribute.TimeoutType == MethodOperationTimeoutType.CallMethod)
+                        {
+                            // Calculate the needed timeout based on parameters that can be used to calculate a timeout
+                            if (string.IsNullOrWhiteSpace(data.MethodEventAttribute.TimeoutCalculationMethod))
+                            {
+                                throw new NotSupportedException("Developer Error!!! Timeout Calculation Method is not set with TimeoutType CallMethod, device is " + data.Device.GetType());
+                            }
+
+                            var timeMethod = data.Device.GetType().GetMethod(data.MethodEventAttribute.TimeoutCalculationMethod, BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                            if (timeMethod == null || timeMethod.ReturnType != typeof(int))
+                            {
+                                throw new NotSupportedException("Developer Error!!! Valid Timeout Calculation Method not found, device is " + data.Device.GetType() + ", method supplied is " + data.MethodEventAttribute.TimeoutCalculationMethod);
+                            }
+
+                            var methodParameters = data.Parameters.Values.ToArray();
+                            if (timeMethod.GetParameters().Length != methodParameters.Length)
+                            {
+                                throw new NotSupportedException("Developer Error!!! Valid Timeout Calculation Method not found (parameter count), device is " + data.Device.GetType() + ", method supplied is " + data.MethodEventAttribute.TimeoutCalculationMethod);
+                            }
+
+                            // For some reason the boxing returns a double, instead of an int
+                            time = (int)timeMethod.Invoke(data.Device, methodParameters);
                         }
                         else if (time <= 0)
                         {

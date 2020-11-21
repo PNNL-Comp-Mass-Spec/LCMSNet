@@ -198,6 +198,11 @@ namespace LcmsNetSDK.Method
         public string EventDescription { get; set; }
 
         /// <summary>
+        /// The name of the public method to call with the event parameters to determine the event duration. Method must return an int.
+        /// </summary>
+        public string TimeoutCalculationMethod { get; set; }
+
+        /// <summary>
         /// Gets the name of the method.
         /// </summary>
         public string Name { get; }

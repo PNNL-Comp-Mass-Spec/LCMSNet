@@ -18,6 +18,11 @@
         /// <summary>
         /// Timeout is unknown at runtime.
         /// </summary>
-        Indeterminate
+        Indeterminate,
+
+        /// <summary>
+        /// Timeout is determined by calling a static method with the event parameters
+        /// </summary>
+        CallMethod,
     }
 }
