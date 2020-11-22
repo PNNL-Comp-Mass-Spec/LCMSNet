@@ -21,7 +21,33 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <DockPanel LastChildFill="False">
+        <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Margin="0,10,3,0">
+            <TabItem Header="Configuration">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock FontSize="16" Text="Configuration" />
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <devicesViews:AdvancedDeviceControlPanelView DataContext="{Binding AdvancedDeviceControlPanel}" />
+            </TabItem>
+            <TabItem Header="Design" IsSelected="{Binding DesignTabSelected}">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock FontSize="16" Text="Design" />
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:FluidicsControlView Margin="3" DataContext="{Binding FluidicsControlVm}" />
+            </TabItem>
+            <!--<TabItem Header="Model Status">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock FontSize="16" Text="Model Status" />
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <devicesViews:ModelCheckReportsView Margin="3" DataContext="{Binding Reporter}" />
+            </TabItem>-->
+        </TabControl>
+        <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="False">
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAsCommand}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource SaveImage}" MaxHeight="20" />
@@ -80,31 +106,5 @@
             </Button>
             <Button Height="70" Margin="3" Command="{Binding ConnectCommand}" Content="Connect" />
         </StackPanel>
-        <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Margin="0,10,3,0">
-            <TabItem Header="Configuration">
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock FontSize="16" Text="Configuration" />
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <devicesViews:AdvancedDeviceControlPanelView DataContext="{Binding AdvancedDeviceControlPanel}" />
-            </TabItem>
-            <TabItem Header="Design" IsSelected="{Binding DesignTabSelected}">
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock FontSize="16" Text="Design" />
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <views:FluidicsControlView Margin="3" DataContext="{Binding FluidicsControlVm}" />
-            </TabItem>
-            <!--<TabItem Header="Model Status">
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock FontSize="16" Text="Model Status" />
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <devicesViews:ModelCheckReportsView Margin="3" DataContext="{Binding Reporter}" />
-            </TabItem>-->
-        </TabControl>
     </Grid>
 </UserControl>
