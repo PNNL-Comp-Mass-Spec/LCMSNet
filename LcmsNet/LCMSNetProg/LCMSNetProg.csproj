@@ -100,9 +100,6 @@
       <DependentUpon>FluidicsDesignView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\OldDeviceNameTranslator.cs" />
-    <Compile Include="DynamicSplashScreenWindow.xaml.cs">
-      <DependentUpon>DynamicSplashScreenWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Devices\Pumps\ViewModels\PumpDisplaysViewModel.cs" />
     <Compile Include="Devices\Pumps\Views\MobilePhaseEditorView.xaml.cs">
       <DependentUpon>MobilePhaseEditorView.xaml</DependentUpon>
@@ -113,6 +110,7 @@
     <Compile Include="Devices\ViewModels\AdvancedDeviceControlPanelViewModel.cs" />
     <Compile Include="Devices\ViewModels\AdvancedDeviceGroupControlViewModel.cs" />
     <Compile Include="Devices\ViewModels\DeviceAddViewModel.cs" />
+    <Compile Include="Devices\ViewModels\DeviceConfigurationViewModel.cs" />
     <Compile Include="Devices\ViewModels\FailedDevicesViewModel.cs" />
     <Compile Include="Devices\ViewModels\ModelCheckReportsViewModel.cs" />
     <Compile Include="Devices\ViewModels\ModelCheckReportViewModel.cs" />
@@ -135,6 +133,9 @@
       <DependentUpon>ModelCheckReportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\Views\SizeLimitedContentControl.cs" />
+    <Compile Include="DynamicSplashScreenWindow.xaml.cs">
+      <DependentUpon>DynamicSplashScreenWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />
     <Compile Include="IO\DeviceNotifierConfigurationXMLWriter.cs" />
     <Compile Include="IO\DeviceNotifierConfigurationXMLReader.cs" />

@@ -73,6 +73,7 @@ namespace FluidicsPack
             get => name;
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
+        public string DeviceStatus { get; } = string.Empty;
 
         public UserControl GetDefaultView()
         {

@@ -50,6 +50,7 @@ namespace LcmsNetPlugins.ASIpump
             get => pumpLog;
             set => this.RaiseAndSetIfChanged(ref pumpLog, value);
         }
+        public string DeviceStatus { get; } = string.Empty;
 
         public bool Running { get; set; }
 

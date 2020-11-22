@@ -14,6 +14,8 @@ namespace LcmsNet.Devices
 
         public IDevice Device { get; set; }
         public string Name { get; set; }
+        public string DeviceStatus { get; } = string.Empty;
+
         public UserControl GetDefaultView()
         {
             return new DefaultUserDeviceView();

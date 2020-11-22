@@ -11,9 +11,8 @@ namespace LcmsNet.Devices.ViewModels
     {
         public AdvancedDeviceControlPanelViewModel()
         {
-            m_controlToPageMap = new Dictionary<AdvancedDeviceGroupControlViewModel, DeviceGroup>();
-            m_nameToControlMap = new Dictionary<string, AdvancedDeviceGroupControlViewModel>();
-            m_deviceToControlMap = new Dictionary<IDevice, AdvancedDeviceGroupControlViewModel>();
+            nameToViewModelMap = new Dictionary<string, AdvancedDeviceGroupControlViewModel>();
+            deviceToViewModelMap = new Dictionary<IDevice, AdvancedDeviceGroupControlViewModel>();
 
             DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
@@ -21,6 +20,19 @@ namespace LcmsNet.Devices.ViewModels
             // Once a group is added to the device controls, automatically make the first one the "Selected group" if one hasn't been previously set.
             this.WhenAnyValue(x => x.deviceGroups, x => x.SelectedGroup, x => x.deviceGroups.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
                 .Subscribe(x => SelectedGroup = x.Item1[0]);
+
+            this.WhenAnyValue(x => x.SelectedGroup).Subscribe(x =>
+            {
+                foreach (var group in deviceGroups)
+                {
+                    group.GroupIsSelected = false;
+                }
+
+                if (SelectedGroup != null)
+                {
+                    SelectedGroup.GroupIsSelected = true;
+                }
+            });
         }
 
         ~AdvancedDeviceControlPanelViewModel()
@@ -37,74 +49,29 @@ namespace LcmsNet.Devices.ViewModels
             GC.SuppressFinalize(this);
         }
 
-        public class DeviceGroup : IEquatable<DeviceGroup>, IDisposable
-        {
-            public string Name { get; }
-            public AdvancedDeviceGroupControlViewModel Content { get; }
+        private readonly ReactiveList<AdvancedDeviceGroupControlViewModel> deviceGroups = new ReactiveList<AdvancedDeviceGroupControlViewModel>();
+        private AdvancedDeviceGroupControlViewModel selectedGroup = null;
 
-            public DeviceGroup(string name)
-            {
-                Name = name;
-                Content = new AdvancedDeviceGroupControlViewModel();
-            }
-
-            ~DeviceGroup()
-            {
-                Dispose();
-            }
-
-            public void Dispose()
-            {
-                Content.Dispose();
-                GC.SuppressFinalize(this);
-            }
-
-            public bool Equals(DeviceGroup other)
-            {
-                if (ReferenceEquals(null, other)) return false;
-                if (ReferenceEquals(this, other)) return true;
-                return string.Equals(Name, other.Name);
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
-                return Equals((DeviceGroup) obj);
-            }
-
-            public override int GetHashCode()
-            {
-                return (Name != null ? Name.GetHashCode() : 0);
-            }
-        }
-
-        private readonly ReactiveList<DeviceGroup> deviceGroups = new ReactiveList<DeviceGroup>();
-        private DeviceGroup selectedGroup = null;
-
-        public IReadOnlyReactiveList<DeviceGroup> DeviceGroups => deviceGroups;
+        public IReadOnlyReactiveList<AdvancedDeviceGroupControlViewModel> DeviceGroups => deviceGroups;
 
         /// <summary>
         /// Selected device
         /// </summary>
-        public DeviceGroup SelectedGroup
+        public AdvancedDeviceGroupControlViewModel SelectedGroup
         {
             get => selectedGroup;
             set => this.RaiseAndSetIfChanged(ref selectedGroup, value);
         }
 
-        private readonly Dictionary<AdvancedDeviceGroupControlViewModel, DeviceGroup> m_controlToPageMap;
-
         /// <summary>
         /// Maps a device to which advanced control panel it belongs to.
         /// </summary>
-        private readonly Dictionary<IDevice, AdvancedDeviceGroupControlViewModel> m_deviceToControlMap;
+        private readonly Dictionary<IDevice, AdvancedDeviceGroupControlViewModel> deviceToViewModelMap;
 
         /// <summary>
         /// Maps a device group name to the advanced control panel.
         /// </summary>
-        private readonly Dictionary<string, AdvancedDeviceGroupControlViewModel> m_nameToControlMap;
+        private readonly Dictionary<string, AdvancedDeviceGroupControlViewModel> nameToViewModelMap;
 
         /// <summary>
         /// Handles when a device is removed from the system.
@@ -113,25 +80,23 @@ namespace LcmsNet.Devices.ViewModels
         /// <param name="device"></param>
         private void Manager_DeviceRemoved(object sender, IDevice device)
         {
-            if (m_deviceToControlMap.ContainsKey(device))
+            if (deviceToViewModelMap.ContainsKey(device))
             {
-                var control = m_deviceToControlMap[device];
-                control.RemoveDevice(device);
+                var vm = deviceToViewModelMap[device];
+                vm.RemoveDevice(device);
 
-                m_deviceToControlMap.Remove(device);
+                deviceToViewModelMap.Remove(device);
 
-                if (control.IsDeviceGroupEmpty)
+                if (vm.IsDeviceGroupEmpty)
                 {
-                    var page = m_controlToPageMap[control];
-                    if (deviceGroups.Contains(page))
+                    if (deviceGroups.Contains(vm))
                     {
-                        deviceGroups.Remove(page);
+                        deviceGroups.Remove(vm);
                     }
-                    if (m_nameToControlMap.ContainsKey(page.Name))
+                    if (nameToViewModelMap.ContainsKey(vm.Name))
                     {
-                        m_nameToControlMap.Remove(page.Name);
+                        nameToViewModelMap.Remove(vm.Name);
                     }
-                    m_controlToPageMap.Remove(control);
                 }
             }
         }
@@ -148,8 +113,7 @@ namespace LcmsNet.Devices.ViewModels
             var attributes = type.GetCustomAttributes(typeof(DeviceControlAttribute), false);
             foreach (var o in attributes)
             {
-                var monitorAttribute = o as DeviceControlAttribute;
-                if (monitorAttribute != null)
+                if (o is DeviceControlAttribute monitorAttribute)
                 {
                     IDeviceControl control = null;
                     if (monitorAttribute.ControlType != null)
@@ -157,7 +121,7 @@ namespace LcmsNet.Devices.ViewModels
                         control = Activator.CreateInstance(monitorAttribute.ControlType) as IDeviceControl;
                     }
 
-                    AddDeviceControl(monitorAttribute.Category, device, control);
+                    AddDeviceViewModel(monitorAttribute.Category, device, control);
                     break;
                 }
             }
@@ -168,35 +132,34 @@ namespace LcmsNet.Devices.ViewModels
         /// </summary>
         /// <param name="groupName"></param>
         /// <param name="device"></param>
-        /// <param name="deviceControl"></param>
-        private void AddDeviceControl(string groupName, IDevice device, IDeviceControl deviceControl)
+        /// <param name="deviceVm"></param>
+        private void AddDeviceViewModel(string groupName, IDevice device, IDeviceControl deviceVm)
         {
             // Ensure that this always happens on the main thread
             RxApp.MainThreadScheduler.Schedule(() =>
             {
                 // Make sure group control exists.
-                AdvancedDeviceGroupControlViewModel control = null;
-                if (!m_nameToControlMap.ContainsKey(groupName))
+                AdvancedDeviceGroupControlViewModel vm = null;
+                if (!nameToViewModelMap.ContainsKey(groupName))
                 {
                     // Create the tab page
-                    var page = new DeviceGroup(groupName);
-                    m_nameToControlMap.Add(groupName, page.Content);
-                    m_controlToPageMap.Add(page.Content, page);
+                    var page = new AdvancedDeviceGroupControlViewModel(groupName);
+                    nameToViewModelMap.Add(groupName, page);
                     deviceGroups.Add(page);
                 }
 
-                control = m_nameToControlMap[groupName];
-                m_deviceToControlMap.Add(device, control);
+                vm = nameToViewModelMap[groupName];
+                deviceToViewModelMap.Add(device, vm);
 
-                if (deviceControl == null)
+                if (deviceVm == null)
                 {
-                    deviceControl = new DefaultUserDeviceViewModel();
+                    deviceVm = new DefaultUserDeviceViewModel();
                 }
 
-                deviceControl.Device = device;
+                deviceVm.Device = device;
 
                 // Adds the device control to the group control
-                control.AddDevice(device, deviceControl);
+                vm.AddDevice(device, deviceVm);
             });
         }
     }

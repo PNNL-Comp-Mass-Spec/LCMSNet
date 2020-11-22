@@ -459,6 +459,26 @@ namespace FluidicsSDK
         }
 
         /// <summary>
+        /// Allows for setting the selected device outside of the interactive display
+        /// </summary>
+        /// <param name="device"></param>
+        public void SetSelectedDevice(IDevice device)
+        {
+            BeginModelSuspension();
+            ClearSelected();
+
+            if (device != null)
+            {
+                m_selectedDevices.Add(FluidicsDeviceManager.DeviceManager.FindDevice(device));
+                EndModelSuspension(true);
+            }
+            else
+            {
+                EndModelSuspension(false);
+            }
+        }
+
+        /// <summary>
         /// remove a device from the fluidics system based on its IDevice
         /// </summary>
         /// <param name="device">an IDevice representing the device to remove</param>

@@ -39,6 +39,11 @@ namespace LcmsNetSDK.Devices
         string Name { get; set; }
 
         /// <summary>
+        /// Status of device, updated using UpdateStatusDisplay
+        /// </summary>
+        string DeviceStatus { get; }
+
+        /// <summary>
         /// Gets an instance of the default view for this view model
         /// </summary>
         /// <returns></returns>

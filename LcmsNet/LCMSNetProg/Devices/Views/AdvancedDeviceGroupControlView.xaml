@@ -13,14 +13,14 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0" Grid.Column="0" TabStripPlacement="Left" ItemsSource="{Binding DeviceControls}" SelectedItem="{Binding SelectedDevice}">
+        <TabControl Grid.Row="0" Grid.Column="0" TabStripPlacement="Left" ItemsSource="{Binding DeviceViewModels}" SelectedItem="{Binding SelectedDevice}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Text="{Binding Name}" />
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
-                <DataTemplate DataType="{x:Type viewModels:AdvancedDeviceGroupControlViewModel+DeviceControlData}">
+                <DataTemplate DataType="{x:Type viewModels:DeviceConfigurationViewModel}">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_SizeChanged">
                         <views:SizeLimitedContentControl Content="{Binding View}" />
                     </ScrollViewer>

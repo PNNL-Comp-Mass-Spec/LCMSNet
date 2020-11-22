@@ -4,22 +4,22 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using LcmsNetCommonControls.Devices;
+using FluidicsSDK;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels
 {
-    public class AdvancedDeviceGroupControlViewModel : ReactiveObject, IDisposable
+    public class AdvancedDeviceGroupControlViewModel : ReactiveObject, IDisposable, IEquatable<AdvancedDeviceGroupControlViewModel>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public AdvancedDeviceGroupControlViewModel()
+        public AdvancedDeviceGroupControlViewModel(string name)
         {
-            deviceToControlMap = new Dictionary<IDevice, IDeviceControl>();
-            deviceToWrapperMap = new Dictionary<IDevice, DeviceControlData>();
+            Name = name;
+            deviceToViewModelMap = new Dictionary<IDevice, DeviceConfigurationViewModel>();
 
             SelectedDevice = null;
 
@@ -31,8 +31,14 @@ namespace LcmsNet.Devices.ViewModels
             ClearErrorCommand = ReactiveCommand.Create(ClearSelectedDeviceError, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
 
             // Once an item is added to the device controls, automatically make the first one the "Selected device" if one hasn't been previously set.
-            this.WhenAnyValue(x => x.deviceControls, x => x.SelectedDevice, x => x.deviceControls.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
+            this.WhenAnyValue(x => x.deviceViewModels, x => x.SelectedDevice, x => x.deviceViewModels.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
                 .Subscribe(x => SelectedDevice = x.Item1[0]);
+
+            this.WhenAnyValue(x => x.SelectedDevice, x => x.GroupIsSelected).Where(x => x.Item2).Subscribe(x =>
+            {
+                // TODO: Limit calling this to when this device class is also selected
+                FluidicsModerator.Moderator.SetSelectedDevice(SelectedDevice?.Device);
+            });
         }
 
         ~AdvancedDeviceGroupControlViewModel()
@@ -42,90 +48,32 @@ namespace LcmsNet.Devices.ViewModels
 
         public void Dispose()
         {
-            foreach (var deviceControl in DeviceControls)
+            foreach (var deviceControl in DeviceViewModels)
             {
                 deviceControl.Dispose();
             }
             GC.SuppressFinalize(this);
         }
 
-        public class DeviceControlData : ReactiveObject, IDisposable
+        private readonly Dictionary<IDevice, DeviceConfigurationViewModel> deviceToViewModelMap;
+        private readonly ReactiveList<DeviceConfigurationViewModel> deviceViewModels = new ReactiveList<DeviceConfigurationViewModel>();
+        private DeviceConfigurationViewModel selectedDevice = null;
+        private bool groupIsSelected = false;
+
+        public string Name { get; }
+
+        public bool GroupIsSelected
         {
-            private System.Windows.Controls.UserControl view = null;
-            private ObservableAsPropertyHelper<string> name;
-            private ObservableAsPropertyHelper<string> status;
-            private string nameEdit = "";
-
-            public IDevice Device { get; }
-            public IDeviceControl ViewModel { get; }
-
-            public System.Windows.Controls.UserControl View
-            {
-                get
-                {
-                    if (view == null)
-                    {
-                        view = ViewModel.GetDefaultView();
-                        view.DataContext = ViewModel;
-                    }
-                    return view;
-                }
-            }
-
-            public string Name => name?.Value ?? string.Empty;
-
-            public string Status => status?.Value ?? string.Empty;
-
-            public string NameEdit
-            {
-                get => nameEdit;
-                set => this.RaiseAndSetIfChanged(ref nameEdit, value);
-            }
-
-            public DeviceControlData(IDevice device, IDeviceControl viewModel)
-            {
-                Device = device;
-                ViewModel = viewModel;
-                //ViewModel.WhenAnyValue(x => x.Name).ToProperty(this, x => x.Name, out name);
-                Device.WhenAnyValue(x => x.Name).ToProperty(this, x => x.Name, out name);
-                Device.WhenAnyValue(x => x.Name).Subscribe(x => NameEdit = x);
-
-                if (viewModel is BaseDeviceControlViewModel vm)
-                {
-                    vm.WhenAnyValue(x => x.DeviceStatus).ToProperty(this, x => x.Status, out status);
-                }
-                else if (viewModel is BaseDeviceControlViewModelReactive vmr)
-                {
-                    vmr.WhenAnyValue(x => x.DeviceStatus).ToProperty(this, x => x.Status, out status);
-                }
-            }
-
-            ~DeviceControlData()
-            {
-                Dispose();
-            }
-
-            public void Dispose()
-            {
-                if (ViewModel is IDisposable dis)
-                {
-                    dis.Dispose();
-                }
-                GC.SuppressFinalize(this);
-            }
+            get => groupIsSelected;
+            set => this.RaiseAndSetIfChanged(ref groupIsSelected, value);
         }
 
-        private readonly Dictionary<IDevice, IDeviceControl> deviceToControlMap;
-        private readonly Dictionary<IDevice, DeviceControlData> deviceToWrapperMap;
-        private readonly ReactiveList<DeviceControlData> deviceControls = new ReactiveList<DeviceControlData>();
-        private DeviceControlData selectedDevice = null;
-
-        public IReadOnlyReactiveList<DeviceControlData> DeviceControls => deviceControls;
+        public IReadOnlyReactiveList<DeviceConfigurationViewModel> DeviceViewModels => deviceViewModels;
 
         /// <summary>
         /// Selected device
         /// </summary>
-        public DeviceControlData SelectedDevice
+        public DeviceConfigurationViewModel SelectedDevice
         {
             get => selectedDevice;
             set => this.RaiseAndSetIfChanged(ref selectedDevice, value);
@@ -134,7 +82,7 @@ namespace LcmsNet.Devices.ViewModels
         /// <summary>
         /// Determines if there are any devices in this group.
         /// </summary>
-        public bool IsDeviceGroupEmpty => deviceControls.Count < 1;
+        public bool IsDeviceGroupEmpty => deviceViewModels.Count < 1;
 
         public Color SelectedColor { get; set; }
 
@@ -197,14 +145,13 @@ namespace LcmsNet.Devices.ViewModels
 
         public void RemoveDevice(IDevice device)
         {
-            if (deviceToWrapperMap.ContainsKey(device))
+            if (deviceToViewModelMap.ContainsKey(device))
             {
                 // Remove from maps
-                var deviceControl = deviceToWrapperMap[device];
-                deviceControls.Remove(deviceControl);
+                var deviceVm = deviceToViewModelMap[device];
+                deviceViewModels.Remove(deviceVm);
 
-                deviceToControlMap.Remove(device);
-                deviceToWrapperMap.Remove(device);
+                deviceToViewModelMap.Remove(device);
             }
         }
 
@@ -212,14 +159,37 @@ namespace LcmsNet.Devices.ViewModels
         /// Adds the device to the panel for us.
         /// </summary>
         /// <param name="device"></param>
-        /// <param name="control"></param>
-        public void AddDevice(IDevice device, IDeviceControl control)
+        /// <param name="viewModel"></param>
+        public void AddDevice(IDevice device, IDeviceControl viewModel)
         {
-            var deviceControl = new DeviceControlData(device, control);
-            deviceControls.Add(deviceControl);
+            var deviceVm = new DeviceConfigurationViewModel(device, viewModel);
+            deviceViewModels.Add(deviceVm);
 
-            deviceToControlMap.Add(device, control);
-            deviceToWrapperMap.Add(device, deviceControl);
+            deviceToViewModelMap.Add(device, deviceVm);
+        }
+
+        #endregion
+
+        #region Equality
+
+        public bool Equals(AdvancedDeviceGroupControlViewModel other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Name == other.Name;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((AdvancedDeviceGroupControlViewModel) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
 
         #endregion

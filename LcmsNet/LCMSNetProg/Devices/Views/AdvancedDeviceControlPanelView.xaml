@@ -15,8 +15,8 @@
             </DataTemplate>
         </TabControl.ItemTemplate>
         <TabControl.ContentTemplate>
-            <DataTemplate DataType="{x:Type viewModels:AdvancedDeviceControlPanelViewModel+DeviceGroup}">
-                <views:AdvancedDeviceGroupControlView DataContext="{Binding Content}" />
+            <DataTemplate DataType="{x:Type viewModels:AdvancedDeviceControlPanelViewModel}">
+                <views:AdvancedDeviceGroupControlView DataContext="{Binding BindsDirectlyToSource=True}" />
             </DataTemplate>
         </TabControl.ContentTemplate>
     </TabControl>
