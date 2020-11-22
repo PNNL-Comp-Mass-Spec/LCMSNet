@@ -410,6 +410,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             if (m_emulation)
             {
                 m_accessible = true;
+                if (!AutoSamplers.ConnectedAutoSamplers.Contains(this))
+                {
+                    AutoSamplers.ConnectedAutoSamplers.Add(this);
+                }
                 ListMethods();
                 ListTrays();
                 return true;
@@ -559,6 +563,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public bool Shutdown()
         {
+            if (AutoSamplers.ConnectedAutoSamplers.Contains(this))
+            {
+                AutoSamplers.ConnectedAutoSamplers.Remove(this);
+            }
+
             if (m_emulation)
             {
                 m_accessible = false;

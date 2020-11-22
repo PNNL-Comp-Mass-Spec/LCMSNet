@@ -566,6 +566,7 @@ namespace LcmsNet
 
         private void Manager_DevicesInitialized(object sender, EventArgs e)
         {
+            SampleManagerVm.DevicesChanged();
             ApplicationLogger.LogMessage(0, "Device initialization complete.");
         }
 
@@ -630,6 +631,7 @@ namespace LcmsNet
         private void Manager_DeviceRemoved(object sender, IDevice device)
         {
             DeRegisterDeviceEventHandlers(device);
+            SampleManagerVm.DevicesChanged();
             ApplicationLogger.LogMessage(0, "Removed device " + device.Name);
         }
 
@@ -641,6 +643,7 @@ namespace LcmsNet
         private void Manager_DeviceAdded(object sender, IDevice device)
         {
             RegisterDeviceEventHandlers(device);
+            SampleManagerVm.DevicesChanged();
             ApplicationLogger.LogMessage(0, "Added device " + device.Name);
         }
 
@@ -652,6 +655,7 @@ namespace LcmsNet
         private void Manager_InitializingDevice(object sender, DeviceManagerStatusArgs e)
         {
             ApplicationLogger.LogMessage(-1, e.Message);
+            SampleManagerVm.DevicesChanged();
         }
 
         /// <summary>

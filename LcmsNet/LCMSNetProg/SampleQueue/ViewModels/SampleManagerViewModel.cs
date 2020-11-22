@@ -23,7 +23,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class SampleManagerViewModel : ReactiveObject
     {
-        #region "Events"
+        #region Events
 
         /// <summary>
         /// Fired when a sample run should be stopped.
@@ -148,7 +148,28 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #endregion
 
-        #region "methods"
+        #region Methods
+
+        /// <summary>
+        /// Method to update UI column visibility based on configured devices.
+        /// </summary>
+        public void DevicesChanged()
+        {
+            if (AutoSamplers.ConnectedAutoSamplers.Count == 0)
+            {
+                // Disable the PAL columns by default if there is no autosampler configured
+                SampleControlViewModel.PalTrayColumnVisible = false;
+                SampleControlViewModel.PalVialColumnVisible = false;
+                SampleControlViewModel.VolumeColumnVisible = false;
+            }
+            else
+            {
+                // Disable the PAL columns by default if there is no autosampler configured
+                SampleControlViewModel.PalTrayColumnVisible = true;
+                SampleControlViewModel.PalVialColumnVisible = true;
+                SampleControlViewModel.VolumeColumnVisible = true;
+            }
+        }
 
         public void PreviewAvailable(object sender, Method.ViewModels.SampleProgressPreviewArgs e)
         {
