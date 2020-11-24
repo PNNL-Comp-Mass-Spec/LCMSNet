@@ -87,7 +87,7 @@ namespace LcmsNet
             // Force all tabs to render first, if they haven't already
             var currentTab = MainTabControl.SelectedItem;
             QueueTab.ForceLoad();
-            FluidicsDesignTab.ForceLoad();
+            FluidicsDevicesTab.ForceLoad();
             ProgressTab.ForceLoad();
             MethodsTab.ForceLoad();
             PumpsTab.ForceLoad();

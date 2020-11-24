@@ -76,12 +76,12 @@
                 </TabItem.HeaderTemplate>
                 <sampleQueueViews:SampleManagerView DataContext="{Binding SampleManagerVm}" x:Name="SampleManagerPage" />
             </TabItem>
-            <TabItem ToolTip="Cart / Instrument Setup" x:Name="FluidicsDesignTab">
+            <TabItem ToolTip="Cart / Instrument Setup" x:Name="FluidicsDevicesTab">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Height="25">
                             <Image Source="{StaticResource WaterImage}" RenderOptions.BitmapScalingMode="HighQuality" />
-                            <TextBlock Text="Design" Margin="3,0" VerticalAlignment="Center" />
+                            <TextBlock Text="Devices" Margin="3,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
