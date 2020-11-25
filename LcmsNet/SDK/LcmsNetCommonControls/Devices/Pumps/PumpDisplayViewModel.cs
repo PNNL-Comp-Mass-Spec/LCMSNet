@@ -152,7 +152,7 @@ namespace LcmsNetCommonControls.Devices.Pumps
             var pressureSeries = new LineSeries()
             {
                 Title = "Pressure (psi)",
-                MarkerType = MarkerType.Circle,
+                //MarkerType = MarkerType.Circle,
                 Color = OxyColors.Red,
                 ItemsSource = plotDataList,
                 Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).Pressure),
@@ -162,7 +162,7 @@ namespace LcmsNetCommonControls.Devices.Pumps
             var flowSeries = new LineSeries()
             {
                 Title = "FlowRate",
-                MarkerType = MarkerType.Triangle,
+                //MarkerType = MarkerType.Triangle,
                 Color = OxyColors.DarkGreen,
                 ItemsSource = plotDataList,
                 Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).Flow),
@@ -172,7 +172,7 @@ namespace LcmsNetCommonControls.Devices.Pumps
             var percentBSeries = new LineSeries()
             {
                 Title = "% B",
-                MarkerType = MarkerType.Square,
+                //MarkerType = MarkerType.Square,
                 Color = OxyColors.Blue,
                 ItemsSource = plotDataList,
                 Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).PercentB),

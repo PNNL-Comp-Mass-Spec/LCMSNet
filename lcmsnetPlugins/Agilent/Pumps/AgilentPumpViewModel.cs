@@ -451,7 +451,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             if (Pump != null && Emulation)
             {
                 timer.Change(Pump.TotalMonitoringSecondsElapsed * 1000, Pump.TotalMonitoringSecondsElapsed * 1000);
-                Pump.PushData(r.NextDouble(), r.NextDouble(), r.NextDouble());
+                // Multiply the value by 100 to get the range of 0-100 instead of 0-1
+                Pump.PushData(r.NextDouble() * 100, r.NextDouble() * 100, r.NextDouble() * 100);
             }
             //#endif
         }
