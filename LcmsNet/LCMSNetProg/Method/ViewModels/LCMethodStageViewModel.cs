@@ -168,8 +168,6 @@ namespace LcmsNet.Method.ViewModels
         public IReadOnlyReactiveList<string> ColumnComboBoxOptions => columnComboBoxOptions;
         public IReadOnlyReactiveList<LCMethodEventViewModel> LCMethodEvents => lcMethodEvents;
 
-        #endregion
-
         /// <summary>
         /// Gets or sets what folder path the methods are stored in.
         /// </summary>
@@ -186,6 +184,8 @@ namespace LcmsNet.Method.ViewModels
         public ReactiveCommand<Unit, Unit> MoveEventDownCommand { get; }
         public ReactiveCommand<Unit, Unit> SelectAllCommand { get; }
         public ReactiveCommand<Unit, Unit> DeselectAllCommand { get; }
+
+        #endregion
 
         private void Manager_MethodUpdated(object sender, LCMethod method)
         {
@@ -241,7 +241,7 @@ namespace LcmsNet.Method.ViewModels
         /// <returns></returns>
         private LCMethod FindMethods(string name)
         {
-            return LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(name);
+            return LCMethodManager.Manager.GetLCMethodByName(name);
         }
 
         /// <summary>

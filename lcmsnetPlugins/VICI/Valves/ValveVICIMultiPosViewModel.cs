@@ -57,9 +57,11 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             RxApp.MainThreadScheduler.Schedule(() => CurrentValvePosition = newPosition.Position.ToString());
         }
+
         #endregion
 
         #region Members
+
         /// <summary>
         /// Class that interfaces the hardware.
         /// </summary>

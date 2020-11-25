@@ -17,7 +17,10 @@ namespace FluidicsSDK.Base
 
         public FluidicsDevice Location { get; set; }
 
-        // Move from current device to next device.
+        /// <summary>
+        /// Move from current device to next device.
+        /// </summary>
+        /// <param name="device"></param>
         public void Move(FluidicsDevice device)
         {
             Location = device;

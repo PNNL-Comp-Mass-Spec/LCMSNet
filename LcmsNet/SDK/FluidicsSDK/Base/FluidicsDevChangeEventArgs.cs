@@ -6,7 +6,7 @@ namespace FluidicsSDK.Base
     /// <summary>
     /// eventargs for a fluidics device change event
     /// </summary>
-    public class FluidicsDevChangeEventArgs:EventArgs
+    public class FluidicsDevChangeEventArgs : EventArgs
     {
         public FluidicsDevChangeEventArgs()
         {

@@ -683,11 +683,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
         }
 
-        public void KillLoggerThread()
-        {
-            ApplicationLogger.ShutDownLogging();
-        }
-
         /// <summary>
         /// Clears all of the listed pump methods.
         /// </summary>

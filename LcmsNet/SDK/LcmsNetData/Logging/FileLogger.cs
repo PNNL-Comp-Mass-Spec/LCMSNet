@@ -238,6 +238,10 @@ namespace LcmsNetData.Logging
                 {
                     // Ignore IO Exceptions
                 }
+                catch (ObjectDisposedException)
+                {
+                    // Probably due to lag in the final log messages when closing down. Ignore it.
+                }
                 catch (Exception ex)
                 {
                     throw new Exception("Exception writing error log file", ex);

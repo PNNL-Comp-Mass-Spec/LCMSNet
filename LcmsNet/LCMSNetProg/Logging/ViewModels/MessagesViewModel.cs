@@ -22,7 +22,7 @@ namespace LcmsNet.Logging.ViewModels
             lockErrorList = new object();
             BindingOperations.EnableCollectionSynchronization(MessageList, lockMessageList);
 
-            AcknowledgeErrorsCommand = ReactiveCommand.Create(this.AcknowledgeErrors);
+            AcknowledgeErrorsCommand = ReactiveCommand.Create(AcknowledgeErrors);
             ClearMessagesCommand = ReactiveCommand.Create(ClearMessages);
         }
 
@@ -43,9 +43,7 @@ namespace LcmsNet.Logging.ViewModels
         /// <returns>Formatted string message to display.</returns>
         private string FormatMessage(string message)
         {
-            return string.Format("{0:MM/dd/yyyy HH:mm:ss.fff}: {1}",
-                TimeKeeper.Instance.Now,
-                message);
+            return $"{TimeKeeper.Instance.Now:MM/dd/yyyy HH:mm:ss.fff}: {message}";
         }
 
         /// <summary>
