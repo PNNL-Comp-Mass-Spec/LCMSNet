@@ -23,7 +23,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public virtual IReadOnlyReactiveList<SampleViewModel> Samples => SampleDataManager.Samples;
 
         private SampleViewModel selectedSample;
-        private readonly ReactiveList<SampleViewModel> selectedSamples = new ReactiveList<SampleViewModel>();
 
         public SampleViewModel SelectedSample
         {
@@ -31,7 +30,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedSample, value);
         }
 
-        public ReactiveList<SampleViewModel> SelectedSamples => selectedSamples;
+        public ReactiveList<SampleViewModel> SelectedSamples { get; } = new ReactiveList<SampleViewModel>();
 
         #region Manipulation Enablement
 

@@ -63,8 +63,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         #region "Class variables"
 
         private bool showUnassigned = true;
-        private int trayNumber;
-        private bool masterView = false;
+        private readonly bool masterView = false;
         private readonly ReactiveList<TrayVialSampleViewModel> selectedSamples = new ReactiveList<TrayVialSampleViewModel>();
         private readonly IReadOnlyReactiveList<TrayVialSampleViewModel> filteredSamples;
         private int assignVial = 54;
@@ -77,13 +76,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         public IReadOnlyReactiveList<TrayVialSampleViewModel> FilteredSamples => filteredSamples;
         public ReactiveList<TrayVialSampleViewModel> SelectedSamples => selectedSamples;
 
-        public int TrayNumber
-        {
-            get => trayNumber;
-            set => this.RaiseAndSetIfChanged(ref trayNumber, value);
-        }
-
         public int SampleCount => FilteredSamples.Count;
+
+        public int TrayNumber { get; }
 
         public bool ShowUnassigned
         {

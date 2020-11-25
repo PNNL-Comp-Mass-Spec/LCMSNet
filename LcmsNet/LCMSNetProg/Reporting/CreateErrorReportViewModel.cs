@@ -33,7 +33,7 @@ namespace LcmsNet.Reporting
                 if (!lcMethodsList.Contains(method))
                 {
                     lcMethodsList.Add(method);
-                    lcMethodsSelected.Add(method);
+                    LCMethodsSelected.Add(method);
                 }
             }
 
@@ -41,10 +41,9 @@ namespace LcmsNet.Reporting
         }
 
         private readonly ReactiveList<LCMethod> lcMethodsList = new ReactiveList<LCMethod>();
-        private readonly ReactiveList<LCMethod> lcMethodsSelected = new ReactiveList<LCMethod>();
 
         public IReadOnlyReactiveList<LCMethod> LCMethodsList => lcMethodsList;
-        public ReactiveList<LCMethod> LCMethodsSelected => lcMethodsSelected;
+        public ReactiveList<LCMethod> LCMethodsSelected { get; } = new ReactiveList<LCMethod>();
 
         #region Button Handler Events
 

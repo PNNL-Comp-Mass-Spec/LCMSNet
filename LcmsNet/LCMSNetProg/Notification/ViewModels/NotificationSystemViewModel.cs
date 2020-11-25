@@ -30,11 +30,7 @@ namespace LcmsNet.Notification.ViewModels
 
             // Setup notifier and options.
             classNotifier = new Notifier();
-            var actions = Enum.GetValues(typeof(DeviceNotificationAction));
-            using (actionsComboBoxOptions.SuppressChangeNotifications())
-            {
-                actionsComboBoxOptions.AddRange(actions.Cast<DeviceNotificationAction>());
-            }
+            ActionsComboBoxOptions = new ReactiveList<DeviceNotificationAction>(Enum.GetValues(typeof(DeviceNotificationAction)).Cast<DeviceNotificationAction>());
 
             // Set the total number of minutes between system health writes.
             RemoteStatusLogInterval = Settings.Default.NotificationWriteTimeMinutes;
@@ -205,7 +201,6 @@ namespace LcmsNet.Notification.ViewModels
         private readonly ReactiveList<string> devicesList = new ReactiveList<string>();
         private readonly ReactiveList<string> eventsList = new ReactiveList<string>();
         private readonly ReactiveList<string> assignedEventsList = new ReactiveList<string>();
-        private readonly ReactiveList<DeviceNotificationAction> actionsComboBoxOptions = new ReactiveList<DeviceNotificationAction>();
         private readonly ReactiveList<LCMethod> methodsComboBoxOptions = new ReactiveList<LCMethod>();
 
         #endregion
@@ -338,7 +333,7 @@ namespace LcmsNet.Notification.ViewModels
         public IReadOnlyReactiveList<string> DevicesList => devicesList;
         public IReadOnlyReactiveList<string> EventsList => eventsList;
         public IReadOnlyReactiveList<string> AssignedEventsList => assignedEventsList;
-        public IReadOnlyReactiveList<DeviceNotificationAction> ActionsComboBoxOptions => actionsComboBoxOptions;
+        public IReadOnlyReactiveList<DeviceNotificationAction> ActionsComboBoxOptions { get; }
         public IReadOnlyReactiveList<LCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
 
         #endregion

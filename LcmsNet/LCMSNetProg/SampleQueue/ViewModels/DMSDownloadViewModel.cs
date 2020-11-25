@@ -64,7 +64,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         private string cartName = string.Empty;
         private string cartConfigName = string.Empty;
 
-        private string windowTitle = string.Empty;
         private string requestName = string.Empty;
         private string requestIdStart = string.Empty;
         private string requestIdEnd = string.Empty;
@@ -82,11 +81,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private DMSDownloadDataViewModel selectedRequestData = new DMSDownloadDataViewModel(false);
         private bool blockingEnabled = false;
 
-        public string WindowTitle
-        {
-            get => windowTitle;
-            private set => this.RaiseAndSetIfChanged(ref windowTitle, value);
-        }
+        public string WindowTitle { get; }
 
         public string RequestName
         {

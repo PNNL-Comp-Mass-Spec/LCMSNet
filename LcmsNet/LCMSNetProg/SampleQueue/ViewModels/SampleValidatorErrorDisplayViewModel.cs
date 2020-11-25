@@ -19,18 +19,16 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleValidatorErrorDisplayViewModel(Dictionary<SampleData, List<SampleValidationError>> errorsSet)
         {
-            using (errors.SuppressChangeNotifications())
+            var errors = new ReactiveList<ErrorData>();
+            foreach (var item in errorsSet)
             {
-                foreach (var item in errorsSet)
-                {
-                    errors.AddRange(item.Value.Select(x => new ErrorData(item.Key, x)));
-                }
+                errors.AddRange(item.Value.Select(x => new ErrorData(item.Key, x)));
             }
+
+            Errors = errors;
         }
 
-        private readonly ReactiveList<ErrorData> errors = new ReactiveList<ErrorData>();
-
-        public IReadOnlyReactiveList<ErrorData> Errors => errors;
+        public IReadOnlyReactiveList<ErrorData> Errors { get; }
 
         public class ErrorData
         {
