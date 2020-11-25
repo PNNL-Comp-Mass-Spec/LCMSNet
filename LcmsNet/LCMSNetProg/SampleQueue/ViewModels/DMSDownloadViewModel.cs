@@ -521,9 +521,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Sorts the available requests by batch, block, and run order
         /// </summary>
-        private async Task SortByBatchBlockRunOrder()
+        private void SortByBatchBlockRunOrder()
         {
-            await Task.Run(() => AvailableRequestData.SortByBatchBlockRunOrder());
+            AvailableRequestData.SortByBatchBlockRunOrder();
         }
 
         /// <summary>

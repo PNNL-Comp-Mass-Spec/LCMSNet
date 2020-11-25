@@ -4,12 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
+             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance {x:Type viewModels:DMSDownloadDataViewModel}, IsDesignTimeCreatable=True}"
              d:DesignHeight="300" d:DesignWidth="800"
              DataContextChanged="DmsDownloadData_OnDataContextChanged">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="DataViewSource" Source="{Binding Data}">
+            <CollectionViewSource.SortDescriptions>
+                <componentModel:SortDescription Direction="Ascending" PropertyName="DmsData.Batch" />
+                <componentModel:SortDescription Direction="Ascending" PropertyName="DmsData.Block" />
+                <componentModel:SortDescription Direction="Ascending" PropertyName="DmsData.RunOrder" />
+                <componentModel:SortDescription Direction="Ascending" PropertyName="DmsData.RequestID" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
     <DataGrid x:Name="SampleDataGrid" AutoGenerateColumns="False"
-              ItemsSource="{Binding Data}"
+              ItemsSource="{Binding Source={StaticResource DataViewSource}}"
               CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" CanUserSortColumns="{Binding UserSortable}"
               SelectionMode="Extended"
               SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

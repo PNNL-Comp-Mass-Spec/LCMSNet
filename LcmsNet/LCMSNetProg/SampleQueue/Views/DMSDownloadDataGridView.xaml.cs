@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,43 +48,47 @@ namespace LcmsNet.SampleQueue.Views
             {
                 if (dmsDownloadDataDataContext != null)
                 {
-                    dmsDownloadDataDataContext.ClearViewSort -= ClearViewSort;
+                    dmsDownloadDataDataContext.SetSortBatchBlockRunOrder -= SetSortBatchBlockRunOrder;
                 }
                 dmsDownloadDataDataContext = ddvm;
-                dmsDownloadDataDataContext.ClearViewSort += ClearViewSort;
+                dmsDownloadDataDataContext.SetSortBatchBlockRunOrder += SetSortBatchBlockRunOrder;
             }
         }
 
         private DMSDownloadDataViewModel dmsDownloadDataDataContext = null;
 
-        private void ClearViewSort(object sender, EventArgs e)
+        private void SetSortBatchBlockRunOrder(object sender, EventArgs e)
         {
             if (!Dispatcher.CheckAccess())
             {
-                Dispatcher.Invoke(ClearViewSortInternal);
+                Dispatcher.Invoke(SetSortBatchBlockRunOrderInternal);
             }
             else
             {
-                ClearViewSortInternal();
+                SetSortBatchBlockRunOrderInternal();
             }
         }
 
-        private void ClearViewSortInternal()
+        private void SetSortBatchBlockRunOrderInternal()
         {
             if (this.DataContext == null)
             {
                 return;
             }
 
-            var view = CollectionViewSource.GetDefaultView(SampleDataGrid.ItemsSource);
-            if (view != null && view.SortDescriptions.Count > 0)
-            {
-                view.SortDescriptions.Clear();
-            }
-
             foreach (var column in SampleDataGrid.Columns)
             {
                 column.SortDirection = null;
+            }
+
+            var view = (ICollectionView)SampleDataGrid.ItemsSource;
+            if (view != null)
+            {
+                view.SortDescriptions.Clear();
+                view.SortDescriptions.Add(new SortDescription("DmsData.Batch", ListSortDirection.Ascending));
+                view.SortDescriptions.Add(new SortDescription("DmsData.Block", ListSortDirection.Ascending));
+                view.SortDescriptions.Add(new SortDescription("DmsData.RunOrder", ListSortDirection.Ascending));
+                view.SortDescriptions.Add(new SortDescription("DmsData.RequestID", ListSortDirection.Ascending));
             }
         }
     }
