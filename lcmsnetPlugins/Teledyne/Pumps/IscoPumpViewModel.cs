@@ -18,9 +18,59 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public IscoPumpViewModel()
         {
-            controlModesComboBoxOptions = new ReactiveList<IscoControlMode>(Enum.GetValues(typeof(IscoControlMode)).Cast<IscoControlMode>());
-            operationModeComboBoxOptions = new ReactiveList<IscoOperationMode>(Enum.GetValues(typeof(IscoOperationMode)).Cast<IscoOperationMode>());
-            controlModesComboBoxOptions.Remove(IscoControlMode.External); // External is not an option...
+            ControlModesComboBoxOptions = new ReactiveList<IscoControlMode>(Enum.GetValues(typeof(IscoControlMode)).Cast<IscoControlMode>()
+                .Where(x => x != IscoControlMode.External /* External is not an option... */));
+            OperationModeComboBoxOptions = new ReactiveList<IscoOperationMode>(Enum.GetValues(typeof(IscoOperationMode)).Cast<IscoOperationMode>());
+            PumpCountComboBoxOptions = new ReactiveList<int>(Enumerable.Range(1, 3));
+
+            // Add a list of available unit addresses to the unit address combo box
+            var unitAddressOptions = new ReactiveList<int>();
+            for (var indx = pump.UnitAddressMin; indx <= pump.UnitAddressMax; indx++)
+            {
+                unitAddressOptions.Add(indx);
+            }
+            UnitAddressComboBoxOptions = unitAddressOptions;
+
+            // Initialize refill rate array
+            // Initialize max refill rate array
+            RefillRates = new ReactiveList<RefillData>
+            {
+                new RefillData("Pump A", 0) {MaxRefillRate = 30D},
+                new RefillData("Pump B", 1) {MaxRefillRate = 30D},
+                new RefillData("Pump C", 2) {MaxRefillRate = 30D},
+            };
+
+            LimitsList = new ReactiveList<LimitData>
+            {
+                new LimitData("Flow Units"),
+                new LimitData("Pressure Units"),
+                new LimitData("Level Units"),
+                new LimitData("Min Pressure SP"),
+                new LimitData("Max Pressure SP (Note 1)"),
+                new LimitData("Min Flow SP"),
+                new LimitData("Max Flow SP"),
+                new LimitData("Max Flow Value (Note 2)"),
+                new LimitData("Min Refill Rate SP"),
+                new LimitData("Max Refill Rate SP"),
+            };
+
+
+            // Initialize the pump display controls
+            PumpDisplays = new ReactiveList<IscoPumpDisplayViewModel>
+            {
+                new IscoPumpDisplayViewModel(0),
+                new IscoPumpDisplayViewModel(1),
+                new IscoPumpDisplayViewModel(2),
+            };
+
+            foreach (var pumpDisplay in PumpDisplays)
+            {
+                // Set event handlers
+                pumpDisplay.SetpointChanged += PumpDisplays_SetpointChanged;
+                pumpDisplay.StartRefill += PumpDisplays_StartRefill;
+                pumpDisplay.StartPump += PumpDisplays_StartPump;
+                pumpDisplay.StopPump += PumpDisplays_StopPump;
+            }
 
             PropertyChanged += PumpIscoViewModel_PropertyChanged;
 
@@ -117,13 +167,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         private IscoPump pump = new IscoPump();
         private int pumpCount = 3;
-        private readonly ReactiveList<IscoPumpDisplayViewModel> pumpDisplays = new ReactiveList<IscoPumpDisplayViewModel>();
-        private readonly ReactiveList<IscoControlMode> controlModesComboBoxOptions;
-        private readonly ReactiveList<int> pumpCountComboBoxOptions = new ReactiveList<int>();
-        private readonly ReactiveList<int> unitAddressComboBoxOptions = new ReactiveList<int>();
-        private readonly ReactiveList<IscoOperationMode> operationModeComboBoxOptions;
-        private readonly ReactiveList<RefillData> refillRates = new ReactiveList<RefillData>();
-        private readonly ReactiveList<LimitData> limitsList = new ReactiveList<LimitData>();
         private string comPort = "";
         private int unitAddress = 6;
         private string notes = "";
@@ -137,14 +180,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         #region "Properties"
 
-        public IReadOnlyReactiveList<IscoPumpDisplayViewModel> PumpDisplays => pumpDisplays;
-        public IReadOnlyReactiveList<IscoControlMode> ControlModesComboBoxOptions => controlModesComboBoxOptions;
-        public IReadOnlyReactiveList<int> PumpCountComboBoxOptions => pumpCountComboBoxOptions;
+        public IReadOnlyReactiveList<IscoPumpDisplayViewModel> PumpDisplays { get; }
+        public IReadOnlyReactiveList<IscoControlMode> ControlModesComboBoxOptions { get; }
+        public IReadOnlyReactiveList<int> PumpCountComboBoxOptions { get; }
         public IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
-        public IReadOnlyReactiveList<int> UnitAddressComboBoxOptions => unitAddressComboBoxOptions;
-        public IReadOnlyReactiveList<IscoOperationMode> OperationModeComboBoxOptions => operationModeComboBoxOptions;
-        public IReadOnlyReactiveList<RefillData> RefillRates => refillRates;
-        public IReadOnlyReactiveList<LimitData> LimitsList => limitsList;
+        public IReadOnlyReactiveList<int> UnitAddressComboBoxOptions { get; }
+        public IReadOnlyReactiveList<IscoOperationMode> OperationModeComboBoxOptions { get; }
+        public IReadOnlyReactiveList<RefillData> RefillRates { get; }
+        public IReadOnlyReactiveList<LimitData> LimitsList { get; }
 
         public string COMPort
         {
@@ -248,17 +291,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         private void InitControl()
         {
-            // Add a list of available unit addresses to the unit address combo box
-            using (unitAddressComboBoxOptions.SuppressChangeNotifications())
-            {
-                unitAddressComboBoxOptions.Clear();
-
-                for (var indx = pump.UnitAddressMin; indx < pump.UnitAddressMax + 1; indx++)
-                {
-                    unitAddressComboBoxOptions.Add(indx);
-                }
-            }
-
             // Set the default to 6, if allowed; otherwise use minimum value
             if (UnitAddressComboBoxOptions.Count > 0)
             {
@@ -269,23 +301,10 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 }
             }
 
-            using (pumpCountComboBoxOptions.SuppressChangeNotifications())
-            {
-                pumpCountComboBoxOptions.Clear();
-                pumpCountComboBoxOptions.Add(1);
-                pumpCountComboBoxOptions.Add(2);
-                pumpCountComboBoxOptions.Add(3);
-            }
-
-                // Fill in the Notes text box
-                var noteStr = "1) Also max allowed pressure in Const Flow mode" + Environment.NewLine;
+            // Fill in the Notes text box
+            var noteStr = "1) Also max allowed pressure in Const Flow mode" + Environment.NewLine;
             noteStr += "2) Max allowed flow in Const Press mode";
             Notes = noteStr;
-
-            // Initialize the pump display controls
-            AddPumpDisplay(new IscoPumpDisplayViewModel(0));
-            AddPumpDisplay(new IscoPumpDisplayViewModel(1));
-            AddPumpDisplay(new IscoPumpDisplayViewModel(2));
 
             // Assign pump class event handlers
             pump.RefreshComplete += Pump_RefreshComplete;
@@ -308,29 +327,15 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             OperationMode = IscoOperationMode.ConstantFlow;
             SetOperationMode();
 
-            // Initialize refill rate array
-            // Initialize max refill rate array
-            using (refillRates.SuppressChangeNotifications())
+            // Set/Reset max refill rates
+            foreach (var rate in RefillRates)
             {
-                refillRates.Add(new RefillData("Pump A", 0) { MaxRefillRate = 30D });
-                refillRates.Add(new RefillData("Pump B", 1) { MaxRefillRate = 30D });
-                refillRates.Add(new RefillData("Pump C", 2) { MaxRefillRate = 30D });
+                rate.MaxRefillRate = 30D;
             }
 
             COMPort = pump.PortName;
 
             UpdateLimitDisplay();
-        }
-
-        private void AddPumpDisplay(IscoPumpDisplayViewModel pumpDisplay)
-        {
-            //pumpDisplay.InitViewModel(pumpDisplays.Count);
-            RxApp.MainThreadScheduler.Schedule(() => pumpDisplays.Add(pumpDisplay));
-
-            pumpDisplay.SetpointChanged += PumpDisplays_SetpointChanged;
-            pumpDisplay.StartRefill += PumpDisplays_StartRefill;
-            pumpDisplay.StartPump += PumpDisplays_StartPump;
-            pumpDisplay.StopPump += PumpDisplays_StopPump;
         }
 
         private void RegisterDevice(IDevice device)
@@ -382,26 +387,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         private void UpdateLimitDisplay()
         {
-            if (LimitsList.Count == 0)
-            {
-                RxApp.MainThreadScheduler.Schedule(() =>
-                {
-                    using (limitsList.SuppressChangeNotifications())
-                    {
-                        limitsList.Add(new LimitData("Flow Units"));
-                        limitsList.Add(new LimitData("Pressure Units"));
-                        limitsList.Add(new LimitData("Level Units"));
-                        limitsList.Add(new LimitData("Min Pressure SP"));
-                        limitsList.Add(new LimitData("Max Pressure SP (Note 1)"));
-                        limitsList.Add(new LimitData("Min Flow SP"));
-                        limitsList.Add(new LimitData("Max Flow SP"));
-                        limitsList.Add(new LimitData("Max Flow Value (Note 2)"));
-                        limitsList.Add(new LimitData("Min Refill Rate SP"));
-                        limitsList.Add(new LimitData("Max Refill Rate SP"));
-                    }
-                });
-            }
-
             for (var indx = 0; indx < PumpDisplays.Count; indx++)
             {
                 // Flow units

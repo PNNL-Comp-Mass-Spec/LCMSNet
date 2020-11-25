@@ -14,33 +14,25 @@ namespace LcmsNet.Simulator.ViewModels
         /// Calling this constructor is only for the windows WPF designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public ModelCheckListViewModel()
+        public ModelCheckListViewModel() : this(new IFluidicsModelChecker[] {new FluidicsCycleCheck(), new MultipleSourcesModelCheck(), new NoSinksModelCheck(), new TestModelCheck()})
         {
-            AddCheckerControl(new FluidicsCycleCheck());
-            AddCheckerControl(new MultipleSourcesModelCheck());
-            AddCheckerControl(new NoSinksModelCheck());
-            AddCheckerControl(new TestModelCheck());
-            InitData();
         }
 
-        public ModelCheckListViewModel(IModelCheckController cntrlr, IEnumerable<IFluidicsModelChecker> checks)
+        public ModelCheckListViewModel(IModelCheckController cntrlr, IEnumerable<IFluidicsModelChecker> checks) : this(checks)
         {
             controller = cntrlr;
             controller.ModelCheckAdded += CheckAddedHandler;
             controller.ModelCheckRemoved += CheckRemovedHandler;
+        }
+
+        private ModelCheckListViewModel(IEnumerable<IFluidicsModelChecker> checks)
+        {
             foreach (var check in checks)
             {
                 AddCheckerControl(check);
             }
-            InitData();
-        }
 
-        private void InitData()
-        {
-            using (statusCategoryComboBoxOptions.SuppressChangeNotifications())
-            {
-                statusCategoryComboBoxOptions.AddRange(Enum.GetValues(typeof(ModelStatusCategory)).Cast<ModelStatusCategory>());
-            }
+            StatusCategoryComboBoxOptions = new ReactiveList<ModelStatusCategory>(Enum.GetValues(typeof(ModelStatusCategory)).Cast<ModelStatusCategory>());
 
             Checkers.ChangeTrackingEnabled = true;
 
@@ -60,7 +52,6 @@ namespace LcmsNet.Simulator.ViewModels
 
         private readonly IModelCheckController controller;
         private readonly ReactiveList<IFluidicsModelChecker> checkers = new ReactiveList<IFluidicsModelChecker>();
-        private readonly ReactiveList<ModelStatusCategory> statusCategoryComboBoxOptions = new ReactiveList<ModelStatusCategory>();
         private bool allChecked = false;
         private bool enableAll = false;
 
@@ -71,7 +62,7 @@ namespace LcmsNet.Simulator.ViewModels
         }
 
         public IReadOnlyReactiveList<IFluidicsModelChecker> Checkers => checkers;
-        public IReadOnlyReactiveList<ModelStatusCategory> StatusCategoryComboBoxOptions => statusCategoryComboBoxOptions;
+        public IReadOnlyReactiveList<ModelStatusCategory> StatusCategoryComboBoxOptions { get; }
 
         private void EnableAllChanged()
         {

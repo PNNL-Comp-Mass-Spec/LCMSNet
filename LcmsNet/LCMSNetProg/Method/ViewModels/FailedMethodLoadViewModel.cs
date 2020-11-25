@@ -11,7 +11,6 @@ namespace LcmsNet.Method.ViewModels
     /// </summary>
     public class FailedMethodLoadViewModel : ReactiveObject
     {
-
         /// <summary>
         /// Default constructor for the failed method load view model that takes no arguments
         /// Calling this constructor is only for the IDE designer.
@@ -19,10 +18,12 @@ namespace LcmsNet.Method.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public FailedMethodLoadViewModel()
         {
+            var errorList = new ReactiveList<ErrorListing>();
             var testErrors = new string[] {"Error 1", "Error 2", "Error 3"};
             errorList.Add(new ErrorListing("File 1", testErrors));
             errorList.Add(new ErrorListing("File 2", testErrors));
             errorList.Add(new ErrorListing("File 3", testErrors));
+            ErrorList = errorList;
         }
 
         /// <summary>
@@ -31,25 +32,10 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="errors"></param>
         public FailedMethodLoadViewModel(Dictionary<string, List<Exception>> errors)
         {
-            UpdateList(errors);
+            ErrorList = new ReactiveList<ErrorListing>(errors.Select(file => new ErrorListing(Path.GetFileNameWithoutExtension(file.Key), file.Value.Select(x => x.Message))));
         }
 
-        private readonly ReactiveList<ErrorListing> errorList = new ReactiveList<ErrorListing>();
-
-        public IReadOnlyReactiveList<ErrorListing> ErrorList => errorList;
-
-        /// <summary>
-        /// Updates the listview with the error device messages.
-        /// </summary>
-        /// <param name="errors"></param>
-        public void UpdateList(Dictionary<string, List<Exception>> errors)
-        {
-            errorList.Clear();
-            foreach (var file in errors)
-            {
-                errorList.Add(new ErrorListing(Path.GetFileNameWithoutExtension(file.Key), file.Value.Select(x => x.Message)));
-            }
-        }
+        public IReadOnlyReactiveList<ErrorListing> ErrorList { get; }
     }
 
     public class ErrorListing : ReactiveObject
@@ -57,21 +43,11 @@ namespace LcmsNet.Method.ViewModels
         public ErrorListing(string filename = "", IEnumerable<string> errors = null)
         {
             FileName = filename;
-            using (Errors.SuppressChangeNotifications())
-            {
-                Errors.AddRange(errors);
-            }
+            Errors = new ReactiveList<string>(errors);
         }
 
-        private string fileName = "";
-        private readonly ReactiveList<string> errors = new ReactiveList<string>();
+        public string FileName { get; }
 
-        public string FileName
-        {
-            get => fileName;
-            set => this.RaiseAndSetIfChanged(ref fileName, value);
-        }
-
-        public ReactiveList<string> Errors => errors;
+        public IReadOnlyReactiveList<string> Errors { get; }
     }
 }

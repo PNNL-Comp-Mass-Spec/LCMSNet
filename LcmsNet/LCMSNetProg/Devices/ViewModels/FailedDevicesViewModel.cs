@@ -13,12 +13,12 @@ namespace LcmsNet.Devices.ViewModels
         /// Calling this constructor is only for the IDE designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public FailedDevicesViewModel()
+        public FailedDevicesViewModel() : this(new List<DeviceErrorEventArgs>()
         {
-            var list = new List<DeviceErrorEventArgs>();
-            list.Add(new DeviceErrorEventArgs("Test Failure message", new Exception("Test exception message"), DeviceErrorStatus.ErrorSampleOnly, new TimerDevice()));
-            list.Add(new DeviceErrorEventArgs("Test Failure message", null, DeviceErrorStatus.ErrorAffectsAllColumns, new TimerDevice()));
-            UpdateDeviceList(list);
+            new DeviceErrorEventArgs("Test Failure message", new Exception("Test exception message"), DeviceErrorStatus.ErrorSampleOnly, new TimerDevice()),
+            new DeviceErrorEventArgs("Test Failure message", null, DeviceErrorStatus.ErrorAffectsAllColumns, new TimerDevice()),
+        })
+        {
         }
 
         /// <summary>
@@ -27,25 +27,10 @@ namespace LcmsNet.Devices.ViewModels
         /// <param name="deviceErrors"></param>
         public FailedDevicesViewModel(List<DeviceErrorEventArgs> deviceErrors)
         {
-            UpdateDeviceList(deviceErrors);
+            DeviceErrorList = new ReactiveList<DeviceErrorData>(deviceErrors.Select(x => new DeviceErrorData(x.Device.Name, x.Error + " " + x.Exception?.Message)));
         }
 
-        private readonly ReactiveList<DeviceErrorData> deviceErrorList = new ReactiveList<DeviceErrorData>();
-
-        public IReadOnlyReactiveList<DeviceErrorData> DeviceErrorList => deviceErrorList;
-
-        /// <summary>
-        /// Updates the listview with the error device messages.
-        /// </summary>
-        /// <param name="deviceErrors"></param>
-        public void UpdateDeviceList(List<DeviceErrorEventArgs> deviceErrors)
-        {
-            using (deviceErrorList.SuppressChangeNotifications())
-            {
-                deviceErrorList.Clear();
-                deviceErrorList.AddRange(deviceErrors.Select(x => new DeviceErrorData(x.Device.Name, x.Error + " " + x.Exception?.Message)));
-            }
-        }
+        public IReadOnlyReactiveList<DeviceErrorData> DeviceErrorList { get; }
     }
 
     public class DeviceErrorData : ReactiveObject

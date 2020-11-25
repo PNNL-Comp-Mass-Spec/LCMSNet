@@ -20,8 +20,6 @@ namespace LcmsNet.Configuration.ViewModels
     /// </summary>
     public class SystemConfigurationViewModel : ReactiveObject
     {
-        private readonly bool mIsLoading;
-
         #region "Constructors"
 
         /// <summary>
@@ -29,16 +27,59 @@ namespace LcmsNet.Configuration.ViewModels
         /// </summary>
         public SystemConfigurationViewModel()
         {
-            mIsLoading = true;
+#if DEBUG
+            // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                Column1ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 1, Color = Colors.Red }, ColumnNameComboBoxOptions);
+                Column2ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 2, Color = Colors.Yellow }, ColumnNameComboBoxOptions);
+                Column3ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 3, Color = Colors.Green }, ColumnNameComboBoxOptions);
+                Column4ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 4, Color = Colors.Orange }, ColumnNameComboBoxOptions);
+                return;
+            }
+#endif
 
-            Initialize();
+            TriggerLocation = LCMSSettings.GetParameter(LCMSSettings.PARAM_TRIGGERFILEFOLDER);
+            PdfPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_PDFPATH);
 
-            SetInstrumentCommand = ReactiveCommand.Create(SaveInstrument);
-            SetOperatorCommand = ReactiveCommand.Create(SaveOperator);
-            ReloadCartDataCommand = ReactiveCommand.Create(ReloadData);
+            Column1ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[0], ColumnNameComboBoxOptions);
+            Column2ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[1], ColumnNameComboBoxOptions);
+            Column3ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[2], ColumnNameComboBoxOptions);
+            Column4ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[3], ColumnNameComboBoxOptions);
+
+            RegisterColumn(Column1ViewModel);
+            RegisterColumn(Column2ViewModel);
+            RegisterColumn(Column3ViewModel);
+            RegisterColumn(Column4ViewModel);
+            SpecialColumnEnabled = !LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true);
+
+            // Cart name
+            CartName = CartConfiguration.CartName;
+
+            LoadSeparationTypes();
+            LoadInstrumentInformation();
+            LoadApplicationSettings();
+
+            MinVolume = CartConfiguration.MinimumVolume;
+
+            //load time zones into combobox
+            TimeZoneComboBoxOptions = new ReactiveList<string>(TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id));
+            TimeZone = LCMSSettings.GetParameter(LCMSSettings.PARAM_TIMEZONE);
+
+            LoadUserCombo(SQLiteTools.GetUserList(false));
+
+            ReloadData(true);
+
+            this.WhenAnyValue(x => x.InstrumentOperator).Subscribe(x => this.OperatorNotSaved = true);
+            this.WhenAnyValue(x => x.InstrumentName).Subscribe(x => this.InstrumentNameNotSaved = true);
+            this.WhenAnyValue(x => x.SpecialColumnEnabled).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, (!x).ToString()));
+            OperatorNotSaved = false;
+            InstrumentNameNotSaved = false;
+
+            SetInstrumentCommand = ReactiveCommand.Create(() => SaveInstrument(false));
+            SetOperatorCommand = ReactiveCommand.Create(() => SaveOperator(false));
+            ReloadCartDataCommand = ReactiveCommand.Create(() => ReloadData(false));
             BrowsePdfPathCommand = ReactiveCommand.Create(BrowsePdfPath);
-
-            mIsLoading = false;
         }
 
         #endregion
@@ -55,19 +96,13 @@ namespace LcmsNet.Configuration.ViewModels
         private double minVolume = 1;
         private string triggerLocation = "";
         private string pdfPath = "";
-        private string cartName = "";
         private string cartConfigName = "";
         private string timeZone = "";
         private string instrumentName = "";
         private string separationType = "";
         private string instrumentOperator = "";
-        private ColumnConfigViewModel column1ViewModel;
-        private ColumnConfigViewModel column2ViewModel;
-        private ColumnConfigViewModel column3ViewModel;
-        private ColumnConfigViewModel column4ViewModel;
         private bool instrumentNameNotSaved;
         private bool operatorNotSaved;
-        private readonly ReactiveList<string> timeZoneComboBoxOptions = new ReactiveList<string>();
         private readonly ReactiveList<string> instrumentComboBoxOptions = new ReactiveList<string>();
         private readonly ReactiveList<string> cartConfigComboBoxOptions = new ReactiveList<string>();
         private readonly ReactiveList<string> separationTypeComboBoxOptions = new ReactiveList<string>();
@@ -105,11 +140,7 @@ namespace LcmsNet.Configuration.ViewModels
             set => this.RaiseAndSetIfChanged(ref pdfPath, value);
         }
 
-        public string CartName
-        {
-            get => cartName;
-            set => this.RaiseAndSetIfChanged(ref cartName, value);
-        }
+        public string CartName { get; }
 
         public string CartConfigName
         {
@@ -164,29 +195,13 @@ namespace LcmsNet.Configuration.ViewModels
             set => this.RaiseAndSetIfChanged(ref instrumentOperator, value);
         }
 
-        public ColumnConfigViewModel Column1ViewModel
-        {
-            get => column1ViewModel;
-            set => this.RaiseAndSetIfChanged(ref column1ViewModel, value);
-        }
+        public ColumnConfigViewModel Column1ViewModel { get; }
 
-        public ColumnConfigViewModel Column2ViewModel
-        {
-            get => column2ViewModel;
-            set => this.RaiseAndSetIfChanged(ref column2ViewModel, value);
-        }
+        public ColumnConfigViewModel Column2ViewModel { get; }
 
-        public ColumnConfigViewModel Column3ViewModel
-        {
-            get => column3ViewModel;
-            set => this.RaiseAndSetIfChanged(ref column3ViewModel, value);
-        }
+        public ColumnConfigViewModel Column3ViewModel { get; }
 
-        public ColumnConfigViewModel Column4ViewModel
-        {
-            get => column4ViewModel;
-            set => this.RaiseAndSetIfChanged(ref column4ViewModel, value);
-        }
+        public ColumnConfigViewModel Column4ViewModel { get; }
 
         public bool SpecialColumnEnabled
         {
@@ -218,7 +233,7 @@ namespace LcmsNet.Configuration.ViewModels
             private set => this.RaiseAndSetIfChanged(ref operatorNotSaved, value);
         }
 
-        public IReadOnlyReactiveList<string> TimeZoneComboBoxOptions => timeZoneComboBoxOptions;
+        public IReadOnlyReactiveList<string> TimeZoneComboBoxOptions { get; }
         public IReadOnlyReactiveList<string> InstrumentComboBoxOptions => instrumentComboBoxOptions;
         public IReadOnlyReactiveList<string> CartConfigComboBoxOptions => cartConfigComboBoxOptions;
         public IReadOnlyReactiveList<string> SeparationTypeComboBoxOptions => separationTypeComboBoxOptions;
@@ -237,65 +252,6 @@ namespace LcmsNet.Configuration.ViewModels
         #endregion
 
         #region "Methods"
-
-        /// <summary>
-        /// Initializes data for the controls.
-        /// </summary>
-        private void Initialize()
-        {
-#if DEBUG
-            // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
-            {
-                Column1ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 1, Color = Colors.Red }, ColumnNameComboBoxOptions);
-                Column2ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 2, Color = Colors.Yellow }, ColumnNameComboBoxOptions);
-                Column3ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 3, Color = Colors.Green }, ColumnNameComboBoxOptions);
-                Column4ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 4, Color = Colors.Orange }, ColumnNameComboBoxOptions);
-
-                return;
-            }
-#endif
-
-            TriggerLocation = LCMSSettings.GetParameter(LCMSSettings.PARAM_TRIGGERFILEFOLDER);
-            PdfPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_PDFPATH);
-
-            Column1ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[0], ColumnNameComboBoxOptions);
-            Column2ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[1], ColumnNameComboBoxOptions);
-            Column3ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[2], ColumnNameComboBoxOptions);
-            Column4ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[3], ColumnNameComboBoxOptions);
-
-            RegisterColumn(Column1ViewModel);
-            RegisterColumn(Column2ViewModel);
-            RegisterColumn(Column3ViewModel);
-            RegisterColumn(Column4ViewModel);
-            SpecialColumnEnabled = !LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true);
-
-            // Cart name
-            CartName = CartConfiguration.CartName;
-
-            LoadSeparationTypes();
-            LoadInstrumentInformation();
-            LoadApplicationSettings();
-
-            MinVolume = CartConfiguration.MinimumVolume;
-
-            //load time zones into combobox
-            using (timeZoneComboBoxOptions.SuppressChangeNotifications())
-            {
-                timeZoneComboBoxOptions.AddRange(TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id));
-            }
-            TimeZone = LCMSSettings.GetParameter(LCMSSettings.PARAM_TIMEZONE);
-
-            LoadUserCombo(SQLiteTools.GetUserList(false));
-
-            ReloadData();
-
-            this.WhenAnyValue(x => x.InstrumentOperator).Subscribe(x => this.OperatorNotSaved = true);
-            this.WhenAnyValue(x => x.InstrumentName).Subscribe(x => this.InstrumentNameNotSaved = true);
-            this.WhenAnyValue(x => x.SpecialColumnEnabled).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, (!x).ToString()));
-            OperatorNotSaved = false;
-            InstrumentNameNotSaved = false;
-        }
 
         private void BrowsePdfPath()
         {
@@ -464,7 +420,7 @@ namespace LcmsNet.Configuration.ViewModels
             SQLiteTools.SaveSelectedSeparationType(LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE));
         }
 
-        private void ReloadData()
+        private void ReloadData(bool isLoading = false)
         {
             // Get a fresh list of columns from DMS and store it in the cache db
             try
@@ -480,8 +436,8 @@ namespace LcmsNet.Configuration.ViewModels
 
             LoadSeparationTypes();
 
-            UpdateCartConfigNames();
-            UpdateColumnNameLists();
+            UpdateCartConfigNames(isLoading);
+            UpdateColumnNameLists(isLoading);
 
             RestoreCurrentSelections();
         }
@@ -516,7 +472,7 @@ namespace LcmsNet.Configuration.ViewModels
             }
         }
 
-        private void UpdateCartConfigNames()
+        private void UpdateCartConfigNames(bool isLoading)
         {
             List<string> cartConfigNameList = null;
             var fullCount = 0;
@@ -532,7 +488,7 @@ namespace LcmsNet.Configuration.ViewModels
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
 
-            if (!mIsLoading)
+            if (!isLoading)
             {
                 // If a valid list was received, update the display
                 if (cartConfigNameList == null)
@@ -567,14 +523,14 @@ namespace LcmsNet.Configuration.ViewModels
                 cartConfigComboBoxOptions.AddRange(cartConfigNameList);
             }
 
-            if (!mIsLoading)
+            if (!isLoading)
             {
                 ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "Cart config name lists updated");
             }
         }
 
-        private void UpdateColumnNameLists()
+        private void UpdateColumnNameLists(bool isLoading)
         {
             List<string> columnList = null;
             try
@@ -587,7 +543,7 @@ namespace LcmsNet.Configuration.ViewModels
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
 
-            if (!mIsLoading)
+            if (!isLoading)
             {
                 // If a valid list was received, update the display
                 if (columnList == null)
@@ -613,23 +569,23 @@ namespace LcmsNet.Configuration.ViewModels
                 columnNameComboBoxOptions.AddRange(columnList);
             }
 
-            if (!mIsLoading)
+            if (!isLoading)
             {
                 ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "Column name lists updated");
             }
         }
 
-        private void SaveInstrument()
+        private void SaveInstrument(bool isLoading)
         {
-            if (!mIsLoading)
+            if (!isLoading)
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_INSTNAME, InstrumentName);
             InstrumentNameNotSaved = false;
         }
 
-        private void SaveOperator()
+        private void SaveOperator(bool isLoading)
         {
-            if (!mIsLoading)
+            if (!isLoading)
             {
                 var operatorName = InstrumentOperator;
                 if (dmsUserList.ContainsKey(operatorName))

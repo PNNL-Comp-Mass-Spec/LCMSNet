@@ -206,21 +206,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
 
             // Initialize form controls
-            InitFormControls();
-
-            FindCommand = ReactiveCommand.CreateFromTask(FindDmsRequests);
-            MoveDownCommand = ReactiveCommand.Create(MoveRequestsToRunList);
-            MoveUpCommand = ReactiveCommand.Create(RemoveRequestsFromRunList);
-            OkCommand = ReactiveCommand.Create(UpdateDMSCartAssignment);
-            RefreshCartInfoCommand = ReactiveCommand.Create(RefreshCartInfo);
-            SortByBatchBlockRunOrderCommand = ReactiveCommand.CreateFromTask(SortByBatchBlockRunOrder, this.WhenAnyValue(x => x.BlockingEnabled));
-        }
-
-        /// <summary>
-        /// Loads form controls with initial data, where applicable
-        /// </summary>
-        private void InitFormControls()
-        {
             // Form caption
             string dbInUse;
             try
@@ -254,6 +239,13 @@ namespace LcmsNet.SampleQueue.ViewModels
                 // No cart name is assigned, user will need to select one
                 CartName = "";
             }
+
+            FindCommand = ReactiveCommand.CreateFromTask(FindDmsRequests);
+            MoveDownCommand = ReactiveCommand.Create(MoveRequestsToRunList);
+            MoveUpCommand = ReactiveCommand.Create(RemoveRequestsFromRunList);
+            OkCommand = ReactiveCommand.Create(UpdateDMSCartAssignment);
+            RefreshCartInfoCommand = ReactiveCommand.Create(RefreshCartInfo);
+            SortByBatchBlockRunOrderCommand = ReactiveCommand.Create(SortByBatchBlockRunOrder, this.WhenAnyValue(x => x.BlockingEnabled));
         }
 
         /// <summary>

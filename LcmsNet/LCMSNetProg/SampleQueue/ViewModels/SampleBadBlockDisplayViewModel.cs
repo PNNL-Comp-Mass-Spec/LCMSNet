@@ -12,29 +12,17 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Calling this constructor is only for the windows WPF designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public SampleBadBlockDisplayViewModel()
+        public SampleBadBlockDisplayViewModel() : this(new List<SampleData> { new SampleData() })
         {
-            var samples = new List<SampleData>();
-            samples.Add(new SampleData());
-            DisplaySamples(samples);
         }
 
         public SampleBadBlockDisplayViewModel(List<SampleData> samples)
         {
-            DisplaySamples(samples);
+            BadSamples = new ReactiveList<BlockErrorData>(samples.Select(sample => new BlockErrorData(sample.DmsData.Batch, sample.DmsData.Block,
+                sample.ColumnIndex + 1, sample.DmsData.DatasetName, sample.LCMethodName)));
         }
 
-        private readonly ReactiveList<BlockErrorData> badSamples = new ReactiveList<BlockErrorData>();
-
-        public IReadOnlyReactiveList<BlockErrorData> BadSamples => badSamples;
-
-        private void DisplaySamples(List<SampleData> samples)
-        {
-            using (badSamples.SuppressChangeNotifications())
-            {
-                badSamples.AddRange(samples.Select(sample => new BlockErrorData(sample.DmsData.Batch, sample.DmsData.Block, sample.ColumnIndex + 1, sample.DmsData.DatasetName, sample.LCMethodName)));
-            }
-        }
+        public IReadOnlyReactiveList<BlockErrorData> BadSamples { get; }
 
         public class BlockErrorData
         {

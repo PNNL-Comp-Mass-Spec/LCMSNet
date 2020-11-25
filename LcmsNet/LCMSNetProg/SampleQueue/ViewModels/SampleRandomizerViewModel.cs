@@ -27,38 +27,20 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public SampleRandomizerViewModel(List<SampleData> inputList)
         {
-            inputSampleList = new ReactiveList<SampleData>(inputList);
-            InitControls();
-        }
-
-        /// <summary>
-        /// Initializes the form controls
-        /// </summary>
-        private void InitControls()
-        {
-            // Load list of randomizer types
-            randomizersDict = RandomizerPluginTools.GetRandomizerPlugins();
-
-            if (randomizersDict.Count < 1)
-                return;
-
-            using (randomizerNameList.SuppressChangeNotifications())
-            {
-                randomizerNameList.Clear();
-                randomizerNameList.AddRange(randomizersDict.Keys);
-            }
-            SelectedRandomizer = "";
+            InputSampleList = new ReactiveList<SampleData>(inputList);
 
             RandomizationPerformed = false;
-            RandomizeCommand = ReactiveCommand.Create(() => Randomize(), this.WhenAnyValue(x => x.SelectedRandomizer).Select(x => !string.IsNullOrWhiteSpace(SelectedRandomizer)));
+            RandomizeCommand = ReactiveCommand.Create(Randomize, this.WhenAnyValue(x => x.SelectedRandomizer).Select(x => !string.IsNullOrWhiteSpace(SelectedRandomizer)));
+
+            // Load list of randomizer types
+            RandomizerNameList = new ReactiveList<string>(RandomizerPluginTools.GetRandomizerPlugins().Keys);
+            SelectedRandomizer = "";
         }
 
         #region "Class variables"
 
-        private readonly IReadOnlyReactiveList<SampleData> inputSampleList = new ReactiveList<SampleData>();
         private readonly ReactiveList<SampleData> outputSampleList = new ReactiveList<SampleData>();
         private Dictionary<string, Type> randomizersDict = new Dictionary<string, Type>();
-        private readonly ReactiveList<string> randomizerNameList = new ReactiveList<string>();
         private string currentStatus = "Ready.";
         private string selectedRandomizer = "";
         private bool randomizationPerformed = false;
@@ -67,9 +49,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Properties"
 
-        public IReadOnlyReactiveList<SampleData> InputSampleList => inputSampleList;
+        public IReadOnlyReactiveList<SampleData> InputSampleList { get; }
         public IReadOnlyReactiveList<SampleData> OutputSampleList => outputSampleList;
-        public IReadOnlyReactiveList<string> RandomizerNameList => randomizerNameList;
+        public IReadOnlyReactiveList<string> RandomizerNameList { get; }
 
         public string CurrentStatus
         {
@@ -89,7 +71,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref randomizationPerformed, value);
         }
 
-        public ReactiveCommand<Unit, Unit> RandomizeCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> RandomizeCommand { get; }
 
         #endregion
 
