@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using DynamicData;
 using FluidicsSDK.ModelCheckers;
 using LcmsNetSDK;
 using ReactiveUI;
@@ -14,7 +16,7 @@ namespace LcmsNet.Simulator.ViewModels
         /// Calling this constructor is only for the windows WPF designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public ModelCheckListViewModel() : this(new IFluidicsModelChecker[] {new FluidicsCycleCheck(), new MultipleSourcesModelCheck(), new NoSinksModelCheck(), new TestModelCheck()})
+        public ModelCheckListViewModel() : this(new IFluidicsModelChecker[]{ new FluidicsCycleCheck(), new MultipleSourcesModelCheck(), new NoSinksModelCheck(), new TestModelCheck() })
         {
         }
 
@@ -32,13 +34,14 @@ namespace LcmsNet.Simulator.ViewModels
                 AddCheckerControl(check);
             }
 
-            StatusCategoryComboBoxOptions = new ReactiveList<ModelStatusCategory>(Enum.GetValues(typeof(ModelStatusCategory)).Cast<ModelStatusCategory>());
-
-            Checkers.ChangeTrackingEnabled = true;
+            StatusCategoryComboBoxOptions = Enum.GetValues(typeof(ModelStatusCategory)).Cast<ModelStatusCategory>().ToList().AsReadOnly();
 
             this.WhenAnyValue(x => x.EnableAll).Subscribe(x => EnableAllChanged());
-            Checkers.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.IsEnabled)))
-                .Subscribe(x => ModelEnabledChanged(x.Sender.IsEnabled));
+
+            checkers.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var checkersBound).Subscribe();
+            Checkers = checkersBound;
+
+            checkers.Connect().ObserveOn(RxApp.MainThreadScheduler).WhenValueChanged(x => x.IsEnabled).Subscribe(ModelEnabledChanged);
         }
 
         ~ModelCheckListViewModel()
@@ -51,7 +54,7 @@ namespace LcmsNet.Simulator.ViewModels
         }
 
         private readonly IModelCheckController controller;
-        private readonly ReactiveList<IFluidicsModelChecker> checkers = new ReactiveList<IFluidicsModelChecker>();
+        private readonly SourceList<IFluidicsModelChecker> checkers = new SourceList<IFluidicsModelChecker>();
         private bool allChecked = false;
         private bool enableAll = false;
 
@@ -61,14 +64,14 @@ namespace LcmsNet.Simulator.ViewModels
             set => this.RaiseAndSetIfChanged(ref enableAll, value);
         }
 
-        public IReadOnlyReactiveList<IFluidicsModelChecker> Checkers => checkers;
-        public IReadOnlyReactiveList<ModelStatusCategory> StatusCategoryComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<IFluidicsModelChecker> Checkers {get; }
+        public ReadOnlyCollection<ModelStatusCategory> StatusCategoryComboBoxOptions { get; }
 
         private void EnableAllChanged()
         {
             if (EnableAll && !allChecked)
             {
-                foreach (var check in checkers)
+                foreach (var check in checkers.Items)
                 {
                     check.IsEnabled = true;
                 }
@@ -76,7 +79,7 @@ namespace LcmsNet.Simulator.ViewModels
             }
             if (!EnableAll && allChecked)
             {
-                foreach (var check in checkers)
+                foreach (var check in checkers.Items)
                 {
                     check.IsEnabled = false;
                 }
@@ -88,7 +91,7 @@ namespace LcmsNet.Simulator.ViewModels
         {
             if (newValue)
             {
-                if (checkers.All(x => x.IsEnabled))
+                if (checkers.Items.All(x => x.IsEnabled))
                 {
                     allChecked = true;
                     EnableAll = true;
@@ -96,7 +99,7 @@ namespace LcmsNet.Simulator.ViewModels
             }
             else
             {
-                if (checkers.Any(x => !x.IsEnabled))
+                if (checkers.Items.Any(x => !x.IsEnabled))
                 {
                     allChecked = false;
                     EnableAll = false;
@@ -106,7 +109,7 @@ namespace LcmsNet.Simulator.ViewModels
 
         private void AddCheckerControl(IFluidicsModelChecker check)
         {
-            if (!checkers.Any(x => x.Name.Equals(check.Name)))
+            if (!checkers.Items.Any(x => x.Name.Equals(check.Name)))
             {
                 checkers.Add(check);
             }
@@ -120,12 +123,16 @@ namespace LcmsNet.Simulator.ViewModels
         private void CheckRemovedHandler(object sender, ModelCheckControllerEventArgs e)
         {
             var check = e.ModelChecker;
-            if (checkers.Any(x => x.Name.Equals(check.Name)))
+            if (checkers.Items.Any(x => x.Name.Equals(check.Name)))
             {
-                using (checkers.SuppressChangeNotifications())
+                checkers.Edit(sourceList =>
                 {
-                    checkers.RemoveAll(Checkers.ToList().Where(x => x.Name.Equals(check.Name)));
-                }
+                    var toRemove = sourceList.Where(x => x.Name.Equals(check.Name)).ToList();
+                    foreach (var item in toRemove)
+                    {
+                        sourceList.Remove(item);
+                    }
+                });
             }
         }
     }

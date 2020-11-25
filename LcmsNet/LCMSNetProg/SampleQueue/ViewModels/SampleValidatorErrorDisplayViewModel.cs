@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Experiment;
@@ -19,16 +20,16 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleValidatorErrorDisplayViewModel(Dictionary<SampleData, List<SampleValidationError>> errorsSet)
         {
-            var errors = new ReactiveList<ErrorData>();
+            var errors = new List<ErrorData>();
             foreach (var item in errorsSet)
             {
                 errors.AddRange(item.Value.Select(x => new ErrorData(item.Key, x)));
             }
 
-            Errors = errors;
+            Errors = errors.AsReadOnly();
         }
 
-        public IReadOnlyReactiveList<ErrorData> Errors { get; }
+        public ReadOnlyCollection<ErrorData> Errors { get; }
 
         public class ErrorData
         {

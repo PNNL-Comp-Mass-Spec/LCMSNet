@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using LcmsNetDmsTools;
 using LcmsNetSDK.Data;
 using ReactiveUI;
@@ -7,12 +9,11 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class SampleDMSValidationViewModel : ReactiveObject
     {
-        private readonly static ReactiveList<string> usageTypeComboBoxOptions = new ReactiveList<string>(new string[] {
+        private static readonly ReadOnlyCollection<string> usageTypeComboBoxOptions = new List<string> {
             "BROKEN",
             "CAP_DEV",
             "MAINTENANCE", // TODO: PULL this information from DMS T_EUS_UsageType and cache in SQLite DB!
-            "USER"});
-
+            "USER"}.AsReadOnly();
 
         /// <summary>
         /// Calling this constructor is only for the windows WPF designer.
@@ -61,7 +62,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public int ID { get; set; }
 
-        public IReadOnlyReactiveList<string> UsageTypeComboBoxOptions => usageTypeComboBoxOptions;
+        public ReadOnlyCollection<string> UsageTypeComboBoxOptions => usageTypeComboBoxOptions;
         public SampleData Sample => sample;
 
         public bool CanChangeEmslData

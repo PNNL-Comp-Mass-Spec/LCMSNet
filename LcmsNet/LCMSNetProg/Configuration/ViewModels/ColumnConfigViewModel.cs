@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Media;
 using LcmsNetData;
 using LcmsNetData.Logging;
@@ -25,15 +26,15 @@ namespace LcmsNet.Configuration.ViewModels
                 Color = Colors.Red
             };
 
-            columnNamesComboBoxOptions = new ReactiveList<string>(new string[] {"NOTSET"});
+            ColumnNamesComboBoxOptions = new ReadOnlyObservableCollection<string>(new ObservableCollection<string>(new string[] {"NOTSET"}));
 
             Initialize();
         }
 
-        public ColumnConfigViewModel(ColumnData column, IReadOnlyReactiveList<string> columnNames)
+        public ColumnConfigViewModel(ColumnData column, ReadOnlyObservableCollection<string> columnNames)
         {
             columnData = column;
-            columnNamesComboBoxOptions = columnNames;
+            ColumnNamesComboBoxOptions = columnNames;
 
             Initialize();
         }
@@ -87,7 +88,6 @@ namespace LcmsNet.Configuration.ViewModels
         private ColumnData columnData;
 
         private ObservableAsPropertyHelper<int> columnId;
-        private readonly IReadOnlyReactiveList<string> columnNamesComboBoxOptions;
 
         #endregion
 
@@ -125,7 +125,7 @@ namespace LcmsNet.Configuration.ViewModels
         /// <summary>
         /// Sets the list of column names.
         /// </summary>
-        public IReadOnlyReactiveList<string> ColumnNamesComboBoxOptions => columnNamesComboBoxOptions;
+        public ReadOnlyObservableCollection<string> ColumnNamesComboBoxOptions { get; }
 
         #endregion
 

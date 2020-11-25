@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using DynamicData;
+using DynamicData.Binding;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using ReactiveUI;
@@ -25,21 +28,23 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public SampleRandomizerViewModel(List<SampleData> inputList)
+        public SampleRandomizerViewModel(IEnumerable<SampleData> inputList)
         {
-            InputSampleList = new ReactiveList<SampleData>(inputList);
+            InputSampleList = inputList.ToList().AsReadOnly();
+            outputSampleList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var outputSampleListBound).Subscribe();
+            OutputSampleList = outputSampleListBound;
 
             RandomizationPerformed = false;
             RandomizeCommand = ReactiveCommand.Create(Randomize, this.WhenAnyValue(x => x.SelectedRandomizer).Select(x => !string.IsNullOrWhiteSpace(SelectedRandomizer)));
 
             // Load list of randomizer types
-            RandomizerNameList = new ReactiveList<string>(RandomizerPluginTools.GetRandomizerPlugins().Keys);
+            RandomizerNameList = RandomizerPluginTools.GetRandomizerPlugins().Keys.ToList().AsReadOnly();
             SelectedRandomizer = "";
         }
 
         #region "Class variables"
 
-        private readonly ReactiveList<SampleData> outputSampleList = new ReactiveList<SampleData>();
+        private readonly SourceList<SampleData> outputSampleList = new SourceList<SampleData>();
         private Dictionary<string, Type> randomizersDict = new Dictionary<string, Type>();
         private string currentStatus = "Ready.";
         private string selectedRandomizer = "";
@@ -49,9 +54,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Properties"
 
-        public IReadOnlyReactiveList<SampleData> InputSampleList { get; }
-        public IReadOnlyReactiveList<SampleData> OutputSampleList => outputSampleList;
-        public IReadOnlyReactiveList<string> RandomizerNameList { get; }
+        public ReadOnlyCollection<SampleData> InputSampleList { get; }
+        public ReadOnlyObservableCollection<SampleData> OutputSampleList { get; }
+        public ReadOnlyCollection<string> RandomizerNameList { get; }
 
         public string CurrentStatus
         {
@@ -107,10 +112,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             var randomizer = randomizerObject as IRandomizerInterface;
             var randomized = randomizer.RandomizeSamples(InputSampleList.ToList());
 
-            using (outputSampleList.SuppressChangeNotifications())
+            outputSampleList.Edit(list =>
             {
-                outputSampleList.AddRange(randomized);
-            }
+                list.AddRange(randomized);
+            });
 
             CurrentStatus = "Randomization Complete.";
 

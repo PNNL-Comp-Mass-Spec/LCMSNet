@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
+using DynamicData;
 using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
@@ -39,6 +42,17 @@ namespace LcmsNet.Configuration.ViewModels
             }
 #endif
 
+            instrumentComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var instrumentComboBoxOptionsBound).Subscribe();
+            cartConfigComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var cartConfigComboBoxOptionsBound).Subscribe();
+            separationTypeComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var separationTypeComboBoxOptionsBound).Subscribe();
+            operatorsComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var operatorsComboBoxOptionsBound).Subscribe();
+            columnNameComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var columnNameComboBoxOptionsBound).Subscribe();
+            InstrumentComboBoxOptions = instrumentComboBoxOptionsBound;
+            CartConfigComboBoxOptions = cartConfigComboBoxOptionsBound;
+            SeparationTypeComboBoxOptions = separationTypeComboBoxOptionsBound;
+            OperatorsComboBoxOptions = operatorsComboBoxOptionsBound;
+            ColumnNameComboBoxOptions = columnNameComboBoxOptionsBound;
+
             TriggerLocation = LCMSSettings.GetParameter(LCMSSettings.PARAM_TRIGGERFILEFOLDER);
             PdfPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_PDFPATH);
 
@@ -63,7 +77,7 @@ namespace LcmsNet.Configuration.ViewModels
             MinVolume = CartConfiguration.MinimumVolume;
 
             //load time zones into combobox
-            TimeZoneComboBoxOptions = new ReactiveList<string>(TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id));
+            TimeZoneComboBoxOptions = TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id).ToList().AsReadOnly();
             TimeZone = LCMSSettings.GetParameter(LCMSSettings.PARAM_TIMEZONE);
 
             LoadUserCombo(SQLiteTools.GetUserList(false));
@@ -103,11 +117,11 @@ namespace LcmsNet.Configuration.ViewModels
         private string instrumentOperator = "";
         private bool instrumentNameNotSaved;
         private bool operatorNotSaved;
-        private readonly ReactiveList<string> instrumentComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<string> cartConfigComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<string> separationTypeComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<string> operatorsComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<string> columnNameComboBoxOptions = new ReactiveList<string>();
+        private readonly SourceList<string> instrumentComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<string> cartConfigComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<string> separationTypeComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<string> operatorsComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<string> columnNameComboBoxOptions = new SourceList<string>();
         private bool specialColumnEnabled;
 
         #endregion
@@ -233,16 +247,12 @@ namespace LcmsNet.Configuration.ViewModels
             private set => this.RaiseAndSetIfChanged(ref operatorNotSaved, value);
         }
 
-        public IReadOnlyReactiveList<string> TimeZoneComboBoxOptions { get; }
-        public IReadOnlyReactiveList<string> InstrumentComboBoxOptions => instrumentComboBoxOptions;
-        public IReadOnlyReactiveList<string> CartConfigComboBoxOptions => cartConfigComboBoxOptions;
-        public IReadOnlyReactiveList<string> SeparationTypeComboBoxOptions => separationTypeComboBoxOptions;
-        public IReadOnlyReactiveList<string> OperatorsComboBoxOptions => operatorsComboBoxOptions;
-        public IReadOnlyReactiveList<string> ColumnNameComboBoxOptions => columnNameComboBoxOptions;
-
-        #endregion
-
-        #region Commands
+        public ReadOnlyCollection<string> TimeZoneComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> InstrumentComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> CartConfigComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> SeparationTypeComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> OperatorsComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> ColumnNameComboBoxOptions { get; }
 
         public ReactiveCommand<Unit, Unit> SetInstrumentCommand { get; }
         public ReactiveCommand<Unit, Unit> SetOperatorCommand { get; }
@@ -287,23 +297,17 @@ namespace LcmsNet.Configuration.ViewModels
             // Load combo box
             var instList = SQLiteTools.GetInstrumentList(false).ToList();
 
-            if (instList == null)
-            {
-                ApplicationLogger.LogError(0, "Instrument list retrieval returned null.");
-                return;
-            }
-
             if (instList.Count < 1)
             {
                 ApplicationLogger.LogError(0, "No instruments found.");
                 return;
             }
 
-            using (instrumentComboBoxOptions.SuppressChangeNotifications())
+            instrumentComboBoxOptions.Edit(list =>
             {
-                instrumentComboBoxOptions.Clear();
-                instrumentComboBoxOptions.AddRange(instList.Select(x => x.DMSName));
-            }
+                list.Clear();
+                list.AddRange(instList.Select(x => x.DMSName));
+            });
 
             // Determine if presently specified instrument name is in list. If it is, display it.
             InstrumentName = LCMSSettings.GetParameter(LCMSSettings.PARAM_INSTNAME);
@@ -360,11 +364,11 @@ namespace LcmsNet.Configuration.ViewModels
             }
 
             // Now add user list to combo box
-            using (operatorsComboBoxOptions.SuppressChangeNotifications())
+            operatorsComboBoxOptions.Edit(list =>
             {
-                operatorsComboBoxOptions.Clear();
-                operatorsComboBoxOptions.AddRange(dmsUserList.Select(x => x.Key));
-            }
+                list.Clear();
+                list.AddRange(dmsUserList.Select(x => x.Key));
+            });
 
             // Determine if presently specified operator name is in list. If it is, display it.
             var savedName = LCMSSettings.GetParameter(LCMSSettings.PARAM_OPERATOR);
@@ -465,11 +469,11 @@ namespace LcmsNet.Configuration.ViewModels
         {
             var separationTypes = SQLiteTools.GetSepTypeList(false);
 
-            using (separationTypeComboBoxOptions.SuppressChangeNotifications())
+            separationTypeComboBoxOptions.Edit(list =>
             {
-                separationTypeComboBoxOptions.Clear();
-                separationTypeComboBoxOptions.AddRange(separationTypes);
-            }
+                list.Clear();
+                list.AddRange(separationTypes);
+            });
         }
 
         private void UpdateCartConfigNames(bool isLoading)
@@ -517,11 +521,11 @@ namespace LcmsNet.Configuration.ViewModels
                 }
             }
 
-            using (cartConfigComboBoxOptions.SuppressChangeNotifications())
+            cartConfigComboBoxOptions.Edit(list =>
             {
-                cartConfigComboBoxOptions.Clear();
-                cartConfigComboBoxOptions.AddRange(cartConfigNameList);
-            }
+                list.Clear();
+                list.AddRange(cartConfigNameList);
+            });
 
             if (!isLoading)
             {
@@ -563,11 +567,11 @@ namespace LcmsNet.Configuration.ViewModels
             }
 
             // Everything was OK, so update the list
-            using (columnNameComboBoxOptions.SuppressChangeNotifications())
+            columnNameComboBoxOptions.Edit(list =>
             {
-                columnNameComboBoxOptions.Clear();
-                columnNameComboBoxOptions.AddRange(columnList);
-            }
+                list.Clear();
+                list.AddRange(columnList);
+            });
 
             if (!isLoading)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using LcmsNetSDK.Data;
 using ReactiveUI;
@@ -18,11 +19,11 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleBadBlockDisplayViewModel(List<SampleData> samples)
         {
-            BadSamples = new ReactiveList<BlockErrorData>(samples.Select(sample => new BlockErrorData(sample.DmsData.Batch, sample.DmsData.Block,
-                sample.ColumnIndex + 1, sample.DmsData.DatasetName, sample.LCMethodName)));
+            BadSamples = samples.Select(sample => new BlockErrorData(sample.DmsData.Batch, sample.DmsData.Block,
+                sample.ColumnIndex + 1, sample.DmsData.DatasetName, sample.LCMethodName)).ToList().AsReadOnly();
         }
 
-        public IReadOnlyReactiveList<BlockErrorData> BadSamples { get; }
+        public ReadOnlyCollection<BlockErrorData> BadSamples {get; }
 
         public class BlockErrorData
         {
