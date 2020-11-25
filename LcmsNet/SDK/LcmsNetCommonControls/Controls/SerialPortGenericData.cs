@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Security.Permissions;
+using DynamicData;
+using DynamicData.Binding;
 using LcmsNetData.Logging;
 using Microsoft.Win32;
 using ReactiveUI;
@@ -15,23 +18,29 @@ namespace LcmsNetCommonControls.Controls
     /// </summary>
     public static class SerialPortGenericData
     {
-        private static readonly ReactiveList<string> SerialPortNamesList;
-        private static readonly ReactiveList<SerialPortData> SerialPortsList;
+        private static readonly ObservableCollectionExtended<string> SerialPortNamesList;
+        private static readonly ObservableCollectionExtended<SerialPortData> SerialPortsList;
 
         /// <summary>
         /// List of serial port names
         /// </summary>
-        public static IReadOnlyReactiveList<string> SerialPortNames => SerialPortNamesList;
+        public static ReadOnlyObservableCollection<string> SerialPortNames {get; }
 
         /// <summary>
         /// List of serial ports
         /// </summary>
-        public static IReadOnlyReactiveList<SerialPortData> SerialPorts => SerialPortsList;
+        public static ReadOnlyObservableCollection<SerialPortData> SerialPorts { get; }
 
         static SerialPortGenericData()
         {
-            SerialPortNamesList = new ReactiveList<string>();
-            SerialPortsList = new ReactiveList<SerialPortData>();
+            SerialPortNamesList = new ObservableCollectionExtended<string>();
+            SerialPortsList = new ObservableCollectionExtended<SerialPortData>();
+
+            SerialPortNamesList.ToObservableChangeSet().Bind(out var serialPortNamesBound).Subscribe();
+            SerialPortsList.ToObservableChangeSet().Bind(out var serialPortsBound).Subscribe();
+            SerialPortNames = serialPortNamesBound;
+            SerialPorts = serialPortsBound;
+
             ReadAndStoreSerialPorts();
         }
 
@@ -45,15 +54,12 @@ namespace LcmsNetCommonControls.Controls
 
         private static void ReadAndStoreSerialPorts()
         {
-            using (SerialPortsList.SuppressChangeNotifications())
+            using (SerialPortsList.SuspendNotifications())
+            using (SerialPortNamesList.SuspendNotifications())
             {
                 SerialPortsList.Clear();
-                SerialPortsList.AddRange(GetSerialPortInformation());
-            }
-
-            using (SerialPortNamesList.SuppressChangeNotifications())
-            {
                 SerialPortNamesList.Clear();
+                SerialPortsList.AddRange(GetSerialPortInformation());
                 SerialPortNamesList.AddRange(SerialPortsList.Select(x => x.PortName));
             }
         }

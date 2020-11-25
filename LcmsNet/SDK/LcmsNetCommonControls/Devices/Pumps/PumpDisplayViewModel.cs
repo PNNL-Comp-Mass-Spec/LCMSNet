@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LcmsNetSDK.Devices;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -36,7 +37,11 @@ namespace LcmsNetCommonControls.Devices.Pumps
         private PlotModel dataPressureMonitorPlot;
         private PlotModel dataFlowMonitorPlot;
         private PlotModel dataBMonitorPlot;
-        private readonly ReactiveList<PlotData> plotDataList = new ReactiveList<PlotData>();
+
+        /// <summary>
+        /// List for supplying data to the plots. Does not need to be an observable list because we directly trigger updates.
+        /// </summary>
+        private readonly List<PlotData> plotDataList = new List<PlotData>();
 
         /// <summary>
         /// Name of the pump
@@ -189,13 +194,11 @@ namespace LcmsNetCommonControls.Devices.Pumps
         /// </summary>
         public void DisplayMonitoringData(object sender, PumpDataEventArgs args)
         {
-            using (plotDataList.SuppressChangeNotifications())
+            // TODO: Change this so that we are not re-generating the whole list with every update.
+            plotDataList.Clear();
+            for (var i = 0; i < args.Time.Count; i++)
             {
-                plotDataList.Clear();
-                for (var i = 0; i < args.Time.Count; i++)
-                {
-                    plotDataList.Add(new PlotData(args.Time[i], args.Pressure[i], args.Flowrate[i], args.PercentB[i]));
-                }
+                plotDataList.Add(new PlotData(args.Time[i], args.Pressure[i], args.Flowrate[i], args.PercentB[i]));
             }
 
             DataPressureMonitorPlot.InvalidatePlot(true);

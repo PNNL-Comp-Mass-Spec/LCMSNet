@@ -1,7 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using DynamicData;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
@@ -17,13 +21,16 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// <summary>
         /// Constructor
         /// </summary>
-        public NetStartViewModelBase()
+        protected NetStartViewModelBase()
         {
             RefreshMethodsCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshMethods));
             StartAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(StartAcquisition));
             StopAcquisitionCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(StopAcquisition));
 
             this.PropertyChanged += OnPropertyChanged;
+
+            methodComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var methodComboBoxOptionsBound).Subscribe();
+            MethodComboBoxOptions = methodComboBoxOptionsBound;
         }
 
         #endregion
@@ -33,7 +40,7 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// <summary>
         /// MethodComboBoxOptions backing field
         /// </summary>
-        protected readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
+        protected readonly SourceList<string> methodComboBoxOptions = new SourceList<string>();
 
         private string selectedMethod = "";
         private string sampleName = "";
@@ -48,7 +55,7 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// <summary>
         /// The methods to show in the ComboBox
         /// </summary>
-        public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
+        public ReadOnlyObservableCollection<string> MethodComboBoxOptions { get; }
 
         /// <summary>
         /// The currently selected method

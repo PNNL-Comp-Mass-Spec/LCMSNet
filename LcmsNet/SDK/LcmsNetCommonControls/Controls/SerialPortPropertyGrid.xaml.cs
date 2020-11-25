@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
-using ReactiveUI;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace LcmsNetCommonControls.Controls
@@ -21,7 +21,7 @@ namespace LcmsNetCommonControls.Controls
         /// <summary>
         /// List of available serial ports.
         /// </summary>
-        public IReadOnlyReactiveList<SerialPortData> SerialPorts => SerialPortGenericData.SerialPorts;
+        public ReadOnlyObservableCollection<SerialPortData> SerialPorts => SerialPortGenericData.SerialPorts;
 
         private void PropertyGrid_OnPropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
         {

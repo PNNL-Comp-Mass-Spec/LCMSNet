@@ -86,13 +86,10 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
         {
             var methodNames = new List<string>(data.Select(x => x.ToString()));
 
-            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
+            methodComboBoxOptions.Edit(x =>
             {
-                using (methodComboBoxOptions.SuppressChangeNotifications())
-                {
-                    methodComboBoxOptions.Clear();
-                    methodComboBoxOptions.AddRange(methodNames);
-                }
+                x.Clear();
+                x.AddRange(methodNames);
             });
 
             InstrumentMethodListReceived?.Invoke(methodNames);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -42,7 +43,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// </summary>
         protected ContactClosureReadViewModelBase()
         {
-            inputPortComboBoxOptions = new ReactiveUI.ReactiveList<T>(Enum.GetValues(typeof(T)).Cast<T>());
+            // Use List<T>.AsReadOnly and ReadOnlyCollection<T> to get a non-modifiable list of the options; there is no reason for this to be modifiable.
+            InputPortComboBoxOptions = Enum.GetValues(typeof(T)).Cast<T>().ToList().AsReadOnly();
             ReadStatusCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ReadStatus()));
             MinimumAnalogVoltage = 0;
             MaximumAnalogVoltage = 5;
@@ -62,11 +64,6 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         private bool isAnalog;
         private ContactClosureState status = ContactClosureState.Unknown;
 
-        /// <summary>
-        /// InputPortComboBoxOptions backing field
-        /// </summary>
-        protected readonly ReactiveUI.ReactiveList<T> inputPortComboBoxOptions;
-
         #endregion
 
         #region Properties
@@ -74,7 +71,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// <summary>
         /// The Port options to show in the ComboBox
         /// </summary>
-        public ReactiveUI.IReadOnlyReactiveList<T> InputPortComboBoxOptions => inputPortComboBoxOptions;
+        public ReadOnlyCollection<T> InputPortComboBoxOptions { get; }
 
         /// <summary>
         /// Command to read the signal

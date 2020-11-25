@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -120,7 +121,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         public IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
         public IReadOnlyReactiveList<string> TrayComboBoxOptions => trayComboBoxOptions;
         public IReadOnlyReactiveList<VialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
-        public IReadOnlyReactiveList<SerialPortData> PortNamesComboBoxOptions => SerialPortGenericData.SerialPorts;
+        public ReadOnlyObservableCollection<SerialPortData> PortNamesComboBoxOptions => SerialPortGenericData.SerialPorts;
         public IReadOnlyReactiveList<string> TrayNamesAndMaxVial => trayNamesAndMaxVial;
 
         public string SelectedMethod

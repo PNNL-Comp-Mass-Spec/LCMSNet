@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -183,7 +184,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         public IReadOnlyReactiveList<IscoPumpDisplayViewModel> PumpDisplays { get; }
         public IReadOnlyReactiveList<IscoControlMode> ControlModesComboBoxOptions { get; }
         public IReadOnlyReactiveList<int> PumpCountComboBoxOptions { get; }
-        public IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
+        public ReadOnlyObservableCollection<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
         public IReadOnlyReactiveList<int> UnitAddressComboBoxOptions { get; }
         public IReadOnlyReactiveList<IscoOperationMode> OperationModeComboBoxOptions { get; }
         public IReadOnlyReactiveList<RefillData> RefillRates { get; }

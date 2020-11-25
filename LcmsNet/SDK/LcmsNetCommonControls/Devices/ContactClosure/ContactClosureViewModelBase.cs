@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -21,7 +22,8 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// </summary>
         protected ContactClosureViewModelBase()
         {
-            outputPortComboBoxOptions = new ReactiveUI.ReactiveList<T>(Enum.GetValues(typeof(T)).Cast<T>());
+            // Use List<T>.AsReadOnly and ReadOnlyCollection<T> to get a non-modifiable list of the options; there is no reason for this to be modifiable.
+            OutputPortComboBoxOptions = Enum.GetValues(typeof(T)).Cast<T>().ToList().AsReadOnly();
             SendPulseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SendPulse()));
         }
 
@@ -33,11 +35,6 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         private double voltage;
         private T selectedPort;
 
-        /// <summary>
-        /// OutputPortComboBoxOptions backing field
-        /// </summary>
-        protected readonly ReactiveUI.ReactiveList<T> outputPortComboBoxOptions;
-
         #endregion
 
         #region Properties
@@ -45,7 +42,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// <summary>
         /// The Port options to show in the ComboBox
         /// </summary>
-        public ReactiveUI.IReadOnlyReactiveList<T> OutputPortComboBoxOptions => outputPortComboBoxOptions;
+        public ReadOnlyCollection<T> OutputPortComboBoxOptions { get; }
 
         /// <summary>
         /// The minimum voltage allowed for the contact closure

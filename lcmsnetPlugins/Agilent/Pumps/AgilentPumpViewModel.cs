@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
@@ -184,7 +185,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public IReadOnlyReactiveList<AgilentPumpModes> ModeComboBoxOptions => modeComboBoxOptions;
         public IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
-        public IReadOnlyReactiveList<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
+        public ReadOnlyObservableCollection<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
 
         public string PumpModel => pumpModel?.Value ?? "";
         public string PumpSerial => pumpSerial?.Value ?? "";
