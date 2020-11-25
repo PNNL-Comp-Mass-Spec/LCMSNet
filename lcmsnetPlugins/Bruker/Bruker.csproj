@@ -81,6 +81,9 @@
     <Resource Include="Images\BrukerStart.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DynamicData">
+      <Version>6.14.3</Version>
+    </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
       <Version>8.7.2</Version>
     </PackageReference>
