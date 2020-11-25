@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using DynamicData;
 using LcmsNetCommonControls.Controls;
 using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.Pumps;
@@ -32,6 +33,10 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         public AgilentPumpViewModel()
         {
+            ModeComboBoxOptions = Enum.GetValues(typeof(AgilentPumpModes)).Cast<AgilentPumpModes>().ToList().AsReadOnly();
+            methodComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var methodComboBoxOptionsBound).Subscribe();
+            MethodComboBoxOptions = methodComboBoxOptionsBound;
+
             pumpDisplay = new PumpDisplayViewModel("Unknown");
             pumpPopoutVm = new PopoutViewModel(pumpDisplay);
 
@@ -97,11 +102,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 Pump.MonitoringDataReceived += Pump_MonitoringDataReceived;
                 Pump.PropertyChanged += PumpOnPropertyChanged;
                 Pump.MethodNames += PumpOnMethodNames;
-                using (modeComboBoxOptions.SuppressChangeNotifications())
-                {
-                    modeComboBoxOptions.Clear();
-                    modeComboBoxOptions.AddRange(Enum.GetValues(typeof(AgilentPumpModes)).Cast<AgilentPumpModes>());
-                }
 
                 PumpDisplay.SetPumpName(Pump.Name);
                 NewMethodAvailable += PumpAgilent_NewMethodAvailable;
@@ -163,10 +163,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
         //private double mixerVolumeRead;
         private double percentB;
         private double percentBRead;
-        private readonly ReactiveList<AgilentPumpModes> modeComboBoxOptions = new ReactiveList<AgilentPumpModes>();
         private AgilentPumpModes selectedMode;
         private double pressure;
-        private readonly ReactiveList<string> methodComboBoxOptions = new ReactiveList<string>();
+        private readonly SourceList<string> methodComboBoxOptions = new SourceList<string>();
         private string selectedMethod = "";
         private string selectedComPort = "";
         private string methodText = "";
@@ -183,8 +182,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         #region Properties
 
-        public IReadOnlyReactiveList<AgilentPumpModes> ModeComboBoxOptions => modeComboBoxOptions;
-        public IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
+        public ReadOnlyCollection<AgilentPumpModes> ModeComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> MethodComboBoxOptions { get; }
         public ReadOnlyObservableCollection<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
 
         public string PumpModel => pumpModel?.Value ?? "";
@@ -379,16 +378,16 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="data"></param>
         private void PumpOnMethodNames(object sender, List<object> data)
         {
-            using (methodComboBoxOptions.SuppressChangeNotifications())
+            methodComboBoxOptions.Edit(list =>
             {
-                methodComboBoxOptions.Clear();
-                methodComboBoxOptions.AddRange(data.Select(x => x.ToString()));
-            }
+                list.Clear();
+                list.AddRange(data.Select(x => x.ToString()));
+            });
 
             // Make sure one method is selected.
-            if (methodComboBoxOptions.Count > 0 && !methodComboBoxOptions.Contains(SelectedMethod))
+            if (methodComboBoxOptions.Count > 0 && !methodComboBoxOptions.Items.Contains(SelectedMethod))
             {
-                SelectedMethod = methodComboBoxOptions[0];
+                SelectedMethod = methodComboBoxOptions.Items.First();
             }
         }
 
@@ -422,19 +421,16 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 methods[System.IO.Path.GetFileNameWithoutExtension(filename)] = method;
             }
 
-            RxApp.MainThreadScheduler.Schedule(() => {
-                // Clear any existing pump methods
-                if (methods.Count > 0)
-                {
-                    Pump.ClearMethods();
-                    using (methodComboBoxOptions.SuppressChangeNotifications())
-                    {
-                        methodComboBoxOptions.Clear();
-                    }
+            // Clear any existing pump methods
+            if (methods.Count > 0)
+            {
+                methodComboBoxOptions.Clear();
 
+                RxApp.MainThreadScheduler.Schedule(() => {
+                    Pump.ClearMethods();
                     Pump.AddMethods(methods);
-                }
-            });
+                });
+            }
 
             if (methodSelected != null)
             {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -41,10 +43,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             if (valve != null)
             {
-                using (valvePositionComboBoxOptions.SuppressChangeNotifications())
-                {
-                    valvePositionComboBoxOptions.AddRange(Enum.GetValues(valve.GetStateType()).Cast<object>().Select(x => x.ToString()));
-                }
+                ValvePositionComboBoxOptions = Enum.GetValues(valve.GetStateType()).Cast<object>().Select(x => x.ToString()).ToList().AsReadOnly();
             }
         }
 
@@ -67,14 +66,18 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         private ValveVICIMultiPos valve;
 
-        private readonly ReactiveList<string> valvePositionComboBoxOptions = new ReactiveList<string>();
+        private ReadOnlyCollection<string> valvePositionComboBoxOptions = new List<string>().AsReadOnly();
         private string selectedValvePosition = "";
 
         #endregion
 
         #region Properties
 
-        public IReadOnlyReactiveList<string> ValvePositionComboBoxOptions => valvePositionComboBoxOptions;
+        public ReadOnlyCollection<string> ValvePositionComboBoxOptions
+        {
+            get => valvePositionComboBoxOptions;
+            private set => this.RaiseAndSetIfChanged(ref valvePositionComboBoxOptions, value);
+        }
 
         public string SelectedValvePosition
         {

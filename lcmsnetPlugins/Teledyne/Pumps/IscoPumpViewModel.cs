@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetCommonControls.Controls;
@@ -19,29 +19,29 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         public IscoPumpViewModel()
         {
-            ControlModesComboBoxOptions = new ReactiveList<IscoControlMode>(Enum.GetValues(typeof(IscoControlMode)).Cast<IscoControlMode>()
-                .Where(x => x != IscoControlMode.External /* External is not an option... */));
-            OperationModeComboBoxOptions = new ReactiveList<IscoOperationMode>(Enum.GetValues(typeof(IscoOperationMode)).Cast<IscoOperationMode>());
-            PumpCountComboBoxOptions = new ReactiveList<int>(Enumerable.Range(1, 3));
+            ControlModesComboBoxOptions = Enum.GetValues(typeof(IscoControlMode)).Cast<IscoControlMode>()
+                .Where(x => x != IscoControlMode.External /* External is not a valid option... */).ToList().AsReadOnly();
+            OperationModeComboBoxOptions = Enum.GetValues(typeof(IscoOperationMode)).Cast<IscoOperationMode>().ToList().AsReadOnly();
+            PumpCountComboBoxOptions = new List<int>(Enumerable.Range(1, 3)).AsReadOnly();
 
             // Add a list of available unit addresses to the unit address combo box
-            var unitAddressOptions = new ReactiveList<int>();
+            var unitAddressOptions = new List<int>();
             for (var indx = pump.UnitAddressMin; indx <= pump.UnitAddressMax; indx++)
             {
                 unitAddressOptions.Add(indx);
             }
-            UnitAddressComboBoxOptions = unitAddressOptions;
+            UnitAddressComboBoxOptions = unitAddressOptions.AsReadOnly();
 
             // Initialize refill rate array
             // Initialize max refill rate array
-            RefillRates = new ReactiveList<RefillData>
+            RefillRates = new List<RefillData>
             {
                 new RefillData("Pump A", 0) {MaxRefillRate = 30D},
                 new RefillData("Pump B", 1) {MaxRefillRate = 30D},
                 new RefillData("Pump C", 2) {MaxRefillRate = 30D},
-            };
+            }.AsReadOnly();
 
-            LimitsList = new ReactiveList<LimitData>
+            LimitsList = new List<LimitData>
             {
                 new LimitData("Flow Units"),
                 new LimitData("Pressure Units"),
@@ -53,16 +53,16 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 new LimitData("Max Flow Value (Note 2)"),
                 new LimitData("Min Refill Rate SP"),
                 new LimitData("Max Refill Rate SP"),
-            };
+            }.AsReadOnly();
 
 
             // Initialize the pump display controls
-            PumpDisplays = new ReactiveList<IscoPumpDisplayViewModel>
+            PumpDisplays = new List<IscoPumpDisplayViewModel>
             {
                 new IscoPumpDisplayViewModel(0),
                 new IscoPumpDisplayViewModel(1),
                 new IscoPumpDisplayViewModel(2),
-            };
+            }.AsReadOnly();
 
             foreach (var pumpDisplay in PumpDisplays)
             {
@@ -181,14 +181,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
         #region "Properties"
 
-        public IReadOnlyReactiveList<IscoPumpDisplayViewModel> PumpDisplays { get; }
-        public IReadOnlyReactiveList<IscoControlMode> ControlModesComboBoxOptions { get; }
-        public IReadOnlyReactiveList<int> PumpCountComboBoxOptions { get; }
+        public ReadOnlyCollection<IscoPumpDisplayViewModel> PumpDisplays { get; }
+        public ReadOnlyCollection<IscoControlMode> ControlModesComboBoxOptions { get; }
+        public ReadOnlyCollection<int> PumpCountComboBoxOptions { get; }
         public ReadOnlyObservableCollection<SerialPortData> ComPortComboBoxOptions => SerialPortGenericData.SerialPorts;
-        public IReadOnlyReactiveList<int> UnitAddressComboBoxOptions { get; }
-        public IReadOnlyReactiveList<IscoOperationMode> OperationModeComboBoxOptions { get; }
-        public IReadOnlyReactiveList<RefillData> RefillRates { get; }
-        public IReadOnlyReactiveList<LimitData> LimitsList { get; }
+        public ReadOnlyCollection<int> UnitAddressComboBoxOptions { get; }
+        public ReadOnlyCollection<IscoOperationMode> OperationModeComboBoxOptions { get; }
+        public ReadOnlyCollection<RefillData> RefillRates { get; }
+        public ReadOnlyCollection<LimitData> LimitsList { get; }
 
         public string COMPort
         {

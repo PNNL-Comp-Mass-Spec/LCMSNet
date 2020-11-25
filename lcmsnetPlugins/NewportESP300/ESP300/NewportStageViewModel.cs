@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using DynamicData;
 using LcmsNetCommonControls.Devices;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
@@ -14,6 +17,9 @@ namespace LcmsNetPlugins.Newport.ESP300
     {
         public NewportStageViewModel()
         {
+            positionsList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var positionsListBound).Subscribe();
+            PositionsList = positionsListBound;
+
             PropertyChanged += NewportStageViewModel_PropertyChanged;
 
             RefreshPositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshPosition));
@@ -47,7 +53,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         private NewportStage newportStage;
         private const string units = "mm";
         private const string positionNotDefined = "NoPosition";
-        private readonly ReactiveList<string> positionsList = new ReactiveList<string>();
+        private readonly SourceList<string> positionsList = new SourceList<string>();
         private string axis1MotorStatus = "";
         private string axis2MotorStatus = "";
         private string axis3MotorStatus = "";
@@ -63,7 +69,7 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         #region Properties
 
-        public IReadOnlyReactiveList<string> PositionsList => positionsList;
+        public ReadOnlyObservableCollection<string> PositionsList { get; }
 
         public string Axis1MotorStatus
         {
@@ -378,13 +384,10 @@ namespace LcmsNetPlugins.Newport.ESP300
 
         private void UpdatePositionListBox()
         {
-            RxApp.MainThreadScheduler.Schedule(() =>
+            positionsList.Edit(list =>
             {
-                using (positionsList.SuppressChangeNotifications())
-                {
-                    positionsList.Clear();
-                    positionsList.AddRange(NewportStage.Positions.Keys);
-                }
+                list.Clear();
+                list.AddRange(NewportStage.Positions.Keys);
             });
         }
 

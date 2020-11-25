@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetData;
@@ -13,6 +14,7 @@ namespace DemoPluginLibrary
 
         public DemoPALAdvancedControlViewModel()
         {
+            MethodsComboBoxOptions = new ReadOnlyObservableCollection<string>(new ObservableCollection<string>{ "Example Method 1", "Example Method 2" });
             RunCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Run()));
         }
 
@@ -36,11 +38,10 @@ namespace DemoPluginLibrary
             }
         }
 
-        private readonly ReactiveUI.ReactiveList<string> methodsComboBoxOptions = new ReactiveUI.ReactiveList<string>();
         private string selectedMethod = "";
         private double timeout = 0;
 
-        public ReactiveUI.IReadOnlyReactiveList<string> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public ReadOnlyObservableCollection<string> MethodsComboBoxOptions { get; }
 
         public string SelectedMethod
         {

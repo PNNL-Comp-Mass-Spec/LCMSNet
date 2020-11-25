@@ -6,10 +6,12 @@ using System.Globalization;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using DynamicData;
 using LcmsNetCommonControls.Controls;
 using LcmsNetCommonControls.Devices;
 using LcmsNetSDK.Devices;
@@ -28,7 +30,13 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             isInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
 
-            vialRangeComboBoxOptions = new ReactiveList<VialRanges>(Enum.GetValues(typeof(VialRanges)).Cast<VialRanges>());
+            methodComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var methodComboBoxOptionsBound).Subscribe();
+            trayComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var trayComboBoxOptionsBound).Subscribe();
+            VialRangeComboBoxOptions = Enum.GetValues(typeof(VialRanges)).Cast<VialRanges>().ToList().AsReadOnly();
+            trayNamesAndMaxVial.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var trayNamesAndMaxVialBound).Subscribe();
+            MethodComboBoxOptions = methodComboBoxOptionsBound;
+            TrayComboBoxOptions = trayComboBoxOptionsBound;
+            TrayNamesAndMaxVial = trayNamesAndMaxVialBound;
 
             this.PropertyChanged += PalViewModel_PropertyChanged;
 
@@ -95,10 +103,9 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         private Pal pal;
 
-        private readonly ReactiveList<string> methodComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<string> trayComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<VialRanges> vialRangeComboBoxOptions;
-        private readonly ReactiveList<string> trayNamesAndMaxVial = new ReactiveList<string>();
+        private readonly SourceList<string> methodComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<string> trayComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<string> trayNamesAndMaxVial = new SourceList<string>();
         private readonly bool isInDesignMode = false;
         private string selectedMethod = "";
         private string selectedTray = "";
@@ -118,11 +125,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         #region Properties
 
-        public IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
-        public IReadOnlyReactiveList<string> TrayComboBoxOptions => trayComboBoxOptions;
-        public IReadOnlyReactiveList<VialRanges> VialRangeComboBoxOptions => vialRangeComboBoxOptions;
+        public ReadOnlyObservableCollection<string> MethodComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> TrayComboBoxOptions { get; }
+        public ReadOnlyCollection<VialRanges> VialRangeComboBoxOptions { get; }
         public ReadOnlyObservableCollection<SerialPortData> PortNamesComboBoxOptions => SerialPortGenericData.SerialPorts;
-        public IReadOnlyReactiveList<string> TrayNamesAndMaxVial => trayNamesAndMaxVial;
+        public ReadOnlyObservableCollection<string> TrayNamesAndMaxVial { get; }
 
         public string SelectedMethod
         {
@@ -340,11 +347,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             //LcmsNetDataClasses.Logging.ApplicationLogger.LogMessage(LcmsNetDataClasses.Logging.ApplicationLogger.CONST_STATUS_LEVEL_DETAILED, "PAL ADVANCED CONTROL PROCESS METHODS:" + rawMethodList.Count);
             if (rawMethodList != null)
             {
-                using (methodComboBoxOptions.SuppressChangeNotifications())
+                methodComboBoxOptions.Edit(list =>
                 {
-                    methodComboBoxOptions.Clear();
-                    methodComboBoxOptions.AddRange(rawMethodList);
-                }
+                    list.Clear();
+                    list.AddRange(rawMethodList);
+                });
             }
         }
 
@@ -359,11 +366,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                                                                "ADVANCED CONTROL PROCESS TRAYS:" + trayList.Count);*/
             if (trayList != null)
             {
-                using (trayComboBoxOptions.SuppressChangeNotifications())
+                trayComboBoxOptions.Edit(list =>
                 {
-                    trayComboBoxOptions.Clear();
-                    trayComboBoxOptions.AddRange(trayList);
-                }
+                    list.Clear();
+                    list.AddRange(trayList);
+                });
             }
         }
 
@@ -371,11 +378,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             if (traysAndMaxVials != null)
             {
-                using (TrayNamesAndMaxVial.SuppressChangeNotifications())
+                trayNamesAndMaxVial.Edit(list =>
                 {
-                    trayNamesAndMaxVial.Clear();
-                    trayNamesAndMaxVial.AddRange(traysAndMaxVials.Select(x => $"Tray: {x.Key}   Max Vial: {x.Value}"));
-                }
+                    list.Clear();
+                    list.AddRange(traysAndMaxVials.Select(x => $"Tray: {x.Key}   Max Vial: {x.Value}"));
+                });
             }
 
             TrayNamesAndMaxVialFormatted = string.Join("\n", TrayNamesAndMaxVial);

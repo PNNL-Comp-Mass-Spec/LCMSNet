@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO.Ports;
 using System.Reactive;
@@ -22,14 +23,12 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             IsInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
 
-            using (valveIdComboBoxOptions.SuppressChangeNotifications())
+            ValveIdComboBoxOptions = new ReadOnlyObservableCollection<char>(new ObservableCollection<char>
             {
-                valveIdComboBoxOptions.AddRange(new []
-                {
-                    // TODO: Universal Actuators also support A-Z IDs.
-                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' '
-                });
-            }
+                // TODO: Universal Actuators also support A-Z IDs.
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ',
+            });
+
             ValveControlTabSelected = true; // Default selected tab
 
             ClearValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearValveId()));
@@ -68,7 +67,6 @@ namespace LcmsNetPlugins.VICI.Valves
 
         protected readonly bool IsInDesignMode = false;
 
-        private readonly ReactiveList<char> valveIdComboBoxOptions = new ReactiveList<char>();
         private char selectedValveId = ' ';
         private char currentValveId = ' ';
         private string currentValvePosition = "";
@@ -81,7 +79,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
         #region Properties
 
-        public IReadOnlyReactiveList<char> ValveIdComboBoxOptions => valveIdComboBoxOptions;
+        public ReadOnlyObservableCollection<char> ValveIdComboBoxOptions { get; }
 
         public char SelectedValveId
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace DemoPluginLibrary
 
         public DemoValve2AdvancedControlViewModel()
         {
-            valvePositionComboBoxOptions = new ReactiveUI.ReactiveList<EightPositionState>(Enum.GetValues(typeof(EightPositionState)).Cast<EightPositionState>().Where(x => x != EightPositionState.Unknown));
+            ValvePositionComboBoxOptions = Enum.GetValues(typeof(EightPositionState)).Cast<EightPositionState>().Where(x => x != EightPositionState.Unknown).ToList().AsReadOnly();
             SetCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Set()));
             RefreshCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Refresh()));
         }
@@ -39,11 +40,10 @@ namespace DemoPluginLibrary
             }
         }
 
-        private readonly ReactiveUI.ReactiveList<EightPositionState> valvePositionComboBoxOptions;
         private EightPositionState selectedPosition;
         private string state = "";
 
-        public ReactiveUI.IReadOnlyReactiveList<EightPositionState> ValvePositionComboBoxOptions => valvePositionComboBoxOptions;
+        public ReadOnlyCollection<EightPositionState> ValvePositionComboBoxOptions { get; }
 
         public EightPositionState SelectedPosition
         {

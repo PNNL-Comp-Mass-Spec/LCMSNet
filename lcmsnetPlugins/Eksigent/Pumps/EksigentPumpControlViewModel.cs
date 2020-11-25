@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using DynamicData;
 using LcmsNetData;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
@@ -15,6 +17,9 @@ namespace LcmsNetPlugins.Eksigent.Pumps
     {
         public EksigentPumpControlViewModel()
         {
+            methodComboBoxOptions.Connect().ObserveOn(ReactiveUI.RxApp.MainThreadScheduler).Bind(out var methodComboBoxOptionsBound).Subscribe();
+            MethodComboBoxOptions = methodComboBoxOptionsBound;
+
             ShowMethodEditorCommand = ReactiveUI.ReactiveCommand.Create(ShowMethodMenu);
             ShowDirectControlCommand = ReactiveUI.ReactiveCommand.Create(ShowDirectControl);
             ShowMobilePhasesCommand = ReactiveUI.ReactiveCommand.Create(ShowMobilePhaseMenu);
@@ -74,14 +79,14 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         /// </summary>
         private EksigentPump m_pump;
 
-        private readonly ReactiveUI.ReactiveList<string> methodComboBoxOptions = new ReactiveUI.ReactiveList<string>();
+        private readonly SourceList<string> methodComboBoxOptions = new SourceList<string>();
         private string selectedMethod = "";
         private int minChannelNumber = 0;
         private int maxChannelNumber = 1;
         private int channelNumber = 1;
         private string statusText = "Unknown";
 
-        public ReactiveUI.IReadOnlyReactiveList<string> MethodComboBoxOptions => methodComboBoxOptions;
+        public ReadOnlyObservableCollection<string> MethodComboBoxOptions {get; }
 
         public string SelectedMethod
         {
@@ -164,13 +169,10 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         /// <param name="data"></param>
         private void Pump_MethodNames(object sender, List<object> data)
         {
-            ReactiveUI.RxApp.MainThreadScheduler.Schedule(() =>
+            methodComboBoxOptions.Edit(list =>
             {
-                using (methodComboBoxOptions.SuppressChangeNotifications())
-                {
-                    methodComboBoxOptions.Clear();
-                    methodComboBoxOptions.AddRange(data.Select(x => x.ToString()));
-                }
+                list.Clear();
+                list.AddRange(data.Select(x => x.ToString()));
             });
         }
 
