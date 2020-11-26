@@ -1,11 +1,12 @@
-﻿using System.Reactive;
+﻿using System.Collections.ObjectModel;
+using System.Reactive;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
 {
     public class MoveToMethodSelectorViewModel : ReactiveObject
     {
-        public IReadOnlyReactiveList<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
+        public ReadOnlyObservableCollection<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
 
         /// <summary>
         /// Default constructor.

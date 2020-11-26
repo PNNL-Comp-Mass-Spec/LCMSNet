@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Windows.Media;
 using LcmsNetData.Data;
@@ -81,11 +82,11 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
-        public IReadOnlyReactiveList<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
-        public IReadOnlyReactiveList<string> DatasetTypeComboBoxOptions => SampleDataManager.DatasetTypeOptions;
-        public IReadOnlyReactiveList<string> PalTrayComboBoxOptions => SampleDataManager.PalTrayOptions;
-        public IReadOnlyReactiveList<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
-        public IReadOnlyReactiveList<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
+        public ReadOnlyObservableCollection<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
+        public ReadOnlyCollection<string> DatasetTypeComboBoxOptions => SampleDataManager.DatasetTypeOptions;
+        public ReadOnlyObservableCollection<string> PalTrayComboBoxOptions => SampleDataManager.PalTrayOptions;
+        public ReadOnlyObservableCollection<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
+        public ReadOnlyCollection<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
         public string CartConfigError => SampleDataManager.CartConfigOptionsError;
 
         #region Row and cell color control

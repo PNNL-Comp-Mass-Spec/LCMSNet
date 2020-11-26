@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Windows.Media;
@@ -20,7 +21,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public IReadOnlyReactiveList<SampleViewModel> FilteredSamples => filteredSamples;
 
         // Local "wrapper" around the static class options, for data binding purposes
-        public IReadOnlyReactiveList<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
+        public ReadOnlyObservableCollection<LCMethod> LcMethodComboBoxOptions => SampleDataManager.LcMethodOptions;
 
         private LCMethod selectedLCMethod;
 
