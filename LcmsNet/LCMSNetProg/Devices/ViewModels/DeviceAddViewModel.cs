@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
+using DynamicData;
+using DynamicData.Binding;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
@@ -12,6 +16,11 @@ namespace LcmsNet.Devices.ViewModels
     {
         public DeviceAddViewModel()
         {
+            addedPlugins.ToObservableChangeSet().Bind(out var addedBound).Subscribe();
+            availablePlugins.ToObservableChangeSet().Bind(out var availableBound).Subscribe();
+            AddedPlugins = addedBound;
+            AvailablePlugins = availableBound;
+
             // Design-time data
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
@@ -31,14 +40,13 @@ namespace LcmsNet.Devices.ViewModels
                 SelectedPlugins.Add(devices[2]);
             }
 
-            AddCommand = ReactiveCommand.Create(() => AddSelectedNode(), this.WhenAnyValue(x => x.SelectedPlugin, x => x.addedPlugins).Select(x => x.Item1 != null && !x.Item2.Any(y => y.DisplayName.Equals(x.Item1.DisplayName))));
-            RemoveCommand = ReactiveCommand.Create(() => RemoveSelectedItems(), this.WhenAnyValue(x => x.SelectedPlugins.Count).Select(x => x > 0));
+            AddCommand = ReactiveCommand.Create(AddSelectedNode, this.WhenAnyValue(x => x.SelectedPlugin, x => x.addedPlugins).Select(x => x.Item1 != null && !x.Item2.Any(y => y.DisplayName.Equals(x.Item1.DisplayName))));
+            RemoveCommand = ReactiveCommand.Create(RemoveSelectedItems, this.WhenAnyValue(x => x.SelectedPlugins.Count).Select(x => x > 0));
         }
 
         private bool initializeOnAdd = false;
-        private readonly ReactiveList<DevicePluginInformation> addedPlugins = new ReactiveList<DevicePluginInformation>();
-        private readonly ReactiveList<PluginCategoryData> availablePlugins = new ReactiveList<PluginCategoryData>();
-        private readonly ReactiveList<DevicePluginInformation> selectedPlugins = new ReactiveList<DevicePluginInformation>();
+        private readonly ObservableCollectionExtended<DevicePluginInformation> addedPlugins = new ObservableCollectionExtended<DevicePluginInformation>();
+        private readonly ObservableCollectionExtended<PluginCategoryData> availablePlugins = new ObservableCollectionExtended<PluginCategoryData>();
         private DevicePluginInformation selectedPlugin;
 
         /// <summary>
@@ -50,9 +58,9 @@ namespace LcmsNet.Devices.ViewModels
             set => this.RaiseAndSetIfChanged(ref initializeOnAdd, value);
         }
 
-        public IReadOnlyReactiveList<DevicePluginInformation> AddedPlugins => addedPlugins;
-        public IReadOnlyReactiveList<PluginCategoryData> AvailablePlugins => availablePlugins;
-        public ReactiveList<DevicePluginInformation> SelectedPlugins => selectedPlugins;
+        public ReadOnlyObservableCollection<DevicePluginInformation> AddedPlugins { get; }
+        public ReadOnlyObservableCollection<PluginCategoryData> AvailablePlugins { get; }
+        public ObservableCollectionExtended<DevicePluginInformation> SelectedPlugins { get; } = new ObservableCollectionExtended<DevicePluginInformation>();
 
         public DevicePluginInformation SelectedPlugin
         {
@@ -79,7 +87,7 @@ namespace LcmsNet.Devices.ViewModels
                 mapping[plugin.DeviceAttribute.Category].Plugins.Add(plugin);
             }
 
-            using (availablePlugins.SuppressChangeNotifications())
+            using (availablePlugins.SuspendNotifications())
             {
                 availablePlugins.Clear();
                 availablePlugins.AddRange(mapping.Values);
@@ -106,10 +114,13 @@ namespace LcmsNet.Devices.ViewModels
         {
             if (SelectedPlugins.Count > 0)
             {
-                using (SelectedPlugins.SuppressChangeNotifications())
-                using (addedPlugins.SuppressChangeNotifications())
+                using (SelectedPlugins.SuspendNotifications())
+                using (addedPlugins.SuspendNotifications())
                 {
-                    addedPlugins.RemoveAll(SelectedPlugins);
+                    foreach (var item in SelectedPlugins)
+                    {
+                        addedPlugins.Remove(item);
+                    }
                 }
             }
         }
@@ -119,9 +130,7 @@ namespace LcmsNet.Devices.ViewModels
     {
         public string Category { get; }
 
-        public ReactiveList<DevicePluginInformation> Plugins => plugins;
-
-        private readonly ReactiveList<DevicePluginInformation> plugins = new ReactiveList<DevicePluginInformation>();
+        public ObservableCollectionExtended<DevicePluginInformation> Plugins { get; } = new ObservableCollectionExtended<DevicePluginInformation>();
 
         public PluginCategoryData(string categoryName)
         {

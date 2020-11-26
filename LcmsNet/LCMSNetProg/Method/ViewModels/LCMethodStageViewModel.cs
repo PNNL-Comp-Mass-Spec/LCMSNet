@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Data;
+using DynamicData;
 using LcmsNetData;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
@@ -59,10 +61,12 @@ namespace LcmsNet.Method.ViewModels
             LCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
             LCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
 
-            BindingOperations.EnableCollectionSynchronization(SavedMethodsComboBoxOptions, savedMethodsComboBoxOptionsLock);
-            BindingOperations.EnableCollectionSynchronization(ColumnComboBoxOptions, columnComboBoxOptionsLock);
-            BindingOperations.EnableCollectionSynchronization(LCMethodEvents, lcMethodEventsLock);
-
+            savedMethodsComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var savedMethodsComboBoxOptionsBound).Subscribe();
+            columnComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var columnComboBoxOptionsBound).Subscribe();
+            lcMethodEvents.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcMethodEventsBound).Subscribe();
+            SavedMethodsComboBoxOptions = savedMethodsComboBoxOptionsBound;
+            ColumnComboBoxOptions = columnComboBoxOptionsBound;
+            LCMethodEvents = lcMethodEventsBound;
             LoadMethodCommand = ReactiveCommand.Create(LoadMethods);
             SaveMethodCommand = ReactiveCommand.Create(SaveSelectedMethod, this.WhenAnyValue(x => x.CanSave));
             SaveAllMethodsCommand = ReactiveCommand.Create(SaveMethods, this.WhenAnyValue(x => x.CanSave));
@@ -90,12 +94,9 @@ namespace LcmsNet.Method.ViewModels
         private bool canSave;
         private bool canBuild;
         private bool canUpdate;
-        private readonly object savedMethodsComboBoxOptionsLock = new object();
-        private readonly object columnComboBoxOptionsLock = new object();
-        private readonly object lcMethodEventsLock = new object();
-        private readonly ReactiveList<string> savedMethodsComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<string> columnComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<LCMethodEventViewModel> lcMethodEvents = new ReactiveList<LCMethodEventViewModel>();
+        private readonly SourceList<string> savedMethodsComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<string> columnComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<LCMethodEventViewModel> lcMethodEvents = new SourceList<LCMethodEventViewModel>();
 
         #region Properties
 
@@ -164,9 +165,9 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        public IReadOnlyReactiveList<string> SavedMethodsComboBoxOptions => savedMethodsComboBoxOptions;
-        public IReadOnlyReactiveList<string> ColumnComboBoxOptions => columnComboBoxOptions;
-        public IReadOnlyReactiveList<LCMethodEventViewModel> LCMethodEvents => lcMethodEvents;
+        public ReadOnlyObservableCollection<string> SavedMethodsComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> ColumnComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<LCMethodEventViewModel> LCMethodEvents { get; }
 
         /// <summary>
         /// Gets or sets what folder path the methods are stored in.
@@ -532,11 +533,11 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private void RenderEventList()
         {
-            using (lcMethodEvents.SuppressChangeNotifications())
+            lcMethodEvents.Edit(list =>
             {
-                lcMethodEvents.Clear();
-                lcMethodEvents.AddRange(eventsList);
-            }
+                list.Clear();
+                list.AddRange(eventsList);
+            });
         }
 
         /// <summary>

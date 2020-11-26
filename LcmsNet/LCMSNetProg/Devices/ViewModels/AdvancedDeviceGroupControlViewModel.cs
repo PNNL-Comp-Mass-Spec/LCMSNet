@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using DynamicData;
 using FluidicsSDK;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
@@ -30,8 +32,11 @@ namespace LcmsNet.Devices.ViewModels
             InitializeDeviceCommand = ReactiveCommand.CreateFromTask(InitializeSelectedDevice, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
             ClearErrorCommand = ReactiveCommand.Create(ClearSelectedDeviceError, this.WhenAnyValue(x => x.SelectedDevice).Select(x => x != null));
 
+            deviceViewModels.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var deviceViewModelsBound).Subscribe();
+            DeviceViewModels = deviceViewModelsBound;
+
             // Once an item is added to the device controls, automatically make the first one the "Selected device" if one hasn't been previously set.
-            this.WhenAnyValue(x => x.deviceViewModels, x => x.SelectedDevice, x => x.deviceViewModels.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
+            this.WhenAnyValue(x => x.DeviceViewModels, x => x.SelectedDevice, x => x.deviceViewModels.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
                 .Subscribe(x => SelectedDevice = x.Item1[0]);
 
             this.WhenAnyValue(x => x.SelectedDevice, x => x.GroupIsSelected).Where(x => x.Item2).Subscribe(x =>
@@ -56,7 +61,7 @@ namespace LcmsNet.Devices.ViewModels
         }
 
         private readonly Dictionary<IDevice, DeviceConfigurationViewModel> deviceToViewModelMap;
-        private readonly ReactiveList<DeviceConfigurationViewModel> deviceViewModels = new ReactiveList<DeviceConfigurationViewModel>();
+        private readonly SourceList<DeviceConfigurationViewModel> deviceViewModels = new SourceList<DeviceConfigurationViewModel>();
         private DeviceConfigurationViewModel selectedDevice = null;
         private bool groupIsSelected = false;
 
@@ -68,7 +73,7 @@ namespace LcmsNet.Devices.ViewModels
             set => this.RaiseAndSetIfChanged(ref groupIsSelected, value);
         }
 
-        public IReadOnlyReactiveList<DeviceConfigurationViewModel> DeviceViewModels => deviceViewModels;
+        public ReadOnlyObservableCollection<DeviceConfigurationViewModel> DeviceViewModels { get; }
 
         /// <summary>
         /// Selected device
@@ -150,7 +155,6 @@ namespace LcmsNet.Devices.ViewModels
                 // Remove from maps
                 var deviceVm = deviceToViewModelMap[device];
                 deviceViewModels.Remove(deviceVm);
-
                 deviceToViewModelMap.Remove(device);
             }
         }
@@ -164,7 +168,6 @@ namespace LcmsNet.Devices.ViewModels
         {
             var deviceVm = new DeviceConfigurationViewModel(device, viewModel);
             deviceViewModels.Add(deviceVm);
-
             deviceToViewModelMap.Add(device, deviceVm);
         }
 

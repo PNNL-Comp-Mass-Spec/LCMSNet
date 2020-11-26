@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using DynamicData;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
@@ -17,13 +19,16 @@ namespace LcmsNet.Devices.ViewModels
             DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
 
+            deviceGroups.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var deviceGroupsBound).Subscribe();
+            DeviceGroups = deviceGroupsBound;
+
             // Once a group is added to the device controls, automatically make the first one the "Selected group" if one hasn't been previously set.
-            this.WhenAnyValue(x => x.deviceGroups, x => x.SelectedGroup, x => x.deviceGroups.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
+            this.WhenAnyValue(x => x.DeviceGroups, x => x.SelectedGroup, x => x.deviceGroups.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
                 .Subscribe(x => SelectedGroup = x.Item1[0]);
 
             this.WhenAnyValue(x => x.SelectedGroup).Subscribe(x =>
             {
-                foreach (var group in deviceGroups)
+                foreach (var group in DeviceGroups)
                 {
                     group.GroupIsSelected = false;
                 }
@@ -49,10 +54,10 @@ namespace LcmsNet.Devices.ViewModels
             GC.SuppressFinalize(this);
         }
 
-        private readonly ReactiveList<AdvancedDeviceGroupControlViewModel> deviceGroups = new ReactiveList<AdvancedDeviceGroupControlViewModel>();
+        private readonly SourceList<AdvancedDeviceGroupControlViewModel> deviceGroups = new SourceList<AdvancedDeviceGroupControlViewModel>();
         private AdvancedDeviceGroupControlViewModel selectedGroup = null;
 
-        public IReadOnlyReactiveList<AdvancedDeviceGroupControlViewModel> DeviceGroups => deviceGroups;
+        public ReadOnlyObservableCollection<AdvancedDeviceGroupControlViewModel> DeviceGroups { get; }
 
         /// <summary>
         /// Selected device
@@ -89,14 +94,8 @@ namespace LcmsNet.Devices.ViewModels
 
                 if (vm.IsDeviceGroupEmpty)
                 {
-                    if (deviceGroups.Contains(vm))
-                    {
-                        deviceGroups.Remove(vm);
-                    }
-                    if (nameToViewModelMap.ContainsKey(vm.Name))
-                    {
-                        nameToViewModelMap.Remove(vm.Name);
-                    }
+                    deviceGroups.Remove(vm);
+                    nameToViewModelMap.Remove(vm.Name);
                 }
             }
         }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
+using DynamicData;
 using LcmsNetCommonControls.Devices.Pumps;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
@@ -17,6 +19,11 @@ namespace LcmsNet.Devices.Pumps.ViewModels
 
         public PumpDisplaysViewModel()
         {
+            mobilePhases.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var mobilePhasesBound).Subscribe();
+            pumpMonitorDisplays.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var pumpMonitorsBound).Subscribe();
+            MobilePhases = mobilePhasesBound;
+            PumpMonitorDisplays = pumpMonitorsBound;
+
 #if DEBUG
             // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
@@ -30,6 +37,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
                 pumpName = "TestPump";
             }
 #endif
+
             pumps = new List<IPump>();
             pumpMonitorDictionary = new Dictionary<IPump, PumpDisplayViewModel>();
             DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
@@ -43,8 +51,8 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         private int currentPump;
         private string pumpName = "";
 
-        private readonly ReactiveList<MobilePhase> mobilePhases = new ReactiveList<MobilePhase>();
-        private readonly ReactiveList<PumpDisplayViewModel> pumpMonitorDisplays = new ReactiveList<PumpDisplayViewModel>();
+        private readonly SourceList<MobilePhase> mobilePhases = new SourceList<MobilePhase>();
+        private readonly SourceList<PumpDisplayViewModel> pumpMonitorDisplays = new SourceList<PumpDisplayViewModel>();
 
         private int CurrentPump
         {
@@ -58,9 +66,9 @@ namespace LcmsNet.Devices.Pumps.ViewModels
             set => this.RaiseAndSetIfChanged(ref pumpName, value);
         }
 
-        public IReadOnlyReactiveList<MobilePhase> MobilePhases => mobilePhases;
+        public ReadOnlyObservableCollection<MobilePhase> MobilePhases { get; }
 
-        public IReadOnlyReactiveList<PumpDisplayViewModel> PumpMonitorDisplays => pumpMonitorDisplays;
+        public ReadOnlyObservableCollection<PumpDisplayViewModel> PumpMonitorDisplays { get; }
 
         public ReactiveCommand<Unit, Unit> MoveLeftCommand { get; }
         public ReactiveCommand<Unit, Unit> MoveRightCommand { get; }
@@ -88,14 +96,14 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         {
             var pump = pumps[CurrentPump];
 
-            using (mobilePhases.SuppressChangeNotifications())
+            mobilePhases.Edit(list =>
             {
-                mobilePhases.Clear();
+                list.Clear();
                 if (pump.MobilePhases != null)
                 {
-                    mobilePhases.AddRange(pump.MobilePhases);
+                    list.AddRange(pump.MobilePhases);
                 }
-            }
+            });
 
             PumpName = pump.Name;
         }
@@ -178,11 +186,11 @@ namespace LcmsNet.Devices.Pumps.ViewModels
                 CurrentPump = pumps.Count - 1;
                 UpdateLabel();
 
-                using (mobilePhases.SuppressChangeNotifications())
+                mobilePhases.Edit(list =>
                 {
-                    mobilePhases.Clear();
-                    mobilePhases.AddRange(pump.MobilePhases);
-                }
+                    list.Clear();
+                    list.AddRange(pump.MobilePhases);
+                });
             }
         }
 

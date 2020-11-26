@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
@@ -27,10 +28,10 @@ namespace LcmsNet.Devices.ViewModels
         /// <param name="deviceErrors"></param>
         public FailedDevicesViewModel(List<DeviceErrorEventArgs> deviceErrors)
         {
-            DeviceErrorList = new ReactiveList<DeviceErrorData>(deviceErrors.Select(x => new DeviceErrorData(x.Device.Name, x.Error + " " + x.Exception?.Message)));
+            DeviceErrorList = deviceErrors.Select(x => new DeviceErrorData(x.Device.Name, x.Error + " " + x.Exception?.Message)).ToList().AsReadOnly();
         }
 
-        public IReadOnlyReactiveList<DeviceErrorData> DeviceErrorList { get; }
+        public ReadOnlyCollection<DeviceErrorData> DeviceErrorList { get; }
     }
 
     public class DeviceErrorData : ReactiveObject

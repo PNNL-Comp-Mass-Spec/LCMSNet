@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Media;
+using DynamicData;
+using DynamicData.Binding;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 using ReactiveUI;
@@ -25,7 +29,7 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private static readonly Dictionary<IDevice, List<LCMethodEventData>> DeviceMappings = new Dictionary<IDevice, List<LCMethodEventData>>();
 
-        private static readonly ReactiveList<IDevice> DevicesList = new ReactiveList<IDevice>();
+        private static readonly SourceList<IDevice> DevicesList = new SourceList<IDevice>();
 
         static LCMethodEventViewModel()
         {
@@ -67,12 +71,20 @@ namespace LcmsNet.Method.ViewModels
 
             if (DevicesList.Count > 0)
             {
-                SelectedDevice = DevicesList[0];
+                SelectedDevice = DevicesList.Items.First();
                 UpdateSelectedDevice();
             }
 
             this.WhenAnyValue(x => x.DevicesComboBoxOptions.Count).Select(x => x > 0).ToProperty(this, x => x.DevicesComboBoxEnabled, out devicesComboBoxEnabled);
-            DevicesList.ItemsAdded.Subscribe(_ => this.DeviceAdded());
+            DevicesList.Connect().WhereReasonsAre(ListChangeReason.Add, ListChangeReason.AddRange).Subscribe(_ => this.DeviceAdded());
+            var resortTrigger = DevicesList.Connect().WhenValueChanged(x => x.Name).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
+            DevicesList.Connect().Sort(SortExpressionComparer<IDevice>.Ascending(x => x.Name), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var devicesBound).Subscribe();
+            DevicesComboBoxOptions = devicesBound;
+
+            methodsComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var methodsBound).Subscribe();
+            MethodsComboBoxOptions = methodsBound;
+            eventParameterList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var eventParametersBound).Subscribe();
+            EventParameterList = eventParametersBound;
         }
 
         /// <summary>
@@ -122,8 +134,19 @@ namespace LcmsNet.Method.ViewModels
                 // We have to do some reference trickery here, since method data is reconstructed
                 // for every lcevent then we need to set the method data for this object
                 // with the method we previously selected. This way we preserve the parameter values etc.
-                var index = FindMethodIndex(methodData);
-                methodsComboBoxOptions[index] = methodData;
+                methodsComboBoxOptions.Edit(list =>
+                {
+                    for (var i = 0; i < list.Count; i++)
+                    {
+                        var data = list[i];
+                        if (data != null && data.MethodEventAttribute.Name.Equals(methodData.MethodEventAttribute.Name))
+                        {
+                            list[i] = methodData;
+                            break;
+                        }
+                    }
+                });
+
                 SelectedLCEvent = methodData;
 
                 LoadMethodEventParameters(methodData);
@@ -166,21 +189,6 @@ namespace LcmsNet.Method.ViewModels
                 methodEventData.BreakPoint = e.IsSet;
         }
 
-        private int FindMethodIndex(LCMethodEventData method)
-        {
-            var i = 0;
-            foreach (var data in MethodsComboBoxOptions)
-            {
-                if (data != null)
-                {
-                    if (data.MethodEventAttribute.Name.Equals(method.MethodEventAttribute.Name))
-                        return i;
-                }
-                i++;
-            }
-            return -1;
-        }
-
         #region Members
 
         /// <summary>
@@ -193,8 +201,8 @@ namespace LcmsNet.Method.ViewModels
         private bool optimizeWith = false;
         private IDevice selectedDevice = null;
         private LCMethodEventData selectedLCEvent = null;
-        private readonly ReactiveList<LCMethodEventData> methodsComboBoxOptions = new ReactiveList<LCMethodEventData>();
-        private readonly ReactiveList<ILCEventParameter> eventParameterList = new ReactiveList<ILCEventParameter>();
+        private readonly SourceList<LCMethodEventData> methodsComboBoxOptions = new SourceList<LCMethodEventData>();
+        private readonly SourceList<ILCEventParameter> eventParameterList = new SourceList<ILCEventParameter>();
         private bool isSelected = false;
         private readonly ObservableAsPropertyHelper<bool> devicesComboBoxEnabled;
 
@@ -232,9 +240,9 @@ namespace LcmsNet.Method.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedLCEvent, value);
         }
 
-        public IReadOnlyReactiveList<IDevice> DevicesComboBoxOptions => DevicesList;
-        public IReadOnlyReactiveList<LCMethodEventData> MethodsComboBoxOptions => methodsComboBoxOptions;
-        public IReadOnlyReactiveList<ILCEventParameter> EventParameterList => eventParameterList;
+        public ReadOnlyObservableCollection<IDevice> DevicesComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<LCMethodEventData> MethodsComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<ILCEventParameter> EventParameterList { get; }
         public bool DevicesComboBoxEnabled => devicesComboBoxEnabled.Value && EventUnlocked;
         public bool EventUnlocked { get; }
 
@@ -328,7 +336,7 @@ namespace LcmsNet.Method.ViewModels
             if (device.DeviceType == DeviceType.Fluidics)
                 return;
 
-            if (DevicesList.Contains(device))
+            if (DevicesList.Items.Contains(device))
                 DevicesList.Remove(device);
 
             if (DeviceMappings.ContainsKey(device))
@@ -345,13 +353,9 @@ namespace LcmsNet.Method.ViewModels
             if (device.DeviceType == DeviceType.Fluidics)
                 return;
 
-            if (DevicesList.Contains(device) == false)
+            if (!DevicesList.Items.Contains(device))
             {
-                using (DevicesList.SuppressChangeNotifications())
-                {
-                    DevicesList.Add(device);
-                    DevicesList.Sort((x, y) => x.Name.CompareTo(y.Name));
-                }
+                DevicesList.Add(device);
             }
 
             if (DeviceMappings.ContainsKey(device) == false)
@@ -373,7 +377,7 @@ namespace LcmsNet.Method.ViewModels
             // Make sure we select a device
             if (DevicesList.Count == 1)
             {
-                SelectedDevice = DevicesList[0];
+                SelectedDevice = DevicesList.Items.First();
                 UpdateSelectedDevice();
             }
         }
@@ -406,16 +410,16 @@ namespace LcmsNet.Method.ViewModels
             }
             // Add the method information into the combo-box as deemed by the device.
             var methods = DeviceMappings[device];
-            using (methodsComboBoxOptions.SuppressChangeNotifications())
+            methodsComboBoxOptions.Edit(list =>
             {
                 // Clear out the combo-box
-                methodsComboBoxOptions.Clear();
-                methodsComboBoxOptions.AddRange(methods);
-            }
+                list.Clear();
+                list.AddRange(methods);
+            });
 
             if (methodsComboBoxOptions.Count > 0)
             {
-                SelectedLCEvent = methodsComboBoxOptions[0];
+                SelectedLCEvent = MethodsComboBoxOptions[0];
                 UpdateSelectedMethodEvent();
             }
         }
@@ -433,7 +437,7 @@ namespace LcmsNet.Method.ViewModels
             // Clear out the combo-box
             try
             {
-                foreach (var vm in eventParameterList)
+                foreach (var vm in EventParameterList)
                 {
                     vm.EventChanged -= param_EventChanged;
                 }
@@ -441,10 +445,8 @@ namespace LcmsNet.Method.ViewModels
             catch
             {
             }
-            using (eventParameterList.SuppressChangeNotifications())
-            {
-                eventParameterList.Clear();
-            }
+
+            eventParameterList.Clear();
             //mpanel_parameters.ColumnStyles.Clear();
 
             // If the method requires sample input then we just ignore adding any controls.
@@ -690,11 +692,8 @@ namespace LcmsNet.Method.ViewModels
                 // Add the parameters to the combo box before we do anything.
                 var enumControl = new EventParameterEnumViewModel();
                 control = enumControl;
-                using (enumControl.ComboBoxOptions.SuppressChangeNotifications())
-                {
-                    // Grab the enumeration values for the parameter
-                    enumControl.FillData(null, Enum.GetValues(t).Cast<object>().ToList());
-                }
+                // Grab the enumeration values for the parameter
+                enumControl.FillData(null, Enum.GetValues(t).Cast<object>().ToList());
                 enumControl.SelectedOption = enumControl.ComboBoxOptions.FirstOrDefault();
             }
             else if (NumericTypes.Contains(t))

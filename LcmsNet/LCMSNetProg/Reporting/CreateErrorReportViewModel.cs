@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows.Controls;
+using DynamicData;
+using DynamicData.Binding;
 using LcmsNetData;
 using LcmsNetSDK.Method;
 using ReactiveUI;
@@ -30,20 +34,23 @@ namespace LcmsNet.Reporting
 
             foreach (var method in methodManager.AllLCMethods)
             {
-                if (!lcMethodsList.Contains(method))
+                if (!LCMethodsList.Contains(method))
                 {
                     lcMethodsList.Add(method);
                     LCMethodsSelected.Add(method);
                 }
             }
 
+            lcMethodsList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcMethodsBound).Subscribe();
+            LCMethodsList = lcMethodsBound;
+
             CreateReportCommand = ReactiveCommand.Create(CreateReport);
         }
 
-        private readonly ReactiveList<LCMethod> lcMethodsList = new ReactiveList<LCMethod>();
+        private readonly SourceList<LCMethod> lcMethodsList = new SourceList<LCMethod>();
 
-        public IReadOnlyReactiveList<LCMethod> LCMethodsList => lcMethodsList;
-        public ReactiveList<LCMethod> LCMethodsSelected { get; } = new ReactiveList<LCMethod>();
+        public ReadOnlyObservableCollection<LCMethod> LCMethodsList { get; }
+        public ObservableCollectionExtended<LCMethod> LCMethodsSelected { get; }
 
         #region Button Handler Events
 
@@ -77,9 +84,6 @@ namespace LcmsNet.Reporting
         /// <returns></returns>
         private void MethodManager_MethodRemoved(object sender, LCMethod method)
         {
-            if (!lcMethodsList.Contains(method))
-                return;
-
             lcMethodsList.Remove(method);
         }
 
@@ -91,10 +95,13 @@ namespace LcmsNet.Reporting
         /// <returns></returns>
         private void MethodManager_MethodAdded(object sender, LCMethod method)
         {
-            if (lcMethodsList.Contains(method))
-                return;
-
-            lcMethodsList.Add(method);
+            lcMethodsList.Edit(list =>
+            {
+                if (!list.Contains(method))
+                {
+                    lcMethodsList.Add(method);
+                }
+            });
         }
 
         #endregion

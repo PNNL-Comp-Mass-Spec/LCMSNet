@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
+using DynamicData;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 
@@ -8,9 +11,15 @@ namespace LcmsNet.Method.ViewModels
 {
     public class EventParameterEnumViewModel : ReactiveObject, ILCEventParameterWithDataProvider
     {
+        public EventParameterEnumViewModel()
+        {
+            comboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var comboBoxOptionsBound).Subscribe();
+            ComboBoxOptions = comboBoxOptionsBound;
+        }
+
         private string parameterLabel = "";
         private object selectedOption;
-        private readonly ReactiveList<object> comboBoxOptions = new ReactiveList<object>();
+        private readonly SourceList<object> comboBoxOptions = new SourceList<object>();
 
         public string ParameterLabel
         {
@@ -47,7 +56,7 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        public IReadOnlyReactiveList<object> ComboBoxOptions => comboBoxOptions;
+        public ReadOnlyObservableCollection<object> ComboBoxOptions { get; }
 
         /// <summary>
         /// Method for storing objects in the list view.
@@ -56,22 +65,19 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="data"></param>
         public void FillData(object sender, IReadOnlyList<object> data)
         {
-            using (comboBoxOptions.SuppressChangeNotifications())
+            comboBoxOptions.Edit(list =>
             {
-                comboBoxOptions.Clear();
+                list.Clear();
 
-                if (data == null || data.Count < 1)
-                    return;
-
-                comboBoxOptions.AddRange(data);
-            }
-
-            if (data.Count > 0)
-            {
-                if (SelectedOption == null || !comboBoxOptions.Contains(SelectedOption))
+                if (data != null && data.Count > 0)
                 {
-                    SelectedOption = comboBoxOptions.FirstOrDefault();
+                    list.AddRange(data);
                 }
+            });
+
+            if (comboBoxOptions.Count > 0 && (SelectedOption == null || !ComboBoxOptions.Contains(SelectedOption)))
+            {
+                SelectedOption = ComboBoxOptions.FirstOrDefault();
             }
         }
 

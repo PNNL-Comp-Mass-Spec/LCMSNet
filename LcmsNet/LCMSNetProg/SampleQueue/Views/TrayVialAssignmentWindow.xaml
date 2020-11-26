@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TabControl>
-            <TabItem Header="{Binding TrayUnassigned.SampleCount}" HeaderStringFormat="Unassigned ({0})">
+            <TabItem Header="{Binding TrayUnassigned.FilteredSamples.Count}" HeaderStringFormat="Unassigned ({0})">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -28,22 +28,22 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding Tray1.SampleCount}" HeaderStringFormat="Tray 1 ({0})">
+            <TabItem Header="{Binding Tray1.FilteredSamples.Count}" HeaderStringFormat="Tray 1 ({0})">
                 <views:TrayVialView DataContext="{Binding Tray1}" />
             </TabItem>
-            <TabItem Header="{Binding Tray2.SampleCount}" HeaderStringFormat="Tray 2 ({0})">
+            <TabItem Header="{Binding Tray2.FilteredSamples.Count}" HeaderStringFormat="Tray 2 ({0})">
                 <views:TrayVialView DataContext="{Binding Tray2}" />
             </TabItem>
-            <TabItem Header="{Binding Tray3.SampleCount}" HeaderStringFormat="Tray 3 ({0})">
+            <TabItem Header="{Binding Tray3.FilteredSamples.Count}" HeaderStringFormat="Tray 3 ({0})">
                 <views:TrayVialView DataContext="{Binding Tray3}" />
             </TabItem>
-            <TabItem Header="{Binding Tray4.SampleCount}" HeaderStringFormat="Tray 4 ({0})">
+            <TabItem Header="{Binding Tray4.FilteredSamples.Count}" HeaderStringFormat="Tray 4 ({0})">
                 <views:TrayVialView DataContext="{Binding Tray4}" />
             </TabItem>
-            <TabItem Header="{Binding Tray5.SampleCount}" HeaderStringFormat="Tray 5 ({0})">
+            <TabItem Header="{Binding Tray5.FilteredSamples.Count}" HeaderStringFormat="Tray 5 ({0})">
                 <views:TrayVialView DataContext="{Binding Tray5}" />
             </TabItem>
-            <TabItem Header="{Binding Tray6.SampleCount}" HeaderStringFormat="Tray 6 ({0})">
+            <TabItem Header="{Binding Tray6.FilteredSamples.Count}" HeaderStringFormat="Tray 6 ({0})">
                 <views:TrayVialView DataContext="{Binding Tray6}" />
             </TabItem>
         </TabControl>

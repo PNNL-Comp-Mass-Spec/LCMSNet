@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using DynamicData;
 using LcmsNetSDK.Data;
 using ReactiveUI;
 
@@ -29,8 +30,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public TrayVialAssignmentViewModel(List<string> trayNamesList, List<SampleData> samples)
         {
-            SampleList = samples;
-
             sampleVms.AddRange(samples.Select(x => new TrayVialSampleViewModel(x, trayNamesList)));
 
             TrayUnassigned = new TrayVialViewModel(0, sampleVms);
@@ -46,9 +45,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public ReactiveCommand<Unit, Unit> ApplyChangesCommand { get; }
 
-        public List<SampleData> SampleList { get; private set; }
-
-        private readonly ReactiveList<TrayVialSampleViewModel> sampleVms = new ReactiveList<TrayVialSampleViewModel>() { ChangeTrackingEnabled = true };
+        private readonly SourceList<TrayVialSampleViewModel> sampleVms = new SourceList<TrayVialSampleViewModel>();
 
         public TrayVialViewModel TrayUnassigned { get; }
         public TrayVialViewModel Tray1 { get; }
@@ -63,7 +60,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void UpdateSampleList()
         {
-            foreach (var sample in this.sampleVms)
+            foreach (var sample in this.sampleVms.Items)
             {
                 sample.StoreTrayVialToSample();
             }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using DynamicData.Binding;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels
@@ -18,12 +20,12 @@ namespace LcmsNet.Method.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public FailedMethodLoadViewModel()
         {
-            var errorList = new ReactiveList<ErrorListing>();
+            var errorList = new List<ErrorListing>();
             var testErrors = new string[] {"Error 1", "Error 2", "Error 3"};
             errorList.Add(new ErrorListing("File 1", testErrors));
             errorList.Add(new ErrorListing("File 2", testErrors));
             errorList.Add(new ErrorListing("File 3", testErrors));
-            ErrorList = errorList;
+            ErrorList = errorList.AsReadOnly();
         }
 
         /// <summary>
@@ -32,22 +34,27 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="errors"></param>
         public FailedMethodLoadViewModel(Dictionary<string, List<Exception>> errors)
         {
-            ErrorList = new ReactiveList<ErrorListing>(errors.Select(file => new ErrorListing(Path.GetFileNameWithoutExtension(file.Key), file.Value.Select(x => x.Message))));
+            var errorList = new List<ErrorListing>();
+            foreach (var file in errors)
+            {
+                errorList.Add(new ErrorListing(Path.GetFileNameWithoutExtension(file.Key), file.Value.Select(x => x.Message)));
+            }
+            ErrorList = errorList.AsReadOnly();
         }
 
-        public IReadOnlyReactiveList<ErrorListing> ErrorList { get; }
+        public ReadOnlyCollection<ErrorListing> ErrorList { get; }
     }
 
     public class ErrorListing : ReactiveObject
     {
-        public ErrorListing(string filename = "", IEnumerable<string> errors = null)
+        public ErrorListing(string filename, IEnumerable<string> errors)
         {
             FileName = filename;
-            Errors = new ReactiveList<string>(errors);
+            Errors = errors?.ToList().AsReadOnly();
         }
 
         public string FileName { get; }
 
-        public IReadOnlyReactiveList<string> Errors { get; }
+        public ReadOnlyCollection<string> Errors { get; }
     }
 }

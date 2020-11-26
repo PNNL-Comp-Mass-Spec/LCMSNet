@@ -49,7 +49,7 @@ namespace LcmsNet.Method.Views
                 return;
             }
 
-            using (dc.SelectedListLCMethods.SuppressChangeNotifications())
+            using (dc.SelectedListLCMethods.SuspendNotifications())
             {
                 dc.SelectedListLCMethods.Clear();
                 if (selector.SelectedItems.Count == 0)

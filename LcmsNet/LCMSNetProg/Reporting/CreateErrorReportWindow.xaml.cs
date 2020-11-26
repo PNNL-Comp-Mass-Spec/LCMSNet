@@ -39,7 +39,7 @@ namespace LcmsNet.Reporting
                 return;
             }
 
-            using (dc.LCMethodsSelected.SuppressChangeNotifications())
+            using (dc.LCMethodsSelected.SuspendNotifications())
             {
                 dc.LCMethodsSelected.Clear();
                 if (selector.SelectedItems.Count == 0)

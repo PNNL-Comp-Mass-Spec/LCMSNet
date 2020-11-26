@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using DynamicData;
 using LcmsNetSDK;
 using ReactiveUI;
 
@@ -22,18 +24,17 @@ namespace LcmsNet.Devices.ViewModels
         {
             cntrlr.ModelStatusChangeEvent += StatusChangeHandler;
             ClearCommand = ReactiveCommand.Create(() => reports.Clear(), this.WhenAnyValue(x => x.reports.Count).Select(x => x > 0));
+            reports.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var reportsBound).Subscribe();
+            Reports = reportsBound;
         }
 
-        private readonly ReactiveList<ModelCheckReportViewModel> reports = new ReactiveList<ModelCheckReportViewModel>();
+        private readonly SourceList<ModelCheckReportViewModel> reports = new SourceList<ModelCheckReportViewModel>();
 
-        public IReadOnlyReactiveList<ModelCheckReportViewModel> Reports => reports;
+        public ReadOnlyObservableCollection<ModelCheckReportViewModel> Reports { get; }
 
         private void StatusChangeHandler(object sender, ModelStatusChangeEventArgs e)
         {
-            using (reports.SuppressChangeNotifications())
-            {
-                reports.AddRange(e.StatusList.Select(x => new ModelCheckReportViewModel(x)));
-            }
+            reports.AddRange(e.StatusList.Select(x => new ModelCheckReportViewModel(x)));
         }
 
         public ReactiveCommand<Unit, Unit> ClearCommand { get; }

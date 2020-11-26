@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
+using DynamicData;
 using FluidicsSDK;
 using LcmsNet.Devices;
 using LcmsNet.Properties;
@@ -24,13 +26,23 @@ namespace LcmsNet.Notification.ViewModels
         {
             Disable();
 
+            devicesList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var devicesListBound).Subscribe();
+            eventsList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var eventsListBound).Subscribe();
+            assignedEventsList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var assignedEventsListBound).Subscribe();
+            methodsComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var methodsComboBoxOptionsBound).Subscribe();
+            DevicesList = devicesListBound;
+            EventsList = eventsListBound;
+            AssignedEventsList = assignedEventsListBound;
+            MethodsComboBoxOptions = methodsComboBoxOptionsBound;
+
             deviceEventTable = new Dictionary<INotifier, NotificationLinker>();
             itemToDeviceMap = new Dictionary<string, INotifier>();
             currentSetting = new NotificationAlwaysSetting();
 
             // Setup notifier and options.
             classNotifier = new Notifier();
-            ActionsComboBoxOptions = new ReactiveList<DeviceNotificationAction>(Enum.GetValues(typeof(DeviceNotificationAction)).Cast<DeviceNotificationAction>());
+            ActionsComboBoxOptions = new ReadOnlyObservableCollection<DeviceNotificationAction>(new ObservableCollection<DeviceNotificationAction>(
+                Enum.GetValues(typeof(DeviceNotificationAction)).Cast<DeviceNotificationAction>()));
 
             // Set the total number of minutes between system health writes.
             RemoteStatusLogInterval = Settings.Default.NotificationWriteTimeMinutes;
@@ -198,10 +210,10 @@ namespace LcmsNet.Notification.ViewModels
         private double numberConditionMinimum = 0;
         private double numberConditionMaximum = 0;
         private LCMethod selectedLCMethod;
-        private readonly ReactiveList<string> devicesList = new ReactiveList<string>();
-        private readonly ReactiveList<string> eventsList = new ReactiveList<string>();
-        private readonly ReactiveList<string> assignedEventsList = new ReactiveList<string>();
-        private readonly ReactiveList<LCMethod> methodsComboBoxOptions = new ReactiveList<LCMethod>();
+        private readonly SourceList<string> devicesList = new SourceList<string>();
+        private readonly SourceList<string> eventsList = new SourceList<string>();
+        private readonly SourceList<string> assignedEventsList = new SourceList<string>();
+        private readonly SourceList<LCMethod> methodsComboBoxOptions = new SourceList<LCMethod>();
 
         #endregion
 
@@ -330,11 +342,12 @@ namespace LcmsNet.Notification.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedLCMethod, value);
         }
 
-        public IReadOnlyReactiveList<string> DevicesList => devicesList;
-        public IReadOnlyReactiveList<string> EventsList => eventsList;
-        public IReadOnlyReactiveList<string> AssignedEventsList => assignedEventsList;
-        public IReadOnlyReactiveList<DeviceNotificationAction> ActionsComboBoxOptions { get; }
-        public IReadOnlyReactiveList<LCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public ReadOnlyObservableCollection<string> DevicesList { get; }
+        public ReadOnlyObservableCollection<string> EventsList { get; }
+        public ReadOnlyObservableCollection<string> AssignedEventsList { get; }
+        public ReadOnlyObservableCollection<DeviceNotificationAction> ActionsComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<LCMethod> MethodsComboBoxOptions { get; }
+
 
         #endregion
 
@@ -414,27 +427,30 @@ namespace LcmsNet.Notification.ViewModels
 
         private void Manager_MethodUpdated(object sender, LCMethod method)
         {
-            if (methodsComboBoxOptions.Contains(method))
+            methodsComboBoxOptions.Edit(list =>
             {
-                var index = methodsComboBoxOptions.IndexOf(method);
-                methodsComboBoxOptions[index] = method;
-            }
+                if (list.Contains(method))
+                {
+                    var index = list.IndexOf(method);
+                    list[index] = method;
+                }
+            });
         }
 
         private void Manager_MethodRemoved(object sender, LCMethod method)
         {
-            if (methodsComboBoxOptions.Contains(method))
-            {
-                methodsComboBoxOptions.Remove(method);
-            }
+            methodsComboBoxOptions.Remove(method);
         }
 
         private void Manager_MethodAdded(object sender, LCMethod method)
         {
-            if (!methodsComboBoxOptions.Contains(method))
+            methodsComboBoxOptions.Edit(list =>
             {
-                methodsComboBoxOptions.Add(method);
-            }
+                if (!list.Contains(method))
+                {
+                    list.Add(method);
+                }
+            });
         }
 
         #endregion
@@ -529,10 +545,7 @@ namespace LcmsNet.Notification.ViewModels
             if (currentDevice == device)
             {
                 currentDevice = null;
-                using (eventsList.SuppressChangeNotifications())
-                {
-                    eventsList.Clear();
-                }
+                eventsList.Clear();
 
                 EventSettingsEnabled = false;
             }
@@ -763,12 +776,12 @@ namespace LcmsNet.Notification.ViewModels
             {
                 var previousAction = currentSetting.Action;
                 currentSetting.Action = action;
-                if (previousAction == DeviceNotificationAction.Ignore && !assignedEventsList.Contains(currentNotification))
+                if (previousAction == DeviceNotificationAction.Ignore && !AssignedEventsList.Contains(currentNotification))
                 {
                     eventsList.Remove(currentNotification);
                     assignedEventsList.Add(currentNotification);
                 }
-                else if (action == DeviceNotificationAction.Ignore && !eventsList.Contains(currentNotification))
+                else if (action == DeviceNotificationAction.Ignore && !EventsList.Contains(currentNotification))
                 {
                     assignedEventsList.Remove(currentNotification);
                     eventsList.Add(currentNotification);
@@ -845,7 +858,7 @@ namespace LcmsNet.Notification.ViewModels
             }
             else if (devicesList.Count > 0)
             {
-                item = devicesList.First();
+                item = devicesList.Items.First();
             }
             if (!string.IsNullOrEmpty(item))
             {
@@ -856,12 +869,8 @@ namespace LcmsNet.Notification.ViewModels
 
                 DeviceLabelText = "Notifier: " + device.Name;
 
-                using (assignedEventsList.SuppressChangeNotifications())
-                using (eventsList.SuppressChangeNotifications())
-                {
-                    assignedEventsList.Clear();
-                    eventsList.Clear();
-                }
+                assignedEventsList.Clear();
+                eventsList.Clear();
                 foreach (var key in linker.EventMap.Keys)
                 {
                     var setting = linker.EventMap[key];
@@ -886,11 +895,11 @@ namespace LcmsNet.Notification.ViewModels
                 }
                 if (eventsList.Count > 0)
                 {
-                    SelectedEvent = eventsList[0];
+                    SelectedEvent = eventsList.Items.First();
                 }
                 else if (assignedEventsList.Count > 0)
                 {
-                    SelectedEvent = assignedEventsList[0];
+                    SelectedEvent = assignedEventsList.Items.First();
                 }
             }
         }
@@ -990,19 +999,21 @@ namespace LcmsNet.Notification.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 var removals = new List<string>();
-                foreach (var item in assignedEventsList)
+                foreach (var item in assignedEventsList.Items)
                 {
                     var setting = deviceEventTable[currentDevice].EventMap[item];
                     setting.Action = DeviceNotificationAction.Ignore;
                     removals.Add(item);
                 }
 
-                using (eventsList.SuppressChangeNotifications())
-                using (assignedEventsList.SuppressChangeNotifications())
+                assignedEventsList.Edit(list =>
                 {
-                    assignedEventsList.RemoveAll(removals);
-                    eventsList.AddRange(removals);
-                }
+                    foreach (var removal in removals)
+                    {
+                        list.Remove(removal);
+                    }
+                });
+                eventsList.AddRange(removals);
 
                 EventSettingsEnabled = false;
             }

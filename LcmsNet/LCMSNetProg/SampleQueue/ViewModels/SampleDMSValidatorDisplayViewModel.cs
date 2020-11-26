@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using DynamicData.Binding;
 using LcmsNetData.Data;
 using LcmsNetSDK.Data;
 using ReactiveUI;
@@ -10,10 +12,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class SampleDMSValidatorDisplayViewModel : ReactiveObject
     {
-        private readonly ReactiveList<SampleDMSValidationViewModel> samples = new ReactiveList<SampleDMSValidationViewModel>();
         private SampleDMSValidationViewModel selectedItem;
 
-        public IReadOnlyReactiveList<SampleDMSValidationViewModel> Samples => samples;
+        public ReadOnlyCollection<SampleDMSValidationViewModel> Samples { get; }
 
         /// <summary>
         /// Calling this constructor is only for the windows WPF designer.
@@ -21,9 +22,11 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public SampleDMSValidatorDisplayViewModel() : this(new List<SampleData>(1))
         {
+            var samples = new List<SampleDMSValidationViewModel>();
             samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 1234567,   EMSLUsageType = "CAP_DEV", EMSLProposalUser = "(none1)", Experiment = "TestExp1", EMSLProposalID = "5" } }, true, false, false, true, true, true));
             samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 12345678,  EMSLUsageType = "CAP_DEV", EMSLProposalUser = "(none2)", Experiment = "TestExp2", EMSLProposalID = "6" } }, false, true, true, false, false, true));
             samples.Add(new SampleDMSValidationViewModel(new SampleData(false) { DmsData = new DMSData() { DatasetName = "Test DatasetName", RequestID = 123456789, EMSLUsageType = "CAP_DEV", EMSLProposalUser = "(none3)", Experiment = "TestExp3", EMSLProposalID = "7" } }, true, true, false, true, true, false));
+            Samples = samples.AsReadOnly();
         }
 
         /// <summary>
@@ -32,12 +35,14 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <param name="samplesList">Sample validation.</param>
         public SampleDMSValidatorDisplayViewModel(List<SampleData> samplesList)
         {
+            var samples = new List<SampleDMSValidationViewModel>();
             // Create a sample validator control for each sample.
             var i = 0;
             foreach (var sample in samplesList)
             {
                 samples.Add(new SampleDMSValidationViewModel(sample) { ID = i++ });
             }
+            Samples = samples.AsReadOnly();
 
             FillDownAll = ReactiveCommand.Create<object>(x => FillDown(x, false, FillDownSelection.All));
             FillDownBlank = ReactiveCommand.Create<object>(x => FillDown(x, true, FillDownSelection.All));
@@ -57,7 +62,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedItem, value);
         }
 
-        public ReactiveList<SampleDMSValidationViewModel> SelectedItems { get; } = new ReactiveList<SampleDMSValidationViewModel>();
+        public ObservableCollectionExtended<SampleDMSValidationViewModel> SelectedItems { get; } = new ObservableCollectionExtended<SampleDMSValidationViewModel>();
 
         public ReactiveCommand<object, Unit> FillDownAll { get; }
         public ReactiveCommand<object, Unit> FillDownBlank { get; }

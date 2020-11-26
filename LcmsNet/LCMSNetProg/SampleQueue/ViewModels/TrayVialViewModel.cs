@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
+using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -19,11 +22,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public TrayVialViewModel()
         {
-            filteredSamples = new ReactiveList<TrayVialSampleViewModel>();
-            FilteredSamples.WhenAnyValue(x => x.Count).Subscribe(x => this.RaisePropertyChanged(nameof(SampleCount)));
+            FilteredSamples = new ReadOnlyObservableCollection<TrayVialSampleViewModel>(new ObservableCollection<TrayVialSampleViewModel>());
         }
 
-        public TrayVialViewModel(int trayNumber, IReadOnlyReactiveList<TrayVialSampleViewModel> sampleList)
+        public TrayVialViewModel(int trayNumber, SourceList<TrayVialSampleViewModel> sampleList)
         {
             TrayNumber = trayNumber;
             if (TrayNumber <= 0)
@@ -31,21 +33,24 @@ namespace LcmsNet.SampleQueue.ViewModels
                 masterView = true;
             }
 
-            // Using signalReset to force an update when the selected LC Method changes
-            filteredSamples = sampleList.CreateDerivedCollection(x => x, x =>
-            {
-                if (masterView)
+            var filter = this.WhenValueChanged(x => x.ShowUnassigned).Select(x =>
+                new Func<TrayVialSampleViewModel, bool>(y =>
                 {
-                    if (ShowUnassigned)
+                    if (masterView)
                     {
-                        return x.Tray == 0;
-                    }
-                    return true;
-                }
-                return x.Tray == TrayNumber;
-            }, signalReset: this.WhenAnyValue(x => x.ShowUnassigned));
+                        if (ShowUnassigned)
+                        {
+                            return y.Tray == 0;
+                        }
 
-            FilteredSamples.WhenAnyValue(x => x.Count).Subscribe(x => this.RaisePropertyChanged(nameof(SampleCount)));
+                        return true;
+                    }
+
+                    return y.Tray == TrayNumber;
+                }));
+
+            sampleList.Connect().Filter(filter).ObserveOn(RxApp.MainThreadScheduler).Bind(out var filtered).Subscribe();
+            FilteredSamples = filtered;
 
             AssignSelectedToVialCommand = ReactiveCommand.Create(() => AssignSelectedToVial(this.AssignVial), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
             AutoAssignVialsCommand = ReactiveCommand.Create(AutoAssignVials, this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
@@ -64,8 +69,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         private bool showUnassigned = true;
         private readonly bool masterView = false;
-        private readonly ReactiveList<TrayVialSampleViewModel> selectedSamples = new ReactiveList<TrayVialSampleViewModel>();
-        private readonly IReadOnlyReactiveList<TrayVialSampleViewModel> filteredSamples;
         private int assignVial = 54;
         private int maxVials = 54;
 
@@ -73,10 +76,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Properties"
 
-        public IReadOnlyReactiveList<TrayVialSampleViewModel> FilteredSamples => filteredSamples;
-        public ReactiveList<TrayVialSampleViewModel> SelectedSamples => selectedSamples;
+        public ReadOnlyObservableCollection<TrayVialSampleViewModel> FilteredSamples { get; }
 
-        public int SampleCount => FilteredSamples.Count;
+        public ObservableCollectionExtended<TrayVialSampleViewModel> SelectedSamples { get; } = new ObservableCollectionExtended<TrayVialSampleViewModel>();
 
         public int TrayNumber { get; }
 

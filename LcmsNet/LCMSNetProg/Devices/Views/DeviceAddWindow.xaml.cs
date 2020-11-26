@@ -67,7 +67,7 @@ namespace LcmsNet.Devices.Views
                 return;
             }
 
-            using (dc.SelectedPlugins.SuppressChangeNotifications())
+            using (dc.SelectedPlugins.SuspendNotifications())
             {
                 dc.SelectedPlugins.Clear();
                 if (selector.SelectedItems.Count == 0)

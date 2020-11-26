@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using DynamicData;
 using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetSDK.Data;
@@ -72,9 +75,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         private string batchId = string.Empty;
         private string block = string.Empty;
         private bool unassignedRequestsOnly;
-        private readonly ReactiveList<string> lcCartComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<string> lcCartSearchComboBoxOptions = new ReactiveList<string>();
-        private readonly ReactiveList<string> lcCartConfigComboBoxOptions = new ReactiveList<string>();
+        private readonly SourceList<string> lcCartComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<string> lcCartSearchComboBoxOptions = new SourceList<string>();
+        private readonly SourceList<string> lcCartConfigComboBoxOptions = new SourceList<string>();
         private DMSDownloadDataViewModel availableRequestData = new DMSDownloadDataViewModel(true);
         private bool loadingData;
         private string requestsFoundString = string.Empty;
@@ -143,17 +146,15 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref cartName, value);
         }
 
-        public IReadOnlyReactiveList<string> LcCartComboBoxOptions => lcCartComboBoxOptions;
-
-        public IReadOnlyReactiveList<string> LcCartSearchComboBoxOptions => lcCartSearchComboBoxOptions;
+        public ReadOnlyObservableCollection<string> LcCartComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> LcCartSearchComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<string> LcCartConfigComboBoxOptions { get; }
 
         public string CartConfigName
         {
             get => cartConfigName;
             set => this.RaiseAndSetIfChanged(ref cartConfigName, value);
         }
-
-        public IReadOnlyReactiveList<string> LcCartConfigComboBoxOptions => lcCartConfigComboBoxOptions;
 
         public DMSDownloadDataViewModel AvailableRequestData
         {
@@ -199,6 +200,13 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 return;
             }
+
+            lcCartComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcCartComboBoxOptionsBound).Subscribe();
+            lcCartSearchComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcCartSearchComboBoxOptionsBound).Subscribe();
+            lcCartConfigComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcCartConfigComboBoxOptionsBound).Subscribe();
+            LcCartComboBoxOptions = lcCartComboBoxOptionsBound;
+            LcCartSearchComboBoxOptions = lcCartSearchComboBoxOptionsBound;
+            LcCartConfigComboBoxOptions = lcCartConfigComboBoxOptionsBound;
 
             // Initialize form controls
             // Form caption
@@ -290,16 +298,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             if (cartList.Any())
             {
-                using (lcCartComboBoxOptions.SuppressChangeNotifications())
-                {
-                    lcCartComboBoxOptions.AddRange(cartList);
-                }
-                using (lcCartSearchComboBoxOptions.SuppressChangeNotifications())
+                lcCartComboBoxOptions.AddRange(cartList);
+                lcCartSearchComboBoxOptions.Edit(list =>
                 {
                     // Add a blank for "No cart specified"
-                    lcCartSearchComboBoxOptions.Add("");
-                    lcCartSearchComboBoxOptions.AddRange(cartList);
-                }
+                    list.Add("");
+                    list.AddRange(cartList);
+                });
             }
         }
 
@@ -340,10 +345,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             if (cartConfigList.Any())
             {
-                using (LcCartConfigComboBoxOptions.SuppressChangeNotifications())
-                {
-                    lcCartConfigComboBoxOptions.AddRange(cartConfigList);
-                }
+                lcCartConfigComboBoxOptions.AddRange(cartConfigList);
             }
         }
 
@@ -398,7 +400,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             LoadingData = true;
 
             // Clear the available datasets listview
-            AvailableRequestData.Data.Clear();
+            AvailableRequestData.ClearSamples();
 
             tempRequestList = await Task.Run(() => GetDMSData(queryData));
 
@@ -444,10 +446,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
             }
 
-            using (AvailableRequestData.Data.SuppressChangeNotifications())
-            {
-                AvailableRequestData.Data.AddRange(availReqList);
-            }
+            AvailableRequestData.AddSamples(availReqList);
 
             // Hide the wait message and display the listview again
             LoadingData = false;
@@ -532,18 +531,15 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void MoveRequestsToRunList()
         {
             // Copy selected items and update main list of DMS items
-            using (AvailableRequestData.Data.SuppressChangeNotifications())
-            using (SelectedRequestData.Data.SuppressChangeNotifications())
+            var data = AvailableRequestData.SelectedData.ToList();
+            // Remove the selected items from the Available Requests listview
+            AvailableRequestData.RemoveSamples(data);
+            // Add the selected items to the selected list
+            SelectedRequestData.AddSamples(data);
+            foreach (var tempItem in data)
             {
-                foreach (var tempItem in AvailableRequestData.SelectedData)
-                {
-                    // Move the selected items
-                    SelectedRequestData.Data.Add(tempItem);
-                    // Update main list of DMS items
-                    tempItem.DmsData.SelectedToRun = true;
-                    // Remove the selected items from the Available Requests listview
-                    AvailableRequestData.Data.Remove(tempItem);
-                }
+                // Update main list of DMS items
+                tempItem.DmsData.SelectedToRun = true;
             }
         }
 
@@ -552,20 +548,17 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void RemoveRequestsFromRunList()
         {
-            using (AvailableRequestData.Data.SuppressChangeNotifications())
-            using (SelectedRequestData.Data.SuppressChangeNotifications())
+            var data = SelectedRequestData.SelectedData.ToList();
+            AvailableRequestData.AddSamples(data);
+            SelectedRequestData.RemoveSamples(data);
+            foreach (var tempItem in SelectedRequestData.SelectedData)
             {
-                foreach (var tempItem in SelectedRequestData.SelectedData)
+                // Update main list of DMS items
+                if (!dmsRequestList.Remove(tempItem))
                 {
-                    // Update main list of DMS items
-                    if (!dmsRequestList.Remove(tempItem))
-                    {
-                        var tempStr = "Request " + tempItem.DmsData.RequestName + " not found in requested run collection";
-                        MessageBox.Show(tempStr);
-                        return;
-                    }
-                    // Remove the selected items from the Requests To Run listview
-                    SelectedRequestData.Data.Remove(tempItem);
+                    var tempStr = "Request " + tempItem.DmsData.RequestName + " not found in requested run collection";
+                    MessageBox.Show(tempStr);
+                    return;
                 }
             }
         }
@@ -590,8 +583,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public void ClearForm()
         {
-            AvailableRequestData.Data.Clear();
-            SelectedRequestData.Data.Clear();
+            AvailableRequestData.ClearSamples();
+            SelectedRequestData.ClearSamples();
             dmsRequestList.Clear();
         }
 

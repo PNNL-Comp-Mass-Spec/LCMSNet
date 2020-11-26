@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Data;
+using DynamicData;
+using DynamicData.Binding;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 
@@ -26,9 +29,11 @@ namespace LcmsNet.Method.ViewModels
                 LCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
                 LCMethodManager.Manager.MethodUpdated += Manager_MethodAdded;
             }
-            BindingOperations.EnableCollectionSynchronization(ListSelectedLCMethods, listSelectedLcMethodsLock);
-            BindingOperations.EnableCollectionSynchronization(MethodsComboBoxOptions, methodsComboBoxOptionsLock);
-            BindingOperations.EnableCollectionSynchronization(SelectedListLCMethods, selectedLcMethodNamesLock);
+
+            listSelectedLcMethods.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcMethodsListBound).Subscribe();
+            methodsComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var methodsComboOptions).Subscribe();
+            ListSelectedLCMethods = lcMethodsListBound;
+            MethodsComboBoxOptions = methodsComboOptions;
 
             AddCommand = ReactiveCommand.Create(AddMethodToList, this.WhenAnyValue(x => x.SelectedLCMethod, x => x.ListSelectedLCMethods.Count).Select(x => !this.ListSelectedLCMethods.Contains(SelectedLCMethod)));
             RemoveCommand = ReactiveCommand.Create(RemoveSelectedMethods, this.WhenAnyValue(x => x.SelectedListLCMethods.Count).Select(x => x > 0));
@@ -44,13 +49,9 @@ namespace LcmsNet.Method.ViewModels
             get { return ListSelectedLCMethods.Select(x => x.Clone() as LCMethod).ToList(); }
         }
 
-        private readonly object listSelectedLcMethodsLock = new object();
-        private readonly object methodsComboBoxOptionsLock = new object();
-        private readonly object selectedLcMethodNamesLock = new object();
-
         private LCMethod selectedLCMethod = null;
-        private readonly ReactiveList<LCMethod> listSelectedLcMethods = new ReactiveList<LCMethod>();
-        private readonly ReactiveList<LCMethod> methodsComboBoxOptions = new ReactiveList<LCMethod>();
+        private readonly SourceList<LCMethod> listSelectedLcMethods = new SourceList<LCMethod>();
+        private readonly SourceList<LCMethod> methodsComboBoxOptions = new SourceList<LCMethod>();
 
         public LCMethod SelectedLCMethod
         {
@@ -61,13 +62,13 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// LC Methods currently selected for display
         /// </summary>
-        public IReadOnlyReactiveList<LCMethod> ListSelectedLCMethods => listSelectedLcMethods;
-        public IReadOnlyReactiveList<LCMethod> MethodsComboBoxOptions => methodsComboBoxOptions;
+        public ReadOnlyObservableCollection<LCMethod> ListSelectedLCMethods { get; }
+        public ReadOnlyObservableCollection<LCMethod> MethodsComboBoxOptions { get; }
 
         /// <summary>
         /// LC Methods currently selected in the listbox for manipulation
         /// </summary>
-        public ReactiveList<LCMethod> SelectedListLCMethods { get; } = new ReactiveList<LCMethod>();
+        public ObservableCollectionExtended<LCMethod> SelectedListLCMethods { get; } = new ObservableCollectionExtended<LCMethod>();
 
         public ReactiveCommand<Unit, Unit> AddCommand { get; }
         public ReactiveCommand<Unit, Unit> RemoveCommand { get; }
@@ -102,7 +103,7 @@ namespace LcmsNet.Method.ViewModels
         #region Methods and Event Handlers
 
         /// <summary>
-        /// Removes the method to the user interface when it's removed from the manager.
+        /// Removes the method from the user interface when it's removed from the manager.
         /// </summary>
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to remove.</param>
@@ -150,15 +151,10 @@ namespace LcmsNet.Method.ViewModels
             // If the method exists, then we need to make sure here that we update the list box
             if (ListSelectedLCMethods.Any(lcMethod => lcMethod.Name.Equals(method.Name)))
             {
-                for (var i = 0; i < listSelectedLcMethods.Count; i++)
-                {
-                    if (listSelectedLcMethods[i].Name.Equals(method.Name))
-                    {
-                        var diff = listSelectedLcMethods[i].CurrentEventNumber;
-                        listSelectedLcMethods[i] = method.Clone() as LCMethod;
-                        listSelectedLcMethods[i].CurrentEventNumber = diff;
-                    }
-                }
+                var match = ListSelectedLCMethods.First(x => x.Name.Equals(method.Name));
+                var replace = (LCMethod)method.Clone();
+                replace.CurrentEventNumber = match.CurrentEventNumber;
+                listSelectedLcMethods.Replace(match, replace);
 
                 MethodUpdated?.Invoke(this);
             }
@@ -238,11 +234,12 @@ namespace LcmsNet.Method.ViewModels
                 }
             }
 
-            using (listSelectedLcMethods.SuppressChangeNotifications())
+            // TODO: use .Move(...) instead
+            listSelectedLcMethods.Edit(sourceList =>
             {
-                listSelectedLcMethods.Clear();
-                listSelectedLcMethods.AddRange(names);
-            }
+                sourceList.Clear();
+                sourceList.AddRange(names);
+            });
 
             // Alerts listening objects that the order of the methods has changed.
             MethodUpdated?.Invoke(this);
@@ -282,11 +279,12 @@ namespace LcmsNet.Method.ViewModels
                 }
             }
 
-            using (listSelectedLcMethods.SuppressChangeNotifications())
+            // TODO: use .Move(...) instead
+            listSelectedLcMethods.Edit(sourceList =>
             {
-                listSelectedLcMethods.Clear();
-                listSelectedLcMethods.AddRange(names);
-            }
+                sourceList.Clear();
+                sourceList.AddRange(names);
+            });
 
             // Alerts listening objects that the order of the methods has changed.
             MethodUpdated?.Invoke(this);

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Windows.Data;
+using System.Reactive.Linq;
+using DynamicData;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
 using ReactiveUI;
@@ -18,9 +20,11 @@ namespace LcmsNet.Logging.ViewModels
         {
             MessageLevel = ApplicationLogger.CONST_STATUS_LEVEL_USER;
             ErrorLevel = ApplicationLogger.CONST_STATUS_LEVEL_USER;
-            lockMessageList = new object();
-            lockErrorList = new object();
-            BindingOperations.EnableCollectionSynchronization(MessageList, lockMessageList);
+
+            messageList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var messageListBound).Subscribe();
+            errorMessages.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var errorMessagesBound).Subscribe();
+            MessageList = messageListBound;
+            ErrorMessages = errorMessagesBound;
 
             AcknowledgeErrorsCommand = ReactiveCommand.Create(AcknowledgeErrors);
             ClearMessagesCommand = ReactiveCommand.Create(ClearMessages);
@@ -56,19 +60,7 @@ namespace LcmsNet.Logging.ViewModels
             if (level <= messageLevel && message != null)
             {
                 var formatted = FormatMessage(message.Message);
-                RxApp.MainThreadScheduler.Schedule(x => InsertMessage(formatted));
-            }
-        }
-
-        /// <summary>
-        /// Updates message window using a delegate to avoid cross-thread problems
-        /// </summary>
-        /// <param name="message"></param>
-        private void InsertMessage(string message)
-        {
-            lock (lockMessageList)
-            {
-                messageList.Insert(0, message);
+                messageList.Insert(0, formatted);
             }
         }
 
@@ -81,18 +73,19 @@ namespace LcmsNet.Logging.ViewModels
         {
             if (level <= errorLevel && error != null)
             {
-                RxApp.MainThreadScheduler.Schedule(x => InsertError(error));
+                InsertError(error);
             }
         }
 
         private void InsertError(ErrorLoggerArgs error)
         {
             ErrorPresent?.Invoke(this, new EventArgs());
-            lock (lockErrorList)
+            // Use .Edit to make the whole set a single change (both synchronized, and single notification)
+            errorMessages.Edit(sourceList =>
             {
                 if (error.Exception != null)
                 {
-                    errorMessages.Insert(0, FormatMessage(error.Exception.StackTrace));
+                    sourceList.Insert(0, FormatMessage(error.Exception.StackTrace));
 
                     var exMessages = new List<string>();
                     var ex = error.Exception;
@@ -102,28 +95,22 @@ namespace LcmsNet.Logging.ViewModels
                         ex = ex.InnerException;
                     }
 
-                    errorMessages.Insert(0, FormatMessage(string.Join("\n", exMessages)));
+                    sourceList.Insert(0, FormatMessage(string.Join("\n", exMessages)));
                 }
 
-                errorMessages.Insert(0, FormatMessage(error.Message));
-            }
+                sourceList.Insert(0, FormatMessage(error.Message));
+            });
         }
 
         private void AcknowledgeErrors()
         {
-            using (errorMessages.SuppressChangeNotifications())
-            {
-                errorMessages.Clear();
-            }
+            errorMessages.Clear();
             ErrorCleared?.Invoke(this, new EventArgs());
         }
 
         private void ClearMessages()
         {
-            using (messageList.SuppressChangeNotifications())
-            {
-                messageList.Clear();
-            }
+            messageList.Clear();
         }
 
         #region Members
@@ -138,11 +125,8 @@ namespace LcmsNet.Logging.ViewModels
         /// </summary>
         private int errorLevel;
 
-        private readonly object lockMessageList;
-        private readonly object lockErrorList;
-
-        private readonly ReactiveList<string> messageList = new ReactiveList<string>();
-        private readonly ReactiveList<string> errorMessages = new ReactiveList<string>();
+        private readonly SourceList<string> messageList = new SourceList<string>();
+        private readonly SourceList<string> errorMessages = new SourceList<string>();
 
         #endregion
 
@@ -184,8 +168,8 @@ namespace LcmsNet.Logging.ViewModels
             set => MessageLevel = (int)value;
         }
 
-        public IReadOnlyReactiveList<string> MessageList => messageList;
-        public IReadOnlyReactiveList<string> ErrorMessages => errorMessages;
+        public ReadOnlyObservableCollection<string> MessageList { get; }
+        public ReadOnlyObservableCollection<string> ErrorMessages { get; }
 
         public ReactiveCommand<Unit, Unit> AcknowledgeErrorsCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearMessagesCommand { get; }

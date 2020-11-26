@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -40,7 +41,6 @@ namespace LcmsNet.Method.ViewModels
         private LCMethodStageViewModel acquisitionStage;
         private LCMethodSelectionViewModel selectedMethods;
         private MethodPreviewOptions methodPreviewOptions;
-        private readonly ReactiveList<LCMethodRenderMode> previewModeComboBoxOptions = new ReactiveList<LCMethodRenderMode>();
 
         /// <summary>
         /// Constructor that allows for users to edit methods.
@@ -60,7 +60,7 @@ namespace LcmsNet.Method.ViewModels
             SelectedMethods.MethodDeleted += SelectedMethods_MethodDeleted;
             SelectedMethods.MethodUpdated += SelectedMethods_MethodUpdated;
 
-            previewModeComboBoxOptions.Add(LCMethodRenderMode.Column);
+            PreviewModeComboBoxOptions = new List<LCMethodRenderMode> { LCMethodRenderMode.Column, }.AsReadOnly();
 
             MethodPreviewOptions = new MethodPreviewOptions
             {
@@ -117,7 +117,7 @@ namespace LcmsNet.Method.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedMethods, value);
         }
 
-        public IReadOnlyReactiveList<LCMethodRenderMode> PreviewModeComboBoxOptions => previewModeComboBoxOptions;
+        public ReadOnlyCollection<LCMethodRenderMode> PreviewModeComboBoxOptions { get; }
 
         #endregion
 

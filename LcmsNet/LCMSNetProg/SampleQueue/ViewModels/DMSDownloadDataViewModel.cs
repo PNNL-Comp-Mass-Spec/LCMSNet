@@ -1,5 +1,9 @@
 ﻿using System;
-using System.Windows.Data;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
+using DynamicData;
+using DynamicData.Binding;
 using LcmsNetSDK.Data;
 using ReactiveUI;
 
@@ -7,14 +11,20 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class DMSDownloadDataViewModel : ReactiveObject
     {
-        private readonly ReactiveList<SampleData> data = new ReactiveList<SampleData>();
-        private readonly ReactiveList<SampleData> selectedData = new ReactiveList<SampleData>();
-        private SampleData selectedItem;
-        private object dataLock = new object();
-        private object selectedDataLock = new object();
+        public DMSDownloadDataViewModel(bool userSortable = false)
+        {
+            UserSortable = userSortable;
+            dataList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var dataBound).Subscribe();
+            Data = dataBound;
+        }
 
-        public ReactiveList<SampleData> Data => data;
-        public ReactiveList<SampleData> SelectedData => selectedData;
+        private SampleData selectedItem;
+
+        private readonly SourceList<SampleData> dataList = new SourceList<SampleData>();
+
+        public ReadOnlyObservableCollection<SampleData> Data { get; }
+
+        public ObservableCollectionExtended<SampleData> SelectedData { get; } = new ObservableCollectionExtended<SampleData>();
 
         public SampleData SelectedItem
         {
@@ -24,14 +34,32 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool UserSortable { get; }
 
-        public DMSDownloadDataViewModel(bool userSortable = false)
+        public event EventHandler<EventArgs> SetSortBatchBlockRunOrder;
+
+        public void AddSample(SampleData sample)
         {
-            UserSortable = userSortable;
-            BindingOperations.EnableCollectionSynchronization(data, dataLock);
-            BindingOperations.EnableCollectionSynchronization(selectedData, selectedDataLock);
+            dataList.Add(sample);
         }
 
-        public event EventHandler<EventArgs> SetSortBatchBlockRunOrder;
+        public void AddSamples(IEnumerable<SampleData> samples)
+        {
+            dataList.AddRange(samples);
+        }
+
+        public void RemoveSample(SampleData sample)
+        {
+            dataList.Remove(sample);
+        }
+
+        public void RemoveSamples(IEnumerable<SampleData> samples)
+        {
+            dataList.RemoveMany(samples);
+        }
+
+        public void ClearSamples()
+        {
+            dataList.Clear();
+        }
 
         /// <summary>
         /// Sorts the data by batch, block, and run order
