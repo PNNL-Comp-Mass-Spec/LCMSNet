@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Media;
 using DynamicData;
+using DynamicData.Binding;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetData;
 using LcmsNetData.Data;
@@ -27,9 +28,10 @@ namespace LcmsNet.SampleQueue
     /// </summary>
     public class SampleDataManager : ReactiveObject
     {
-        private readonly ReactiveList<SampleViewModel> samplesList = new ReactiveList<SampleViewModel>() { ChangeTrackingEnabled = true };
+        private readonly SourceList<SampleViewModel> samplesList = new SourceList<SampleViewModel>();
 
-        public IReadOnlyReactiveList<SampleViewModel> Samples => samplesList;
+        public ReadOnlyObservableCollection<SampleViewModel> Samples { get; }
+        public IObservableList<SampleViewModel> SamplesSource => samplesList;
 
         private readonly DMSSampleValidator mValidator;
 
@@ -132,7 +134,10 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public SampleDataManager(SampleQueue sampleQueue)
         {
-            BindingOperations.EnableCollectionSynchronization(samplesList, new object());
+            var resortTrigger = samplesList.Connect().WhenValueChanged(x => x.Sample.SequenceID).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
+            samplesList.Connect().Sort(SortExpressionComparer<SampleViewModel>.Ascending(x => x.Sample.SequenceID), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var samplesListBound).Subscribe();
+            Samples = samplesListBound;
+
             foreach (var column in CartConfiguration.Columns)
             {
                 column.StatusChanged += column_StatusChanged;
@@ -192,6 +197,9 @@ namespace LcmsNet.SampleQueue
                 ApplicationLogger.LogError(0,
                     "An exception occurred while trying to build the sample queue controls.  Constructor 2: " + ex.Message, ex);
             }
+
+            samplesList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var samplesListBound).Subscribe();
+            Samples = samplesListBound;
 
             #region DesignTimeData
             samplesList.Add(new SampleViewModel(new SampleData()
@@ -361,7 +369,7 @@ namespace LcmsNet.SampleQueue
             }
             if (e.SettingName.Equals(LCMSSettings.PARAM_CARTCONFIGNAME))
             {
-                foreach (var sample in samplesList)
+                foreach (var sample in samplesList.Items)
                 {
                     var data = sample.Sample.DmsData;
                     data.CartConfigName = e.SettingValue;
@@ -413,25 +421,16 @@ namespace LcmsNet.SampleQueue
             ShowInstrumentMethods();
             ShowLCSeparationMethods();
 
-            Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.IsChecked))).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
-            Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.RequestName))).Subscribe(x => CheckForDuplicates(x.Sender.Sample));
-            Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.Sample.IsDuplicateRequestName))).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender.Sample));
+            samplesList.Connect().WhenPropertyChanged(x => x.IsChecked).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
+            samplesList.Connect().WhenPropertyChanged(x => x.RequestName).Subscribe(x => CheckForDuplicates(x.Sender.Sample));
+            samplesList.Connect().WhenPropertyChanged(x => x.Sample.IsDuplicateRequestName).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender.Sample));
             // TODO: Check for side effects
             // TODO: The idea of this is that it would detect the minor changes to the queue, where a value was changed using the databinding. There needs to be a lockout for actions not taken via the databinding, since those already handle this process...
-            Samples.ItemChanged.Where(x =>
-            {
-                var prop = x.PropertyName;
-                var obj = x.Sender;
-                return prop.Equals(nameof(obj.RequestName)) ||
-                       prop.Equals(nameof(obj.Sample.DmsData)) ||
-                       prop.Equals(nameof(obj.Sample.PAL)) ||
-                       prop.Equals(nameof(obj.Sample.InstrumentMethod)) ||
-                       prop.Equals(nameof(obj.ColumnNumber)) ||
-                       prop.Equals(nameof(obj.InstrumentMethod)) ||
-                       prop.Equals(nameof(obj.Sample.LCMethodName)) ||
-                       prop.Equals(nameof(obj.Sample.SequenceID));
-            }).Throttle(TimeSpan.FromSeconds(.25))
-            .Subscribe(x => this.ChangeMade(x.Sender));
+            samplesList.Connect().WhenAnyPropertyChanged(nameof(SampleViewModel.RequestName), nameof(SampleViewModel.Sample.DmsData),
+                nameof(SampleViewModel.Sample.PAL), nameof(SampleViewModel.Sample.InstrumentMethod), nameof(SampleViewModel.ColumnNumber),
+                nameof(SampleViewModel.InstrumentMethod), nameof(SampleViewModel.Sample.LCMethodName), nameof(SampleViewModel.Sample.SequenceID))
+                .Throttle(TimeSpan.FromSeconds(.25))
+                .Subscribe(this.ChangeMade);
 
             this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanUndo, out canUndo);
             this.WhenAnyValue(x => x.SampleQueue.CanRedo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanRedo, out canRedo);
@@ -458,131 +457,141 @@ namespace LcmsNet.SampleQueue
                 currentlyProcessingQueueChange = true;
             }
 
-            using (samplesList.SuppressChangeNotifications())
+            var currentTask = "Initializing";
+
+            try
             {
-                var currentTask = "Initializing";
+                currentTask = "Determine number of selected items";
+                currentTask = "Examine samples";
 
-                try
+                if (changedSample.IsChecked)
                 {
-                    currentTask = "Determine number of selected items";
-                    currentTask = "Examine samples";
-
-                    if (changedSample.IsChecked)
+                    var foundError = false;
+                    // Queue samples
+                    foreach (var sample in samplesList.Items.OrderBy(x => x.Sample.UniqueID))
                     {
-                        var foundError = false;
-                        // Queue samples
-                        foreach (var sample in samplesList)
+                        // bypass samples already in running queue
+                        if (sample.Sample.IsSetToRunOrHasRun)
                         {
-                            // bypass samples already in running queue
-                            if (sample.Sample.IsSetToRunOrHasRun)
-                            {
-                                continue;
-                            }
+                            continue;
+                        }
 
-                            var sampleErrors = string.Empty;
-                            if (!sample.Sample.DmsData.DatasetNameCharactersValid())
+                        if (sample.Sample.UniqueID > changedSample.Sample.UniqueID)
+                        {
+                            // Safety check: we've already gone past the sample that was changed.
+                            break;
+                        }
+
+                        var sampleErrors = string.Empty;
+                        if (!sample.Sample.DmsData.DatasetNameCharactersValid())
+                        {
+                            sampleErrors += "Request name contains invalid characters!\n" +
+                                                          DMSData.ValidDatasetNameCharacters + "\n";
+                            foundError = true;
+                        }
+                        // Validate sample and add it to the run queue
+
+                        // Validate sample.
+                        if (LCMSSettings.GetParameter(LCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
+                        {
+                            var sampleValidErrors = mValidator.IsSampleValidDetailed(sample.Sample);
+
+                            if (sampleValidErrors != DMSSampleValidatorErrors.NoError)
                             {
-                                sampleErrors += "Request name contains invalid characters!\n" +
-                                                              DMSData.ValidDatasetNameCharacters + "\n";
+                                sampleErrors += mValidator.CreateErrorListFromErrors(sampleValidErrors);
                                 foundError = true;
-                            }
-                            // Validate sample and add it to the run queue
-
-                            // Validate sample.
-                            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
-                            {
-                                var sampleValidErrors = mValidator.IsSampleValidDetailed(sample.Sample);
-
-                                if (sampleValidErrors != DMSSampleValidatorErrors.NoError)
-                                {
-                                    sampleErrors += mValidator.CreateErrorListFromErrors(sampleValidErrors);
-                                    foundError = true;
-                                }
-                                else
-                                {
-                                    sampleErrors = string.Empty;
-                                }
                             }
                             else
                             {
-                                // DMS Sample validation is disabled
-                                RxApp.MainThreadScheduler.Schedule(() => sample.Sample.SampleErrors = sampleErrors);
-                                break;
-                            }
-
-                            if (string.IsNullOrEmpty(sampleErrors))
-                            {
-                                // Validate other parts of the sample.
-                                var errors = new List<SampleValidationError>();
-                                foreach (var reference in SampleValidatorManager.Instance.Validators)
-                                {
-#if DEBUG
-                                    Console.WriteLine("Validating sample with validator: " +
-                                                      reference.Metadata.Name);
-#endif
-                                    var sampleValidator = reference.Value;
-                                    errors.AddRange(sampleValidator.ValidateSamples(sample.Sample));
-                                }
-
-                                if (errors.Count > 0)
-                                {
-                                    if (sampleErrors.Length > 0)
-                                    {
-                                        sampleErrors += "\n";
-                                    }
-                                    sampleErrors += string.Join("\n", errors.Select(x => x.ToString()));
-                                    foundError = true;
-                                }
-                            }
-
-                            RxApp.MainThreadScheduler.Schedule(() => sample.Sample.SampleErrors = sampleErrors);
-
-                            if (!foundError)
-                            {
-                                // Add to run queue
-                                SampleQueue.MoveSamplesToRunningQueue(sample.Sample); // TODO: MainThreadWrap?
-                            }
-
-                            if (sample.Equals(changedSample))
-                            {
-                                if (foundError)
-                                {
-                                    RxApp.MainThreadScheduler.Schedule(() => sample.IsChecked = false);
-                                }
-                                //Stop validating and queuing samples
-                                break;
+                                sampleErrors = string.Empty;
                             }
                         }
-                    }
-                    else
-                    {
-                        // Dequeue samples - iterate in reverse
-                        foreach (var sample in samplesList.Reverse())
+                        else
                         {
-                            // bypass samples not set to run
-                            if (!sample.Sample.IsSetToRunOrHasRun ||
-                                sample.Sample.RunningStatus == SampleRunningStatus.Complete ||
-                                sample.Sample.RunningStatus == SampleRunningStatus.Running)
-                            {
-                                continue;
-                            }
-                            // Remove sample from run queue
-                            SampleQueue.DequeueSampleFromRunningQueue(sample.Sample);
+                            // DMS Sample validation is disabled
+                            RxApp.MainThreadScheduler.Schedule(() => sample.Sample.SampleErrors = sampleErrors);
+                            break;
+                        }
 
-                            if (sample.Equals(changedSample))
+                        if (string.IsNullOrEmpty(sampleErrors))
+                        {
+                            // Validate other parts of the sample.
+                            var errors = new List<SampleValidationError>();
+                            foreach (var reference in SampleValidatorManager.Instance.Validators)
                             {
-                                // Stop removing sample from run queue
-                                break;
+#if DEBUG
+                                Console.WriteLine("Validating sample with validator: " +
+                                                  reference.Metadata.Name);
+#endif
+                                var sampleValidator = reference.Value;
+                                errors.AddRange(sampleValidator.ValidateSamples(sample.Sample));
                             }
+
+                            if (errors.Count > 0)
+                            {
+                                if (sampleErrors.Length > 0)
+                                {
+                                    sampleErrors += "\n";
+                                }
+                                sampleErrors += string.Join("\n", errors.Select(x => x.ToString()));
+                                foundError = true;
+                            }
+                        }
+
+                        RxApp.MainThreadScheduler.Schedule(() => sample.Sample.SampleErrors = sampleErrors);
+
+                        if (!foundError)
+                        {
+                            // Add to run queue
+                            SampleQueue.MoveSamplesToRunningQueue(sample.Sample); // TODO: MainThreadWrap?
+                        }
+
+                        if (sample.Equals(changedSample))
+                        {
+                            if (foundError)
+                            {
+                                RxApp.MainThreadScheduler.Schedule(() => sample.IsChecked = false);
+                            }
+                            //Stop validating and queuing samples
+                            break;
                         }
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    ApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueuing, task " + currentTask, ex);
-                    MessageBox.Show(@"Error in HandleSampleValidationAndQueuing, task " + currentTask + @": " + ex.Message, @"Error",
-                        MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    // Dequeue samples - iterate in reverse
+                    foreach (var sample in samplesList.Items.OrderBy(x => x.Sample.UniqueID).Reverse())
+                    {
+                        // bypass samples not set to run
+                        if (!sample.Sample.IsSetToRunOrHasRun ||
+                            sample.Sample.RunningStatus == SampleRunningStatus.Complete ||
+                            sample.Sample.RunningStatus == SampleRunningStatus.Running)
+                        {
+                            continue;
+                        }
+
+                        if (sample.Sample.UniqueID < changedSample.Sample.UniqueID)
+                        {
+                            // Safety check: we've already gone past the sample that was changed.
+                            break;
+                        }
+
+                        // Remove sample from run queue
+                        SampleQueue.DequeueSampleFromRunningQueue(sample.Sample);
+
+                        if (sample.Equals(changedSample))
+                        {
+                            // Stop removing sample from run queue
+                            break;
+                        }
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueuing, task " + currentTask, ex);
+                MessageBox.Show(@"Error in HandleSampleValidationAndQueuing, task " + currentTask + @": " + ex.Message, @"Error",
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
 
             lock (this)
@@ -705,7 +714,7 @@ namespace LcmsNet.SampleQueue
             // If we just added a sample, we want to make sure the samples have a method selected.
             if (lcMethodOptions.Count == 1)
             {
-                foreach (var sample in Samples)
+                foreach (var sample in samplesList.Items)
                 {
                     sample.Sample.LCMethodName = method.Name;
                 }
@@ -723,10 +732,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void Undo()
         {
-            using (samplesList.SuppressChangeNotifications())
-            {
-                SampleQueue.Undo();
-            }
+            SampleQueue.Undo();
         }
 
         /// <summary>
@@ -734,10 +740,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void Redo()
         {
-            using (samplesList.SuppressChangeNotifications())
-            {
-                SampleQueue.Redo();
-            }
+            SampleQueue.Redo();
         }
 
         private bool recentlyChanged = false;
@@ -770,16 +773,13 @@ namespace LcmsNet.SampleQueue
         /// <param name="insertIntoUnused"></param>
         public void AddSamplesToManager(List<SampleData> samples, bool insertIntoUnused)
         {
-            using (samplesList.SuppressChangeNotifications())
+            if (insertIntoUnused == false)
             {
-                if (insertIntoUnused == false)
-                {
-                    SampleQueue.QueueSamples(samples, ColumnHandling);
-                }
-                else
-                {
-                    SampleQueue.InsertIntoUnusedSamples(samples, ColumnHandling);
-                }
+                SampleQueue.QueueSamples(samples, ColumnHandling);
+            }
+            else
+            {
+                SampleQueue.InsertIntoUnusedSamples(samples, ColumnHandling);
             }
         }
 
@@ -971,14 +971,11 @@ namespace LcmsNet.SampleQueue
             if (samples.Count < 1)
                 return;
 
-            using (samplesList.SuppressChangeNotifications())
+            foreach (var sample in samples)
             {
-                foreach (var sample in samples)
-                {
-                    SampleData.AddDateCartColumnToDatasetName(sample);
-                }
-                SampleQueue.UpdateSamples(samples);
+                SampleData.AddDateCartColumnToDatasetName(sample);
             }
+            SampleQueue.UpdateSamples(samples);
         }
 
         public void ResetDatasetName(List<SampleData> samples)
@@ -989,15 +986,12 @@ namespace LcmsNet.SampleQueue
             if (samples.Count < 1)
                 return;
 
-            using (samplesList.SuppressChangeNotifications())
+            foreach (var sample in samples)
             {
-                foreach (var sample in samples)
-                {
-                    SampleData.ResetDatasetNameToRequestName(sample);
-                }
-
-                SampleQueue.UpdateSamples(samples);
+                SampleData.ResetDatasetNameToRequestName(sample);
             }
+
+            SampleQueue.UpdateSamples(samples);
         }
 
         /// <summary>
@@ -1008,16 +1002,13 @@ namespace LcmsNet.SampleQueue
         /// <param name="newColor"></param>
         private void column_ColorChanged(object sender, Color previousColor, Color newColor)
         {
-            using (samplesList.SuppressChangeNotifications())
-            {
-                SampleQueue.UpdateAllSamples();
+            SampleQueue.UpdateAllSamples();
 
-                // The following is necessary due to how samples are stored and read from a database
-                // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
-                foreach (var s in samplesList)
-                {
-                    s.Sample.ColumnIndex = CartConfiguration.Columns[s.Sample.ColumnIndex].ID;
-                }
+            // The following is necessary due to how samples are stored and read from a database
+            // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
+            foreach (var s in samplesList.Items)
+            {
+                s.Sample.ColumnIndex = CartConfiguration.Columns[s.Sample.ColumnIndex].ID;
             }
         }
 
@@ -1029,16 +1020,13 @@ namespace LcmsNet.SampleQueue
         /// <param name="oldName"></param>
         private void column_NameChanged(object sender, string name, string oldName)
         {
-            using (samplesList.SuppressChangeNotifications())
-            {
-                SampleQueue.UpdateWaitingSamples();
+            SampleQueue.UpdateWaitingSamples();
 
-                // The following is necessary due to how samples are stored and read from a database
-                // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
-                foreach (var s in samplesList)
-                {
-                    s.Sample.ColumnIndex = CartConfiguration.Columns[s.Sample.ColumnIndex].ID;
-                }
+            // The following is necessary due to how samples are stored and read from a database
+            // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
+            foreach (var s in samplesList.Items)
+            {
+                s.Sample.ColumnIndex = CartConfiguration.Columns[s.Sample.ColumnIndex].ID;
             }
         }
 
@@ -1156,7 +1144,7 @@ namespace LcmsNet.SampleQueue
             // If we have a sample, get the previous sample data.
             if (samplesList.Count > 0)
             {
-                var data = samplesList.Last().Sample;
+                var data = samplesList.Items.Last().Sample;
                 if (data != null)
                 {
                     var actualData = SampleQueue.FindSample(data.UniqueID);
@@ -1187,10 +1175,7 @@ namespace LcmsNet.SampleQueue
 
             if (newData != null)
             {
-                using (samplesList.SuppressChangeNotifications())
-                {
-                    AddSamplesToManager(new List<SampleData> { newData }, insertIntoUnused);
-                }
+                AddSamplesToManager(new List<SampleData> { newData }, insertIntoUnused);
             }
             return newData;
         }
@@ -1206,18 +1191,16 @@ namespace LcmsNet.SampleQueue
             {
                 return false;
             }
-            if (!samplesList.Any(x => x.Sample.Equals(sample)))
+            if (!samplesList.Items.Any(x => x.Sample.Equals(sample)))
             {
-                using (samplesList.SuppressChangeNotifications())
+                if (string.IsNullOrWhiteSpace(sample.DmsData.CartConfigName))
                 {
-                    if (string.IsNullOrWhiteSpace(sample.DmsData.CartConfigName))
-                    {
-                        sample.DmsData.CartConfigName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
-                    }
-                    samplesList.Add(new SampleViewModel(sample));
-                    samplesList.Sort((x, y) => x.Sample.SequenceID.CompareTo(y.Sample.SequenceID));
-                    UpdateRow(sample);
+                    sample.DmsData.CartConfigName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
                 }
+                samplesList.Add(new SampleViewModel(sample));
+                // TODO: Verify: sorting should be handled by the SourceList observers
+                //samplesList.Sort((x, y) => x.Sample.SequenceID.CompareTo(y.Sample.SequenceID));
+                UpdateRow(sample);
             }
             return true;
         }
@@ -1226,17 +1209,35 @@ namespace LcmsNet.SampleQueue
         /// Adds samples to the list but optimizes layout and updates for rendering controls.
         /// </summary>
         /// <param name="samples">Sample to display in the list view.</param>
-        /// <returns>True if addition was a success, or false if adding sample failed.</returns>
+        /// <returns>True if addition was a success (or samples were already present), or false if adding sample failed.</returns>
         public bool AddSamplesToList(IEnumerable<SampleData> samples)
         {
-            using (samplesList.SuppressChangeNotifications())
+            var existingItems = samplesList.Items.ToList();
+            var newItems = new List<SampleViewModel>();
+            foreach (var sample in samples.Where(x => x != null && !existingItems.Any(y => y.Sample.Equals(x))))
             {
-                foreach (var data in samples)
+                //AddSamplesToList(sample);
+                if (newItems.Any(x => x.Sample.Equals(sample)))
                 {
-                    AddSamplesToList(data);
+                    continue;
                 }
-                return true;
+
+                if (string.IsNullOrWhiteSpace(sample.DmsData.CartConfigName))
+                {
+                    sample.DmsData.CartConfigName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
+                }
+                // Add the new items to a temporary list.
+                newItems.Add(new SampleViewModel(sample));
+                // TODO: Verify: sorting should be handled by the SourceList observers
+                //samplesList.Sort((x, y) => x.Sample.SequenceID.CompareTo(y.Sample.SequenceID));
+                // The following does not reference Samples or samplesList.
+                UpdateRow(sample);
             }
+
+            // Add all new samples to the observed list as a single change
+            samplesList.AddRange(newItems);
+
+            return true;
         }
 
         /// <summary>
@@ -1244,12 +1245,9 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void ClearAllSamples()
         {
-            using (samplesList.SuppressChangeNotifications())
-            {
-                // Remove all of them from the sample queue.
-                // This should update the other views as well.
-                SampleQueue.RemoveSample(samplesList.Select(x => x.Sample.UniqueID).ToList(), enumColumnDataHandling.LeaveAlone);
-            }
+            // Remove all of them from the sample queue.
+            // This should update the other views as well.
+            SampleQueue.RemoveSample(samplesList.Items.Select(x => x.Sample.UniqueID).ToList(), enumColumnDataHandling.LeaveAlone);
         }
 
         /// <summary>
@@ -1263,15 +1261,12 @@ namespace LcmsNet.SampleQueue
             if (data.Count < 1)
                 return;
 
-            using (samplesList.SuppressChangeNotifications())
-            {
-                // We have to make sure the data is sorted by sequence
-                // number in order for the sample queue movement to work
-                data.Sort(new SequenceComparer());
+            // We have to make sure the data is sorted by sequence
+            // number in order for the sample queue movement to work
+            data.Sort(new SequenceComparer());
 
-                // Move in the sample queue
-                SampleQueue.MoveQueuedSamples(data, 0, offset, moveType);
-            }
+            // Move in the sample queue
+            SampleQueue.MoveQueuedSamples(data, 0, offset, moveType);
         }
 
         /// <summary>
@@ -1279,10 +1274,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void RemoveUnusedSamples(enumColumnDataHandling resortColumns)
         {
-            using (samplesList.SuppressChangeNotifications())
-            {
-                SampleQueue.RemoveUnusedSamples(resortColumns);
-            }
+            SampleQueue.RemoveUnusedSamples(resortColumns);
         }
 
         /// <summary>
@@ -1290,10 +1282,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void RemoveUnusedSamples(ColumnData column, enumColumnDataHandling resortColumns)
         {
-            using (samplesList.SuppressChangeNotifications())
-            {
-                SampleQueue.RemoveUnusedSamples(column, resortColumns);
-            }
+            SampleQueue.RemoveUnusedSamples(column, resortColumns);
         }
 
         /// <summary>
@@ -1311,12 +1300,9 @@ namespace LcmsNet.SampleQueue
                     removes.Add(sample.Sample.UniqueID);
                 }
 
-                using (samplesList.SuppressChangeNotifications())
-                {
-                    // Remove all of them from the sample queue.
-                    // This should update the other views as well.
-                    SampleQueue.RemoveSample(removes, resortColumns);
-                }
+                // Remove all of them from the sample queue.
+                // This should update the other views as well.
+                SampleQueue.RemoveSample(removes, resortColumns);
             }
             catch (Exception ex)
             {
@@ -1358,7 +1344,7 @@ namespace LcmsNet.SampleQueue
             if (data.IsDuplicateRequestName)
             {
                 // We only need to look for duplicates matching this one's requestname
-                foreach (var sample in samplesList.Where(x => x.RequestName.Equals(data.DmsData.RequestName)))
+                foreach (var sample in samplesList.Items.Where(x => x.RequestName.Equals(data.DmsData.RequestName)))
                 {
                     if (sample.Sample.Equals(data))
                     {
@@ -1370,7 +1356,7 @@ namespace LcmsNet.SampleQueue
             else
             {
                 // This sample is no longer a duplicate, so we need to hit everything that was flagged as a duplicate name
-                foreach (var sample in samplesList.Where(x => x.Sample.IsDuplicateRequestName))
+                foreach (var sample in samplesList.Items.Where(x => x.Sample.IsDuplicateRequestName))
                 {
                     if (sample.Sample.Equals(data))
                     {
@@ -1488,11 +1474,8 @@ namespace LcmsNet.SampleQueue
             // But track the position of the scroll bar to be nice to the user.
             // TODO: var backup = samplesList.ToList();
 
-            using (samplesList.SuppressChangeNotifications())
-            {
-                samplesList.Clear();
-                AddSamplesToList(data.Samples);
-            }
+            samplesList.Clear();
+            AddSamplesToList(data.Samples);
 
             // TODO: if (samplesList.Count > 0)
             // TODO: {
@@ -1554,22 +1537,19 @@ namespace LcmsNet.SampleQueue
             // The sample queue gives all of the samples
             var sampleList = samples.ToList();
 
-            using (samplesList.SuppressChangeNotifications())
+            if (replaceExistingRows && samplesList.Count > 0)
             {
-                if (replaceExistingRows && samplesList.Count > 0)
+                try
                 {
-                    try
-                    {
-                        samplesList.Clear();
-                    }
-                    catch (Exception ex)
-                    {
-                        ApplicationLogger.LogError(0, "Ignoring exception in SamplesAddedFromQueue: " + ex.Message);
-                    }
+                    samplesList.Clear();
                 }
-
-                AddSamplesToList(sampleList);
+                catch (Exception ex)
+                {
+                    ApplicationLogger.LogError(0, "Ignoring exception in SamplesAddedFromQueue: " + ex.Message);
+                }
             }
+
+            AddSamplesToList(sampleList);
 
             // TODO: if (samplesList.Count > 0 && sampleList.Count > 0)
             // TODO: {
@@ -1584,11 +1564,9 @@ namespace LcmsNet.SampleQueue
         /// <param name="data"></param>
         private void SampleQueue_SamplesReordered(object sender, SampleQueueArgs data)
         {
-            using (samplesList.SuppressChangeNotifications())
-            {
-                samplesList.Clear();
-                AddSamplesToList(data.Samples);
-            }
+            samplesList.Clear();
+            AddSamplesToList(data.Samples);
+
             // TODO: if (samplesList.Count > 0 && data.Samples.Any())
             // TODO: {
             // TODO:     ScrollIntoView(samplesList.Last(x => x.Sample.Equals(data.Samples.Last())));

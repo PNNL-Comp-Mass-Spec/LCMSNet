@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Media;
+using DynamicData;
+using DynamicData.Binding;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
@@ -14,11 +17,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class ColumnControlViewModel : SampleControlViewModel
     {
-        public override IReadOnlyReactiveList<SampleViewModel> Samples => FilteredSamples;
+        public override ReadOnlyObservableCollection<SampleViewModel> Samples => FilteredSamples;
 
-        private readonly IReadOnlyReactiveList<SampleViewModel> filteredSamples;
-
-        public IReadOnlyReactiveList<SampleViewModel> FilteredSamples => filteredSamples;
+        public ReadOnlyObservableCollection<SampleViewModel> FilteredSamples { get; }
 
         private readonly ObservableAsPropertyHelper<string> columnHeader;
 
@@ -40,7 +41,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         [Obsolete("For WPF Design time use only.", true)]
         public ColumnControlViewModel(bool commandsAreVisible) : base()
         {
-            filteredSamples = new ReactiveList<SampleViewModel>();
+            FilteredSamples = new ReadOnlyObservableCollection<SampleViewModel>(new ObservableCollection<SampleViewModel>());
             CheckboxColumnVisible = false;
             StatusColumnVisible = false;
             ColumnIdColumnVisible = false;
@@ -64,7 +65,11 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, ColumnData columnData, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
-            filteredSamples = SampleDataManager.Samples.CreateDerivedCollection(x => x, x => Column == null || Column.ID == x.Sample.ColumnIndex);
+            var resortTrigger = SampleDataManager.SamplesSource.Connect().WhenValueChanged(x => x.Sample.SequenceID).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
+            var filter = this.WhenValueChanged(x => x.Column).Select(x => new Func<SampleViewModel, bool>(y => x == null || x.ID == y.Sample.ColumnIndex));
+            // TODO: Check and verify auto-refresh when ColumnData changes
+            SampleDataManager.SamplesSource.Connect()/*.AutoRefresh(x => x.Sample.ColumnData)*/.Filter(filter).Sort(SortExpressionComparer<SampleViewModel>.Ascending(x => x.Sample.SequenceID), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var filteredSamples).Subscribe();
+            FilteredSamples = filteredSamples;
 
             this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
                 .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")
@@ -319,55 +324,52 @@ namespace LcmsNet.SampleQueue.ViewModels
                     }
                 }
 
-                using (Samples.SuppressChangeNotifications())
+                // Get the list of unique id's from the samples and
+                // change the column to put the samples on.
+
+                // Could keep track of updated IDs with
+                // var ids = new List<long>();
+
+                foreach (var sample in samples)
                 {
-                    // Get the list of unique id's from the samples and
-                    // change the column to put the samples on.
+                    // ids.Add(sample.UniqueID);
+                    sample.LCMethodName = method.Name;
+                    sample.ColumnIndex = CartConfiguration.Columns[column].ID;
+                }
 
-                    // Could keep track of updated IDs with
-                    // var ids = new List<long>();
+                // TODO: The below code was what would do the moving into unused samples, long disabled Should it be deleted?.
+                /*
+                // Then remove them from the queue
+                enumColumnDataHandling backFill = enumColumnDataHandling.CreateUnused;
+                if (selector.InsertIntoUnused)
+                {
+                    backFill = enumColumnDataHandling.LeaveAlone;
+                }
 
-                    foreach (var sample in samples)
-                    {
-                        // ids.Add(sample.UniqueID);
-                        sample.LCMethodName = method.Name;
-                        sample.ColumnIndex = CartConfiguration.Columns[column].ID;
-                    }
+                SampleDataManager.SampleQueue.RemoveSample(ids, backFill);
 
-                    // TODO: The below code was what would do the moving into unused samples, long disabled Should it be deleted?.
-                    /*
-                    // Then remove them from the queue
-                    enumColumnDataHandling backFill = enumColumnDataHandling.CreateUnused;
+                // Then re-queue the samples.
+                try
+                {
                     if (selector.InsertIntoUnused)
                     {
-                        backFill = enumColumnDataHandling.LeaveAlone;
+                        SampleDataManager.SampleQueue.InsertIntoUnusedSamples(samples, handling);
                     }
-
-                    SampleDataManager.SampleQueue.RemoveSample(ids, backFill);
-
-                    // Then re-queue the samples.
-                    try
+                    else
                     {
-                        if (selector.InsertIntoUnused)
-                        {
-                            SampleDataManager.SampleQueue.InsertIntoUnusedSamples(samples, handling);
-                        }
-                        else
-                        {
-                            //SampleDataManager.UpdateSamples(
-                            SampleDataManager.SampleQueue.QueueSamples(samples, handling);
-                        }
+                        //SampleDataManager.UpdateSamples(
+                        SampleDataManager.SampleQueue.QueueSamples(samples, handling);
                     }
-                    catch (Exception ex)
-                    {
-                        ApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
-                    }
-                    if (samples.Count > 0)
-                    {
-                        SampleDataManager.SampleQueue.UpdateSamples(samples);
-                    }
-                    */
                 }
+                catch (Exception ex)
+                {
+                    ApplicationLogger.LogError(0, "Could not queue the samples when moving between columns.", ex);
+                }
+                if (samples.Count > 0)
+                {
+                    SampleDataManager.SampleQueue.UpdateSamples(samples);
+                }
+                */
 
                 // Re-select the first sample
                 SelectedSample = Samples.First(x => x.Sample.Equals(selectedSamples.First()));

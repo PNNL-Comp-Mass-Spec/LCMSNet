@@ -120,20 +120,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             synchronizationContext = SynchronizationContext.Current;
 
-            UndoCommand = ReactiveCommand.Create(() =>
-            {
-                using (SampleControlViewModel.Samples.SuppressChangeNotifications())
-                {
-                    this.sampleQueue.Undo();
-                }
-            }, this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
-            RedoCommand = ReactiveCommand.Create(() =>
-            {
-                using (SampleControlViewModel.Samples.SuppressChangeNotifications())
-                {
-                    this.sampleQueue.Redo();
-                }
-            }, this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
+            UndoCommand = ReactiveCommand.Create(() => sampleQueue.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
+            RedoCommand = ReactiveCommand.Create(() => sampleQueue.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
             RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
             StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue(), this.WhenAnyValue(x => x.IsStopButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
         }

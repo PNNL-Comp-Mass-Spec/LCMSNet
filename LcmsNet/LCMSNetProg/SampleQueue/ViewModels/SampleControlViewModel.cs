@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
+using DynamicData;
+using DynamicData.Binding;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
 using LcmsNet.SampleQueue.Views;
@@ -20,7 +23,7 @@ namespace LcmsNet.SampleQueue.ViewModels
     /// </summary>
     public class SampleControlViewModel : ReactiveObject
     {
-        public virtual IReadOnlyReactiveList<SampleViewModel> Samples => SampleDataManager.Samples;
+        public virtual ReadOnlyObservableCollection<SampleViewModel> Samples => SampleDataManager.Samples;
 
         private SampleViewModel selectedSample;
 
@@ -30,7 +33,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedSample, value);
         }
 
-        public ReactiveList<SampleViewModel> SelectedSamples { get; } = new ReactiveList<SampleViewModel>();
+        public ObservableCollectionExtended<SampleViewModel> SelectedSamples { get; } = new ObservableCollectionExtended<SampleViewModel>();
 
         #region Manipulation Enablement
 
@@ -110,8 +113,8 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             SampleDataManager = sampleDataManager;
             SampleDataManager.WhenAnyValue(x => x.HasData, x => x.HasValidColumns).Subscribe(x => SetEnabledDisabled());
-            SampleDataManager.Samples.ItemChanged.Where(x => x.PropertyName.Equals(nameof(x.Sender.Sample.HasNotRun)))
-                .Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => this.PerformAutoScroll());
+            SampleDataManager.SamplesSource.Connect().WhenValueChanged(x => x.Sample.HasNotRun)
+                .Throttle(TimeSpan.FromMilliseconds(250)).Subscribe(x => PerformAutoScroll());
             this.WhenAnyValue(x => x.SampleDataManager.Samples).Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => this.PerformAutoScroll());
 
             Initialize(dmsView);
@@ -507,11 +510,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var result = randomizer.ShowDialog();
                 if (result.HasValue && result.Value)
                 {
-                    using (Samples.SuppressChangeNotifications())
-                    {
-                        var newSamples = randomizerVm.OutputSampleList.ToList();
-                        SampleDataManager.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
-                    }
+                    var newSamples = randomizerVm.OutputSampleList.ToList();
+                    SampleDataManager.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
                 }
             }
             else if (samplesToRandomize.Count == 1)
