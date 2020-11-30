@@ -20,9 +20,6 @@ namespace LcmsNetDmsTools
     /// <summary>
     /// Class for interacting with DMS database
     /// </summary>
-    // Deprecated export: [Export(typeof(IDmsTools))]
-    // Deprecated export: [ExportMetadata("Name", "PrismDMSTools")]
-    // Deprecated export: [ExportMetadata("Version", "1.0")]
     public class DMSDBTools : IDisposable
     {
         // Ignore Spelling: typeof, DMSPwd, SqlConnection, ini, yyyy-MM-dd, Wellplate, usernames, utf, xmlns, xs, T_Secondary_Sep, unallowable, subaccount
