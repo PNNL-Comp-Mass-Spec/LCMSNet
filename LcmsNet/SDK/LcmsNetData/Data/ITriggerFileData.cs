@@ -66,6 +66,6 @@ namespace LcmsNetData.Data
         /// <summary>
         /// Autosampler information, specifically Well Plate Number and Well Number
         /// </summary>
-        PalData PAL { get; }
+        IPalData PAL { get; }
     }
 }

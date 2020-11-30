@@ -48,10 +48,10 @@
     <Compile Include="Data\ConvertVialPosition.cs" />
     <Compile Include="Data\ExperimentData.cs" />
     <Compile Include="Data\InstrumentInfo.cs" />
+    <Compile Include="Data\IPalData.cs" />
     <Compile Include="Data\IRequestedRunData.cs" />
     <Compile Include="Data\ISampleData.cs" />
     <Compile Include="Data\ITriggerFileData.cs" />
-    <Compile Include="Data\PalData.cs" />
     <Compile Include="Data\PersistenceSettingAttribute.cs" />
     <Compile Include="Data\ProposalUser.cs" />
     <Compile Include="Data\SampleQueryData.cs" />

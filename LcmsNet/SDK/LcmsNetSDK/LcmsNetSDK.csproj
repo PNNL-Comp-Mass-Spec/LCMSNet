@@ -54,6 +54,7 @@
     <Compile Include="Data\IDMSValidatorMetaData.cs" />
     <Compile Include="Data\IMethodWriter.cs" />
     <Compile Include="Data\MobilePhase.cs" />
+    <Compile Include="Data\PalData.cs" />
     <Compile Include="Data\SampleData.cs" />
     <Compile Include="Data\SampleRunningStatus.cs" />
     <Compile Include="Devices\BaseDeviceControlViewModel.cs" />

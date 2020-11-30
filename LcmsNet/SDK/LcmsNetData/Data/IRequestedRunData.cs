@@ -20,6 +20,6 @@
         /// <summary>
         /// Gets the pal data associated with this sample.
         /// </summary>
-        PalData PAL { get; set; }
+        IPalData PAL { get; set; }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using LcmsNetData;
+using LcmsNetData.Data;
 
-namespace LcmsNetData.Data
+namespace LcmsNetSDK.Data
 {
     [Serializable]
-    public class PalData : ICloneable, INotifyPropertyChangedExt
+    public class PalData : IPalData, ICloneable, INotifyPropertyChangedExt
     {
         #region "Constructors"
 
@@ -144,3 +146,4 @@ namespace LcmsNetData.Data
         }
     }
 }
+

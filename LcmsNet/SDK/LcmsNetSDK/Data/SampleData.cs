@@ -191,7 +191,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Pal Data reference.
         /// </summary>
-        private PalData palData;
+        private IPalData palData;
 
         /// <summary>
         /// Information regarding what column the sample is to be, or did run on.
@@ -331,7 +331,7 @@ namespace LcmsNetSDK.Data
         /// Gets or sets the pal data associated with this sample.
         /// </summary>
         [PersistenceSetting(ColumnNamePrefix = "PAL.")]
-        public PalData PAL
+        public IPalData PAL
         {
             get => palData;
             set
