@@ -82,10 +82,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DynamicData">
-      <Version>6.14.3</Version>
+      <Version>6.17.14</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>8.7.2</Version>
+      <Version>12.1.5</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
