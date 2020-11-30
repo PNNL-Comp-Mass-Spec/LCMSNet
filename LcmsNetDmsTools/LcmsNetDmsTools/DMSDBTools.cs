@@ -1152,7 +1152,7 @@ namespace LcmsNetDmsTools
             }
         }
 
-        private IEnumerable<MRMFileData> ReadMRMFilesFromDMS(string fileIndexList)
+        private IEnumerable<(string FileName, string FileContents)> ReadMRMFilesFromDMS(string fileIndexList)
         {
             var connStr = GetConnectionString();
             var sqlCmd = "SELECT File_Name, Contents FROM T_Attachments WHERE ID IN (" + fileIndexList + ")";
@@ -1174,11 +1174,10 @@ namespace LcmsNetDmsTools
                 {
                     while (reader.Read())
                     {
-                        yield return new MRMFileData
-                        {
-                            FileName = reader["File_Name"].CastDBValTo<string>(),
-                            FileContents = reader["Contents"].CastDBValTo<string>()
-                        };
+                        yield return (
+                            reader["File_Name"].CastDBValTo<string>(),
+                            reader["Contents"].CastDBValTo<string>()
+                        );
                     }
                 }
             }
@@ -1587,7 +1586,7 @@ namespace LcmsNetDmsTools
         /// </summary>
         /// <param name="fileIndexList">Comma-separated list of file indices needing data</param>
         /// <param name="fileData">List of file names and contents; new data will be appended to this list</param>
-        public void GetMRMFilesFromDMS(string fileIndexList, List<MRMFileData> fileData)
+        public void GetMRMFilesFromDMS(string fileIndexList, List<(string FileName, string FileContents)> fileData)
         {
             if (fileData == null)
             {

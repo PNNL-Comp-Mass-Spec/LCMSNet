@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
 
@@ -122,7 +121,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns>List with file names and data</returns>
         private List<MRMFileData> GetMRMFileData(List<string> filesToGet)
         {
-            var retData = new List<MRMFileData>();
+            var retData = new List<(string FileName, string FileContents)>();
 
             var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
 
@@ -130,6 +129,7 @@ namespace LcmsNet.SampleQueue.IO
             var fileCount = 1;
             var sqlStrBld = new StringBuilder();
             var firstID = true;
+            var error = false;
             foreach (var fileID in filesToGet)
             {
                 //NOTE: For present, assume all file data will fit in memory without problem
@@ -165,7 +165,7 @@ namespace LcmsNet.SampleQueue.IO
                     {
                         var ErrMsg = "Exception getting MRM files from DMS";
                         ApplicationLogger.LogError(0, ErrMsg, ex);
-                        return retData;
+                        error = true;
                     }
 
                     // Initialize a new query string
@@ -176,7 +176,7 @@ namespace LcmsNet.SampleQueue.IO
             } // End foreach
 
             // Run query for any remaining files
-            if (sqlStrBld.Length > 0)
+            if (sqlStrBld.Length > 0 && !error)
             {
                 // The number of files was not a multiple of 25, so process the remainder
                 try
@@ -187,10 +187,14 @@ namespace LcmsNet.SampleQueue.IO
                 {
                     var ErrMsg = "Exception getting MRM files from DMS";
                     ApplicationLogger.LogError(0, ErrMsg, ex);
-                    return retData;
                 }
             }
-            return retData;
+
+            return retData.Select(x => new MRMFileData
+            {
+                FileName = x.FileName,
+                FileContents = x.FileContents
+            }).ToList();
         }
 
         /// <summary>

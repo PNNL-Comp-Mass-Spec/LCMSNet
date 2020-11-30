@@ -259,6 +259,7 @@
     </Compile>
     <Compile Include="SampleQueue\DataExportException.cs" />
     <Compile Include="SampleQueue\DataImportException.cs" />
+    <Compile Include="SampleQueue\IO\MRMFileData.cs" />
     <Compile Include="SampleQueue\RandomizerPluginTools.cs" />
     <Compile Include="SampleQueue\SampleQueue.cs" />
     <Compile Include="SampleQueue\SampleQueueArgs.cs" />

@@ -51,7 +51,6 @@
     <Compile Include="Data\IRequestedRunData.cs" />
     <Compile Include="Data\ISampleData.cs" />
     <Compile Include="Data\ITriggerFileData.cs" />
-    <Compile Include="Data\MRMFileData.cs" />
     <Compile Include="Data\PalData.cs" />
     <Compile Include="Data\PersistenceSettingAttribute.cs" />
     <Compile Include="Data\ProposalUser.cs" />

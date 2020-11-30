@@ -1,4 +1,4 @@
-﻿namespace LcmsNetData.Data
+﻿namespace LcmsNet.SampleQueue.IO
 {
     /// <summary>
     /// Holds MRM file data downloaded from DMS
