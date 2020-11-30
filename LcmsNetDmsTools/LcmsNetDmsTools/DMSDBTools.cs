@@ -1265,7 +1265,8 @@ namespace LcmsNetDmsTools
                     {
                         var tmpDMSData = new T
                         {
-                            DmsData =
+                            // Sets the properties on the existing sub-object, which is why this is valid.
+                            DmsBasicData =
                             {
                                 DatasetType = reader["Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 Experiment = reader["Experiment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
@@ -1277,11 +1278,6 @@ namespace LcmsNetDmsTools
                                 EMSLProposalUser = reader["EUS Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 CartName = reader["Cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 Comment = reader["Comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                MRMFileID = reader["MRMFileID"].CastDBValTo<int>(),
-                                Block = reader["Block"].CastDBValTo<int>(),
-                                RunOrder = reader["RunOrder"].CastDBValTo<int>(),
-                                Batch = reader["Batch"].CastDBValTo<int>(),
-                                SelectedToRun = false,
                             }
                         };
 
@@ -1294,6 +1290,15 @@ namespace LcmsNetDmsTools
 
                             if (string.IsNullOrWhiteSpace(palData.PAL.WellPlate) || palData.PAL.WellPlate == "na")
                                 palData.PAL.WellPlate = "";
+                        }
+
+                        if (tmpDMSData.DmsBasicData is IDmsDataForSampleRun dmsData)
+                        {
+                            dmsData.MRMFileID = reader["MRMFileID"].CastDBValTo<int>();
+                            dmsData.Block = reader["Block"].CastDBValTo<int>();
+                            dmsData.RunOrder = reader["RunOrder"].CastDBValTo<int>();
+                            dmsData.Batch = reader["Batch"].CastDBValTo<int>();
+                            dmsData.SelectedToRun = false;
                         }
 
                         yield return tmpDMSData;

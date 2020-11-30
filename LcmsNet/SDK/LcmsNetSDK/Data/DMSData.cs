@@ -1,15 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 using System.Text.RegularExpressions;
+using LcmsNetData;
+using LcmsNetData.Data;
 
-namespace LcmsNetData.Data
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Dataset information supplied by or required by DMS; includes run request information
     /// </summary>
     [Serializable]
-    public class DMSData : INotifyPropertyChangedExt, ICloneable
+    public class DMSData : IDmsDataForSampleRun, INotifyPropertyChangedExt, ICloneable
     {
         /// <summary>
         /// The matching string to ensure only valid characters exist in a dataset name
@@ -28,13 +29,11 @@ namespace LcmsNetData.Data
 
         public DMSData()
         {
-            LockData = false;
             Batch = -1;
             Block = -1;
             CartName = "";
             CartConfigName = "";
             Comment = "";
-            CommentAddition = "";
             DatasetName = "";
             DatasetType = "";
             Experiment = "";
@@ -54,13 +53,11 @@ namespace LcmsNetData.Data
         /// </summary>
         public void Reset()
         {
-            LockData = false;
             Batch = -1;
             Block = -1;
             CartName = "";
             CartConfigName = "";
             Comment = "";
-            CommentAddition = "";
             DatasetName = "";
             DatasetType = "";
             Experiment = "";
@@ -100,56 +97,8 @@ namespace LcmsNetData.Data
             newDmsData.EMSLUsageType = EMSLUsageType;
             newDmsData.EMSLProposalUser = EMSLProposalUser;
             newDmsData.WorkPackage = WorkPackage;
-            newDmsData.LockData = LockData;
 
             return newDmsData;
-        }
-
-        public void CopyValuesAndLock(DMSData other)
-        {
-            LockData = false;
-            Batch = other.Batch;
-            Block = other.Block;
-            CartName = other.CartName;
-            CartConfigName = other.CartConfigName;
-            Comment = other.Comment;
-            DatasetName = other.DatasetName;
-            DatasetType = other.DatasetType;
-            Experiment = other.Experiment;
-            MRMFileID = other.MRMFileID;
-            EMSLProposalID = other.EMSLProposalID;
-            RequestID = other.RequestID;
-            RequestName = other.RequestName;
-            RunOrder = other.RunOrder;
-            SelectedToRun = other.SelectedToRun;
-            EMSLUsageType = other.EMSLUsageType;
-            EMSLProposalUser = other.EMSLProposalUser;
-            WorkPackage = other.WorkPackage;
-            LockData = other.LockData;
-        }
-
-        /// <summary>
-        /// Copies the data and locks this object, and sets the dataset name to the filename in <paramref name="filePath"/>
-        /// Used in Buzzard
-        /// </summary>
-        /// <param name="other"></param>
-        /// <param name="filePath"></param>
-        public void CopyValuesAndLockWithNewPath(DMSData other, string filePath)
-        {
-            CopyValuesAndLock(other);
-
-            if (string.IsNullOrWhiteSpace(filePath))
-            {
-                return;
-            }
-
-            var fileName = Path.GetFileNameWithoutExtension(filePath);
-            if (!string.IsNullOrWhiteSpace(fileName))
-            {
-                LockData = false;
-                DatasetName = fileName;
-                LockData = true;
-            }
         }
 
         #region Property Backing Variables
@@ -168,25 +117,13 @@ namespace LcmsNetData.Data
         private int runOrder;
         private int batch;
         private bool selectedToRun;
-        private bool lockData = false;
         private string cartName;
         private string comment;
         private int mrmFileId;
-        private string commentAddition;
 
         #endregion
 
         #region "Properties"
-
-        /// <summary>
-        /// When the data comes from DMS, it will be locked. This is meant to stop the user
-        /// from altering it. (this is not used in LCMSNet; it is used in Buzzard)
-        /// </summary>
-        public bool LockData
-        {
-            get => lockData;
-            private set => this.RaiseAndSetIfChanged(ref lockData, value, nameof(LockData));
-        }
 
         /// <summary>
         /// Flag for determining if request from DMS has been selected for running
@@ -194,7 +131,7 @@ namespace LcmsNetData.Data
         public bool SelectedToRun
         {
             get => selectedToRun;
-            set => this.RaiseAndSetIfChangedLockCheck(ref selectedToRun, value, LockData, nameof(SelectedToRun));
+            set => this.RaiseAndSetIfChanged(ref selectedToRun, value);
         }
 
         /// <summary>
@@ -207,7 +144,7 @@ namespace LcmsNetData.Data
             get => requestName;
             set
             {
-                if (this.RaiseAndSetIfChangedLockCheckRetBool(ref requestName, value, LockData, nameof(RequestName)))
+                if (this.RaiseAndSetIfChangedRetBool(ref requestName, value))
                 {
                     if (string.IsNullOrWhiteSpace(DatasetName))
                     {
@@ -224,7 +161,7 @@ namespace LcmsNetData.Data
         public string DatasetName
         {
             get => datasetName;
-            set => this.RaiseAndSetIfChangedLockCheck(ref datasetName, value, LockData, nameof(DatasetName));
+            set => this.RaiseAndSetIfChanged(ref datasetName, value);
         }
 
         /// <summary>
@@ -234,7 +171,7 @@ namespace LcmsNetData.Data
         public int RequestID
         {
             get => requestId;
-            set => this.RaiseAndSetIfChangedLockCheck(ref requestId, value, LockData, nameof(RequestID));
+            set => this.RaiseAndSetIfChanged(ref requestId, value);
         }
 
         /// <summary>
@@ -243,7 +180,7 @@ namespace LcmsNetData.Data
         public string Experiment
         {
             get => experiment;
-            set => this.RaiseAndSetIfChangedLockCheck(ref experiment, value, LockData, nameof(Experiment));
+            set => this.RaiseAndSetIfChanged(ref experiment, value);
         }
 
         /// <summary>
@@ -252,7 +189,7 @@ namespace LcmsNetData.Data
         public string DatasetType
         {
             get => datasetType;
-            set => this.RaiseAndSetIfChangedLockCheck(ref datasetType, value, LockData, nameof(DatasetType));
+            set => this.RaiseAndSetIfChanged(ref datasetType, value);
         }
 
         /// <summary>
@@ -261,7 +198,7 @@ namespace LcmsNetData.Data
         public string WorkPackage
         {
             get => workPackage;
-            set => this.RaiseAndSetIfChangedLockCheck(ref workPackage, value, LockData, nameof(WorkPackage));
+            set => this.RaiseAndSetIfChanged(ref workPackage, value);
         }
 
         /// <summary>
@@ -270,7 +207,7 @@ namespace LcmsNetData.Data
         public string EMSLUsageType
         {
             get => emslUsageType;
-            set => this.RaiseAndSetIfChangedLockCheck(ref emslUsageType, value, LockData, nameof(EMSLUsageType));
+            set => this.RaiseAndSetIfChanged(ref emslUsageType, value);
         }
 
         /// <summary>
@@ -279,7 +216,7 @@ namespace LcmsNetData.Data
         public string EMSLProposalID
         {
             get => emslProposalId;
-            set => this.RaiseAndSetIfChangedLockCheck(ref emslProposalId, value, LockData, nameof(EMSLProposalID));
+            set => this.RaiseAndSetIfChanged(ref emslProposalId, value);
         }
 
         /// <summary>
@@ -288,7 +225,7 @@ namespace LcmsNetData.Data
         public string EMSLProposalUser
         {
             get => emslProposalUser;
-            set => this.RaiseAndSetIfChangedLockCheck(ref emslProposalUser, value, LockData, nameof(EMSLProposalUser));
+            set => this.RaiseAndSetIfChanged(ref emslProposalUser, value);
         }
 
         /// <summary>
@@ -298,7 +235,7 @@ namespace LcmsNetData.Data
         public string CartName
         {
             get => cartName;
-            set => this.RaiseAndSetIfChanged(ref cartName, value, nameof(CartName));
+            set => this.RaiseAndSetIfChanged(ref cartName, value);
         }
 
         /// <summary>
@@ -308,7 +245,7 @@ namespace LcmsNetData.Data
         public string CartConfigName
         {
             get => cartConfigName;
-            set => this.RaiseAndSetIfChanged(ref cartConfigName, value, nameof(CartConfigName));
+            set => this.RaiseAndSetIfChanged(ref cartConfigName, value);
         }
 
         /// <summary>
@@ -317,30 +254,8 @@ namespace LcmsNetData.Data
         public string Comment
         {
             get => comment;
-            set => this.RaiseAndSetIfChangedLockCheck(ref comment, value, LockData, nameof(Comment));
+            set => this.RaiseAndSetIfChanged(ref comment, value);
         }
-
-        /// <summary>
-        /// The full comment, including the addition and addition prefix
-        /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
-        public string CommentComplete => $"{Comment} {(string.IsNullOrWhiteSpace(CommentAdditionPrefix) ? string.Empty : CommentAdditionPrefix.Trim() + " ")}{CommentAddition}".Trim();
-
-        /// <summary>
-        /// Additional comment. Used by Buzzard to add comment information to datasets matched to run requests.
-        /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
-        public string CommentAddition
-        {
-            get => commentAddition;
-            set => this.RaiseAndSetIfChanged(ref commentAddition, value);
-        }
-
-        /// <summary>
-        /// Additional comment prefix. Used by Buzzard, output before CommentAddition.
-        /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
-        public string CommentAdditionPrefix { get; set; }
 
         /// <summary>
         /// File ID for locating MRM file to download
@@ -348,7 +263,7 @@ namespace LcmsNetData.Data
         public int MRMFileID
         {
             get => mrmFileId;
-            set => this.RaiseAndSetIfChangedLockCheck(ref mrmFileId, value, LockData, nameof(MRMFileID));
+            set => this.RaiseAndSetIfChanged(ref mrmFileId, value);
         }
 
         /// <summary>
@@ -357,7 +272,7 @@ namespace LcmsNetData.Data
         public int Block
         {
             get => block;
-            set => this.RaiseAndSetIfChangedLockCheck(ref block, value, LockData, nameof(Block));
+            set => this.RaiseAndSetIfChanged(ref block, value);
         }
 
         /// <summary>
@@ -366,7 +281,7 @@ namespace LcmsNetData.Data
         public int RunOrder
         {
             get => runOrder;
-            set => this.RaiseAndSetIfChangedLockCheck(ref runOrder, value, LockData, nameof(RunOrder));
+            set => this.RaiseAndSetIfChanged(ref runOrder, value);
         }
 
         /// <summary>
@@ -375,7 +290,7 @@ namespace LcmsNetData.Data
         public int Batch
         {
             get => batch;
-            set => this.RaiseAndSetIfChangedLockCheck(ref batch, value, LockData, nameof(Batch));
+            set => this.RaiseAndSetIfChanged(ref batch, value);
         }
 
         #endregion

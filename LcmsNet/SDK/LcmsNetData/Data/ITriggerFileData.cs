@@ -10,7 +10,7 @@ namespace LcmsNetData.Data
         /// <summary>
         /// DMS Data: Request ID, Dataset Name, etc.
         /// </summary>
-        DMSData DmsData { get; }
+        IDmsData DmsBasicData { get; }
 
         /// <summary>
         /// Time when the Acquisition started

@@ -79,7 +79,7 @@ namespace LcmsNetDmsTools
         [Obsolete("Use IsSampleValidDetailed to report why it failed")]
         public bool IsSampleValid(IRequestedRunData sample)
         {
-            var data = sample.DmsData;
+            var data = sample.DmsBasicData;
 
             if (data.RequestID != 0)
             {
@@ -127,7 +127,7 @@ namespace LcmsNetDmsTools
         /// <returns>True if valid, false if invalid</returns>
         public DMSSampleValidatorErrors IsSampleValidDetailed(IRequestedRunData sample)
         {
-            var data = sample.DmsData;
+            var data = sample.DmsBasicData;
 
             //if (data.RequestID != 0)
             //{
@@ -238,7 +238,7 @@ namespace LcmsNetDmsTools
         /// <returns></returns>
         public static bool IsEMSLProposalIDValid(IRequestedRunData sample)
         {
-            var data = sample.DmsData;
+            var data = sample.DmsBasicData;
 
             if (data.RequestID == 0)
             {
@@ -260,7 +260,7 @@ namespace LcmsNetDmsTools
         /// <returns></returns>
         public static bool IsEMSLUserValid(IRequestedRunData sample)
         {
-            var data = sample.DmsData;
+            var data = sample.DmsBasicData;
 
             if (data.RequestID == 0)
             {
@@ -282,7 +282,7 @@ namespace LcmsNetDmsTools
         /// <returns></returns>
         public static bool IsEMSLUsageTypeValid(IRequestedRunData sample)
         {
-            var data = sample.DmsData;
+            var data = sample.DmsBasicData;
 
             if (data.RequestID == 0)
             {
@@ -301,7 +301,7 @@ namespace LcmsNetDmsTools
         /// <returns></returns>
         public static bool IsExperimentNameValid(IRequestedRunData sample)
         {
-            var data = sample.DmsData;
+            var data = sample.DmsBasicData;
 
             if (data.RequestID == 0)
             {
@@ -320,7 +320,7 @@ namespace LcmsNetDmsTools
         /// <returns></returns>
         public static bool IsCartConfigValid(IRequestedRunData sample)
         {
-            var data = sample.DmsData;
+            var data = sample.DmsBasicData;
 
             if (data.RequestID == 0)
             {

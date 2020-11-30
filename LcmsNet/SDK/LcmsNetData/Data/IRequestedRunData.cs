@@ -6,9 +6,9 @@
     public interface IRequestedRunData
     {
         /// <summary>
-        /// Gets or sets the list of data downloaded from DMS for this sample
+        /// Gets the list of data downloaded from DMS for this sample
         /// </summary>
-        DMSData DmsData { get; set; }
+        IDmsData DmsBasicData { get; }
     }
 
     /// <summary>

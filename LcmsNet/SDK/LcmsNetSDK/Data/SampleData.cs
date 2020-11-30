@@ -303,6 +303,12 @@ namespace LcmsNetSDK.Data
         }
 
         /// <summary>
+        /// Interface implementation of DmsData
+        /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
+        public IDmsData DmsBasicData => DmsData;
+
+        /// <summary>
         /// Gets or sets the list of data downloaded from DMS for this sample
         /// </summary>
         [PersistenceSetting(ColumnNamePrefix = "DMS.")]
