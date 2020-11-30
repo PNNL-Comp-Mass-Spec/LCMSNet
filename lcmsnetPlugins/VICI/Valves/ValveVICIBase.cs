@@ -288,7 +288,7 @@ namespace LcmsNetPlugins.VICI.Valves
             if (Emulation)
             {
                 //Fill in fake ID, version
-                SoftwareID = '1';
+                SoftwareID = ' ';
                 Version = "Device is in emulation";
                 return true;
             }

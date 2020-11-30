@@ -22,6 +22,8 @@ namespace LcmsNetPlugins.VICI.Valves
     //]
     public class ValveVICIMultiPos : ValveVICIBase, IDevice, IMultiPositionValve
     {
+        // TODO: Thought: Create a separate class for universal actuator valves
+        // TODO: Reason: More extensive command set, ability to dynamically read and adjust the number of ports
         // Settings for EMTCA-CE (Multi-pos actuator):
         //     Baud Rate   9600
         //     Parity      None
