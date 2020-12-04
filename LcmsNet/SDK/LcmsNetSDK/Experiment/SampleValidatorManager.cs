@@ -10,19 +10,21 @@ namespace LcmsNetSDK.Experiment
 {
     public class SampleValidatorManager
     {
-        private const string CONST_VALIDATOR_PATH = @"LCMSNet\SampleValidators";
+        private const string CONST_VALIDATOR_PATH = @"SampleValidators";
         private static SampleValidatorManager m_instance;
 
         private SampleValidatorManager()
         {
             var catalog = new AggregateCatalog(new AssemblyCatalog(typeof (SampleValidatorManager).Assembly));
 
-            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var validatorPath = Path.Combine(appDataPath, CONST_VALIDATOR_PATH);
+            var validatorPath = CONST_VALIDATOR_PATH;
             var validatorFolder = new DirectoryInfo(validatorPath);
 
             if (!validatorFolder.Exists)
-                validatorFolder.Create();
+            {
+                Validators = new List<Lazy<ISampleValidator, ISampleValidatorMetaData>>();
+                return;
+            }
 
             var mmefDirectorycatalog = new DirectoryCatalog(validatorPath);
             catalog.Catalogs.Add(mmefDirectorycatalog);

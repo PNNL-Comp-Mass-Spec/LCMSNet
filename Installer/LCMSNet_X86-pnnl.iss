@@ -38,7 +38,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Dirs]
 Name: "{userappdata}\{#MyAppName}\Log"
-Name: "{userappdata}\{#MyAppName}\SampleValidators"
+Name: "{app}\SampleValidators"
 Name: "{app}\LCMethods"
 Name: "{app}\Plugins"
 Name: "{app}\x86"
@@ -79,7 +79,7 @@ Source: "{#MyExtLib}\*.dll";                                                   D
 
 ;Sample Validators
 ;Core sample validator, PAL Validator    
-Source: "{#MyValidators}\*.dll";                                               DestDir: "{userappdata}\{#MyAppName}\SampleValidators\"; Flags: ignoreversion
+Source: "{#MyValidators}\*.dll";                                               DestDir: "{app}\SampleValidators\"; Flags: ignoreversion
 
 ;Plugins
 Source: "{#MyPlugins}\*.dll";                                                  DestDir: "{app}\Plugins\"; Flags: ignoreversion

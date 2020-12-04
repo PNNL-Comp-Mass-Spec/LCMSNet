@@ -58,10 +58,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
-if not exist "%25appdata%25\LCMSNet\SampleValidators" mkdir "%25appdata%25\LCMSNet\SampleValidators"
+    <PostBuildEvent>if not exist "$(SolutionDir)SampleValidators" mkdir "$(SolutionDir)SampleValidators"
 
-xcopy /y /f /d "$(TargetPath)" "%25appdata%25\LCMSNet\SampleValidators\"
 xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)SampleValidators\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)SampleValidators\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)SampleValidators\"

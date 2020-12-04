@@ -842,6 +842,10 @@ xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.pdb" "$(TargetDir)Plugins\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\x86\*.dll" "$(TargetDir)Plugins\x86\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\x64\*.dll" "$(TargetDir)Plugins\x64\"
 
+if not exist "$(TargetDir)SampleValidators\" mkdir "$(TargetDir)SampleValidators\"
+xcopy /Y /F /D "$(SolutionDir)SampleValidators\*.dll" "$(TargetDir)SampleValidators\"
+xcopy /Y /F /D "$(SolutionDir)SampleValidators\*.pdb" "$(TargetDir)SampleValidators\"
+
 rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
 powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
 </PostBuildEvent>
