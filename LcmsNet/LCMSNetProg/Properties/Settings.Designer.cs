@@ -442,18 +442,6 @@ namespace LcmsNet.Properties {
 
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://prismsupport.bionet/finchingest/update")]
-        public string FinchServerURL {
-            get {
-                return ((string)(this["FinchServerURL"]));
-            }
-            set {
-                this["FinchServerURL"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ShouldDisplayQueue {
             get {

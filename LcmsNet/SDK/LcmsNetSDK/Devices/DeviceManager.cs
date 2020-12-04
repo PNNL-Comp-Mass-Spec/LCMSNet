@@ -16,46 +16,6 @@ namespace LcmsNetSDK.Devices
         private const string CONST_MOBILE_PHASE_NAME = "mobilephase-";
         private const string CONST_MOBILE_PHASE_COMMENT = "mobilephase-comment-";
 
-        /*#region System Health
-        /// <summary>
-        /// Writes the system health to the provider.
-        /// </summary>
-        public void WriteSystemHealth(string path)
-        {
-            // Retrieve the data from the aggregates
-            List<FinchAggregateData> aggregates = new List<FinchAggregateData>();
-            FinchAggregateData aggregate = new FinchAggregateData();
-            aggregate.Components         = new List<FinchComponentData>();
-            aggregate.Error              = null;
-            aggregate.LastUpdate         = DateTime.Now;
-            aggregate.Status             = "";
-            aggregate.Name               = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
-
-            foreach (IDevice device in m_devices)
-            {
-                FinchComponentData data = device.GetData();
-                if (data != null)
-                {
-                    aggregate.Components.Add(data);
-                }
-            }
-
-            // Then write the aggregate data to file.
-            aggregates.Add(aggregate);
-            try
-            {
-                //writer.WriteAggregates(aggregates, path);
-                FinchRestHttpClass http = new FinchRestHttpClass();
-                http.URL                = Properties.Settings.Default.FinchServerURL;
-                http.WriteAggregates(aggregates, path);
-            }
-            catch (Exception ex)
-            {
-                ApplicationLogger.LogError(0, "Could not create system health message data.", ex);
-            }
-        }
-        #endregion*/
-
         #region Static Property
 
         /// <summary>

@@ -119,9 +119,6 @@
     <Setting Name="ErrorPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">\\proto-5\BionetXfer\LCMSNetErrorReports</Value>
     </Setting>
-    <Setting Name="FinchServerURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://prismsupport.bionet/finchingest/update</Value>
-    </Setting>
     <Setting Name="ShouldDisplayQueue" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
