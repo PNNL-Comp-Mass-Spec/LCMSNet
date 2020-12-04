@@ -12,7 +12,7 @@ namespace LcmsNet.Properties {
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
 
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -32,33 +32,6 @@ namespace LcmsNet.Properties {
             }
         }
 
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("tcp://proto-10.pnl.gov:61616")]
-        public string BrokerURI {
-            get {
-                return ((string)(this["BrokerURI"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DAC.Control")]
-        public string CmdQueueName {
-            get {
-                return ((string)(this["CmdQueueName"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DAC.Status")]
-        public string StatusTopicName {
-            get {
-                return ((string)(this["StatusTopicName"]));
-            }
-        }
-
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("BabyRuth")]
@@ -68,15 +41,6 @@ namespace LcmsNet.Properties {
             }
             set {
                 this["InstName"] = value;
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int InstResponseTime {
-            get {
-                return ((int)(this["InstResponseTime"]));
             }
         }
 
@@ -140,60 +104,6 @@ namespace LcmsNet.Properties {
         public bool CreateMethodFolders {
             get {
                 return ((bool)(this["CreateMethodFolders"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Methods")]
-        public string BrukerMethodFolderLocalName {
-            get {
-                return ((string)(this["BrukerMethodFolderLocalName"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Data_BrukerTest\\BrukerTest")]
-        public string BrukerOutputFolderLocalName {
-            get {
-                return ((string)(this["BrukerOutputFolderLocalName"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7005")]
-        public int BrukerInstPort {
-            get {
-                return ((int)(this["BrukerInstPort"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\prismdev3.emsl.pnl.gov\\ProteomicsData")]
-        public string BrukerOutputFolderShareName {
-            get {
-                return ((string)(this["BrukerOutputFolderShareName"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("prismdev3.emsl.pnl.gov")]
-        public string BrukerInstNetName {
-            get {
-                return ((string)(this["BrukerInstNetName"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\prismdev3.emsl.pnl.gov\\Methods")]
-        public string BrukerMethodFolderShareName {
-            get {
-                return ((string)(this["BrukerMethodFolderShareName"]));
             }
         }
 
