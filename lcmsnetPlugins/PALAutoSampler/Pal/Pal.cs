@@ -512,7 +512,9 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                                             newMethodsFolder));
                     methodsFolder = newMethodsFolder;
                 }
+
                 MethodsFolder = methodsFolder;
+
                 WaitUntilReady(CONST_WAITTIMEOUT);
                 //If we made it this far, success! We can now access the PAL.
                 m_accessible = true;
@@ -521,6 +523,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 {
                     AutoSamplers.ConnectedAutoSamplers.Add(this);
                 }
+
+                // Set the methods folder the PAL uses according to the LCMSNet application settings
+                m_PALDrvr.SelectMethodFolder(MethodsFolder);
+
                 //list methods
                 ListMethods();
                 status = WaitUntilReady(CONST_WAITTIMEOUT);
