@@ -72,16 +72,6 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /Y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
-xcopy /Y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
-
-if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
-if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
-
-xcopy /Y /F /D "$(TargetDir)*.dll" "%25appdata%25\LCMSNet\dmsExtensions\"
-xcopy /Y /F /D "$(TargetDir)*.pdb" "%25appdata%25\LCMSNet\dmsExtensions\"
-xcopy /Y /F /D "$(TargetDir)*.xml" "%25appdata%25\LCMSNet\dmsExtensions\"
-xcopy /Y /F /D "$(TargetDir)*.config" "%25appdata%25\LCMSNet\dmsExtensions\"
-xcopy /Y /F /D "$(ProjectDir)PrismDMS.config" "%25appdata%25\LCMSNet\dmsExtensions\"
-</PostBuildEvent>
+xcopy /Y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

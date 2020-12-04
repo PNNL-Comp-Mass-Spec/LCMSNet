@@ -842,12 +842,6 @@ xcopy /Y /F /D "$(SolutionDir)pluginDLLs\*.pdb" "$(TargetDir)Plugins\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\x86\*.dll" "$(TargetDir)Plugins\x86\"
 xcopy /Y /F /D "$(SolutionDir)pluginDLLs\x64\*.dll" "$(TargetDir)Plugins\x64\"
 
-if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
-if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"
-
-xcopy /Y /F /D "$(SolutionDir)lib\LcmsNetDmsTools.dll" "%25appdata%25\LCMSNet\dmsExtensions"
-xcopy /Y /F /D "$(SolutionDir)LcmsNetDmsTools\LcmsNetDmsTools\PrismDMS.config" "%25appdata%25\LCMSNet\dmsExtensions"
-
 rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
 powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
 </PostBuildEvent>

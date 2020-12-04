@@ -81,9 +81,6 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
-xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
-
-if not exist "%25appdata%25\LCMSNet" mkdir "%25appdata%25\LCMSNet"
-if not exist "%25appdata%25\LCMSNet\dmsExtensions" mkdir "%25appdata%25\LCMSNet\dmsExtensions"</PostBuildEvent>
+xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
