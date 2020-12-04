@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using LcmsNetData;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNet.SampleQueue
 {
@@ -20,7 +20,7 @@ namespace LcmsNet.SampleQueue
 
             // Get list of DLL's in plugin folder
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
-            var pluginFolder = Path.Combine(fi.DirectoryName, LCMSSettings.GetParameter(LCMSSettings.PARAM_PLUGINFOLDER));
+            var pluginFolder = Path.Combine(fi.DirectoryName, DeviceManager.CONST_DEVICE_PLUGIN_PATH);
             var dllFiles = Directory.GetFiles(pluginFolder, "*.dll");
             if (dllFiles.GetLength(0) == 0)
             {

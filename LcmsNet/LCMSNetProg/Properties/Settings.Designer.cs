@@ -25,15 +25,6 @@ namespace LcmsNet.Properties {
 
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Plugins")]
-        public string PluginFolder {
-            get {
-                return ((string)(this["PluginFolder"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\PAL\\Cycle Composer\\HTS PAL")]
         public string PalMethodsFolder {
             get {
