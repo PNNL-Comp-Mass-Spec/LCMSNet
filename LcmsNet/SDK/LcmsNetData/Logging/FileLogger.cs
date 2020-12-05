@@ -29,7 +29,6 @@ namespace LcmsNetData.Logging
         /// </summary>
         private FileLogger()
         {
-            AppFolder = "LCMSNet";
             // Close out the log file once every hour, to help avoid issues with stale file handles
             logFileStreamTimeout = new Timer(CloseLogFile, this, TimeSpan.FromHours(1), TimeSpan.FromHours(1));
         }
@@ -55,11 +54,6 @@ namespace LcmsNetData.Logging
         /// Gets the file log path.
         /// </summary>
         public static string LogPath { get; private set; }
-
-        /// <summary>
-        /// Gets the file log path.
-        /// </summary>
-        public static string AppFolder { get; set; }
 
         #endregion
 
@@ -255,11 +249,12 @@ namespace LcmsNetData.Logging
         /// <returns>Name and path of error log file</returns>
         private string CreateLogFilePath()
         {
-            var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            // This path is one either set by the user, or %AppData%\AppName
+            var basePath = PersistDataPaths.LocalDataPath;
+
             //string logFileName = "Log_" + DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0)).ToString("MMddyyyy_HHmmss") + ".txt";
             var logFileName = "Log_" + TimeKeeper.Instance.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
-            var path = Path.Combine(appPath, AppFolder);
-            return Path.Combine(Path.Combine(path, "Log"), logFileName);
+            return Path.Combine(Path.Combine(basePath, "Log"), logFileName);
         }
 
         #endregion

@@ -35,7 +35,7 @@
         /// <summary>
         /// LC Methods folder name.
         /// </summary>
-        public const string CONST_LC_METHOD_FOLDER = "LCMethods";
+        public const string CONST_LC_METHOD_FOLDER = @"C:\LCMSNet\LCMethods";
 
         /// <summary>
         /// Deterministic or non-deterministic events.

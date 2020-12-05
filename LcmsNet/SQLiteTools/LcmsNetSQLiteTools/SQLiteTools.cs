@@ -61,13 +61,12 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Initialize the cache, with the provided app name and cache filename
+        /// Initialize the cache, with the provided cache filename
         /// </summary>
-        /// <param name="appDataFolderName"></param>
         /// <param name="cacheName"></param>
-        public static void Initialize(string appDataFolderName = "LCMSNet", string cacheName = "LCMSCache.que")
+        public static void Initialize(string cacheName = "LCMSCache.que")
         {
-            Cache.Initialize(appDataFolderName, cacheName);
+            Cache.Initialize(cacheName);
         }
 
         public static void BuildConnectionString(bool newCache)

@@ -207,8 +207,8 @@ namespace LcmsNet
         /// <summary>
         /// Loads the application settings.
         /// </summary>
-        /// <returns>An object that holds the application settings.</returns>
-        private void LoadSettings()
+        /// <returns>A list of errors that occurred while loading settings.</returns>
+        private List<Tuple<string, Exception>> LoadSettings()
         {
             // Note that settings are persisted in file user.config in a randomly named folder below %userprofile%\appdata\local
             // For example:
@@ -224,6 +224,8 @@ namespace LcmsNet
                 Settings.Default.UpgradeSettings = false;
                 Settings.Default.Save();
             }
+
+            var loadErrors = new List<Tuple<string, Exception>>();
 
             // Settings: There are the default LcmsNet.exe.config application config and [user\appdata\local\...\user.config] user config files,
             // but some settings apply to the whole system (application config, LcmsNet.exe.config), yet shouldn't be replaced when we install
@@ -255,12 +257,16 @@ namespace LcmsNet
                     }
                     catch (Exception e)
                     {
-                        ApplicationLogger.LogError(0, $"Could not apply persistent setting '{setting}' with value '{settingValue}' to type '{match.PropertyType.FullName}'", e);
+                        // Don't use ApplicationLogger yet - load the settings first to load the possibly user-modified local logging path.
+                        //ApplicationLogger.LogError(0, $"Could not apply persistent setting '{setting}' with value '{settingValue}' to type '{match.PropertyType.FullName}'", e);
+                        loadErrors.Add(new Tuple<string, Exception>($"Could not apply persistent setting '{setting}' with value '{settingValue}' to type '{match.PropertyType.FullName}'", e));
                     }
                 }
                 else
                 {
-                    ApplicationLogger.LogError(0, $"Could not apply persistent setting '{setting}' with value '{settingValue}': Setting does not exist, or it is a user setting.");
+                    // Don't use ApplicationLogger yet - load the settings first to load the possibly user-modified local logging path.
+                    // ApplicationLogger.LogError(0, $"Could not apply persistent setting '{setting}' with value '{settingValue}': Setting does not exist, or it is a user setting.");
+                    loadErrors.Add(new Tuple<string, Exception>($"Could not apply persistent setting '{setting}' with value '{settingValue}': Setting does not exist, or it is a user setting.", null));
                 }
             }
 
@@ -275,7 +281,7 @@ namespace LcmsNet
             // Add path to executable as a saved setting
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
             LCMSSettings.SetParameter(LCMSSettings.PARAM_APPLICATIONPATH, fi.DirectoryName);
-            LCMSSettings.SetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH, PersistDataPaths.ProgramDataPath);
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH, PersistDataPaths.LocalDataPath);
 
             var emulation = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED);
             if (!string.IsNullOrWhiteSpace(emulation))
@@ -283,6 +289,8 @@ namespace LcmsNet
                 var isEmulated = Convert.ToBoolean(emulation);
                 splashScreen.SetEmulatedLabelVisibility(LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME), isEmulated);
             }
+
+            return loadErrors;
         }
 
         #endregion
@@ -461,16 +469,6 @@ namespace LcmsNet
         {
             var mutexName = "Global\\" + Assembly.GetExecutingAssembly().GetName().Name;
 
-            ApplicationLogger.StartUpLogging();
-
-            // Before we do anything, let's initialize the file logging capability.
-            ApplicationLogger.Error += FileLogger.Instance.LogError;
-            ApplicationLogger.Message += FileLogger.Instance.LogMessage;
-
-            // Now lets initialize logging to SQLite database.
-            ApplicationLogger.Error += DbLogger.Instance.LogError;
-            ApplicationLogger.Message += DbLogger.Instance.LogMessage;
-
             // Note that we used icons from here for the gears on the main form window.
             //     http://labs.chemist2dio.com/free-vector-gears.php/
             //
@@ -479,6 +477,7 @@ namespace LcmsNet
             // Code adapted from K. Scott Allen's OdeToCode.com at
             //      http://odetocode.com/Blogs/scott/archive/2004/08/20/401.aspx
             singleInstanceMutex = new Mutex(false, mutexName);
+            var abandonedMutex = false;
             try
             {
                 if (!singleInstanceMutex.WaitOne(0, false))
@@ -490,17 +489,14 @@ namespace LcmsNet
                     }
                     window.ShowMessage("A copy of LcmsNet is already running.");
 
-                    ApplicationLogger.LogError(0, "A copy of LcmsNet is already running.", null, null);
-                    ShutDownLogging();
+                    Shutdown();
                     return;
                 }
             }
             catch (AbandonedMutexException)
             {
-                ApplicationLogger.LogMessage(0, "Warning: The last LcmsNet session did not close properly (AbandonedMutexException).");
+                abandonedMutex = true;
             }
-
-            KillExistingPalProcesses();
 
             // Show the splash screen
             resetSplashCreated = new ManualResetEvent(false);
@@ -516,6 +512,49 @@ namespace LcmsNet
             resetSplashCreated.WaitOne();
 
             var splashLoadTime = DateTime.UtcNow;
+
+            // Load settings first - includes the path we will log to.
+            var settingsErrors = LoadSettings();
+            if (!Directory.Exists(Settings.Default.LocalDataPath))
+            {
+                // Major error: our local data path stored in the settings doesn't exist, make it known and exit.
+                Window window = main;
+                if (!splashScreenEnded)
+                {
+                    window = splashScreen;
+                }
+                window.ShowMessage($"ERROR: Local data directory \"{Settings.Default.LocalDataPath}\" does not exist. Please create the path and try running LCMSNet again.");
+
+                Shutdown();
+                return;
+            }
+
+            ApplicationLogger.StartUpLogging();
+
+            // Before we do anything, let's initialize the file logging capability.
+            ApplicationLogger.Error += FileLogger.Instance.LogError;
+            ApplicationLogger.Message += FileLogger.Instance.LogMessage;
+
+            // Now lets initialize logging to SQLite database.
+            ApplicationLogger.Error += DbLogger.Instance.LogError;
+            ApplicationLogger.Message += DbLogger.Instance.LogMessage;
+
+            // Catch up on messages we want logged.
+            if (abandonedMutex)
+            {
+                ApplicationLogger.LogMessage(0, "Warning: The last LcmsNet session did not close properly (AbandonedMutexException).");
+            }
+
+            if (settingsErrors.Count > 0)
+            {
+                LogMessage(-1, "Settings load errors:");
+                foreach (var error in settingsErrors)
+                {
+                    ApplicationLogger.LogError(0, error.Item1, error.Item2);
+                }
+            }
+
+            KillExistingPalProcesses();
 
             if (!LoadEverything())
             {
@@ -579,15 +618,11 @@ namespace LcmsNet
             LogMachineInformation();
             LogMessage("[Log]");
 
-            // Display the splash screen mesasge first! make the log folder,
+            // Display the splash screen message first! make the log folder,
             // after that we will route messages through the logger instead of
             // through this static call.  That way we know the log folder has been
             // created.
             //LogMessage(-1, "Creating pertinent folders");
-
-            // Load settings
-            LogMessage(-1, "Loading settings");
-            LoadSettings();
 
             // Make sure we can log/error report locally before we do anything!
             try

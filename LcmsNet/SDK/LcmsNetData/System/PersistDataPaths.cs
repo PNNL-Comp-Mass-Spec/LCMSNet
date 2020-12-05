@@ -32,9 +32,28 @@ namespace LcmsNetData.System
         }
 
         /// <summary>
-        /// Path to the ProgramData directory for this program
+        /// Gets the local data storage path; if the settings file does not contain a value for "LocalDataPath", defaults to %AppData%\[AppName]
         /// </summary>
-        public static string ProgramDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName);
+        public static string LocalDataPath
+        {
+            get
+            {
+                var path = LCMSSettings.GetParameter(LCMSSettings.PARAM_LocalDataPath);
+
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    // Use 'Environment.SpecialFolder.CommonApplicationData' to get %ProgramData% instead.
+                    path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppName);
+                }
+
+                return path;
+            }
+        }
+
+        /// <summary>
+        /// Program data path; here for compatibility
+        /// </summary>
+        private static string ProgramDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName);
 
         /// <summary>
         /// Get the path where the file should be saved
@@ -43,22 +62,22 @@ namespace LcmsNetData.System
         /// <returns></returns>
         public static string GetFileSavePath(string fileSubPath)
         {
-            // Prefer the program data path
+            // Prefer the local data path
             // Transitioning to this, so don't return the programFiles path at all.
-            var programDataPath = Path.Combine(ProgramDataPath, fileSubPath);
-            if (File.Exists(programDataPath))
+            var localDataPath = Path.Combine(LocalDataPath, fileSubPath);
+            if (File.Exists(localDataPath))
             {
-                return programDataPath;
+                return localDataPath;
             }
 
             // Ensure that the needed directory tree exists
-            var parent = Path.GetDirectoryName(programDataPath);
+            var parent = Path.GetDirectoryName(localDataPath);
             if (parent != null && !Directory.Exists(parent))
             {
                 Directory.CreateDirectory(parent);
             }
 
-            return programDataPath;
+            return localDataPath;
         }
 
         /// <summary>
@@ -68,21 +87,28 @@ namespace LcmsNetData.System
         /// <returns></returns>
         public static string GetFileLoadPath(string fileSubPath)
         {
-            // Prefer the program data path
+            // Prefer the local data path
+            var localDataPath = Path.Combine(LocalDataPath, fileSubPath);
+            if (File.Exists(localDataPath))
+            {
+                return localDataPath;
+            }
+
+            // fallback 1: program data path (used for a time)
             var programDataPath = Path.Combine(ProgramDataPath, fileSubPath);
-            if (File.Exists(programDataPath))
+            if (Directory.Exists(programDataPath))
             {
                 return programDataPath;
             }
 
-            // fallback: program files path (may cause exceptions if not running as administrator)
+            // fallback 2: program files path (may cause exceptions if not running as administrator)
             var programFilesPath = Path.Combine(ProgramExeDirectory, fileSubPath);
             if (File.Exists(programFilesPath))
             {
                 return programFilesPath;
             }
 
-            // fallback2: working directory (usually ends up being the same as programFilesPath)
+            // fallback 3: working directory (usually ends up being the same as programFilesPath)
             return fileSubPath;
         }
 
@@ -98,26 +124,26 @@ namespace LcmsNetData.System
                 return directorySubPath;
             }
 
-            // Prefer the program data path
+            // Prefer the local data path
             // Transitioning to this, so don't return the programFiles path at all.
-            var programDataPath = Path.Combine(ProgramDataPath, directorySubPath);
-            if (Directory.Exists(programDataPath))
+            var localDataPath = Path.Combine(LocalDataPath, directorySubPath);
+            if (Directory.Exists(localDataPath))
             {
-                return programDataPath;
+                return localDataPath;
             }
 
-            Directory.CreateDirectory(programDataPath);
+            Directory.CreateDirectory(localDataPath);
 
             // Ensure that the needed directory tree exists
-            var oldDataDir = GetDirectoryLoadPath(directorySubPath);
+            var oldDataDir = GetDirectoryLoadPathCheckContents(directorySubPath);
 
             if (Directory.Exists(oldDataDir))
             {
                 // copy files over, since we don't want to read both directories...
-                CopyDirectory(oldDataDir, programDataPath);
+                CopyDirectory(oldDataDir, localDataPath);
             }
 
-            return programDataPath;
+            return localDataPath;
         }
 
         private static void CopyDirectory(string sourceDir, string targetDir)
@@ -152,21 +178,28 @@ namespace LcmsNetData.System
         /// <returns></returns>
         public static string GetDirectoryLoadPath(string directorySubPath)
         {
-            // Prefer the program data path
+            // Prefer the local data path
+            var localDataPath = Path.Combine(LocalDataPath, directorySubPath);
+            if (Directory.Exists(localDataPath))
+            {
+                return localDataPath;
+            }
+
+            // fallback 1: program data path (used for a time)
             var programDataPath = Path.Combine(ProgramDataPath, directorySubPath);
             if (Directory.Exists(programDataPath))
             {
                 return programDataPath;
             }
 
-            // fallback: program files path (may cause exceptions if not running as administrator)
+            // fallback 2: program files path (may cause exceptions if not running as administrator)
             var programFilesPath = Path.Combine(ProgramExeDirectory, directorySubPath);
             if (Directory.Exists(programFilesPath))
             {
                 return programFilesPath;
             }
 
-            // fallback2: working directory (usually ends up being the same as programFilesPath)
+            // fallback 3: working directory (usually ends up being the same as programFilesPath)
             return directorySubPath;
         }
 
@@ -177,21 +210,28 @@ namespace LcmsNetData.System
         /// <returns></returns>
         public static string GetDirectoryLoadPathCheckContents(string directorySubPath)
         {
-            // Prefer the program data path
+            // Prefer the local data path
+            var localDataPath = Path.Combine(LocalDataPath, directorySubPath);
+            if (Directory.Exists(localDataPath) && Directory.EnumerateFileSystemEntries(localDataPath).Any())
+            {
+                return localDataPath;
+            }
+
+            // fallback 1: program data path (used for a time)
             var programDataPath = Path.Combine(ProgramDataPath, directorySubPath);
             if (Directory.Exists(programDataPath) && Directory.EnumerateFileSystemEntries(programDataPath).Any())
             {
                 return programDataPath;
             }
 
-            // fallback: program files path (may cause exceptions if not running as administrator)
+            // fallback 2: program files path (may cause exceptions if not running as administrator)
             var programFilesPath = Path.Combine(ProgramExeDirectory, directorySubPath);
             if (Directory.Exists(programFilesPath) && Directory.EnumerateFileSystemEntries(programFilesPath).Any())
             {
                 return programFilesPath;
             }
 
-            // fallback2: working directory (usually ends up being the same as programFilesPath)
+            // fallback 3: working directory (usually ends up being the same as programFilesPath)
             return directorySubPath;
         }
 
@@ -203,21 +243,28 @@ namespace LcmsNetData.System
         /// <returns></returns>
         public static string GetDirectoryLoadPathCheckFiles(string directorySubPath, string fileFilter = "*")
         {
-            // Prefer the program data path
+            // Prefer the local data path
+            var localDataPath = Path.Combine(LocalDataPath, directorySubPath);
+            if (Directory.Exists(localDataPath) && Directory.EnumerateFiles(localDataPath, fileFilter).Any())
+            {
+                return localDataPath;
+            }
+
+            // fallback 1: program data path (used for a time)
             var programDataPath = Path.Combine(ProgramDataPath, directorySubPath);
             if (Directory.Exists(programDataPath) && Directory.EnumerateFiles(programDataPath, fileFilter).Any())
             {
                 return programDataPath;
             }
 
-            // fallback: program files path (may cause exceptions if not running as administrator)
+            // fallback 2: program files path (may cause exceptions if not running as administrator)
             var programFilesPath = Path.Combine(ProgramExeDirectory, directorySubPath);
             if (Directory.Exists(programFilesPath) && Directory.EnumerateFiles(programFilesPath, fileFilter).Any())
             {
                 return programFilesPath;
             }
 
-            // fallback2: working directory (usually ends up being the same as programFilesPath)
+            // fallback 3: working directory (usually ends up being the same as programFilesPath)
             return directorySubPath;
         }
     }

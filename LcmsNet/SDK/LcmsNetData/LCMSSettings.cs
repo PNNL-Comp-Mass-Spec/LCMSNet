@@ -61,6 +61,7 @@ namespace LcmsNetData
         public const string PARAM_TIMEZONE = "TimeZone";
         public const string PARAM_TRIGGERFILEFOLDER = "TriggerFileFolder";
         public const string PARAM_VALIDATESAMPLESFORDMS = "ValidateSamplesForDMS";
+        public const string PARAM_LocalDataPath = "LocalDataPath";
 
         #region "Class variables"
 

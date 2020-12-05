@@ -35,7 +35,6 @@ namespace LcmsNetSQLiteTools
             private set => LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, value);
         }
 
-        public string AppDataFolderName { get; set; }
         public string ConnString { get; set; } = "";
         public bool DatabaseImageBad { get; private set; }
         public bool DisableInMemoryCaching { get; set; }
@@ -52,13 +51,11 @@ namespace LcmsNetSQLiteTools
         }
 
         /// <summary>
-        /// Initialize the cache, with the provided app name and cache filename
+        /// Initialize the cache, with the provided cache filename
         /// </summary>
-        /// <param name="appDataFolderName"></param>
         /// <param name="cacheName"></param>
-        public void Initialize(string appDataFolderName = "LCMSNet", string cacheName = "LCMSCache.que")
+        public void Initialize(string cacheName = "LCMSCache.que")
         {
-            AppDataFolderName = appDataFolderName;
             CacheName = cacheName;
 
             BuildConnectionString(false);
@@ -83,14 +80,13 @@ namespace LcmsNetSQLiteTools
                 var exists = File.Exists(name);
                 if (!exists && !newCache)
                 {
-                    var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    name = Path.Combine(appPath, AppDataFolderName);
-
-                    if (!Directory.Exists(name))
+                    var basePath = LCMSSettings.GetParameter(LCMSSettings.PARAM_LocalDataPath);
+                    if (!Directory.Exists(basePath))
                     {
-                        Directory.CreateDirectory(name);
+                        Directory.CreateDirectory(basePath);
                     }
-                    name = Path.Combine(name, CacheName);
+
+                    name = Path.Combine(basePath, CacheName);
                     LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, name);
                 }
 
@@ -846,9 +842,9 @@ namespace LcmsNetSQLiteTools
         {
             if (!location.Contains(@"\"))
             {
+                var basePath = LCMSSettings.GetParameter(LCMSSettings.PARAM_LocalDataPath);
                 var fileName = Path.GetFileName(location);
-                var appPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                location = Path.Combine(appPath, AppDataFolderName, fileName);
+                location = Path.Combine(basePath, fileName);
             }
 
             CacheName = location;

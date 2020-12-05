@@ -8,6 +8,7 @@
 #define MyPlugins "..\PluginDlls" 
 #define MyValidators "..\SampleValidators"
 #define MyAppName "LCMSNet"
+#define MyAppDataPath "C:\LCMSNet"
 #define MyAppVis  "PNNL"
 #define MyAppPublisher "Battelle"
 #define MyAppExeName "LcmsNet.exe"  
@@ -37,9 +38,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Dirs]
-Name: "{userappdata}\{#MyAppName}\Log"
+Name: "{#MyAppDataPath}\Log"
 Name: "{app}\SampleValidators"
-Name: "{app}\LCMethods"
 Name: "{app}\Plugins"
 Name: "{app}\x86"
 Name: "{app}\x64"

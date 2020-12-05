@@ -31,7 +31,6 @@ namespace LcmsNetSQLiteToolsUnitTests
 
             // Note that this will call BuildConnectionString
             SQLiteTools.SetCacheLocation(file);
-
         }
 
 

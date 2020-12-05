@@ -481,5 +481,14 @@ namespace LcmsNet.Properties {
                 this["UpgradeSettings"] = value;
             }
         }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\LCMSNet")]
+        public string LocalDataPath {
+            get {
+                return ((string)(this["LocalDataPath"]));
+            }
+        }
     }
 }

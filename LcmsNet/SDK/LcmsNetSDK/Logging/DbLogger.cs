@@ -23,6 +23,7 @@ namespace LcmsNetSDK.Logging
         /// </summary>
         private DbLogger()
         {
+            LogFolderPath = Path.Combine(PersistDataPaths.LocalDataPath, "Log");
         }
 
         private const string INSERT_CMD_BASE = "INSERT INTO T_LogData('Date','Type','Level','Sample',"
@@ -30,15 +31,7 @@ namespace LcmsNetSDK.Logging
 
         #region "Properties"
 
-        public string LogFolderPath
-        {
-            get
-            {
-                var logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "LCMSNet", "Log");
-                return logDir;
-            }
-        }
+        public string LogFolderPath { get; }
 
         #endregion
 
