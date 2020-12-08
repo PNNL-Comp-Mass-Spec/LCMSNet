@@ -841,7 +841,9 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             if (timeout > span.TotalSeconds)
             {
                 // If the PAL is waiting for data station synchronization, DO NOT CONTINUE IN THE START METHOD!
-                if (!status.Contains("WAITING FOR DS"))
+                // Exception: PAL default macros include a "Wait for DS" step in the 'Method Entry' macro. To support this, we add the 'time < 20 seconds', to allow passing it.
+                // This will only "continue" once, so it mainly targets the method entry 'Wait for DS'
+                if (!status.Contains("WAITING FOR DS") || span.TotalSeconds < 20)
                 {
                     ContinueMethod(timeout - span.TotalSeconds);
                 }
