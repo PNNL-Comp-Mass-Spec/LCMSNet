@@ -82,11 +82,6 @@ namespace LcmsNet.SampleQueue
         #region Members
 
         /// <summary>
-        /// Object that manages the list of all samples.
-        /// </summary>
-        private SampleQueue sampleQueue;
-
-        /// <summary>
         /// Names of the methods available on the PAL
         /// </summary>
         private List<string> autoSamplerMethods;
@@ -155,7 +150,27 @@ namespace LcmsNet.SampleQueue
             try
             {
                 mValidator = new DMSSampleValidator(CartConfigOptions);
-                Initialize(sampleQueue);
+
+                SampleQueue = sampleQueue;
+                if (SampleQueue != null)
+                {
+                    SampleQueue.SamplesAdded += SampleQueue_SampleAdded;
+                    SampleQueue.SamplesCancelled += SampleQueue_SampleCancelled;
+                    SampleQueue.SamplesFinished += SampleQueue_SampleFinished;
+                    SampleQueue.SamplesRemoved += SampleQueue_SampleRemoved;
+                    SampleQueue.SamplesStarted += SampleQueue_SampleStarted;
+                    SampleQueue.SamplesReordered += SampleQueue_SamplesReordered;
+                    SampleQueue.SamplesUpdated += SampleQueue_SamplesUpdated;
+                    SampleQueue.SamplesWaitingToRun += SampleQueue_SamplesWaitingToRun;
+                    SampleQueue.SamplesStopped += SampleQueue_SamplesStopped;
+                    HasData = true;
+                }
+                else
+                {
+                    HasData = false;
+                }
+
+                Initialize();
             }
             catch (Exception ex)
             {
@@ -190,7 +205,8 @@ namespace LcmsNet.SampleQueue
             try
             {
                 mValidator = new DMSSampleValidator();
-                Initialize(null);
+                HasData = false;
+                Initialize();
             }
             catch (Exception ex)
             {
@@ -380,8 +396,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Performs initialization for the constructors.
         /// </summary>
-        /// <param name="sampleQueue"></param>
-        private void Initialize(SampleQueue sampleQueue)
+        private void Initialize()
         {
             this.WhenAnyValue(x => x.CycleColumns)
                 .Subscribe(x =>
@@ -399,8 +414,6 @@ namespace LcmsNet.SampleQueue
                 column.NameChanged += column_NameChanged;
                 column.ColorChanged += column_ColorChanged;
             }
-
-            SampleQueue = sampleQueue;
 
             // Lists that hold information to be used by the sample queue combo boxes.
             autoSamplerMethods = new List<string>();
@@ -763,7 +776,7 @@ namespace LcmsNet.SampleQueue
         public SampleQueue.BatchChangeDisposable StartBatchChange()
         {
             recentlyChanged = false;
-            return sampleQueue.StartBatchChange(RecentlyChanged);
+            return SampleQueue.StartBatchChange(RecentlyChanged);
         }
 
         /// <summary>
@@ -788,33 +801,9 @@ namespace LcmsNet.SampleQueue
         #region Properties
 
         /// <summary>
-        /// Gets or sets the sample queue that handles all queue management at a low level.
+        /// Gets the sample queue that handles all queue management at a low level.
         /// </summary>
-        private SampleQueue SampleQueue
-        {
-            get => sampleQueue;
-            set
-            {
-                sampleQueue = value;
-                if (value != null)
-                {
-                    sampleQueue.SamplesAdded += SampleQueue_SampleAdded;
-                    sampleQueue.SamplesCancelled += SampleQueue_SampleCancelled;
-                    sampleQueue.SamplesFinished += SampleQueue_SampleFinished;
-                    sampleQueue.SamplesRemoved += SampleQueue_SampleRemoved;
-                    sampleQueue.SamplesStarted += SampleQueue_SampleStarted;
-                    sampleQueue.SamplesReordered += SampleQueue_SamplesReordered;
-                    sampleQueue.SamplesUpdated += SampleQueue_SamplesUpdated;
-                    sampleQueue.SamplesWaitingToRun += SampleQueue_SamplesWaitingToRun;
-                    sampleQueue.SamplesStopped += SampleQueue_SamplesStopped;
-                    HasData = true;
-                }
-                else
-                {
-                    HasData = false;
-                }
-            }
-        }
+        private SampleQueue SampleQueue { get; }
 
         /// <summary>
         /// Gets or sets a list of pal method names.

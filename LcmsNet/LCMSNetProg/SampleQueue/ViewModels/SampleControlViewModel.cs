@@ -81,11 +81,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region Members
 
-        /// <summary>
-        /// Form that provides user interface to retrieve samples from DMS.
-        /// </summary>
-        private DMSDownloadViewModel dmsView;
-
         private bool autoScroll = true;
         private ObservableAsPropertyHelper<bool> itemsSelected;
 
@@ -111,13 +106,14 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public SampleControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager)
         {
+            DMSView = dmsView;
             SampleDataManager = sampleDataManager;
             SampleDataManager.WhenAnyValue(x => x.HasData, x => x.HasValidColumns).Subscribe(x => SetEnabledDisabled());
             SampleDataManager.SamplesSource.Connect().WhenValueChanged(x => x.Sample.HasNotRun)
                 .Throttle(TimeSpan.FromMilliseconds(250)).Subscribe(x => PerformAutoScroll());
             this.WhenAnyValue(x => x.SampleDataManager.Samples).Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => this.PerformAutoScroll());
+            this.WhenAnyValue(x => x.SelectedSamples, x => x.SelectedSample, x => x.SelectedSamples.Count).Select(x => x.Item1.Count > 0 || x.Item2 != null).ToProperty(this, x => x.ItemsSelected, out this.itemsSelected, false);
 
-            Initialize(dmsView);
             SetupCommands();
         }
 
@@ -130,18 +126,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public SampleControlViewModel()
         {
             SampleDataManager = new SampleDataManager();
-            Initialize(null);
-        }
-
-        /// <summary>
-        /// Performs initialization for the constructors.
-        /// </summary>
-        /// <param name="dmsView"></param>
-        private void Initialize(DMSDownloadViewModel dmsView)
-        {
-            DMSView = dmsView;
-
-            this.WhenAnyValue(x => x.SelectedSamples, x => x.SelectedSample, x => x.SelectedSamples.Count).Select(x => x.Item1.Count > 0 || x.Item2 != null).ToProperty(this, x => x.ItemsSelected, out this.itemsSelected, false);
         }
 
         #endregion
@@ -165,11 +149,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Gets or sets the DMS View form.
         /// </summary>
-        public virtual DMSDownloadViewModel DMSView
-        {
-            get => dmsView;
-            private set => dmsView = value;
-        }
+        public virtual DMSDownloadViewModel DMSView { get; }
 
         #endregion
 
@@ -327,10 +307,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private void ShowDMSView()
         {
-            if (dmsView == null)
+            if (DMSView == null)
                 return;
 
-            var dmsWindow = new DMSDownloadWindow() { DataContext = dmsView };
+            var dmsWindow = new DMSDownloadWindow() { DataContext = DMSView };
             var result = dmsWindow.ShowDialog();
 
             // If the user clicks ok , then add the samples from the
@@ -340,8 +320,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             // we don't care how we add them to the form.
             if (result.HasValue && result.Value)
             {
-                var samples = dmsView.GetNewSamplesDMSView();
-                dmsView.ClearForm();
+                var samples = DMSView.GetNewSamplesDMSView();
+                DMSView.ClearForm();
 
                 using (SampleDataManager.StartBatchChange())
                 {

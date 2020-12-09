@@ -13,8 +13,6 @@ namespace LcmsNet.SampleQueue.IO
         //Exports specified queue to CSV file
         //**********************************************************************************************************
 
-        #region "Methods"
-
         /// <summary>
         /// Saves the specified sample list to the specified file
         /// </summary>
@@ -133,7 +131,5 @@ namespace LcmsNet.SampleQueue.IO
                 throw new DataExportException(errMsg, ex);
             }
         }
-
-        #endregion
     }
 }

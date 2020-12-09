@@ -4,7 +4,6 @@ using System.IO;
 using System.Xml;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Method;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -16,8 +15,6 @@ namespace LcmsNet.SampleQueue.IO
         //*********************************************************************************************************
         //
         //**********************************************************************************************************
-
-        #region "Methods"
 
         /// <summary>
         /// Reads the XML file into a list
@@ -197,7 +194,5 @@ namespace LcmsNet.SampleQueue.IO
             }
             return value;
         }
-
-        #endregion
     }
 }

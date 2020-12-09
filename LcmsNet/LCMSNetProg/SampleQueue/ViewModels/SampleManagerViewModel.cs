@@ -42,7 +42,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Reference to the DMS View.
         /// </summary>
-        private DMSDownloadViewModel dmsView;
+        private readonly DMSDownloadViewModel dmsView;
 
         private string lastSavedFileName = "queue.que";
 
@@ -53,34 +53,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
 
-        private SampleControlViewModel sampleControlViewModel;
-        private ColumnManagerViewModel columnManagerViewModel;
-        private MethodManagerViewModel methodManagerViewModel;
-        private SampleDataManager sampleDataManager;
+        public SampleControlViewModel SampleControlViewModel { get; }
 
-        public SampleControlViewModel SampleControlViewModel
-        {
-            get => sampleControlViewModel;
-            private set => this.RaiseAndSetIfChanged(ref sampleControlViewModel, value);
-        }
+        public ColumnManagerViewModel ColumnManagerViewModel { get; }
 
-        public ColumnManagerViewModel ColumnManagerViewModel
-        {
-            get => columnManagerViewModel;
-            private set => this.RaiseAndSetIfChanged(ref columnManagerViewModel, value);
-        }
+        public MethodManagerViewModel MethodManagerViewModel { get; }
 
-        public MethodManagerViewModel MethodManagerViewModel
-        {
-            get => methodManagerViewModel;
-            private set => this.RaiseAndSetIfChanged(ref methodManagerViewModel, value);
-        }
-
-        public SampleDataManager SampleDataManager
-        {
-            get => sampleDataManager;
-            private set => this.RaiseAndSetIfChanged(ref sampleDataManager, value);
-        }
+        public SampleDataManager SampleDataManager { get; }
 
         private SynchronizationContext synchronizationContext;
 
@@ -350,6 +329,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 Title = "Load Queue",
                 Filter = "LCMSNet Queue (*.que)|*.que|LCMS VB6 XML File (*.xml)|*.xml"
             };
+
             var result = fileDialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
