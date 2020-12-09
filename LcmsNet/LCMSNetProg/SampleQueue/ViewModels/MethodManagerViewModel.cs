@@ -144,7 +144,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void SetMaxMethodsVisible()
         {
             MaxMethodsVisible = Math.Min(SampleDataManager.LcMethodNameOptions.Count + 1, 8);
-            MethodsVisible = Math.Max(MethodsVisible, MaxMethodsVisible);
+            MethodsVisible = 2;
         }
 
         private void SetMethodVisibility()

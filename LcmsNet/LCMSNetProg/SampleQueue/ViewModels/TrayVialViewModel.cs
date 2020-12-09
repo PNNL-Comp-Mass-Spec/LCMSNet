@@ -49,7 +49,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     return y.Tray == TrayNumber;
                 }));
 
-            sampleList.Connect().Filter(filter).ObserveOn(RxApp.MainThreadScheduler).Bind(out var filtered).Subscribe();
+            sampleList.Connect().AutoRefreshOnObservable(x => x.WhenPropertyChanged(y => y.Tray), TimeSpan.FromMilliseconds(200)).Filter(filter).ObserveOn(RxApp.MainThreadScheduler).Bind(out var filtered).Subscribe();
             FilteredSamples = filtered;
 
             AssignSelectedToVialCommand = ReactiveCommand.Create(() => AssignSelectedToVial(this.AssignVial), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
