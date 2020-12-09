@@ -507,6 +507,8 @@ namespace LcmsNet.SampleQueue
                         // Validate sample.
                         if (LCMSSettings.GetParameter(LCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
                         {
+                            // If DMS Sample Validation is enabled, check for data required by DMS for uploads.
+                            // TODO: Would be good to only check this if the selected method has a 'UploadTriggerFiles' step, because if we're not uploading a trigger file, we obviously don't need this.
                             var sampleValidErrors = mValidator.IsSampleValidDetailed(sample.Sample);
 
                             if (sampleValidErrors != DMSSampleValidatorErrors.NoError)
@@ -514,16 +516,6 @@ namespace LcmsNet.SampleQueue
                                 sampleErrors += mValidator.CreateErrorListFromErrors(sampleValidErrors);
                                 foundError = true;
                             }
-                            else
-                            {
-                                sampleErrors = string.Empty;
-                            }
-                        }
-                        else
-                        {
-                            // DMS Sample validation is disabled
-                            RxApp.MainThreadScheduler.Schedule(() => sample.Sample.SampleErrors = sampleErrors);
-                            break;
                         }
 
                         if (string.IsNullOrEmpty(sampleErrors))
