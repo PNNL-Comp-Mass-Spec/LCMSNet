@@ -10,6 +10,7 @@ using DynamicData;
 using DynamicData.Binding;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
+using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
@@ -684,6 +685,20 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
         */
 
+        public void ImportQueueFromClipboard()
+        {
+            try
+            {
+                var samples = QueueImportClipboard.ReadSamples();
+                SampleDataManager.SampleQueue.LoadQueue(samples);
+                ApplicationLogger.LogMessage(0, "The queue was successfully imported from clipboard.");
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(0, "Could not load the queue from clipboard", ex);
+            }
+        }
+
         private void ClearSamplesConfirm()
         {
             var result = System.Windows.MessageBox.Show(
@@ -727,6 +742,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveCommand<Unit, Unit> RedoCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> PreviewThroughputCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> ClearAllSamplesCommand { get; protected set; }
+        public ReactiveCommand<Unit, Unit> ClipboardPasteCommand { get; protected set; }
 
         protected virtual void SetupCommands()
         {
@@ -748,6 +764,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
             PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput(), this.WhenAnyValue(x => x.ItemsSelected));
             ClearAllSamplesCommand = ReactiveCommand.Create(() => this.ClearSamplesConfirm());
+            ClipboardPasteCommand = ReactiveCommand.Create(ImportQueueFromClipboard);
         }
 
         #endregion

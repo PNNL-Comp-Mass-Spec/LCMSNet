@@ -803,7 +803,7 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Gets the sample queue that handles all queue management at a low level.
         /// </summary>
-        private SampleQueue SampleQueue { get; }
+        public SampleQueue SampleQueue { get; }
 
         /// <summary>
         /// Gets or sets a list of pal method names.
