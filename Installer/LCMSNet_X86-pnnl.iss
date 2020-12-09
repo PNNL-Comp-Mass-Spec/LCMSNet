@@ -53,7 +53,9 @@ Source: LCMSNetProg\bin\x86\Release\LcmsNet.exe;                               D
 Source: LCMSNetProg\bin\x86\Release\LcmsNet.exe.config;                        DestDir: "{app}";          Flags: ignoreversion confirmoverwrite
 
 ; Nuget DLLs
+Source: LCMSNetProg\bin\x86\Release\CsvHelper.dll;                             DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\DynamicData.dll;                           DestDir: "{app}";          Flags: ignoreversion
+Source: LCMSNetProg\bin\x86\Release\Microsoft.Bcl.AsyncInterfaces.dll;         DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\Microsoft.WindowsAPICodePack*.dll;         DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\OxyPlot*.dll;                              DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\Reactive*.dll;                             DestDir: "{app}";          Flags: ignoreversion

@@ -327,19 +327,22 @@ namespace LcmsNet.SampleQueue.ViewModels
             var fileDialog = new OpenFileDialog
             {
                 Title = "Load Queue",
-                Filter = "LCMSNet Queue (*.que)|*.que|LCMS VB6 XML File (*.xml)|*.xml"
+                Filter = "LCMSNet Queue (*.que)|*.que|CSV file|*.csv|LCMS VB6 XML File (*.xml)|*.xml"
             };
 
             var result = fileDialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
                 ISampleQueueReader reader = null;
-                var extension = Path.GetExtension(fileDialog.FileName);
+                var extension = Path.GetExtension(fileDialog.FileName).ToLower();
 
                 switch (extension)
                 {
                     case ".xml":
                         reader = new QueueImportXML();
+                        break;
+                    case ".csv":
+                        reader = new QueueImportCSV();
                         break;
                     case CONST_DEFAULT_QUEUE_EXTENSION:
                         reader = new QueueImportSQLite();
@@ -348,6 +351,44 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 try
                 {
+                    sampleQueue.LoadQueue(fileDialog.FileName, reader);
+                    ApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
+                }
+                catch (Exception ex)
+                {
+                    ApplicationLogger.LogError(0, string.Format("Could not load the queue {0}", fileDialog.FileName), ex);
+                }
+            }
+        }
+
+        public void ImportQueueFromClipboard()
+        {
+            try
+            {
+                var samples = QueueImportClipboard.ReadSamples();
+                sampleQueue.LoadQueue(samples);
+                ApplicationLogger.LogMessage(0, "The queue was successfully imported from clipboard.");
+            }
+            catch (Exception ex)
+            {
+                ApplicationLogger.LogError(0, "Could not load the queue from clipboard", ex);
+            }
+        }
+
+        public void ImportQueueFromCsv()
+        {
+            var fileDialog = new OpenFileDialog
+            {
+                Title = "Load Queue",
+                Filter = "CSV (*.csv)|*.csv|CSV text (*.txt)|*.txt"
+            };
+
+            var result = fileDialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                try
+                {
+                    var reader = new QueueImportCSV();
                     sampleQueue.LoadQueue(fileDialog.FileName, reader);
                     ApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
                 }

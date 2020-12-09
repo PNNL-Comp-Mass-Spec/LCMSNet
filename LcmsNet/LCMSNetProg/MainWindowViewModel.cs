@@ -87,6 +87,8 @@ namespace LcmsNet
             OpenQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
             SaveQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
             SaveQueueAsCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueueAs(), this.WhenAnyValue(x => x.QueueTabSelected));
+            ImportQueueFromClipboardCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueueFromClipboard(), this.WhenAnyValue(x => x.QueueTabSelected));
+            ImportQueueFromCsvCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueueFromCsv(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToXmlCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXML(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToCsvCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToCsv(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToXcaliburCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXcalibur(), this.WhenAnyValue(x => x.QueueTabSelected));
@@ -102,6 +104,8 @@ namespace LcmsNet
         public ReactiveCommand<Unit, Unit> OpenQueueCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveQueueCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveQueueAsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ImportQueueFromClipboardCommand { get; }
+        public ReactiveCommand<Unit, Unit> ImportQueueFromCsvCommand { get; }
         public ReactiveCommand<Unit, Unit> ExportQueueToXmlCommand { get; }
         public ReactiveCommand<Unit, Unit> ExportQueueToCsvCommand { get; }
         public ReactiveCommand<Unit, Unit> ExportQueueToXcaliburCommand { get; }

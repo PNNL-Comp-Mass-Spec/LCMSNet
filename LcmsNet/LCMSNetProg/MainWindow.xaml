@@ -41,6 +41,10 @@
                 <MenuItem Header="Save" Command="{Binding SaveQueueCommand}" />
                 <MenuItem Header="Save As" Command="{Binding SaveQueueAsCommand}" />
                 <Separator />
+                <MenuItem Header="Import" IsEnabled="{Binding QueueTabSelected}">
+                    <MenuItem Header="from Clipboard" Command="{Binding ImportQueueFromClipboardCommand}" />
+                    <MenuItem Header="from CSV" Command="{Binding ImportQueueFromCsvCommand}" />
+                </MenuItem>
                 <MenuItem Header="Export" IsEnabled="{Binding QueueTabSelected}">
                     <MenuItem Header="to LCMS VB6 (XML)" Command="{Binding ExportQueueToXmlCommand}" />
                     <MenuItem Header="to CSV" Command="{Binding ExportQueueToCsvCommand}" />

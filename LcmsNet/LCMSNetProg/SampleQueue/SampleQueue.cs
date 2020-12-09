@@ -2240,6 +2240,29 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Saves the queue to the appropriate object.
         /// </summary>
+        /// <param name="newSamples"></param>
+        public void LoadQueue(List<SampleData> newSamples)
+        {
+            var waitingSamples = newSamples;
+
+            //
+            // Make sure the method references are created
+            //
+            foreach (var sample in waitingSamples)
+            {
+                sample.DmsData.CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
+                if (sample.UniqueID >= m_sampleIndex)
+                {
+                    m_sampleIndex = Convert.ToInt32(sample.UniqueID);
+                }
+            }
+
+            QueueSamples(waitingSamples, enumColumnDataHandling.LeaveAlone);
+        }
+
+        /// <summary>
+        /// Saves the queue to the appropriate object.
+        /// </summary>
         /// <param name="path"></param>
         /// <param name="reader"></param>
         /// <param name="column"></param>
