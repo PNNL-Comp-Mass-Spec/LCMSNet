@@ -12,6 +12,7 @@ using FluidicsSDK;
 using LcmsNet.Devices;
 using LcmsNet.Properties;
 using LcmsNetData.Logging;
+using LcmsNetData.System;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
@@ -371,6 +372,11 @@ namespace LcmsNet.Notification.ViewModels
             Disable();
 
             var path = Settings.Default.NotificationFilePath;
+            if (!Path.IsPathRooted(path))
+            {
+                path = PersistDataPaths.GetFileLoadPath(path);
+            }
+
             if (File.Exists(path))
             {
                 var reader = new DeviceNotifierConfigurationXMLReader();
@@ -415,8 +421,10 @@ namespace LcmsNet.Notification.ViewModels
                     }
                 }
             }
+
             var writer = new DeviceNotifierConfigurationXMLWriter();
-            writer.WriteConfiguration(Settings.Default.NotificationFilePath, configuration);
+            var path = PersistDataPaths.GetFileSavePath(Settings.Default.NotificationFilePath);
+            writer.WriteConfiguration(path, configuration);
 
             ApplicationLogger.LogMessage(0, "Notification file saved to: " + Settings.Default.NotificationFilePath);
         }
