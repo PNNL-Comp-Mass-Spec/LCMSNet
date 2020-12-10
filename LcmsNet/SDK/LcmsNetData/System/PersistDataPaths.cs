@@ -109,7 +109,13 @@ namespace LcmsNetData.System
             }
 
             // fallback 3: working directory (usually ends up being the same as programFilesPath)
-            return fileSubPath;
+            if (File.Exists(fileSubPath))
+            {
+                return fileSubPath;
+            }
+
+            // final: nothing meets the criteria, return the preferred local data path
+            return localDataPath;
         }
 
         /// <summary>
@@ -200,7 +206,13 @@ namespace LcmsNetData.System
             }
 
             // fallback 3: working directory (usually ends up being the same as programFilesPath)
-            return directorySubPath;
+            if (Directory.Exists(directorySubPath))
+            {
+                return directorySubPath;
+            }
+
+            // final: nothing meets the criteria, return the preferred local data path
+            return localDataPath;
         }
 
         /// <summary>
@@ -232,7 +244,13 @@ namespace LcmsNetData.System
             }
 
             // fallback 3: working directory (usually ends up being the same as programFilesPath)
-            return directorySubPath;
+            if (Directory.Exists(directorySubPath) && Directory.EnumerateFileSystemEntries(directorySubPath).Any())
+            {
+                return directorySubPath;
+            }
+
+            // final: nothing meets the criteria, return the preferred local data path
+            return localDataPath;
         }
 
         /// <summary>
@@ -265,7 +283,13 @@ namespace LcmsNetData.System
             }
 
             // fallback 3: working directory (usually ends up being the same as programFilesPath)
-            return directorySubPath;
+            if (Directory.Exists(directorySubPath) && Directory.EnumerateFiles(directorySubPath, fileFilter).Any())
+            {
+                return directorySubPath;
+            }
+
+            // final: nothing meets the criteria, return the preferred local data path
+            return localDataPath;
         }
     }
 }
