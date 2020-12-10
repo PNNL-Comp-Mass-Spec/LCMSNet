@@ -1949,7 +1949,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
                                         CONST_ERROR_BELOW_PRESSURE,
                                         CONST_ERROR_FLOW_EXCEEDS,
                                         CONST_ERROR_FLOW_UNSTABLE,
-                                        CONST_PUMP_ERROR
+                                        CONST_PUMP_ERROR,
+                                        "Pump Event", // Seeing this, it doesn't make much sense, but I need to at least silence the "unpublished error" warnings
             };
 
             foreach (var value in errorCodes.Values)
