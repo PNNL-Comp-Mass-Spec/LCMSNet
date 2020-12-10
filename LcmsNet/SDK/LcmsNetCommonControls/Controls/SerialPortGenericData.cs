@@ -288,7 +288,7 @@ namespace LcmsNetCommonControls.Controls
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read serial port information from WMI. Extra detail about COM ports will not be displayed.", ex);
+                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read serial port information from WMI. Extra detail about COM ports might not be available.", ex);
             }
 
             return data;
