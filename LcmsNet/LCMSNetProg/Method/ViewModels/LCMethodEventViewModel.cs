@@ -57,7 +57,7 @@ namespace LcmsNet.Method.ViewModels
         public LCMethodEventViewModel(int eventNum)
         {
             SelectedDevice = null;
-            EventNumber = eventNum.ToString();
+            EventNumber = eventNum;
             StoppedHere = false;
             EventUnlocked = true;
 
@@ -197,7 +197,7 @@ namespace LcmsNet.Method.ViewModels
         private LCMethodEventData methodEventData;
 
         private BreakpointViewModel breakpoint;
-        private string eventNumber = "1";
+        private int eventNumber = 1;
         private bool optimizeWith = false;
         private IDevice selectedDevice = null;
         private LCMethodEventData selectedLCEvent = null;
@@ -216,7 +216,7 @@ namespace LcmsNet.Method.ViewModels
             set => this.RaiseAndSetIfChanged(ref breakpoint, value);
         }
 
-        public string EventNumber
+        public int EventNumber
         {
             get => eventNumber;
             set => this.RaiseAndSetIfChanged(ref eventNumber, value);
@@ -415,11 +415,15 @@ namespace LcmsNet.Method.ViewModels
                 // Clear out the combo-box
                 list.Clear();
                 list.AddRange(methods);
+
+                if (list.Count > 0)
+                {
+                    SelectedLCEvent = list[0];
+                }
             });
 
             if (methodsComboBoxOptions.Count > 0)
             {
-                SelectedLCEvent = MethodsComboBoxOptions[0];
                 UpdateSelectedMethodEvent();
             }
         }
@@ -540,15 +544,6 @@ namespace LcmsNet.Method.ViewModels
         private void OnEventChanged()
         {
             EventChanged?.Invoke(this, null);
-        }
-
-        /// <summary>
-        /// Updates the label to display which number this event is in the list of events.
-        /// </summary>
-        /// <param name="eventNum">integer representing the place in the event list of this event</param>
-        public void UpdateEventNum(int eventNum)
-        {
-            EventNumber = eventNum.ToString();
         }
 
         #endregion
@@ -761,6 +756,17 @@ namespace LcmsNet.Method.ViewModels
             if (methodEventData != null)
                 methodEventData.OptimizeWith = OptimizeWith;
             OnEventChanged();
+        }
+
+        public override string ToString()
+        {
+            var eventData = SelectedMethod.Device.Name;
+            if (SelectedMethod?.MethodEventAttribute != null)
+            {
+                eventData = $"{SelectedMethod.Device.Name} - {SelectedMethod.MethodEventAttribute.Name}";
+            }
+
+            return eventData;
         }
 
         #endregion

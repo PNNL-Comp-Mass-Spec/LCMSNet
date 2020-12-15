@@ -18,6 +18,7 @@ namespace LcmsNetSDK.Method
             OperationTime = -1;
             TimeoutType = MethodOperationTimeoutType.Attribute;
             HasDiscreteParameters = false;
+            DataProvider = string.Empty;
             DataProviderIndex = -1;
         }
 
@@ -36,7 +37,7 @@ namespace LcmsNetSDK.Method
             Name = methodName;
             OperationTime = operationTime;
 
-            if (string.IsNullOrEmpty(dataProvider) == false)
+            if (!string.IsNullOrEmpty(dataProvider))
             {
                 DataProvider = dataProvider;
                 DataProviderIndex = dataProviderIndex;
@@ -74,7 +75,7 @@ namespace LcmsNetSDK.Method
             Name = methodName;
             TimeoutType = timeout;
 
-            if (string.IsNullOrEmpty(dataProvider) == false)
+            if (!string.IsNullOrEmpty(dataProvider))
             {
                 DataProvider = dataProvider;
                 DataProviderIndex = dataProviderIndex;

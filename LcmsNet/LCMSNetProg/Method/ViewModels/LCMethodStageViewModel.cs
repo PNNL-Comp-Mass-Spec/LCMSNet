@@ -7,6 +7,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
 using DynamicData;
+using DynamicData.Binding;
 using LcmsNetData;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
@@ -40,30 +41,24 @@ namespace LcmsNet.Method.ViewModels
         private readonly Dictionary<string, ColumnData> checkBoxToColumnDataMap;
 
         /// <summary>
-        /// List of controls that manage events.
-        /// </summary>
-        private readonly List<LCMethodEventViewModel> eventsList;
-
-        /// <summary>
         /// Constructor for holding the list of events.
         /// </summary>
         public LCMethodStageViewModel()
         {
-            eventsList = new List<LCMethodEventViewModel>();
             methodMap = new Dictionary<string, string>();
             MethodFolderPath = CONST_METHOD_FOLDER_PATH;
 
             // Build the button to method dictionary.
             checkBoxToColumnDataMap = new Dictionary<string, ColumnData>();
             UpdateConfiguration();
-            //TODO: In Code-behind?: MethodName.LostFocus += MethodName_LostFocus;
             LCMethodManager.Manager.MethodAdded += Manager_MethodAdded;
             LCMethodManager.Manager.MethodRemoved += Manager_MethodRemoved;
             LCMethodManager.Manager.MethodUpdated += Manager_MethodUpdated;
 
             savedMethodsComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var savedMethodsComboBoxOptionsBound).Subscribe();
             columnComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var columnComboBoxOptionsBound).Subscribe();
-            lcMethodEvents.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcMethodEventsBound).Subscribe();
+            var resortTrigger = lcMethodEvents.Connect().WhenValueChanged(x => x.EventNumber).Throttle(TimeSpan.FromMilliseconds(200)).Select(_ => Unit.Default);
+            lcMethodEvents.Connect().Throttle(TimeSpan.FromMilliseconds(200)).Sort(SortExpressionComparer<LCMethodEventViewModel>.Ascending(x => x.EventNumber), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcMethodEventsBound).Subscribe();
             SavedMethodsComboBoxOptions = savedMethodsComboBoxOptionsBound;
             ColumnComboBoxOptions = columnComboBoxOptionsBound;
             LCMethodEvents = lcMethodEventsBound;
@@ -154,7 +149,7 @@ namespace LcmsNet.Method.ViewModels
             {
                 // Grab the selected method items from the user interfaces
                 var data = new List<LCMethodEventData>();
-                foreach (var lcEvent in eventsList)
+                foreach (var lcEvent in lcMethodEvents.Items.OrderBy(x => x.EventNumber))
                 {
                     data.Add(lcEvent.SelectedMethod);
                 }
@@ -208,7 +203,7 @@ namespace LcmsNet.Method.ViewModels
                 if (methodMap.ContainsKey(method.Name))
                 {
                     methodMap.Remove(method.Name);
-                    ComboBoxSavedItemsRemoveItem(method.Name);
+                    savedMethodsComboBoxOptions.Remove(method.Name);
                 }
             }
         }
@@ -220,19 +215,9 @@ namespace LcmsNet.Method.ViewModels
                 if (!methodMap.ContainsKey(method.Name))
                 {
                     methodMap.Add(method.Name, method.Name);
-                    ComboBoxSavedItemsAddItem(method.Name);
+                    savedMethodsComboBoxOptions.Add(method.Name);
                 }
             }
-        }
-
-        public void ComboBoxSavedItemsRemoveItem(string name)
-        {
-            savedMethodsComboBoxOptions.Remove(name);
-        }
-
-        public void ComboBoxSavedItemsAddItem(string name)
-        {
-            savedMethodsComboBoxOptions.Add(name);
         }
 
         /// <summary>
@@ -253,7 +238,7 @@ namespace LcmsNet.Method.ViewModels
         {
             if (method != null)
             {
-                LoadMethod(method, true);
+                LoadMethodEvents(method);
                 MethodName = method.Name;
             }
         }
@@ -268,16 +253,10 @@ namespace LcmsNet.Method.ViewModels
             IgnoreUpdates = true;
             LoadMethod(method);
             MethodName = name;
-            OnEditMethod();
             IgnoreUpdates = false;
 
             CanBuild = false;
             CanUpdate = MethodExists();
-        }
-
-        private void OnEditMethod()
-        {
-            UpdatingMethod?.Invoke(this, new classMethodEditingEventArgs(MethodName));
         }
 
         /// <summary>
@@ -285,6 +264,11 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private void MethodNameChanged()
         {
+            if (SelectedSavedMethod.Equals(MethodName))
+            {
+                return;
+            }
+
             var text = MethodName;
             var found = false;
             foreach (var o in SavedMethodsComboBoxOptions)
@@ -295,7 +279,6 @@ namespace LcmsNet.Method.ViewModels
                     SelectedSavedMethod = o;
                     var method = FindMethods(text);
                     LoadMethod(method);
-                    OnEditMethod();
                     break;
                 }
             }
@@ -306,14 +289,12 @@ namespace LcmsNet.Method.ViewModels
                 UpdateUserInterface(false);
 
                 OnEventChanged();
-                OnEditMethod();
                 IgnoreUpdates = false;
             }
             else
             {
                 UpdateUserInterface(false);
                 OnEventChanged();
-                OnEditMethod();
             }
         }
 
@@ -383,25 +364,6 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        public bool IsColumnSelected()
-        {
-            if (SelectedColumn == null)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// returns index of the event in the event list, used to number the events on screen.
-        /// </summary>
-        /// <param name="thisEvent"></param>
-        /// <returns>an integer</returns>
-        public int EventIndex(LCMethodEventViewModel thisEvent)
-        {
-            return eventsList.IndexOf(thisEvent);
-        }
-
         /// <summary>
         /// Builds the LC Method.
         /// </summary>
@@ -467,8 +429,7 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private void BuildSelectedMethod()
         {
-            var columnSelected = IsColumnSelected();
-            if (!columnSelected)
+            if (SelectedColumn == null)
             {
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, "Please select a column before building the method.");
                 return;
@@ -511,34 +472,7 @@ namespace LcmsNet.Method.ViewModels
             return false;
         }
 
-        /// <summary>
-        /// Fired when editing a method.
-        /// </summary>
-        public event EventHandler<classMethodEditingEventArgs> UpdatingMethod;
-
-        public class classMethodEditingEventArgs : EventArgs
-        {
-            public classMethodEditingEventArgs(string methodName)
-            {
-                Name = methodName;
-            }
-
-            public string Name { get; }
-        }
-
         #region Event List Control for Adding, Deleting, Moving, and Rendering LC-Events
-
-        /// <summary>
-        /// Re-renders the event list.
-        /// </summary>
-        private void RenderEventList()
-        {
-            lcMethodEvents.Edit(list =>
-            {
-                list.Clear();
-                list.AddRange(eventsList);
-            });
-        }
 
         /// <summary>
         /// Returns a list of selected events.
@@ -547,15 +481,6 @@ namespace LcmsNet.Method.ViewModels
         private List<LCMethodEventViewModel> GetSelectedEvents()
         {
             return LCMethodEvents.Where(x => x.IsSelected).ToList();
-        }
-
-        /// <summary>
-        /// Adds a new event to the list of events to run.
-        /// </summary>
-        private void AddNewEvent()
-        {
-            var deviceEvent = new LCMethodEventViewModel(eventsList.Count + 1);
-            AddNewEvent(deviceEvent);
         }
 
         /// <summary>
@@ -569,7 +494,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Adds a new event to the list of events to run.
         /// </summary>
-        private void AddNewEvent(LCMethodEventViewModel deviceEvent)
+        private LCMethodEventViewModel RegisterNewEventEventHandlers(LCMethodEventViewModel deviceEvent)
         {
             // Adds a new event into the user interface and records the new event in the event list
 
@@ -577,26 +502,24 @@ namespace LcmsNet.Method.ViewModels
             deviceEvent.Lock += deviceEvent_Lock;
             deviceEvent.EventChanged += deviceEvent_EventChanged;
 
-            var eventData = "";
-            if (deviceEvent.SelectedMethod?.MethodEventAttribute != null)
-            {
-                eventData = string.Format("{0} - {1}", deviceEvent.SelectedMethod.Device.Name, deviceEvent.SelectedMethod.MethodEventAttribute.Name, string.Join(", ", deviceEvent.SelectedMethod.Parameters));
-            }
-            ApplicationLogger.LogMessage(6, "Control event added - " + eventData);
-            eventsList.Add(deviceEvent);
-            RenderEventList();
+            ApplicationLogger.LogMessage(6, "Control event added - " + deviceEvent.ToString());
+
+            return deviceEvent;
         }
 
         /// <summary>
         /// Loads the method to the user interface.
         /// </summary>
         /// <param name="method"></param>
-        /// <param name="clearOld"></param>
-        public void LoadMethod(LCMethod method, bool clearOld)
+        private void LoadMethodEvents(LCMethod method)
         {
-            if (clearOld)
-                eventsList.Clear();
+            if (method == null)
+            {
+                lcMethodEvents.Clear();
+            }
 
+            var eventNumber = 1;
+            var eventsList = new List<LCMethodEventViewModel>(method.Events.Count);
             foreach (var lcEvent in method.Events)
             {
                 var parameters = new List<LCMethodEventParameter>();
@@ -632,9 +555,16 @@ namespace LcmsNet.Method.ViewModels
                 // Construct an event.  We send false as locked because its not a locking event.
                 var eventVm = new LCMethodEventViewModel(data, false);
                 eventVm.SetBreakPoint(lcEvent.BreakPoint);
-                AddNewEvent(eventVm);
-                eventVm.UpdateEventNum(EventIndex(eventVm) + 1);
+                eventVm.EventNumber = eventNumber++;
+                eventsList.Add(eventVm);
             }
+
+            lcMethodEvents.Edit(list =>
+            {
+                list.Clear();
+                list.AddRange(eventsList.Select(x => RegisterNewEventEventHandlers(x)));
+            });
+
             // Then set all the check boxes accordingly.
             if (method.Column < 0)
             {
@@ -673,7 +603,7 @@ namespace LcmsNet.Method.ViewModels
 
             var senderEvent = sender as LCMethodEventViewModel;
             var newEvent = new LCMethodEventViewModel(method, true);
-            AddNewEvent(newEvent);
+            lcMethodEvents.Add(RegisterNewEventEventHandlers(newEvent));
         }
 
         /// <summary>
@@ -697,7 +627,6 @@ namespace LcmsNet.Method.ViewModels
             // Remove the events from the list
             foreach (var deviceEvent in listEvents)
             {
-                var indexOfLastDeleted = eventsList.IndexOf(deviceEvent);
                 var data = deviceEvent.SelectedMethod;
                 var device = deviceEvent.SelectedDevice;
 
@@ -722,13 +651,16 @@ namespace LcmsNet.Method.ViewModels
                         ApplicationLogger.LogError(0, "There was an error when removing the device event. " + ex.Message, ex);
                     }
                 }
-                for (var i = indexOfLastDeleted; i < eventsList.Count; i++)
-                {
-                    eventsList[i].UpdateEventNum(eventsList.IndexOf(eventsList[i]));
-                }
+
                 lcMethodEvents.Remove(deviceEvent);
-                eventsList.Remove(deviceEvent);
-                ApplicationLogger.LogMessage(0, string.Format("A control event for the device {0} was  removed from method {1}.", deviceEvent.SelectedDevice.Name, data.Method.Name));
+                ApplicationLogger.LogMessage(0, $"A control event for the device {deviceEvent.SelectedDevice.Name} was  removed from method {data.Method.Name}.");
+            }
+
+            // Fix numbering after deleting all events.
+            var counter = 1;
+            foreach (var item in lcMethodEvents.Items.OrderBy(x => x.EventNumber))
+            {
+                item.EventNumber = counter++;
             }
         }
 
@@ -742,43 +674,27 @@ namespace LcmsNet.Method.ViewModels
             if (listEvents.Count <= 0)
                 return;
 
-            var indices = new int[listEvents.Count];
-
-            // Construct the pivot table.
-            var i = 0;
-            foreach (var devEvent in listEvents)
+            var orderedEvents = LCMethodEvents.OrderBy(x => x.EventNumber).ToList();
+            for (var i = 0; i < orderedEvents.Count - 1; i++)
             {
-                var index = eventsList.IndexOf(devEvent);
-                indices[i++] = index;
-            }
-
-            // Use the pivot table to move the items around
-            var maxPos = 0;
-
-            // Don't worry about checking for the length of indices because we already did that above
-            // when we checked the number of selected events being of the right size.
-            if (indices[0] == 0)
-                maxPos = 1;
-
-            for (var j = 0; j < i; j++)
-            {
-                if (indices[j] > maxPos)
+                // Only moves a selected item down if it is possible.
+                if (!orderedEvents[i].IsSelected && orderedEvents[i + 1].IsSelected)
                 {
-                    // Now swap the events
-                    var preEvent = eventsList[indices[j]];
-                    eventsList[indices[j]] = eventsList[indices[j] - 1];
-                    eventsList[indices[j] - 1] = preEvent;
-                    //update event list positions
-                    eventsList[indices[j]].UpdateEventNum(eventsList.IndexOf(eventsList[indices[j]]) + 1);
-                    preEvent.UpdateEventNum(eventsList.IndexOf(preEvent) + 1);
-
-                    // Update the pivot index now so that we cannot advance above that.
-                    maxPos = indices[j];
+                    // Swap items
+                    var temp = orderedEvents[i];
+                    orderedEvents[i] = orderedEvents[i + 1];
+                    orderedEvents[i + 1] = temp;
                 }
             }
 
+            // Update the event numbers according to the ordering in orderedEvents
+            var counter = 1;
+            foreach (var eventItem in orderedEvents)
+            {
+                eventItem.EventNumber = counter++;
+            }
+
             ApplicationLogger.LogMessage(0, "Control event moved up.");
-            RenderEventList();
         }
 
         /// <summary>
@@ -787,42 +703,31 @@ namespace LcmsNet.Method.ViewModels
         private void MoveSelectedEventsDown()
         {
             var listEvents = GetSelectedEvents();
+
             if (listEvents.Count <= 0)
                 return;
 
-            var indices = new int[listEvents.Count];
-            // Construct the pivot table.
-            var i = 0;
-            foreach (var devEvent in listEvents)
+            var orderedEvents = LCMethodEvents.OrderBy(x => x.EventNumber).ToList();
+            for (var i = orderedEvents.Count - 1; i > 0; i--)
             {
-                var index = eventsList.IndexOf(devEvent);
-                indices[i++] = index;
-            }
-
-            // Use the pivot table to move the items around
-            var maxPos = eventsList.Count - 1;
-            if (maxPos == indices[indices.Length - 1])
-            {
-                maxPos--;
-            }
-
-            for (var j = i - 1; j >= 0; j--)
-            {
-                if (indices[j] < maxPos)
+                // Only moves a selected item down if it is possible.
+                if (!orderedEvents[i].IsSelected && orderedEvents[i - 1].IsSelected)
                 {
-                    // Now swap the events
-                    var preEvent = eventsList[indices[j]];
-                    eventsList[indices[j]] = eventsList[indices[j] + 1];
-                    eventsList[indices[j] + 1] = preEvent;
-                    eventsList[indices[j]].UpdateEventNum(eventsList.IndexOf(eventsList[indices[j]]) + 1);
-                    preEvent.UpdateEventNum(eventsList.IndexOf(preEvent) + 1);
-                    // Update the pivot index now so that we cannot advance above that.
+                    // Swap items
+                    var temp = orderedEvents[i];
+                    orderedEvents[i] = orderedEvents[i - 1];
+                    orderedEvents[i - 1] = temp;
                 }
-                maxPos = indices[j];
+            }
+
+            // Update the event numbers according to the ordering in orderedEvents
+            var counter = 1;
+            foreach (var eventItem in orderedEvents)
+            {
+                eventItem.EventNumber = counter++;
             }
 
             ApplicationLogger.LogMessage(0, "Control event moved down.");
-            RenderEventList();
         }
 
         #endregion
@@ -834,7 +739,7 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private void AddEvent()
         {
-            AddNewEvent();
+            lcMethodEvents.Add(RegisterNewEventEventHandlers(new LCMethodEventViewModel(lcMethodEvents.Count + 1)));
             OnEventChanged();
         }
 
