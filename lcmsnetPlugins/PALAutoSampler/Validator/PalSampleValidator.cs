@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Experiment;
 
-namespace LcmsNetPlugins.PalValidator
+namespace LcmsNetPlugins.PALAutoSampler.Validator
 {
     /// <summary>
     /// Sample Validator for PAL AutoSampler

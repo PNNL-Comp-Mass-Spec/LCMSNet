@@ -58,11 +58,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)SampleValidators" mkdir "$(SolutionDir)SampleValidators"
+    <PostBuildEvent>if not exist "$(SolutionDir)pluginDLLs" mkdir "$(SolutionDir)pluginDLLs"
 
-xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)SampleValidators\"
-xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)SampleValidators\"
-xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)SampleValidators\"
+xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,12 +5,13 @@ using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNetSDK.Experiment
 {
     public class SampleValidatorManager
     {
-        private const string CONST_VALIDATOR_PATH = @"SampleValidators";
+        private const string CONST_VALIDATOR_PATH = DeviceManager.CONST_DEVICE_PLUGIN_PATH;
         private static SampleValidatorManager m_instance;
 
         private SampleValidatorManager()
