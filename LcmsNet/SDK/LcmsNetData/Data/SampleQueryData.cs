@@ -135,7 +135,7 @@ namespace LcmsNetData.Data
         /// <returns></returns>
         public string BuildSqlString()
         {
-            const string cmdBase = "SELECT * FROM V_Scheduled_Run_Export";
+            const string cmdBase = "SELECT * FROM V_Requested_Run_Active_Export";
             var queryBldr = new StringBuilder();
 
             // Note that minimum request ID is auto-defined as 0 in the constructor
