@@ -1084,7 +1084,7 @@ namespace LcmsNetDmsTools
             var connStr = GetConnectionString();
 
             // Get a table containing the instrument data
-            const string sqlCmd = "SELECT Instrument, NameAndUsage, CaptureMethod, " +
+            const string sqlCmd = "SELECT Instrument, NameAndUsage, InstrumentGroup, CaptureMethod, " +
                                   "Status, HostName, SharePath " +
                                   "FROM V_Instrument_Info_LCMSNet " +
                                   "ORDER BY Instrument";
@@ -1110,6 +1110,7 @@ namespace LcmsNetDmsTools
                         {
                             DMSName = reader["Instrument"].CastDBValTo<string>(),
                             CommonName = reader["NameAndUsage"].CastDBValTo<string>(),
+                            InstrumentGroup = reader["InstrumentGroup"].CastDBValTo<string>(),
                             CaptureMethod = reader["CaptureMethod"].CastDBValTo<string>(),
                             Status = reader["Status"].CastDBValTo<string>(),
                             HostName = reader["HostName"].CastDBValTo<string>(),
@@ -1273,6 +1274,7 @@ namespace LcmsNetDmsTools
                                 EMSLProposalID = reader["Proposal ID"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 RequestID = reader["Request"].CastDBValTo<int>(),
                                 RequestName = reader["Name"].CastDBValTo<string>(),
+                                InstrumentGroup = reader["Instrument"].CastDBValTo<string>(),
                                 WorkPackage = reader["Work Package"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 EMSLUsageType = reader["Usage Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 EMSLProposalUser = reader["EUS Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),

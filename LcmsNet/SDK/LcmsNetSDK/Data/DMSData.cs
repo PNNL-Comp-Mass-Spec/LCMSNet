@@ -175,6 +175,11 @@ namespace LcmsNetSDK.Data
         }
 
         /// <summary>
+        /// Instrument group specified in DMS for the request (only used when <see cref="RequestID"/> &gt; 0)
+        /// </summary>
+        public string InstrumentGroup { get; set; }
+
+        /// <summary>
         /// Experiment name
         /// </summary>
         public string Experiment

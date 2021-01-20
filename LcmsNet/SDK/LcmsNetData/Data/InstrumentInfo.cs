@@ -28,6 +28,11 @@ namespace LcmsNetData.Data
         public string CommonName { get; set; }
 
         /// <summary>
+        /// Instrument grouping in DMS (a rough 'instrument class/type' specification)
+        /// </summary>
+        public string InstrumentGroup { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the method used to capture data from this instrument
         /// </summary>
         public string CaptureMethod

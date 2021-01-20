@@ -21,6 +21,11 @@ namespace LcmsNetData.Data
         int RequestID { get; set; }
 
         /// <summary>
+        /// Instrument group specified in DMS for the request (only used when <see cref="RequestID"/> &gt; 0)
+        /// </summary>
+        string InstrumentGroup { get; set; }
+
+        /// <summary>
         /// Experiment name
         /// </summary>
         string Experiment { get; set; }
