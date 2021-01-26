@@ -1,5 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using LcmsNetData.System;
 
 namespace LcmsNetData
 {
@@ -63,18 +69,12 @@ namespace LcmsNetData
         public const string PARAM_VALIDATESAMPLESFORDMS = "ValidateSamplesForDMS";
         public const string PARAM_LocalDataPath = "LocalDataPath";
 
-        #region "Class variables"
-
         /// <summary>
         /// String dictionary to hold settings data
         /// </summary>
         static readonly Dictionary<string, string> m_Settings;
 
-        #endregion
-
         public static event EventHandler<SettingChangedEventArgs> SettingChanged;
-
-        #region "Methods"
 
         /// <summary>
         /// Constructor to initialize static members
@@ -191,6 +191,98 @@ namespace LcmsNetData
 
             return defaultValue;
         }
-        #endregion
+
+        /// <summary>
+        /// Loads settings into <see cref="LCMSSettings"/>, with some settings allowed to override others. All logging is to the returned list.
+        /// </summary>
+        /// <param name="settings">Collection of settings for the application, usually the Application default-style 'Settings' class</param>
+        /// <param name="overridingSettings">Collection of settings that override the settings in <paramref name="settings"/>, usually from something like 'ConfigurationManager.AppSettings' (this can come from a file specified in 'app.config')</param>
+        /// <param name="allowOverridingUserSettings">If false, <paramref name="overridingSettings"/> entries that override user-scope settings will be ignored and reported via the returned list. If true, they will override user-scope settings.</param>
+        /// <returns>Errors/log entries that occurred while loading settings</returns>
+        /// <remarks>
+        /// Some examples of sources for <paramref name="overridingSettings"/>:
+        /// in app.config/configuration/configSections:
+        /// &lt;section name="developerAppSettings" type="System.Configuration.NameValueFileSectionHandler, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/&gt;
+        /// in app.config/configuration:
+        /// &lt;appSettings file="LcmsNet_PersistentSettings.config"/&gt;
+        /// &lt;developerAppSettings file="LcmsNet_DeveloperSettings.config"/&gt;
+        ///
+        /// LcmsNet_PersistentSettings.config:
+        /// &lt;appSettings&gt;
+        ///   &lt;add key="CartName" value="No_Cart" /&gt;
+        /// &lt;/appSettings&gt;
+        ///
+        /// LcmsNet_DeveloperSettings.config:
+        /// &lt;developerAppSettings&gt;
+        ///   &lt;add key="CartName" value="(none)" /&gt;
+        /// &lt;/developerAppSettings&gt;
+        ///
+        /// To load them into the program:
+        /// var persistentSettings = ConfigurationManager.AppSettings;
+        /// var devSettings = (NameValueCollection)(ConfigurationManager.GetSection("developerAppSettings"));
+        /// // ... (Choosing logic for using persistentSettings or devSettings)
+        /// </remarks>
+        public static List<Tuple<string, Exception>> LoadSettings(ApplicationSettingsBase settings, NameValueCollection overridingSettings = null, bool allowOverridingUserSettings = false)
+        {
+            var loadErrors = new List<Tuple<string, Exception>>();
+
+            if (overridingSettings != null)
+            {
+                // Settings: There are the default *.exe.config application config and [user\appdata\local\...\user.config] user config files,
+                // but some settings apply to the whole system (application config, *.exe.config), yet shouldn't be replaced when we install
+                // a new version of the program (but the application config file has other important configuration information that should be replaced).
+                // To properly handle this, these settings are specified in the application configuration, but we use a different file (specified in
+                // app.config, the appSettings file 'LcmsNet_PersistentSettings.config') to overrule the matching settings in the application config file.
+
+                var mainSettings = settings.Properties.Cast<SettingsProperty>().ToList();
+                foreach (var setting in overridingSettings.AllKeys)
+                {
+                    // Can't add new settings, and we don't want to override user-scope settings
+                    var settingValue = overridingSettings[setting];
+                    var match = mainSettings.First(x => x.Name.Equals(setting));
+                    if (match == null)
+                    {
+                        // ApplicationLogger.LogError(0, $"Could not apply persistent setting '{setting}' with value '{settingValue}': Setting does not exist.");
+                        loadErrors.Add(new Tuple<string, Exception>($"Could not apply persistent setting '{setting}' with value '{settingValue}': Setting does not exist.", null));
+                    }
+                    else if (match.Attributes.Contains(typeof(ApplicationScopedSettingAttribute)) || allowOverridingUserSettings)
+                    {
+                        // By default only overriding of application-scope settings is allowed, but allowing overriding of user-scope settings is useful in certain instances (during development is an example)
+                        try
+                        {
+                            var changedTypeValue = Convert.ChangeType(settingValue, match.PropertyType);
+                            settings[setting] = changedTypeValue;
+                        }
+                        catch (Exception e)
+                        {
+                            // Don't use ApplicationLogger yet - load the settings first to load the possibly user-modified local logging path.
+                            //ApplicationLogger.LogError(0, $"Could not apply persistent setting '{setting}' with value '{settingValue}' to type '{match.PropertyType.FullName}'", e);
+                            loadErrors.Add(new Tuple<string, Exception>($"Could not apply persistent setting '{setting}' with value '{settingValue}' to type '{match.PropertyType.FullName}'", e));
+                        }
+                    }
+                    else
+                    {
+                        // Don't use ApplicationLogger yet - load the settings first to load the possibly user-modified local logging path.
+                        // ApplicationLogger.LogError(0, $"Could not apply persistent setting '{setting}' with value '{settingValue}': Cannot override a user-scope setting.");
+                        loadErrors.Add(new Tuple<string, Exception>($"Could not apply persistent setting '{setting}' with value '{settingValue}': Cannot override a user-scope setting.", null));
+                    }
+                }
+            }
+
+            var propColl = settings.Properties;
+            foreach (SettingsProperty currProperty in propColl)
+            {
+                var propertyName = currProperty.Name;
+                var propertyValue = settings[propertyName].ToString();
+                SetParameter(propertyName, propertyValue);
+            }
+
+            // Add path to executable as a saved setting
+            var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
+            SetParameter(PARAM_APPLICATIONPATH, fi.DirectoryName);
+            SetParameter(PARAM_APPLICATIONDATAPATH, PersistDataPaths.LocalDataPath);
+
+            return loadErrors;
+        }
     }
 }

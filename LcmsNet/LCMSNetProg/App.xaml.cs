@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -225,8 +224,6 @@ namespace LcmsNet
                 Settings.Default.Save();
             }
 
-            var loadErrors = new List<Tuple<string, Exception>>();
-
             // Settings: There are the default LcmsNet.exe.config application config and [user\appdata\local\...\user.config] user config files,
             // but some settings apply to the whole system (application config, LcmsNet.exe.config), yet shouldn't be replaced when we install
             // a new version of the program (but the application config file has other important configuration information that should be replaced).
@@ -241,47 +238,7 @@ namespace LcmsNet
                 persistentSettings = devSettings;
             }
 
-            var mainSettings = Settings.Default.Properties.Cast<SettingsProperty>().ToList();
-            foreach (var setting in persistentSettings.AllKeys)
-            {
-                // Can't add new settings, and we don't want to override user-scope settings
-                var settingValue = persistentSettings[setting];
-                var match = mainSettings.First(x => x.Name.Equals(setting));
-                // Dev settings can override any setting, but the normal persistent settings are only allowed for application settings
-                if (match != null && (match.Attributes.Contains(typeof(ApplicationScopedSettingAttribute)) || persistentSettings == devSettings))
-                {
-                    try
-                    {
-                        var changedTypeValue = Convert.ChangeType(settingValue, match.PropertyType);
-                        Settings.Default[setting] = changedTypeValue;
-                    }
-                    catch (Exception e)
-                    {
-                        // Don't use ApplicationLogger yet - load the settings first to load the possibly user-modified local logging path.
-                        //ApplicationLogger.LogError(0, $"Could not apply persistent setting '{setting}' with value '{settingValue}' to type '{match.PropertyType.FullName}'", e);
-                        loadErrors.Add(new Tuple<string, Exception>($"Could not apply persistent setting '{setting}' with value '{settingValue}' to type '{match.PropertyType.FullName}'", e));
-                    }
-                }
-                else
-                {
-                    // Don't use ApplicationLogger yet - load the settings first to load the possibly user-modified local logging path.
-                    // ApplicationLogger.LogError(0, $"Could not apply persistent setting '{setting}' with value '{settingValue}': Setting does not exist, or it is a user setting.");
-                    loadErrors.Add(new Tuple<string, Exception>($"Could not apply persistent setting '{setting}' with value '{settingValue}': Setting does not exist, or it is a user setting.", null));
-                }
-            }
-
-            var propColl = Settings.Default.Properties;
-            foreach (SettingsProperty currProperty in propColl)
-            {
-                var propertyName = currProperty.Name;
-                var propertyValue = Settings.Default[propertyName].ToString();
-                LCMSSettings.SetParameter(propertyName, propertyValue);
-            }
-
-            // Add path to executable as a saved setting
-            var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
-            LCMSSettings.SetParameter(LCMSSettings.PARAM_APPLICATIONPATH, fi.DirectoryName);
-            LCMSSettings.SetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH, PersistDataPaths.LocalDataPath);
+            var loadErrors = LCMSSettings.LoadSettings(Settings.Default, persistentSettings, persistentSettings == devSettings);
 
             var emulation = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED);
             if (!string.IsNullOrWhiteSpace(emulation))
