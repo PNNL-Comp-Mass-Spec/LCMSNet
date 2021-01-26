@@ -289,8 +289,18 @@ namespace LcmsNetData
             }
 
             // Add path to executable as a saved setting
-            var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
-            SetParameter(PARAM_APPLICATIONPATH, fi.DirectoryName);
+            var entryAssembly = Assembly.GetEntryAssembly();
+            if (entryAssembly == null)
+            {
+                loadErrors.Add(new Tuple<string, Exception>("Settings loading: Could not determine the entry assembly; cannot store path to application", null));
+            }
+            else
+            {
+                var exeInfo = new FileInfo(entryAssembly.Location);
+                SetParameter(PARAM_APPLICATIONPATH, exeInfo.DirectoryName);
+            }
+
+            // Assure that parameter ApplicationDataPath is defined
             SetParameter(PARAM_APPLICATIONDATAPATH, PersistDataPaths.LocalDataPath);
 
             return loadErrors;
