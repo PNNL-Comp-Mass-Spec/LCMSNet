@@ -200,27 +200,38 @@ namespace LcmsNetData
         /// <param name="allowOverridingUserSettings">If false, <paramref name="overridingSettings"/> entries that override user-scope settings will be ignored and reported via the returned list. If true, they will override user-scope settings.</param>
         /// <returns>Errors/log entries that occurred while loading settings</returns>
         /// <remarks>
-        /// Some examples of sources for <paramref name="overridingSettings"/>:
-        /// in app.config/configuration/configSections:
-        /// &lt;section name="developerAppSettings" type="System.Configuration.NameValueFileSectionHandler, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/&gt;
-        /// in app.config/configuration:
-        /// &lt;appSettings file="LcmsNet_PersistentSettings.config"/&gt;
-        /// &lt;developerAppSettings file="LcmsNet_DeveloperSettings.config"/&gt;
-        ///
-        /// LcmsNet_PersistentSettings.config:
-        /// &lt;appSettings&gt;
-        ///   &lt;add key="CartName" value="No_Cart" /&gt;
-        /// &lt;/appSettings&gt;
-        ///
-        /// LcmsNet_DeveloperSettings.config:
-        /// &lt;developerAppSettings&gt;
-        ///   &lt;add key="CartName" value="(none)" /&gt;
-        /// &lt;/developerAppSettings&gt;
-        ///
-        /// To load them into the program:
-        /// var persistentSettings = ConfigurationManager.AppSettings;
-        /// var devSettings = (NameValueCollection)(ConfigurationManager.GetSection("developerAppSettings"));
-        /// // ... (Choosing logic for using persistentSettings or devSettings)
+        /// Some examples of sources for <paramref name="overridingSettings"/>:<br />
+        /// in app.config/configuration/configSections:<br />
+        /// <code>
+        /// &lt;section name="developerAppSettings" type="System.Configuration.NameValueFileSectionHandler, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/&gt;<br />
+        /// </code>
+        /// <br />
+        /// in app.config/configuration:<br />
+        /// <code>
+        /// &lt;appSettings file="LcmsNet_PersistentSettings.config"/&gt;<br />
+        /// &lt;developerAppSettings file="LcmsNet_DeveloperSettings.config"/&gt;<br />
+        /// </code>
+        ///<br />
+        /// LcmsNet_PersistentSettings.config:<br />
+        /// <code>
+        /// &lt;appSettings&gt;<br />
+        ///   &lt;add key="CartName" value="No_Cart" /&gt;<br />
+        /// &lt;/appSettings&gt;<br />
+        /// </code>
+        ///<br />
+        /// LcmsNet_DeveloperSettings.config:<br />
+        /// <code>
+        /// &lt;developerAppSettings&gt;<br />
+        ///   &lt;add key="CartName" value="(none)" /&gt;<br />
+        /// &lt;/developerAppSettings&gt;<br />
+        /// </code>
+        ///<br />
+        /// To load them into the program:<br />
+        /// <code>
+        /// var persistentSettings = ConfigurationManager.AppSettings;<br />
+        /// var devSettings = (NameValueCollection)(ConfigurationManager.GetSection("developerAppSettings"));<br />
+        /// // ... (Choosing logic for using persistentSettings or devSettings)<br />
+        /// </code>
         /// </remarks>
         public static List<Tuple<string, Exception>> LoadSettings(ApplicationSettingsBase settings, NameValueCollection overridingSettings = null, bool allowOverridingUserSettings = false)
         {
