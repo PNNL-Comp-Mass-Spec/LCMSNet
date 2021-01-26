@@ -201,25 +201,25 @@ namespace LcmsNetData
         /// <returns>Errors/log entries that occurred while loading settings</returns>
         /// <remarks>
         /// Some examples of sources for <paramref name="overridingSettings"/>:<br />
-        /// in app.config/configuration/configSections:<br />
+        /// in <c>app.config/configuration/configSections</c>:<br />
         /// <code>
         /// &lt;section name="developerAppSettings" type="System.Configuration.NameValueFileSectionHandler, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/&gt;<br />
         /// </code>
         /// <br />
-        /// in app.config/configuration:<br />
+        /// in <c>app.config/configuration</c>:<br />
         /// <code>
         /// &lt;appSettings file="LcmsNet_PersistentSettings.config"/&gt;<br />
         /// &lt;developerAppSettings file="LcmsNet_DeveloperSettings.config"/&gt;<br />
         /// </code>
         ///<br />
-        /// LcmsNet_PersistentSettings.config:<br />
+        /// <c>LcmsNet_PersistentSettings.config</c>:<br />
         /// <code>
         /// &lt;appSettings&gt;<br />
         ///   &lt;add key="CartName" value="No_Cart" /&gt;<br />
         /// &lt;/appSettings&gt;<br />
         /// </code>
         ///<br />
-        /// LcmsNet_DeveloperSettings.config:<br />
+        /// <c>LcmsNet_DeveloperSettings.config</c>:<br />
         /// <code>
         /// &lt;developerAppSettings&gt;<br />
         ///   &lt;add key="CartName" value="(none)" /&gt;<br />
@@ -228,7 +228,8 @@ namespace LcmsNetData
         ///<br />
         /// To load them into the program:<br />
         /// <code>
-        /// var persistentSettings = ConfigurationManager.AppSettings;<br />
+        /// // System.Configuration.ConfigurationManager: Will need to add an assembly reference<br />
+        /// var persistentSettings = System.Configuration.ConfigurationManager.AppSettings;<br />
         /// var devSettings = (NameValueCollection)(ConfigurationManager.GetSection("developerAppSettings"));<br />
         /// // ... (Choosing logic for using persistentSettings or devSettings)<br />
         /// </code>
