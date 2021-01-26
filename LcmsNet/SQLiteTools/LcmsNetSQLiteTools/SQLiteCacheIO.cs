@@ -8,6 +8,7 @@ using System.Text;
 using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
+using LcmsNetData.System;
 
 namespace LcmsNetSQLiteTools
 {
@@ -80,7 +81,7 @@ namespace LcmsNetSQLiteTools
                 var exists = File.Exists(name);
                 if (!exists && !newCache)
                 {
-                    var basePath = LCMSSettings.GetParameter(LCMSSettings.PARAM_LocalDataPath);
+                    var basePath = PersistDataPaths.LocalDataPath;
                     if (!Directory.Exists(basePath))
                     {
                         Directory.CreateDirectory(basePath);
@@ -842,7 +843,7 @@ namespace LcmsNetSQLiteTools
         {
             if (!location.Contains(@"\"))
             {
-                var basePath = LCMSSettings.GetParameter(LCMSSettings.PARAM_LocalDataPath);
+                var basePath = PersistDataPaths.LocalDataPath;
                 var fileName = Path.GetFileName(location);
                 location = Path.Combine(basePath, fileName);
             }
