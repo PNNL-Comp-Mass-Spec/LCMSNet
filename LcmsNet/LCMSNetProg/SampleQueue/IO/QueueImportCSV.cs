@@ -98,6 +98,7 @@ namespace LcmsNet.SampleQueue.IO
                 Map(x => x.RunOrder).Name("Run Order").Index(3).Default(-1);
                 Map(x => x.PalTray).Name("PAL Tray", "Tray").Index(2).Default("");
                 Map(x => x.PalVial).Name("PAL Vial", "Vial", "Well").Index(1).Default("");
+                Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(5).Default("");
             }
         }
     }

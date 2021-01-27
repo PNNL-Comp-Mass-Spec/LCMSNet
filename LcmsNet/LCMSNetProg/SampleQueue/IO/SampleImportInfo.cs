@@ -10,6 +10,7 @@ namespace LcmsNet.SampleQueue.IO
         public int RunOrder { get; set; } = -1;
         public string PalTray { get; set; } = "";
         public string PalVial { get; set; } = "";
+        public string LcMethod { get; set; } = "";
 
         public SampleData GetSampleData()
         {
@@ -42,6 +43,12 @@ namespace LcmsNet.SampleQueue.IO
                     // TODO: Hazard - currently will only work properly for 96-well plates
                     sampleData.PAL.Well = ConvertVialPosition.ConvertVialToInt(PalVial);
                 }
+            }
+
+            if (!string.IsNullOrWhiteSpace(LcMethod))
+            {
+                // TODO: Maybe verify that the name is valid first? Even do some case-insensitive matching?
+                sampleData.LCMethodName = LcMethod;
             }
 
             return sampleData;
