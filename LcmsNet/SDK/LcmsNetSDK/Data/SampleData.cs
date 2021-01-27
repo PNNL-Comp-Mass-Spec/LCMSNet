@@ -392,7 +392,7 @@ namespace LcmsNetSDK.Data
                     return;
                 }
 
-                if (this.RaiseAndSetIfChangedRetBool(ref methodName, value, nameof(LCMethod)))
+                if (this.RaiseAndSetIfChangedRetBool(ref methodName, value, nameof(LCMethodName)))
                 {
                     var method = LCMethodManager.Manager.GetLCMethodByName(value);
 

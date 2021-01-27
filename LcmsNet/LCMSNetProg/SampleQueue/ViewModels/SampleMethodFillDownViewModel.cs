@@ -361,40 +361,40 @@ namespace LcmsNet.SampleQueue.ViewModels
             var methods = new List<LCMethod>();
             if (ApplyGroup1)
             {
-                var method = LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup1);
+                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup1);
                 methods.Add(method);
             }
             if (ApplyGroup2)
             {
-                var method = LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup2);
+                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup2);
                 methods.Add(method);
             }
             if (ApplyGroup3)
             {
-                var method = LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup3);
+                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup3);
                 methods.Add(method);
             }
             if (ApplyGroup4)
             {
-                var method = LcmsNetSDK.Method.LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup4);
+                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup4);
                 methods.Add(method);
             }
             if (methods.Count < 1)
                 return;
 
             var i = 0;
-            foreach (var samples in Samples)
+            foreach (var sample in Samples)
             {
                 var tempMethod = methods[i];
 
-                if (tempMethod.Column != samples.ColumnIndex)
+                if (tempMethod.Column != sample.ColumnIndex)
                 {
                     if (tempMethod.Column >= 0)
                     {
-                        samples.ColumnIndex = CartConfiguration.Columns[tempMethod.Column].ID;
+                        sample.ColumnIndex = CartConfiguration.Columns[tempMethod.Column].ID;
                     }
                 }
-                samples.LCMethodName = tempMethod.Name;
+                sample.LCMethodName = tempMethod.Name;
 
                 i++;
                 // mod?
