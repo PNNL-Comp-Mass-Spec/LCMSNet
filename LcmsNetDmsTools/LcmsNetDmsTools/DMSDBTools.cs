@@ -1113,7 +1113,7 @@ namespace LcmsNetDmsTools
                             InstrumentGroup = reader["InstrumentGroup"].CastDBValTo<string>(),
                             CaptureMethod = reader["CaptureMethod"].CastDBValTo<string>(),
                             Status = reader["Status"].CastDBValTo<string>(),
-                            HostName = reader["HostName"].CastDBValTo<string>(),
+                            HostName = reader["HostName"].CastDBValTo<string>().Replace(".bionet", ""),
                             SharePath = reader["SharePath"].CastDBValTo<string>()
                         };
                     }
