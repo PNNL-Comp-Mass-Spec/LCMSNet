@@ -55,6 +55,7 @@ namespace LcmsNet.SampleQueue.IO
             }
 
             var headerLine = csvData.Split(new char[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)[0];
+            // Check for presence of "name" column, if it isn't present, then read using an index
             var hasHeaders = CheckHeaderLine(headerLine);
 
             using (var reader = new StringReader(csvData))
@@ -78,7 +79,6 @@ namespace LcmsNet.SampleQueue.IO
                 csv.Configuration.RegisterClassMap(new SampleImportMap());
                 csv.Configuration.Delimiter = ","; // Could change to "\t" to support TSV
                 csv.Configuration.PrepareHeaderForMatch = (header, index) => header?.Trim().ToLower();
-                // TODO: Check (somehow) for presence of "name" column, if it isn't present, then re-read using an index?
                 csv.Configuration.HasHeaderRecord = hasHeaders; // Set to false to allow reading a file without headers
                 csv.Configuration.HeaderValidated = null; // Allows missing headers
                 csv.Configuration.MissingFieldFound = null; // Allow empty fields
@@ -94,11 +94,11 @@ namespace LcmsNet.SampleQueue.IO
             public SampleImportMap()
             {
                 Map(x => x.DatasetName).Name("Request Name", "Sample Name", "Dataset Name", "Sample", "Dataset", "Name").Index(0);
-                Map(x => x.RequestId).Name("Request ID").Index(4).Default(0);
-                Map(x => x.RunOrder).Name("Run Order").Index(3).Default(-1);
-                Map(x => x.PalTray).Name("PAL Tray", "Tray").Index(2).Default("");
                 Map(x => x.PalVial).Name("PAL Vial", "Vial", "Well").Index(1).Default("");
-                Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(5).Default("");
+                Map(x => x.PalTray).Name("PAL Tray", "Tray").Index(2).Default("");
+                Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(3).Default("");
+                Map(x => x.RunOrder).Name("Run Order").Index(4).Default(-1);
+                Map(x => x.RequestId).Name("Request ID").Index(5).Default(0);
             }
         }
     }
