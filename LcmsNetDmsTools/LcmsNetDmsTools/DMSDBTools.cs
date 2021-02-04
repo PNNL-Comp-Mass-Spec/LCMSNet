@@ -984,6 +984,19 @@ namespace LcmsNetDmsTools
                     const string errMsg = "Exception storing instrument list in cache";
                     ApplicationLogger.LogError(0, errMsg, ex);
                 }
+
+                var instrumentGroups = ReadInstrumentGroupFromDMS();
+
+                // Store data in cache
+                try
+                {
+                    SQLiteTools.SaveInstGroupListToCache(instrumentGroups);
+                }
+                catch (Exception ex)
+                {
+                    const string errMsg = "Exception storing instrument group list in cache";
+                    ApplicationLogger.LogError(0, errMsg, ex);
+                }
             }
             catch (Exception ex)
             {
@@ -1115,6 +1128,42 @@ namespace LcmsNetDmsTools
                             Status = reader["Status"].CastDBValTo<string>(),
                             HostName = reader["HostName"].CastDBValTo<string>().Replace(".bionet", ""),
                             SharePath = reader["SharePath"].CastDBValTo<string>()
+                        };
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<InstrumentGroupInfo> ReadInstrumentGroupFromDMS()
+        {
+            var connStr = GetConnectionString();
+
+            // Get a table containing the instrument data
+            const string sqlCmd = "SELECT InstrumentGroup, DefaultDatasetType, AllowedDatasetTypes " +
+                                  "FROM V_Instrument_Group_Dataset_Types_Active";
+
+            var cn = GetConnection(connStr);
+            if (!cn.IsValid)
+            {
+                cn.Dispose();
+                throw new Exception(cn.FailedConnectionAttemptMessage);
+            }
+
+            using (cn)
+            using (var cmd = cn.CreateCommand())
+            {
+                cmd.CommandText = sqlCmd;
+                cmd.CommandType = CommandType.Text;
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        yield return new InstrumentGroupInfo
+                        {
+                            InstrumentGroup = reader["InstrumentGroup"].CastDBValTo<string>(),
+                            DefaultDatasetType = reader["DefaultDatasetType"].CastDBValTo<string>(),
+                            AllowedDatasetTypes = reader["AllowedDatasetTypes"].CastDBValTo<string>()
                         };
                     }
                 }

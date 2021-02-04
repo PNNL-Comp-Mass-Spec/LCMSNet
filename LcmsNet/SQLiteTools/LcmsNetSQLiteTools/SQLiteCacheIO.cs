@@ -865,6 +865,7 @@ namespace LcmsNetSQLiteTools
             CheckSingleColumnCacheTable(DatabaseTableTypes.DatasetTypeList, writeData.DatasetTypes);
             CheckSingleColumnCacheTable(DatabaseTableTypes.ColumnList, writeData.ColumnNames);
             CheckMultiColumnCacheTable<InstrumentInfo>(DatabaseTableTypes.InstrumentList);
+            CheckMultiColumnCacheTable<InstrumentGroupInfo>(DatabaseTableTypes.InstrumentGroupList);
             CheckMultiColumnCacheTable<UserInfo>(DatabaseTableTypes.UserList);
             CheckMultiColumnCacheTable<ExperimentData>(DatabaseTableTypes.ExperimentList);
             CheckMultiColumnCacheTable<ProposalUser>(DatabaseTableTypes.PUserList);

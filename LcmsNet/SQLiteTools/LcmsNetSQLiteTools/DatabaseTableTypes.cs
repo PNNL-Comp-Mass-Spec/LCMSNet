@@ -30,6 +30,7 @@
         DatasetList,
         CartConfigNameList,
         CartConfigNameSelected,
-        WorkPackages
+        WorkPackages,
+        InstrumentGroupList,
     }
 }

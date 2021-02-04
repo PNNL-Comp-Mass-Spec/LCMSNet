@@ -72,6 +72,7 @@ namespace LcmsNetData.Data
 
             newInstrumentInfo.DMSName = DMSName;
             newInstrumentInfo.CommonName = CommonName;
+            newInstrumentInfo.InstrumentGroup = InstrumentGroup;
             newInstrumentInfo.CaptureMethod = CaptureMethod;
             newInstrumentInfo.Status = Status;
             newInstrumentInfo.HostName = HostName;

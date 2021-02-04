@@ -48,6 +48,7 @@
     <Compile Include="Data\ConvertVialPosition.cs" />
     <Compile Include="Data\ExperimentData.cs" />
     <Compile Include="Data\IDmsData.cs" />
+    <Compile Include="Data\InstrumentGroupInfo.cs" />
     <Compile Include="Data\InstrumentInfo.cs" />
     <Compile Include="Data\IPalData.cs" />
     <Compile Include="Data\IRequestedRunData.cs" />

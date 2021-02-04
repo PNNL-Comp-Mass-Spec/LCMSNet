@@ -44,6 +44,7 @@ namespace LcmsNetSQLiteTools
         private static readonly Dictionary<string, WorkPackageInfo> workPackageMap = new Dictionary<string, WorkPackageInfo>(0);
         private static readonly List<UserInfo> userInfo = new List<UserInfo>(0);
         private static readonly List<InstrumentInfo> instrumentInfo = new List<InstrumentInfo>(0);
+        private static readonly List<InstrumentGroupInfo> instrumentGroupInfo = new List<InstrumentGroupInfo>(0);
         private static readonly List<ExperimentData> experimentsData = new List<ExperimentData>(0);
         private static readonly List<ProposalUser> proposalUsers = new List<ProposalUser>(0);
         private static readonly Dictionary<string, List<UserIDPIDCrossReferenceEntry>> proposalIdIndexedReferenceList = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>(0);
@@ -413,6 +414,16 @@ namespace LcmsNetSQLiteTools
             return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.InstrumentList, () => new InstrumentInfo(), instrumentInfo, force);
         }
 
+        /// <summary>
+        /// Gets a list of instrument groups from the cache
+        /// </summary>
+        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
+        /// <returns>List of instrument groups</returns>
+        public static IEnumerable<InstrumentGroupInfo> GetInstrumentGroupList(bool force)
+        {
+            return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.InstrumentGroupList, () => new InstrumentGroupInfo(), instrumentGroupInfo, force);
+        }
+
         public static IEnumerable<ExperimentData> GetExperimentList()
         {
             return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.ExperimentList, () => new ExperimentData(), experimentsData, false);
@@ -607,6 +618,15 @@ namespace LcmsNetSQLiteTools
         public static void SaveInstListToCache(IEnumerable<InstrumentInfo> instList)
         {
             Cache.SaveMultiColumnListToCache(DatabaseTableTypes.InstrumentList, instList, instrumentInfo);
+        }
+
+        /// <summary>
+        /// Saves a list of instrument groups to cache
+        /// </summary>
+        /// <param name="instGroupList">List of InstrumentGroupInfo containing instrument group data</param>
+        public static void SaveInstGroupListToCache(IEnumerable<InstrumentGroupInfo> instGroupList)
+        {
+            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.InstrumentGroupList, instGroupList, instrumentGroupInfo);
         }
 
         /// <summary>
