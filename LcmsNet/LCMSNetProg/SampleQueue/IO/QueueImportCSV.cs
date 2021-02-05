@@ -96,9 +96,10 @@ namespace LcmsNet.SampleQueue.IO
                 Map(x => x.DatasetName).Name("Request Name", "Sample Name", "Dataset Name", "Sample", "Dataset", "Name").Index(0);
                 Map(x => x.PalVial).Name("PAL Vial", "Vial", "Well").Index(1).Default("");
                 Map(x => x.PalTray).Name("PAL Tray", "Tray").Index(2).Default("");
-                Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(3).Default("");
-                Map(x => x.RunOrder).Name("Run Order").Index(4).Default(-1);
-                Map(x => x.RequestId).Name("Request ID").Index(5).Default(0);
+                Map(x => x.Volume).Name("Volume").Index(3).Default(0);
+                Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(4).Default("");
+                Map(x => x.RunOrder).Name("Run Order").Index(5).Default(-1);
+                Map(x => x.RequestId).Name("Request ID").Index(6).Default(0);
             }
         }
     }

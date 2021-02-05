@@ -10,6 +10,7 @@ namespace LcmsNet.SampleQueue.IO
         public int RunOrder { get; set; } = -1;
         public string PalTray { get; set; } = "";
         public string PalVial { get; set; } = "";
+        public double Volume { get; set; } = 0;
         public string LcMethod { get; set; } = "";
 
         public SampleData GetSampleData()
@@ -43,6 +44,11 @@ namespace LcmsNet.SampleQueue.IO
                     // TODO: Hazard - currently will only work properly for 96-well plates
                     sampleData.PAL.Well = ConvertVialPosition.ConvertVialToInt(PalVial);
                 }
+            }
+
+            if (Volume > 0)
+            {
+                sampleData.Volume = Volume;
             }
 
             if (!string.IsNullOrWhiteSpace(LcMethod))
