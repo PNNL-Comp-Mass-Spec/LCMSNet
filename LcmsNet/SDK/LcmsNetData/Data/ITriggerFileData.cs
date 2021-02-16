@@ -38,7 +38,7 @@ namespace LcmsNetData.Data
         string SeparationType { get; }
 
         /// <summary>
-        /// Name of operator (as entered in DMS)
+        /// Name of operator (as entered in DMS). Can be just userID, just user's name, or "user's name (userID)"
         /// </summary>
         string Operator { get; }
 
