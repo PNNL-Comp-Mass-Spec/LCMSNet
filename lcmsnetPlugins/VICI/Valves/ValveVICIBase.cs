@@ -783,9 +783,25 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
+        /// <summary>
+        /// For reporting status changes within a method operation. Primary usage is by MultiPosition valves, with advanced methods.
+        /// </summary>
+        protected void SendStatusMessage(StatusReportType statusType, string message)
+        {
+            StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, statusType.ToString(), this, message));
+        }
+
+        protected enum StatusReportType
+        {
+            PositionChanged,
+            CycleCount
+        }
+
         public List<string> GetStatusNotificationList()
         {
-            return new List<string>() { "Status Changed" };
+            var statusOptions = new List<string>() {"Status Changed" };
+            statusOptions.AddRange(Enum.GetNames(typeof(StatusReportType)));
+            return statusOptions;
         }
 
         public List<string> GetErrorNotificationList()

@@ -255,11 +255,14 @@ namespace LcmsNetPlugins.VICI.Valves
                 return ValveErrors.Success;
             }
 
+            SendStatusMessage(StatusReportType.CycleCount, $"Starting {cycleCount} valve cycles, waiting {delayEachStepSeconds} in each position.");
+
             var endPosition = LastMeasuredPosition;
 
             var result = ValveErrors.BadArgument;
             for (var i = 0; i < cycleCount; i++)
             {
+                SendStatusMessage(StatusReportType.CycleCount, $"Starting valve cycle {i + 1} of {cycleCount}, moving from position {endPosition}...");
                 for (var j = 0; j < NumberOfPositions; j++)
                 {
                     result = StepPosition(delayEachStepSeconds);
@@ -274,6 +277,7 @@ namespace LcmsNetPlugins.VICI.Valves
                     break;
                 }
             }
+            SendStatusMessage(StatusReportType.CycleCount, $"Completed {cycleCount} valve cycles.");
 
             if (LastMeasuredPosition != endPosition && result == ValveErrors.Success)
             {
@@ -328,6 +332,7 @@ namespace LcmsNetPlugins.VICI.Valves
                 return ValveErrors.Success;
             }
 
+            SendStatusMessage(StatusReportType.CycleCount, $"Stepping {stepCount} valve positions, waiting {delayEachStepSeconds} in each position.");
             var result = ValveErrors.BadArgument;
             for (var i = 0; i < stepCount; i++)
             {
