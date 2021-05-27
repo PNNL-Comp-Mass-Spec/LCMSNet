@@ -13,7 +13,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             "BROKEN",
             "CAP_DEV",
             "MAINTENANCE", // TODO: PULL this information from DMS T_EUS_UsageType and cache in SQLite DB!
-            "USER"}.AsReadOnly();
+            "USER_ONSITE",
+            "USER_REMOTE"}.AsReadOnly();
 
         /// <summary>
         /// Calling this constructor is only for the windows WPF designer.
