@@ -1291,7 +1291,7 @@ namespace LcmsNetDmsTools
         {
             var connStr = GetConnectionString();
 
-            // Retrieve run requests from V_Scheduled_Run_Export, filtering based on settings in queryData
+            // Retrieve run requests from V_Requested_Run_Active_Export, filtering based on settings in queryData
             var sqlCmd = queryData.BuildSqlString();
 
             var cn = GetConnection(connStr);
@@ -1496,7 +1496,7 @@ namespace LcmsNetDmsTools
                         "V_LC_Cart_Config_Export", "V_Charge_Code_Export", "V_LC_Cart_Active_Export",
                         "V_LCMSNet_Dataset_Export", "V_LCMSNet_Column_Export", "T_Secondary_Sep", "t_DatasetTypeName",
                         "V_Active_Users", "V_LCMSNet_Experiment_Export", "V_EUS_Proposal_Users",
-                        "V_Instrument_Info_LCMSNet", "V_Scheduled_Run_Export", "T_Attachments", "T_Requested_Run"
+                        "V_Instrument_Info_LCMSNet", "V_Requested_Run_Active_Export", "T_Attachments", "T_Requested_Run"
                     };
 
                     foreach (var tableName in tableNames)
@@ -1621,7 +1621,7 @@ namespace LcmsNetDmsTools
         /// <summary>
         /// Gets a list of samples (essentially requested runs) from DMS
         /// </summary>
-        /// <remarks>Retrieves data from view V_Scheduled_Run_Export</remarks>
+        /// <remarks>Retrieves data from view V_Requested_Run_Active_Export</remarks>
         public IEnumerable<T> GetRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : IRequestedRunData, new()
         {
             try

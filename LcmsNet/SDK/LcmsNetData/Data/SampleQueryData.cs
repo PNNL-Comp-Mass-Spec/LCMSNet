@@ -130,7 +130,7 @@ namespace LcmsNetData.Data
         }
 
         /// <summary>
-        /// Build the query string for retrieving data from V_Scheduled_Run_Export
+        /// Build the query string for retrieving data from V_Requested_Run_Active_Export
         /// </summary>
         /// <returns></returns>
         public string BuildSqlString()
