@@ -18,6 +18,7 @@ using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
+using LcmsNetDmsTools;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
@@ -485,6 +486,9 @@ namespace LcmsNet
                 Shutdown();
                 return;
             }
+
+            var assembly = Assembly.GetExecutingAssembly().GetName();
+            DMSDBTools.ApplicationName = $"LCMSNet {assembly.Version}";
 
             ApplicationLogger.StartUpLogging();
 

@@ -24,6 +24,8 @@ namespace LcmsNetDmsTools
     {
         // Ignore Spelling: typeof, DMSPwd, SqlConnection, ini, yyyy-MM-dd, Wellplate, usernames, utf, xmlns, xs, T_Secondary_Sep, unallowable, subaccount
 
+        public static string ApplicationName { get; set; } = "-LcmsNetDmsTools- -version-";
+
         #region "Class variables"
 
         private bool mConnectionStringLogged;
@@ -388,6 +390,11 @@ namespace LcmsNetDmsTools
                     "DMS version string not found in configuration file (this parameter is the " +
                     "name of the database to connect to).  Delete the " + CONFIG_FILE + " file and " +
                     "it will be automatically re-created with the default values.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(ApplicationName))
+            {
+                retStr += $";Application Name={ApplicationName}";
             }
 
             if (!mConnectionStringLogged)
