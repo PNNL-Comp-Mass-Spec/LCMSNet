@@ -54,6 +54,7 @@ namespace LcmsNetSDK.Data
             DmsData = new DMSData();
 
             PAL = new PalData();
+            PAL.PropertyChanged += PalDataChanged;
             columnIndex = 0;
             InstrumentMethod = "";
 
@@ -73,6 +74,35 @@ namespace LcmsNetSDK.Data
             Operator = LCMSSettings.GetParameter(LCMSSettings.PARAM_OPERATOR);
         }
 
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="other">Object from where we copy data</param>
+        private SampleData(SampleData other) : this(other.IsDummySample)
+        {
+            DmsData = other.DmsData?.Clone() as DMSData;
+            sequenceNumber = other.sequenceNumber;
+
+            PAL = other.PAL?.Clone() as PalData ?? new PalData();
+            PAL.PropertyChanged += PalDataChanged;
+
+            volume = other.volume;
+            ColumnIndex = other.ColumnIndex;
+            UniqueID = other.UniqueID;
+            LCMethodName = other.LCMethodName;
+            actualMethod = other.actualMethod?.Clone() as LCMethod;
+            InstrumentMethod = other.InstrumentMethod;
+            if (!string.IsNullOrWhiteSpace(other.Operator))
+            {
+                Operator = other.Operator;
+            }
+            isDuplicateRequestName = other.isDuplicateRequestName;
+            sampleErrors = other.sampleErrors;
+
+            // The ability to set some properties is keyed on the value of this property, so set it last.
+            runningStatus = other.runningStatus;
+        }
+
         #endregion
 
         #region ICloneable Members
@@ -83,28 +113,7 @@ namespace LcmsNetSDK.Data
         /// <returns>Deep copy of object</returns>
         public object Clone()
         {
-            var newSample = new SampleData(this.IsDummySample);
-
-            newSample.DmsData = this.DmsData?.Clone() as DMSData;
-            newSample.sequenceNumber = this.sequenceNumber;
-            newSample.PAL = this.PAL?.Clone() as PalData;
-            newSample.volume = this.volume;
-            newSample.ColumnIndex = this.ColumnIndex;
-            newSample.UniqueID = this.UniqueID;
-            newSample.LCMethodName = this.LCMethodName;
-            newSample.actualMethod = this.actualMethod?.Clone() as LCMethod;
-            newSample.InstrumentMethod = this.InstrumentMethod;
-            if (!string.IsNullOrWhiteSpace(Operator))
-            {
-                newSample.Operator = this.Operator;
-            }
-            newSample.isDuplicateRequestName = this.isDuplicateRequestName;
-            newSample.sampleErrors = this.sampleErrors;
-
-            // The ability to set some properties is keyed on the value of this property, so set it last.
-            newSample.runningStatus = this.runningStatus;
-
-            return newSample;
+            return new SampleData(this);
         }
 
         #endregion
@@ -187,11 +196,6 @@ namespace LcmsNetSDK.Data
         /// DMS Data structure.
         /// </summary>
         private DMSData dmsData;
-
-        /// <summary>
-        /// Pal Data reference.
-        /// </summary>
-        private IPalData palData;
 
         /// <summary>
         /// Information regarding what column the sample is to be, or did run on.
@@ -337,26 +341,7 @@ namespace LcmsNetSDK.Data
         /// Gets or sets the pal data associated with this sample.
         /// </summary>
         [PersistenceSetting(ColumnNamePrefix = "PAL.")]
-        public IPalData PAL
-        {
-            get => palData;
-            set
-            {
-                var oldValue = palData;
-                if (this.RaiseAndSetIfChangedRetBool(ref palData, value, nameof(PAL)))
-                {
-                    if (oldValue != null)
-                    {
-                        oldValue.PropertyChanged -= PalDataChanged;
-                    }
-
-                    if (value != null)
-                    {
-                        value.PropertyChanged += PalDataChanged;
-                    }
-                }
-            }
-        }
+        public IPalData PAL { get; }
 
         /// <summary>
         /// Gets the experiment object data.

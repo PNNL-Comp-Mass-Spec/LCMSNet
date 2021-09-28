@@ -48,7 +48,11 @@ namespace LcmsNetSQLiteTools
                 // Test to make sure the property has both get and set accessors
                 // TODO: Should not be necessary for non-primitive-type properties, as long as they are otherwise initialized appropriately.
                 // TODO: Requirement: if an object, then "CanWrite" can be false as long as there is a default constructor for the object type.
-                if (!(property.CanRead && property.CanWrite))
+                var propType = property.PropertyType;
+                // Logic expected: If can't read, it's an exception; if it can't write, and it's not a class or interface that is part of LCMSNet, it's also an exception
+                // Reason: Allow read-only object properties that are LCMSNet classes or interfaces.
+                if (!property.CanRead || (!property.CanWrite &&
+                    !((propType.IsClass || propType.IsInterface) && propType.FullName?.StartsWith("LCMSNet", StringComparison.OrdinalIgnoreCase) == true)))
                 {
                     throw new NotSupportedException(
                         "Operation requires get and set accessors for all persisted properties. " +
@@ -118,7 +122,7 @@ namespace LcmsNetSQLiteTools
                 // Built-in direct handling: read or assign, with some error checking
                 yield return new PropertyColumnMapping(settings.ColumnName, propType, settings.IsUniqueColumn, x =>
                 {
-                    if (x.GetType() != type)
+                    if (!TypeIsCompatible(x.GetType(), type))
                     {
                         // return the default value for the type
                         //return Activator.CreateInstance(propType);
@@ -133,7 +137,7 @@ namespace LcmsNetSQLiteTools
                     return property.GetValue(x);
                 }, (cls, propValue) =>
                 {
-                    if (cls.GetType() != type)
+                    if (!TypeIsCompatible(cls.GetType(), type))
                     {
                         // return the default value for the type
                         //return Activator.CreateInstance(propType);
@@ -160,7 +164,7 @@ namespace LcmsNetSQLiteTools
                 yield break;
             }
 
-            if (propType.IsClass && propType.FullName?.StartsWith("LCMSNet", StringComparison.OrdinalIgnoreCase) == true)
+            if ((propType.IsClass || propType.IsInterface) && propType.FullName?.StartsWith("LCMSNet", StringComparison.OrdinalIgnoreCase) == true)
             {
                 // LCMSNet class: generate the mapping, with cascading through sub-objects
                 var objectMappings = GetPropertyColumnMapping(propType);
@@ -224,6 +228,44 @@ namespace LcmsNetSQLiteTools
                     });
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks to see if the supplied type is compatible with the required type.
+        /// </summary>
+        /// <param name="suppliedType"></param>
+        /// <param name="requiredType"></param>
+        /// <returns></returns>
+        private static bool TypeIsCompatible(Type suppliedType, Type requiredType)
+        {
+            if (suppliedType == requiredType)
+                return true;
+
+            // No base-type/interface checks for primitives.
+            if (requiredType.IsPrimitive || requiredType.IsEnum || requiredType == typeof(string))
+                return false;
+
+            if (requiredType.IsInterface)
+            {
+                foreach (var iface in suppliedType.GetInterfaces())
+                {
+                    if (iface == requiredType)
+                        return true;
+                }
+
+                return false;
+            }
+
+            var baseType = suppliedType.BaseType;
+            while (baseType != null)
+            {
+                if (baseType == requiredType)
+                    return true;
+
+                baseType = baseType.BaseType;
+            }
+
+            return false;
         }
 
         private object ConvertToType(object value, Type targetType)
@@ -343,6 +385,11 @@ namespace LcmsNetSQLiteTools
                 ReadProperty = readProperty;
                 SetProperty = setProperty;
                 IsUniqueColumn = isUniqueColumn;
+            }
+
+            public override string ToString()
+            {
+                return $"{ColumnName}<=>{PropertyType.Name} Mapping";
             }
         }
     }
