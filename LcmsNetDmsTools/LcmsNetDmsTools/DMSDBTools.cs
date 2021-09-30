@@ -1402,8 +1402,9 @@ namespace LcmsNetDmsTools
 
             // Get the instrument operator names and usernames
             // Switched from V_Active_Users to V_Active_Instrument_Operators in January 2020
+            // Switched from V_Active_Instrument_Operators to V_Active_Instrument_Users in October 2021
             // Note that EMSL Users have a separate list
-            const string sqlCmd = "SELECT Name, [Payroll Num] as Payroll FROM V_Active_Instrument_Operators ORDER BY Name";
+            const string sqlCmd = "SELECT Name, [Payroll Num] as Payroll FROM V_Active_Instrument_Users ORDER BY Name";
 
             var cn = GetConnection(connStr);
             if (!cn.IsValid)
