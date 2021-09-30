@@ -323,8 +323,6 @@ namespace LcmsNet.Configuration.ViewModels
         /// </summary>
         private void LoadApplicationSettings()
         {
-            //checkBox_createTriggerFiles.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATETRIGGERFILES, false));
-            //checkBox_copyTriggerFiles.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYTRIGGERFILES, false));
             //checkBox_createMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATEMETHODFOLDERS, false));
             //checkBox_copyMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS, false));
         }

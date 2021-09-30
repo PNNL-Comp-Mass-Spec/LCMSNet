@@ -257,53 +257,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         /// <summary>
-        /// Edits the selected samples in the sample view.
-        /// </summary>
-        private void EditDMSData()
-        {
-            var samples = GetSelectedSamples();
-
-            if (samples.Count < 1)
-            {
-                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
-                    "You must select a sample to edit the DMS information.");
-                return;
-            }
-
-            using (var batchDisp = SampleDataManager.StartBatchChange())
-            {
-                try
-                {
-                    var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
-                    var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
-
-                    var result = dmsDisplay.ShowDialog();
-
-                    if (!result.HasValue || !result.Value)
-                    {
-                        batchDisp.Cancelled = true;
-                        return;
-                    }
-
-                    // If samples are not valid...then what?
-                    if (!dmsDisplayVm.AreSamplesValid)
-                    {
-                        ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                            "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.");
-                    }
-                }
-                catch (InvalidOperationException ex)
-                {
-                    ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL,
-                        "Unable to edit dmsdata:" + ex.Message, ex);
-                }
-            }
-
-            // Re-select the first sample
-            SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
-        }
-
-        /// <summary>
         /// Displays the DMS View Dialog Window.
         /// </summary>
         private void ShowDMSView()
@@ -737,7 +690,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveCommand<Unit, Unit> MoveUpCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> DeleteUnusedCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> CartColumnDateCommand { get; protected set; }
-        public ReactiveCommand<Unit, Unit> DmsEditCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> UndoCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> RedoCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> PreviewThroughputCommand { get; protected set; }
@@ -759,7 +711,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
             CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName(), this.WhenAnyValue(x => x.ItemsSelected));
-            DmsEditCommand = ReactiveCommand.Create(() => this.EditDMSData(), this.WhenAnyValue(x => x.ItemsSelected));
             UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
             RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
             PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput(), this.WhenAnyValue(x => x.ItemsSelected));

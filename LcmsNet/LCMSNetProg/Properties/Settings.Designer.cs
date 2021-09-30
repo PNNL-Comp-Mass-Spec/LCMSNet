@@ -227,18 +227,6 @@ namespace LcmsNet.Properties {
             }
         }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ValidateSamplesForDMS {
-            get {
-                return ((bool)(this["ValidateSamplesForDMS"]));
-            }
-            set {
-                this["ValidateSamplesForDMS"] = value;
-            }
-        }
-
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
@@ -395,15 +383,6 @@ namespace LcmsNet.Properties {
         public string TriggerFileFolder {
             get {
                 return ((string)(this["TriggerFileFolder"]));
-            }
-        }
-
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool CopyTriggerFiles {
-            get {
-                return ((bool)(this["CopyTriggerFiles"]));
             }
         }
 

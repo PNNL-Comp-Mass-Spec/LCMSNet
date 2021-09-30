@@ -84,7 +84,6 @@
     <Compile Include="Configuration\Views\SystemConfigurationView.xaml.cs">
       <DependentUpon>SystemConfigurationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\ApplicationDevice.cs" />
     <Compile Include="Devices\BlockDevice.cs" />
     <Compile Include="Devices\DefaultUserDeviceView.xaml.cs">
       <DependentUpon>DefaultUserDeviceView.xaml</DependentUpon>
@@ -283,8 +282,6 @@
     <Compile Include="SampleQueue\ViewModels\DMSDownloadDataViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\DMSDownloadViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\SampleBadBlockDisplayViewModel.cs" />
-    <Compile Include="SampleQueue\ViewModels\SampleDMSValidationViewModel.cs" />
-    <Compile Include="SampleQueue\ViewModels\SampleDMSValidatorDisplayViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\SampleRandomizerViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\SampleValidatorErrorDisplayViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\TrayVialAssignmentViewModel.cs" />
@@ -331,9 +328,6 @@
     <Compile Include="SampleQueue\Views\SampleControlBindingProxy.cs" />
     <Compile Include="SampleQueue\Views\SampleControlView.xaml.cs">
       <DependentUpon>SampleControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Views\SampleDMSValidatorDisplayWindow.xaml.cs">
-      <DependentUpon>SampleDMSValidatorDisplayWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SampleQueue\Views\SampleManagerView.xaml.cs">
       <DependentUpon>SampleManagerView.xaml</DependentUpon>
@@ -735,10 +729,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SampleQueue\Views\SampleControlView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SampleQueue\Views\SampleDMSValidatorDisplayWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

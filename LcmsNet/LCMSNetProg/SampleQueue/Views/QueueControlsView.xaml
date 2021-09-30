@@ -9,10 +9,9 @@
              MaxHeight="70"
              MinHeight="70"
              d:DataContext="{d:DesignInstance {x:Type viewModels:MethodControlViewModel}, IsDesignTimeCreatable=True}"
-             d:DesignWidth="800">
+             d:DesignWidth="720">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80*" MaxWidth="80"/>
             <ColumnDefinition Width="80*" MaxWidth="80"/>
             <ColumnDefinition Width="80*" MaxWidth="80"/>
             <ColumnDefinition Width="80*" MaxWidth="80"/>
@@ -119,16 +118,6 @@
                 </Grid.RowDefinitions>
                 <Image Source="{StaticResource CartColumnNameImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="48" />
                 <TextBlock TextWrapping="WrapWithOverflow" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Cart, Col, Date" />
-            </Grid>
-        </Button>
-        <Button Grid.Column="11" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding SampleDataManager.DMSAvailable}" Command="{Binding DmsEditCommand}" TabIndex="41">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
-                <Image Source="{StaticResource DmsEditImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="41" />
-                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow" Text="DMS Edit" />
             </Grid>
         </Button>
     </Grid>

@@ -479,36 +479,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
             }
 
-            // Then for trigger file checks, we want the sample data for DMS to be complete.
-            // So here we validate all of the samples and show the user all samples before running.
-            // This way they can validate if they need to all of this information.
-            var validateSamples = LCMSSettings.GetParameter(LCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false) &&
-                                  !(string.IsNullOrWhiteSpace(LCMSSettings.GetParameter(LCMSSettings.PARAM_DMSTOOL)));
-            if (validateSamples)
-            {
-                var dmsDisplayVm = new SampleDMSValidatorDisplayViewModel(samples);
-                var dmsDisplay = new SampleDMSValidatorDisplayWindow() { DataContext = dmsDisplayVm };
-
-                var dmsResult = dmsDisplay.ShowDialog();
-
-                // We don't care what the result is..
-                if (!dmsResult.HasValue || !dmsResult.Value)
-                    return;
-
-                // If samples are not valid...then what?
-                if (!dmsDisplayVm.AreSamplesValid)
-                {
-                    var result =
-                        MessageBox.Show(
-                            "Some samples do not contain all necessary DMS information.  This will affect automatic uploads.  Do you wish to continue?",
-                            "DMS Sample Validation",
-                            MessageBoxButton.YesNo);
-
-                    if (result == MessageBoxResult.No)
-                        return;
-                }
-                sampleQueue.UpdateSamples(samples);
-            }
             //SynchronizeSystemClock();
             sampleQueue.StartSamples();
             ToggleRunButton(false, true);

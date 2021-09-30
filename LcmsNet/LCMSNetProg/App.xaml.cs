@@ -618,7 +618,6 @@ namespace LcmsNet
             deviceManager.AddDevice(new TimerDevice());
             deviceManager.AddDevice(new BlockDevice());
             deviceManager.AddDevice(new LogDevice());
-            deviceManager.AddDevice(new ApplicationDevice());
 
             // Load the device plug-ins.
             LogMessage(-1, "Loading necessary device plug-ins.");
@@ -684,16 +683,6 @@ namespace LcmsNet
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error caching DMS data: " + ex.Message);
                 if (ex.StackTrace != null)
                     ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Stack trace: " + ex.StackTrace);
-            }
-
-            // Check to see if any trigger files need to be copied to the transfer server, and copy if necessary
-            if (bool.Parse(LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYTRIGGERFILES)))
-            {
-                if (TriggerFileTools.CheckLocalTriggerFiles())
-                {
-                    LogMessage(-1, "Copying trigger files to DMS");
-                    TriggerFileTools.MoveLocalTriggerFiles();
-                }
             }
 
             // Check to see if any method folders need to be copied to the transfer server, and copy if necessary

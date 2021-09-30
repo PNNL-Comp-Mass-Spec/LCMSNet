@@ -505,19 +505,6 @@ namespace LcmsNet.SampleQueue
                         // Validate sample and add it to the run queue
 
                         // Validate sample.
-                        if (LCMSSettings.GetParameter(LCMSSettings.PARAM_VALIDATESAMPLESFORDMS, false))
-                        {
-                            // If DMS Sample Validation is enabled, check for data required by DMS for uploads.
-                            // TODO: Would be good to only check this if the selected method has a 'UploadTriggerFiles' step, because if we're not uploading a trigger file, we obviously don't need this.
-                            var sampleValidErrors = mValidator.IsSampleValidDetailed(sample.Sample);
-
-                            if (sampleValidErrors != DMSSampleValidatorErrors.NoError)
-                            {
-                                sampleErrors += mValidator.CreateErrorListFromErrors(sampleValidErrors);
-                                foundError = true;
-                            }
-                        }
-
                         if (string.IsNullOrEmpty(sampleErrors))
                         {
                             // Validate other parts of the sample.

@@ -48,7 +48,6 @@ namespace LcmsNetData
         public const string PARAM_COPYMETHODFOLDERS = "CopyMethodFolders";
         public const string PARAM_COPYTRIGGERFILES = "CopyTriggerFiles";
         public const string PARAM_CREATEMETHODFOLDERS = "CreateMethodFolders";
-        public const string PARAM_CREATETRIGGERFILES = "CreateTriggerFiles";
         public const string PARAM_DMSPWD = "DMSPwd";
         public const string PARAM_DMSTOOL = "DMSTool";
         public const string PARAM_DMSVERSION = "DMSVersion";
@@ -66,7 +65,6 @@ namespace LcmsNetData
         public const string PARAM_SEPARATIONTYPE = "SeparationType";
         public const string PARAM_TIMEZONE = "TimeZone";
         public const string PARAM_TRIGGERFILEFOLDER = "TriggerFileFolder";
-        public const string PARAM_VALIDATESAMPLESFORDMS = "ValidateSamplesForDMS";
         public const string PARAM_LocalDataPath = "LocalDataPath";
 
         /// <summary>

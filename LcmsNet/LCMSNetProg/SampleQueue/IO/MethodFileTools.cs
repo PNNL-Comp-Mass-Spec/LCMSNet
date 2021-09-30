@@ -11,7 +11,7 @@ using LcmsNetSDK.Data;
 namespace LcmsNet.SampleQueue.IO
 {
     /// <summary>
-    /// Methods for copying trigger files and other data to DMS.
+    /// Methods for copying method files and other data to DMS.
     /// </summary>
     public class MethodFileTools : IMethodWriter
     {

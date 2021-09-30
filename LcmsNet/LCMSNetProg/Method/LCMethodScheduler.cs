@@ -878,8 +878,8 @@ namespace LcmsNet.Method
                                                                                   SampleProgressType.Complete));
                     m_sampleQueue.FinishSampleRun(samples[columnID]); // Then tell the sample queue that we are done!
                     //
-                    // Write the trigger file and other data in a separate thread. I/O is expensive and we don't
-                    // want to bog down time critical functions waiting on it. So lets toss it in a threadpool thread.
+                    // Write the method file and other data in a separate thread. I/O is expensive and we don't
+                    // want to bog down time critical functions waiting on it. So let's toss it in a threadpool thread.
                     //
                     MethodFileTools.WriteMethodFilesAsync(m_columnThreads[columnID].Sample);
                     samples[columnID] = null;
