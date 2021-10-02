@@ -6,9 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using LcmsNet.Devices;
-using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method

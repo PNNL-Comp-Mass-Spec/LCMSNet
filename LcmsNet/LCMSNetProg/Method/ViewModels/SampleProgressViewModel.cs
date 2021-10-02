@@ -4,12 +4,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using LcmsNet.Method.Drawing;
-using LcmsNetData;
-using LcmsNetData.System;
+using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

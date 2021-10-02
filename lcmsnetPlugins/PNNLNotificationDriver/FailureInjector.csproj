@@ -34,9 +34,6 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LcmsNetData">
-      <HintPath>..\..\lib\LcmsNetData.dll</HintPath>
-    </Reference>
     <Reference Include="LcmsNetSdk">
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>

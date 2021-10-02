@@ -7,8 +7,7 @@ using System.Linq;
 using System.Text;
 using LcmsNet.IO.DMS;
 using LcmsNet.IO.DMS.Data;
-using LcmsNetData.Data;
-using LcmsNetData.Logging;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet.IO.SQLite
 {

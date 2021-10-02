@@ -4,11 +4,11 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
 using FluidicsSDK.Devices;
-using LcmsNetData;
-using LcmsNetData.System;
 using LcmsNetPlugins.LabJack;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
 {

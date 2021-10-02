@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using LcmsNetData;
+using LcmsNetSDK;
 
 namespace LcmsNetPlugins.Agilent.Pumps
 {

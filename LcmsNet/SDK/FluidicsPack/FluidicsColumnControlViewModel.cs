@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Controls;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
 namespace FluidicsPack

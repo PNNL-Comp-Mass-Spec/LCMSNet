@@ -12,13 +12,13 @@ using DynamicData.Binding;
 using LcmsNet.IO.DMS;
 using LcmsNet.IO.SQLite;
 using LcmsNet.SampleQueue.ViewModels;
-using LcmsNetData;
-using LcmsNetData.Data;
-using LcmsNetData.Logging;
+using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Experiment;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue

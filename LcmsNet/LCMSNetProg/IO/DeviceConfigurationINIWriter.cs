@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Devices

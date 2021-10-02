@@ -5,8 +5,8 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using DynamicData;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Logging.ViewModels

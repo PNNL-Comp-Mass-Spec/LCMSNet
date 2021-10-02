@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace LcmsNetData.Logging
+namespace LcmsNetSDK.Logging
 {
     /// <summary>
     /// Class that marshals messages from different components to different logging and streaming capabilities.

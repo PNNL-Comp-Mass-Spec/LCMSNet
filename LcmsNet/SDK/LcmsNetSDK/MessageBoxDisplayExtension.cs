@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
 
-namespace LcmsNetData
+namespace LcmsNetSDK
 {
     /// <summary>
     /// Extension method for Window involving message box

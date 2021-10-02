@@ -5,9 +5,8 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.System;
 
 namespace LcmsNetSDK.Logging
 {

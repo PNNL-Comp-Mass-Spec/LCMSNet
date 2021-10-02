@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.Method
 {

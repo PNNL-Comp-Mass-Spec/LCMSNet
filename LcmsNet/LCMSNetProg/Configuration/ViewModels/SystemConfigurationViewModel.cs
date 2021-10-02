@@ -10,11 +10,11 @@ using DynamicData;
 using LcmsNet.IO.DMS;
 using LcmsNet.IO.DMS.Data;
 using LcmsNet.IO.SQLite;
-using LcmsNetData;
-using LcmsNetData.Data;
-using LcmsNetData.Logging;
+using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 

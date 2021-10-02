@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetData.Data
+namespace LcmsNetSDK.Data
 {
     public interface IDmsData : INotifyPropertyChangedExt
     {

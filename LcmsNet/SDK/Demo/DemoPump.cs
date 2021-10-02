@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsSDK.Devices;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;

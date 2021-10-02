@@ -2,7 +2,7 @@
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 

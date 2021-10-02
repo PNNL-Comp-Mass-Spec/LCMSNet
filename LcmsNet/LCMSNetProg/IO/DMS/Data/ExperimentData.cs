@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using LcmsNetData;
-using LcmsNetData.Data;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
 
 namespace LcmsNet.IO.DMS.Data
 {

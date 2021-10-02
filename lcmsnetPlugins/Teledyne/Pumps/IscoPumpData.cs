@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetData.System;
+using LcmsNetSDK.System;
 
 namespace LcmsNetPlugins.Teledyne.Pumps
 {

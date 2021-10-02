@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetData.Data
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Settings for object persistence (generally to the SQLite database)

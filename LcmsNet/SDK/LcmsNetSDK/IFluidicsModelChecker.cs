@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using LcmsNetData;
 using LcmsNetSDK.System;
 
 namespace LcmsNetSDK

@@ -12,9 +12,9 @@ using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
 using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.Views;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

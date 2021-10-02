@@ -1,9 +1,9 @@
 ﻿using System;
 using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.ContactClosure;
-using LcmsNetData.Logging;
 using LcmsNetPlugins.LabJack;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 
 namespace LcmsNetPlugins.PNNLDevices.ContactClosure

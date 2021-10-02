@@ -3,8 +3,9 @@ using System.IO;
 using FluidicsSDK;
 using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Simulator.ViewModels

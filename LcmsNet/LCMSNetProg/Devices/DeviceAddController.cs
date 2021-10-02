@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet.Devices
 {

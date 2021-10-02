@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using LcmsNetData;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.System;
 
 namespace PDFGenerator
 {

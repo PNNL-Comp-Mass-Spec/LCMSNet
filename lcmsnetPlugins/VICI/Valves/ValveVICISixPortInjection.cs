@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.VICI.Valves

@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetData.System;
+using LcmsNetSDK.System;
 using NUnit.Framework;
 
 namespace LcmsnetUnitTest

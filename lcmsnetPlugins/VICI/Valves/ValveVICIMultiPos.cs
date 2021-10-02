@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetData;
-using LcmsNetData.Logging;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNetPlugins.VICI.Valves

@@ -32,8 +32,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoPluginLibrary", "LcmsNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetCommonControls", "LcmsNet\SDK\LcmsNetCommonControls\LcmsNetCommonControls.csproj", "{176AACC9-480E-4425-BA4B-40BB7B8A2E04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetData", "LcmsNet\SDK\LcmsNetData\LcmsNetData.csproj", "{09993D8A-15CA-413E-BC48-EC80D399136A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

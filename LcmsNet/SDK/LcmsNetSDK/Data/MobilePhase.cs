@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using LcmsNetData;
 
 namespace LcmsNetSDK.Data
 {

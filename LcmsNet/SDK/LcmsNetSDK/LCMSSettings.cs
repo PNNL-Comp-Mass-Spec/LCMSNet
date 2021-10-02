@@ -5,9 +5,9 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using LcmsNetData.System;
+using LcmsNetSDK.System;
 
-namespace LcmsNetData
+namespace LcmsNetSDK
 {
     public class SettingChangedEventArgs : EventArgs
     {

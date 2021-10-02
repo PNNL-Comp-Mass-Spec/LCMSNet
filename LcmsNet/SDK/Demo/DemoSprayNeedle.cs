@@ -4,7 +4,7 @@ using System.ComponentModel;
 using FluidicsPack;
 using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary

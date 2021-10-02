@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using LcmsNetData;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.System;
 
 namespace LcmsNetSDK.Configuration
 {

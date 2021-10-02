@@ -8,12 +8,12 @@ using System.Reactive.Linq;
 using System.Windows;
 using DynamicData;
 using DynamicData.Binding;
-using LcmsNetData;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
+using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

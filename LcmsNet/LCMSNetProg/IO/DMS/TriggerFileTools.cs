@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Xml;
-using LcmsNetData;
-using LcmsNetData.Data;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.IO.DMS
 {

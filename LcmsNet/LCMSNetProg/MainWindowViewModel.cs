@@ -25,13 +25,13 @@ using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNet.Simulator.ViewModels;
 using LcmsNetCommonControls.ViewModels;
-using LcmsNetData;
-using LcmsNetData.Logging;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using PDFGenerator;
 using ReactiveUI;
 

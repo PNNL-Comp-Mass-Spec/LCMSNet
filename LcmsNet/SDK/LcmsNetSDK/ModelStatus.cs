@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
-using LcmsNetData.System;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.System;
 
 namespace LcmsNetSDK
 {

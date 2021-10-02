@@ -1,8 +1,8 @@
 ﻿using System;
 using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.ContactClosure;
-using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNetPlugins.LabJackU3
 {

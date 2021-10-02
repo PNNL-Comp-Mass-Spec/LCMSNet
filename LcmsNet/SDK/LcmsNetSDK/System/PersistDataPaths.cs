@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace LcmsNetData.System
+namespace LcmsNetSDK.System
 {
     public static class PersistDataPaths
     {

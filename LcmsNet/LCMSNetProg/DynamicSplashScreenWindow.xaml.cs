@@ -4,8 +4,8 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
-using LcmsNetData;
-using LcmsNetData.Logging;
+using LcmsNetSDK;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet
 {

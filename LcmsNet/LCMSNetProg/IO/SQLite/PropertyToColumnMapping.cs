@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Media;
-using LcmsNetData.Data;
+using LcmsNetSDK.Data;
 
 namespace LcmsNet.IO.SQLite
 {

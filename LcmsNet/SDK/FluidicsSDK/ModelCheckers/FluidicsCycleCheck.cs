@@ -6,10 +6,9 @@ using FluidicsSDK.Managers;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
-using LcmsNetData;
-using LcmsNetData.System;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.System;
 
 namespace FluidicsSDK.ModelCheckers
 {

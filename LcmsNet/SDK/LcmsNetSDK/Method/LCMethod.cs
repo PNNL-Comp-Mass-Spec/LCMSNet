@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
-using LcmsNetData;
-using LcmsNetData.Data;
+using LcmsNetSDK.Data;
 
 namespace LcmsNetSDK.Method
 {

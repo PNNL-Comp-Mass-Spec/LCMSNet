@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using LcmsNetCommonControls.Controls;
 using LcmsNetCommonControls.Devices;
-using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 
 namespace LcmsNetPlugins.Teledyne.Pumps

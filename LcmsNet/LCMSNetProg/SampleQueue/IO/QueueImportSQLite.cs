@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using LcmsNet.IO.SQLite;
-using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet.SampleQueue.IO
 {

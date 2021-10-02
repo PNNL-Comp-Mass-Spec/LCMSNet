@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Windows.Media;
 using DemoPluginLibrary;
 using LcmsNet.SampleQueue;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using NUnit.Framework;
 
 namespace LcmsnetUnitTest

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using DynamicData;
 using FluidicsSDK;
-using LcmsNetData.Logging;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels

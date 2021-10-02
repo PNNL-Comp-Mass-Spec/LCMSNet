@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetData.Data
+namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Interface for storing PAL data. Only needed (available in LcmsNetData) for populating this data when reading samples from DMS, for LCMSNet.

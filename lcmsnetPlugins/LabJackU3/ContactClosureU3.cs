@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using FluidicsSDK.Devices;
-using LcmsNetData;
-using LcmsNetData.Logging;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNetPlugins.LabJackU3

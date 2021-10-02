@@ -1,4 +1,4 @@
-﻿namespace LcmsNetData.Data
+﻿namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// The necessary set of data objects needed to store DMS requested run information

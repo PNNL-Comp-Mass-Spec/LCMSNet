@@ -3,11 +3,10 @@ using System.IO;
 using System.Threading.Tasks;
 using LcmsNet.IO.DMS;
 using LcmsNet.Method;
-using LcmsNetData;
-using LcmsNetData.Data;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.SampleQueue.IO
 {

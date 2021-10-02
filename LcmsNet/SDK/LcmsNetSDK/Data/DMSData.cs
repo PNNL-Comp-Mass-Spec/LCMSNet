@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-using LcmsNetData;
-using LcmsNetData.Data;
 
 namespace LcmsNetSDK.Data
 {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 
 namespace LcmsNetSDK.Method
 {

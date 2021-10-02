@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Windows.Media;
-using LcmsNetData.Data;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using ReactiveUI;

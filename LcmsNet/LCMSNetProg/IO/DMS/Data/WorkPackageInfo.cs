@@ -1,4 +1,4 @@
-﻿using LcmsNetData.Data;
+﻿using LcmsNetSDK.Data;
 
 namespace LcmsNet.IO.DMS.Data
 {

@@ -1,4 +1,4 @@
-﻿namespace LcmsNetData.Data
+﻿namespace LcmsNetSDK.Data
 {
     /// <summary>
     /// Interface for use by SQLiteTools to limit object types stored to a "Queue" cache

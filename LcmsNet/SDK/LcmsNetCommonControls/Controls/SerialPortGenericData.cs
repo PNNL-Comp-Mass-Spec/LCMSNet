@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 using System.Security.Permissions;
 using DynamicData;
 using DynamicData.Binding;
-using LcmsNetData.Logging;
+using LcmsNetSDK.Logging;
 using Microsoft.Win32;
 using ReactiveUI;
 

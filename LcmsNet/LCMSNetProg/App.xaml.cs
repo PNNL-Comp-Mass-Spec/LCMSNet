@@ -16,14 +16,12 @@ using LcmsNet.IO.SQLite;
 using LcmsNet.Method;
 using LcmsNet.Properties;
 using LcmsNet.SampleQueue.IO;
-using LcmsNetData;
-using LcmsNetData.Data;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
+using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 
 namespace LcmsNet
 {

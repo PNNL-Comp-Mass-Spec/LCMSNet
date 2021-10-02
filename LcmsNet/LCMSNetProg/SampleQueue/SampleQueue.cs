@@ -7,13 +7,13 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using LcmsNet.IO.SQLite;
 using LcmsNet.SampleQueue.IO;
-using LcmsNetData;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
+using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Experiment;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace LcmsNet.SampleQueue
 {

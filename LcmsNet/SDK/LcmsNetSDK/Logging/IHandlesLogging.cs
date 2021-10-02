@@ -1,4 +1,4 @@
-﻿namespace LcmsNetData.Logging
+﻿namespace LcmsNetSDK.Logging
 {
     public interface IHandlesLogging
     {

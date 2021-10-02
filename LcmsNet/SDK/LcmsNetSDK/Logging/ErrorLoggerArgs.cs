@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetData.Logging
+namespace LcmsNetSDK.Logging
 {
     /// <summary>
     /// Class that encapsulates an error found by a component.

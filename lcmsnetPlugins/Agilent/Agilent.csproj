@@ -45,9 +45,6 @@
     <Reference Include="LcmsNetCommonControls">
       <HintPath>..\..\lib\LcmsNetCommonControls.dll</HintPath>
     </Reference>
-    <Reference Include="LcmsNetData">
-      <HintPath>..\..\lib\LcmsNetData.dll</HintPath>
-    </Reference>
     <Reference Include="LcmsNetSdk">
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>

@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Threading;
-using LcmsNetData.System;
+using LcmsNetSDK.System;
 
-namespace LcmsNetData.Logging
+namespace LcmsNetSDK.Logging
 {
     /// <summary>
     /// Logs errors and messages to a file

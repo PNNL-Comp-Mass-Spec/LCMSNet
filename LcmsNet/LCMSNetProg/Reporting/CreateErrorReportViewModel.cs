@@ -6,8 +6,9 @@ using System.Reactive.Linq;
 using System.Windows.Controls;
 using DynamicData;
 using DynamicData.Binding;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Reporting

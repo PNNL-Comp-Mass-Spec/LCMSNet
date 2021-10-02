@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using LcmsNetData;
-using LcmsNetData.Data;
-using LcmsNetData.System;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 
 namespace LcmsNetSDK.Data
 {

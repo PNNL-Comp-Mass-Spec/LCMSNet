@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 using LcmsNet.Notification;
 using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.IO;
-using LcmsNetData;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
+using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
 
 namespace LcmsNet.Method

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 

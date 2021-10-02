@@ -47,10 +47,6 @@
     <Compile Include="SimEventList.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LcmsNetData\LcmsNetData.csproj">
-      <Project>{09993d8a-15ca-413e-bc48-ec80d399136a}</Project>
-      <Name>LcmsNetData</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
       <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
       <Name>LcmsNetSDK</Name>

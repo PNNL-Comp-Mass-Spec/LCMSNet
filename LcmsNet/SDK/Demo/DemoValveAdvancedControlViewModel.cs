@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using FluidicsSDK.Devices.Valves;
-using LcmsNetData;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
 namespace DemoPluginLibrary

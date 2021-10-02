@@ -2,8 +2,9 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using LcmsNetSDK.System;
 
-namespace LcmsNetData
+namespace LcmsNetSDK
 {
     public class SystemInformationReporter
     {

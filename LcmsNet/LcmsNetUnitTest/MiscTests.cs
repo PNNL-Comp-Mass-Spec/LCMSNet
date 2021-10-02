@@ -1,5 +1,4 @@
 ﻿using LcmsNet.IO.DMS.Data;
-using LcmsNetData.Data;
 using NUnit.Framework;
 
 namespace LcmsnetUnitTest

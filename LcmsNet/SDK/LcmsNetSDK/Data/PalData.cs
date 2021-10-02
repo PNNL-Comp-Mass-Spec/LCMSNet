@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using LcmsNetData;
-using LcmsNetData.Data;
 
 namespace LcmsNetSDK.Data
 {

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using LcmsNet.IO.DMS.Data;
 using LcmsNet.IO.SQLite;
-using LcmsNetData.Data;
 using LcmsNetSDK.Data;
 using NUnit.Framework;
 

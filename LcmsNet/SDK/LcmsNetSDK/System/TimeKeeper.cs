@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace LcmsNetData.System
+namespace LcmsNetSDK.System
 {
     public class TimeKeeper
     {

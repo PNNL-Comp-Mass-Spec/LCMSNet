@@ -14,9 +14,9 @@ using LcmsNetCommonControls.Controls;
 using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.Pumps;
 using LcmsNetCommonControls.ViewModels;
-using LcmsNetData.Logging;
-using LcmsNetData.System;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using LcmsNetSDK.System;
 using Microsoft.Win32;
 using ReactiveUI;
 

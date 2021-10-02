@@ -15,8 +15,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using FluidicsSDK.Devices;
-using LcmsNetData;
 using LcmsNetPlugins.LabJack;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 

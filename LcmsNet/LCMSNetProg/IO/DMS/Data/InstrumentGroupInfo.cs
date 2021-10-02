@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LcmsNetData.Data;
+using LcmsNetSDK.Data;
 
 namespace LcmsNet.IO.DMS.Data
 {

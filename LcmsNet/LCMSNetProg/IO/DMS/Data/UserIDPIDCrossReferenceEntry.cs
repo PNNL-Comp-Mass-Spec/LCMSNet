@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using LcmsNetData;
+using LcmsNetSDK;
 
 namespace LcmsNet.IO.DMS.Data
 {

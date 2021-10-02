@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace LcmsNetData.Logging
+namespace LcmsNetSDK.Logging
 {
     /// <summary>
     /// Class to basically run the logging on another thread as a producer-consumer queue, rather than creating a new task for every log message
