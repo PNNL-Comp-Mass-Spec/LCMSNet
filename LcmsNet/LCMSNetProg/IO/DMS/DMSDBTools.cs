@@ -1294,7 +1294,7 @@ namespace LcmsNet.IO.DMS
             }
         }
 
-        private IEnumerable<T> ReadRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : IRequestedRunData, new()
+        private IEnumerable<SampleData> ReadRequestedRunsFromDMS(SampleQueryData queryData)
         {
             var connStr = GetConnectionString();
 
@@ -1320,10 +1320,10 @@ namespace LcmsNet.IO.DMS
                 {
                     while (reader.Read())
                     {
-                        var tmpDMSData = new T
+                        var tmpDMSData = new SampleData(false)
                         {
                             // Sets the properties on the existing sub-object, which is why this is valid.
-                            DmsBasicData =
+                            DmsData =
                             {
                                 DatasetType = reader["Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 Experiment = reader["Experiment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
@@ -1339,25 +1339,19 @@ namespace LcmsNet.IO.DMS
                             }
                         };
 
-                        if (tmpDMSData is IRequestedRunDataWithPalData palData)
-                        {
-                            var wellNumber = reader["Well Number"].CastDBValTo<string>();
-                            palData.PAL.Well = ConvertWellStringToInt(wellNumber);
+                        var wellNumber = reader["Well Number"].CastDBValTo<string>();
+                        tmpDMSData.PAL.Well = ConvertWellStringToInt(wellNumber);
 
-                            palData.PAL.WellPlate = reader["Wellplate Number"].CastDBValTo<string>();
+                        tmpDMSData.PAL.WellPlate = reader["Wellplate Number"].CastDBValTo<string>();
 
-                            if (string.IsNullOrWhiteSpace(palData.PAL.WellPlate) || palData.PAL.WellPlate == "na")
-                                palData.PAL.WellPlate = "";
-                        }
+                        if (string.IsNullOrWhiteSpace(tmpDMSData.PAL.WellPlate) || tmpDMSData.PAL.WellPlate == "na")
+                            tmpDMSData.PAL.WellPlate = "";
 
-                        if (tmpDMSData.DmsBasicData is IDmsDataForSampleRun dmsData)
-                        {
-                            dmsData.MRMFileID = reader["MRMFileID"].CastDBValTo<int>();
-                            dmsData.Block = reader["Block"].CastDBValTo<int>();
-                            dmsData.RunOrder = reader["RunOrder"].CastDBValTo<int>();
-                            dmsData.Batch = reader["Batch"].CastDBValTo<int>();
-                            dmsData.SelectedToRun = false;
-                        }
+                        tmpDMSData.DmsData.MRMFileID = reader["MRMFileID"].CastDBValTo<int>();
+                        tmpDMSData.DmsData.Block = reader["Block"].CastDBValTo<int>();
+                        tmpDMSData.DmsData.RunOrder = reader["RunOrder"].CastDBValTo<int>();
+                        tmpDMSData.DmsData.Batch = reader["Batch"].CastDBValTo<int>();
+                        tmpDMSData.DmsData.SelectedToRun = false;
 
                         yield return tmpDMSData;
                     }
@@ -1630,18 +1624,18 @@ namespace LcmsNet.IO.DMS
         /// Gets a list of samples (essentially requested runs) from DMS
         /// </summary>
         /// <remarks>Retrieves data from view V_Requested_Run_Active_Export</remarks>
-        public IEnumerable<T> GetRequestedRunsFromDMS<T>(SampleQueryData queryData) where T : IRequestedRunData, new()
+        public IEnumerable<SampleData> GetRequestedRunsFromDMS(SampleQueryData queryData)
         {
             try
             {
-                return ReadRequestedRunsFromDMS<T>(queryData);
+                return ReadRequestedRunsFromDMS(queryData);
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting run request list";
                 //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
-                return Enumerable.Empty<T>();
+                return Enumerable.Empty<SampleData>();
             }
         }
 

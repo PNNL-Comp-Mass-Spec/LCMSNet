@@ -77,9 +77,9 @@ namespace LcmsNet.IO.DMS
         /// <param name="sample"></param>
         /// <returns>True if valid, false if invalid</returns>
         [Obsolete("Use IsSampleValidDetailed to report why it failed")]
-        public bool IsSampleValid(IRequestedRunData sample)
+        public bool IsSampleValid(SampleData sample)
         {
-            var data = sample.DmsBasicData;
+            var data = sample.DmsData;
 
             if (data.RequestID != 0)
             {
@@ -125,9 +125,9 @@ namespace LcmsNet.IO.DMS
         /// </summary>
         /// <param name="sample"></param>
         /// <returns>True if valid, false if invalid</returns>
-        public DMSSampleValidatorErrors IsSampleValidDetailed(IRequestedRunData sample)
+        public DMSSampleValidatorErrors IsSampleValidDetailed(SampleData sample)
         {
-            var data = sample.DmsBasicData;
+            var data = sample.DmsData;
 
             //if (data.RequestID != 0)
             //{
@@ -236,9 +236,9 @@ namespace LcmsNet.IO.DMS
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsEMSLProposalIDValid(IRequestedRunData sample)
+        public static bool IsEMSLProposalIDValid(SampleData sample)
         {
-            var data = sample.DmsBasicData;
+            var data = sample.DmsData;
 
             if (data.RequestID == 0)
             {
@@ -258,9 +258,9 @@ namespace LcmsNet.IO.DMS
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsEMSLUserValid(IRequestedRunData sample)
+        public static bool IsEMSLUserValid(SampleData sample)
         {
-            var data = sample.DmsBasicData;
+            var data = sample.DmsData;
 
             if (data.RequestID == 0)
             {
@@ -280,9 +280,9 @@ namespace LcmsNet.IO.DMS
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsEMSLUsageTypeValid(IRequestedRunData sample)
+        public static bool IsEMSLUsageTypeValid(SampleData sample)
         {
-            var data = sample.DmsBasicData;
+            var data = sample.DmsData;
 
             if (data.RequestID == 0)
             {
@@ -299,9 +299,9 @@ namespace LcmsNet.IO.DMS
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsExperimentNameValid(IRequestedRunData sample)
+        public static bool IsExperimentNameValid(SampleData sample)
         {
-            var data = sample.DmsBasicData;
+            var data = sample.DmsData;
 
             if (data.RequestID == 0)
             {
@@ -318,9 +318,9 @@ namespace LcmsNet.IO.DMS
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public static bool IsCartConfigValid(IRequestedRunData sample)
+        public static bool IsCartConfigValid(SampleData sample)
         {
-            var data = sample.DmsBasicData;
+            var data = sample.DmsData;
 
             if (data.RequestID == 0)
             {

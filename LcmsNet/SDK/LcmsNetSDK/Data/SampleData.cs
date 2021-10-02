@@ -10,7 +10,7 @@ namespace LcmsNetSDK.Data
     /// Class to hold data for one sample (more specifically, one instrument dataset)
     /// </summary>
     [Serializable]
-    public class SampleData : ISampleData, ITriggerFilePalData, IRequestedRunDataWithPalData, ICloneable, IEquatable<SampleData>, INotifyPropertyChangedExt
+    public class SampleData : ICloneable, IEquatable<SampleData>, INotifyPropertyChangedExt
     {
         #region Delegate Definitions
 
@@ -30,11 +30,6 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public SampleData() : this(true)
         {
-        }
-
-        ISampleData ISampleData.GetNewNonDummy()
-        {
-            return GetNewNonDummy();
         }
 
         public SampleData GetNewNonDummy()
@@ -305,12 +300,6 @@ namespace LcmsNetSDK.Data
         }
 
         /// <summary>
-        /// Interface implementation of DmsData
-        /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
-        public IDmsData DmsBasicData => DmsData;
-
-        /// <summary>
         /// Gets or sets the list of data downloaded from DMS for this sample
         /// </summary>
         [PersistenceSetting(ColumnNamePrefix = "DMS.")]
@@ -339,7 +328,7 @@ namespace LcmsNetSDK.Data
         /// Gets or sets the pal data associated with this sample.
         /// </summary>
         [PersistenceSetting(ColumnNamePrefix = "PAL.")]
-        public IPalData PAL { get; }
+        public PalData PAL { get; }
 
         /// <summary>
         /// Gets the experiment object data.

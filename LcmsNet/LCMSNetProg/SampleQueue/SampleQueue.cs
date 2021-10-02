@@ -2115,7 +2115,7 @@ namespace LcmsNet.SampleQueue
         {
             lock (m_completeQueue)
             {
-                m_completeQueue = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.CompletedQueue).ToList();
+                m_completeQueue = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.CompletedQueue).ToList();
 
                 foreach (var sample in m_completeQueue)
                 {
@@ -2141,7 +2141,7 @@ namespace LcmsNet.SampleQueue
             //
             // Loads the samples and creates unique sequence ID's and unique id's
             //
-            var waitingSamples = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.WaitingQueue).ToList();
+            var waitingSamples = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.WaitingQueue).ToList();
 
             //
             // Update the Waiting Sample queue with the right LC-Methods.  This makes sure

@@ -27,7 +27,7 @@ namespace LcmsNet.IO.DMS
         /// Generates a trigger file for a sample
         /// </summary>
         /// <param name="sample"></param>
-        public static string GenerateTriggerFile(ITriggerFileData sample)
+        public static string GenerateTriggerFile(SampleData sample)
         {
             /*
              * NOTE: Disabled because the 'CopyTriggerFiles' setting allows us to create the trigger file locally, but not copy it to the server.
@@ -53,7 +53,7 @@ namespace LcmsNet.IO.DMS
         /// Generates the XML-formatted trigger file contents
         /// </summary>
         /// <param name="sample">sample object for sample that was run</param>
-        protected static XmlDocument GenerateXmlDoc(ITriggerFileData sample)
+        protected static XmlDocument GenerateXmlDoc(SampleData sample)
         {
             // Create and initialize the document
             var triggerFileContents = new XmlDocument();
@@ -65,27 +65,24 @@ namespace LcmsNet.IO.DMS
             triggerFileContents.AppendChild(rootElement);
 
             // Add the parameters
-            AddParam(rootElement, "Dataset Name", sample.DmsBasicData.DatasetName);
-            AddParam(rootElement, "Experiment Name", TrimWhitespace(sample.DmsBasicData.Experiment));
+            AddParam(rootElement, "Dataset Name", sample.DmsData.DatasetName);
+            AddParam(rootElement, "Experiment Name", TrimWhitespace(sample.DmsData.Experiment));
             AddParam(rootElement, "Instrument Name", TrimWhitespace(sample.InstrumentName));
             AddParam(rootElement, "Capture Share Name", TrimWhitespace(sample.CaptureShareName));
             AddParam(rootElement, "Capture Subdirectory", TrimWhitespace(sample.CaptureSubdirectoryPath));
             AddParam(rootElement, "Separation Type", TrimWhitespace(sample.SeparationType));
-            AddParam(rootElement, "LC Cart Name", TrimWhitespace(sample.DmsBasicData.CartName));
-            AddParam(rootElement, "LC Cart Config", TrimWhitespace(sample.DmsBasicData.CartConfigName));
+            AddParam(rootElement, "LC Cart Name", TrimWhitespace(sample.DmsData.CartName));
+            AddParam(rootElement, "LC Cart Config", TrimWhitespace(sample.DmsData.CartConfigName));
             AddParam(rootElement, "LC Column", TrimWhitespace(sample.ColumnName));
 
-            if (sample is ITriggerFilePalData lcSample)
-            {
-                AddParam(rootElement, "Wellplate Number", TrimWhitespace(lcSample.PAL.WellPlate));
-                AddParam(rootElement, "Well Number", TrimWhitespace(lcSample.PAL.Well.ToString()));
-            }
+            AddParam(rootElement, "Wellplate Number", TrimWhitespace(sample.PAL.WellPlate));
+            AddParam(rootElement, "Well Number", TrimWhitespace(sample.PAL.Well.ToString()));
 
-            AddParam(rootElement, "Dataset Type", TrimWhitespace(sample.DmsBasicData.DatasetType));
+            AddParam(rootElement, "Dataset Type", TrimWhitespace(sample.DmsData.DatasetType));
 
             AddParam(rootElement, "Operator (PRN)", TrimWhitespace(sample.Operator));
-            AddParam(rootElement, "Work Package", TrimWhitespace(sample.DmsBasicData.WorkPackage));
-            AddParam(rootElement, "Comment", TrimWhitespace(sample.DmsBasicData.Comment));
+            AddParam(rootElement, "Work Package", TrimWhitespace(sample.DmsData.WorkPackage));
+            AddParam(rootElement, "Comment", TrimWhitespace(sample.DmsData.Comment));
             AddParam(rootElement, "Interest Rating", TrimWhitespace(sample.InterestRating ?? "Unreviewed"));
 
             //
@@ -95,14 +92,14 @@ namespace LcmsNet.IO.DMS
             var usage = "";
             var user = "";
             var proposal = "";
-            if (sample.DmsBasicData.RequestID <= 0)
+            if (sample.DmsData.RequestID <= 0)
             {
-                proposal = sample.DmsBasicData.EMSLProposalID;
-                usage = sample.DmsBasicData.EMSLUsageType;
-                user = sample.DmsBasicData.EMSLProposalUser;
+                proposal = sample.DmsData.EMSLProposalID;
+                usage = sample.DmsData.EMSLUsageType;
+                user = sample.DmsData.EMSLProposalUser;
             }
 
-            AddParam(rootElement, "Request", sample.DmsBasicData.RequestID.ToString());
+            AddParam(rootElement, "Request", sample.DmsData.RequestID.ToString());
             AddParam(rootElement, "EMSL Proposal ID", proposal);
             AddParam(rootElement, "EMSL Usage Type", usage);
             AddParam(rootElement, "EMSL Users List", user);
@@ -170,12 +167,12 @@ namespace LcmsNet.IO.DMS
         /// <param name="sample"></param>
         /// <param name="extension"></param>
         /// <returns></returns>
-        public static string GetTriggerFileName(ITriggerFileData sample, string extension)
+        public static string GetTriggerFileName(SampleData sample, string extension)
         {
-            var datasetName = sample.DmsBasicData.DatasetName;
+            var datasetName = sample.DmsData.DatasetName;
             var outFileName =
                 string.Format("{0}_{1:MM.dd.yyyy_hh.mm.ss}_{2}{3}",
-                    sample.DmsBasicData.CartName,
+                    sample.DmsData.CartName,
                     sample.RunStart,
                     datasetName,
                     extension);
@@ -188,9 +185,9 @@ namespace LcmsNet.IO.DMS
         /// <param name="doc">XML document to be written</param>
         /// <param name="sample">Name of the sample this trigger file is for</param>
         /// <returns>The remote (or local) trigger file path if successful; an empty string if an error</returns>
-        protected static string SaveFile(XmlDocument doc, ITriggerFileData sample)
+        protected static string SaveFile(XmlDocument doc, SampleData sample)
         {
-            var sampleName = sample.DmsBasicData.DatasetName;
+            var sampleName = sample.DmsData.DatasetName;
             var outFileName = GetTriggerFileName(sample, ".xml");
 
             try
@@ -205,21 +202,21 @@ namespace LcmsNet.IO.DMS
                     var outputFile = new FileStream(remoteTriggerFilePath, FileMode.Create, FileAccess.Write);
                     doc.Save(outputFile);
                     outputFile.Close();
-                    ApplicationLogger.LogMessage(0, "Remote trigger file created for dataset " + sample.DmsBasicData.DatasetName);
+                    ApplicationLogger.LogMessage(0, "Remote trigger file created for dataset " + sample.DmsData.DatasetName);
 
                     // File successfully created remotely, so exit the procedure
                     return remoteTriggerFilePath;
                 }
 
                 // Skip remote file creation since CopyTriggerFiles is false
-                var msg = "Generate Trigger File: Dataset " + sample.DmsBasicData.DatasetName + ", Remote Trigger file creation disabled";
+                var msg = "Generate Trigger File: Dataset " + sample.DmsData.DatasetName + ", Remote Trigger file creation disabled";
                 ApplicationLogger.LogMessage(0, msg);
             }
             catch (Exception ex)
             {
                 // If remote write failed or disabled, log and try to write locally
-                ErrorMessages.Add(string.Format("Exception creating remote trigger file for {0}: {1}", sample.DmsBasicData.DatasetName, ex.Message));
-                var msg = "Remote trigger file creation failed, dataset " + sample.DmsBasicData.DatasetName + ". Creating file locally.";
+                ErrorMessages.Add(string.Format("Exception creating remote trigger file for {0}: {1}", sample.DmsData.DatasetName, ex.Message));
+                var msg = "Remote trigger file creation failed, dataset " + sample.DmsData.DatasetName + ". Creating file locally.";
                 ApplicationLogger.LogError(0, msg, ex);
             }
 

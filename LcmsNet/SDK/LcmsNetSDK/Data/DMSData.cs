@@ -8,7 +8,7 @@ namespace LcmsNetSDK.Data
     /// Dataset information supplied by or required by DMS; includes run request information
     /// </summary>
     [Serializable]
-    public class DMSData : IDmsDataForSampleRun, INotifyPropertyChangedExt, ICloneable
+    public class DMSData : INotifyPropertyChangedExt, ICloneable
     {
         /// <summary>
         /// The matching string to ensure only valid characters exist in a dataset name

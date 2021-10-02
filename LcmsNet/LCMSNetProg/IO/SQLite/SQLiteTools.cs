@@ -172,9 +172,9 @@ namespace LcmsNet.IO.SQLite
         /// </summary>
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <returns>List containing queue data</returns>
-        public static IEnumerable<T> GetQueueFromCache<T>(DatabaseTableTypes tableType) where T : ISampleData, new()
+        public static IEnumerable<SampleData> GetQueueFromCache(DatabaseTableTypes tableType)
         {
-            return GetQueueFromCache<T>(tableType, ConnString);
+            return GetQueueFromCache(tableType, ConnString);
         }
 
         /// <summary>
@@ -184,11 +184,10 @@ namespace LcmsNet.IO.SQLite
         /// <param name="tableType">tableType enum specifying type of queue to retrieve</param>
         /// <param name="connectionString">Cache connection string</param>
         /// <returns>List containing queue data</returns>
-        public static IEnumerable<T> GetQueueFromCache<T>(DatabaseTableTypes tableType, string connectionString) where T : ISampleData, new()
+        public static IEnumerable<SampleData> GetQueueFromCache(DatabaseTableTypes tableType, string connectionString)
         {
-            var exampleObject = new T();
             // All finished, so return
-            return Cache.ReadMultiColumnDataFromCache(tableType, () => (T)(exampleObject.GetNewNonDummy()), connectionString);
+            return Cache.ReadMultiColumnDataFromCache(tableType, () => new SampleData(false), connectionString);
         }
 
         /// <summary>
@@ -555,7 +554,7 @@ namespace LcmsNet.IO.SQLite
         /// </summary>
         /// <param name="queueData">List of SampleData containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
-        public static void SaveQueueToCache<T>(IEnumerable<T> queueData, DatabaseTableTypes tableType) where T : ISampleData, new()
+        public static void SaveQueueToCache(IEnumerable<SampleData> queueData, DatabaseTableTypes tableType)
         {
             SaveQueueToCache(queueData, tableType, ConnString);
         }
@@ -567,7 +566,7 @@ namespace LcmsNet.IO.SQLite
         /// <param name="queueData">List containing the sample data to save</param>
         /// <param name="tableType">TableTypes enum specifying which queue is being saved</param>
         /// <param name="connStr">Connection string for database file</param>
-        public static void SaveQueueToCache<T>(IEnumerable<T> queueData, DatabaseTableTypes tableType, string connStr) where T : ISampleData, new()
+        public static void SaveQueueToCache(IEnumerable<SampleData> queueData, DatabaseTableTypes tableType, string connStr)
         {
             Cache.SaveMultiColumnListToCache(tableType, queueData, connStr);
         }

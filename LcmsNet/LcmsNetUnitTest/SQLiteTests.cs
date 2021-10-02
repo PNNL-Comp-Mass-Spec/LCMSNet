@@ -147,7 +147,7 @@ namespace LcmsnetUnitTest
             samples.Add(new SampleData());
             samples[1].UniqueID = 2;
 
-            SQLiteTools.SaveQueueToCache<SampleData>(samples, DatabaseTableTypes.WaitingQueue);
+            SQLiteTools.SaveQueueToCache(samples, DatabaseTableTypes.WaitingQueue);
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace LcmsnetUnitTest
         [Test]
         public void TestI()
         {
-            var samples = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.WaitingQueue).ToList();
+            var samples = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.WaitingQueue).ToList();
             Assert.AreEqual(1, samples[0].UniqueID);
         }
 
@@ -171,7 +171,7 @@ namespace LcmsnetUnitTest
                 new SampleData()
             };
             samples[0].UniqueID = 2;
-            SQLiteTools.SaveQueueToCache<SampleData>(samples, DatabaseTableTypes.RunningQueue);
+            SQLiteTools.SaveQueueToCache(samples, DatabaseTableTypes.RunningQueue);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace LcmsnetUnitTest
         [Test]
         public void TestK()
         {
-            var samples = SQLiteTools.GetQueueFromCache<SampleData>(DatabaseTableTypes.RunningQueue).ToList();
+            var samples = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.RunningQueue).ToList();
             Assert.AreEqual(2, samples[0].UniqueID);
         }
 

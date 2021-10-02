@@ -51,14 +51,9 @@
     <Compile Include="Data\ColumnData.cs" />
     <Compile Include="Data\ColumnStatus.cs" />
     <Compile Include="Data\DMSData.cs" />
-    <Compile Include="Data\IDmsData.cs" />
     <Compile Include="Data\IDMSValidator.cs" />
     <Compile Include="Data\IDMSValidatorMetaData.cs" />
     <Compile Include="Data\IMethodWriter.cs" />
-    <Compile Include="Data\IPalData.cs" />
-    <Compile Include="Data\IRequestedRunData.cs" />
-    <Compile Include="Data\ISampleData.cs" />
-    <Compile Include="Data\ITriggerFileData.cs" />
     <Compile Include="Data\MobilePhase.cs" />
     <Compile Include="Data\PalData.cs" />
     <Compile Include="Data\PersistenceSettingAttribute.cs" />

@@ -473,7 +473,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             try
             {
                 var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
-                tempRequestList = dmsTools.GetRequestedRunsFromDMS<SampleData>(queryData).ToList();
+                tempRequestList = dmsTools.GetRequestedRunsFromDMS(queryData).ToList();
             }
             catch (DatabaseConnectionStringException ex)
             {
