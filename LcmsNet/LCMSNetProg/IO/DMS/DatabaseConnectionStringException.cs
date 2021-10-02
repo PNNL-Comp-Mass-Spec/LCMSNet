@@ -2,7 +2,7 @@
 
 // ReSharper disable UnusedMember.Global
 
-namespace LcmsNetSQLiteTools
+namespace LcmsNet.IO.DMS
 {
     /// <summary>
     /// Custom exception for reporting invalid database connection string

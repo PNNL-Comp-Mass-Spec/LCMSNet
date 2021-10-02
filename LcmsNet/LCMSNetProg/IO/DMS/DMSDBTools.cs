@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml;
 using System.Xml.Schema;
-using LcmsNetSQLiteTools;
-using System.IO;
-using System.Threading;
 using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
+using LcmsNetSQLiteTools;
 
 // ReSharper disable UnusedMember.Global
 
-namespace LcmsNetDmsTools
+namespace LcmsNet.IO.DMS
 {
     /// <summary>
     /// Class for interacting with DMS database

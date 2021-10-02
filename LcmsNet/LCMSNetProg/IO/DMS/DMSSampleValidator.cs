@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using LcmsNetData.Data;
 
-namespace LcmsNetDmsTools
+namespace LcmsNet.IO.DMS
 {
     [Flags]
     public enum DMSSampleValidatorErrors : int

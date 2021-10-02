@@ -135,6 +135,11 @@
     <Compile Include="DynamicSplashScreenWindow.xaml.cs">
       <DependentUpon>DynamicSplashScreenWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IO\DMS\DatabaseConnectionStringException.cs" />
+    <Compile Include="IO\DMS\DatabaseStoredProcException.cs" />
+    <Compile Include="IO\DMS\DMSDBTools.cs" />
+    <Compile Include="IO\DMS\DMSSampleValidator.cs" />
+    <Compile Include="IO\DMS\ExtensionMethods.cs" />
     <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />
     <Compile Include="IO\DeviceNotifierConfigurationXMLWriter.cs" />
     <Compile Include="IO\DeviceNotifierConfigurationXMLReader.cs" />
@@ -393,6 +398,9 @@
     </None>
     <None Include="LcmsNet_PersistentSettings.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="PrismDMS.config">
+      <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LcmsNetDmsTools
+namespace LcmsNet.IO.DMS
 {
     /// <summary>
     /// Extension methods static class for LcmsNetDmsTools

@@ -1,1 +1,0 @@
-To build deployment-ready library build using the PNNLRelease configuration which will copy the .dll to the InternalLibs directory.

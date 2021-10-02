@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OptimizerUnitTests.cs" />
+    <Compile Include="DMSTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleQueueTests.cs" />
     <Compile Include="TimeKeeperTest.cs" />
