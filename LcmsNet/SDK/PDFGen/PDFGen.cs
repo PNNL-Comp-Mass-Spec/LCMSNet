@@ -6,7 +6,6 @@ using System.Windows.Media.Imaging;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.System;
 
 namespace PDFGenerator
 {

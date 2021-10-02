@@ -51,8 +51,6 @@
     <Compile Include="Data\ColumnData.cs" />
     <Compile Include="Data\ColumnStatus.cs" />
     <Compile Include="Data\DMSData.cs" />
-    <Compile Include="Data\IDMSValidator.cs" />
-    <Compile Include="Data\IDMSValidatorMetaData.cs" />
     <Compile Include="Data\IMethodWriter.cs" />
     <Compile Include="Data\MobilePhase.cs" />
     <Compile Include="Data\PalData.cs" />

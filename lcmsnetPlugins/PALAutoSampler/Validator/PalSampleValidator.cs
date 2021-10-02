@@ -14,7 +14,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Validator
     [Export(typeof(ISampleValidator))]
     [ExportMetadata("Name", "PalSampleValidations")]
     [ExportMetadata("Version", "1.0")]
-    public class PalSampleValidator:ISampleValidator
+    public class PalSampleValidator : ISampleValidator
     {
         /// <summary>
         /// Validate the sample blocks
