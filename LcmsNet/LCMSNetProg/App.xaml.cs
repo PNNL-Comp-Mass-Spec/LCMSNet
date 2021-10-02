@@ -660,6 +660,9 @@ namespace LcmsNet
             // Create the method manager
             //LogMessage(-1, "Creating the Method Manager");
 
+            SQLiteTools.SetDefaultDirectoryPath(() => PersistDataPaths.LocalDataPath);
+            SQLiteTools.SetCacheLocation(LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME));
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, SQLiteTools.CacheName);
             CreateSQLCache();
             LogMessage(-1, "Loading DMS data");
 

@@ -2057,10 +2057,10 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Writes each of the queue lists to a SQLite cache file
         /// </summary>
-        public void CacheQueue(bool buildconnectionString)
+        public void CacheQueue(bool buildConnectionString)
         {
             // This means that we have to recompile the data ...
-            if (buildconnectionString)
+            if (buildConnectionString)
             {
                 var cartNames = SQLiteTools.GetCartNameList();
                 var columnNames = SQLiteTools.GetColumnList(false);
@@ -2099,6 +2099,7 @@ namespace LcmsNet.SampleQueue
         public void CacheQueue(string cachePath)
         {
             SQLiteTools.SetCacheLocation(cachePath);
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, SQLiteTools.CacheName);
             CacheQueue(true);
         }
 

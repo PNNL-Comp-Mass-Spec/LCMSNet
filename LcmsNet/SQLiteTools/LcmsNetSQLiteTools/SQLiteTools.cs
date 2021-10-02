@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
 
@@ -48,6 +47,7 @@ namespace LcmsNetSQLiteTools
         private static readonly List<ExperimentData> experimentsData = new List<ExperimentData>(0);
         private static readonly List<ProposalUser> proposalUsers = new List<ProposalUser>(0);
         private static readonly Dictionary<string, List<UserIDPIDCrossReferenceEntry>> proposalIdIndexedReferenceList = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>(0);
+        private static bool firstTimeLookupSelectedSepType = true;
 
         #endregion
 
@@ -73,6 +73,16 @@ namespace LcmsNetSQLiteTools
         public static void BuildConnectionString(bool newCache)
         {
             Cache.BuildConnectionString(newCache);
+        }
+
+        public static void SetDefaultDirectoryPath(string path)
+        {
+            Cache.SetDefaultDirectoryPath(path);
+        }
+
+        public static void SetDefaultDirectoryPath(Func<string> pathGetMethod)
+        {
+            Cache.SetDefaultDirectoryPath(pathGetMethod);
         }
 
         #endregion
@@ -508,26 +518,18 @@ namespace LcmsNetSQLiteTools
             }
             catch (Exception ex)
             {
-                var firstTimeLookupSelectedSepType = LCMSSettings.GetParameter(LCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE);
-
-                var isFirstTime = true;
-                if (!string.IsNullOrWhiteSpace(firstTimeLookupSelectedSepType))
-                {
-                    isFirstTime = Convert.ToBoolean(firstTimeLookupSelectedSepType);
-                }
-
-                if (!isFirstTime)
+                if (!firstTimeLookupSelectedSepType)
                 {
                     const string errorMessage =
                         "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
                     ApplicationLogger.LogError(0, errorMessage, ex);
                 }
-                else
-                {
-                    LCMSSettings.SetParameter(LCMSSettings.PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE, false.ToString());
-                }
+
+                firstTimeLookupSelectedSepType = false;
                 return string.Empty;
             }
+
+            firstTimeLookupSelectedSepType = false;
 
             if (sepType.Count < 1)
             {

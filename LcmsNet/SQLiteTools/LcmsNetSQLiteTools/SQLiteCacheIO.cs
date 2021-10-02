@@ -5,10 +5,8 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
-using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
-using LcmsNetData.System;
 
 namespace LcmsNetSQLiteTools
 {
@@ -24,23 +22,52 @@ namespace LcmsNetSQLiteTools
 
         private readonly PropertyToColumnMapping propToColumnMap = new PropertyToColumnMapping();
 
+        private Func<string> defaultDirectoryPathGetMethod = () => ".";
+
         #region Properties
 
         /// <summary>
         /// Cache file name or path
         /// </summary>
         /// <remarks>Starts off as a filename, but is changed to a path by BuildConnectionString</remarks>
-        public string CacheName
-        {
-            get => LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME);
-            private set => LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, value);
-        }
+        public string CacheName { get; private set; }
 
         public string ConnString { get; set; } = "";
         public bool DatabaseImageBad { get; private set; }
         public bool DisableInMemoryCaching { get; set; }
 
         public bool AlwaysRead => !DatabaseImageBad && DisableInMemoryCaching;
+
+        public string DefaultDirectoryPath => defaultDirectoryPathGetMethod();
+
+        public void SetDefaultDirectoryPath(string path)
+        {
+            defaultDirectoryPathGetMethod = () => path;
+        }
+
+        public void SetDefaultDirectoryPath(Func<string> pathGetMethod)
+        {
+            defaultDirectoryPathGetMethod = pathGetMethod;
+        }
+
+        /// <summary>
+        /// Sets the cache location to the path provided
+        /// </summary>
+        /// <param name="location">New path to location of queue</param>
+        /// <remarks>If location is a filename (and not a path), then updates to use AppDataFolderName</remarks>
+        public void SetCacheLocation(string location)
+        {
+            if (!location.Contains(@"\"))
+            {
+                var basePath = DefaultDirectoryPath;
+                var fileName = Path.GetFileName(location);
+                location = Path.Combine(basePath, fileName);
+            }
+
+            CacheName = location;
+
+            BuildConnectionString(!File.Exists(location));
+        }
 
         #endregion
 
@@ -77,18 +104,18 @@ namespace LcmsNetSQLiteTools
         {
             try
             {
-                var name = LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME);
+                var name = CacheName;
                 var exists = File.Exists(name);
                 if (!exists && !newCache)
                 {
-                    var basePath = PersistDataPaths.LocalDataPath;
+                    var basePath = DefaultDirectoryPath;
                     if (!Directory.Exists(basePath))
                     {
                         Directory.CreateDirectory(basePath);
                     }
 
                     name = Path.Combine(basePath, CacheName);
-                    LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, name);
+                    CacheName = name;
                 }
 
                 cacheFullPath = name;
@@ -832,25 +859,6 @@ namespace LcmsNetSQLiteTools
                     ApplicationLogger.LogError(0, "Could not delete the SQLite database!", ex);
                 }
             }
-        }
-
-        /// <summary>
-        /// Sets the cache location to the path provided
-        /// </summary>
-        /// <param name="location">New path to location of queue</param>
-        /// <remarks>If location is a filename (and not a path), then updates to use AppDataFolderName</remarks>
-        public void SetCacheLocation(string location)
-        {
-            if (!location.Contains(@"\"))
-            {
-                var basePath = PersistDataPaths.LocalDataPath;
-                var fileName = Path.GetFileName(location);
-                location = Path.Combine(basePath, fileName);
-            }
-
-            CacheName = location;
-
-            BuildConnectionString(!File.Exists(location));
         }
 
         /// <summary>

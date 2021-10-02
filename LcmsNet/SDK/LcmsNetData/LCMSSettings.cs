@@ -53,7 +53,6 @@ namespace LcmsNetData
         public const string PARAM_DMSVERSION = "DMSVersion";
         public const string PARAM_EMULATIONENABLED = "EmulationEnabled";
         public const string PARAM_ERRORPATH = "ErrorPath";
-        public const string PARAM_FIRSTTIME_LOOKUP_SELECTED_SEP_TYPE = "FirstTime";
         public const string PARAM_INITIALIZEHARDWAREONSTARTUP = "InitializeHardwareOnStartup";
         public const string PARAM_INSTNAME = "InstName";
         public const string PARAM_LOGGINGERRORLEVEL = "LoggingErrorLevel";

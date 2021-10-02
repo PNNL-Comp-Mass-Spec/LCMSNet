@@ -259,6 +259,7 @@
     <Compile Include="SampleQueue\DataExportException.cs" />
     <Compile Include="SampleQueue\DataImportException.cs" />
     <Compile Include="SampleQueue\IO\MRMFileData.cs" />
+    <Compile Include="SampleQueue\IO\QueueCacheCSV.cs" />
     <Compile Include="SampleQueue\IO\QueueImportClipboard.cs" />
     <Compile Include="SampleQueue\IO\QueueImportCSV.cs" />
     <Compile Include="SampleQueue\IO\SampleImportInfo.cs" />
