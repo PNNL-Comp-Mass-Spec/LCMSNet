@@ -44,24 +44,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\CartConfigInfo.cs" />
-    <Compile Include="Data\ConvertVialPosition.cs" />
-    <Compile Include="Data\ExperimentData.cs" />
     <Compile Include="Data\IDmsData.cs" />
-    <Compile Include="Data\InstrumentGroupInfo.cs" />
-    <Compile Include="Data\InstrumentInfo.cs" />
     <Compile Include="Data\IPalData.cs" />
     <Compile Include="Data\IRequestedRunData.cs" />
     <Compile Include="Data\ISampleData.cs" />
     <Compile Include="Data\ITriggerFileData.cs" />
     <Compile Include="Data\PersistenceSettingAttribute.cs" />
-    <Compile Include="Data\ProposalUser.cs" />
-    <Compile Include="Data\SampleQueryData.cs" />
-    <Compile Include="Data\TriggerFileTools.cs" />
-    <Compile Include="Data\UserIDPIDCrossReferenceEntry.cs" />
-    <Compile Include="Data\UserInfo.cs" />
-    <Compile Include="Data\WorkPackageInfo.cs" />
-    <Compile Include="EventArgs.cs" />
     <Compile Include="INotifyPropertyChangedExtensions.cs" />
     <Compile Include="LCMSSettings.cs" />
     <Compile Include="Logging\ApplicationLogger.cs" />

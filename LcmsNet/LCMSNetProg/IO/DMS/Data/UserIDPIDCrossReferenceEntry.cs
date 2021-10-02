@@ -1,8 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using LcmsNetData;
 
-namespace LcmsNetData.Data
+namespace LcmsNet.IO.DMS.Data
 {
     [Serializable]
     public class UserIDPIDCrossReferenceEntry : IEquatable<UserIDPIDCrossReferenceEntry>, INotifyPropertyChangedExt

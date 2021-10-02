@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using DynamicData;
 using LcmsNet.IO.DMS;
+using LcmsNet.IO.DMS.Data;
 using LcmsNet.IO.SQLite;
 using LcmsNetData;
 using LcmsNetData.Data;

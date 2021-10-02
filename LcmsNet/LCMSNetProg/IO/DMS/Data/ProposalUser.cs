@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using LcmsNetData;
 
-namespace LcmsNetData.Data
+namespace LcmsNet.IO.DMS.Data
 {
     [Serializable]
     public class ProposalUser : IEquatable<ProposalUser>, INotifyPropertyChangedExt

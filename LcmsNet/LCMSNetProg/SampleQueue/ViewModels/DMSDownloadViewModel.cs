@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using DynamicData;
 using LcmsNet.IO.DMS;
+using LcmsNet.IO.DMS.Data;
 using LcmsNet.IO.SQLite;
 using LcmsNetData;
 using LcmsNetData.Data;

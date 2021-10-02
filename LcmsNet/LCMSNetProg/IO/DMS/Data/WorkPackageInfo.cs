@@ -1,4 +1,6 @@
-﻿namespace LcmsNetData.Data
+﻿using LcmsNetData.Data;
+
+namespace LcmsNet.IO.DMS.Data
 {
     /// <summary>
     /// Class to hold information about a work package

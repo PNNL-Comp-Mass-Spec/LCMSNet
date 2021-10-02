@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Xml;
 using System.Xml.Schema;
+using LcmsNet.IO.DMS.Data;
 using LcmsNet.IO.SQLite;
 using LcmsNetData;
 using LcmsNetData.Data;

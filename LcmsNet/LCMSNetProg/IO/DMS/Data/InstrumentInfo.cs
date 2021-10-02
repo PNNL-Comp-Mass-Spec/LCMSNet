@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using LcmsNetData;
+using LcmsNetData.Data;
 
-namespace LcmsNetData.Data
+namespace LcmsNet.IO.DMS.Data
 {
     /// <summary>
     /// Class to hold data about the instrument connected to the LC cart

@@ -32,9 +32,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
     </Reference>
-    <Reference Include="LcmsNetData">
-      <HintPath>..\..\lib\LcmsNetData.dll</HintPath>
-    </Reference>
     <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
@@ -50,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MiscTests.cs" />
     <Compile Include="SQLiteTests.cs" />
     <Compile Include="OptimizerUnitTests.cs" />
     <Compile Include="DMSTests.cs" />
@@ -64,6 +62,10 @@
     <ProjectReference Include="..\LCMSNetProg\LCMSNetProg.csproj">
       <Project>{51f59458-d3d7-41d6-8e09-19a12ad54b7a}</Project>
       <Name>LCMSNetProg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SDK\LcmsNetData\LcmsNetData.csproj">
+      <Project>{09993d8a-15ca-413e-bc48-ec80d399136a}</Project>
+      <Name>LcmsNetData</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

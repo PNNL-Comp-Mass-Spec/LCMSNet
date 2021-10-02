@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LcmsNetData.Data
+namespace LcmsNet.IO.DMS.Data
 {
     /// <summary>
     /// Utilities for converting Vial (aka Well) position between LCMSNet and LCMS values

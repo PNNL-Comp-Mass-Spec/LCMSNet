@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Xml;
+using LcmsNetData;
+using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetData.System;
 
-namespace LcmsNetData.Data
+namespace LcmsNet.IO.DMS
 {
     /// <summary>
     /// Tools for generation of trigger files

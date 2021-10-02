@@ -1,4 +1,4 @@
-﻿namespace LcmsNetData.Data
+﻿namespace LcmsNet.IO.DMS.Data
 {
     /// <summary>
     /// Class to hold information about a single LC Cart Config

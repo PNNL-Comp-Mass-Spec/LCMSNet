@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LcmsNetData.Data;
 
-namespace LcmsNetData.Data
+namespace LcmsNet.IO.DMS.Data
 {
     /// <summary>
     /// Class to hold data about an instrument group

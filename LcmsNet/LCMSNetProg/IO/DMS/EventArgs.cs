@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetData
+namespace LcmsNet.IO.DMS
 {
     public class MessageEventArgs : EventArgs
     {

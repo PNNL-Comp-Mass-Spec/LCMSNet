@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using LcmsNetData;
+using LcmsNetData.Data;
 
-namespace LcmsNetData.Data
+namespace LcmsNet.IO.DMS.Data
 {
     [Serializable]
     public class ExperimentData : INotifyPropertyChangedExt

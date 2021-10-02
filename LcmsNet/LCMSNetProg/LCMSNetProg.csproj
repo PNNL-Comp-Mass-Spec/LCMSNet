@@ -137,10 +137,22 @@
     </Compile>
     <Compile Include="IO\DMS\DatabaseConnectionStringException.cs" />
     <Compile Include="IO\DMS\DatabaseStoredProcException.cs" />
+    <Compile Include="IO\DMS\Data\CartConfigInfo.cs" />
+    <Compile Include="IO\DMS\Data\ConvertVialPosition.cs" />
+    <Compile Include="IO\DMS\Data\ExperimentData.cs" />
+    <Compile Include="IO\DMS\Data\InstrumentGroupInfo.cs" />
+    <Compile Include="IO\DMS\Data\InstrumentInfo.cs" />
+    <Compile Include="IO\DMS\Data\ProposalUser.cs" />
+    <Compile Include="IO\DMS\Data\SampleQueryData.cs" />
+    <Compile Include="IO\DMS\Data\UserIDPIDCrossReferenceEntry.cs" />
+    <Compile Include="IO\DMS\Data\UserInfo.cs" />
+    <Compile Include="IO\DMS\Data\WorkPackageInfo.cs" />
     <Compile Include="IO\DMS\DMSDBTools.cs" />
     <Compile Include="IO\DMS\DMSSampleValidator.cs" />
+    <Compile Include="IO\DMS\EventArgs.cs" />
     <Compile Include="IO\DMS\ExtensionMethods.cs" />
     <Compile Include="IO\DMS\DatabaseDataException.cs" />
+    <Compile Include="IO\DMS\TriggerFileTools.cs" />
     <Compile Include="IO\SQLite\DatabaseTableTypes.cs" />
     <Compile Include="IO\SQLite\ExtensionMethods.cs" />
     <Compile Include="IO\SQLite\PropertyToColumnMapping.cs" />

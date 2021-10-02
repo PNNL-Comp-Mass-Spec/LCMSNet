@@ -1,7 +1,8 @@
-﻿using LcmsNetData.Data;
+﻿using LcmsNet.IO.DMS.Data;
+using LcmsNetData.Data;
 using NUnit.Framework;
 
-namespace LcmsNetSDKUnitTests
+namespace LcmsnetUnitTest
 {
     [TestFixture]
     public class MiscTests
