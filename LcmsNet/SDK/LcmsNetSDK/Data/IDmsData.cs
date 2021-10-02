@@ -89,17 +89,17 @@ namespace LcmsNetSDK.Data
         int MRMFileID { get; set; }
 
         /// <summary>
-        /// Block ID for blocking/randomizing
+        /// Block ID for blocking
         /// </summary>
         int Block { get; set; }
 
         /// <summary>
-        /// Run order for blocking/randomizing
+        /// Run order for blocking
         /// </summary>
         int RunOrder { get; set; }
 
         /// <summary>
-        /// Batch number for blocking/randomizing
+        /// Batch number for blocking
         /// </summary>
         int Batch { get; set; }
     }

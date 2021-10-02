@@ -124,7 +124,6 @@
     <Compile Include="IFluidicsModelChecker.cs" />
     <Compile Include="IModelCheckController.cs" />
     <Compile Include="IPDF.cs" />
-    <Compile Include="IRandomizerInterface.cs" />
     <Compile Include="ModelStatus.cs" />
     <Compile Include="ModelStatusChangeEventArgs.cs" />
     <Compile Include="PlugInDisplayNameAttribute.cs" />

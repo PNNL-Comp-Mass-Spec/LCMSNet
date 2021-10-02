@@ -284,7 +284,6 @@
     <Compile Include="SampleQueue\IO\QueueImportClipboard.cs" />
     <Compile Include="SampleQueue\IO\QueueImportCSV.cs" />
     <Compile Include="SampleQueue\IO\SampleImportInfo.cs" />
-    <Compile Include="SampleQueue\RandomizerPluginTools.cs" />
     <Compile Include="SampleQueue\SampleQueue.cs" />
     <Compile Include="SampleQueue\SampleQueueArgs.cs" />
     <Compile Include="SampleQueue\SequenceComparer.cs" />
@@ -304,7 +303,6 @@
     <Compile Include="SampleQueue\ViewModels\DMSDownloadDataViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\DMSDownloadViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\SampleBadBlockDisplayViewModel.cs" />
-    <Compile Include="SampleQueue\ViewModels\SampleRandomizerViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\SampleValidatorErrorDisplayViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\TrayVialAssignmentViewModel.cs" />
     <Compile Include="SampleQueue\ViewModels\TrayVialSampleViewModel.cs" />
@@ -359,9 +357,6 @@
     </Compile>
     <Compile Include="SampleQueue\Views\SampleMethodFillDownWindow.xaml.cs">
       <DependentUpon>SampleMethodFillDownWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SampleQueue\Views\SampleRandomizerWindow.xaml.cs">
-      <DependentUpon>SampleRandomizerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SampleQueue\Views\SampleValidatorErrorDisplayWindow.xaml.cs">
       <DependentUpon>SampleValidatorErrorDisplayWindow.xaml</DependentUpon>
@@ -758,10 +753,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SampleQueue\Views\SampleMethodFillDownWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SampleQueue\Views\SampleRandomizerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

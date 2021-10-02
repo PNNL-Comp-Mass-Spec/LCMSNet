@@ -412,60 +412,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         /// <summary>
-        /// Randomizes the selected samples for the sample queue.
-        /// </summary>
-        private void RandomizeSelectedSamples()
-        {
-            var samplesToRandomize = new List<SampleData>();
-            // Get all the data references that we want to randomize.
-            foreach (var row in SelectedSamples)
-            {
-                var data = row.Sample;
-                if (data != null && data.RunningStatus == SampleRunningStatus.Queued)
-                {
-                    var sample = data.Clone() as SampleData;
-                    samplesToRandomize.Add(sample);
-                }
-            }
-            // If we have something selected then randomize them.
-            if (samplesToRandomize.Count > 1)
-            {
-                SampleRandomizerViewModel randomizerVm;
-                try
-                {
-                    randomizerVm = new SampleRandomizerViewModel(samplesToRandomize);
-                }
-                catch
-                {
-                    ApplicationLogger.LogError(0, "No randomization plug-ins exist.");
-                    return;
-                }
-                var randomizer = new SampleRandomizerWindow() { DataContext = randomizerVm };
-                var result = randomizer.ShowDialog();
-                if (result.HasValue && result.Value)
-                {
-                    var newSamples = randomizerVm.OutputSampleList.ToList();
-                    SampleDataManager.ReorderSamples(newSamples, enumColumnDataHandling.LeaveAlone);
-                }
-            }
-            else if (samplesToRandomize.Count == 1)
-            {
-                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER,
-                    "Select more than one sample for randomization.");
-            }
-            else
-            {
-                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER,
-                    "No samples selected for randomization.");
-            }
-            if (samplesToRandomize.Count > 0)
-            {
-                // Re-select the first sample
-                SelectedSample = Samples.First(x => x.Sample.Equals(samplesToRandomize.First()));
-            }
-        }
-
-        /// <summary>
         /// Removes the selected samples from the list view.
         /// </summary>
         protected void RemoveSelectedSamples(enumColumnDataHandling resortColumns)
@@ -685,7 +631,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveCommand<Unit, Unit> RemoveSelectedCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> FillDownCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> TrayVialCommand { get; protected set; }
-        public ReactiveCommand<Unit, Unit> RandomizeCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> MoveDownCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> MoveUpCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> DeleteUnusedCommand { get; protected set; }
@@ -706,7 +651,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             RemoveSelectedCommand = ReactiveCommand.Create(() => this.RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
             FillDownCommand = ReactiveCommand.Create(() => this.FillDown(), this.WhenAnyValue(x => x.ItemsSelected));
             TrayVialCommand = ReactiveCommand.Create(() => this.EditTrayAndVial(), this.WhenAnyValue(x => x.ItemsSelected));
-            RandomizeCommand = ReactiveCommand.Create(() => this.RandomizeSelectedSamples(), this.WhenAnyValue(x => x.ItemsSelected));
             MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));

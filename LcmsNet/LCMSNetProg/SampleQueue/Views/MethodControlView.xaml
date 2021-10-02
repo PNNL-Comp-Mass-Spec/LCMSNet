@@ -61,8 +61,6 @@
                     </MenuItem.ItemsSource>
                 </MenuItem>
                 <MenuItem Header="Preview Throughput" Command="{Binding PreviewThroughputCommand}" />
-                <Separator />
-                <MenuItem Header="Randomize" Command="{Binding RandomizeCommand}" />
             </ContextMenu>
         </Grid.ContextMenu>
         <Grid.Resources>

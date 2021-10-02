@@ -233,7 +233,7 @@ namespace LcmsNet.SampleQueue
         public event DelegateSamplesModifiedHandler SamplesStopped;
 
         /// <summary>
-        /// Fired when a sample is reordered or randomized.
+        /// Fired when a sample is reordered.
         /// </summary>
         public event DelegateSamplesModifiedHandler SamplesReordered;
 

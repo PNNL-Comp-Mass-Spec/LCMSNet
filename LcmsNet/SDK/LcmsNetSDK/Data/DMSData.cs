@@ -270,7 +270,7 @@ namespace LcmsNetSDK.Data
         }
 
         /// <summary>
-        /// Block ID for blocking/randomizing
+        /// Block ID for blocking
         /// </summary>
         public int Block
         {
@@ -279,7 +279,7 @@ namespace LcmsNetSDK.Data
         }
 
         /// <summary>
-        /// Run order for blocking/randomizing
+        /// Run order for blocking
         /// </summary>
         public int RunOrder
         {
@@ -288,7 +288,7 @@ namespace LcmsNetSDK.Data
         }
 
         /// <summary>
-        /// Batch number for blocking/randomizing
+        /// Batch number for blocking
         /// </summary>
         public int Batch
         {
