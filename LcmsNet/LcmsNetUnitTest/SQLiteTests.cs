@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LcmsNet.IO.SQLite;
 using LcmsNetData.Data;
 using LcmsNetSDK.Data;
-using LcmsNetSQLiteTools;
 using NUnit.Framework;
 
-namespace LcmsNetSQLiteToolsUnitTests
+namespace LcmsnetUnitTest
 {
     [TestFixture]
-    public class LcmsNetSQLiteToolsUnitTests
+    public class SQLiteTests
     {
         const string CONST_TEST_FOLDER = "LCMSNetUnitTests";
         const string CONST_TEST_CACHE = "SQLiteToolsUnitTests.que";
 
         private const bool DELETE_CACHE_DB = true;
 
-        public LcmsNetSQLiteToolsUnitTests()
+        public SQLiteTests()
         {
 
             SQLiteTools.Initialize(CONST_TEST_FOLDER);

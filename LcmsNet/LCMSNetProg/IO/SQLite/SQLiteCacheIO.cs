@@ -5,10 +5,11 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
+using LcmsNet.IO.DMS;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
 
-namespace LcmsNetSQLiteTools
+namespace LcmsNet.IO.SQLite
 {
     internal class SQLiteCacheIO : IDisposable
     {

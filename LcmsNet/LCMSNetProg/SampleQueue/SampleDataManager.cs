@@ -10,6 +10,7 @@ using System.Windows.Media;
 using DynamicData;
 using DynamicData.Binding;
 using LcmsNet.IO.DMS;
+using LcmsNet.IO.SQLite;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetData;
 using LcmsNetData.Data;
@@ -18,7 +19,6 @@ using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Method;
-using LcmsNetSQLiteTools;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue

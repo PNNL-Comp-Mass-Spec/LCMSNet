@@ -13,6 +13,7 @@ using LcmsNet.Devices.Pumps.ViewModels;
 using LcmsNet.Devices.ViewModels;
 using LcmsNet.Devices.Views;
 using LcmsNet.IO;
+using LcmsNet.IO.SQLite;
 using LcmsNet.Logging.ViewModels;
 using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
@@ -31,7 +32,6 @@ using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
-using LcmsNetSQLiteTools;
 using PDFGenerator;
 using ReactiveUI;
 

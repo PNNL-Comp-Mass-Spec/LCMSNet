@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Windows.Media;
 using LcmsNetData.Data;
 
-namespace LcmsNetSQLiteTools
+namespace LcmsNet.IO.SQLite
 {
     internal class PropertyToColumnMapping
     {

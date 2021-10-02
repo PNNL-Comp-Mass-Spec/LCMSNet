@@ -8,10 +8,10 @@ using System.Linq;
 using System.Threading;
 using System.Xml;
 using System.Xml.Schema;
+using LcmsNet.IO.SQLite;
 using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
-using LcmsNetSQLiteTools;
 
 // ReSharper disable UnusedMember.Global
 

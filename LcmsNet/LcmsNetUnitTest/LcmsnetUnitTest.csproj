@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SQLiteTests.cs" />
     <Compile Include="OptimizerUnitTests.cs" />
     <Compile Include="DMSTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

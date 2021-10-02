@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using LcmsNet.Devices;
 using LcmsNet.IO.DMS;
+using LcmsNet.IO.SQLite;
 using LcmsNet.Method;
 using LcmsNet.Properties;
 using LcmsNet.SampleQueue.IO;
@@ -23,7 +24,6 @@ using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
-using LcmsNetSQLiteTools;
 
 namespace LcmsNet
 {

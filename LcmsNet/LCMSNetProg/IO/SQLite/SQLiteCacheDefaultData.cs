@@ -3,7 +3,7 @@ using LcmsNetData.Data;
 
 // ReSharper disable UnusedMember.Global
 
-namespace LcmsNetSQLiteTools
+namespace LcmsNet.IO.SQLite
 {
     public class SQLiteCacheDefaultData
     {

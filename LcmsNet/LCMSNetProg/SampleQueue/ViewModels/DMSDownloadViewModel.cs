@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using DynamicData;
 using LcmsNet.IO.DMS;
+using LcmsNet.IO.SQLite;
 using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetSDK.Data;
-using LcmsNetSQLiteTools;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

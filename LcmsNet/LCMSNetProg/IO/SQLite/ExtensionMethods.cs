@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LcmsNetSQLiteTools
+namespace LcmsNet.IO.SQLite
 {
     public static class ExtensionMethods
     {

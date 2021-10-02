@@ -140,6 +140,13 @@
     <Compile Include="IO\DMS\DMSDBTools.cs" />
     <Compile Include="IO\DMS\DMSSampleValidator.cs" />
     <Compile Include="IO\DMS\ExtensionMethods.cs" />
+    <Compile Include="IO\DMS\DatabaseDataException.cs" />
+    <Compile Include="IO\SQLite\DatabaseTableTypes.cs" />
+    <Compile Include="IO\SQLite\ExtensionMethods.cs" />
+    <Compile Include="IO\SQLite\PropertyToColumnMapping.cs" />
+    <Compile Include="IO\SQLite\SQLiteCacheDefaultData.cs" />
+    <Compile Include="IO\SQLite\SQLiteCacheIO.cs" />
+    <Compile Include="IO\SQLite\SQLiteTools.cs" />
     <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />
     <Compile Include="IO\DeviceNotifierConfigurationXMLWriter.cs" />
     <Compile Include="IO\DeviceNotifierConfigurationXMLReader.cs" />
@@ -559,10 +566,6 @@
       <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
       <Name>LcmsNetSDK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SQLiteTools\LcmsNetSQLiteTools\SQLiteTools.csproj">
-      <Project>{b164f88d-3799-46b9-8926-20b40707b2e4}</Project>
-      <Name>SQLiteTools</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="AboutWindow.xaml">
@@ -829,6 +832,7 @@
       <Version>1.0.112</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterClean">
     <ItemGroup>

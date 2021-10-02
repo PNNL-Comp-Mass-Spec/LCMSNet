@@ -7,12 +7,13 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
 using DynamicData;
+using LcmsNet.IO.DMS;
+using LcmsNet.IO.SQLite;
 using LcmsNetData;
 using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
-using LcmsNetSQLiteTools;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 

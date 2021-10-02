@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using LcmsNet.IO.SQLite;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetData;
 using LcmsNetData.Logging;
@@ -13,7 +14,6 @@ using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Method;
-using LcmsNetSQLiteTools;
 
 namespace LcmsNet.SampleQueue
 {

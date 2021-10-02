@@ -1,4 +1,4 @@
-﻿namespace LcmsNetSQLiteTools
+﻿namespace LcmsNet.IO.SQLite
 {
     /// <summary>
     /// Describes the available data table names

@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DemoFiles", "DemoFiles", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetSDK", "LcmsNet\SDK\LcmsNetSDK\LcmsNetSDK.csproj", "{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteTools", "LcmsNet\SQLiteTools\LcmsNetSQLiteTools\SQLiteTools.csproj", "{B164F88D-3799-46B9-8926-20B40707B2E4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetCommonControls", "LcmsNet\SDK\LcmsNetCommonControls\LcmsNetCommonControls.csproj", "{176AACC9-480E-4425-BA4B-40BB7B8A2E04}"
 EndProject
 Global
@@ -36,10 +34,6 @@ Global
 		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Debug|x86.Build.0 = Debug|Any CPU
 		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Release|x86.ActiveCfg = Release|Any CPU
 		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}.Release|x86.Build.0 = Release|Any CPU
-		{B164F88D-3799-46B9-8926-20B40707B2E4}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B164F88D-3799-46B9-8926-20B40707B2E4}.Debug|x86.Build.0 = Debug|Any CPU
-		{B164F88D-3799-46B9-8926-20B40707B2E4}.Release|x86.ActiveCfg = Release|Any CPU
-		{B164F88D-3799-46B9-8926-20B40707B2E4}.Release|x86.Build.0 = Release|Any CPU
 		{176AACC9-480E-4425-BA4B-40BB7B8A2E04}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{176AACC9-480E-4425-BA4B-40BB7B8A2E04}.Debug|x86.Build.0 = Debug|Any CPU
 		{176AACC9-480E-4425-BA4B-40BB7B8A2E04}.Release|x86.ActiveCfg = Release|Any CPU

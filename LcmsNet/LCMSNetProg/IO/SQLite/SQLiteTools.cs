@@ -6,7 +6,7 @@ using LcmsNetData.Logging;
 
 // ReSharper disable UnusedMember.Global
 
-namespace LcmsNetSQLiteTools
+namespace LcmsNet.IO.SQLite
 {
     public static class SQLiteTools
     {
