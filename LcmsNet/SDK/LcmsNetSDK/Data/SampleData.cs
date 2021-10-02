@@ -168,7 +168,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Sequence order of the sample to run.
         /// </summary>
-        private long sequenceNumber;
+        private int sequenceNumber;
 
         /// <summary>
         /// Volume of sample to inject.
@@ -379,7 +379,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Gets or sets the sequence number that the sample is run in.
         /// </summary>
-        public long SequenceID
+        public int SequenceID
         {
             get => sequenceNumber;
             set => this.RaiseAndSetIfChanged(ref sequenceNumber, value, nameof(SequenceID));

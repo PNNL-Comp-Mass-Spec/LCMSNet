@@ -714,7 +714,7 @@ namespace LcmsNet.SampleQueue
         {
             if (queue.Count > 0)
             {
-                long sequence = 0;
+                int sequence = 0;
                 lock (m_completeQueue)
                 {
                     foreach (var sample in m_completeQueue)
@@ -739,7 +739,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="queue"></param>
         /// <param name="startSequence">Start offset to resequence from.</param>
-        private void ResequenceQueuedSamples(List<SampleData> queue, long startSequence)
+        private void ResequenceQueuedSamples(List<SampleData> queue, int startSequence)
         {
             foreach (var data in queue)
             {
