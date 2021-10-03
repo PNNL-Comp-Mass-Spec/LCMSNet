@@ -8,13 +8,11 @@ using System.Windows;
 using System.Windows.Media;
 using DynamicData;
 using LcmsNet.IO.DMS;
-using LcmsNet.IO.DMS.Data;
 using LcmsNet.IO.SQLite;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
-using LcmsNetSDK.System;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 
@@ -36,30 +34,27 @@ namespace LcmsNet.Configuration.ViewModels
             // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                Column1ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 1, Color = Colors.Red }, ColumnNameComboBoxOptions);
-                Column2ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 2, Color = Colors.Yellow }, ColumnNameComboBoxOptions);
-                Column3ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 3, Color = Colors.Green }, ColumnNameComboBoxOptions);
-                Column4ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 4, Color = Colors.Orange }, ColumnNameComboBoxOptions);
+                Column1ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 1, Color = Colors.Red });
+                Column2ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 2, Color = Colors.Yellow });
+                Column3ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 3, Color = Colors.Green });
+                Column4ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 4, Color = Colors.Orange });
                 return;
             }
 #endif
-            cartConfigComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var cartConfigComboBoxOptionsBound).Subscribe();
-            columnNameComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var columnNameComboBoxOptionsBound).Subscribe();
-            CartConfigComboBoxOptions = cartConfigComboBoxOptionsBound;
-            ColumnNameComboBoxOptions = columnNameComboBoxOptionsBound;
 
             TriggerLocation = LCMSSettings.GetParameter(LCMSSettings.PARAM_TRIGGERFILEFOLDER);
             PdfPath = LCMSSettings.GetParameter(LCMSSettings.PARAM_PDFPATH);
 
-            Column1ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[0], ColumnNameComboBoxOptions);
-            Column2ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[1], ColumnNameComboBoxOptions);
-            Column3ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[2], ColumnNameComboBoxOptions);
-            Column4ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[3], ColumnNameComboBoxOptions);
+            Column1ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[0]);
+            Column2ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[1]);
+            Column3ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[2]);
+            Column4ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[3]);
 
             RegisterColumn(Column1ViewModel);
             RegisterColumn(Column2ViewModel);
             RegisterColumn(Column3ViewModel);
             RegisterColumn(Column4ViewModel);
+
             SpecialColumnEnabled = !LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true);
 
             // Cart name
@@ -90,10 +85,7 @@ namespace LcmsNet.Configuration.ViewModels
         private double minVolume = 1;
         private string triggerLocation = "";
         private string pdfPath = "";
-        private string cartConfigName = "";
         private string timeZone = "";
-        private readonly SourceList<string> cartConfigComboBoxOptions = new SourceList<string>();
-        private readonly SourceList<string> columnNameComboBoxOptions = new SourceList<string>();
         private bool specialColumnEnabled;
 
         #endregion
@@ -127,20 +119,6 @@ namespace LcmsNet.Configuration.ViewModels
         }
 
         public string CartName { get; }
-
-        public string CartConfigName
-        {
-            get => cartConfigName;
-            set
-            {
-                var oldValue = cartConfigName;
-                this.RaiseAndSetIfChanged(ref cartConfigName, value);
-                if (!oldValue.Equals(cartConfigName))
-                {
-                    SaveCartConfigName();
-                }
-            }
-        }
 
         public string TimeZone
         {
@@ -183,8 +161,6 @@ namespace LcmsNet.Configuration.ViewModels
         }
 
         public ReadOnlyCollection<string> TimeZoneComboBoxOptions { get; }
-        public ReadOnlyObservableCollection<string> CartConfigComboBoxOptions { get; }
-        public ReadOnlyObservableCollection<string> ColumnNameComboBoxOptions { get; }
 
         public ReactiveCommand<Unit, Unit> ReloadCartDataCommand { get; }
         public ReactiveCommand<Unit, Unit> BrowsePdfPathCommand { get; }
@@ -255,14 +231,6 @@ namespace LcmsNet.Configuration.ViewModels
 
         #endregion
 
-        #region Form Events
-
-        private void SaveCartConfigName()
-        {
-            LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTCONFIGNAME, CartConfigName);
-            SQLiteTools.SaveSelectedCartConfigName(LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME));
-        }
-
         private void ReloadData(bool isLoading = false)
         {
             // Get a fresh list of columns from DMS and store it in the cache db
@@ -276,126 +244,6 @@ namespace LcmsNet.Configuration.ViewModels
             {
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
-
-            UpdateCartConfigNames(isLoading);
-            UpdateColumnNameLists(isLoading);
-
-            RestoreCurrentSelections();
         }
-
-        private void RestoreCurrentSelections()
-        {
-            var cartConfig = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
-            if (!string.IsNullOrWhiteSpace(cartConfig))
-            {
-                CartConfigName = cartConfig;
-            }
-        }
-
-        private void UpdateCartConfigNames(bool isLoading)
-        {
-            List<string> cartConfigNameList = null;
-            var fullCount = 0;
-            try
-            {
-                // Get the new cart config names from the cache db
-                cartConfigNameList = SQLiteTools.GetCartConfigNameList(true).ToList();
-                fullCount = cartConfigNameList.Count;
-                cartConfigNameList = SQLiteTools.GetCartConfigNameList(CartConfiguration.CartName, false).ToList();
-            }
-            catch (DatabaseDataException ex)
-            {
-                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
-            }
-
-            if (!isLoading)
-            {
-                // If a valid list was received, update the display
-                if (cartConfigNameList == null)
-                {
-                    // No new cart config names were obtained
-                    ApplicationLogger.LogError(0, "Cart config name list null when refreshing list");
-                    MessageBox.Show(@"List not updated. Cart config name list from DMS is null");
-                    return;
-                }
-
-                if (cartConfigNameList.Count < 1)
-                {
-                    if (fullCount < 1)
-                    {
-                        // No names found in list
-                        ApplicationLogger.LogError(0, "No cart config names found when refreshing list");
-                        MessageBox.Show(@"List not updated. No cart config names were found.");
-                    }
-                    else
-                    {
-                        // No names in list after cart name filter
-                        ApplicationLogger.LogError(0, "No cart config names found when refreshing list - none match the cart name");
-                        MessageBox.Show(@"List not updated. No cart config names were found - none match the cart name.");
-                    }
-                    return;
-                }
-            }
-
-            cartConfigComboBoxOptions.Edit(list =>
-            {
-                list.Clear();
-                list.AddRange(cartConfigNameList);
-            });
-
-            if (!isLoading)
-            {
-                ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_USER,
-                    "Cart config name lists updated");
-            }
-        }
-
-        private void UpdateColumnNameLists(bool isLoading)
-        {
-            List<string> columnList = null;
-            try
-            {
-                // Get the new list of columns from the cache db
-                columnList = SQLiteTools.GetColumnList(true).ToList();
-            }
-            catch (DatabaseDataException ex)
-            {
-                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
-            }
-
-            if (!isLoading)
-            {
-                // If a valid list was received, update the display
-                if (columnList == null)
-                {
-                    // No new column list obtained
-                    ApplicationLogger.LogError(0, "Column name list null when refreshing list");
-                    MessageBox.Show("List not updated. Column name list from DMS is null");
-                    return;
-                }
-                if (columnList.Count < 1)
-                {
-                    // No names found in list
-                    ApplicationLogger.LogError(0, "No column names found when refreshing list");
-                    MessageBox.Show("List not updated. No column names found.");
-                    return;
-                }
-            }
-
-            // Everything was OK, so update the list
-            columnNameComboBoxOptions.Edit(list =>
-            {
-                list.Clear();
-                list.AddRange(columnList);
-            });
-
-            if (!isLoading)
-            {
-                ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_USER,
-                    "Column name lists updated");
-            }
-        }
-
-        #endregion
     }
 }

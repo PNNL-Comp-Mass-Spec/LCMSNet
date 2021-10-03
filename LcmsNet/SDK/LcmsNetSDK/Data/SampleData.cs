@@ -451,18 +451,6 @@ namespace LcmsNetSDK.Data
             }
         }
 
-        /// <inheritdoc />
-        [PersistenceSetting(IgnoreProperty = true)]
-        public virtual string CaptureShareName => "";
-
-        /// <inheritdoc />
-        [PersistenceSetting(IgnoreProperty = true)]
-        public virtual string CaptureSubdirectoryPath => "";
-
-        /// <inheritdoc />
-        [PersistenceSetting(IgnoreProperty = true)]
-        public virtual string InterestRating => "Unreviewed";
-
         #endregion
 
         #region "Methods"
@@ -506,9 +494,8 @@ namespace LcmsNetSDK.Data
         private void DmsDataChanged(object sender, PropertyChangedEventArgs args)
         {
             if (args.PropertyName.Equals(nameof(DmsData.DatasetName)) || args.PropertyName.Equals(nameof(DmsData.RequestName)) ||
-                args.PropertyName.Equals(nameof(DmsData.CartConfigName)) || args.PropertyName.Equals(nameof(DmsData.RunOrder)) ||
-                args.PropertyName.Equals(nameof(DmsData.Batch)) || args.PropertyName.Equals(nameof(DmsData.Block)) ||
-                args.PropertyName.Equals(nameof(DmsData.RequestID)))
+                args.PropertyName.Equals(nameof(DmsData.RunOrder)) || args.PropertyName.Equals(nameof(DmsData.Batch)) ||
+                args.PropertyName.Equals(nameof(DmsData.Block)) || args.PropertyName.Equals(nameof(DmsData.RequestID)))
             {
                 OnPropertyChanged(nameof(DmsData));
             }

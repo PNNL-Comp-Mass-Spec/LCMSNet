@@ -2063,11 +2063,9 @@ namespace LcmsNet.SampleQueue
             if (buildConnectionString)
             {
                 var cartNames = SQLiteTools.GetCartNameList();
-                var columnNames = SQLiteTools.GetColumnList(false);
 
                 SQLiteTools.BuildConnectionString(true);
 
-                SQLiteTools.SaveColumnListToCache(columnNames);
                 SQLiteTools.SaveCartListToCache(cartNames);
             }
 

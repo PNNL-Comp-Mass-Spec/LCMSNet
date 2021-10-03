@@ -105,15 +105,6 @@ namespace LcmsNetSDK.Configuration
             set => LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTNAME, value);
         }
 
-        /// <summary>
-        /// Gets or sets the name of the cart configuration in use
-        /// </summary>
-        public static string CartConfigName
-        {
-            get => LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
-            set => LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTCONFIGNAME, value);
-        }
-
         public static double MinimumVolume
         {
             get

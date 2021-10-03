@@ -32,7 +32,6 @@ namespace LcmsNetSDK
         public const string PARAM_APPLICATIONPATH = "ApplicationPath";
         public const string PARAM_APPLICATIONDATAPATH = "ApplicationDataPath";
         public const string PARAM_CACHEFILENAME = "CacheFileName";
-        public const string PARAM_CARTCONFIGNAME = "CartConfigName";
         public const string PARAM_CARTNAME = "CartName";
         public const string PARAM_COLUMNNAME = "ColumnName";
         public const string PARAM_COLUMNNAME0 = "ColumnName0";

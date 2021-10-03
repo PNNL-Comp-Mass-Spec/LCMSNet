@@ -1,5 +1,4 @@
-﻿using LcmsNet.IO.DMS.Data;
-using LcmsNetSDK.Data;
+﻿using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue.IO
 {

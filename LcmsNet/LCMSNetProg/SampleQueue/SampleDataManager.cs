@@ -377,14 +377,6 @@ namespace LcmsNet.SampleQueue
             {
                 DMSAvailable = true;
             }
-            if (e.SettingName.Equals(LCMSSettings.PARAM_CARTCONFIGNAME))
-            {
-                foreach (var sample in samplesList.Items)
-                {
-                    var data = sample.Sample.DmsData;
-                    data.CartConfigName = e.SettingValue;
-                }
-            }
         }
 
         /// <summary>
@@ -1024,8 +1016,7 @@ namespace LcmsNet.SampleQueue
                     RequestName = string.Format("{0}_{1:0000}",
                         SampleQueue.DefaultSampleName,
                         SampleQueue.RunningSampleIndex++),
-                    CartName = sampleToCopy.DmsData.CartName,
-                    CartConfigName = sampleToCopy.DmsData.CartConfigName
+                    CartName = sampleToCopy.DmsData.CartName
                 },
                 PAL =
                 {
@@ -1125,8 +1116,7 @@ namespace LcmsNet.SampleQueue
                         RequestName = string.Format("{0}_{1:0000}",
                             SampleQueue.DefaultSampleName,
                             SampleQueue.RunningSampleIndex++),
-                        CartName = CartConfiguration.CartName,
-                        CartConfigName = CartConfiguration.CartConfigName
+                        CartName = CartConfiguration.CartName
                     }
                 };
             }
@@ -1151,10 +1141,6 @@ namespace LcmsNet.SampleQueue
             }
             if (!samplesList.Items.Any(x => x.Sample.Equals(sample)))
             {
-                if (string.IsNullOrWhiteSpace(sample.DmsData.CartConfigName))
-                {
-                    sample.DmsData.CartConfigName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
-                }
                 samplesList.Add(new SampleViewModel(sample));
                 // TODO: Verify: sorting should be handled by the SourceList observers
                 //samplesList.Sort((x, y) => x.Sample.SequenceID.CompareTo(y.Sample.SequenceID));
@@ -1180,10 +1166,6 @@ namespace LcmsNet.SampleQueue
                     continue;
                 }
 
-                if (string.IsNullOrWhiteSpace(sample.DmsData.CartConfigName))
-                {
-                    sample.DmsData.CartConfigName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME);
-                }
                 // Add the new items to a temporary list.
                 newItems.Add(new SampleViewModel(sample));
                 // TODO: Verify: sorting should be handled by the SourceList observers
@@ -1569,50 +1551,6 @@ namespace LcmsNet.SampleQueue
                 return;
             }
 #endif
-
-            // Get the list of cart configuration names from DMS
-            var cartConfigOptions = new List<string>();
-            CartConfigOptions = cartConfigOptions.AsReadOnly();
-            try
-            {
-                var totalConfigCount = SQLiteTools.GetCartConfigNameList(false).Count();
-                var cartName = CartConfiguration.CartName;
-                var cartConfigList = SQLiteTools.GetCartConfigNameList(cartName, false).ToList();
-                if (cartConfigList.Count > 0)
-                {
-                    cartConfigOptions.AddRange(cartConfigList.ToList());
-                }
-                else
-                {
-                    if (totalConfigCount > 0)
-                    {
-                        CartConfigOptionsError = "No cart configurations found that match the supplied cart name: \"" + cartName + "\".\n" +
-                                                 "Fix: close, fix the cart name, and restart.";
-                    }
-                    else
-                    {
-                        CartConfigOptionsError = "No cart configurations found. Can this computer communicate with DMS? Fix and restart LCMSNet";
-                    }
-                }
-            }
-            catch (DatabaseConnectionStringException ex)
-            {
-                // The SQLite connection string wasn't found
-                var errMsg = ex.Message + " while getting LC cart config name listing.\r\n" +
-                             "Please close LcmsNet program and correct the configuration file";
-                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
-            }
-            catch (DatabaseDataException ex)
-            {
-                // There was a problem getting the list of LC carts from the cache db
-                var innerException = string.Empty;
-                if (ex.InnerException != null)
-                    innerException = ex.InnerException.Message;
-                var errMsg = "Exception getting LC cart config name list from DMS: " + innerException + "\r\n" +
-                             "As a workaround, you may manually type the cart config name when needed.\r\n" +
-                             "You may retry retrieving the cart list later, if desired.";
-                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
-            }
 
             lcMethodOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcMethodOptionsBound).Subscribe();
             lcMethodOptions.Connect().Transform(x => x.Name).ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcMethodNamesBound).Subscribe();

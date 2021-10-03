@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using LcmsNet.IO.DMS;
-using LcmsNet.IO.DMS.Data;
 using LcmsNetSDK.Logging;
 
 namespace LcmsNet.IO.SQLite
@@ -870,7 +869,6 @@ namespace LcmsNet.IO.SQLite
         {
             var writeData = defaultData ?? new SQLiteCacheDefaultData();
             CheckSingleColumnCacheTable(DatabaseTableTypes.CartList, writeData.CartNames);
-            CheckSingleColumnCacheTable(DatabaseTableTypes.ColumnList, writeData.ColumnNames);
         }
 
         /// <summary>

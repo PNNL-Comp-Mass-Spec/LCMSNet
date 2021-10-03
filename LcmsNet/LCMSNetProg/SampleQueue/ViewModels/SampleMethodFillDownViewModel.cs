@@ -136,35 +136,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref volumeGroup4, value);
         }
 
-        public string CartConfigGroup1
-        {
-            get => cartConfigGroup1;
-            set => this.RaiseAndSetIfChanged(ref cartConfigGroup1, value);
-        }
-
-        public string CartConfigGroup2
-        {
-            get => cartConfigGroup2;
-            set => this.RaiseAndSetIfChanged(ref cartConfigGroup2, value);
-        }
-
-        public string CartConfigGroup3
-        {
-            get => cartConfigGroup3;
-            set => this.RaiseAndSetIfChanged(ref cartConfigGroup3, value);
-        }
-
-        public string CartConfigGroup4
-        {
-            get => cartConfigGroup4;
-            set => this.RaiseAndSetIfChanged(ref cartConfigGroup4, value);
-        }
-
         // Local "wrappers" around the static class options, for data binding purposes
         public ReadOnlyObservableCollection<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
         public ReadOnlyObservableCollection<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
-        public ReadOnlyCollection<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
-        public string CartConfigError => SampleDataManager.CartConfigOptionsError;
 
         public double VolumeMinimum => CartConfiguration.MinimumVolume;
 
@@ -175,7 +149,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveCommand<Unit, Unit> ApplyLCMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyInstrumentMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyVolumeCommand { get; }
-        public ReactiveCommand<Unit, Unit> ApplyCartConfigCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyAllCommand { get; }
         public ReactiveCommand<Unit, Unit> CloseWindowCommand { get; }
 
@@ -200,7 +173,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             ApplyLCMethodCommand = ReactiveCommand.Create(LCMethodFillDown);
             ApplyInstrumentMethodCommand = ReactiveCommand.Create(InstrumentMethodFillDown);
             ApplyVolumeCommand = ReactiveCommand.Create(VolumeFillDown);
-            ApplyCartConfigCommand = ReactiveCommand.Create(CartConfigFillDown);
             ApplyAllCommand = ReactiveCommand.Create(ApplyAllFillDown);
             CloseWindowCommand = ReactiveCommand.Create(CloseWindow);
 
@@ -258,29 +230,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        private void EnsureCartConfigComboBoxValues()
-        {
-            if (CartConfigComboBoxOptions.Count > 0)
-            {
-                if (string.IsNullOrWhiteSpace(CartConfigGroup1))
-                {
-                    CartConfigGroup1 = CartConfigComboBoxOptions[0];
-                }
-                if (string.IsNullOrWhiteSpace(CartConfigGroup2))
-                {
-                    CartConfigGroup2 = CartConfigComboBoxOptions[0];
-                }
-                if (string.IsNullOrWhiteSpace(CartConfigGroup3))
-                {
-                    CartConfigGroup3 = CartConfigComboBoxOptions[0];
-                }
-                if (string.IsNullOrWhiteSpace(CartConfigGroup4))
-                {
-                    CartConfigGroup4 = CartConfigComboBoxOptions[0];
-                }
-            }
-        }
-
         /// <summary>
         /// Make sure a selected value will be shown for each combobox. Can be used for defaults and error checking (doesn't replace set values)
         /// </summary>
@@ -288,7 +237,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             EnsureLCMethodComboBoxValues();
             //EnsureInstrumentMethodComboBoxValues(); // commented out in the view
-            EnsureCartConfigComboBoxValues();
         }
 
         /// <summary>
@@ -422,43 +370,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         /// <summary>
-        /// Fill down the dataset type
-        /// </summary>
-        private void CartConfigFillDown()
-        {
-            EnsureItemsAreSelected();
-            var cartConfigs = new List<string>();
-            if (ApplyGroup1)
-            {
-                cartConfigs.Add(CartConfigGroup1);
-            }
-            if (ApplyGroup2)
-            {
-                cartConfigs.Add(CartConfigGroup2);
-            }
-            if (ApplyGroup3)
-            {
-                cartConfigs.Add(CartConfigGroup3);
-            }
-            if (ApplyGroup4)
-            {
-                cartConfigs.Add(CartConfigGroup4);
-            }
-            if (cartConfigs.Count < 1)
-                return;
-
-            var i = 0;
-            foreach (var sample in Samples)
-            {
-                sample.DmsData.CartConfigName = cartConfigs[i];
-                i++;
-                // mod?
-                if (i >= cartConfigs.Count)
-                    i = 0;
-            }
-        }
-
-        /// <summary>
         /// Apply all filldown settings
         /// </summary>
         private void ApplyAllFillDown()
@@ -468,7 +379,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             EnsureItemsAreSelected();
             LCMethodFillDown();
             VolumeFillDown();
-            CartConfigFillDown();
         }
 
         private void CloseWindow()

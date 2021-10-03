@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LcmsNet.IO.DMS.Data
+namespace LcmsNet.IO.DMS
 {
     /// <summary>
     /// Class for holding data used to query DMS for samples to run

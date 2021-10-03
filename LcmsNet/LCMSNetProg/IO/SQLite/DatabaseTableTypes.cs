@@ -9,11 +9,5 @@
         RunningQueue,
         CompletedQueue,
         CartList,
-        /// <summary>
-        /// Active LC Columns
-        /// </summary>
-        ColumnList,
-        CartConfigNameList,
-        CartConfigNameSelected,
     }
 }

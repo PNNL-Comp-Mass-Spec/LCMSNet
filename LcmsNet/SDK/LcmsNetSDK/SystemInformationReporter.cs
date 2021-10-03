@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
-using LcmsNetSDK.System;
 
 namespace LcmsNetSDK
 {
@@ -13,7 +12,6 @@ namespace LcmsNetSDK
             var name = "[SystemInfo]\r\n";
             name += $"Machine Name = {Environment.MachineName}\r\n";
             name += $"CartName = {LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME)}\r\n";
-            name += $"CartConfigName = {LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME)}\r\n";
             try
             {
                 var hostName = Dns.GetHostName();

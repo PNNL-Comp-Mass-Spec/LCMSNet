@@ -8,8 +8,8 @@ using System.Linq;
 using System.Threading;
 using System.Xml;
 using System.Xml.Schema;
-using LcmsNet.IO.DMS.Data;
 using LcmsNet.IO.SQLite;
+using LcmsNet.SampleQueue.IO;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 
@@ -608,33 +608,6 @@ namespace LcmsNet.IO.DMS
         #region Private Methods: Read from DMS and cache to SQLite
 
         /// <summary>
-        /// Gets a list of Cart Config Names from DMS and stores it in cache
-        /// </summary>
-        private void GetCartConfigNamesFromDMS()
-        {
-            try
-            {
-                var cartConfigs = ReadCartConfigNamesFromDMS();
-
-                // Store the list of cart config names in the cache db
-                try
-                {
-                    SQLiteTools.SaveCartConfigListToCache(cartConfigs);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing LC cart config names in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting cart config list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
         /// Gets a list of instrument carts from DMS and stores it in cache
         /// </summary>
         private void GetCartListFromDMS()
@@ -668,79 +641,9 @@ namespace LcmsNet.IO.DMS
             }
         }
 
-        /// <summary>
-        /// Gets a list of active LC columns from DMS and stores in the cache
-        /// </summary>
-        private void GetColumnListFromDMS()
-        {
-            IEnumerable<string> tmpColList;    // Temp list for holding return values
-            var connStr = GetConnectionString();
-
-            // Get a list of active columns
-            const string sqlCmd = "SELECT ColumnNumber FROM V_LCMSNet_Column_Export WHERE State <> 'Retired' ORDER BY ColumnNumber";
-            try
-            {
-                tmpColList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting column list";
-                //              throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            // Store the list of carts in the cache db
-            try
-            {
-                SQLiteTools.SaveColumnListToCache(tmpColList);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing column list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
         #endregion
 
         #region Private DMS database read-and-convert methods
-
-        private IEnumerable<CartConfigInfo> ReadCartConfigNamesFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            // Get a list containing all active cart configuration names
-            const string sqlCmd =
-                "SELECT Cart_Config_Name, Cart_Name " +
-                "FROM V_LC_Cart_Config_Export " +
-                "WHERE Cart_Config_State = 'Active' " +
-                "ORDER BY Cart_Name, Cart_Config_Name";
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return new CartConfigInfo(
-                            reader["Cart_Config_Name"].CastDBValTo<string>(),
-                            reader["Cart_Name"].CastDBValTo<string>());
-                    }
-                }
-            }
-        }
 
         private IEnumerable<KeyValuePair<int, int>> ReadMRMFileListFromDMS(int minID, int maxID)
         {
@@ -964,12 +867,6 @@ namespace LcmsNet.IO.DMS
             ReportProgress("Loading cart names", 1, stepCountTotal);
             GetCartListFromDMS();
 
-            ReportProgress("Loading cart config names", 2, stepCountTotal);
-            GetCartConfigNamesFromDMS();
-
-            ReportProgress("Loading LC columns", 8, stepCountTotal);
-            GetColumnListFromDMS();
-
             ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);
         }
 
@@ -1044,75 +941,6 @@ namespace LcmsNet.IO.DMS
             }
 
             return retList;
-        }
-
-        /// <summary>
-        /// Updates the cart assignment in DMS
-        /// </summary>
-        /// <param name="requestList">Comma-delimited string of request ID's (must be less than 8000 chars long)</param>
-        /// <param name="cartName">Name of cart to assign (ignored for removing assignment)</param>
-        /// <param name="cartConfigName">Name of cart config name to assign</param>
-        /// <param name="updateMode">TRUE for updating assignment; FALSE to clear assignment</param>
-        /// <returns>TRUE for success; FALSE for error</returns>
-        public bool UpdateDMSCartAssignment(string requestList, string cartName, string cartConfigName, bool updateMode)
-        {
-            var connStr = GetConnectionString();
-            string mode;
-            int resultCode;
-
-            // Verify request list is < 8000 chars (stored procedure limitation)
-            if (requestList.Length > 8000)
-            {
-                ErrMsg = "Too many requests selected for import.\r\nReduce the number of requests being imported.";
-                return false;
-            }
-
-            // Convert mode to string value
-            if (updateMode)
-            {
-                mode = "Add";
-            }
-            else
-            {
-                mode = "Remove";
-            }
-
-            // Set up parameters for stored procedure call
-            var spCmd = new SqlCommand
-            {
-                CommandType = CommandType.StoredProcedure,
-                CommandText = "AddRemoveRequestCartAssignment"
-            };
-            spCmd.Parameters.Add(new SqlParameter("@Return", SqlDbType.Int)).Direction = ParameterDirection.ReturnValue;
-
-            spCmd.Parameters.Add(new SqlParameter("@RequestIDList", SqlDbType.VarChar, 8000)).Value = requestList;
-            spCmd.Parameters.Add(new SqlParameter("@CartName", SqlDbType.VarChar, 128)).Value = cartName;
-            spCmd.Parameters.Add(new SqlParameter("@CartConfigName", SqlDbType.VarChar, 128)).Value = cartConfigName;
-            spCmd.Parameters.Add(new SqlParameter("@Mode", SqlDbType.VarChar, 32)).Value = mode;
-
-            spCmd.Parameters.Add(new SqlParameter("@message", SqlDbType.VarChar, 512));
-            spCmd.Parameters["@message"].Direction = ParameterDirection.InputOutput;
-            spCmd.Parameters["@message"].Value = "";
-
-            // Execute the SP
-            try
-            {
-                resultCode = ExecuteSP(spCmd, connStr);
-            }
-            catch (Exception ex)
-            {
-                ApplicationLogger.LogError(0, "Exception updating DMS cart information", ex);
-                return false;
-            }
-
-            if (resultCode != 0)    // Error occurred
-            {
-                var returnMsg = spCmd.Parameters["@message"].ToString();
-                throw new DatabaseStoredProcException("AddRemoveRequestCartAssignment", resultCode, returnMsg);
-            }
-
-            // Success!
-            return true;
         }
 
         #endregion

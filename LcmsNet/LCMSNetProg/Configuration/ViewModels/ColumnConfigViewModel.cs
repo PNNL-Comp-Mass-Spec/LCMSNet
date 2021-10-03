@@ -27,15 +27,12 @@ namespace LcmsNet.Configuration.ViewModels
                 Color = Colors.Red
             };
 
-            ColumnNamesComboBoxOptions = new ReadOnlyObservableCollection<string>(new ObservableCollection<string>(new string[] {"NOTSET"}));
-
             Initialize();
         }
 
-        public ColumnConfigViewModel(ColumnData column, ReadOnlyObservableCollection<string> columnNames)
+        public ColumnConfigViewModel(ColumnData column)
         {
             columnData = column;
-            ColumnNamesComboBoxOptions = columnNames;
 
             Initialize();
         }
@@ -122,11 +119,6 @@ namespace LcmsNet.Configuration.ViewModels
             get => columnData;
             private set => this.RaiseAndSetIfChanged(ref columnData, value);
         }
-
-        /// <summary>
-        /// Sets the list of column names.
-        /// </summary>
-        public ReadOnlyObservableCollection<string> ColumnNamesComboBoxOptions { get; }
 
         #endregion
 

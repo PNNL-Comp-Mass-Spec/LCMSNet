@@ -30,7 +30,6 @@ namespace LcmsNetSDK.Data
             Batch = -1;
             Block = -1;
             CartName = "";
-            CartConfigName = "";
             Comment = "";
             DatasetName = "";
             MRMFileID = -1;
@@ -48,7 +47,6 @@ namespace LcmsNetSDK.Data
             Batch = -1;
             Block = -1;
             CartName = "";
-            CartConfigName = "";
             Comment = "";
             DatasetName = "";
             MRMFileID = -1;
@@ -69,7 +67,6 @@ namespace LcmsNetSDK.Data
             newDmsData.Batch = Batch;
             newDmsData.Block = Block;
             newDmsData.CartName = CartName;
-            newDmsData.CartConfigName = CartConfigName;
             newDmsData.Comment = Comment;
             newDmsData.DatasetName = DatasetName;
             newDmsData.MRMFileID = MRMFileID;
@@ -86,7 +83,6 @@ namespace LcmsNetSDK.Data
         private int requestId;
         private string requestName;
         private string datasetName;
-        private string cartConfigName;
         private int block;
         private int runOrder;
         private int batch;
@@ -156,16 +152,6 @@ namespace LcmsNetSDK.Data
         {
             get => cartName;
             set => this.RaiseAndSetIfChanged(ref cartName, value);
-        }
-
-        /// <summary>
-        /// Name of cart configuration for the current cart
-        /// </summary>
-        /// <remarks>This is an editable field even if the DMS Request has been resolved.</remarks>
-        public string CartConfigName
-        {
-            get => cartConfigName;
-            set => this.RaiseAndSetIfChanged(ref cartConfigName, value);
         }
 
         /// <summary>

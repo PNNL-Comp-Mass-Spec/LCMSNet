@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LcmsNet.IO.DMS.Data;
 using LcmsNet.IO.SQLite;
 using LcmsNetSDK.Data;
 using NUnit.Framework;
@@ -102,29 +101,6 @@ namespace LcmsnetUnitTest
         {
             var samples = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.RunningQueue).ToList();
             Assert.AreEqual(2, samples[0].UniqueID);
-        }
-
-        /// <summary>
-        /// Tests that LCColumns are saved to cache
-        /// </summary>
-        [Test]
-        public void TestR()
-        {
-            var cols = new List<string>();
-            var col = "ColTest1";
-            cols.Add(col);
-            SQLiteTools.SaveColumnListToCache(cols);
-        }
-
-        /// <summary>
-        /// Tests that LCColumns are read from cache
-        /// </summary>
-        [Test]
-        public void TestS()
-        {
-            var cols = SQLiteTools.GetColumnList(false).ToList();
-            Assert.AreEqual(1, cols.Count);
-            Assert.IsTrue(cols[0] == "ColTest1");
         }
     }
 }

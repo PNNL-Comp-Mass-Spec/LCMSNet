@@ -18,7 +18,7 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public ColumnData()
         {
-            m_name = "NOTSET";
+            m_name = "";
             m_columnIndex = 0;
             m_status = ColumnStatus.Idle;
             m_first = false;
@@ -192,7 +192,13 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public string Name
         {
-            get => m_name;
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(m_name))
+                    return m_name;
+
+                return (ID + 1).ToString();
+            }
             set
             {
                 var oldName = m_name;
