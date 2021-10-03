@@ -60,7 +60,6 @@ namespace LcmsNetSDK
         public const string PARAM_OPERATOR = "Operator";
         public const string PARAM_PALMETHODSFOLDER = "PalMethodsFolder";
         public const string PARAM_PDFPATH = "PdfPath";
-        public const string PARAM_SEPARATIONTYPE = "SeparationType";
         public const string PARAM_TIMEZONE = "TimeZone";
         public const string PARAM_TRIGGERFILEFOLDER = "TriggerFileFolder";
         public const string PARAM_LocalDataPath = "LocalDataPath";

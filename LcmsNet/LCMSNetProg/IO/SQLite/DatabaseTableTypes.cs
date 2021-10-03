@@ -9,9 +9,6 @@
         RunningQueue,
         CompletedQueue,
         CartList,
-        SeparationTypeList,
-        SeparationTypeSelected,
-        DatasetTypeList,
         /// <summary>
         /// Active LC Columns
         /// </summary>

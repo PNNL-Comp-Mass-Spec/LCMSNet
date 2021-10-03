@@ -254,9 +254,6 @@ namespace PDFGenerator
             string[] iv = { "Injection Volume:", sample.Volume.ToString("0.00") };
             var injectionVolume = FormatString(FieldWidths, iv);
 
-            string[] t = { "Dataset Type:", sample.DmsData.DatasetType };
-            var type = FormatString(FieldWidths, t);
-
             string[] ba = { "Batch:", sample.DmsData.Batch.ToString() };
             var batch = FormatString(FieldWidths, ba);
 
@@ -269,7 +266,7 @@ namespace PDFGenerator
             string[] co = {"Comment:", sample.DmsData.Comment};
             var comment = FormatString(FieldWidths, co);
 
-            var paragraph = datasetNameString + requestString + requestIdString + startFormatted + endFormatted + columnString + LCMethodString + PALTrayString + PALVialString + injectionVolume + type + batch +
+            var paragraph = datasetNameString + requestString + requestIdString + startFormatted + endFormatted + columnString + LCMethodString + PALTrayString + PALVialString + injectionVolume + batch +
                 block + runOrder + comment;
 
             return paragraph;

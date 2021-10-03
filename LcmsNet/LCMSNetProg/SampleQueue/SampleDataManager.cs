@@ -1025,8 +1025,7 @@ namespace LcmsNet.SampleQueue
                         SampleQueue.DefaultSampleName,
                         SampleQueue.RunningSampleIndex++),
                     CartName = sampleToCopy.DmsData.CartName,
-                    CartConfigName = sampleToCopy.DmsData.CartConfigName,
-                    DatasetType = sampleToCopy.DmsData.DatasetType
+                    CartConfigName = sampleToCopy.DmsData.CartConfigName
                 },
                 PAL =
                 {
@@ -1082,12 +1081,9 @@ namespace LcmsNet.SampleQueue
             newSample.DmsData.Batch = 0;
             newSample.DmsData.Block = 0;
             newSample.DmsData.Comment = "Blank";
-            newSample.DmsData.Experiment = "";
             newSample.DmsData.MRMFileID = 0;
-            newSample.DmsData.EMSLProposalID = "";
             newSample.DmsData.RequestID = 0;
             newSample.DmsData.RunOrder = 0;
-            newSample.DmsData.EMSLUsageType = "";
 
             return newSample;
         }
@@ -1555,7 +1551,6 @@ namespace LcmsNet.SampleQueue
         public static ReadOnlyObservableCollection<LCMethod> LcMethodOptions { get; }
         public static ReadOnlyObservableCollection<string> LcMethodNameOptions { get; }
         public static ReadOnlyObservableCollection<string> InstrumentMethodOptions { get; }
-        public static ReadOnlyCollection<string> DatasetTypeOptions { get; }
         public static ReadOnlyCollection<string> CartConfigOptions { get; }
         public static ReadOnlyObservableCollection<string> PalTrayOptions { get; }
 
@@ -1574,20 +1569,6 @@ namespace LcmsNet.SampleQueue
                 return;
             }
 #endif
-
-            // Add the dataset type items to the data grid
-            var datasetTypeOptions = new List<string>();
-            DatasetTypeOptions = datasetTypeOptions.AsReadOnly();
-            try
-            {
-                var datasetTypes = SQLiteTools.GetDatasetTypeList(false);
-                datasetTypeOptions.AddRange(datasetTypes.ToList());
-            }
-            catch (Exception ex)
-            {
-                ApplicationLogger.LogError(1, "The sample queue could not load the dataset type list.", ex);
-                DatasetTypeOptions = new List<string>().AsReadOnly();
-            }
 
             // Get the list of cart configuration names from DMS
             var cartConfigOptions = new List<string>();

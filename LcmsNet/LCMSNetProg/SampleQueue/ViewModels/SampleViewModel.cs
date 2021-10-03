@@ -67,7 +67,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             // Extras to trigger the collection monitor when nested properties change
             this.WhenAnyValue(x => x.Sample.DmsData.Block, x => x.Sample.DmsData.RunOrder, x => x.Sample.DmsData.Batch,
-                    x => x.Sample.DmsData.CartConfigName, x => x.Sample.DmsData.DatasetType, x => x.Sample.PAL.PALTray, x => x.Sample.PAL.Well)
+                    x => x.Sample.DmsData.CartConfigName, x => x.Sample.PAL.PALTray, x => x.Sample.PAL.Well)
                 .Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
             this.WhenAnyValue(x => x.Sample.SequenceID, x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
             this.WhenAnyValue(x => x.Sample.LCMethodName).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethodName)));
@@ -82,7 +82,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         // Local "wrappers" around the static class options, for data binding purposes
         public ReadOnlyObservableCollection<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
-        public ReadOnlyCollection<string> DatasetTypeComboBoxOptions => SampleDataManager.DatasetTypeOptions;
         public ReadOnlyObservableCollection<string> PalTrayComboBoxOptions => SampleDataManager.PalTrayOptions;
         public ReadOnlyObservableCollection<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
         public ReadOnlyCollection<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;

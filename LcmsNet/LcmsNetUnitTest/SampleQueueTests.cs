@@ -103,7 +103,6 @@ namespace LcmsnetUnitTest
             sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
-            sampleA.DmsData.DatasetType = "HMS";
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
@@ -111,7 +110,6 @@ namespace LcmsnetUnitTest
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
-            sampleB.DmsData.DatasetType = "HMS";
             sampleB.DmsData.DatasetName = "testDataset2";
             sampleB.DmsData.CartName = "Emulated";
 
@@ -156,7 +154,6 @@ namespace LcmsnetUnitTest
             sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
-            sampleA.DmsData.DatasetType = "HMS";
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
@@ -164,7 +161,6 @@ namespace LcmsnetUnitTest
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
-            sampleB.DmsData.DatasetType = "HMS";
             sampleB.DmsData.DatasetName = "testDataset2";
             sampleB.DmsData.CartName = "Emulated";
 
@@ -221,7 +217,6 @@ namespace LcmsnetUnitTest
             sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
-            sampleA.DmsData.DatasetType = "HMS";
             sampleA.DmsData.DatasetName = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
@@ -229,7 +224,6 @@ namespace LcmsnetUnitTest
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
-            sampleB.DmsData.DatasetType = "HMS";
             sampleB.DmsData.DatasetName = "testDataset2";
             sampleB.DmsData.CartName = "Emulated";
 

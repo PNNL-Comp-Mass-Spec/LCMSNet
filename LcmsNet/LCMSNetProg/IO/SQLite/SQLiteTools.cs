@@ -38,9 +38,6 @@ namespace LcmsNet.IO.SQLite
         private static readonly List<string> cartNames = new List<string>(0);
         private static readonly Dictionary<string, List<string>> cartConfigNames = new Dictionary<string, List<string>>(0);
         private static readonly List<string> columnNames = new List<string>(0);
-        private static readonly List<string> separationNames = new List<string>(0);
-        private static readonly List<string> datasetTypeNames = new List<string>(0);
-        private static bool firstTimeLookupSelectedSepType = true;
 
         #endregion
 
@@ -277,26 +274,6 @@ namespace LcmsNet.IO.SQLite
         }
 
         /// <summary>
-        /// Wrapper around generic retrieval method specifically for separation type lists
-        /// </summary>
-        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
-        /// <returns>List containing separation types</returns>
-        public static IEnumerable<string> GetSepTypeList(bool force)
-        {
-            return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.SeparationTypeList, separationNames, force);
-        }
-
-        /// <summary>
-        /// Wrapper around generic retrieval method specifically for dataset type lists
-        /// </summary>
-        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
-        /// <returns>List containing dataset types</returns>
-        public static IEnumerable<string> GetDatasetTypeList(bool force)
-        {
-            return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.DatasetTypeList, datasetTypeNames, force);
-        }
-
-        /// <summary>
         /// Retrieves the cached cart configuration name
         /// </summary>
         /// <returns>Cart configuration name</returns>
@@ -320,40 +297,6 @@ namespace LcmsNet.IO.SQLite
             }
 
             return cartConfigNamesList[0];
-        }
-
-        /// <summary>
-        /// Retrieves the cached separation type
-        /// </summary>
-        /// <returns>Separation type</returns>
-        public static string GetDefaultSeparationType()
-        {
-            List<string> sepType;
-            try
-            {
-                sepType = Cache.ReadSingleColumnListFromCacheCheckExceptions(DatabaseTableTypes.SeparationTypeSelected).ToList();
-            }
-            catch (Exception ex)
-            {
-                if (!firstTimeLookupSelectedSepType)
-                {
-                    const string errorMessage =
-                        "Exception getting default separation type. (NOTE: This is normal if a new cache is being used)";
-                    ApplicationLogger.LogError(0, errorMessage, ex);
-                }
-
-                firstTimeLookupSelectedSepType = false;
-                return string.Empty;
-            }
-
-            firstTimeLookupSelectedSepType = false;
-
-            if (sepType.Count < 1)
-            {
-                return string.Empty;
-            }
-
-            return sepType[0];
         }
 
         #endregion
@@ -422,24 +365,6 @@ namespace LcmsNet.IO.SQLite
         }
 
         /// <summary>
-        /// Saves a list of dataset type names to the SQLite cache
-        /// </summary>
-        /// <param name="datasetTypeList">Dataset type names</param>
-        public static void SaveDatasetTypeListToCache(IEnumerable<string> datasetTypeList)
-        {
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.DatasetTypeList, datasetTypeList, datasetTypeNames);
-        }
-
-        /// <summary>
-        /// Saves a list of separation types to the SQLite cache
-        /// </summary>
-        /// <param name="separationTypeList">Separation type names</param>
-        public static void SaveSeparationTypeListToCache(IEnumerable<string> separationTypeList)
-        {
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.SeparationTypeList, separationTypeList, separationNames);
-        }
-
-        /// <summary>
         /// Caches the cart configuration name that is currently selected for this cart
         /// </summary>
         /// <param name="cartConfigName">Cart configuration name</param>
@@ -447,16 +372,6 @@ namespace LcmsNet.IO.SQLite
         {
             // Create a list for the Save call to use (it requires a list)
             Cache.SaveSingleColumnListToCache(DatabaseTableTypes.CartConfigNameSelected, new List<string> { cartConfigName });
-        }
-
-        /// <summary>
-        /// Caches the separation type that is currently selected for this cart
-        /// </summary>
-        /// <param name="separationType">Separation type</param>
-        public static void SaveSelectedSeparationType(string separationType)
-        {
-            // Create a list for the Save call to use (it requires a list)
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.SeparationTypeSelected, new List<string> { separationType });
         }
 
         #endregion

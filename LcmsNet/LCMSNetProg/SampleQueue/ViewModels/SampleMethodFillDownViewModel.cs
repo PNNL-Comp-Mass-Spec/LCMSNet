@@ -31,10 +31,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         private double volumeGroup2 = 7.0;
         private double volumeGroup3 = 7.0;
         private double volumeGroup4 = 7.0;
-        private string datasetTypeGroup1;
-        private string datasetTypeGroup2;
-        private string datasetTypeGroup3;
-        private string datasetTypeGroup4;
         private string cartConfigGroup1;
         private string cartConfigGroup2;
         private string cartConfigGroup3;
@@ -140,30 +136,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref volumeGroup4, value);
         }
 
-        public string DatasetTypeGroup1
-        {
-            get => datasetTypeGroup1;
-            set => this.RaiseAndSetIfChanged(ref datasetTypeGroup1, value);
-        }
-
-        public string DatasetTypeGroup2
-        {
-            get => datasetTypeGroup2;
-            set => this.RaiseAndSetIfChanged(ref datasetTypeGroup2, value);
-        }
-
-        public string DatasetTypeGroup3
-        {
-            get => datasetTypeGroup3;
-            set => this.RaiseAndSetIfChanged(ref datasetTypeGroup3, value);
-        }
-
-        public string DatasetTypeGroup4
-        {
-            get => datasetTypeGroup4;
-            set => this.RaiseAndSetIfChanged(ref datasetTypeGroup4, value);
-        }
-
         public string CartConfigGroup1
         {
             get => cartConfigGroup1;
@@ -191,7 +163,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         // Local "wrappers" around the static class options, for data binding purposes
         public ReadOnlyObservableCollection<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
         public ReadOnlyObservableCollection<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
-        public ReadOnlyCollection<string> DatasetTypeComboBoxOptions => SampleDataManager.DatasetTypeOptions;
         public ReadOnlyCollection<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
         public string CartConfigError => SampleDataManager.CartConfigOptionsError;
 
@@ -204,7 +175,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveCommand<Unit, Unit> ApplyLCMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyInstrumentMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyVolumeCommand { get; }
-        public ReactiveCommand<Unit, Unit> ApplyDatasetTypeCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyCartConfigCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyAllCommand { get; }
         public ReactiveCommand<Unit, Unit> CloseWindowCommand { get; }
@@ -230,7 +200,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             ApplyLCMethodCommand = ReactiveCommand.Create(LCMethodFillDown);
             ApplyInstrumentMethodCommand = ReactiveCommand.Create(InstrumentMethodFillDown);
             ApplyVolumeCommand = ReactiveCommand.Create(VolumeFillDown);
-            ApplyDatasetTypeCommand = ReactiveCommand.Create(DatasetTypeFillDown);
             ApplyCartConfigCommand = ReactiveCommand.Create(CartConfigFillDown);
             ApplyAllCommand = ReactiveCommand.Create(ApplyAllFillDown);
             CloseWindowCommand = ReactiveCommand.Create(CloseWindow);
@@ -289,35 +258,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        private void EnsureDatasetTypeComboBoxValues()
-        {
-            if (DatasetTypeComboBoxOptions.Count == 0)
-            {
-                return;
-            }
-            var defaultDatasetType = DatasetTypeComboBoxOptions.FirstOrDefault(x => x.StartsWith("HMS-HCD-HMSn", StringComparison.OrdinalIgnoreCase));
-            if (string.IsNullOrWhiteSpace(defaultDatasetType))
-            {
-                defaultDatasetType = DatasetTypeComboBoxOptions[0];
-            }
-            if (string.IsNullOrWhiteSpace(DatasetTypeGroup1))
-            {
-                DatasetTypeGroup1 = defaultDatasetType;
-            }
-            if (string.IsNullOrWhiteSpace(DatasetTypeGroup2))
-            {
-                DatasetTypeGroup2 = defaultDatasetType;
-            }
-            if (string.IsNullOrWhiteSpace(DatasetTypeGroup3))
-            {
-                DatasetTypeGroup3 = defaultDatasetType;
-            }
-            if (string.IsNullOrWhiteSpace(DatasetTypeGroup4))
-            {
-                DatasetTypeGroup4 = defaultDatasetType;
-            }
-        }
-
         private void EnsureCartConfigComboBoxValues()
         {
             if (CartConfigComboBoxOptions.Count > 0)
@@ -348,7 +288,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             EnsureLCMethodComboBoxValues();
             //EnsureInstrumentMethodComboBoxValues(); // commented out in the view
-            EnsureDatasetTypeComboBoxValues();
             EnsureCartConfigComboBoxValues();
         }
 
@@ -485,43 +424,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Fill down the dataset type
         /// </summary>
-        private void DatasetTypeFillDown()
-        {
-            EnsureItemsAreSelected();
-            var datasetTypes = new List<string>();
-            if (ApplyGroup1)
-            {
-                datasetTypes.Add(DatasetTypeGroup1);
-            }
-            if (ApplyGroup2)
-            {
-                datasetTypes.Add(DatasetTypeGroup2);
-            }
-            if (ApplyGroup3)
-            {
-                datasetTypes.Add(DatasetTypeGroup3);
-            }
-            if (ApplyGroup4)
-            {
-                datasetTypes.Add(DatasetTypeGroup4);
-            }
-            if (datasetTypes.Count < 1)
-                return;
-
-            var i = 0;
-            foreach (var sample in Samples)
-            {
-                sample.DmsData.DatasetType = datasetTypes[i];
-                i++;
-                // mod?
-                if (i >= datasetTypes.Count)
-                    i = 0;
-            }
-        }
-
-        /// <summary>
-        /// Fill down the dataset type
-        /// </summary>
         private void CartConfigFillDown()
         {
             EnsureItemsAreSelected();
@@ -566,7 +468,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             EnsureItemsAreSelected();
             LCMethodFillDown();
             VolumeFillDown();
-            DatasetTypeFillDown();
             CartConfigFillDown();
         }
 

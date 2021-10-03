@@ -61,7 +61,6 @@
             <TextBlock Grid.Column="2" Grid.Row="0" Margin="3,0" Text="Instrument Acquisition Method" />
             -->
             <TextBlock Grid.Column="3" Grid.Row="0" Margin="3,0" Text="Volume" />
-            <TextBlock Grid.Column="4" Grid.Row="0" Margin="3,0" Text="Dataset Type" />
             <TextBlock Grid.Column="5" Grid.Row="0" Margin="3,0" Text="Cart Config Name" />
             <CheckBox Grid.Column="0" Grid.Row="1" Margin="3" VerticalAlignment="Center" IsChecked="{Binding ApplyGroup1}" Width="55" TabIndex="2" Content="Apply" />
             <CheckBox Grid.Column="0" Grid.Row="2" Margin="3" VerticalAlignment="Center" IsChecked="{Binding ApplyGroup2}" Width="55" TabIndex="8" Content="Apply" />
@@ -81,10 +80,6 @@
             <xctk:DoubleUpDown Grid.Column="3" Grid.Row="2" Margin="3" Value="{Binding VolumeGroup2}" Minimum="{Binding VolumeMinimum}" Increment="0.1" DefaultValue="7" FormatString="F1" AllowTextInput="True" ClipValueToMinMax="True" IsEnabled="{Binding ApplyGroup2}" Width="60" TabIndex="11" />
             <xctk:DoubleUpDown Grid.Column="3" Grid.Row="3" Margin="3" Value="{Binding VolumeGroup3}" Minimum="{Binding VolumeMinimum}" Increment="0.1" DefaultValue="7" FormatString="F1" AllowTextInput="True" ClipValueToMinMax="True" IsEnabled="{Binding ApplyGroup3}" Width="60" TabIndex="17" />
             <xctk:DoubleUpDown Grid.Column="3" Grid.Row="4" Margin="3" Value="{Binding VolumeGroup4}" Minimum="{Binding VolumeMinimum}" Increment="0.1" DefaultValue="7" FormatString="F1" AllowTextInput="True" ClipValueToMinMax="True" IsEnabled="{Binding ApplyGroup4}" Width="60" TabIndex="23" />
-            <ComboBox Grid.Column="4" Grid.Row="1" Margin="3" SelectedItem="{Binding DatasetTypeGroup1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding ApplyGroup1}" Width="175" TabIndex="6" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-            <ComboBox Grid.Column="4" Grid.Row="2" Margin="3" SelectedItem="{Binding DatasetTypeGroup2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding ApplyGroup2}" Width="175" TabIndex="12" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-            <ComboBox Grid.Column="4" Grid.Row="3" Margin="3" SelectedItem="{Binding DatasetTypeGroup3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding ApplyGroup3}" Width="175" TabIndex="18" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-            <ComboBox Grid.Column="4" Grid.Row="4" Margin="3" SelectedItem="{Binding DatasetTypeGroup4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding ApplyGroup4}" Width="175" TabIndex="24" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <ComboBox Grid.Column="5" Grid.Row="1" Margin="3" SelectedItem="{Binding CartConfigGroup1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding ApplyGroup1}" ToolTip="{Binding CartConfigError}" Width="225" TabIndex="4" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <ComboBox Grid.Column="5" Grid.Row="2" Margin="3" SelectedItem="{Binding CartConfigGroup2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding ApplyGroup2}" ToolTip="{Binding CartConfigError}" Width="225" TabIndex="10" cueBannerOverlay:CueBannerService.CueBanner="Select" />
             <ComboBox Grid.Column="5" Grid.Row="3" Margin="3" SelectedItem="{Binding CartConfigGroup3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding ApplyGroup3}" ToolTip="{Binding CartConfigError}" Width="225" TabIndex="16" cueBannerOverlay:CueBannerService.CueBanner="Select" />
@@ -112,16 +107,6 @@
             </Button>
             -->
             <Button Grid.Column="3" Grid.Row="5" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding ApplyVolumeCommand}" TabIndex="28" >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" MinHeight="15" />
-                    </Grid.RowDefinitions>
-                    <Image Source="{StaticResource FillDownImage}" Stretch="Uniform" VerticalAlignment="Top" Grid.Row="0" MaxWidth="16" />
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Apply" />
-                </Grid>
-            </Button>
-            <Button Grid.Column="4" Grid.Row="5" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding ApplyDatasetTypeCommand}" TabIndex="29" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />

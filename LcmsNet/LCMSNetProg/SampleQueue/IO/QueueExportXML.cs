@@ -116,11 +116,6 @@ namespace LcmsNet.SampleQueue.IO
             // No return type needed, since these elements don't have any children
             AddElementWithTypeAttribute("RequestNumber", dmsElement, "String", InpSample.DmsData.RequestID.ToString());
             AddElementWithTypeAttribute("Comment", dmsElement, "String", InpSample.DmsData.Comment);
-            AddElementWithTypeAttribute("DatasetType", dmsElement, "String", InpSample.DmsData.DatasetType);
-            AddElementWithTypeAttribute("Experiment", dmsElement, "String", InpSample.DmsData.Experiment);
-            AddElementWithTypeAttribute("EMSLProposalID", dmsElement, "String", InpSample.DmsData.EMSLProposalID);
-            AddElementWithTypeAttribute("EMSLUsageType", dmsElement, "String", InpSample.DmsData.EMSLUsageType);
-            AddElementWithTypeAttribute("EMSLUser", dmsElement, "String", InpSample.DmsData.EMSLProposalUser);
         }
 
         /// <summary>

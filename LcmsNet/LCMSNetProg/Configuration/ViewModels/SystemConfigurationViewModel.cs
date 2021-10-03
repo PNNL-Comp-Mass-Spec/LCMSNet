@@ -44,10 +44,8 @@ namespace LcmsNet.Configuration.ViewModels
             }
 #endif
             cartConfigComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var cartConfigComboBoxOptionsBound).Subscribe();
-            separationTypeComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var separationTypeComboBoxOptionsBound).Subscribe();
             columnNameComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var columnNameComboBoxOptionsBound).Subscribe();
             CartConfigComboBoxOptions = cartConfigComboBoxOptionsBound;
-            SeparationTypeComboBoxOptions = separationTypeComboBoxOptionsBound;
             ColumnNameComboBoxOptions = columnNameComboBoxOptionsBound;
 
             TriggerLocation = LCMSSettings.GetParameter(LCMSSettings.PARAM_TRIGGERFILEFOLDER);
@@ -67,7 +65,6 @@ namespace LcmsNet.Configuration.ViewModels
             // Cart name
             CartName = CartConfiguration.CartName;
 
-            LoadSeparationTypes();
             LoadApplicationSettings();
 
             MinVolume = CartConfiguration.MinimumVolume;
@@ -95,9 +92,7 @@ namespace LcmsNet.Configuration.ViewModels
         private string pdfPath = "";
         private string cartConfigName = "";
         private string timeZone = "";
-        private string separationType = "";
         private readonly SourceList<string> cartConfigComboBoxOptions = new SourceList<string>();
-        private readonly SourceList<string> separationTypeComboBoxOptions = new SourceList<string>();
         private readonly SourceList<string> columnNameComboBoxOptions = new SourceList<string>();
         private bool specialColumnEnabled;
 
@@ -161,19 +156,6 @@ namespace LcmsNet.Configuration.ViewModels
             }
         }
 
-        public string SeparationType
-        {
-            get => separationType;
-            set {
-                var oldValue = separationType;
-                this.RaiseAndSetIfChanged(ref separationType, value);
-                if (!oldValue.Equals(separationType))
-                {
-                    SaveSeparationType();
-                }
-            }
-        }
-
         public ColumnConfigViewModel Column1ViewModel { get; }
 
         public ColumnConfigViewModel Column2ViewModel { get; }
@@ -202,7 +184,6 @@ namespace LcmsNet.Configuration.ViewModels
 
         public ReadOnlyCollection<string> TimeZoneComboBoxOptions { get; }
         public ReadOnlyObservableCollection<string> CartConfigComboBoxOptions { get; }
-        public ReadOnlyObservableCollection<string> SeparationTypeComboBoxOptions { get; }
         public ReadOnlyObservableCollection<string> ColumnNameComboBoxOptions { get; }
 
         public ReactiveCommand<Unit, Unit> ReloadCartDataCommand { get; }
@@ -282,12 +263,6 @@ namespace LcmsNet.Configuration.ViewModels
             SQLiteTools.SaveSelectedCartConfigName(LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTCONFIGNAME));
         }
 
-        private void SaveSeparationType()
-        {
-            LCMSSettings.SetParameter(LCMSSettings.PARAM_SEPARATIONTYPE, SeparationType);
-            SQLiteTools.SaveSelectedSeparationType(LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE));
-        }
-
         private void ReloadData(bool isLoading = false)
         {
             // Get a fresh list of columns from DMS and store it in the cache db
@@ -302,8 +277,6 @@ namespace LcmsNet.Configuration.ViewModels
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
             }
 
-            LoadSeparationTypes();
-
             UpdateCartConfigNames(isLoading);
             UpdateColumnNameLists(isLoading);
 
@@ -317,27 +290,6 @@ namespace LcmsNet.Configuration.ViewModels
             {
                 CartConfigName = cartConfig;
             }
-
-            var sepType = LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE);
-            if (string.IsNullOrWhiteSpace(sepType))
-            {
-                SeparationType = "none";
-            }
-            else
-            {
-                SeparationType = sepType;
-            }
-        }
-
-        private void LoadSeparationTypes()
-        {
-            var separationTypes = SQLiteTools.GetSepTypeList(false);
-
-            separationTypeComboBoxOptions.Edit(list =>
-            {
-                list.Clear();
-                list.AddRange(separationTypes);
-            });
         }
 
         private void UpdateCartConfigNames(bool isLoading)

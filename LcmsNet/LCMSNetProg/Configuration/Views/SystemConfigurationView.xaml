@@ -29,8 +29,6 @@
                             <TextBox Grid.Row="0" Grid.Column="1" Width="302" HorizontalAlignment="Left" Margin="3" IsReadOnly="True" Text="{Binding CartName, Mode=OneWay}" />
                             <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Cart Configuration Name:" />
                             <ComboBox Grid.Row="1" Grid.Column="1" Width="506" HorizontalAlignment="Left" Margin="3" SelectedItem="{Binding CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Separation Type:" />
-                            <ComboBox Grid.Row="2" Grid.Column="1" Width="302" HorizontalAlignment="Left" Margin="3" SelectedItem="{Binding SeparationType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding SeparationTypeComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                         </Grid>
                         <Grid Height="170" Margin="0,10">
                             <Grid.RowDefinitions>

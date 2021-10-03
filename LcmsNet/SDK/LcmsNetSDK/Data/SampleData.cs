@@ -453,10 +453,6 @@ namespace LcmsNetSDK.Data
 
         /// <inheritdoc />
         [PersistenceSetting(IgnoreProperty = true)]
-        public string SeparationType => LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE);
-
-        /// <inheritdoc />
-        [PersistenceSetting(IgnoreProperty = true)]
         public virtual string CaptureShareName => "";
 
         /// <inheritdoc />
@@ -510,11 +506,9 @@ namespace LcmsNetSDK.Data
         private void DmsDataChanged(object sender, PropertyChangedEventArgs args)
         {
             if (args.PropertyName.Equals(nameof(DmsData.DatasetName)) || args.PropertyName.Equals(nameof(DmsData.RequestName)) ||
-                args.PropertyName.Equals(nameof(DmsData.CartConfigName)) || args.PropertyName.Equals(nameof(DmsData.DatasetType)) ||
-                args.PropertyName.Equals(nameof(DmsData.RunOrder)) || args.PropertyName.Equals(nameof(DmsData.Batch)) ||
-                args.PropertyName.Equals(nameof(DmsData.Block)) || args.PropertyName.Equals(nameof(DmsData.EMSLUsageType)) ||
-                args.PropertyName.Equals(nameof(DmsData.EMSLProposalUser)) || args.PropertyName.Equals(nameof(DmsData.Experiment)) ||
-                args.PropertyName.Equals(nameof(DmsData.RequestID)) || args.PropertyName.Equals(nameof(DmsData.EMSLProposalID)))
+                args.PropertyName.Equals(nameof(DmsData.CartConfigName)) || args.PropertyName.Equals(nameof(DmsData.RunOrder)) ||
+                args.PropertyName.Equals(nameof(DmsData.Batch)) || args.PropertyName.Equals(nameof(DmsData.Block)) ||
+                args.PropertyName.Equals(nameof(DmsData.RequestID)))
             {
                 OnPropertyChanged(nameof(DmsData));
             }

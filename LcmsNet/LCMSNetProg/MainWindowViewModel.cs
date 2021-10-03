@@ -154,9 +154,6 @@ namespace LcmsNet
             // Save fluidics designer config, if desired
             //m_fluidicsDesign.SaveConfiguration();
 
-            // Cache the selected separation type
-            SQLiteTools.SaveSelectedSeparationType(LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE));
-
             // Shut off the scheduler...
             try
             {
@@ -348,7 +345,6 @@ namespace LcmsNet
             }
 
             SystemConfiguration.ColumnNameChanged += SystemConfiguration_ColumnNameChanged;
-            SQLiteTools.GetSepTypeList(false);
 
             // Notification System
             NotificationSystemVm.ActionRequired += m_notifications_ActionRequired;
@@ -375,9 +371,6 @@ namespace LcmsNet
             ApplicationLogger.Message += ApplicationLogger_Message;
 
             SampleManagerVm.Stop += SampleManager_Stop;
-
-            // Get the most recently used separation type
-            LCMSSettings.SetParameter(LCMSSettings.PARAM_SEPARATIONTYPE, SQLiteTools.GetDefaultSeparationType());
 
             // Initialize the hardware
             DeviceManager.Manager.InitializingDevice += Manager_InitializingDevice;

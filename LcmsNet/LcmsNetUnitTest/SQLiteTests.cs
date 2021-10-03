@@ -52,58 +52,6 @@ namespace LcmsnetUnitTest
         }
 
         /// <summary>
-        /// Tests that SaveSingleColumnListToCache works
-        /// </summary>
-        [Test]
-        public void TestB()
-        {
-            var testSeparationTypes = new List<string>
-            {
-                "Separation 1",
-                "Separation 2",
-                "Separation 3"
-            };
-
-            // if the following line doesn't throw an exception, it "worked".
-            SQLiteTools.SaveSeparationTypeListToCache(testSeparationTypes);
-        }
-
-        /// <summary>
-        /// Tests that getseptypelist gets separations..specifically those stored by TestB.
-        /// </summary>
-        [Test]
-        public void TestC()
-        {
-            var testList = new List<string>
-            {
-                "Separation 1",
-                "Separation 2",
-                "Separation 3"
-            };
-            var retrieved = SQLiteTools.GetSepTypeList(false);
-            Assert.IsTrue(retrieved.SequenceEqual(testList)); // If this is equal, both TestB and C worked, and we read the information back from the cache
-        }
-
-        /// <summary>
-        /// Tests that the default separation type is saved.
-        /// </summary>
-        [Test]
-        public void TestF()
-        {
-            SQLiteTools.SaveSelectedSeparationType("Separation3");
-        }
-
-        /// <summary>
-        /// Tests that GetDefaultSeparationType returns a non-empty string.
-        /// </summary>
-        [Test]
-        public void TestG()
-        {
-            var result = SQLiteTools.GetDefaultSeparationType();
-            Assert.AreEqual("Separation3", result);
-        }
-
-        /// <summary>
         /// Tests that SaveQueueToCache works by saving the "waiting queue"
         /// </summary>
         [Test]

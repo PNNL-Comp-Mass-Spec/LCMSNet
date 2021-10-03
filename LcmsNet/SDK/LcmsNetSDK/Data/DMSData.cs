@@ -33,17 +33,11 @@ namespace LcmsNetSDK.Data
             CartConfigName = "";
             Comment = "";
             DatasetName = "";
-            DatasetType = "";
-            Experiment = "";
             MRMFileID = -1;
-            EMSLProposalID = "";
             RequestID = 0;
             RequestName = "";
             RunOrder = -1;
             SelectedToRun = false;
-            EMSLUsageType = "";
-            EMSLProposalUser = "";
-            WorkPackage = "";
         }
 
         /// <summary>
@@ -57,17 +51,11 @@ namespace LcmsNetSDK.Data
             CartConfigName = "";
             Comment = "";
             DatasetName = "";
-            DatasetType = "";
-            Experiment = "";
             MRMFileID = -1;
-            EMSLProposalID = "";
             RequestID = 0;
             RequestName = "";
             RunOrder = -1;
             SelectedToRun = false;
-            EMSLUsageType = "";
-            EMSLProposalUser = "";
-            WorkPackage = "";
         }
 
         /// <summary>
@@ -84,17 +72,11 @@ namespace LcmsNetSDK.Data
             newDmsData.CartConfigName = CartConfigName;
             newDmsData.Comment = Comment;
             newDmsData.DatasetName = DatasetName;
-            newDmsData.DatasetType = DatasetType;
-            newDmsData.Experiment = Experiment;
             newDmsData.MRMFileID = MRMFileID;
-            newDmsData.EMSLProposalID = EMSLProposalID;
             newDmsData.RequestID = RequestID;
             newDmsData.RequestName = RequestName;
             newDmsData.RunOrder = RunOrder;
             newDmsData.SelectedToRun = SelectedToRun;
-            newDmsData.EMSLUsageType = EMSLUsageType;
-            newDmsData.EMSLProposalUser = EMSLProposalUser;
-            newDmsData.WorkPackage = WorkPackage;
 
             return newDmsData;
         }
@@ -104,13 +86,7 @@ namespace LcmsNetSDK.Data
         private int requestId;
         private string requestName;
         private string datasetName;
-        private string datasetType;
         private string cartConfigName;
-        private string workPackage;
-        private string emslUsageType;
-        private string emslProposalId;
-        private string emslProposalUser;
-        private string experiment;
         private int block;
         private int runOrder;
         private int batch;
@@ -170,65 +146,6 @@ namespace LcmsNetSDK.Data
         {
             get => requestId;
             set => this.RaiseAndSetIfChanged(ref requestId, value);
-        }
-
-        /// <summary>
-        /// Instrument group specified in DMS for the request (only used when <see cref="RequestID"/> &gt; 0)
-        /// </summary>
-        public string InstrumentGroup { get; set; }
-
-        /// <summary>
-        /// Experiment name
-        /// </summary>
-        public string Experiment
-        {
-            get => experiment;
-            set => this.RaiseAndSetIfChanged(ref experiment, value);
-        }
-
-        /// <summary>
-        /// Dataset type (ie, HMS-MSn, HMS, etc)
-        /// </summary>
-        public string DatasetType
-        {
-            get => datasetType;
-            set => this.RaiseAndSetIfChanged(ref datasetType, value);
-        }
-
-        /// <summary>
-        /// Work Package/charge code
-        /// </summary>
-        public string WorkPackage
-        {
-            get => workPackage;
-            set => this.RaiseAndSetIfChanged(ref workPackage, value);
-        }
-
-        /// <summary>
-        /// EMSL usage type
-        /// </summary>
-        public string EMSLUsageType
-        {
-            get => emslUsageType;
-            set => this.RaiseAndSetIfChanged(ref emslUsageType, value);
-        }
-
-        /// <summary>
-        /// EUS user proposal ID
-        /// </summary>
-        public string EMSLProposalID
-        {
-            get => emslProposalId;
-            set => this.RaiseAndSetIfChanged(ref emslProposalId, value);
-        }
-
-        /// <summary>
-        /// EUS user list
-        /// </summary>
-        public string EMSLProposalUser
-        {
-            get => emslProposalUser;
-            set => this.RaiseAndSetIfChanged(ref emslProposalUser, value);
         }
 
         /// <summary>
@@ -311,9 +228,6 @@ namespace LcmsNetSDK.Data
 
                 return "Dataset " + DatasetName;
             }
-
-            if (!string.IsNullOrWhiteSpace(Experiment))
-                return "Experiment " + Experiment;
 
             if (!string.IsNullOrWhiteSpace(RequestName))
                 return "Request " + RequestName;

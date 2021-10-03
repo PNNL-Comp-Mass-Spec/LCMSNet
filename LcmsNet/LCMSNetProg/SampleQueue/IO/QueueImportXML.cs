@@ -134,21 +134,6 @@ namespace LcmsNet.SampleQueue.IO
             // DMS Comment (DMSData.Comment)
             retData.DmsData.Comment = GetNodeValue(itemNode, "DMS/Comment");
 
-            // DMS DatasetType (DMSData.DatasetType)
-            retData.DmsData.DatasetType = GetNodeValue(itemNode, "DMS/DatasetType");
-
-            // DMS Experiment (DMSData.Experiment)
-            retData.DmsData.Experiment = GetNodeValue(itemNode, "DMS/Experiment");
-
-            // DMS EMSLProposalID (DMSData.EMSLProposalID)
-            retData.DmsData.EMSLProposalID = GetNodeValue(itemNode, "DMS/EMSLProposalID");
-
-            // DMS EMSLUsageType (DMSData.EMSLUsageType)
-            retData.DmsData.EMSLUsageType = GetNodeValue(itemNode, "DMS/EMSLUsageType");
-
-            // DMS EMSLUser (DMSData.EMSLProposalUser)
-            retData.DmsData.EMSLProposalUser = GetNodeValue(itemNode, "DMS/EMSLUser");
-
             // It's all in, so return
             return retData;
         }

@@ -702,74 +702,6 @@ namespace LcmsNet.IO.DMS
             }
         }
 
-        /// <summary>
-        /// Gets a list of separation types from DMS and stores it in cache
-        /// </summary>
-        private void GetSepTypeListFromDMS()
-        {
-            IEnumerable<string> tmpRetVal; // Temp list for holding separation types
-            var connStr = GetConnectionString();
-
-            const string sqlCmd = "SELECT Distinct SS_Name FROM T_Secondary_Sep WHERE SS_active > 0 ORDER BY SS_Name";
-
-            try
-            {
-                tmpRetVal = GetSingleColumnTableFromDMS(sqlCmd, connStr);
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting separation type list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            // Store data in cache
-            try
-            {
-                SQLiteTools.SaveSeparationTypeListToCache(tmpRetVal);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing separation type list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of dataset types from DMS ans stores it in cache
-        /// </summary>
-        private void GetDatasetTypeListFromDMS()
-        {
-            IEnumerable<string> tmpRetVal; // Temp list for holding dataset types
-            var connStr = GetConnectionString();
-
-            // Get a list of the dataset types
-            const string sqlCmd = "SELECT Distinct DST_Name FROM t_DatasetTypeName ORDER BY DST_Name";
-            try
-            {
-                tmpRetVal = GetSingleColumnTableFromDMS(sqlCmd, connStr);
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting dataset type list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            // Store data in cache
-            try
-            {
-                SQLiteTools.SaveDatasetTypeListToCache(tmpRetVal);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing dataset type list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
         #endregion
 
         #region Private DMS database read-and-convert methods
@@ -904,15 +836,8 @@ namespace LcmsNet.IO.DMS
                             // Sets the properties on the existing sub-object, which is why this is valid.
                             DmsData =
                             {
-                                DatasetType = reader["Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                Experiment = reader["Experiment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                EMSLProposalID = reader["Proposal ID"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 RequestID = reader["Request"].CastDBValTo<int>(),
                                 RequestName = reader["Name"].CastDBValTo<string>(),
-                                InstrumentGroup = reader["Instrument"].CastDBValTo<string>(),
-                                WorkPackage = reader["Work Package"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                EMSLUsageType = reader["Usage Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                EMSLProposalUser = reader["EUS Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 CartName = reader["Cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 Comment = reader["Comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                             }
@@ -1042,16 +967,8 @@ namespace LcmsNet.IO.DMS
             ReportProgress("Loading cart config names", 2, stepCountTotal);
             GetCartConfigNamesFromDMS();
 
-            ReportProgress("Loading separation types", 3, stepCountTotal);
-            GetSepTypeListFromDMS();
-
-            ReportProgress("Loading dataset types", 4, stepCountTotal);
-            GetDatasetTypeListFromDMS();
-
             ReportProgress("Loading LC columns", 8, stepCountTotal);
             GetColumnListFromDMS();
-
-            var stepCountCompleted = STEP_COUNT_BASE;
 
             ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);
         }

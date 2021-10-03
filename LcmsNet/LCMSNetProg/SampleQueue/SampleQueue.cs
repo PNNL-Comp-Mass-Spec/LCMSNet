@@ -2064,16 +2064,10 @@ namespace LcmsNet.SampleQueue
             {
                 var cartNames = SQLiteTools.GetCartNameList();
                 var columnNames = SQLiteTools.GetColumnList(false);
-                var datasetTypeNames = SQLiteTools.GetDatasetTypeList(false);
-                var separationTypes = SQLiteTools.GetSepTypeList(false);
-                var separationDefault = SQLiteTools.GetDefaultSeparationType();
 
                 SQLiteTools.BuildConnectionString(true);
 
-                SQLiteTools.SaveSelectedSeparationType(separationDefault);
                 SQLiteTools.SaveColumnListToCache(columnNames);
-                SQLiteTools.SaveDatasetTypeListToCache(datasetTypeNames);
-                SQLiteTools.SaveSeparationTypeListToCache(separationTypes);
                 SQLiteTools.SaveCartListToCache(cartNames);
             }
 

@@ -870,8 +870,6 @@ namespace LcmsNet.IO.SQLite
         {
             var writeData = defaultData ?? new SQLiteCacheDefaultData();
             CheckSingleColumnCacheTable(DatabaseTableTypes.CartList, writeData.CartNames);
-            CheckSingleColumnCacheTable(DatabaseTableTypes.SeparationTypeList, writeData.SeparationTypes);
-            CheckSingleColumnCacheTable(DatabaseTableTypes.DatasetTypeList, writeData.DatasetTypes);
             CheckSingleColumnCacheTable(DatabaseTableTypes.ColumnList, writeData.ColumnNames);
         }
 
