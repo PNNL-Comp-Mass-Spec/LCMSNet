@@ -17,10 +17,7 @@ namespace LcmsnetUnitTest
             logMessageLevel = 2;
 
             var dbt = new DMSDBTools();
-
-            dbt.ProgressEvent += Dbt_ProgressEvent;
-
-            dbt.LoadCacheFromDMS();
+            var carts = dbt.GetCartListFromDMS();
 
             Console.WriteLine("Data loaded");
         }
@@ -51,11 +48,5 @@ namespace LcmsnetUnitTest
 
             Console.WriteLine(args.Message);
         }
-
-        private void Dbt_ProgressEvent(object sender, ProgressEventArgs e)
-        {
-            Console.WriteLine(e.CurrentTask);
-        }
-
     }
 }

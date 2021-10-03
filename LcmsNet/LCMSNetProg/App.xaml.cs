@@ -661,7 +661,6 @@ namespace LcmsNet
             SQLiteTools.SetDefaultDirectoryPath(() => PersistDataPaths.LocalDataPath);
             SQLiteTools.SetCacheLocation(LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME));
             LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, SQLiteTools.CacheName);
-            CreateSQLCache();
             LogMessage(-1, "Loading DMS data");
 
             try
@@ -670,14 +669,6 @@ namespace LcmsNet
 
                 var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
-
-                dmsTools.ProgressEvent += DmsToolsManager_ProgressEvent;
-                LcmsNet.Configuration.DMSDataContainer.LogDBToolsEvents = false;
-
-                dmsTools.LoadCacheFromDMS();
-
-                LcmsNet.Configuration.DMSDataContainer.LogDBToolsEvents = true;
-                dmsTools.ProgressEvent -= DmsToolsManager_ProgressEvent;
             }
             catch (Exception ex)
             {
@@ -697,19 +688,6 @@ namespace LcmsNet
             }
 
             return true;
-        }
-
-        private void DmsToolsManager_ProgressEvent(object sender, ProgressEventArgs e)
-        {
-            LogMessage(e.CurrentTask);
-        }
-
-        /// <summary>
-        /// Create the SQL cache file, if necessary (SQLiteTools does all the heavy lifting.)
-        /// </summary>
-        private void CreateSQLCache()
-        {
-            SQLiteTools.CheckOrCreateCache(new SQLiteCacheDefaultData());
         }
 
         private void LogMessage(string message)

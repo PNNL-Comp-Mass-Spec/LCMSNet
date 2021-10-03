@@ -30,12 +30,6 @@ namespace LcmsNet.IO.SQLite
 
         #endregion
 
-        #region Class Variables
-
-        private static readonly List<string> cartNames = new List<string>(0);
-
-        #endregion
-
         #region Initialize
 
         /// <summary>
@@ -141,23 +135,9 @@ namespace LcmsNet.IO.SQLite
             return Cache.ReadMultiColumnDataFromCache(tableType, () => new SampleData(false), connectionString);
         }
 
-        /// <summary>
-        /// Wrapper around generic retrieval method specifically for cart lists
-        /// </summary>
-        /// <returns>List containing cart names</returns>
-        public static IEnumerable<string> GetCartNameList()
-        {
-            return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.CartList, cartNames, false);
-        }
-
         #endregion
 
         #region Public Methods: Cache Writing
-
-        public static void CheckOrCreateCache(SQLiteCacheDefaultData defaultData = null)
-        {
-            Cache.CheckOrCreateCache(defaultData);
-        }
 
         /// <summary>
         /// Saves the contents of specified sample queue to the SQLite cache file
@@ -180,15 +160,6 @@ namespace LcmsNet.IO.SQLite
         public static void SaveQueueToCache(IEnumerable<SampleData> queueData, DatabaseTableTypes tableType, string connStr)
         {
             Cache.SaveMultiColumnListToCache(tableType, queueData, connStr);
-        }
-
-        /// <summary>
-        /// Saves a list of cart names to the SQLite cache
-        /// </summary>
-        /// <param name="cartNameList">Cart names</param>
-        public static void SaveCartListToCache(IEnumerable<string> cartNameList)
-        {
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.CartList, cartNameList, cartNames);
         }
 
         #endregion

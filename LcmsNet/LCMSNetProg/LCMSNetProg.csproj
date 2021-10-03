@@ -133,17 +133,14 @@
       <DependentUpon>DynamicSplashScreenWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="IO\DMS\DatabaseConnectionStringException.cs" />
-    <Compile Include="IO\DMS\DatabaseStoredProcException.cs" />
     <Compile Include="SampleQueue\IO\ConvertVialPosition.cs" />
     <Compile Include="IO\DMS\SampleQueryData.cs" />
     <Compile Include="IO\DMS\DMSDBTools.cs" />
-    <Compile Include="IO\DMS\ProgressEventArgs.cs" />
     <Compile Include="IO\DMS\ExtensionMethods.cs" />
     <Compile Include="IO\DMS\DatabaseDataException.cs" />
     <Compile Include="IO\SQLite\DatabaseTableTypes.cs" />
     <Compile Include="IO\SQLite\ExtensionMethods.cs" />
     <Compile Include="IO\SQLite\PropertyToColumnMapping.cs" />
-    <Compile Include="IO\SQLite\SQLiteCacheDefaultData.cs" />
     <Compile Include="IO\SQLite\SQLiteCacheIO.cs" />
     <Compile Include="IO\SQLite\SQLiteTools.cs" />
     <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />

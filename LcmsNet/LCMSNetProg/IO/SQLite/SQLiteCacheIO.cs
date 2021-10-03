@@ -862,16 +862,6 @@ namespace LcmsNet.IO.SQLite
         }
 
         /// <summary>
-        /// Checks for an existing cache or creates a new one, and makes sure certain tables exist.
-        /// </summary>
-        /// <param name="defaultData"></param>
-        public void CheckOrCreateCache(SQLiteCacheDefaultData defaultData = null)
-        {
-            var writeData = defaultData ?? new SQLiteCacheDefaultData();
-            CheckSingleColumnCacheTable(DatabaseTableTypes.CartList, writeData.CartNames);
-        }
-
-        /// <summary>
         /// Read the data for a list from the cache, handling the in-memory cache appropriately
         /// </summary>
         /// <typeparam name="T"></typeparam>

@@ -68,11 +68,8 @@ namespace LcmsNet.Configuration.ViewModels
             TimeZoneComboBoxOptions = TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id).ToList().AsReadOnly();
             TimeZone = LCMSSettings.GetParameter(LCMSSettings.PARAM_TIMEZONE);
 
-            ReloadData(true);
-
             this.WhenAnyValue(x => x.SpecialColumnEnabled).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, (!x).ToString()));
 
-            ReloadCartDataCommand = ReactiveCommand.Create(() => ReloadData(false));
             BrowsePdfPathCommand = ReactiveCommand.Create(BrowsePdfPath);
         }
 
@@ -161,8 +158,6 @@ namespace LcmsNet.Configuration.ViewModels
         }
 
         public ReadOnlyCollection<string> TimeZoneComboBoxOptions { get; }
-
-        public ReactiveCommand<Unit, Unit> ReloadCartDataCommand { get; }
         public ReactiveCommand<Unit, Unit> BrowsePdfPathCommand { get; }
 
         #endregion
@@ -209,8 +204,6 @@ namespace LcmsNet.Configuration.ViewModels
 
         #endregion
 
-        #region Column events
-
         ///// <summary>
         ///// Handles the event when the column status is changed.
         ///// </summary>
@@ -228,22 +221,5 @@ namespace LcmsNet.Configuration.ViewModels
         //        StatusChanged(sender, previousStatus, newStatus);
         //    }
         //}
-
-        #endregion
-
-        private void ReloadData(bool isLoading = false)
-        {
-            // Get a fresh list of columns from DMS and store it in the cache db
-            try
-            {
-                var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
-                // Just re-load everything
-                dmsTools.LoadCacheFromDMS();
-            }
-            catch (Exception ex)
-            {
-                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, ex.Message);
-            }
-        }
     }
 }

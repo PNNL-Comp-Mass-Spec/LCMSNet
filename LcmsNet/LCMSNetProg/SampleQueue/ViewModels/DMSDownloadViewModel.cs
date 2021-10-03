@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using DynamicData;
+using LcmsNet.Configuration;
 using LcmsNet.IO.DMS;
 using LcmsNet.IO.SQLite;
 using LcmsNetSDK;
@@ -42,11 +43,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Command for MoveUp button to move requests from Requests To Run to Available Requests list
         /// </summary>
         public ReactiveCommand<Unit, Unit> MoveUpCommand { get; }
-
-        /// <summary>
-        /// Command to trigger list of carts in combo boxes to be updated
-        /// </summary>
-        public ReactiveCommand<Unit, Unit> RefreshCartInfoCommand { get; }
 
         /// <summary>
         /// Command to sort available requests by batch, block, and run order
@@ -208,16 +204,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             FindCommand = ReactiveCommand.CreateFromTask(FindDmsRequests);
             MoveDownCommand = ReactiveCommand.Create(MoveRequestsToRunList);
             MoveUpCommand = ReactiveCommand.Create(RemoveRequestsFromRunList);
-            RefreshCartInfoCommand = ReactiveCommand.Create(RefreshCartInfo);
             SortByBatchBlockRunOrderCommand = ReactiveCommand.Create(SortByBatchBlockRunOrder, this.WhenAnyValue(x => x.BlockingEnabled));
-        }
-
-        /// <summary>
-        /// Causes list of carts in combo boxes to be updated
-        /// </summary>
-        private void RefreshCartInfo()
-        {
-            RefreshCartList();
         }
 
         /// <summary>
@@ -231,7 +218,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Get the list of carts from DMS
             try
             {
-                cartList = SQLiteTools.GetCartNameList().ToList();
+                cartList = DMSDataContainer.DBTools.GetCartListFromDMS();
             }
             catch (DatabaseConnectionStringException ex)
             {

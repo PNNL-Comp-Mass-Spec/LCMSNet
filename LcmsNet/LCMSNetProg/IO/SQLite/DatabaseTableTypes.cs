@@ -8,6 +8,5 @@
         WaitingQueue,
         RunningQueue,
         CompletedQueue,
-        CartList,
     }
 }

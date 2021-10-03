@@ -2062,11 +2062,7 @@ namespace LcmsNet.SampleQueue
             // This means that we have to recompile the data ...
             if (buildConnectionString)
             {
-                var cartNames = SQLiteTools.GetCartNameList();
-
                 SQLiteTools.BuildConnectionString(true);
-
-                SQLiteTools.SaveCartListToCache(cartNames);
             }
 
             // Clean up the queues first

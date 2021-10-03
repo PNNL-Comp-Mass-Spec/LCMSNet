@@ -26,8 +26,6 @@ namespace LcmsNet.IO.DMS
 
         public static string ApplicationName { get; set; } = "-LcmsNetDmsTools- -version-";
 
-        #region "Class variables"
-
         private bool mConnectionStringLogged;
 
         /// <summary>
@@ -49,9 +47,6 @@ namespace LcmsNet.IO.DMS
 
         private const string CONFIG_FILE = "PrismDMS.config";
 
-        #endregion
-
-        #region "Properties"
         public bool ForceValidation => true;
 
         public string ErrMsg { get; set; } = "";
@@ -61,24 +56,6 @@ namespace LcmsNet.IO.DMS
         public bool UseConnectionPooling { get; set; }
 
         private readonly Dictionary<string,string> mConfiguration;
-
-        #endregion
-
-        #region "Events"
-
-        public event EventHandler<ProgressEventArgs> ProgressEvent;
-
-        public void OnProgressUpdate(ProgressEventArgs e)
-        {
-            if (ProgressEvent == null)
-                Console.WriteLine(e.CurrentTask + ": " + e.PercentComplete);
-            else
-                ProgressEvent.Invoke(this, e);
-        }
-
-        #endregion
-
-        #region "Constructors"
 
         /// <summary>
         /// Constructor
@@ -90,7 +67,6 @@ namespace LcmsNet.IO.DMS
             // This should generally be true for SqlClient/SqlConnection, false means connection reuse (and potential multi-threading problems)
             UseConnectionPooling = true;
         }
-        #endregion
 
         #region Instance
 
@@ -438,84 +414,6 @@ namespace LcmsNet.IO.DMS
             }
         }
 
-        /// <summary>
-        /// Retrieves a data table from DMS
-        /// </summary>
-        /// <param name="cmdStr">SQL command to retrieve table</param>
-        /// <param name="connStr">DMS connection string</param>
-        /// <returns>DataTable containing requested data</returns>
-        /// <remarks>This tends to use more memory than directly reading and parsing data.</remarks>
-        [Obsolete("Unused")]
-        private DataTable GetDataTable(string cmdStr, string connStr)
-        {
-            var returnTable = new DataTable();
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            using (cn)
-            using (var da = new SqlDataAdapter())
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = cmdStr;
-                cmd.CommandType = CommandType.Text;
-                da.SelectCommand = cmd;
-                try
-                {
-                    da.Fill(returnTable);
-                }
-                catch (Exception ex)
-                {
-                    var errMsg = "SQL exception getting data table via query " + cmdStr;
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                    throw new DatabaseDataException(errMsg, ex);
-                }
-            }
-
-            // Return the output table
-            return returnTable;
-        }
-
-        /// <summary>
-        /// Executes a stored procedure
-        /// </summary>
-        /// <param name="spCmd">SQL command object containing SP parameters</param>
-        /// <param name="connStr">Connection string</param>
-        /// <returns>SP result code</returns>
-        private int ExecuteSP(SqlCommand spCmd, string connStr)
-        {
-            var resultCode = -9999;
-            try
-            {
-                var cn = GetConnection(connStr);
-                if (!cn.IsValid)
-                {
-                    cn.Dispose();
-                    throw new Exception(cn.FailedConnectionAttemptMessage);
-                }
-
-                using (cn)
-                using (var da = new SqlDataAdapter())
-                using (var ds = new DataSet())
-                {
-                    spCmd.Connection = cn.GetConnection();
-                    da.SelectCommand = spCmd;
-                    da.Fill(ds);
-                    resultCode = (int)da.SelectCommand.Parameters["@Return"].Value;
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception executing stored procedure " + spCmd.CommandText;
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                throw new DatabaseStoredProcException(spCmd.CommandText, resultCode, ex.Message);
-            }
-            return resultCode;
-        }
-
         private static void CreateDefaultConfigFile(string configurationPath)
         {
             // Create a new file with default config data
@@ -597,22 +495,13 @@ namespace LcmsNet.IO.DMS
             return retStr;
         }
 
-        private void ReportProgress(string currentTask, int currentStep, int stepCountTotal)
-        {
-            var percentComplete = currentStep / (double)stepCountTotal * 100;
-            OnProgressUpdate(new ProgressEventArgs(currentTask, percentComplete));
-        }
-
         #endregion
-
-        #region Private Methods: Read from DMS and cache to SQLite
 
         /// <summary>
         /// Gets a list of instrument carts from DMS and stores it in cache
         /// </summary>
-        private void GetCartListFromDMS()
+        public List<string> GetCartListFromDMS()
         {
-            IEnumerable<string> tmpCartList;   // Temp list for holding return values
             var connStr = GetConnectionString();
 
             // Get a List containing all the carts
@@ -620,30 +509,15 @@ namespace LcmsNet.IO.DMS
                                   "ORDER BY [Cart_Name]";
             try
             {
-                tmpCartList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
+                return GetSingleColumnTableFromDMS(sqlCmd, connStr).ToList();
             }
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting cart list";
                 ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            // Store the list of carts in the cache db
-            try
-            {
-                SQLiteTools.SaveCartListToCache(tmpCartList);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing LC cart list in cache";
-                ApplicationLogger.LogError(0, errMsg, ex);
+                return new List<string>();
             }
         }
-
-        #endregion
-
-        #region Private DMS database read-and-convert methods
 
         private IEnumerable<KeyValuePair<int, int>> ReadMRMFileListFromDMS(int minID, int maxID)
         {
@@ -797,10 +671,6 @@ namespace LcmsNet.IO.DMS
             }
         }
 
-        #endregion
-
-        #region Public Methods
-
         /// <summary>
         /// Test if we can query each of the needed DMS tables/views.
         /// </summary>
@@ -836,38 +706,6 @@ namespace LcmsNet.IO.DMS
             }
 
             return true;
-        }
-
-        public void LoadCacheFromDMS()
-        {
-            const int STEP_COUNT_BASE = 11;
-
-            var stepCountTotal = STEP_COUNT_BASE;
-
-            ReportProgress("Loading data from DMS (determining Connection String)", 0, stepCountTotal);
-
-            var sqLiteConnectionString = SQLiteTools.ConnString;
-            var equalsIndex = sqLiteConnectionString.IndexOf('=');
-            string cacheFilePath;
-
-            if (equalsIndex > 0 && equalsIndex < sqLiteConnectionString.Length - 1)
-                cacheFilePath = "SQLite cache file path: " + sqLiteConnectionString.Substring(equalsIndex + 1);
-            else
-                cacheFilePath = "SQLite cache file path: " + sqLiteConnectionString;
-
-            var dmsConnectionString = GetConnectionString();
-
-            // Remove the password from the connection string
-            var passwordStartIndex = dmsConnectionString.IndexOf(";Password", StringComparison.InvariantCultureIgnoreCase);
-            if (passwordStartIndex > 0)
-                dmsConnectionString = dmsConnectionString.Substring(0, passwordStartIndex);
-
-            ReportProgress("Loading data from DMS (" + dmsConnectionString + ") and storing in " + cacheFilePath, 0, stepCountTotal);
-
-            ReportProgress("Loading cart names", 1, stepCountTotal);
-            GetCartListFromDMS();
-
-            ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);
         }
 
         /// <summary>
@@ -942,7 +780,5 @@ namespace LcmsNet.IO.DMS
 
             return retList;
         }
-
-        #endregion
     }
 }
