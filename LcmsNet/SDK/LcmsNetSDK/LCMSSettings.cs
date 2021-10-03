@@ -54,7 +54,6 @@ namespace LcmsNetSDK
         public const string PARAM_EMULATIONENABLED = "EmulationEnabled";
         public const string PARAM_ERRORPATH = "ErrorPath";
         public const string PARAM_INITIALIZEHARDWAREONSTARTUP = "InitializeHardwareOnStartup";
-        public const string PARAM_INSTNAME = "InstName";
         public const string PARAM_LOGGINGERRORLEVEL = "LoggingErrorLevel";
         public const string PARAM_LOGGINGMSGLEVEL = "LoggingMsgLevel";
         public const string PARAM_MINIMUMVOLUME = "MinimumVolume";

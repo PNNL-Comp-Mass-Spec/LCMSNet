@@ -2,16 +2,6 @@
 
 namespace LcmsNet.IO.DMS
 {
-    public class MessageEventArgs : EventArgs
-    {
-        public readonly string Message;
-
-        public MessageEventArgs(string message)
-        {
-            Message = message;
-        }
-    }
-
     public class ProgressEventArgs : EventArgs
     {
         /// <summary>

@@ -16,13 +16,7 @@ namespace LcmsnetUnitTest
             ApplicationLogger.Message += ApplicationLogger_Message;
             logMessageLevel = 2;
 
-            var dbt = new DMSDBTools
-            {
-                LoadExperiments = true,
-                LoadDatasets = true,
-                RecentExperimentsMonthsToLoad = 18,
-                RecentDatasetsMonthsToLoad = 12
-            };
+            var dbt = new DMSDBTools();
 
             dbt.ProgressEvent += Dbt_ProgressEvent;
 

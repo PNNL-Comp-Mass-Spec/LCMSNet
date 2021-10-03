@@ -2065,20 +2065,16 @@ namespace LcmsNet.SampleQueue
                 var cartNames = SQLiteTools.GetCartNameList();
                 var columnNames = SQLiteTools.GetColumnList(false);
                 var datasetTypeNames = SQLiteTools.GetDatasetTypeList(false);
-                var instrumentList = SQLiteTools.GetInstrumentList(false);
                 var separationTypes = SQLiteTools.GetSepTypeList(false);
-                var userNames = SQLiteTools.GetUserList(false);
                 var separationDefault = SQLiteTools.GetDefaultSeparationType();
 
                 SQLiteTools.BuildConnectionString(true);
 
-                SQLiteTools.SaveInstListToCache(instrumentList);
                 SQLiteTools.SaveSelectedSeparationType(separationDefault);
                 SQLiteTools.SaveColumnListToCache(columnNames);
                 SQLiteTools.SaveDatasetTypeListToCache(datasetTypeNames);
                 SQLiteTools.SaveSeparationTypeListToCache(separationTypes);
                 SQLiteTools.SaveCartListToCache(cartNames);
-                SQLiteTools.SaveUserListToCache(userNames);
             }
 
             // Clean up the queues first

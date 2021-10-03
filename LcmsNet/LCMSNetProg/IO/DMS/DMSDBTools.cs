@@ -58,33 +58,6 @@ namespace LcmsNet.IO.DMS
 
         public string DMSVersion => GetConfigSetting(CONST_DMS_VERSION_KEY, "UnknownVersion");
 
-        /// <summary>
-        /// Controls whether datasets are loaded when LoadCacheFromDMS() is called
-        /// </summary>
-        public bool LoadDatasets { get; set; }
-
-        /// <summary>
-        /// Controls whether experiments are loaded when LoadCacheFromDMS() is called
-        /// </summary>
-        public bool LoadExperiments { get; set; }
-
-        /// <summary>
-        /// Number of months back to search when reading dataset names
-        /// </summary>
-        /// <remarks>Default is 12 months; use 0 to load all data</remarks>
-        public int RecentDatasetsMonthsToLoad { get; set; }
-
-        /// <summary>
-        /// Number of months back to search when reading experiment information
-        /// </summary>
-        /// <remarks>Default is 18 months; use 0 to load all data</remarks>
-        public int RecentExperimentsMonthsToLoad { get; set; }
-
-        /// <summary>
-        /// Number of months back to load expired EMSL Proposals; defaults to '12', use '-1' to load all data
-        /// </summary>
-        public int EMSLProposalsRecentMonthsToLoad { get; set; }
-
         public bool UseConnectionPooling { get; set; }
 
         private readonly Dictionary<string,string> mConfiguration;
@@ -113,9 +86,6 @@ namespace LcmsNet.IO.DMS
         public DMSDBTools()
         {
             mConfiguration = new Dictionary<string, string>();
-            RecentDatasetsMonthsToLoad = 12;
-            RecentExperimentsMonthsToLoad = 18;
-            EMSLProposalsRecentMonthsToLoad = 12;
             LoadConfiguration();
             // This should generally be true for SqlClient/SqlConnection, false means connection reuse (and potential multi-threading problems)
             UseConnectionPooling = true;
@@ -665,33 +635,6 @@ namespace LcmsNet.IO.DMS
         }
 
         /// <summary>
-        /// Gets a list of Work Packages from DMS and stores it in cache
-        /// </summary>
-        private void GetWorkPackagesFromDMS()
-        {
-            try
-            {
-                var dataFromDms = ReadWorkPackagesFromDMS();
-
-                // Store the list of cart config names in the cache db
-                try
-                {
-                    SQLiteTools.SaveWorkPackageListToCache(dataFromDms);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing work packages in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting work package list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
         /// Gets a list of instrument carts from DMS and stores it in cache
         /// </summary>
         private void GetCartListFromDMS()
@@ -722,40 +665,6 @@ namespace LcmsNet.IO.DMS
             {
                 const string errMsg = "Exception storing LC cart list in cache";
                 ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
-        private void GetDatasetListFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            var sqlCmd = "SELECT Dataset FROM V_LCMSNet_Dataset_Export";
-
-            if (RecentDatasetsMonthsToLoad > 0)
-            {
-                var dateThreshold = DateTime.Now.AddMonths(-RecentDatasetsMonthsToLoad).ToString("yyyy-MM-dd");
-                sqlCmd += " WHERE Created >= '" + dateThreshold + "'";
-            }
-
-            try
-            {
-                var datasetList = GetSingleColumnTableFromDMS(sqlCmd, connStr);
-
-                // Store the data in the cache db
-                try
-                {
-                    SQLiteTools.SaveDatasetNameListToCache(datasetList);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing dataset list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting dataset list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
             }
         }
 
@@ -861,158 +770,6 @@ namespace LcmsNet.IO.DMS
             }
         }
 
-        /// <summary>
-        /// Obtain the list of instrument operators from DMS and store this list in the cache
-        /// </summary>
-        private void GetInstrumentOperatorsFromDMS()
-        {
-            try
-            {
-                var operators = ReadInstrumentOperatorsFromDMS();
-
-                // Store data in cache
-                try
-                {
-                    SQLiteTools.SaveUserListToCache(operators);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing user list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting user list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        private void GetExperimentListFromDMS()
-        {
-            try
-            {
-                var experiments = ReadExperimentsFromDMS();
-
-                try
-                {
-                    SQLiteTools.SaveExperimentListToCache(experiments);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing experiment list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting experiment list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Get EMSL User Proposal IDs and associated users. Uses <see cref="EMSLProposalsRecentMonthsToLoad"/> to control how much data is loaded.
-        /// </summary>
-        private void GetProposalUsers()
-        {
-            var users = new List<ProposalUser>();
-            var referenceList = new List<UserIDPIDCrossReferenceEntry>();
-            var referenceDictionary = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>();
-
-            try
-            {
-                // Split the View back into the two tables it was built from.
-                // Note: It would be faster if we had the component tables the View was created from.
-                var userMap = new Dictionary<int, ProposalUser>();
-
-                foreach (var pUser in ReadProposalUsersFromDMS())
-                {
-                    if (!pUser.UserId.HasValue || string.IsNullOrWhiteSpace(pUser.ProposalId) || string.IsNullOrWhiteSpace(pUser.UserName))
-                        continue;
-
-                    var user = new ProposalUser(pUser.UserId.Value, pUser.UserName);
-                    var crossReference = new UserIDPIDCrossReferenceEntry(pUser.UserId.Value, pUser.ProposalId);
-
-                    if (!userMap.ContainsKey(user.UserID))
-                    {
-                        userMap.Add(user.UserID, user);
-                        users.Add(user);
-                    }
-
-                    if (!referenceDictionary.ContainsKey(crossReference.PID))
-                        referenceDictionary.Add(crossReference.PID, new List<UserIDPIDCrossReferenceEntry>());
-
-                    if (referenceDictionary[crossReference.PID].Any(cr => cr.UserID == crossReference.UserID))
-                    {
-                        continue;
-                    }
-
-                    referenceDictionary[crossReference.PID].Add(crossReference);
-                    referenceList.Add(crossReference);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting EUS Proposal Users list";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                return;
-            }
-
-            try
-            {
-                SQLiteTools.SaveProposalUsers(users, referenceList, referenceDictionary);
-            }
-            catch (Exception ex)
-            {
-                const string errMsg = "Exception storing Proposal Users list in cache";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, errMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of instruments from DMS
-        /// </summary>
-        private void GetInstrumentListFromDMS()
-        {
-            try
-            {
-                var instruments = ReadInstrumentFromDMS();
-
-                // Store data in cache
-                try
-                {
-                    SQLiteTools.SaveInstListToCache(instruments);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing instrument list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-
-                var instrumentGroups = ReadInstrumentGroupFromDMS();
-
-                // Store data in cache
-                try
-                {
-                    SQLiteTools.SaveInstGroupListToCache(instrumentGroups);
-                }
-                catch (Exception ex)
-                {
-                    const string errMsg = "Exception storing instrument group list in cache";
-                    ApplicationLogger.LogError(0, errMsg, ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting instrument list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-            }
-        }
-
         #endregion
 
         #region Private DMS database read-and-convert methods
@@ -1048,130 +805,6 @@ namespace LcmsNet.IO.DMS
                         yield return new CartConfigInfo(
                             reader["Cart_Config_Name"].CastDBValTo<string>(),
                             reader["Cart_Name"].CastDBValTo<string>());
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<ExperimentData> ReadExperimentsFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            var sqlCmd = "SELECT ID, Experiment, Created, Organism, Reason, Request, Researcher FROM V_LCMSNet_Experiment_Export";
-
-            if (RecentExperimentsMonthsToLoad > 0)
-            {
-                var dateThreshold = DateTime.Now.AddMonths(-RecentExperimentsMonthsToLoad).ToString("yyyy-MM-dd");
-                sqlCmd += " WHERE Last_Used >= '" + dateThreshold + "'";
-            }
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            var deDupDictionary = new Dictionary<string, string>();
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return new ExperimentData
-                        {
-                            Created = reader["Created"].CastDBValTo<DateTime>(),
-                            Experiment = reader["Experiment"].CastDBValTo<string>(),
-                            ID = reader["ID"].CastDBValTo<int>(),
-                            Organism = reader["Organism"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                            Reason = reader["Reason"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                            Request = reader["Request"].CastDBValTo<int>(),
-                            Researcher = reader["Researcher"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary)
-                        };
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<InstrumentInfo> ReadInstrumentFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            // Get a table containing the instrument data
-            const string sqlCmd = "SELECT Instrument, NameAndUsage, InstrumentGroup, CaptureMethod, " +
-                                  "Status, HostName, SharePath " +
-                                  "FROM V_Instrument_Info_LCMSNet " +
-                                  "ORDER BY Instrument";
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return new InstrumentInfo
-                        {
-                            DMSName = reader["Instrument"].CastDBValTo<string>(),
-                            CommonName = reader["NameAndUsage"].CastDBValTo<string>(),
-                            InstrumentGroup = reader["InstrumentGroup"].CastDBValTo<string>(),
-                            CaptureMethod = reader["CaptureMethod"].CastDBValTo<string>(),
-                            Status = reader["Status"].CastDBValTo<string>(),
-                            HostName = reader["HostName"].CastDBValTo<string>().Replace(".bionet", ""),
-                            SharePath = reader["SharePath"].CastDBValTo<string>()
-                        };
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<InstrumentGroupInfo> ReadInstrumentGroupFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            // Get a table containing the instrument data
-            const string sqlCmd = "SELECT InstrumentGroup, DefaultDatasetType, AllowedDatasetTypes " +
-                                  "FROM V_Instrument_Group_Dataset_Types_Active";
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return new InstrumentGroupInfo
-                        {
-                            InstrumentGroup = reader["InstrumentGroup"].CastDBValTo<string>(),
-                            DefaultDatasetType = reader["DefaultDatasetType"].CastDBValTo<string>(),
-                            AllowedDatasetTypes = reader["AllowedDatasetTypes"].CastDBValTo<string>()
-                        };
                     }
                 }
             }
@@ -1234,60 +867,6 @@ namespace LcmsNet.IO.DMS
                         yield return (
                             reader["File_Name"].CastDBValTo<string>(),
                             reader["Contents"].CastDBValTo<string>()
-                        );
-                    }
-                }
-            }
-        }
-
-        private readonly struct DmsProposalUserEntry
-        {
-            public readonly int? UserId;
-            public readonly string UserName;
-            public readonly string ProposalId;
-
-            public DmsProposalUserEntry(int? userId, string userName, string proposalId)
-            {
-                UserId = userId;
-                UserName = userName;
-                ProposalId = proposalId;
-            }
-        }
-
-        private IEnumerable<DmsProposalUserEntry> ReadProposalUsersFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            const string sqlCmdStart = "SELECT [User ID], [User Name], [#Proposal] FROM V_EUS_Proposal_Users";
-            var sqlCmd = sqlCmdStart;
-            if (EMSLProposalsRecentMonthsToLoad > -1)
-            {
-                var oldestExpiration = DateTime.Now.AddMonths(-EMSLProposalsRecentMonthsToLoad);
-                sqlCmd += $" WHERE Proposal_End_Date >= '{oldestExpiration:yyyy-MM-dd}' OR Proposal_End_Date IS NULL";
-            }
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return new DmsProposalUserEntry
-                        (
-                            reader["User ID"].CastDBValTo<int?>(),
-                            reader["User Name"].CastDBValTo<string>(),
-                            reader["#Proposal"].CastDBValTo<string>()
                         );
                     }
                 }
@@ -1390,92 +969,6 @@ namespace LcmsNet.IO.DMS
             }
         }
 
-        private IEnumerable<UserInfo> ReadInstrumentOperatorsFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            // Get the instrument operator names and usernames
-            // Switched from V_Active_Users to V_Active_Instrument_Operators in January 2020
-            // Switched from V_Active_Instrument_Operators to V_Active_Instrument_Users in October 2021
-            // Note that EMSL Users have a separate list
-            const string sqlCmd = "SELECT Name, [Payroll Num] as Payroll FROM V_Active_Instrument_Users ORDER BY Name";
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return new UserInfo
-                        {
-                            UserName = reader["Name"].CastDBValTo<string>(),
-                            PayrollNum = reader["Payroll"].CastDBValTo<string>()
-                        };
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<WorkPackageInfo> ReadWorkPackagesFromDMS()
-        {
-            var connStr = GetConnectionString();
-
-            // Get a list containing all active work packages
-
-            // Filters:
-            // * Only get the last 6 years
-            // * None from an 'unallowable' subaccount
-            // * None that are inactive and never used
-            // * None that have not been used, where the owner name is unknown (not in DMS)
-            var sqlCmd =
-                "SELECT Charge_Code, State, SubAccount, WorkBreakdownStructure, Title, Owner_PRN, Owner_Name " +
-                "FROM V_Charge_Code_Export " +
-                $"WHERE Setup_Date > '{DateTime.Now.AddYears(-6):yyyy-MM-dd}' AND SubAccount NOT LIKE '%UNALLOWABLE%' AND State <> 'Inactive, unused' AND (State LIKE '%, used%' OR Owner_Name IS NOT NULL)" +
-                "ORDER BY SortKey";
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            var deDupDictionary = new Dictionary<string, string>();
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return new WorkPackageInfo(
-                            reader["Charge_Code"].CastDBValTo<string>()?.Trim(),
-                            reader["State"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
-                            reader["SubAccount"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
-                            reader["WorkBreakdownStructure"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
-                            reader["Title"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
-                            reader["Owner_PRN"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary),
-                            reader["Owner_Name"].CastDBValTo<string>()?.Trim().LimitStringDuplication(deDupDictionary));
-                    }
-                }
-            }
-        }
-
         #endregion
 
         #region Public Methods
@@ -1517,33 +1010,11 @@ namespace LcmsNet.IO.DMS
             return true;
         }
 
-        /// <summary>
-        /// Loads all DMS data into cache
-        /// </summary>
         public void LoadCacheFromDMS()
         {
-            LoadCacheFromDMS(LoadExperiments, LoadDatasets);
-        }
-
-        public void LoadCacheFromDMS(bool loadExperiments)
-        {
-            ReportProgress("Loading data from DMS (entering LoadCacheFromDMS(bool loadExperiments)", 0, 20);
-            LoadCacheFromDMS(loadExperiments, LoadDatasets);
-        }
-
-        public void LoadCacheFromDMS(bool loadExperiments, bool loadDatasets)
-        {
             const int STEP_COUNT_BASE = 11;
-            const int EXPERIMENT_STEPS = 20;
-            const int DATASET_STEPS = 50;
 
             var stepCountTotal = STEP_COUNT_BASE;
-
-            if (loadExperiments)
-                stepCountTotal += EXPERIMENT_STEPS;
-
-            if (loadDatasets)
-                stepCountTotal += DATASET_STEPS;
 
             ReportProgress("Loading data from DMS (determining Connection String)", 0, stepCountTotal);
 
@@ -1577,45 +1048,10 @@ namespace LcmsNet.IO.DMS
             ReportProgress("Loading dataset types", 4, stepCountTotal);
             GetDatasetTypeListFromDMS();
 
-            ReportProgress("Loading instruments", 5, stepCountTotal);
-            GetInstrumentListFromDMS();
-
-            ReportProgress("Loading work packages", 6, stepCountTotal);
-            GetWorkPackagesFromDMS();
-
-            ReportProgress("Loading operators", 7, stepCountTotal);
-            GetInstrumentOperatorsFromDMS();
-
             ReportProgress("Loading LC columns", 8, stepCountTotal);
             GetColumnListFromDMS();
 
-            ReportProgress("Loading proposal users", 9, stepCountTotal);
-            GetProposalUsers();
-
             var stepCountCompleted = STEP_COUNT_BASE;
-            if (loadExperiments)
-            {
-                var currentTask = "Loading experiments";
-                if (RecentExperimentsMonthsToLoad > 0)
-                    currentTask += " created/used in the last " + RecentExperimentsMonthsToLoad + " months";
-
-                ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
-
-                GetExperimentListFromDMS();
-                stepCountCompleted += EXPERIMENT_STEPS;
-            }
-
-            if (loadDatasets)
-            {
-                var currentTask = "Loading datasets";
-                if (RecentDatasetsMonthsToLoad > 0)
-                    currentTask += " from the last " + RecentDatasetsMonthsToLoad + " months";
-
-                ReportProgress(currentTask, stepCountCompleted, stepCountTotal);
-
-                GetDatasetListFromDMS();
-                // stepCountCompleted += DATASET_STEPS;
-            }
 
             ReportProgress("DMS data loading complete", stepCountTotal, stepCountTotal);
         }

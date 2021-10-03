@@ -66,7 +66,7 @@ namespace LcmsNet.SampleQueue.IO
             // ----------------------------------------------------------------------------------------------------
             // Write the LC Method file
             // ----------------------------------------------------------------------------------------------------
-            var methodFileName = TriggerFileTools.GetTriggerFileName(sample, ".incompleteLcmethod");
+            var methodFileName = GetMethodFileName(sample, ".incompleteLcmethod");
             var lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
             var lcWriter = new LCMethodWriter();
             try
@@ -127,7 +127,7 @@ namespace LcmsNet.SampleQueue.IO
             // Write the LC Method file
             // ----------------------------------------------------------------------------------------------------
             var methodWriter = new LCMethodWriter();
-            var methodFileName = TriggerFileTools.GetTriggerFileName(sample, ".lcmethod");
+            var methodFileName = GetMethodFileName(sample, ".lcmethod");
             var lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
             var lcWriter = new LCMethodWriter();
             try
@@ -198,6 +198,24 @@ namespace LcmsNet.SampleQueue.IO
                     remoteTargetFolder);
                 ApplicationLogger.LogError(0, message, ex, sample);
             }
+        }
+
+        /// <summary>
+        /// Get the method file name for the provided dataset
+        /// </summary>
+        /// <param name="sample"></param>
+        /// <param name="extension"></param>
+        /// <returns></returns>
+        public static string GetMethodFileName(SampleData sample, string extension)
+        {
+            var datasetName = sample.DmsData.DatasetName;
+            var outFileName =
+                string.Format("{0}_{1:MM.dd.yyyy_hh.mm.ss}_{2}{3}",
+                    sample.DmsData.CartName,
+                    sample.RunStart,
+                    datasetName,
+                    extension);
+            return outFileName;
         }
 
         /// <summary>

@@ -40,14 +40,6 @@ namespace LcmsNet.IO.SQLite
         private static readonly List<string> columnNames = new List<string>(0);
         private static readonly List<string> separationNames = new List<string>(0);
         private static readonly List<string> datasetTypeNames = new List<string>(0);
-        private static readonly List<string> datasetNames = new List<string>(0);
-        private static readonly Dictionary<string, WorkPackageInfo> workPackageMap = new Dictionary<string, WorkPackageInfo>(0);
-        private static readonly List<UserInfo> userInfo = new List<UserInfo>(0);
-        private static readonly List<InstrumentInfo> instrumentInfo = new List<InstrumentInfo>(0);
-        private static readonly List<InstrumentGroupInfo> instrumentGroupInfo = new List<InstrumentGroupInfo>(0);
-        private static readonly List<ExperimentData> experimentsData = new List<ExperimentData>(0);
-        private static readonly List<ProposalUser> proposalUsers = new List<ProposalUser>(0);
-        private static readonly Dictionary<string, List<UserIDPIDCrossReferenceEntry>> proposalIdIndexedReferenceList = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>(0);
         private static bool firstTimeLookupSelectedSepType = true;
 
         #endregion
@@ -103,39 +95,6 @@ namespace LcmsNet.IO.SQLite
         public static void CloseConnection()
         {
             Cache.CloseConnection();
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private static void UpdateProposalIdIndexReferenceList(IReadOnlyDictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
-        {
-            if (Cache.AlwaysRead)
-            {
-                return;
-            }
-
-            foreach (var key in proposalIdIndexedReferenceList.Keys.ToArray())
-            {
-                if (!pidIndexedReferenceList.ContainsKey(key))
-                {
-                    proposalIdIndexedReferenceList.Remove(key);
-                }
-            }
-
-            foreach (var item in proposalIdIndexedReferenceList)
-            {
-                if (proposalIdIndexedReferenceList.TryGetValue(item.Key, out var crossReferenceList))
-                {
-                    crossReferenceList.Clear();
-                    crossReferenceList.AddRange(item.Value);
-                }
-                else
-                {
-                    proposalIdIndexedReferenceList.Add(item.Key, item.Value.ToList());
-                }
-            }
         }
 
         #endregion
@@ -328,25 +287,6 @@ namespace LcmsNet.IO.SQLite
         }
 
         /// <summary>
-        /// Wrapper around generic retrieval method specifically for dataset name lists
-        /// </summary>
-        /// <returns>List containing separation types</returns>
-        public static IEnumerable<string> GetDatasetList()
-        {
-            return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.DatasetList, datasetNames, false);
-        }
-
-        /// <summary>
-        /// Checks if the provided dataset name exists in the cache, case-insensitive
-        /// </summary>
-        /// <param name="datasetName"></param>
-        /// <returns></returns>
-        public static bool CheckDatasetExists(string datasetName)
-        {
-            return Cache.CheckDatasetExists(datasetName);
-        }
-
-        /// <summary>
         /// Wrapper around generic retrieval method specifically for dataset type lists
         /// </summary>
         /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
@@ -354,129 +294,6 @@ namespace LcmsNet.IO.SQLite
         public static IEnumerable<string> GetDatasetTypeList(bool force)
         {
             return Cache.ReadSingleColumnListFromCache(DatabaseTableTypes.DatasetTypeList, datasetTypeNames, force);
-        }
-
-        /// <summary>
-        /// Wrapper around generic retrieval method specifically for Work Package lists
-        /// </summary>
-        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
-        /// <returns>Mapping of Charge Codes to WorkPackageInfo objects</returns>
-        public static Dictionary<string, WorkPackageInfo> GetWorkPackageMap(bool force)
-        {
-            var cacheData = workPackageMap;
-            if (workPackageMap.Count == 0 || force || Cache.AlwaysRead)
-            {
-                // Read the data from the cache
-                var workPackages = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.WorkPackages, () => new WorkPackageInfo()).ToList();
-
-                cacheData = new Dictionary<string, WorkPackageInfo>(workPackages.Count);
-
-                // For each row (representing one work package), create a dictionary and/or list entry
-                foreach (var wpInfo in workPackages)
-                {
-                    // Add the work package data object to the full list
-                    if (!cacheData.ContainsKey(wpInfo.ChargeCode))
-                    {
-                        cacheData.Add(wpInfo.ChargeCode, wpInfo);
-                    }
-                    else
-                    {
-                        // Collision: probably due to certain types of joint appointments
-                        // if username exists in DMS, try to keep the one with the current owner name.
-                        var existing = cacheData[wpInfo.ChargeCode];
-                        if (existing.OwnerName == null || existing.OwnerName.IndexOf("(old", StringComparison.OrdinalIgnoreCase) >= 0)
-                        {
-                            cacheData[wpInfo.ChargeCode] = wpInfo;
-                        }
-                    }
-                }
-
-                workPackageMap.Clear();
-                if (!Cache.AlwaysRead)
-                {
-                    foreach (var item in cacheData)
-                    {
-                        workPackageMap.Add(item.Key, item.Value);
-                    }
-                }
-            }
-
-            return cacheData;
-        }
-
-        /// <summary>
-        /// Gets user list from cache
-        /// </summary>
-        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
-        /// <returns>List of user data</returns>
-        public static IEnumerable<UserInfo> GetUserList(bool force)
-        {
-            return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.UserList, () => new UserInfo(), userInfo, force);
-        }
-
-        /// <summary>
-        /// Gets a list of instruments from the cache
-        /// </summary>
-        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
-        /// <returns>List of instruments</returns>
-        public static IEnumerable<InstrumentInfo> GetInstrumentList(bool force)
-        {
-            return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.InstrumentList, () => new InstrumentInfo(), instrumentInfo, force);
-        }
-
-        /// <summary>
-        /// Gets a list of instrument groups from the cache
-        /// </summary>
-        /// <param name="force">Force reload of data from cache, rather than using the in-memory copy of it</param>
-        /// <returns>List of instrument groups</returns>
-        public static IEnumerable<InstrumentGroupInfo> GetInstrumentGroupList(bool force)
-        {
-            return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.InstrumentGroupList, () => new InstrumentGroupInfo(), instrumentGroupInfo, force);
-        }
-
-        public static IEnumerable<ExperimentData> GetExperimentList()
-        {
-            return Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.ExperimentList, () => new ExperimentData(), experimentsData, false);
-        }
-
-        public static void GetProposalUsers(
-            out List<ProposalUser> users,
-            out Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
-        {
-            if (proposalUsers.Count > 0 && proposalIdIndexedReferenceList.Count > 0 && !Cache.AlwaysRead)
-            {
-                users = proposalUsers;
-                pidIndexedReferenceList = proposalIdIndexedReferenceList;
-            }
-            else
-            {
-                pidIndexedReferenceList = new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>();
-
-                // Read the data from the cache
-                users = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.PUserList, () => new ProposalUser(), proposalUsers).ToList();
-                var crossReferenceList = Cache.ReadMultiColumnDataFromCache(DatabaseTableTypes.PReferenceList, () => new UserIDPIDCrossReferenceEntry());
-
-                foreach (var crossReference in crossReferenceList)
-                {
-                    if (!pidIndexedReferenceList.ContainsKey(crossReference.PID))
-                    {
-                        pidIndexedReferenceList.Add(
-                            crossReference.PID,
-                            new List<UserIDPIDCrossReferenceEntry>());
-                    }
-
-                    pidIndexedReferenceList[crossReference.PID].Add(crossReference);
-                }
-
-                if (Cache.AlwaysRead)
-                {
-                    proposalIdIndexedReferenceList.Clear();
-                }
-                else
-                {
-                    UpdateProposalIdIndexReferenceList(pidIndexedReferenceList);
-                }
-            }
         }
 
         /// <summary>
@@ -572,66 +389,6 @@ namespace LcmsNet.IO.SQLite
         }
 
         /// <summary>
-        /// Saves a list of users to cache
-        /// </summary>
-        /// <param name="userList">List containing user data</param>
-        public static void SaveUserListToCache(IEnumerable<UserInfo> userList)
-        {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.UserList, userList, userInfo);
-        }
-
-        /// <summary>
-        /// Save a list of experiments to cache
-        /// </summary>
-        /// <param name="expList"></param>
-        public static void SaveExperimentListToCache(IEnumerable<ExperimentData> expList)
-        {
-            if (expList == null) return;
-
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.ExperimentList, expList, experimentsData);
-        }
-
-        /// <summary>
-        /// Saves the Proposal Users list and a Proposal ID to Proposal User ID cross-reference
-        /// list to the cache.
-        /// </summary>
-        /// <param name="users">A list of the Proposal Users to cache.</param>
-        /// <param name="crossReferenceList">A list of cross references to cache.</param>
-        /// <param name="pidIndexedReferenceList">
-        /// A dictionary of cross reference lists that have been grouped by Proposal ID.
-        /// </param>
-        public static void SaveProposalUsers(IEnumerable<ProposalUser> users,
-            IEnumerable<UserIDPIDCrossReferenceEntry> crossReferenceList,
-            Dictionary<string, List<UserIDPIDCrossReferenceEntry>> pidIndexedReferenceList)
-        {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.PUserList, users, proposalUsers);
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.PReferenceList, crossReferenceList);
-
-            if (!Cache.AlwaysRead)
-            {
-                UpdateProposalIdIndexReferenceList(pidIndexedReferenceList);
-            }
-        }
-
-        /// <summary>
-        /// Saves a list of instruments to cache
-        /// </summary>
-        /// <param name="instList">List of InstrumentInfo containing instrument data</param>
-        public static void SaveInstListToCache(IEnumerable<InstrumentInfo> instList)
-        {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.InstrumentList, instList, instrumentInfo);
-        }
-
-        /// <summary>
-        /// Saves a list of instrument groups to cache
-        /// </summary>
-        /// <param name="instGroupList">List of InstrumentGroupInfo containing instrument group data</param>
-        public static void SaveInstGroupListToCache(IEnumerable<InstrumentGroupInfo> instGroupList)
-        {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.InstrumentGroupList, instGroupList, instrumentGroupInfo);
-        }
-
-        /// <summary>
         /// Saves a list of Cart_Configs (and associated Cart names) to cache
         /// </summary>
         /// <param name="cartConfigList">List containing cart config info.</param>
@@ -643,21 +400,6 @@ namespace LcmsNet.IO.SQLite
             if (!Cache.AlwaysRead)
             {
                 GetCartConfigNameMap(true);
-            }
-        }
-
-        /// <summary>
-        /// Saves a list of WorkPackageInfo objects to cache
-        /// </summary>
-        /// <param name="workPackageList">List containing work package info.</param>
-        public static void SaveWorkPackageListToCache(IEnumerable<WorkPackageInfo> workPackageList)
-        {
-            Cache.SaveMultiColumnListToCache(DatabaseTableTypes.WorkPackages, workPackageList);
-
-            // Reload the in-memory copy of the cached data
-            if (!Cache.AlwaysRead)
-            {
-                GetWorkPackageMap(true);
             }
         }
 
@@ -677,15 +419,6 @@ namespace LcmsNet.IO.SQLite
         public static void SaveColumnListToCache(IEnumerable<string> columnList)
         {
             Cache.SaveSingleColumnListToCache(DatabaseTableTypes.ColumnList, columnList, columnNames);
-        }
-
-        /// <summary>
-        /// Saves a list of Dataset names to the SQLite cache
-        /// </summary>
-        /// <param name="datasetNameList">Dataset names</param>
-        public static void SaveDatasetNameListToCache(IEnumerable<string> datasetNameList)
-        {
-            Cache.SaveSingleColumnListToCache(DatabaseTableTypes.DatasetList, datasetNameList, datasetNames);
         }
 
         /// <summary>

@@ -674,7 +674,7 @@ namespace LcmsNet
                 dmsTools.ProgressEvent += DmsToolsManager_ProgressEvent;
                 LcmsNet.Configuration.DMSDataContainer.LogDBToolsEvents = false;
 
-                dmsTools.LoadCacheFromDMS(false);
+                dmsTools.LoadCacheFromDMS();
 
                 LcmsNet.Configuration.DMSDataContainer.LogDBToolsEvents = true;
                 dmsTools.ProgressEvent -= DmsToolsManager_ProgressEvent;

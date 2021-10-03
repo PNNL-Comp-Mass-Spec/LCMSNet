@@ -873,12 +873,6 @@ namespace LcmsNet.IO.SQLite
             CheckSingleColumnCacheTable(DatabaseTableTypes.SeparationTypeList, writeData.SeparationTypes);
             CheckSingleColumnCacheTable(DatabaseTableTypes.DatasetTypeList, writeData.DatasetTypes);
             CheckSingleColumnCacheTable(DatabaseTableTypes.ColumnList, writeData.ColumnNames);
-            CheckMultiColumnCacheTable<InstrumentInfo>(DatabaseTableTypes.InstrumentList);
-            CheckMultiColumnCacheTable<InstrumentGroupInfo>(DatabaseTableTypes.InstrumentGroupList);
-            CheckMultiColumnCacheTable<UserInfo>(DatabaseTableTypes.UserList);
-            CheckMultiColumnCacheTable<ExperimentData>(DatabaseTableTypes.ExperimentList);
-            CheckMultiColumnCacheTable<ProposalUser>(DatabaseTableTypes.PUserList);
-            CheckMultiColumnCacheTable<UserIDPIDCrossReferenceEntry>(DatabaseTableTypes.PReferenceList);
         }
 
         /// <summary>
@@ -1207,31 +1201,6 @@ namespace LcmsNet.IO.SQLite
                 }
 
                 transaction.Commit();
-            }
-        }
-
-        /// <summary>
-        /// Checks if the provided dataset name exists in the cache, case-insensitive
-        /// </summary>
-        /// <param name="datasetName"></param>
-        /// <returns>true if the dataset name exists</returns>
-        public bool CheckDatasetExists(string datasetName)
-        {
-            if (string.IsNullOrWhiteSpace(datasetName))
-            {
-                return false;
-            }
-
-            var tableName = GetTableName(DatabaseTableTypes.DatasetList);
-            var columnName = GetSingleColumnName(DatabaseTableTypes.DatasetList, ConnString);
-            using (var connection = GetConnection(ConnString))
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = $"SELECT COUNT(*) FROM {tableName} WHERE {columnName} LIKE :DatasetName";
-                command.Parameters.Add(new SQLiteParameter(":DatasetName", datasetName));
-                var result = command.ExecuteScalar();
-                // We always expect a result, because COUNT(*) returns 0 for no-match
-                return (long)result > 0;
             }
         }
 

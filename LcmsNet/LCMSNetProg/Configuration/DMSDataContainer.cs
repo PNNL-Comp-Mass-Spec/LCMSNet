@@ -19,15 +19,7 @@ namespace LcmsNet.Configuration
         /// </summary>
         static DMSDataContainer()
         {
-            DBTools = new DMSDBTools
-            {
-                // LCMSNet does not directly use experiments. Don't load them from DMS.
-                LoadExperiments = false,
-                // LCMSNet does not use DMS dataset names. Don't load them from DMS.
-                LoadDatasets = false,
-                RecentExperimentsMonthsToLoad = 18,
-                RecentDatasetsMonthsToLoad = 12
-            };
+            DBTools = new DMSDBTools();
 
             LogDBToolsEvents = true;
             DBTools.ProgressEvent += DBTools_ProgressEvent;

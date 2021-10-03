@@ -85,34 +85,6 @@ namespace LcmsnetUnitTest
         }
 
         /// <summary>
-        /// Checks that SaveUserListToCache works(or thinks it does)
-        /// </summary>
-        [Test]
-        public void TestD()
-        {
-            var usersExampleData = new List<UserInfo>();
-            var example = new UserInfo
-            {
-                PayrollNum = "1",
-                UserName = "Test User"
-            };
-            usersExampleData.Add(example);
-            SQLiteTools.SaveUserListToCache(usersExampleData);
-        }
-
-
-        /// <summary>
-        /// Tests that GetUserList returns correct users. Specifically the one added by TestD.
-        /// </summary>
-        [Test]
-        public void TestE()
-        {
-            var users = SQLiteTools.GetUserList(false).ToList();
-            Assert.AreEqual(1, users.Count);
-            Assert.IsTrue(users.Exists(x => x.UserName == "Test User" && x.PayrollNum == "1"));
-        }
-
-        /// <summary>
         /// Tests that the default separation type is saved.
         /// </summary>
         [Test]
@@ -182,90 +154,6 @@ namespace LcmsnetUnitTest
         {
             var samples = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.RunningQueue).ToList();
             Assert.AreEqual(2, samples[0].UniqueID);
-        }
-
-
-        /// <summary>
-        /// Test that experiments are saved to cache correctly
-        /// </summary>
-        [Test]
-        public void TestL()
-        {
-            var experiments = new List<ExperimentData>();
-            var experiment = new ExperimentData
-            {
-                ID = 1,
-                Experiment = "Test",
-                Created = DateTime.Now,
-                Researcher = "Staff",
-                Reason = "Software testing"
-            };
-            experiments.Add(experiment);
-            SQLiteTools.SaveExperimentListToCache(experiments);
-        }
-
-
-        /// <summary>
-        /// Tests that experiments are read from cache
-        /// </summary>
-        [Test]
-        public void TestM()
-        {
-            var experiments = SQLiteTools.GetExperimentList().ToList();
-            Assert.AreEqual(1, experiments[0].ID);
-            Assert.AreEqual("Test", experiments[0].Experiment);
-        }
-
-        /// <summary>
-        /// Test that instruments are saved to cache correctly
-        /// </summary>
-        [Test]
-        public void TestN()
-        {
-            var instInfo = new List<InstrumentInfo>();
-            var inst = new InstrumentInfo
-            {
-                CommonName = "Test instrument"
-            };
-            instInfo.Add(inst);
-            SQLiteTools.SaveInstListToCache(instInfo);
-        }
-
-        /// <summary>
-        /// Tests that instruments are read from cache
-        /// </summary>
-        [Test]
-        public void TestO()
-        {
-            var insts = SQLiteTools.GetInstrumentList(false).ToList();
-            Assert.AreEqual("Test instrument", insts[0].CommonName);
-        }
-
-        /// <summary>
-        /// Test that proposal users are saved to cache correctly
-        /// </summary>
-        [Test]
-        public void TestP()
-        {
-            var users = new List<ProposalUser>();
-            var user = new ProposalUser
-            {
-                UserID = 1
-            };
-            users.Add(user);
-            SQLiteTools.SaveProposalUsers(users, new List<UserIDPIDCrossReferenceEntry>(), new Dictionary<string, List<UserIDPIDCrossReferenceEntry>>());
-        }
-
-        /// <summary>
-        /// Tests that proposal users are read from cache
-        /// </summary>
-        [Test]
-        public void TestQ()
-        {
-            List<ProposalUser> users;
-            Dictionary<string, List<UserIDPIDCrossReferenceEntry>> dict;
-            SQLiteTools.GetProposalUsers(out users, out dict);
-            Assert.AreEqual(1, users[0].UserID);
         }
 
         /// <summary>

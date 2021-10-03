@@ -11,16 +11,6 @@
              d:DesignHeight="647" d:DesignWidth="887"
              d:DataContext="{d:DesignInstance {x:Type viewModels:SystemConfigurationViewModel}, IsDesignTimeCreatable=True}">
     <TabControl Margin="5">
-        <TabItem Header="Operator">
-            <StackPanel>
-                <GroupBox Header="Operator" Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox Width="227" Margin="3" SelectedItem="{Binding InstrumentOperator, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding OperatorsComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                        <Button Width="80" Margin="3" Command="{Binding SetOperatorCommand}" IsEnabled="{Binding OperatorNotSaved}" Content="Set" />
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
-        </TabItem>
         <TabItem Header="LC Cart">
             <StackPanel>
                 <GroupBox Header="LC-Cart" Margin="5">
@@ -73,19 +63,6 @@
                     <TextBox Width="428" Text="{Binding PdfPath}" IsReadOnly="True" />
                     <Button Margin="5,0" Content="Browse" Command="{Binding BrowsePdfPathCommand}" />
                 </StackPanel>
-            </StackPanel>
-        </TabItem>
-        <TabItem Header="Mass Spectrometer">
-            <StackPanel>
-                <GroupBox Header="Mass Spectrometer Instrument" Margin="5">
-                    <StackPanel>
-                        <TextBlock Text="Available Instruments" />
-                        <StackPanel Orientation="Horizontal">
-                            <ComboBox Width="227" Margin="3" SelectedItem="{Binding InstrumentName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding InstrumentComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                            <Button Width="80" Margin="3" Command="{Binding SetInstrumentCommand}" IsEnabled="{Binding InstrumentNameNotSaved}" Content="Set" />
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
             </StackPanel>
         </TabItem>
         <TabItem Header="DMS">

@@ -453,10 +453,6 @@ namespace LcmsNetSDK.Data
 
         /// <inheritdoc />
         [PersistenceSetting(IgnoreProperty = true)]
-        public string InstrumentName => LCMSSettings.GetParameter(LCMSSettings.PARAM_INSTNAME);
-
-        /// <inheritdoc />
-        [PersistenceSetting(IgnoreProperty = true)]
         public string SeparationType => LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE);
 
         /// <inheritdoc />

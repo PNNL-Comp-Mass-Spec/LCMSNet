@@ -43,16 +43,11 @@ namespace LcmsNet.Configuration.ViewModels
                 return;
             }
 #endif
-
-            instrumentComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var instrumentComboBoxOptionsBound).Subscribe();
             cartConfigComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var cartConfigComboBoxOptionsBound).Subscribe();
             separationTypeComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var separationTypeComboBoxOptionsBound).Subscribe();
-            operatorsComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var operatorsComboBoxOptionsBound).Subscribe();
             columnNameComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var columnNameComboBoxOptionsBound).Subscribe();
-            InstrumentComboBoxOptions = instrumentComboBoxOptionsBound;
             CartConfigComboBoxOptions = cartConfigComboBoxOptionsBound;
             SeparationTypeComboBoxOptions = separationTypeComboBoxOptionsBound;
-            OperatorsComboBoxOptions = operatorsComboBoxOptionsBound;
             ColumnNameComboBoxOptions = columnNameComboBoxOptionsBound;
 
             TriggerLocation = LCMSSettings.GetParameter(LCMSSettings.PARAM_TRIGGERFILEFOLDER);
@@ -73,7 +68,6 @@ namespace LcmsNet.Configuration.ViewModels
             CartName = CartConfiguration.CartName;
 
             LoadSeparationTypes();
-            LoadInstrumentInformation();
             LoadApplicationSettings();
 
             MinVolume = CartConfiguration.MinimumVolume;
@@ -82,18 +76,10 @@ namespace LcmsNet.Configuration.ViewModels
             TimeZoneComboBoxOptions = TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id).ToList().AsReadOnly();
             TimeZone = LCMSSettings.GetParameter(LCMSSettings.PARAM_TIMEZONE);
 
-            LoadUserCombo(SQLiteTools.GetUserList(false));
-
             ReloadData(true);
 
-            this.WhenAnyValue(x => x.InstrumentOperator).Subscribe(x => this.OperatorNotSaved = true);
-            this.WhenAnyValue(x => x.InstrumentName).Subscribe(x => this.InstrumentNameNotSaved = true);
             this.WhenAnyValue(x => x.SpecialColumnEnabled).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, (!x).ToString()));
-            OperatorNotSaved = false;
-            InstrumentNameNotSaved = false;
 
-            SetInstrumentCommand = ReactiveCommand.Create(() => SaveInstrument(false));
-            SetOperatorCommand = ReactiveCommand.Create(() => SaveOperator(false));
             ReloadCartDataCommand = ReactiveCommand.Create(() => ReloadData(false));
             BrowsePdfPathCommand = ReactiveCommand.Create(BrowsePdfPath);
         }
@@ -104,25 +90,14 @@ namespace LcmsNet.Configuration.ViewModels
 
         #region "Class variables"
 
-        /// <summary>
-        /// List of users
-        /// </summary>
-        private Dictionary<string, UserInfo> dmsUserList;
-
         private double minVolume = 1;
         private string triggerLocation = "";
         private string pdfPath = "";
         private string cartConfigName = "";
         private string timeZone = "";
-        private string instrumentName = "";
         private string separationType = "";
-        private string instrumentOperator = "";
-        private bool instrumentNameNotSaved;
-        private bool operatorNotSaved;
-        private readonly SourceList<string> instrumentComboBoxOptions = new SourceList<string>();
         private readonly SourceList<string> cartConfigComboBoxOptions = new SourceList<string>();
         private readonly SourceList<string> separationTypeComboBoxOptions = new SourceList<string>();
-        private readonly SourceList<string> operatorsComboBoxOptions = new SourceList<string>();
         private readonly SourceList<string> columnNameComboBoxOptions = new SourceList<string>();
         private bool specialColumnEnabled;
 
@@ -186,12 +161,6 @@ namespace LcmsNet.Configuration.ViewModels
             }
         }
 
-        public string InstrumentName
-        {
-            get => instrumentName;
-            set => this.RaiseAndSetIfChanged(ref instrumentName, value);
-        }
-
         public string SeparationType
         {
             get => separationType;
@@ -203,12 +172,6 @@ namespace LcmsNet.Configuration.ViewModels
                     SaveSeparationType();
                 }
             }
-        }
-
-        public string InstrumentOperator
-        {
-            get => instrumentOperator;
-            set => this.RaiseAndSetIfChanged(ref instrumentOperator, value);
         }
 
         public ColumnConfigViewModel Column1ViewModel { get; }
@@ -237,27 +200,11 @@ namespace LcmsNet.Configuration.ViewModels
             }
         }
 
-        public bool InstrumentNameNotSaved
-        {
-            get => instrumentNameNotSaved;
-            private set => this.RaiseAndSetIfChanged(ref instrumentNameNotSaved, value);
-        }
-
-        public bool OperatorNotSaved
-        {
-            get => operatorNotSaved;
-            private set => this.RaiseAndSetIfChanged(ref operatorNotSaved, value);
-        }
-
         public ReadOnlyCollection<string> TimeZoneComboBoxOptions { get; }
-        public ReadOnlyObservableCollection<string> InstrumentComboBoxOptions { get; }
         public ReadOnlyObservableCollection<string> CartConfigComboBoxOptions { get; }
         public ReadOnlyObservableCollection<string> SeparationTypeComboBoxOptions { get; }
-        public ReadOnlyObservableCollection<string> OperatorsComboBoxOptions { get; }
         public ReadOnlyObservableCollection<string> ColumnNameComboBoxOptions { get; }
 
-        public ReactiveCommand<Unit, Unit> SetInstrumentCommand { get; }
-        public ReactiveCommand<Unit, Unit> SetOperatorCommand { get; }
         public ReactiveCommand<Unit, Unit> ReloadCartDataCommand { get; }
         public ReactiveCommand<Unit, Unit> BrowsePdfPathCommand { get; }
 
@@ -294,32 +241,6 @@ namespace LcmsNet.Configuration.ViewModels
             ColumnNameChanged?.Invoke(this, null);
         }
 
-        private void LoadInstrumentInformation()
-        {
-            // Load combo box
-            var instList = SQLiteTools.GetInstrumentList(false).ToList();
-
-            if (instList.Count < 1)
-            {
-                ApplicationLogger.LogError(0, "No instruments found.");
-                return;
-            }
-
-            instrumentComboBoxOptions.Edit(list =>
-            {
-                list.Clear();
-                list.AddRange(instList.Select(x => x.DMSName));
-            });
-
-            // Determine if presently specified instrument name is in list. If it is, display it.
-            InstrumentName = LCMSSettings.GetParameter(LCMSSettings.PARAM_INSTNAME);
-
-            // Determine if presently specified separation type is in list. If it is, display it.
-            SeparationType = LCMSSettings.GetParameter(LCMSSettings.PARAM_SEPARATIONTYPE);
-
-            InstrumentNameNotSaved = false;
-        }
-
         /// <summary>
         /// Loads the application settings to the user interface.
         /// </summary>
@@ -327,63 +248,6 @@ namespace LcmsNet.Configuration.ViewModels
         {
             //checkBox_createMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATEMETHODFOLDERS, false));
             //checkBox_copyMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS, false));
-        }
-
-        /// <summary>
-        /// Loads the user combo box
-        /// </summary>
-        /// <param name="userList"></param>
-        private void LoadUserCombo(IEnumerable<UserInfo> userList)
-        {
-            // Make a dictionary based on the input list, with the first entry = "(None)"
-            if (dmsUserList == null)
-            {
-                dmsUserList = new Dictionary<string, UserInfo>();
-            }
-            else
-            {
-                dmsUserList.Clear();
-            }
-
-            // Create dummy user. User is not recognized by DMS, so that trigger files will fail and let
-            //      operator know that user name was not provided
-            var tmpUser = new UserInfo
-            {
-                PayrollNum = "None",
-                UserName = "(None)"
-            };
-            dmsUserList.Add(tmpUser.PayrollNum, tmpUser);
-
-            // Add users to dictionary from user list
-            foreach (var user in userList)
-            {
-                var data = string.Format("{0} - ({1})", user.UserName,
-                    user.PayrollNum);
-
-                dmsUserList.Add(data, user);
-            }
-
-            // Now add user list to combo box
-            operatorsComboBoxOptions.Edit(list =>
-            {
-                list.Clear();
-                list.AddRange(dmsUserList.Select(x => x.Key));
-            });
-
-            // Determine if presently specified operator name is in list. If it is, display it.
-            var savedName = LCMSSettings.GetParameter(LCMSSettings.PARAM_OPERATOR);
-            InstrumentOperator = savedName;
-            foreach (var item in dmsUserList)
-            {
-                if (item.Value.UserName.Equals(savedName))
-                {
-                    InstrumentOperator = item.Key;
-                    return;
-                }
-            }
-            InstrumentOperator = LCMSSettings.GetParameter(LCMSSettings.PARAM_OPERATOR);
-
-            OperatorNotSaved = false;
         }
 
         #endregion
@@ -578,32 +442,6 @@ namespace LcmsNet.Configuration.ViewModels
                 ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_USER,
                     "Column name lists updated");
             }
-        }
-
-        private void SaveInstrument(bool isLoading)
-        {
-            if (!isLoading)
-                LCMSSettings.SetParameter(LCMSSettings.PARAM_INSTNAME, InstrumentName);
-            InstrumentNameNotSaved = false;
-        }
-
-        private void SaveOperator(bool isLoading)
-        {
-            if (!isLoading)
-            {
-                var operatorName = InstrumentOperator;
-                if (dmsUserList.ContainsKey(operatorName))
-                {
-                    var instOperator = dmsUserList[operatorName];
-                    LCMSSettings.SetParameter(LCMSSettings.PARAM_OPERATOR, instOperator.UserName);
-                }
-                else
-                {
-                    ApplicationLogger.LogError(0,
-                        "Could not use the current user as the operator.  Was not present in the system.");
-                }
-            }
-            OperatorNotSaved = false;
         }
 
         #endregion

@@ -18,7 +18,6 @@ using LcmsNetSDK.Data;
 using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue
@@ -32,8 +31,6 @@ namespace LcmsNet.SampleQueue
 
         public ReadOnlyObservableCollection<SampleViewModel> Samples { get; }
         public IObservableList<SampleViewModel> SamplesSource => samplesList;
-
-        private readonly DMSSampleValidator mValidator;
 
         #region Column Events
 
@@ -149,8 +146,6 @@ namespace LcmsNet.SampleQueue
 
             try
             {
-                mValidator = new DMSSampleValidator(CartConfigOptions);
-
                 SampleQueue = sampleQueue;
                 if (SampleQueue != null)
                 {
@@ -204,7 +199,6 @@ namespace LcmsNet.SampleQueue
 
             try
             {
-                mValidator = new DMSSampleValidator();
                 HasData = false;
                 Initialize();
             }
