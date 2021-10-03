@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 using DemoPluginLibrary;
+using LcmsNet.Data;
 using LcmsNet.SampleQueue;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
@@ -103,20 +105,20 @@ namespace LcmsnetUnitTest
             sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
-            sampleA.DmsData.DatasetName = "testDataset";
+            sampleA.Name = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
             sampleA.LCMethodName = testLcMethod.Name;
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
-            sampleB.DmsData.DatasetName = "testDataset2";
+            sampleB.Name = "testDataset2";
             sampleB.DmsData.CartName = "Emulated";
 
             samples.Add(sampleA);
             samples.Add(sampleB);
 
-            optimizer.AlignSamples(samples);
+            optimizer.AlignSamples(samples.Cast<ISampleInfo>().ToList());
             q.QueueSamples(samples, enumColumnDataHandling.LeaveAlone);
             Assert.IsTrue(q.GetWaitingQueue().Contains(sampleA) && q.GetWaitingQueue().Contains(sampleB));
         }
@@ -154,20 +156,20 @@ namespace LcmsnetUnitTest
             sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
-            sampleA.DmsData.DatasetName = "testDataset";
+            sampleA.Name = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
             sampleA.LCMethodName = testLcMethod.Name;
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
-            sampleB.DmsData.DatasetName = "testDataset2";
+            sampleB.Name = "testDataset2";
             sampleB.DmsData.CartName = "Emulated";
 
             samples.Add(sampleA);
             samples.Add(sampleB);
 
-            optimizer.AlignSamples(samples);
+            optimizer.AlignSamples(samples.Cast<ISampleInfo>().ToList());
             q.QueueSamples(samples, enumColumnDataHandling.LeaveAlone);
             q.MoveSamplesToRunningQueue(samples);
             q.StartSamples();
@@ -217,20 +219,20 @@ namespace LcmsnetUnitTest
             sampleA.ColumnIndex = 0;
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
-            sampleA.DmsData.DatasetName = "testDataset";
+            sampleA.Name = "testDataset";
             sampleA.DmsData.CartName = "Emulated";
 
             sampleA.LCMethodName = testLcMethod.Name;
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
-            sampleB.DmsData.DatasetName = "testDataset2";
+            sampleB.Name = "testDataset2";
             sampleB.DmsData.CartName = "Emulated";
 
             samples.Add(sampleA);
             samples.Add(sampleB);
 
-            optimizer.AlignSamples(samples);
+            optimizer.AlignSamples(samples.Cast<ISampleInfo>().ToList());
             q.QueueSamples(samples, enumColumnDataHandling.LeaveAlone);
             q.MoveSamplesToRunningQueue(samples);
             q.StartSamples();

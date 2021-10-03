@@ -25,7 +25,7 @@ namespace PDFGenerator
         /// <param name="columnData">a list of classColumnData for each enabled column</param>
         /// <param name="devices">a list of 3-tuples of string containing device name, status, and error type</param>
         /// <param name="fluidicsImage">a bitmap containing the current fluidics design</param>
-        public void WritePDF(string documentPath, string title, SampleData sample, string numEnabledColumns, List<ColumnData> columnData,
+        public void WritePDF(string documentPath, string title, ISampleInfo sample, string numEnabledColumns, List<ColumnData> columnData,
             List<IDevice> devices, BitmapSource fluidicsImage)
         {
             // instantiate PDFSharp writer library, EMSL document model, and setup options.
@@ -38,11 +38,11 @@ namespace PDFGenerator
                 Title = title
             };
             //enter document into model
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Dataset - " + sample.DmsData.DatasetName);
+            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Dataset - " + sample.Name);
             doc.AddParagraph(CreateDatasetParagraph(sample));
             doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "LC Configuration");
             int[] FieldWidths = {-20, -20};
-            string[] cartData = { "Cart-Name:", sample.DmsData.CartName };
+            string[] cartData = { "Cart-Name:", LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME) };
             var cartConfigString = FormatString(FieldWidths, cartData);
 
             string[] configData = { "Enabled-Columns:", numEnabledColumns };
@@ -160,7 +160,7 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="sample">sample data</param>
         /// <returns>a formatted string of LCMethod data</returns>
-        private static string CreateLCMethodString(SampleData sample)
+        private static string CreateLCMethodString(ISampleInfo sample)
         {
             int[] fieldWidths = {-20, -20, -20, -20};
             string[]  row = {"Device", "Event Name", "Duration", "HadError"};
@@ -221,17 +221,13 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="sample">sample information</param>
         /// <returns>a string consisting of formatted dataset info</returns>
-        private static string CreateDatasetParagraph(SampleData sample)
+        private static string CreateDatasetParagraph(ISampleInfo sample)
         {
             /* this paragraph contains all information in two columns, first the information identifier, for example "RequestID" and the second
                contains the actual information such as "42" */
             int[] FieldWidths = { -20, -20 };
-            string[] datasetName = { "Dataset Name:", sample.DmsData.DatasetName };
+            string[] datasetName = { "Dataset Name:", sample.Name };
             var datasetNameString = FormatString(FieldWidths, datasetName);
-            string[] requestData = { "Request:", sample.DmsData.RequestName };
-            var requestString = FormatString(FieldWidths, requestData);
-            string[] rid = {"Request Id:", sample.DmsData.RequestID.ToString()};
-            var requestIdString = FormatString(FieldWidths, rid);
 
             string[] sTime = {"Start Time:", sample.ActualLCMethod.Start.ToLongTimeString() + " " + sample.ActualLCMethod.Start.ToLongDateString()};
             var startFormatted = FormatString(FieldWidths, sTime);
@@ -254,20 +250,13 @@ namespace PDFGenerator
             string[] iv = { "Injection Volume:", sample.Volume.ToString("0.00") };
             var injectionVolume = FormatString(FieldWidths, iv);
 
-            string[] ba = { "Batch:", sample.DmsData.Batch.ToString() };
-            var batch = FormatString(FieldWidths, ba);
+            var additionalLines = "";
+            foreach (var entry in sample.GetExportValuePairs())
+            {
+                additionalLines += FormatString(FieldWidths, entry);
+            }
 
-            string[] bl = { "Block:", sample.DmsData.Block.ToString() };
-            var block = FormatString(FieldWidths, bl);
-
-            string[] ro = {"Run Order:", sample.DmsData.RunOrder.ToString()};
-            var runOrder = FormatString(FieldWidths, ro);
-
-            string[] co = {"Comment:", sample.DmsData.Comment};
-            var comment = FormatString(FieldWidths, co);
-
-            var paragraph = datasetNameString + requestString + requestIdString + startFormatted + endFormatted + columnString + LCMethodString + PALTrayString + PALVialString + injectionVolume + batch +
-                block + runOrder + comment;
+            var paragraph = datasetNameString + startFormatted + endFormatted + columnString + LCMethodString + PALTrayString + PALVialString + injectionVolume + additionalLines;
 
             return paragraph;
         }

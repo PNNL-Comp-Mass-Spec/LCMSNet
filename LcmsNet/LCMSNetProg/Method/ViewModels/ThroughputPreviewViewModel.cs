@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 
@@ -28,7 +30,7 @@ namespace LcmsNet.Method.ViewModels
             // Align the samples
             var optimizer = new LCMethodOptimizer();
             optimizer.UpdateRequired += optimizer_UpdateRequired;
-            optimizer.AlignSamples(samples);
+            optimizer.AlignSamples(samples.Cast<ISampleInfo>().ToList());
 
             // Display end product
             if (optimizer.Methods != null)

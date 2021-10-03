@@ -5,7 +5,7 @@
     /// </summary>
     public interface IMethodWriter
     {
-        void WriteMethodFiles(SampleData sample);
+        void WriteMethodFiles(ISampleInfo sample);
 
         /// <summary>
         /// Test for presence of completed sample method folders that need to be moved to DMS

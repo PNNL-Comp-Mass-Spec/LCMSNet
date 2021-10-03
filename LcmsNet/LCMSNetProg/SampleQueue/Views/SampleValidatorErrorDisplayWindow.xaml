@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" Margin="3" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" RowHeaderWidth="0" ItemsSource="{Binding Errors}" AlternatingRowBackground="LightGray">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Sample" Width="Auto" Binding="{Binding Sample.DmsData.DatasetName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Sample" Width="Auto" Binding="{Binding Sample.Name}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Error" Width="Auto" Binding="{Binding Error.Error}" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>

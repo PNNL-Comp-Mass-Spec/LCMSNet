@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using DynamicData;
 using DynamicData.Binding;
+using LcmsNet.Data;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
 using LcmsNet.SampleQueue.IO;
@@ -328,7 +329,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public void PreviewSelectedThroughput()
         {
             var samples = GetSelectedSamples();
-            samples.RemoveAll(data => data.DmsData.DatasetName.Contains(SampleDataManager.UnusedSampleName));
+            samples.RemoveAll(data => data.Name.Contains(SampleDataManager.UnusedSampleName));
             if (samples.Count > 0)
             {
                 // Validate the samples, and make sure we want to run these.
@@ -366,7 +367,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 foreach (var sample in Samples.Reverse())
                 {
-                    if (sample.Sample.DmsData.RequestName.Equals(newData.DmsData.RequestName))
+                    if (sample.Sample.Name.Equals(newData.Name))
                     {
                         ScrollIntoView(sample);
                         SelectedSample = sample;

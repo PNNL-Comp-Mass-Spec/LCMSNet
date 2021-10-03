@@ -178,7 +178,7 @@
                     </Style>
                 </DataGridTextColumn.CellStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" MinWidth="120" Binding="{Binding RequestName}">
+            <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" MinWidth="120" Binding="{Binding Name}">
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DefaultCellStyle}" >
                         <Setter Property="ToolTip" Value="{Binding RequestNameToolTipText}" />

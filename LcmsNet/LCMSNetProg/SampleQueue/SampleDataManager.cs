@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Media;
 using DynamicData;
 using DynamicData.Binding;
+using LcmsNet.Data;
 using LcmsNet.IO.DMS;
 using LcmsNet.IO.SQLite;
 using LcmsNet.SampleQueue.ViewModels;
@@ -214,6 +215,7 @@ namespace LcmsNet.SampleQueue
             #region DesignTimeData
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_Queued",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_Queued",
@@ -226,6 +228,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_Running",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_Running",
@@ -238,6 +241,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_Waiting",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_Waiting",
@@ -250,6 +254,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_Error",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_Error",
@@ -262,6 +267,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_ErrorBlocked",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_ErrorBlocked",
@@ -274,6 +280,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_Stopped",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_Stopped",
@@ -286,6 +293,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_StoppedBlocked",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_StoppedBlocked",
@@ -298,6 +306,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_Complete",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_Complete",
@@ -310,6 +319,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_Disabled_Column",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_Disabled_Column",
@@ -322,6 +332,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_" + SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME,
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_" + SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME,
@@ -334,6 +345,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_HasErrorData",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_HasErrorData",
@@ -346,6 +358,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design_Dataset_Duplicate",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design_Dataset_Duplicate",
@@ -358,6 +371,7 @@ namespace LcmsNet.SampleQueue
             }));
             samplesList.Add(new SampleViewModel(new SampleData()
             {
+                Name = "Design Dataset Bad Name",
                 DmsData = new DMSData()
                 {
                     RequestName = "Design Dataset Bad Name",
@@ -421,11 +435,11 @@ namespace LcmsNet.SampleQueue
             ShowLCSeparationMethods();
 
             samplesList.Connect().WhenPropertyChanged(x => x.IsChecked).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
-            samplesList.Connect().WhenPropertyChanged(x => x.RequestName).Subscribe(x => CheckForDuplicates(x.Sender.Sample));
+            samplesList.Connect().WhenPropertyChanged(x => x.Name).Subscribe(x => CheckForDuplicates(x.Sender.Sample));
             samplesList.Connect().WhenPropertyChanged(x => x.Sample.IsDuplicateRequestName).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender.Sample));
             // TODO: Check for side effects
             // TODO: The idea of this is that it would detect the minor changes to the queue, where a value was changed using the databinding. There needs to be a lockout for actions not taken via the databinding, since those already handle this process...
-            samplesList.Connect().WhenAnyPropertyChanged(nameof(SampleViewModel.RequestName), nameof(SampleViewModel.Sample.DmsData),
+            samplesList.Connect().WhenAnyPropertyChanged(nameof(SampleViewModel.Name), nameof(SampleViewModel.Sample.DmsData),
                 nameof(SampleViewModel.Sample.PAL), nameof(SampleViewModel.Sample.InstrumentMethod), nameof(SampleViewModel.ColumnNumber),
                 nameof(SampleViewModel.InstrumentMethod), nameof(SampleViewModel.Sample.LCMethodName), nameof(SampleViewModel.Sample.SequenceID))
                 .Throttle(TimeSpan.FromSeconds(.25))
@@ -482,10 +496,10 @@ namespace LcmsNet.SampleQueue
                         }
 
                         var sampleErrors = string.Empty;
-                        if (!sample.Sample.DmsData.DatasetNameCharactersValid())
+                        if (!sample.Sample.NameCharactersValid())
                         {
                             sampleErrors += "Request name contains invalid characters!\n" +
-                                                          DMSData.ValidDatasetNameCharacters + "\n";
+                                                          SampleData.ValidNameCharacters + "\n";
                             foundError = true;
                         }
                         // Validate sample and add it to the run queue
@@ -1011,6 +1025,9 @@ namespace LcmsNet.SampleQueue
         {
             var newSample = new SampleData(false)
             {
+                Name = string.Format("{0}_{1:0000}",
+                    SampleQueue.DefaultSampleName,
+                    SampleQueue.RunningSampleIndex++),
                 DmsData =
                 {
                     RequestName = string.Format("{0}_{1:0000}",
@@ -1111,6 +1128,9 @@ namespace LcmsNet.SampleQueue
                 // Otherwise, add a new sample.
                 newData = new SampleData(false)
                 {
+                    Name = string.Format("{0}_{1:0000}",
+                        SampleQueue.DefaultSampleName,
+                        SampleQueue.RunningSampleIndex++),
                     DmsData =
                     {
                         RequestName = string.Format("{0}_{1:0000}",
@@ -1259,7 +1279,7 @@ namespace LcmsNet.SampleQueue
             // Color duplicates or invalid cells with certain colors!
             var validResult = SampleQueue.IsSampleDataValid(data);
             if (validResult == SampleValidResult.DuplicateRequestName &&
-                !data.DmsData.DatasetName.Contains(SampleQueue.UnusedSampleName))
+                !data.Name.Contains(SampleQueue.UnusedSampleName))
             {
                 data.IsDuplicateRequestName = true;
             }
@@ -1284,7 +1304,7 @@ namespace LcmsNet.SampleQueue
             if (data.IsDuplicateRequestName)
             {
                 // We only need to look for duplicates matching this one's requestname
-                foreach (var sample in samplesList.Items.Where(x => x.RequestName.Equals(data.DmsData.RequestName)))
+                foreach (var sample in samplesList.Items.Where(x => x.Name.Equals(data.Name)))
                 {
                     if (sample.Sample.Equals(data))
                     {

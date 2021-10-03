@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Experiment;
 using ReactiveUI;

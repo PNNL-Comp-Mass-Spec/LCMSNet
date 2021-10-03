@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetSDK.Data
+namespace LcmsNet.Data
 {
     /// <summary>
     /// Dataset information supplied by or required by DMS; includes run request information
@@ -10,28 +12,12 @@ namespace LcmsNetSDK.Data
     [Serializable]
     public class DMSData : INotifyPropertyChangedExt, ICloneable
     {
-        /// <summary>
-        /// The matching string to ensure only valid characters exist in a dataset name
-        /// </summary>
-        public const string ValidDatasetNameRegexString = @"^[a-zA-Z0-9_\-]+$";
-
-        /// <summary>
-        /// The list of characters allowed in a dataset name
-        /// </summary>
-        public const string ValidDatasetNameCharacters = @"Valid characters are: 'A-Z', 'a-z', '0-9', '-', '_' (no spaces)";
-
-        /// <summary>
-        /// Regex to use to test if a dataset name only contains valid characters
-        /// </summary>
-        public static readonly Regex NameValidationRegex = new Regex(ValidDatasetNameRegexString, RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
         public DMSData()
         {
             Batch = -1;
             Block = -1;
             CartName = "";
             Comment = "";
-            DatasetName = "";
             MRMFileID = -1;
             RequestID = 0;
             RequestName = "";
@@ -48,7 +34,6 @@ namespace LcmsNetSDK.Data
             Block = -1;
             CartName = "";
             Comment = "";
-            DatasetName = "";
             MRMFileID = -1;
             RequestID = 0;
             RequestName = "";
@@ -62,27 +47,25 @@ namespace LcmsNetSDK.Data
         /// <returns></returns>
         public object Clone()
         {
-            var newDmsData = new DMSData();
+            var newData = new DMSData();
 
-            newDmsData.Batch = Batch;
-            newDmsData.Block = Block;
-            newDmsData.CartName = CartName;
-            newDmsData.Comment = Comment;
-            newDmsData.DatasetName = DatasetName;
-            newDmsData.MRMFileID = MRMFileID;
-            newDmsData.RequestID = RequestID;
-            newDmsData.RequestName = RequestName;
-            newDmsData.RunOrder = RunOrder;
-            newDmsData.SelectedToRun = SelectedToRun;
+            newData.Batch = Batch;
+            newData.Block = Block;
+            newData.CartName = CartName;
+            newData.Comment = Comment;
+            newData.MRMFileID = MRMFileID;
+            newData.RequestID = RequestID;
+            newData.RequestName = RequestName;
+            newData.RunOrder = RunOrder;
+            newData.SelectedToRun = SelectedToRun;
 
-            return newDmsData;
+            return newData;
         }
 
         #region Property Backing Variables
 
         private int requestId;
         private string requestName;
-        private string datasetName;
         private int block;
         private int runOrder;
         private int batch;
@@ -98,6 +81,7 @@ namespace LcmsNetSDK.Data
         /// <summary>
         /// Flag for determining if request from DMS has been selected for running
         /// </summary>
+        //TODO: DMS_Download_Only
         public bool SelectedToRun
         {
             get => selectedToRun;
@@ -108,30 +92,12 @@ namespace LcmsNetSDK.Data
         /// Name of request in DMS. Becomes sample name in LCMS and forms part
         /// of dataset name sample after run
         /// </summary>
+        //TODO: DMS_Download_Only?
         [PersistenceSetting(IsUniqueColumn = true)]
         public string RequestName
         {
             get => requestName;
-            set
-            {
-                if (this.RaiseAndSetIfChangedRetBool(ref requestName, value))
-                {
-                    if (string.IsNullOrWhiteSpace(DatasetName))
-                    {
-                        DatasetName = value;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the dataset after editing the request name.
-        /// </summary>
-        [PersistenceSetting(IsUniqueColumn = true)]
-        public string DatasetName
-        {
-            get => datasetName;
-            set => this.RaiseAndSetIfChanged(ref datasetName, value);
+            set => this.RaiseAndSetIfChanged(ref requestName, value);
         }
 
         /// <summary>
@@ -148,6 +114,7 @@ namespace LcmsNetSDK.Data
         /// Name of cart used for sample run
         /// </summary>
         /// <remarks>This is an editable field even if the DMS Request has been resolved.</remarks>
+        //TODO: DMS_Download_Only? Probably should just drop it
         public string CartName
         {
             get => cartName;
@@ -203,33 +170,26 @@ namespace LcmsNetSDK.Data
 
         #region Methods
 
+        public List<string[]> GetExportValuePairs()
+        {
+            var exportData = new List<string[]>();
+
+            exportData.Add(new[] { "Request:", RequestName });
+            exportData.Add(new[] { "Request Id:", RequestID.ToString() });
+            exportData.Add(new[] { "Batch:", Batch.ToString() });
+            exportData.Add(new[] { "Block:", Block.ToString() });
+            exportData.Add(new[] { "Run Order:", RunOrder.ToString() });
+            exportData.Add(new[] { "Comment:", Comment });
+
+            return exportData;
+        }
+
         public override string ToString()
         {
-            if (!string.IsNullOrWhiteSpace(DatasetName))
-            {
-                if (string.Equals(RequestName, DatasetName))
-                {
-                    return "Request " + RequestName;
-                }
-
-                return "Dataset " + DatasetName;
-            }
-
             if (!string.IsNullOrWhiteSpace(RequestName))
                 return "Request " + RequestName;
 
             return "RequestID " + RequestID;
-        }
-
-        public bool DatasetNameCharactersValid()
-        {
-            var name = DatasetName;
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                name = RequestName;
-            }
-
-            return NameValidationRegex.IsMatch(name);
         }
 
         #endregion

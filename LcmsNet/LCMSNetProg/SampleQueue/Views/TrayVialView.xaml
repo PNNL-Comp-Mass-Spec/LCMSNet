@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <DataGrid Grid.Row="0" Grid.Column="0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="True" CanUserResizeColumns="True" RowHeaderWidth="20" SelectionMode="Extended" SelectionChanged="DataGrid_OnSelectionChanged" ItemsSource="{Binding FilteredSamples}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Sample" IsReadOnly="True" Binding="{Binding Sample.DmsData.DatasetName}" />
+                <DataGridTextColumn Header="Sample" IsReadOnly="True" Binding="{Binding Sample.Name}" />
                 <DataGridTextColumn Header="Seq #" IsReadOnly="True" Binding="{Binding Sample.SequenceID}" />
                 <DataGridTextColumn Header="Column #" IsReadOnly="True" Binding="{Binding ColumnId}" />
                 <DataGridTextColumn Header="Tray" IsReadOnly="True" Binding="{Binding Tray}" />

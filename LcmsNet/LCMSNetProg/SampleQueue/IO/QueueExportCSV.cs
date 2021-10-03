@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 
@@ -102,7 +103,7 @@ namespace LcmsNet.SampleQueue.IO
             foreach (var sample in samples)
             {
                 var colNum = sample.ColumnIndex + 1;
-                strBld.Append("\"" + sample.DmsData.DatasetName + "\",");
+                strBld.Append("\"" + sample.Name + "\",");
                 strBld.Append("\"" + sample.DmsData.RequestID + "\",");
                 strBld.Append("\"" + colNum + "\",");
                 strBld.Append("\"" + sample.DmsData.RunOrder + "\",");

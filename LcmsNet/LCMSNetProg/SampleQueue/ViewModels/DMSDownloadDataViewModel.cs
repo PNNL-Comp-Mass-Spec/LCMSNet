@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 using ReactiveUI;
 

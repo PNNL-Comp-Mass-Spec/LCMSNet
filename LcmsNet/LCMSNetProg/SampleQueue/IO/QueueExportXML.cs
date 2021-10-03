@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 
@@ -86,7 +87,7 @@ namespace LcmsNet.SampleQueue.IO
         {
             // Description element
             var descElement = AddElementWithTypeAttribute("Description", ParentElement, "String",
-                InpSample.DmsData.DatasetName);
+                InpSample.Name);
 
             // Selection element (PAL data)
             var selectionElement = AddElementNoAttributes("Selection", ParentElement);

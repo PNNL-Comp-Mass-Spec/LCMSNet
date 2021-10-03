@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LcmsNet.Data;
 using LcmsNet.IO.SQLite;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;

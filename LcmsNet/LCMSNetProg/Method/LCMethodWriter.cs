@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Xml;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 

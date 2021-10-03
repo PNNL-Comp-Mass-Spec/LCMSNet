@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LcmsNet.Data;
 using LcmsNet.IO.SQLite;
 using LcmsNetSDK.Data;
 using NUnit.Framework;
@@ -61,7 +62,7 @@ namespace LcmsnetUnitTest
                 new SampleData()
             };
             samples[0].UniqueID = 1;
-            samples[0].DmsData.DatasetName = "Test";
+            samples[0].Name = "Test";
 
             samples.Add(new SampleData());
             samples[1].UniqueID = 2;

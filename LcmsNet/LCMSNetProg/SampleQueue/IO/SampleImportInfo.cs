@@ -1,4 +1,5 @@
-﻿using LcmsNetSDK.Data;
+﻿using LcmsNet.Data;
+using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -15,7 +16,7 @@ namespace LcmsNet.SampleQueue.IO
         public SampleData GetSampleData()
         {
             var sampleData = new SampleData(false);
-            sampleData.DmsData.DatasetName = DatasetName;
+            sampleData.Name = DatasetName;
 
             if (RequestId > 0)
             {

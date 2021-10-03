@@ -809,7 +809,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// Loads the method
         ///
         [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false)]
-        public bool LoadMethod(double timeout, SampleData sample, string methodName)
+        public bool LoadMethod(double timeout, ISampleInfo sample, string methodName)
         {
             if (m_emulation)
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue.IO

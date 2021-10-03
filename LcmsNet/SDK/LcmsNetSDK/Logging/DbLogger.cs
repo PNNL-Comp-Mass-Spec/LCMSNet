@@ -202,9 +202,9 @@ namespace LcmsNetSDK.Logging
             sqlCmdBlder.Append("'" + errorLevel + "',");
 
             // If sample is present, add it to the SQL string
-            if (args.ErrorObject != null && args.ErrorObject is SampleData sample)
+            if (args.ErrorObject != null && args.ErrorObject is ISampleInfo sample)
             {
-                sqlCmdBlder.Append("'" + sample.DmsData.DatasetName + "',");
+                sqlCmdBlder.Append("'" + sample.Name + "',");
                 sqlCmdBlder.Append("'" + sample.ColumnIndex + "',");
                 if (sample.ActualLCMethod != null)
                 {
@@ -255,9 +255,9 @@ namespace LcmsNetSDK.Logging
             sqlCmdBlder.Append("'" + msgLevel + "',");
 
             // If sample is present, add it to the SQL string
-            if (args.ErrorObject != null && args.ErrorObject is SampleData sample)
+            if (args.ErrorObject != null && args.ErrorObject is ISampleInfo sample)
             {
-                sqlCmdBlder.Append("'" + sample.DmsData.DatasetName + "',");
+                sqlCmdBlder.Append("'" + sample.Name + "',");
                 sqlCmdBlder.Append("'" + sample.ColumnIndex + "',"); // Add column here
                 if (sample.ActualLCMethod != null && sample.ActualLCMethod.CurrentEventNumber >= 0)
                 {

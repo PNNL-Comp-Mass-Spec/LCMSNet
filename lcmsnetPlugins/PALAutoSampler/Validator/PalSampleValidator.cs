@@ -17,22 +17,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Validator
     public class PalSampleValidator : ISampleValidator
     {
         /// <summary>
-        /// Validate the sample blocks
-        /// </summary>
-        /// <param name="samples"></param>
-        /// <returns></returns>
-        public List<SampleData> ValidateBlocks(List<SampleData> samples)
-        {
-            // Blocks don't matter to the PAL.
-            return new List<SampleData>();
-        }
-
-        /// <summary>
         /// Validate the sample PAL settings: PAL method, tray, and vial/well
         /// </summary>
         /// <param name="sample"></param>
         /// <returns></returns>
-        public List<SampleValidationError> ValidateSamples(SampleData sample)
+        public List<SampleValidationError> ValidateSamples(ISampleInfo sample)
         {
             var errors = new List<SampleValidationError>();
 
@@ -57,7 +46,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Validator
                 errors.Add(new SampleValidationError("The PAL Tray is not set.", SampleValidationErrorType.PalTrayNotSpecified));
             }
 
-            if (sample.DmsData.DatasetName.ToLower() == "(unused)")
+            if (sample.Name.ToLower() == "(unused)")
             {
                 errors.Add(new SampleValidationError("The dataset name is not correct.", SampleValidationErrorType.DatasetNameError));
             }

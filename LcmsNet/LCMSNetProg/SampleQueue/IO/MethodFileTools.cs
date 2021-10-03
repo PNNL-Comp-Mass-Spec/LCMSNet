@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using LcmsNet.IO.DMS;
+using LcmsNet.Data;
 using LcmsNet.Method;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
@@ -48,7 +48,7 @@ namespace LcmsNet.SampleQueue.IO
             // Exit if method folder creation disabled
             if (!bool.Parse(LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATEMETHODFOLDERS)))
             {
-                var msg = "WriteMethodFiles: Sample " + sample.DmsData.DatasetName +
+                var msg = "WriteMethodFiles: Sample " + sample.Name +
                              ", Method folder creation disabled";
                 ApplicationLogger.LogMessage(0, msg);
                 return;
@@ -108,7 +108,7 @@ namespace LcmsNet.SampleQueue.IO
             // Exit if method folder creation disabled
             if (!bool.Parse(LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATEMETHODFOLDERS)))
             {
-                var msg = "WriteMethodFiles: Sample " + sample.DmsData.DatasetName +
+                var msg = "WriteMethodFiles: Sample " + sample.Name +
                              ", Method folder creation disabled";
                 ApplicationLogger.LogMessage(0, msg);
                 return;
@@ -166,7 +166,7 @@ namespace LcmsNet.SampleQueue.IO
             var shouldCopyFolder = bool.Parse(LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS));
             if (!shouldCopyFolder)
             {
-                var msg = "The method data was not copied to the server for: " + sample.DmsData.DatasetName +
+                var msg = "The method data was not copied to the server for: " + sample.Name +
                              ".  the method folder copy is disabled";
                 ApplicationLogger.LogMessage(0, msg);
                 return;
@@ -187,14 +187,14 @@ namespace LcmsNet.SampleQueue.IO
                 File.Delete(lcMethodFileNamePath);
 
                 var message = string.Format("Method information for {0} was copied to {1}",
-                    sample.DmsData.DatasetName,
+                    sample.Name,
                     remoteTargetFolder);
                 ApplicationLogger.LogMessage(0, message, sample);
             }
             catch (Exception ex)
             {
                 var message = string.Format("Method information for {0} was NOT copied to {1}",
-                    sample.DmsData.DatasetName,
+                    sample.Name,
                     remoteTargetFolder);
                 ApplicationLogger.LogError(0, message, ex, sample);
             }
@@ -208,7 +208,7 @@ namespace LcmsNet.SampleQueue.IO
         /// <returns></returns>
         public static string GetMethodFileName(SampleData sample, string extension)
         {
-            var datasetName = sample.DmsData.DatasetName;
+            var datasetName = sample.Name;
             var outFileName =
                 string.Format("{0}_{1:MM.dd.yyyy_hh.mm.ss}_{2}{3}",
                     sample.DmsData.CartName,
@@ -223,10 +223,8 @@ namespace LcmsNet.SampleQueue.IO
         /// </summary>
         /// <param name="sample">Sample we're making a request for</param>
         /// <returns>On success, string containing folder name/path; empty string on failure</returns>
-        private static string MakeLocalMethodFolder(SampleData sample)
+        private static string MakeLocalMethodFolder(ISampleInfo sample)
         {
-            string message;
-
             // TODO: this line is here for upgrade compatibility - if the folder does not exist in ProgramData, but does in ProgramFiles, this will copy all existing contents.
             var loader = PersistDataPaths.GetDirectorySavePath(LOCAL_METHOD_FOLDER_NAME);
 
@@ -241,7 +239,7 @@ namespace LcmsNet.SampleQueue.IO
                 }
                 catch (Exception ex)
                 {
-                    message = "Could not create the method folder " + localFolder;
+                    var message = "Could not create the method folder " + localFolder;
                     ApplicationLogger.LogError(0, message, ex, sample);
                     return string.Empty;
                 }
@@ -342,9 +340,10 @@ namespace LcmsNet.SampleQueue.IO
 
         #region IMethodWriter Members
 
-        void IMethodWriter.WriteMethodFiles(SampleData sample)
+        void IMethodWriter.WriteMethodFiles(ISampleInfo sample)
         {
-            WriteMethodFiles(sample);
+            if (sample is SampleData sampleData)
+                WriteMethodFiles(sampleData);
         }
 
         bool IMethodWriter.CheckLocalMethodFolders()

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
+using LcmsNet.Data;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetSDK.Data;

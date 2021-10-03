@@ -65,7 +65,7 @@ namespace DemoPluginLibrary
         private void Run()
         {
             // use a defaulted sampledata object since there's no sample associated with a user clicking "run"
-            m_PALdevice.RunMethod(Timeout, new SampleData(), SelectedMethod);
+            m_PALdevice.RunMethod(Timeout, new DummySampleInfo(), SelectedMethod);
         }
     }
 }

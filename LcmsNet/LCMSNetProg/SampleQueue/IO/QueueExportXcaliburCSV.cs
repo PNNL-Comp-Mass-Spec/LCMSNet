@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 
@@ -80,7 +81,7 @@ namespace LcmsNet.SampleQueue.IO
             // Add the data for each sample
             foreach (var sample in samples)
             {
-                strBld.Append(sample.DmsData.DatasetName + Environment.NewLine);
+                strBld.Append(sample.Name + Environment.NewLine);
             }
 
             return strBld.ToString();

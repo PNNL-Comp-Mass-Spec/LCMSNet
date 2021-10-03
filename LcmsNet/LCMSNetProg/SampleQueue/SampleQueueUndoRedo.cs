@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using LcmsNet.Data;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 

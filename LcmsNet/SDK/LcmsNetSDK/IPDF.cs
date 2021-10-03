@@ -7,7 +7,7 @@ namespace LcmsNetSDK
 {
     public interface IPDF
     {
-        void WritePDF(string documentPath, string title, SampleData sample, string numEnabledColumns,
+        void WritePDF(string documentPath, string title, ISampleInfo sample, string numEnabledColumns,
             List<ColumnData> columnData,
             List<IDevice> devices, BitmapSource fluidicsImage);
     }

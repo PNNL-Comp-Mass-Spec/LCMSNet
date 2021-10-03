@@ -81,6 +81,8 @@
     <Compile Include="Configuration\Views\SystemConfigurationView.xaml.cs">
       <DependentUpon>SystemConfigurationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\DMSData.cs" />
+    <Compile Include="Data\SampleData.cs" />
     <Compile Include="Devices\BlockDevice.cs" />
     <Compile Include="Devices\DefaultUserDeviceView.xaml.cs">
       <DependentUpon>DefaultUserDeviceView.xaml</DependentUpon>
@@ -132,6 +134,7 @@
     <Compile Include="DynamicSplashScreenWindow.xaml.cs">
       <DependentUpon>DynamicSplashScreenWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IO\DMS\BlockValidator.cs" />
     <Compile Include="IO\DMS\DatabaseConnectionStringException.cs" />
     <Compile Include="SampleQueue\IO\ConvertVialPosition.cs" />
     <Compile Include="IO\DMS\SampleQueryData.cs" />

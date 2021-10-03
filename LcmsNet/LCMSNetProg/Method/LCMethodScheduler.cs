@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LcmsNet.Data;
 using LcmsNet.Notification;
 using LcmsNet.SampleQueue;
 using LcmsNet.SampleQueue.IO;
@@ -462,7 +463,7 @@ namespace LcmsNet.Method
                 {
                     data = m_sampleQueue.NextSampleStart();
                     Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, EXPECTED START = {2}",
-                        data.DmsData.DatasetName,
+                        data.Name,
                         data.ColumnIndex + 1, data.ActualLCMethod.Start),
                         CONST_VERBOSE_LEAST, null, data);
 
@@ -837,7 +838,7 @@ namespace LcmsNet.Method
                                 "Column {0}: Method {1} of sample {2} had an error running event {3} on device {4} Stack Trace: {5}",
                                 columnID + CONST_COLUMN_DISPLAY_ADJUSTMENT,
                                 samples[columnID].ActualLCMethod.Name,
-                                samples[columnID].DmsData.DatasetName,
+                                samples[columnID].Name,
                                 eventName,
                                 eventDeviceName,
                                 stackTrace));
@@ -861,7 +862,7 @@ namespace LcmsNet.Method
 
                     String datasetName;
                     if (samples[columnID] != null && samples[columnID].DmsData != null)
-                        datasetName = samples[columnID].DmsData.DatasetName;
+                        datasetName = samples[columnID].Name;
                     else
                         datasetName = "Unknown_Dataset since samples[columnID] is null for columnID = " + columnID;
 

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using LcmsNet.Data;
 using LcmsNet.Devices;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue.IO

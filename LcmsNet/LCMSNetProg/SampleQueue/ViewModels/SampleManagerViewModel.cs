@@ -8,6 +8,8 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using LcmsNet.Data;
+using LcmsNet.IO.DMS;
 using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetSDK;
@@ -464,19 +466,19 @@ namespace LcmsNet.SampleQueue.ViewModels
                     display.ShowDialog();
                     return;
                 }
+            }
 
-                // Then we also want to check for running blocks on the wrong column.
-                var badBlocks = validator.ValidateBlocks(samples);
-                if (badBlocks.Count > 0)
+            // Then we also want to check for running blocks on the wrong column.
+            var badBlocks = BlockValidator.ValidateBlocks(samples);
+            if (badBlocks.Count > 0)
+            {
+                //TODO: Add a notification.
+                var displayVm = new SampleBadBlockDisplayViewModel(badBlocks);
+                var display = new SampleBadBlockDisplayWindow() { DataContext = displayVm };
+                var result = display.ShowDialog();
+                if (!result.HasValue || !result.Value)
                 {
-                    //TODO: Add a notification.
-                    var displayVm = new SampleBadBlockDisplayViewModel(badBlocks);
-                    var display = new SampleBadBlockDisplayWindow() { DataContext = displayVm };
-                    var result = display.ShowDialog();
-                    if (!result.HasValue || !result.Value)
-                    {
-                        return;
-                    }
+                    return;
                 }
             }
 

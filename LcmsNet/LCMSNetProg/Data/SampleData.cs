@@ -1,17 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
+using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
+using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace LcmsNetSDK.Data
+namespace LcmsNet.Data
 {
     /// <summary>
     /// Class to hold data for one sample (more specifically, one instrument dataset)
     /// </summary>
     [Serializable]
-    public class SampleData : ICloneable, IEquatable<SampleData>, INotifyPropertyChangedExt
+    public class SampleData : ISampleInfo, ICloneable, IEquatable<SampleData>, INotifyPropertyChangedExt
     {
+        /// <summary>
+        /// The matching string to ensure only valid characters exist in a sample name
+        /// </summary>
+        public const string ValidNameRegexString = @"^[a-zA-Z0-9_\-]+$";
+
+        /// <summary>
+        /// The list of characters allowed in a sample name
+        /// </summary>
+        public const string ValidNameCharacters = @"Valid characters are: 'A-Z', 'a-z', '0-9', '-', '_' (no spaces)";
+
+        /// <summary>
+        /// Regex to use to test if a dataset name only contains valid characters
+        /// </summary>
+        public static readonly Regex NameValidationRegex = new Regex(ValidNameRegexString, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         #region Delegate Definitions
 
         /// <summary>
@@ -71,6 +90,7 @@ namespace LcmsNetSDK.Data
         /// <param name="other">Object from where we copy data</param>
         private SampleData(SampleData other) : this(other.IsDummySample)
         {
+            Name = other.Name;
             DmsData = other.DmsData?.Clone() as DMSData;
             sequenceNumber = other.sequenceNumber;
 
@@ -125,7 +145,7 @@ namespace LcmsNetSDK.Data
         /// <param name="sample"></param>
         public static void AddDateCartColumnToDatasetName(SampleData sample)
         {
-            var oldName = sample.DmsData.DatasetName;
+            var oldName = sample.Name;
             var now = TimeKeeper.Instance.Now;
             var dateName = now.ToString("ddMMMyy");
 
@@ -135,7 +155,7 @@ namespace LcmsNetSDK.Data
             var containsInfoAlready = oldName.Contains(cartColumn);
             if (!containsInfoAlready)
             {
-                sample.DmsData.DatasetName = oldName + name;
+                sample.Name = oldName + name;
             }
         }
 
@@ -145,7 +165,7 @@ namespace LcmsNetSDK.Data
         /// <param name="sample"></param>
         public static void ResetDatasetNameToRequestName(SampleData sample)
         {
-            sample.DmsData.DatasetName = sample.DmsData.RequestName;
+            sample.Name = sample.DmsData.RequestName;
         }
 
         public override string ToString()
@@ -158,6 +178,8 @@ namespace LcmsNetSDK.Data
         }
 
         #region "Members"
+
+        private string name = "";
 
         /// <summary>
         /// Sequence order of the sample to run.
@@ -209,6 +231,16 @@ namespace LcmsNetSDK.Data
         #endregion
 
         #region "Properties"
+
+        /// <summary>
+        /// Name of the sample (also used for the file name)
+        /// </summary>
+        [PersistenceSetting(IsUniqueColumn = true)]
+        public string Name
+        {
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
+        }
 
         [PersistenceSetting(IgnoreProperty = true)]
         public string SampleErrors
@@ -444,6 +476,27 @@ namespace LcmsNetSDK.Data
 
         #region "Methods"
 
+        public bool NameCharactersValid()
+        {
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                Name = DmsData?.RequestName ?? "";
+            }
+
+            return NameValidationRegex.IsMatch(Name);
+        }
+
+        public List<string[]> GetExportValuePairs()
+        {
+            var exportData = new List<string[]>();
+            if (DmsData != null)
+            {
+                exportData.AddRange(DmsData.GetExportValuePairs());
+            }
+
+            return exportData;
+        }
+
         public void SetActualLcMethod()
         {
             if (string.IsNullOrWhiteSpace(LCMethodName))
@@ -482,9 +535,9 @@ namespace LcmsNetSDK.Data
 
         private void DmsDataChanged(object sender, PropertyChangedEventArgs args)
         {
-            if (args.PropertyName.Equals(nameof(DmsData.DatasetName)) || args.PropertyName.Equals(nameof(DmsData.RequestName)) ||
-                args.PropertyName.Equals(nameof(DmsData.RunOrder)) || args.PropertyName.Equals(nameof(DmsData.Batch)) ||
-                args.PropertyName.Equals(nameof(DmsData.Block)) || args.PropertyName.Equals(nameof(DmsData.RequestID)))
+            if (args.PropertyName.Equals(nameof(DmsData.RequestName)) || args.PropertyName.Equals(nameof(DmsData.RunOrder)) ||
+                args.PropertyName.Equals(nameof(DmsData.Batch)) || args.PropertyName.Equals(nameof(DmsData.Block)) ||
+                args.PropertyName.Equals(nameof(DmsData.RequestID)))
             {
                 OnPropertyChanged(nameof(DmsData));
             }

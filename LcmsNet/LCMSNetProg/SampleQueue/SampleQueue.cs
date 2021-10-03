@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using LcmsNet.Data;
 using LcmsNet.IO.SQLite;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetSDK;
@@ -83,7 +84,7 @@ namespace LcmsNet.SampleQueue
             // Determine if the sample has a duplicate request name.
             // If it has one match, then it should be itself.
             //
-            var data = FindSample(sample.DmsData.DatasetName);
+            var data = FindSample(sample.Name);
             if (data.Count > 1)
             {
                 result = SampleValidResult.DuplicateRequestName;
@@ -417,7 +418,7 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == m_integrateName)
+                if (sample.Name == m_integrateName)
                 {
                     return true;
                 }
@@ -438,7 +439,7 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == m_integrateName && column.ID == sample.ColumnIndex)
+                if (sample.Name == m_integrateName && column.ID == sample.ColumnIndex)
                 {
                     return true;
                 }
@@ -461,15 +462,15 @@ namespace LcmsNet.SampleQueue
             //
             lock (m_waitingQueue)
             {
-                samples.AddRange(m_waitingQueue.Where(x => x.DmsData.DatasetName.Equals(sampleName)));
+                samples.AddRange(m_waitingQueue.Where(x => x.Name.Equals(sampleName)));
             }
             lock (m_runningQueue)
             {
-                samples.AddRange(m_runningQueue.Where(x => x.DmsData.DatasetName.Equals(sampleName)));
+                samples.AddRange(m_runningQueue.Where(x => x.Name.Equals(sampleName)));
             }
             lock (m_completeQueue)
             {
-                samples.AddRange(m_completeQueue.Where(x => x.DmsData.DatasetName.Equals(sampleName)));
+                samples.AddRange(m_completeQueue.Where(x => x.Name.Equals(sampleName)));
             }
 
             return samples;
@@ -530,7 +531,7 @@ namespace LcmsNet.SampleQueue
             var unusedSamples = new List<SampleData>();
             foreach (var sample in queue)
             {
-                if (sample.DmsData.DatasetName == m_integrateName)
+                if (sample.Name == m_integrateName)
                 {
                     unusedSamples.Add(sample);
                 }
@@ -550,7 +551,7 @@ namespace LcmsNet.SampleQueue
             var unusedSamples = new List<SampleData>();
             foreach (var sample in queue)
             {
-                if (sample.DmsData.DatasetName == m_integrateName && sample.ColumnIndex == column.ID)
+                if (sample.Name == m_integrateName && sample.ColumnIndex == column.ID)
                 {
                     unusedSamples.Add(sample);
                 }
@@ -661,8 +662,11 @@ namespace LcmsNet.SampleQueue
                     //
                     // Make the request an "Unused sample"
                     //
-                    sampleToAdd.DmsData.RequestName = m_integrateName;
-                    sampleToAdd.DmsData.DatasetName = m_integrateName;
+                    if (sampleToAdd.DmsData != null)
+                    {
+                        sampleToAdd.DmsData.RequestName = m_integrateName;
+                    }
+                    sampleToAdd.Name = m_integrateName;
                     sampleToAdd.DmsData.Block = 0; // It's an unused sample, so don't copy this information.
                     sampleToAdd.DmsData.Batch = 0;
                     sampleToAdd.ColumnIndex = col.ID;
@@ -703,7 +707,7 @@ namespace LcmsNet.SampleQueue
             //
             // Remove excess items from the end of the list.
             //
-            while (queue.Count > 0 && queue[queue.Count - 1].DmsData.DatasetName == m_integrateName)
+            while (queue.Count > 0 && queue[queue.Count - 1].Name == m_integrateName)
                 queue.RemoveAt(queue.Count - 1);
         }
 
@@ -896,7 +900,7 @@ namespace LcmsNet.SampleQueue
             while (i < m_waitingQueue.Count && samples.Count > 0)
             {
                 var unusedSample = m_waitingQueue[i];
-                if (unusedSample.DmsData.DatasetName.Contains(m_integrateName))
+                if (unusedSample.Name.Contains(m_integrateName))
                 {
                     var sample = samples[0];
                     samples.RemoveAt(0);
@@ -956,7 +960,7 @@ namespace LcmsNet.SampleQueue
             while (i < m_waitingQueue.Count && samples.Count > 0)
             {
                 var unusedSample = m_waitingQueue[i];
-                if (unusedSample.DmsData.DatasetName.Contains(m_integrateName) &&
+                if (unusedSample.Name.Contains(m_integrateName) &&
                     unusedSample.ColumnIndex == column.ID)
                 {
                     var sample = samples[0];
@@ -1278,7 +1282,7 @@ namespace LcmsNet.SampleQueue
             var uniqueList = new List<long>();
             foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == m_integrateName)
+                if (sample.Name == m_integrateName)
                 {
                     uniqueList.Add(sample.UniqueID);
                 }
@@ -1314,7 +1318,7 @@ namespace LcmsNet.SampleQueue
             var uniqueList = new List<long>();
             foreach (var sample in m_waitingQueue)
             {
-                if (sample.DmsData.DatasetName == m_integrateName && sample.ColumnIndex == column.ID)
+                if (sample.Name == m_integrateName && sample.ColumnIndex == column.ID)
                 {
                     uniqueList.Add(sample.UniqueID);
                 }
@@ -1698,7 +1702,7 @@ namespace LcmsNet.SampleQueue
             // We have not started to run so optimize this way.
             var optimizer = new LCMethodOptimizer();
             Debug.WriteLine("Optimizing samples that are queued to run before starting the queue");
-            optimizer.AlignSamples(m_runningQueue);
+            optimizer.AlignSamples(m_runningQueue.Cast<ISampleInfo>().ToList());
 
             // Set the listening event so that time sensitive items will know that
             // a sample is waiting on the running queue.
@@ -1741,7 +1745,7 @@ namespace LcmsNet.SampleQueue
                     // this sample does not exist on the sample queue!
                     //
                     throw new NullReferenceException("This sample does not exist in the waiting queue! " +
-                                                     sample.DmsData.DatasetName);
+                                                     sample.Name);
                 }
                 m_waitingQueue.Remove(realSample);
 
@@ -1750,7 +1754,7 @@ namespace LcmsNet.SampleQueue
                     var requestOrDatasetName = "?";
                     if (realSample.DmsData != null)
                     {
-                        requestOrDatasetName = realSample.DmsData.DatasetName;
+                        requestOrDatasetName = realSample.Name;
                         if (string.IsNullOrWhiteSpace(requestOrDatasetName))
                             requestOrDatasetName = realSample.DmsData.RequestName;
                     }
@@ -1776,7 +1780,7 @@ namespace LcmsNet.SampleQueue
                     // We aren't the first ones on the queue, but we are running,
                     // so we need to hurry up and go!
                     realSample.ActualLCMethod.SetStartTime(next);
-                    optimizer.AlignSamples(m_runningQueue, realSample);
+                    optimizer.AlignSamples(m_runningQueue.Cast<ISampleInfo>().ToList(), realSample);
                 }
                 else if (m_runningQueue.Count == 0)
                 {
@@ -1829,7 +1833,7 @@ namespace LcmsNet.SampleQueue
                     // this sample does not exist on the sample queue!
                     //
                     throw new NullReferenceException("This sample does not exist in the waiting queue! " +
-                                                     sample.DmsData.DatasetName);
+                                                     sample.Name);
                 }
 
                 m_runningQueue.Remove(realSample);
@@ -2066,9 +2070,9 @@ namespace LcmsNet.SampleQueue
             }
 
             // Clean up the queues first
-            m_waitingQueue.RemoveAll(x => m_completeQueue.Any(y => y.DmsData.DatasetName.Equals(x.DmsData.DatasetName)));
-            m_waitingQueue.RemoveAll(x => m_runningQueue.Any(y => y.DmsData.DatasetName.Equals(x.DmsData.DatasetName)));
-            m_runningQueue.RemoveAll(x => m_completeQueue.Any(y => y.DmsData.DatasetName.Equals(x.DmsData.DatasetName)));
+            m_waitingQueue.RemoveAll(x => m_completeQueue.Any(y => y.Name.Equals(x.Name)));
+            m_waitingQueue.RemoveAll(x => m_runningQueue.Any(y => y.Name.Equals(x.Name)));
+            m_runningQueue.RemoveAll(x => m_completeQueue.Any(y => y.Name.Equals(x.Name)));
 
             SQLiteTools.SaveQueueToCache(m_waitingQueue, DatabaseTableTypes.WaitingQueue);
             SQLiteTools.SaveQueueToCache(m_runningQueue, DatabaseTableTypes.RunningQueue);

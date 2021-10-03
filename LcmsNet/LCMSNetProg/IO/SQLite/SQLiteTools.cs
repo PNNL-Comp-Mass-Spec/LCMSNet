@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LcmsNet.Data;
 using LcmsNetSDK.Data;
 
 // ReSharper disable UnusedMember.Global

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using LcmsNet.Configuration;
 using LcmsNet.Configuration.ViewModels;
+using LcmsNet.Data;
 using LcmsNet.Devices.Fluidics.ViewModels;
 using LcmsNet.Devices.Pumps.ViewModels;
 using LcmsNet.Devices.ViewModels;
@@ -494,9 +495,7 @@ namespace LcmsNet
                         scheduler.Stop();
                         var dummySample = new SampleData
                         {
-                            DmsData = {
-                                DatasetName = string.Format("NotificationAction--{0}", e.Method.Name)
-                            }
+                            Name = string.Format("NotificationAction--{0}", e.Method.Name)
                         };
 
                         if (columnID >= 0)
@@ -734,7 +733,7 @@ namespace LcmsNet
                         CartConfiguration.Columns[sample.ColumnIndex].Name,
                         lcEvent.Device.Name,
                         lcEvent.Name,
-                        sample.DmsData.DatasetName);
+                        sample.Name);
                     break;
                 case SampleProgressType.Error:
                     message = "";
@@ -797,15 +796,15 @@ namespace LcmsNet
                             MethodFileTools.MoveLocalMethodFiles();
                         }
                         var filePath =
-                            FileUtilities.GetUniqueFileName(Path.Combine(docPath, sample.DmsData.DatasetName), ".pdf");
-                        pdfGen.WritePDF(filePath, sample.DmsData.DatasetName, sample,
+                            FileUtilities.GetUniqueFileName(Path.Combine(docPath, sample.Name), ".pdf");
+                        pdfGen.WritePDF(filePath, sample.Name, sample,
                             CartConfiguration.NumberOfEnabledColumns.ToString(), CartConfiguration.Columns,
                             DeviceManager.Manager.Devices, configImage);
                     }
                     catch (Exception ex)
                     {
                         ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_DETAILED,
-                            "PDF Generation Error for " + sample.DmsData.DatasetName + " " + ex.Message, ex, sample);
+                            "PDF Generation Error for " + sample.Name + " " + ex.Message, ex, sample);
                     }
                     break;
                 case SampleProgressType.Started:

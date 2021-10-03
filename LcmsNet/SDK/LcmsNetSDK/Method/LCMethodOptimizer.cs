@@ -379,7 +379,7 @@ namespace LcmsNetSDK.Method
         /// </summary>
         /// <param name="samples">Samples to align.</param>
         /// <returns>True if aligned, false if not.</returns>
-        public bool AlignSamples(List<SampleData> samples)
+        public bool AlignSamples(List<ISampleInfo> samples)
         {
             var methods = new List<LCMethod>();
             foreach (var sample in samples)
@@ -405,7 +405,7 @@ namespace LcmsNetSDK.Method
         /// <param name="baselineSamples">Samples to align data to.</param>
         /// <param name="aligneeSample">Samples to align.</param>
         /// <returns>True if aligned, false if could not be.</returns>
-        public bool AlignSamples(List<SampleData> baselineSamples, SampleData aligneeSample)
+        public bool AlignSamples(List<ISampleInfo> baselineSamples, ISampleInfo aligneeSample)
         {
             var methods = new List<LCMethod>();
             foreach (var sample in baselineSamples)

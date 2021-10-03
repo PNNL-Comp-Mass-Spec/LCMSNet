@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Windows.Media;
+using LcmsNet.Data;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using ReactiveUI;
@@ -48,9 +49,9 @@ namespace LcmsNet.SampleQueue.ViewModels
                 this.RaisePropertyChanged(nameof(StatusToolTipText));
             });
 
-            this.WhenAnyValue(x => x.Sample.DmsData, x => x.Sample.DmsData.DatasetName, x => x.Sample.DmsData.RequestName).Subscribe(x =>
+            this.WhenAnyValue(x => x.Sample.DmsData, x => x.Sample.Name, x => x.Sample.DmsData.RequestName).Subscribe(x =>
             {
-                this.RaisePropertyChanged(nameof(RequestName));
+                this.RaisePropertyChanged(nameof(Name));
                 this.RaisePropertyChanged(nameof(IsUnusedSample));
                 this.RaisePropertyChanged(nameof(NameHasInvalidChars));
                 this.CheckDatasetName();
@@ -68,8 +69,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Extras to trigger the collection monitor when nested properties change
             this.WhenAnyValue(x => x.Sample.DmsData.Block, x => x.Sample.DmsData.RunOrder, x => x.Sample.DmsData.Batch,
                     x => x.Sample.PAL.PALTray, x => x.Sample.PAL.Well)
-                .Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
-            this.WhenAnyValue(x => x.Sample.SequenceID, x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(RequestName)));
+                .Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
+            this.WhenAnyValue(x => x.Sample.SequenceID, x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
             this.WhenAnyValue(x => x.Sample.LCMethodName).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethodName)));
 
             this.WhenAnyValue(x => x.Sample.DmsData.Block).Subscribe(x => this.RaisePropertyChanged(nameof(IsBlockedSample)));
@@ -93,11 +94,11 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// If the name of the sample is "(unused)", it means that the Sample Queue has backfilled the
         /// samples to help the user normalize samples on columns.
         /// </summary>
-        public bool IsUnusedSample => Sample.DmsData.DatasetName.Contains(SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME);
+        public bool IsUnusedSample => Sample.Name.Contains(SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME);
 
         public bool HasError => !string.IsNullOrWhiteSpace(Sample.SampleErrors);
 
-        public bool NameHasInvalidChars => !Sample.DmsData.DatasetNameCharactersValid();
+        public bool NameHasInvalidChars => !Sample.NameCharactersValid();
 
         /// <summary>
         /// Sets the row colors based on the sample data
@@ -109,9 +110,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 RequestNameToolTipText = "Duplicate Request Name Found!";
             }
-            else if (!Sample.DmsData.DatasetNameCharactersValid())
+            else if (!Sample.NameCharactersValid())
             {
-                RequestNameToolTipText = "Request name contains invalid characters!\n" + DMSData.ValidDatasetNameCharacters;
+                RequestNameToolTipText = "Request name contains invalid characters!\n" + SampleData.ValidNameCharacters;
             }
             else
             {
@@ -298,22 +299,14 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Sample request name
         /// </summary>
-        public string RequestName
+        public string Name
         {
-            get
-            {
-                if (Sample.DmsData.DatasetName.Contains(SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME))
-                {
-                    return Sample.DmsData.RequestName;
-                }
-                return Sample.DmsData.DatasetName;
-            }
+            get => Sample.Name;
             set
             {
-                if (Sample.DmsData.RequestName != value)
+                if (Sample.Name != value)
                 {
-                    Sample.DmsData.RequestName = value;
-                    Sample.DmsData.DatasetName = value;
+                    Sample.Name = value;
                     this.RaisePropertyChanged();
                 }
             }
