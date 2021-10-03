@@ -63,8 +63,6 @@ namespace LcmsNetSDK.Data
             // Default state is always to be queued but not waiting to run.
             //
             RunningStatus = SampleRunningStatus.Queued;
-
-            Operator = LCMSSettings.GetParameter(LCMSSettings.PARAM_OPERATOR);
         }
 
         /// <summary>
@@ -85,10 +83,6 @@ namespace LcmsNetSDK.Data
             LCMethodName = other.LCMethodName;
             actualMethod = other.actualMethod?.Clone() as LCMethod;
             InstrumentMethod = other.InstrumentMethod;
-            if (!string.IsNullOrWhiteSpace(other.Operator))
-            {
-                Operator = other.Operator;
-            }
             isDuplicateRequestName = other.isDuplicateRequestName;
             sampleErrors = other.sampleErrors;
 
@@ -412,11 +406,6 @@ namespace LcmsNetSDK.Data
             get => columnIndex;
             set => this.RaiseAndSetIfChanged(ref columnIndex, value);
         }
-
-        /// <summary>
-        /// Operator performing LC run
-        /// </summary>
-        public string Operator { get; set; }
 
         /// <summary>
         /// Gets or sets the unique ID for a sample.

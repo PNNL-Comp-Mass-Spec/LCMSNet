@@ -84,8 +84,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReadOnlyObservableCollection<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
         public ReadOnlyObservableCollection<string> PalTrayComboBoxOptions => SampleDataManager.PalTrayOptions;
         public ReadOnlyObservableCollection<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
-        public ReadOnlyCollection<string> CartConfigComboBoxOptions => SampleDataManager.CartConfigOptions;
-        public string CartConfigError => SampleDataManager.CartConfigOptionsError;
 
         #region Row and cell color control
 

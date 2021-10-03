@@ -31,10 +31,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         private double volumeGroup2 = 7.0;
         private double volumeGroup3 = 7.0;
         private double volumeGroup4 = 7.0;
-        private string cartConfigGroup1;
-        private string cartConfigGroup2;
-        private string cartConfigGroup3;
-        private string cartConfigGroup4;
 
         #endregion
 

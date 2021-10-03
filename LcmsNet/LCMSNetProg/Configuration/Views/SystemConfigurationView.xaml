@@ -15,20 +15,13 @@
             <StackPanel>
                 <GroupBox Header="LC-Cart" Margin="5">
                     <StackPanel>
-                        <Grid Height="100">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
-                            </Grid.RowDefinitions>
+                        <Grid Height="35">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*" />
                                 <ColumnDefinition Width="4*" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Cart Name:" />
-                            <TextBox Grid.Row="0" Grid.Column="1" Width="302" HorizontalAlignment="Left" Margin="3" IsReadOnly="True" Text="{Binding CartName, Mode=OneWay}" />
-                            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Cart Configuration Name:" />
-                            <ComboBox Grid.Row="1" Grid.Column="1" Width="506" HorizontalAlignment="Left" Margin="3" SelectedItem="{Binding CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Cart Name:" />
+                            <TextBox Grid.Column="1" Width="302" HorizontalAlignment="Left" Margin="3" IsReadOnly="True" Text="{Binding CartName, Mode=OneWay}" />
                         </Grid>
                         <Grid Height="170" Margin="0,10">
                             <Grid.RowDefinitions>
@@ -45,7 +38,6 @@
                             <views:ColumnConfigView Grid.Row="1" Grid.Column="1" Margin="3" DataContext="{Binding Column4ViewModel}" />
                         </Grid>
                         <DockPanel LastChildFill="False">
-                            <Button DockPanel.Dock="Left" Width="202" Margin="3" HorizontalAlignment="Left" Content="Reload Column Names" Command="{Binding ReloadCartDataCommand}" />
                             <CheckBox DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" Content="Display Special Column" IsChecked="{Binding SpecialColumnEnabled}" />
                         </DockPanel>
                     </StackPanel>

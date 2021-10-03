@@ -12,7 +12,7 @@ namespace LcmsNet.Properties {
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
 
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -32,60 +32,12 @@ namespace LcmsNet.Properties {
             }
         }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("BabyRuth")]
-        public string InstName {
-            get {
-                return ((string)(this["InstName"]));
-            }
-            set {
-                this["InstName"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("LC-ISCO-Standard")]
-        public string SeparationType {
-            get {
-                return ((string)(this["SeparationType"]));
-            }
-            set {
-                this["SeparationType"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Operator {
-            get {
-                return ((string)(this["Operator"]));
-            }
-            set {
-                this["Operator"] = value;
-            }
-        }
-
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("(none)")]
         public string CartName {
             get {
                 return ((string)(this["CartName"]));
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Unknown_Cart_Config")]
-        public string CartConfigName {
-            get {
-                return ((string)(this["CartConfigName"]));
-            }
-            set {
-                this["CartConfigName"] = value;
             }
         }
 
@@ -302,18 +254,6 @@ namespace LcmsNet.Properties {
             }
             set {
                 this["NotificationShouldNotify"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public string FirstTime {
-            get {
-                return ((string)(this["FirstTime"]));
-            }
-            set {
-                this["FirstTime"] = value;
             }
         }
 

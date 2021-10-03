@@ -45,7 +45,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             CheckboxColumnVisible = false;
             StatusColumnVisible = false;
             ColumnIdColumnVisible = false;
-            DatasetTypeColumnVisible = false;
             LcMethodColumnVisible = false;
             InstrumentMethodColumnVisible = false;
             PalTrayColumnVisible = false;
@@ -79,13 +78,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             CheckboxColumnVisible = false;
             StatusColumnVisible = false;
             ColumnIdColumnVisible = false;
-            DatasetTypeColumnVisible = false;
             LcMethodColumnVisible = false;
             InstrumentMethodColumnVisible = false;
             PalTrayColumnVisible = false;
             PalVialColumnVisible = false;
             VolumeColumnVisible = false;
-            CartConfigColumnVisible = false;
 
             m_columnData = new ColumnData
             {

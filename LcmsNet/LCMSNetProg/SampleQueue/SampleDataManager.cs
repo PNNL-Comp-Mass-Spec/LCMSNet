@@ -1533,21 +1533,14 @@ namespace LcmsNet.SampleQueue
         public static ReadOnlyObservableCollection<LCMethod> LcMethodOptions { get; }
         public static ReadOnlyObservableCollection<string> LcMethodNameOptions { get; }
         public static ReadOnlyObservableCollection<string> InstrumentMethodOptions { get; }
-        public static ReadOnlyCollection<string> CartConfigOptions { get; }
         public static ReadOnlyObservableCollection<string> PalTrayOptions { get; }
-
-        // If null, no error retrieving the cart config names from the database; otherwise, the error that occurred
-        public static string CartConfigOptionsError { get; }
 
         static SampleDataManager()
         {
-            CartConfigOptionsError = null;
-
 #if DEBUG
             // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                CartConfigOptionsError = "Values not read, because we are running in Visual Studio's Design Mode";
                 return;
             }
 #endif

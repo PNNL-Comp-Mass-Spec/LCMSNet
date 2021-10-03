@@ -51,8 +51,6 @@
                             <MenuItem Header="Volume" IsChecked="{Binding VolumeColumnVisible}" IsCheckable="True" />
                             <MenuItem Header="LC Method" IsChecked="{Binding LcMethodColumnVisible}" IsCheckable="True" />
                             <MenuItem Header="Instrument Method" IsChecked="{Binding InstrumentMethodColumnVisible}" IsCheckable="True" />
-                            <MenuItem Header="Dataset Type" IsChecked="{Binding DatasetTypeColumnVisible}" IsCheckable="True" />
-                            <MenuItem Header="Cart Config" IsChecked="{Binding CartConfigColumnVisible}" IsCheckable="True" />
                             <MenuItem Header="Batch ID" IsChecked="{Binding BatchIdColumnVisible}" IsCheckable="True" />
                             <MenuItem Header="Block" IsChecked="{Binding BlockColumnVisible}" IsCheckable="True" />
                             <MenuItem Header="Run Order" IsChecked="{Binding RunOrderColumnVisible}" IsCheckable="True" />

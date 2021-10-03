@@ -244,13 +244,6 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn Header="Dataset Type" MinWidth="80" Visibility="{Binding Data.DatasetTypeColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <ComboBox x:Name="DatasetTypeSelect" SelectedItem="{Binding Sample.DmsData.DatasetType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DatasetTypeComboBoxOptions}" IsEnabled="{Binding EditAllowed}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
             <DataGridTextColumn x:Name="BatchID" Header="Batch ID" MaxWidth="55" MinWidth="40" Binding="{Binding Sample.DmsData.Batch}" IsReadOnly="True" Visibility="{Binding Data.BatchIdColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}" >
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}" >
@@ -258,13 +251,6 @@
                     </Style>
                 </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
-            <DataGridTemplateColumn Header="Cart Config" MinWidth="80" Visibility="{Binding Data.CartConfigColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <ComboBox x:Name="CartConfigSelect" SelectedItem="{Binding Sample.DmsData.CartConfigName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CartConfigComboBoxOptions}" IsEnabled="{Binding EditAllowed}" ToolTip="{Binding CartConfigError}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>

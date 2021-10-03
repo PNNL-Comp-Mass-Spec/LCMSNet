@@ -6,8 +6,6 @@
     public enum SampleValidResult
     {
         Valid,
-        DuplicateRequestName,
-        InvalidRequestNumber,
-        InvalidDatasetType
+        DuplicateRequestName
     }
 }

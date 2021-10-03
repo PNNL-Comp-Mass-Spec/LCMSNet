@@ -27,8 +27,6 @@ namespace LcmsNetSDK
     /// </summary>
     public class LCMSSettings
     {
-        public const string CONST_UNASSIGNED_CART_NAME = "(none)";
-
         public const string PARAM_APPLICATIONPATH = "ApplicationPath";
         public const string PARAM_APPLICATIONDATAPATH = "ApplicationDataPath";
         public const string PARAM_CACHEFILENAME = "CacheFileName";
@@ -45,7 +43,6 @@ namespace LcmsNetSDK
         public const string PARAM_COLUMNDISABLED3 = "ColumnDisabled3";
         public const string PARAM_COLUMNDISABLEDSPECIAL = "ColumnDisabledSpecial";
         public const string PARAM_COPYMETHODFOLDERS = "CopyMethodFolders";
-        public const string PARAM_COPYTRIGGERFILES = "CopyTriggerFiles";
         public const string PARAM_CREATEMETHODFOLDERS = "CreateMethodFolders";
         public const string PARAM_DMSPWD = "DMSPwd";
         public const string PARAM_DMSTOOL = "DMSTool";
@@ -56,7 +53,6 @@ namespace LcmsNetSDK
         public const string PARAM_LOGGINGERRORLEVEL = "LoggingErrorLevel";
         public const string PARAM_LOGGINGMSGLEVEL = "LoggingMsgLevel";
         public const string PARAM_MINIMUMVOLUME = "MinimumVolume";
-        public const string PARAM_OPERATOR = "Operator";
         public const string PARAM_PALMETHODSFOLDER = "PalMethodsFolder";
         public const string PARAM_PDFPATH = "PdfPath";
         public const string PARAM_TIMEZONE = "TimeZone";
