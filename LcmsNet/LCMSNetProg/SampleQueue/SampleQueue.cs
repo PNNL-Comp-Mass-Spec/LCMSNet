@@ -650,7 +650,7 @@ namespace LcmsNet.SampleQueue
                     SampleData sample;
                     if (queue.Count > 0)
                     {
-                        sample = queue[queue.Count - 1].Clone() as SampleData;
+                        sample = queue[queue.Count - 1].Clone(false);
                     }
                     else
                     {
@@ -662,13 +662,7 @@ namespace LcmsNet.SampleQueue
                     //
                     // Make the request an "Unused sample"
                     //
-                    if (sampleToAdd.DmsData != null)
-                    {
-                        sampleToAdd.DmsData.RequestName = m_integrateName;
-                    }
                     sampleToAdd.Name = m_integrateName;
-                    sampleToAdd.DmsData.Block = 0; // It's an unused sample, so don't copy this information.
-                    sampleToAdd.DmsData.Batch = 0;
                     sampleToAdd.ColumnIndex = col.ID;
                     sampleToAdd.UniqueID = GenerateUniqueID();
                     data.Add(sampleToAdd);
@@ -2216,7 +2210,6 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var sample in waitingSamples)
             {
-                sample.DmsData.CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
                 if (sample.UniqueID >= m_sampleIndex)
                 {
                     m_sampleIndex = Convert.ToInt32(sample.UniqueID);
@@ -2239,7 +2232,6 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var sample in waitingSamples)
             {
-                sample.DmsData.CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
                 if (sample.UniqueID >= m_sampleIndex)
                 {
                     m_sampleIndex = Convert.ToInt32(sample.UniqueID);
@@ -2265,7 +2257,6 @@ namespace LcmsNet.SampleQueue
             //
             foreach (var data in waitingSamples)
             {
-                data.DmsData.CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
                 data.ColumnIndex = column.ID;
             }
 

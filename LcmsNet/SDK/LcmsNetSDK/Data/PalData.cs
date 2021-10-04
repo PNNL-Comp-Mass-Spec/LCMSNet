@@ -3,11 +3,12 @@ using System.ComponentModel;
 
 namespace LcmsNetSDK.Data
 {
+    /// <summary>
+    /// Encapsulates data for an autosampler
+    /// </summary>
     [Serializable]
-    public class PalData : ICloneable, INotifyPropertyChangedExt
+    public class PalData : INotifyPropertyChangedExt
     {
-        #region "Constructors"
-
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -19,15 +20,11 @@ namespace LcmsNetSDK.Data
             WellPlate = "";
         }
 
-        #endregion
-
-        #region ICloneable Members
-
         /// <summary>
         /// Returns a new object reference to a cloned copy of this PAL data.
         /// </summary>
         /// <returns>A new object reference as a copy of this.</returns>
-        public object Clone()
+        public PalData Clone()
         {
             var newData = new PalData
             {
@@ -39,14 +36,6 @@ namespace LcmsNetSDK.Data
 
             return newData;
         }
-
-        #endregion
-
-        //*********************************************************************************************************
-        //Class that encapsulates the PAL data.
-        //**********************************************************************************************************
-
-        #region "Constants"
 
         private const string CONST_METHOD_NAME = "std_01";
 
@@ -65,10 +54,6 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public const int CONST_MAX_WELLPLATE = 1250;
 
-        #endregion
-
-        #region "Class variables"
-
         /// <summary>
         /// Name of the PAL tray to use.
         /// </summary>
@@ -78,10 +63,6 @@ namespace LcmsNetSDK.Data
         /// Vial index to use.
         /// </summary>
         private int well;
-
-        #endregion
-
-        #region "Properties"
 
         /// <summary>
         /// Gets or sets the vial number to pull sample from.
@@ -119,8 +100,6 @@ namespace LcmsNetSDK.Data
         /// The Wellplate name that is stored in DMS.
         /// </summary>
         public string WellPlate { get; set; }
-
-        #endregion
 
         //  /// <summary>
 

@@ -1,5 +1,4 @@
 ﻿using LcmsNet.Data;
-using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue.IO
 {
@@ -7,7 +6,6 @@ namespace LcmsNet.SampleQueue.IO
     {
         public string DatasetName { get; set; }
         public int RequestId { get; set; } = -1;
-        public int RunOrder { get; set; } = -1;
         public string PalTray { get; set; } = "";
         public string PalVial { get; set; } = "";
         public double Volume { get; set; } = 0;
@@ -20,12 +18,7 @@ namespace LcmsNet.SampleQueue.IO
 
             if (RequestId > 0)
             {
-                sampleData.DmsData.RequestID = RequestId;
-            }
-
-            if (RunOrder >= 0)
-            {
-                sampleData.DmsData.RunOrder = RunOrder;
+                sampleData.DmsRequestId = RequestId;
             }
 
             if (!string.IsNullOrWhiteSpace(PalTray))

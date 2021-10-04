@@ -195,14 +195,14 @@
                     </Style>
                 </DataGridTextColumn.CellStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn x:Name="Block" Header="Block" MaxWidth="40" MinWidth="40" Binding="{Binding Sample.DmsData.Block}" IsReadOnly="True" Visibility="{Binding Data.BlockColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}" >
+            <DataGridTextColumn x:Name="Block" Header="Block" MaxWidth="40" MinWidth="40" Binding="{Binding Sample.DmsData.Block, Mode=OneWay}" IsReadOnly="True" Visibility="{Binding Data.BlockColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}" >
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}" >
                         <Setter Property="HorizontalAlignment" Value="Center" />
                     </Style>
                 </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn x:Name="RunOrder" Header="Run Order" MaxWidth="40" MinWidth="40" Binding="{Binding Sample.DmsData.RunOrder}" IsReadOnly="True" Visibility="{Binding Data.RunOrderColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}" >
+            <DataGridTextColumn x:Name="RunOrder" Header="Run Order" MaxWidth="40" MinWidth="40" Binding="{Binding Sample.DmsData.RunOrder, Mode=OneWay}" IsReadOnly="True" Visibility="{Binding Data.RunOrderColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}" >
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}" >
                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -244,7 +244,7 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTextColumn x:Name="BatchID" Header="Batch ID" MaxWidth="55" MinWidth="40" Binding="{Binding Sample.DmsData.Batch}" IsReadOnly="True" Visibility="{Binding Data.BatchIdColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}" >
+            <DataGridTextColumn x:Name="BatchID" Header="Batch ID" MaxWidth="55" MinWidth="40" Binding="{Binding Sample.DmsData.Batch, Mode=OneWay}" IsReadOnly="True" Visibility="{Binding Data.BatchIdColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}" >
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}" >
                         <Setter Property="HorizontalAlignment" Value="Center" />

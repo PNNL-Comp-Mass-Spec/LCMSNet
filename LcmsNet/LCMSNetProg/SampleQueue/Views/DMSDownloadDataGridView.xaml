@@ -39,14 +39,14 @@
             </Style>
         </DataGrid.CellStyle>
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Request Name" Binding="{Binding DmsData.RequestName}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Request #" Binding="{Binding DmsData.RequestID}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Cart" Binding="{Binding DmsData.CartName}" IsReadOnly="True" />
-            <DataGridTextColumn Header="EMSL User" Binding="{Binding DmsData.EMSLProposalUser}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Usage Type" Binding="{Binding DmsData.EMSLUsageType}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Batch" Binding="{Binding DmsData.Batch}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Block" Binding="{Binding DmsData.Block}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Run Order" Binding="{Binding DmsData.RunOrder}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Request Name" Binding="{Binding DmsData.RequestName, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Request #" Binding="{Binding DmsData.RequestID, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Cart" Binding="{Binding DmsData.CartName, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="EMSL User" Binding="{Binding DmsData.EMSLProposalUser, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Usage Type" Binding="{Binding DmsData.EMSLUsageType, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Batch" Binding="{Binding DmsData.Batch, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Block" Binding="{Binding DmsData.Block, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Run Order" Binding="{Binding DmsData.RunOrder, Mode=OneWay}" IsReadOnly="True" />
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>

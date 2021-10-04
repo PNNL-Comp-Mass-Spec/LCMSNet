@@ -211,7 +211,7 @@ namespace LcmsNet.SampleQueue.IO
             var datasetName = sample.Name;
             var outFileName =
                 string.Format("{0}_{1:MM.dd.yyyy_hh.mm.ss}_{2}{3}",
-                    sample.DmsData.CartName,
+                    LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME),
                     sample.RunStart,
                     datasetName,
                     extension);

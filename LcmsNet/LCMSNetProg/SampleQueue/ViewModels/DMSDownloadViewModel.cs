@@ -503,8 +503,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             foreach (var tempSampleData in SelectedRequestData.Data)
             {
-                tempSampleData.DmsData.CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
-
                 //                  SampleData tempSampleData = CopyDMSDataObj(tempDMSData);
                 retList.Add(tempSampleData);
             }

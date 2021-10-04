@@ -94,7 +94,7 @@ namespace LcmsNet.SampleQueue.IO
             // Value is mandatory for this field, so check for it
             if (tempStr != "")
             {
-                retData.DmsData.RequestName = tempStr;
+                retData.Name = tempStr;
             }
             else
             {
@@ -130,10 +130,7 @@ namespace LcmsNet.SampleQueue.IO
             retData.InstrumentMethod = GetNodeValue(itemNode, "Acquisition/Method");
 
             // DMS RequestNumber (DMSData.RequestID)
-            retData.DmsData.RequestID = ConvertNullToInt(GetNodeValue(itemNode, "DMS/RequestNumber"));
-
-            // DMS Comment (DMSData.Comment)
-            retData.DmsData.Comment = GetNodeValue(itemNode, "DMS/Comment");
+            retData.DmsRequestId = ConvertNullToInt(GetNodeValue(itemNode, "DMS/RequestNumber"));
 
             // It's all in, so return
             return retData;

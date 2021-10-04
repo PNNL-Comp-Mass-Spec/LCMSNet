@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 
 namespace LcmsNet.SampleQueue.IO
@@ -25,7 +24,7 @@ namespace LcmsNet.SampleQueue.IO
             var sortedData = new List<SampleData>();
             foreach (var currentSample in data)
             {
-                var tmpSample = (SampleData)currentSample.Clone();
+                var tmpSample = currentSample.Clone(false, true);
                 sortedData.Add(tmpSample);
             }
 

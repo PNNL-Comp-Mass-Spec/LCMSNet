@@ -216,11 +216,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_Queued",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_Queued",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
@@ -229,11 +224,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_Running",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_Running",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Running,
@@ -242,11 +232,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_Waiting",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_Waiting",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.WaitingToRun,
@@ -255,17 +240,12 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_Error",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_Error",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Error,
                 SampleErrors = "",
             }));
-            samplesList.Add(new SampleViewModel(new SampleData()
+            samplesList.Add(new SampleViewModel(new SampleData(true, true)
             {
                 Name = "Design_Dataset_ErrorBlocked",
                 DmsData = new DMSData()
@@ -281,17 +261,12 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_Stopped",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_Stopped",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Stopped,
                 SampleErrors = "",
             }));
-            samplesList.Add(new SampleViewModel(new SampleData()
+            samplesList.Add(new SampleViewModel(new SampleData(true, true)
             {
                 Name = "Design_Dataset_StoppedBlocked",
                 DmsData = new DMSData()
@@ -307,11 +282,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_Complete",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_Complete",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Complete,
@@ -320,11 +290,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_Disabled_Column",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_Disabled_Column",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
@@ -333,11 +298,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_" + SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME,
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_" + SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME,
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
@@ -346,11 +306,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_HasErrorData",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_HasErrorData",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
@@ -359,11 +314,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design_Dataset_Duplicate",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_Duplicate",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = true,
                 RunningStatus = SampleRunningStatus.Queued,
@@ -372,11 +322,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Add(new SampleViewModel(new SampleData()
             {
                 Name = "Design Dataset Bad Name",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design Dataset Bad Name",
-                    Block = 0,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Queued,
@@ -1023,18 +968,11 @@ namespace LcmsNet.SampleQueue
         /// <returns>New object reference of a sample with only required data copied.</returns>
         public SampleData CopyRequiredSampleData(SampleData sampleToCopy)
         {
-            var newSample = new SampleData(false)
+            var newSample = new SampleData(false, false)
             {
                 Name = string.Format("{0}_{1:0000}",
                     SampleQueue.DefaultSampleName,
                     SampleQueue.RunningSampleIndex++),
-                DmsData =
-                {
-                    RequestName = string.Format("{0}_{1:0000}",
-                        SampleQueue.DefaultSampleName,
-                        SampleQueue.RunningSampleIndex++),
-                    CartName = sampleToCopy.DmsData.CartName
-                },
                 PAL =
                 {
                     Method = sampleToCopy.PAL.Method,
@@ -1085,13 +1023,6 @@ namespace LcmsNet.SampleQueue
                 newSample.LCMethodName = "";
             }
 
-            // Clear out any DMS information from the blank
-            newSample.DmsData.Batch = 0;
-            newSample.DmsData.Block = 0;
-            newSample.DmsData.Comment = "Blank";
-            newSample.DmsData.RequestID = 0;
-            newSample.DmsData.RunOrder = 0;
-
             return newSample;
         }
 
@@ -1130,13 +1061,6 @@ namespace LcmsNet.SampleQueue
                     Name = string.Format("{0}_{1:0000}",
                         SampleQueue.DefaultSampleName,
                         SampleQueue.RunningSampleIndex++),
-                    DmsData =
-                    {
-                        RequestName = string.Format("{0}_{1:0000}",
-                            SampleQueue.DefaultSampleName,
-                            SampleQueue.RunningSampleIndex++),
-                        CartName = CartConfiguration.CartName
-                    }
                 };
             }
 

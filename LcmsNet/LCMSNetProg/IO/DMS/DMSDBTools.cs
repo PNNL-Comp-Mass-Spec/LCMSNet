@@ -555,6 +555,8 @@ namespace LcmsNet.IO.DMS
                                 RequestName = reader["Name"].CastDBValTo<string>(),
                                 CartName = reader["Cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 Comment = reader["Comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                EMSLUsageType = reader["Usage Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                EMSLProposalUser = reader["EUS Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 Block = reader["Block"].CastDBValTo<int>(),
                                 RunOrder = reader["RunOrder"].CastDBValTo<int>(),
                                 Batch = reader["Batch"].CastDBValTo<int>(),

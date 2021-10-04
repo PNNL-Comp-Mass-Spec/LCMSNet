@@ -65,7 +65,7 @@ namespace LcmsNet.SampleQueue
             var pushQueue = new List<SampleData>();
             foreach (var data in workingQueue)
             {
-                var sample = data.Clone() as SampleData;
+                var sample = data.Clone(true);
                 pushQueue.Add(sample);
             }
 

@@ -106,14 +106,12 @@ namespace LcmsnetUnitTest
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
             sampleA.Name = "testDataset";
-            sampleA.DmsData.CartName = "Emulated";
 
             sampleA.LCMethodName = testLcMethod.Name;
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
             sampleB.Name = "testDataset2";
-            sampleB.DmsData.CartName = "Emulated";
 
             samples.Add(sampleA);
             samples.Add(sampleB);
@@ -157,14 +155,12 @@ namespace LcmsnetUnitTest
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
             sampleA.Name = "testDataset";
-            sampleA.DmsData.CartName = "Emulated";
 
             sampleA.LCMethodName = testLcMethod.Name;
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
             sampleB.Name = "testDataset2";
-            sampleB.DmsData.CartName = "Emulated";
 
             samples.Add(sampleA);
             samples.Add(sampleB);
@@ -220,14 +216,12 @@ namespace LcmsnetUnitTest
             sampleA.Volume = 5;
             sampleA.SequenceID = 1;
             sampleA.Name = "testDataset";
-            sampleA.DmsData.CartName = "Emulated";
 
             sampleA.LCMethodName = testLcMethod.Name;
             sampleB.ColumnIndex = 0;
             sampleB.Volume = 5;
             sampleB.SequenceID = 2;
             sampleB.Name = "testDataset2";
-            sampleB.DmsData.CartName = "Emulated";
 
             samples.Add(sampleA);
             samples.Add(sampleB);

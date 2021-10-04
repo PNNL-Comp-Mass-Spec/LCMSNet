@@ -14,7 +14,7 @@ namespace LcmsNet.Data
     /// Class to hold data for one sample (more specifically, one instrument dataset)
     /// </summary>
     [Serializable]
-    public class SampleData : ISampleInfo, ICloneable, IEquatable<SampleData>, INotifyPropertyChangedExt
+    public class SampleData : ISampleInfo, IEquatable<SampleData>, INotifyPropertyChangedExt
     {
         /// <summary>
         /// The matching string to ensure only valid characters exist in a sample name
@@ -45,25 +45,18 @@ namespace LcmsNet.Data
         #region Constructors
 
         /// <summary>
-        ///  Default constructor: assumes sample is a dummy or unchecked sample.
-        /// </summary>
-        public SampleData() : this(true)
-        {
-        }
-
-        public SampleData GetNewNonDummy()
-        {
-            return new SampleData(false);
-        }
-
-        /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="isDummySample">If this is possibly a dummy or unchecked sample, and the real sample needs to be found in the queue/list</param>
-        public SampleData(bool isDummySample)
+        /// <param name="addDmsData">If true, create an object for <see cref="DmsData"/>; if false, it will be 'null'</param>
+        public SampleData(bool isDummySample = true, bool addDmsData = false)
         {
             IsDummySample = isDummySample;
-            DmsData = new DMSData();
+            if (addDmsData)
+            {
+                DmsData = new DMSData();
+                DmsData.PropertyChanged += DmsDataChanged;
+            }
 
             PAL = new PalData();
             PAL.PropertyChanged += PalDataChanged;
@@ -88,13 +81,22 @@ namespace LcmsNet.Data
         /// Copy constructor
         /// </summary>
         /// <param name="other">Object from where we copy data</param>
-        private SampleData(SampleData other) : this(other.IsDummySample)
+        /// <param name="cloneDmsData">If true, also copy the <see cref="DmsData"/> property.</param>
+        /// <param name="cloneDmsRequestId">If true, also copy the <see cref="DmsRequestId"/> property.</param>
+        private SampleData(SampleData other, bool cloneDmsData, bool cloneDmsRequestId) : this(other.IsDummySample)
         {
             Name = other.Name;
-            DmsData = other.DmsData?.Clone() as DMSData;
+            if (cloneDmsData && other.DmsData != null)
+            {
+                DmsData = other.DmsData.Clone();
+                DmsData.PropertyChanged += DmsDataChanged;
+            }
+            else if (cloneDmsRequestId)
+                DmsRequestId = other.DmsRequestId;
+
             sequenceNumber = other.sequenceNumber;
 
-            PAL = other.PAL?.Clone() as PalData ?? new PalData();
+            PAL = other.PAL.Clone();
             PAL.PropertyChanged += PalDataChanged;
 
             volume = other.volume;
@@ -110,17 +112,15 @@ namespace LcmsNet.Data
             runningStatus = other.runningStatus;
         }
 
-        #endregion
-
-        #region ICloneable Members
-
         /// <summary>
         /// Makes a deep copy of this object
         /// </summary>
+        /// <param name="cloneDmsData">If true, also copy the <see cref="DmsData"/> property.</param>
+        /// <param name="cloneDmsRequestId">If true, also copy the <see cref="DmsRequestId"/> property.</param>
         /// <returns>Deep copy of object</returns>
-        public object Clone()
+        public SampleData Clone(bool cloneDmsData = false, bool cloneDmsRequestId = false)
         {
-            return new SampleData(this);
+            return new SampleData(this, cloneDmsData, cloneDmsRequestId);
         }
 
         #endregion
@@ -227,6 +227,7 @@ namespace LcmsNet.Data
         private bool isDuplicateRequestName = false;
 
         private string sampleErrors = null;
+        private int dmsRequestId = 0;
 
         #endregion
 
@@ -323,6 +324,13 @@ namespace LcmsNet.Data
         {
             get => instrumentMethod;
             set => this.RaiseAndSetIfChanged(ref instrumentMethod, value, nameof(InstrumentMethod));
+        }
+
+        [PersistenceSetting(IgnoreProperty = true)]
+        public int DmsRequestId
+        {
+            get => DmsData?.RequestID ?? dmsRequestId;
+            set => dmsRequestId = value;
         }
 
         /// <summary>

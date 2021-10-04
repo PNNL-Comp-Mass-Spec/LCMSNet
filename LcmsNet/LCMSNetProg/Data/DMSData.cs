@@ -10,7 +10,7 @@ namespace LcmsNet.Data
     /// Dataset information supplied by or required by DMS; includes run request information
     /// </summary>
     [Serializable]
-    public class DMSData : INotifyPropertyChangedExt, ICloneable
+    public class DMSData : INotifyPropertyChangedExt
     {
         public DMSData()
         {
@@ -43,7 +43,7 @@ namespace LcmsNet.Data
         /// Clone - get a deep copy
         /// </summary>
         /// <returns></returns>
-        public object Clone()
+        public DMSData Clone()
         {
             var newData = new DMSData();
 
@@ -59,20 +59,7 @@ namespace LcmsNet.Data
             return newData;
         }
 
-        #region Property Backing Variables
-
-        private int requestId;
-        private string requestName;
-        private int block;
-        private int runOrder;
-        private int batch;
         private bool selectedToRun;
-        private string cartName;
-        private string comment;
-
-        #endregion
-
-        #region "Properties"
 
         /// <summary>
         /// Flag for determining if request from DMS has been selected for running
@@ -90,72 +77,50 @@ namespace LcmsNet.Data
         /// </summary>
         //TODO: DMS_Download_Only?
         [PersistenceSetting(IsUniqueColumn = true)]
-        public string RequestName
-        {
-            get => requestName;
-            set => this.RaiseAndSetIfChanged(ref requestName, value);
-        }
+        public string RequestName { get; set; }
 
         /// <summary>
         /// Numeric ID of request in DMS
         /// </summary>
         [PersistenceSetting(IsUniqueColumn = true)]
-        public int RequestID
-        {
-            get => requestId;
-            set => this.RaiseAndSetIfChanged(ref requestId, value);
-        }
+        public int RequestID { get; set; }
 
         /// <summary>
         /// Name of cart used for sample run
         /// </summary>
         /// <remarks>This is an editable field even if the DMS Request has been resolved.</remarks>
-        //TODO: DMS_Download_Only? Probably should just drop it
-        public string CartName
-        {
-            get => cartName;
-            set => this.RaiseAndSetIfChanged(ref cartName, value);
-        }
+        //TODO: DMS_Download_Only
+        public string CartName { get; set; }
 
         /// <summary>
         /// Comment field
         /// </summary>
-        public string Comment
-        {
-            get => comment;
-            set => this.RaiseAndSetIfChanged(ref comment, value);
-        }
+        public string Comment { get; set; }
 
         /// <summary>
         /// Block ID for blocking
         /// </summary>
-        public int Block
-        {
-            get => block;
-            set => this.RaiseAndSetIfChanged(ref block, value);
-        }
+        public int Block { get; set; }
 
         /// <summary>
         /// Run order for blocking
         /// </summary>
-        public int RunOrder
-        {
-            get => runOrder;
-            set => this.RaiseAndSetIfChanged(ref runOrder, value);
-        }
+        public int RunOrder { get; set; }
 
         /// <summary>
         /// Batch number for blocking
         /// </summary>
-        public int Batch
-        {
-            get => batch;
-            set => this.RaiseAndSetIfChanged(ref batch, value);
-        }
+        public int Batch { get; set; }
 
-        #endregion
+        /// <summary>
+        /// EMSL usage type
+        /// </summary>
+        public string EMSLUsageType { get; set; }
 
-        #region Methods
+        /// <summary>
+        /// EUS user list
+        /// </summary>
+        public string EMSLProposalUser { get; set; }
 
         public List<string[]> GetExportValuePairs()
         {
@@ -178,8 +143,6 @@ namespace LcmsNet.Data
 
             return "RequestID " + RequestID;
         }
-
-        #endregion
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
