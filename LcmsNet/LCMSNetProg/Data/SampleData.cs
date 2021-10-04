@@ -48,15 +48,13 @@ namespace LcmsNet.Data
         /// Default constructor
         /// </summary>
         /// <param name="isDummySample">If this is possibly a dummy or unchecked sample, and the real sample needs to be found in the queue/list</param>
-        /// <param name="addDmsData">If true, create an object for <see cref="DmsData"/>; if false, it will be 'null'</param>
-        public SampleData(bool isDummySample = true, bool addDmsData = false)
+        /// <param name="dmsData">DMSData object for extra sample metadata</param>
+        public SampleData(bool isDummySample = true, DMSData dmsData = null)
         {
             IsDummySample = isDummySample;
-            if (addDmsData)
-            {
-                DmsData = new DMSData();
-                DmsData.PropertyChanged += DmsDataChanged;
-            }
+            DmsData = dmsData;
+
+            Name = DmsData?.RequestName ?? "";
 
             PAL = new PalData();
             PAL.PropertyChanged += PalDataChanged;
@@ -81,18 +79,15 @@ namespace LcmsNet.Data
         /// Copy constructor
         /// </summary>
         /// <param name="other">Object from where we copy data</param>
-        /// <param name="cloneDmsData">If true, also copy the <see cref="DmsData"/> property.</param>
-        /// <param name="cloneDmsRequestId">If true, also copy the <see cref="DmsRequestId"/> property.</param>
-        private SampleData(SampleData other, bool cloneDmsData, bool cloneDmsRequestId) : this(other.IsDummySample)
+        /// <param name="cloneDmsData">If true, also copy the <see cref="DmsData"/> property (shallow copy).</param>
+        private SampleData(SampleData other, bool cloneDmsData) : this(other.IsDummySample)
         {
             Name = other.Name;
-            if (cloneDmsData && other.DmsData != null)
+            if (cloneDmsData)
             {
-                DmsData = other.DmsData.Clone();
-                DmsData.PropertyChanged += DmsDataChanged;
-            }
-            else if (cloneDmsRequestId)
+                DmsData = other.DmsData;
                 DmsRequestId = other.DmsRequestId;
+            }
 
             sequenceNumber = other.sequenceNumber;
 
@@ -115,12 +110,11 @@ namespace LcmsNet.Data
         /// <summary>
         /// Makes a deep copy of this object
         /// </summary>
-        /// <param name="cloneDmsData">If true, also copy the <see cref="DmsData"/> property.</param>
-        /// <param name="cloneDmsRequestId">If true, also copy the <see cref="DmsRequestId"/> property.</param>
+        /// <param name="cloneDmsData">If true, also copy the <see cref="DmsData"/> property (shallow copy).</param>
         /// <returns>Deep copy of object</returns>
-        public SampleData Clone(bool cloneDmsData = false, bool cloneDmsRequestId = false)
+        public SampleData Clone(bool cloneDmsData = false)
         {
-            return new SampleData(this, cloneDmsData, cloneDmsRequestId);
+            return new SampleData(this, cloneDmsData);
         }
 
         #endregion
@@ -165,16 +159,16 @@ namespace LcmsNet.Data
         /// <param name="sample"></param>
         public static void ResetDatasetNameToRequestName(SampleData sample)
         {
-            sample.Name = sample.DmsData.RequestName;
+            if (sample.DmsData != null)
+                sample.Name = sample.DmsData.RequestName;
         }
 
         public override string ToString()
         {
-            if (DmsData != null)
-            {
-                return DmsData.ToString();
-            }
-            return base.ToString();
+            if (!string.IsNullOrWhiteSpace(Name))
+                return Name;
+
+            return SequenceID.ToString();
         }
 
         #region "Members"
@@ -200,11 +194,6 @@ namespace LcmsNet.Data
         /// LC Method that controls all of the hardware via the scheduling interface.
         /// </summary>
         private LCMethod actualMethod;
-
-        /// <summary>
-        /// DMS Data structure.
-        /// </summary>
-        private DMSData dmsData;
 
         /// <summary>
         /// Information regarding what column the sample is to be, or did run on.
@@ -236,7 +225,7 @@ namespace LcmsNet.Data
         /// <summary>
         /// Name of the sample (also used for the file name)
         /// </summary>
-        [PersistenceSetting(IsUniqueColumn = true)]
+        [PersistenceSetting(ColumnName = "DMS.DatasetName", IsUniqueColumn = true)]
         public string Name
         {
             get => name;
@@ -326,7 +315,7 @@ namespace LcmsNet.Data
             set => this.RaiseAndSetIfChanged(ref instrumentMethod, value, nameof(InstrumentMethod));
         }
 
-        [PersistenceSetting(IgnoreProperty = true)]
+        [PersistenceSetting(ColumnName = "DMS.RequestID", IsUniqueColumn = true)]
         public int DmsRequestId
         {
             get => DmsData?.RequestID ?? dmsRequestId;
@@ -336,27 +325,8 @@ namespace LcmsNet.Data
         /// <summary>
         /// Gets or sets the list of data downloaded from DMS for this sample
         /// </summary>
-        [PersistenceSetting(ColumnNamePrefix = "DMS.")]
-        public DMSData DmsData
-        {
-            get => dmsData;
-            set
-            {
-                var oldValue = dmsData;
-                if (this.RaiseAndSetIfChangedRetBool(ref dmsData, value, nameof(DmsData)))
-                {
-                    if (oldValue != null)
-                    {
-                        oldValue.PropertyChanged -= DmsDataChanged;
-                    }
-
-                    if (value != null)
-                    {
-                        value.PropertyChanged += DmsDataChanged;
-                    }
-                }
-            }
-        }
+        [PersistenceSetting(IgnoreProperty = true)]
+        public DMSData DmsData { get; }
 
         /// <summary>
         /// Gets or sets the pal data associated with this sample.
@@ -501,6 +471,10 @@ namespace LcmsNet.Data
             {
                 exportData.AddRange(DmsData.GetExportValuePairs());
             }
+            else
+            {
+                exportData.Add(new[] { "Request Id:", DmsRequestId.ToString() });
+            }
 
             return exportData;
         }
@@ -540,16 +514,6 @@ namespace LcmsNet.Data
         #endregion
 
         #region "PropertyChanged" event handlers
-
-        private void DmsDataChanged(object sender, PropertyChangedEventArgs args)
-        {
-            if (args.PropertyName.Equals(nameof(DmsData.RequestName)) || args.PropertyName.Equals(nameof(DmsData.RunOrder)) ||
-                args.PropertyName.Equals(nameof(DmsData.Batch)) || args.PropertyName.Equals(nameof(DmsData.Block)) ||
-                args.PropertyName.Equals(nameof(DmsData.RequestID)))
-            {
-                OnPropertyChanged(nameof(DmsData));
-            }
-        }
 
         private void PalDataChanged(object sender, PropertyChangedEventArgs args)
         {

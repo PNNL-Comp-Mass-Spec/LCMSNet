@@ -12,10 +12,10 @@
     <UserControl.Resources>
         <CollectionViewSource x:Key="DataViewSource" Source="{Binding Data}">
             <CollectionViewSource.SortDescriptions>
-                <componentModel:SortDescription Direction="Ascending" PropertyName="DmsData.Batch" />
-                <componentModel:SortDescription Direction="Ascending" PropertyName="DmsData.Block" />
-                <componentModel:SortDescription Direction="Ascending" PropertyName="DmsData.RunOrder" />
-                <componentModel:SortDescription Direction="Ascending" PropertyName="DmsData.RequestID" />
+                <componentModel:SortDescription Direction="Ascending" PropertyName="Batch" />
+                <componentModel:SortDescription Direction="Ascending" PropertyName="Block" />
+                <componentModel:SortDescription Direction="Ascending" PropertyName="RunOrder" />
+                <componentModel:SortDescription Direction="Ascending" PropertyName="RequestID" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
     </UserControl.Resources>
@@ -30,7 +30,7 @@
                 <Style.Triggers>
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding DmsData.CartName}" Value="unknown" />
+                            <Condition Binding="{Binding CartName}" Value="unknown" />
                             <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="False" />
                         </MultiDataTrigger.Conditions>
                         <Setter Property="Background" Value="Yellow"/>
@@ -39,14 +39,14 @@
             </Style>
         </DataGrid.CellStyle>
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Request Name" Binding="{Binding DmsData.RequestName, Mode=OneWay}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Request #" Binding="{Binding DmsData.RequestID, Mode=OneWay}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Cart" Binding="{Binding DmsData.CartName, Mode=OneWay}" IsReadOnly="True" />
-            <DataGridTextColumn Header="EMSL User" Binding="{Binding DmsData.EMSLProposalUser, Mode=OneWay}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Usage Type" Binding="{Binding DmsData.EMSLUsageType, Mode=OneWay}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Batch" Binding="{Binding DmsData.Batch, Mode=OneWay}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Block" Binding="{Binding DmsData.Block, Mode=OneWay}" IsReadOnly="True" />
-            <DataGridTextColumn Header="Run Order" Binding="{Binding DmsData.RunOrder, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Request Name" Binding="{Binding RequestName, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Request #" Binding="{Binding RequestID, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Cart" Binding="{Binding CartName, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="EMSL User" Binding="{Binding EMSLProposalUser, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Usage Type" Binding="{Binding EMSLUsageType, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Batch" Binding="{Binding Batch, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Block" Binding="{Binding Block, Mode=OneWay}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Run Order" Binding="{Binding RunOrder, Mode=OneWay}" IsReadOnly="True" />
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>

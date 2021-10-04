@@ -115,8 +115,7 @@ namespace LcmsNet.SampleQueue.IO
             // DMS element
             var dmsElement = AddElementNoAttributes("DMS", ParentElement);
             // No return type needed, since these elements don't have any children
-            AddElementWithTypeAttribute("RequestNumber", dmsElement, "String", InpSample.DmsData.RequestID.ToString());
-            AddElementWithTypeAttribute("Comment", dmsElement, "String", InpSample.DmsData.Comment);
+            AddElementWithTypeAttribute("RequestNumber", dmsElement, "String", InpSample.DmsRequestId.ToString());
         }
 
         /// <summary>

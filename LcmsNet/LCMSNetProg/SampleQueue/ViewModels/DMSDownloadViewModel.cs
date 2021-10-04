@@ -54,7 +54,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region "Class variables"
 
-        private readonly List<SampleData> dmsRequestList = new List<SampleData>();
+        private readonly List<DmsDownloadData> dmsRequestList = new List<DmsDownloadData>();
         private string matchString;
 
         private string requestName = string.Empty;
@@ -258,7 +258,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private async Task FindDmsRequests()
         {
-            List<SampleData> tempRequestList;
+            List<DmsDownloadData> tempRequestList;
 
             // Fill an object with the data from the UI, then pass to DMSTools class to run the query
             var queryData = new SampleQueryData {
@@ -324,11 +324,11 @@ namespace LcmsNet.SampleQueue.ViewModels
             RequestsFoundString = tempRequestList.Count + " requests found";
 
             // Add the requests to the listview
-            var availReqList = new List<SampleData>();
+            var availReqList = new List<DmsDownloadData>();
             foreach (var request in tempRequestList)
             {
                 // Determine if already in list of requests
-                matchString = request.DmsData.RequestName;
+                matchString = request.RequestName;
                 var foundIndx = dmsRequestList.FindIndex(PredContainsRequestName);
                 if (foundIndx == -1)
                 {
@@ -339,7 +339,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 }
                 else
                 {
-                    if (dmsRequestList[foundIndx].DmsData.SelectedToRun)
+                    if (dmsRequestList[foundIndx].SelectedToRun)
                     {
                         // Request was found and is already in Requests To Run list, so do nothing
                     }
@@ -367,9 +367,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        private List<SampleData> GetDMSData(SampleQueryData queryData)
+        private List<DmsDownloadData> GetDMSData(SampleQueryData queryData)
         {
-            var tempRequestList = new List<SampleData>();
+            var tempRequestList = new List<DmsDownloadData>();
 
             // Get a list of requests from DMS
             try
@@ -407,11 +407,11 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="inputData">List containing downloaded samples</param>
         /// <returns>TRUE if any samples have blocking enabled; otherwise FALSE</returns>
-        private bool IsBlockingEnabled(List<SampleData> inputData)
+        private bool IsBlockingEnabled(List<DmsDownloadData> inputData)
         {
             foreach (var testSample in inputData)
             {
-                if (testSample.DmsData.Block > 0)
+                if (testSample.Block > 0)
                 {
                     // Blocking is enabled for this sample, no further test required
                     return true;
@@ -443,7 +443,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             foreach (var tempItem in data)
             {
                 // Update main list of DMS items
-                tempItem.DmsData.SelectedToRun = true;
+                tempItem.SelectedToRun = true;
             }
         }
 
@@ -460,7 +460,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 // Update main list of DMS items
                 if (!dmsRequestList.Remove(tempItem))
                 {
-                    var tempStr = "Request " + tempItem.DmsData.RequestName + " not found in requested run collection";
+                    var tempStr = "Request " + tempItem.RequestName + " not found in requested run collection";
                     MessageBox.Show(tempStr);
                     return;
                 }
@@ -473,9 +473,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         /// <param name="request">classDMSData object passed in from FindIndex method</param>
         /// <returns>True if match is made; otherwise False</returns>
-        private bool PredContainsRequestName(SampleData request)
+        private bool PredContainsRequestName(DmsDownloadData request)
         {
-            if (string.Equals(request.DmsData.RequestName, matchString, StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(request.RequestName, matchString, StringComparison.CurrentCultureIgnoreCase))
             {
                 return true;
             }
@@ -501,12 +501,21 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var retList = new List<SampleData>();
 
-            foreach (var tempSampleData in SelectedRequestData.Data)
+            foreach (var dmsData in SelectedRequestData.Data)
             {
-                //                  SampleData tempSampleData = CopyDMSDataObj(tempDMSData);
+                var tempSampleData = new SampleData(true, new DMSData(dmsData))
+                {
+                    PAL =
+                    {
+                        Well = dmsData.PalWell,
+                        WellPlate = dmsData.PalWellPlate
+                    }
+                };
+
                 retList.Add(tempSampleData);
             }
-//              classStatusTools.SendStatusMsg("Adding " + retList.Count.ToString() + " samples from DMS");
+
+//            classStatusTools.SendStatusMsg("Adding " + retList.Count.ToString() + " samples from DMS");
             return retList;
         }
 

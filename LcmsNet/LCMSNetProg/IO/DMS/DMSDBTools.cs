@@ -520,7 +520,7 @@ namespace LcmsNet.IO.DMS
             }
         }
 
-        private IEnumerable<SampleData> ReadRequestedRunsFromDMS(SampleQueryData queryData)
+        private IEnumerable<DmsDownloadData> ReadRequestedRunsFromDMS(SampleQueryData queryData)
         {
             var connStr = GetConnectionString();
 
@@ -546,31 +546,27 @@ namespace LcmsNet.IO.DMS
                 {
                     while (reader.Read())
                     {
-                        var tmpDMSData = new SampleData(false)
+                        var tmpDMSData = new DmsDownloadData()
                         {
-                            // Sets the properties on the existing sub-object, which is why this is valid.
-                            DmsData =
-                            {
-                                RequestID = reader["Request"].CastDBValTo<int>(),
-                                RequestName = reader["Name"].CastDBValTo<string>(),
-                                CartName = reader["Cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                Comment = reader["Comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                EMSLUsageType = reader["Usage Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                EMSLProposalUser = reader["EUS Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                                Block = reader["Block"].CastDBValTo<int>(),
-                                RunOrder = reader["RunOrder"].CastDBValTo<int>(),
-                                Batch = reader["Batch"].CastDBValTo<int>(),
-                                SelectedToRun = false
-                            }
+                            RequestID = reader["Request"].CastDBValTo<int>(),
+                            RequestName = reader["Name"].CastDBValTo<string>(),
+                            CartName = reader["Cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                            Comment = reader["Comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                            EMSLUsageType = reader["Usage Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                            EMSLProposalUser = reader["EUS Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                            Block = reader["Block"].CastDBValTo<int>(),
+                            RunOrder = reader["RunOrder"].CastDBValTo<int>(),
+                            Batch = reader["Batch"].CastDBValTo<int>(),
+                            SelectedToRun = false
                         };
 
                         var wellNumber = reader["Well Number"].CastDBValTo<string>();
-                        tmpDMSData.PAL.Well = ConvertWellStringToInt(wellNumber);
+                        tmpDMSData.PalWell = ConvertWellStringToInt(wellNumber);
 
-                        tmpDMSData.PAL.WellPlate = reader["Wellplate Number"].CastDBValTo<string>();
+                        tmpDMSData.PalWellPlate = reader["Wellplate Number"].CastDBValTo<string>();
 
-                        if (string.IsNullOrWhiteSpace(tmpDMSData.PAL.WellPlate) || tmpDMSData.PAL.WellPlate == "na")
-                            tmpDMSData.PAL.WellPlate = "";
+                        if (string.IsNullOrWhiteSpace(tmpDMSData.PalWellPlate) || tmpDMSData.PalWellPlate == "na")
+                            tmpDMSData.PalWellPlate = "";
 
                         yield return tmpDMSData;
                     }
@@ -648,7 +644,7 @@ namespace LcmsNet.IO.DMS
         /// Gets a list of samples (essentially requested runs) from DMS
         /// </summary>
         /// <remarks>Retrieves data from view V_Requested_Run_Active_Export</remarks>
-        public IEnumerable<SampleData> GetRequestedRunsFromDMS(SampleQueryData queryData)
+        public IEnumerable<DmsDownloadData> GetRequestedRunsFromDMS(SampleQueryData queryData)
         {
             try
             {
@@ -659,7 +655,7 @@ namespace LcmsNet.IO.DMS
                 ErrMsg = "Exception getting run request list";
                 //                  throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
-                return Enumerable.Empty<SampleData>();
+                return Enumerable.Empty<DmsDownloadData>();
             }
         }
     }

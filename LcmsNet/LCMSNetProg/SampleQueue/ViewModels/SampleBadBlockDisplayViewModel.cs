@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -20,7 +19,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleBadBlockDisplayViewModel(List<SampleData> samples)
         {
-            BadSamples = samples.Select(sample => new BlockErrorData(sample.DmsData.Batch, sample.DmsData.Block,
+            BadSamples = samples.Select(sample => new BlockErrorData(sample.DmsData?.Batch ?? 0, sample.DmsData?.Block ?? 0,
                 sample.ColumnIndex + 1, sample.Name, sample.LCMethodName)).ToList().AsReadOnly();
         }
 

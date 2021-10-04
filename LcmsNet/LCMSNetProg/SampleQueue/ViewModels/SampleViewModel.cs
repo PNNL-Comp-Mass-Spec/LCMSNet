@@ -49,7 +49,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 this.RaisePropertyChanged(nameof(StatusToolTipText));
             });
 
-            this.WhenAnyValue(x => x.Sample.DmsData, x => x.Sample.Name, x => x.Sample.DmsData.RequestName).Subscribe(x =>
+            this.WhenAnyValue(x => x.Sample.Name).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(Name));
                 this.RaisePropertyChanged(nameof(IsUnusedSample));
@@ -67,15 +67,12 @@ namespace LcmsNet.SampleQueue.ViewModels
                 x => x.Sample.ActualLCMethod.ActualStart, x => x.Sample.ActualLCMethod.ActualEnd).Subscribe(x => this.RaisePropertyChanged(nameof(SequenceToolTipText)));
 
             // Extras to trigger the collection monitor when nested properties change
-            this.WhenAnyValue(x => x.Sample.DmsData.Block, x => x.Sample.DmsData.RunOrder, x => x.Sample.DmsData.Batch,
-                    x => x.Sample.PAL.PALTray, x => x.Sample.PAL.Well)
+            this.WhenAnyValue(x => x.Sample.PAL.PALTray, x => x.Sample.PAL.Well)
                 .Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
             this.WhenAnyValue(x => x.Sample.SequenceID, x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
             this.WhenAnyValue(x => x.Sample.LCMethodName).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethodName)));
 
-            this.WhenAnyValue(x => x.Sample.DmsData.Block).Subscribe(x => this.RaisePropertyChanged(nameof(IsBlockedSample)));
-
-            Sample.WhenAnyValue(x => x.InstrumentMethod, x => x.PAL, x => x.DmsData, x => x.LCMethodName)
+            Sample.WhenAnyValue(x => x.InstrumentMethod, x => x.PAL, x => x.LCMethodName)
                 .Subscribe(x => this.RaisePropertyChanged(nameof(Sample)));
 
             Sample.WhenAnyValue(x => x.ActualLCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(LcMethodCueBannerText)));
@@ -88,7 +85,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region Row and cell color control
 
-        public bool IsBlockedSample => Sample.DmsData.Block > 0;
+        public bool IsBlockedSample => (Sample.DmsData?.Block ?? 0) > 0;
 
         /// <summary>
         /// If the name of the sample is "(unused)", it means that the Sample Queue has backfilled the
@@ -149,7 +146,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                         SequenceToolTipFormat = "Started: {2}\nFinished: {3}";
                         break;
                     case SampleRunningStatus.Error:
-                        if (Sample.DmsData.Block > 0)
+                        if (Sample.DmsData != null && Sample.DmsData.Block > 0)
                         {
                             statusMessage =
                                 "There was an error and this sample was part of a block.  You should re-run the block of samples";
@@ -160,7 +157,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                         }
                         break;
                     case SampleRunningStatus.Stopped:
-                        if (Sample.DmsData.Block > 0)
+                        if (Sample.DmsData != null && Sample.DmsData.Block > 0)
                         {
                             statusMessage =
                                 "The sample was stopped but was part of a block.  You should re-run the block of samples";
@@ -266,7 +263,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                         statusMessage = "Complete";
                         break;
                     case SampleRunningStatus.Error:
-                        if (Sample.DmsData.Block > 0)
+                        if (Sample.DmsData != null && Sample.DmsData.Block > 0)
                         {
                             statusMessage = "Block Error";
                         }

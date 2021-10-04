@@ -4,8 +4,7 @@ using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
-using LcmsNet.Data;
-using LcmsNetSDK.Data;
+using LcmsNet.IO.DMS;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -19,15 +18,15 @@ namespace LcmsNet.SampleQueue.ViewModels
             Data = dataBound;
         }
 
-        private SampleData selectedItem;
+        private DmsDownloadData selectedItem;
 
-        private readonly SourceList<SampleData> dataList = new SourceList<SampleData>();
+        private readonly SourceList<DmsDownloadData> dataList = new SourceList<DmsDownloadData>();
 
-        public ReadOnlyObservableCollection<SampleData> Data { get; }
+        public ReadOnlyObservableCollection<DmsDownloadData> Data { get; }
 
-        public ObservableCollectionExtended<SampleData> SelectedData { get; } = new ObservableCollectionExtended<SampleData>();
+        public ObservableCollectionExtended<DmsDownloadData> SelectedData { get; } = new ObservableCollectionExtended<DmsDownloadData>();
 
-        public SampleData SelectedItem
+        public DmsDownloadData SelectedItem
         {
             get => selectedItem;
             set => this.RaiseAndSetIfChanged(ref selectedItem, value);
@@ -37,22 +36,22 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public event EventHandler<EventArgs> SetSortBatchBlockRunOrder;
 
-        public void AddSample(SampleData sample)
+        public void AddSample(DmsDownloadData sample)
         {
             dataList.Add(sample);
         }
 
-        public void AddSamples(IEnumerable<SampleData> samples)
+        public void AddSamples(IEnumerable<DmsDownloadData> samples)
         {
             dataList.AddRange(samples);
         }
 
-        public void RemoveSample(SampleData sample)
+        public void RemoveSample(DmsDownloadData sample)
         {
             dataList.Remove(sample);
         }
 
-        public void RemoveSamples(IEnumerable<SampleData> samples)
+        public void RemoveSamples(IEnumerable<DmsDownloadData> samples)
         {
             dataList.RemoveMany(samples);
         }

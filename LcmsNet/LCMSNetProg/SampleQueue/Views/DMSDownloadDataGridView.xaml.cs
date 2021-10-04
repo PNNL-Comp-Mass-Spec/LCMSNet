@@ -6,10 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
-using LcmsNet.Data;
-using LcmsNet.Method.ViewModels;
+using LcmsNet.IO.DMS;
 using LcmsNet.SampleQueue.ViewModels;
-using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.Views
@@ -40,7 +38,7 @@ namespace LcmsNet.SampleQueue.Views
 
             dc.SelectedData.Clear();
             //dc.SelectedData.AddRange(selector.SelectedItems.Cast<DMSDownloadDataGridViewModel>());
-            dc.SelectedData.AddRange(selector.SelectedItems.Cast<SampleData>());
+            dc.SelectedData.AddRange(selector.SelectedItems.Cast<DmsDownloadData>());
         }
 
         private void DmsDownloadData_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

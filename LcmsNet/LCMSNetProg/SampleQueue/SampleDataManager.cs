@@ -245,14 +245,9 @@ namespace LcmsNet.SampleQueue
                 RunningStatus = SampleRunningStatus.Error,
                 SampleErrors = "",
             }));
-            samplesList.Add(new SampleViewModel(new SampleData(true, true)
+            samplesList.Add(new SampleViewModel(new SampleData(true, new DMSData("Design_Dataset_ErrorBlocked", 1))
             {
                 Name = "Design_Dataset_ErrorBlocked",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_ErrorBlocked",
-                    Block = 1,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Error,
@@ -266,14 +261,9 @@ namespace LcmsNet.SampleQueue
                 RunningStatus = SampleRunningStatus.Stopped,
                 SampleErrors = "",
             }));
-            samplesList.Add(new SampleViewModel(new SampleData(true, true)
+            samplesList.Add(new SampleViewModel(new SampleData(true, new DMSData("Design_Dataset_StoppedBlocked", 1))
             {
                 Name = "Design_Dataset_StoppedBlocked",
-                DmsData = new DMSData()
-                {
-                    RequestName = "Design_Dataset_StoppedBlocked",
-                    Block = 1,
-                },
                 ColumnIndex = 0,
                 IsDuplicateRequestName = false,
                 RunningStatus = SampleRunningStatus.Stopped,
@@ -384,9 +374,8 @@ namespace LcmsNet.SampleQueue
             samplesList.Connect().WhenPropertyChanged(x => x.Sample.IsDuplicateRequestName).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender.Sample));
             // TODO: Check for side effects
             // TODO: The idea of this is that it would detect the minor changes to the queue, where a value was changed using the databinding. There needs to be a lockout for actions not taken via the databinding, since those already handle this process...
-            samplesList.Connect().WhenAnyPropertyChanged(nameof(SampleViewModel.Name), nameof(SampleViewModel.Sample.DmsData),
-                nameof(SampleViewModel.Sample.PAL), nameof(SampleViewModel.Sample.InstrumentMethod), nameof(SampleViewModel.ColumnNumber),
-                nameof(SampleViewModel.InstrumentMethod), nameof(SampleViewModel.Sample.LCMethodName), nameof(SampleViewModel.Sample.SequenceID))
+            samplesList.Connect().WhenAnyPropertyChanged(nameof(SampleViewModel.Name), nameof(SampleViewModel.Sample.PAL), nameof(SampleViewModel.Sample.InstrumentMethod),
+                    nameof(SampleViewModel.ColumnNumber), nameof(SampleViewModel.InstrumentMethod), nameof(SampleViewModel.Sample.LCMethodName), nameof(SampleViewModel.Sample.SequenceID))
                 .Throttle(TimeSpan.FromSeconds(.25))
                 .Subscribe(this.ChangeMade);
 
@@ -968,7 +957,7 @@ namespace LcmsNet.SampleQueue
         /// <returns>New object reference of a sample with only required data copied.</returns>
         public SampleData CopyRequiredSampleData(SampleData sampleToCopy)
         {
-            var newSample = new SampleData(false, false)
+            var newSample = new SampleData(false)
             {
                 Name = string.Format("{0}_{1:0000}",
                     SampleQueue.DefaultSampleName,

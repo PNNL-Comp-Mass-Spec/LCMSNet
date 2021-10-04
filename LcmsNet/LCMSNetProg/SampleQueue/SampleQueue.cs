@@ -1745,13 +1745,7 @@ namespace LcmsNet.SampleQueue
 
                 if (realSample.LCMethodName == null)
                 {
-                    var requestOrDatasetName = "?";
-                    if (realSample.DmsData != null)
-                    {
-                        requestOrDatasetName = realSample.Name;
-                        if (string.IsNullOrWhiteSpace(requestOrDatasetName))
-                            requestOrDatasetName = realSample.DmsData.RequestName;
-                    }
+                    var requestOrDatasetName = realSample.Name;
 
                     ApplicationLogger.LogError(0, "Method not defined for sample ID " + realSample.UniqueID + ", " + requestOrDatasetName);
                     continue;

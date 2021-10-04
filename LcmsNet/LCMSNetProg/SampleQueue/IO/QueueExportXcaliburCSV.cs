@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 
 namespace LcmsNet.SampleQueue.IO
@@ -25,44 +24,6 @@ namespace LcmsNet.SampleQueue.IO
         {
             var outString = BuildOutputString(data);
             WriteOutputFile(outString, path);
-        }
-
-        /// <summary>
-        /// Compares column ID's for two samples
-        /// </summary>
-        /// <param name="sample1">First sample to be compared</param>
-        /// <param name="sample2">2nd sample to be compared</param>
-        /// <returns>0 if equal, 1 if 1st sample's column ID > 2nd, otherwise -1</returns>
-        private static int CompareSamplesByRunOrder(SampleData sample1, SampleData sample2)
-        {
-            if (sample1 == null)
-            {
-                if (sample2 == null)
-                {
-                    // if sample1 is null and sample2 is null, they're equal)
-                    return 0;
-                }
-                // If sample1 is null and sample2 is not null, sample2 is greater
-                return -1;
-            }
-            if (sample2 == null)
-            {
-                // If sample1 is not null and sample2 is null, sample1 is greater
-                return 1;
-            }
-            // Neither input is null, so compare the column indices
-            if (sample1.DmsData.RunOrder == sample2.DmsData.RunOrder)
-            {
-                // Run orders are equal
-                return 0;
-            }
-            if (sample1.DmsData.RunOrder > sample2.DmsData.RunOrder)
-            {
-                // sample 1 run order is > sample2 run order
-                return 1;
-            }
-            //  sample 1 run order < run order
-            return -1;
         }
 
         /// <summary>

@@ -861,7 +861,7 @@ namespace LcmsNet.Method
                 {
 
                     String datasetName;
-                    if (samples[columnID] != null && samples[columnID].DmsData != null)
+                    if (samples[columnID] != null)
                         datasetName = samples[columnID].Name;
                     else
                         datasetName = "Unknown_Dataset since samples[columnID] is null for columnID = " + columnID;
