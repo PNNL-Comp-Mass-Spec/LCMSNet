@@ -520,69 +520,6 @@ namespace LcmsNet.IO.DMS
             }
         }
 
-        private IEnumerable<KeyValuePair<int, int>> ReadMRMFileListFromDMS(int minID, int maxID)
-        {
-            var connStr = GetConnectionString();
-            var sqlCmd = "SELECT ID, RDS_MRM_Attachment FROM T_Requested_Run WHERE (not RDS_MRM_Attachment is null) " +
-                         "AND (ID BETWEEN " + minID + " AND " + maxID + ")";
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return new KeyValuePair<int, int>(
-                            reader["ID"].CastDBValTo<int>(),
-                            reader["RDS_MRM_Attachment"].CastDBValTo<int>()
-                        );
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<(string FileName, string FileContents)> ReadMRMFilesFromDMS(string fileIndexList)
-        {
-            var connStr = GetConnectionString();
-            var sqlCmd = "SELECT File_Name, Contents FROM T_Attachments WHERE ID IN (" + fileIndexList + ")";
-
-            var cn = GetConnection(connStr);
-            if (!cn.IsValid)
-            {
-                cn.Dispose();
-                throw new Exception(cn.FailedConnectionAttemptMessage);
-            }
-
-            using (cn)
-            using (var cmd = cn.CreateCommand())
-            {
-                cmd.CommandText = sqlCmd;
-                cmd.CommandType = CommandType.Text;
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return (
-                            reader["File_Name"].CastDBValTo<string>(),
-                            reader["Contents"].CastDBValTo<string>()
-                        );
-                    }
-                }
-            }
-        }
-
         private IEnumerable<SampleData> ReadRequestedRunsFromDMS(SampleQueryData queryData)
         {
             var connStr = GetConnectionString();
@@ -618,6 +555,10 @@ namespace LcmsNet.IO.DMS
                                 RequestName = reader["Name"].CastDBValTo<string>(),
                                 CartName = reader["Cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
                                 Comment = reader["Comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                                Block = reader["Block"].CastDBValTo<int>(),
+                                RunOrder = reader["RunOrder"].CastDBValTo<int>(),
+                                Batch = reader["Batch"].CastDBValTo<int>(),
+                                SelectedToRun = false
                             }
                         };
 
@@ -628,12 +569,6 @@ namespace LcmsNet.IO.DMS
 
                         if (string.IsNullOrWhiteSpace(tmpDMSData.PAL.WellPlate) || tmpDMSData.PAL.WellPlate == "na")
                             tmpDMSData.PAL.WellPlate = "";
-
-                        tmpDMSData.DmsData.MRMFileID = reader["MRMFileID"].CastDBValTo<int>();
-                        tmpDMSData.DmsData.Block = reader["Block"].CastDBValTo<int>();
-                        tmpDMSData.DmsData.RunOrder = reader["RunOrder"].CastDBValTo<int>();
-                        tmpDMSData.DmsData.Batch = reader["Batch"].CastDBValTo<int>();
-                        tmpDMSData.DmsData.SelectedToRun = false;
 
                         yield return tmpDMSData;
                     }
@@ -687,10 +622,8 @@ namespace LcmsNet.IO.DMS
                 {
                     var tableNames = new List<string>()
                     {
-                        "V_LC_Cart_Config_Export", "V_Charge_Code_Export", "V_LC_Cart_Active_Export",
-                        "V_LCMSNet_Dataset_Export", "V_LCMSNet_Column_Export", "T_Secondary_Sep", "t_DatasetTypeName",
-                        "V_Active_Users", "V_LCMSNet_Experiment_Export", "V_EUS_Proposal_Users",
-                        "V_Instrument_Info_LCMSNet", "V_Requested_Run_Active_Export", "T_Attachments", "T_Requested_Run"
+                        "V_LC_Cart_Active_Export",
+                        "T_Requested_Run"
                     };
 
                     foreach (var tableName in tableNames)
@@ -726,60 +659,6 @@ namespace LcmsNet.IO.DMS
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return Enumerable.Empty<SampleData>();
             }
-        }
-
-        /// <summary>
-        /// Adds data for block of MRM files to file data list
-        /// </summary>
-        /// <param name="fileIndexList">Comma-separated list of file indices needing data</param>
-        /// <param name="fileData">List of file names and contents; new data will be appended to this list</param>
-        public void GetMRMFilesFromDMS(string fileIndexList, List<(string FileName, string FileContents)> fileData)
-        {
-            if (fileData == null)
-            {
-                throw new ArgumentNullException(nameof(fileData), "fileData must be initialized before calling GetMRMFilesFromDMS");
-            }
-
-            // Get the data from DMS
-            try
-            {
-                fileData.AddRange(ReadMRMFilesFromDMS(fileIndexList));
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting MRM file data from DMS";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                throw new DatabaseDataException(ErrMsg, ex);
-            }
-        }
-
-        /// <summary>
-        /// Gets a list of MRM files to retrieve
-        /// </summary>
-        /// <param name="minID">Minimum request ID for MRM file search</param>
-        /// <param name="maxID"></param>
-        /// <returns></returns>
-        public Dictionary<int, int> GetMRMFileListFromDMS(int minID, int maxID)
-        {
-            var retList = new Dictionary<int, int>();
-
-            // Get the data from DMS
-            try
-            {
-                // Pull the data from the table
-                foreach (var file in ReadMRMFileListFromDMS(minID, maxID))
-                {
-                    retList.Add(file.Key, file.Value);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrMsg = "Exception getting MRM file list from DMS";
-                ApplicationLogger.LogError(0, ErrMsg, ex);
-                throw new DatabaseDataException(ErrMsg, ex);
-            }
-
-            return retList;
         }
     }
 }

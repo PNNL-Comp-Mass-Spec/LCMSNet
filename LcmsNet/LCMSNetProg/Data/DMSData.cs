@@ -18,7 +18,6 @@ namespace LcmsNet.Data
             Block = -1;
             CartName = "";
             Comment = "";
-            MRMFileID = -1;
             RequestID = 0;
             RequestName = "";
             RunOrder = -1;
@@ -34,7 +33,6 @@ namespace LcmsNet.Data
             Block = -1;
             CartName = "";
             Comment = "";
-            MRMFileID = -1;
             RequestID = 0;
             RequestName = "";
             RunOrder = -1;
@@ -53,7 +51,6 @@ namespace LcmsNet.Data
             newData.Block = Block;
             newData.CartName = CartName;
             newData.Comment = Comment;
-            newData.MRMFileID = MRMFileID;
             newData.RequestID = RequestID;
             newData.RequestName = RequestName;
             newData.RunOrder = RunOrder;
@@ -72,7 +69,6 @@ namespace LcmsNet.Data
         private bool selectedToRun;
         private string cartName;
         private string comment;
-        private int mrmFileId;
 
         #endregion
 
@@ -128,15 +124,6 @@ namespace LcmsNet.Data
         {
             get => comment;
             set => this.RaiseAndSetIfChanged(ref comment, value);
-        }
-
-        /// <summary>
-        /// File ID for locating MRM file to download
-        /// </summary>
-        public int MRMFileID
-        {
-            get => mrmFileId;
-            set => this.RaiseAndSetIfChanged(ref mrmFileId, value);
         }
 
         /// <summary>

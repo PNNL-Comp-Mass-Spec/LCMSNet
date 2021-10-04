@@ -1089,7 +1089,6 @@ namespace LcmsNet.SampleQueue
             newSample.DmsData.Batch = 0;
             newSample.DmsData.Block = 0;
             newSample.DmsData.Comment = "Blank";
-            newSample.DmsData.MRMFileID = 0;
             newSample.DmsData.RequestID = 0;
             newSample.DmsData.RunOrder = 0;
 

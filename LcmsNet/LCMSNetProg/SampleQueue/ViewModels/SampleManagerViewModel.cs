@@ -300,24 +300,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        /// <summary>
-        /// Exports the MRM Files
-        /// </summary>
-        public void ExportMRMFiles()
-        {
-            var folderDialog = new CommonOpenFileDialog()
-            {
-                IsFolderPicker = true,
-            };
-
-            if (folderDialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                var mrmFilePath = folderDialog.FileName;
-                var mrmWriter = new MRMFileExporter();
-                sampleQueue.SaveQueue(mrmFilePath, mrmWriter, true);
-            }
-        }
-
         #endregion
 
         #region Form Event Handlers

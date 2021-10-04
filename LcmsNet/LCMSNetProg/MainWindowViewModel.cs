@@ -92,7 +92,6 @@ namespace LcmsNet
             ExportQueueToXmlCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXML(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToCsvCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToCsv(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToXcaliburCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXcalibur(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ExportQueueToMRMCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportMRMFiles(), this.WhenAnyValue(x => x.QueueTabSelected));
 
             this.WhenAnyValue(x => x.SampleManagerVm.TitleBarTextAddition).Subscribe(x => this.RaisePropertyChanged(nameof(WindowTitle)));
         }
@@ -109,7 +108,6 @@ namespace LcmsNet
         public ReactiveCommand<Unit, Unit> ExportQueueToXmlCommand { get; }
         public ReactiveCommand<Unit, Unit> ExportQueueToCsvCommand { get; }
         public ReactiveCommand<Unit, Unit> ExportQueueToXcaliburCommand { get; }
-        public ReactiveCommand<Unit, Unit> ExportQueueToMRMCommand { get; }
 
         #endregion
 
