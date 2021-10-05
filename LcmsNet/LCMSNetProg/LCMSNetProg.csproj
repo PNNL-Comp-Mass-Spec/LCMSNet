@@ -142,11 +142,6 @@
     <Compile Include="IO\DMS\DMSDBTools.cs" />
     <Compile Include="IO\DMS\ExtensionMethods.cs" />
     <Compile Include="IO\DMS\DatabaseDataException.cs" />
-    <Compile Include="IO\SQLite\DatabaseTableTypes.cs" />
-    <Compile Include="IO\SQLite\ExtensionMethods.cs" />
-    <Compile Include="IO\SQLite\PropertyToColumnMapping.cs" />
-    <Compile Include="IO\SQLite\SQLiteCacheIO.cs" />
-    <Compile Include="IO\SQLite\SQLiteTools.cs" />
     <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />
     <Compile Include="IO\DeviceNotifierConfigurationXMLWriter.cs" />
     <Compile Include="IO\DeviceNotifierConfigurationXMLReader.cs" />
@@ -270,9 +265,11 @@
     </Compile>
     <Compile Include="SampleQueue\DataExportException.cs" />
     <Compile Include="SampleQueue\DataImportException.cs" />
-    <Compile Include="SampleQueue\IO\QueueCacheCSV.cs" />
+    <Compile Include="SampleQueue\IO\CsvCache.cs" />
+    <Compile Include="SampleQueue\IO\QueueCacheLcmsCSV.cs" />
     <Compile Include="SampleQueue\IO\QueueImportClipboard.cs" />
     <Compile Include="SampleQueue\IO\QueueImportCSV.cs" />
+    <Compile Include="SampleQueue\IO\SampleCacheData.cs" />
     <Compile Include="SampleQueue\IO\SampleImportInfo.cs" />
     <Compile Include="SampleQueue\SampleQueue.cs" />
     <Compile Include="SampleQueue\SampleQueueArgs.cs" />
@@ -283,9 +280,7 @@
     <Compile Include="SampleQueue\IO\MethodFileTools.cs" />
     <Compile Include="SampleQueue\IO\QueueExportCSV.cs" />
     <Compile Include="SampleQueue\IO\QueueExportXcaliburCSV.cs" />
-    <Compile Include="SampleQueue\IO\QueueExportSQLite.cs" />
     <Compile Include="SampleQueue\IO\QueueExportXML.cs" />
-    <Compile Include="SampleQueue\IO\QueueImportSQLite.cs" />
     <Compile Include="SampleQueue\IO\QueueImportXML.cs" />
     <Compile Include="SampleQueue\SampleDataManager.cs" />
     <Compile Include="SampleQueue\SampleQueueUndoRedo.cs" />

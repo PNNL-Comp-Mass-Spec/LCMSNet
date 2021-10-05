@@ -61,7 +61,7 @@ namespace LcmsNet.Properties {
 
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("LCMSCache.que")]
+        [global::System.Configuration.DefaultSettingValueAttribute("LCMSCache.lcms.csv")]
         public string CacheFileName {
             get {
                 return ((string)(this["CacheFileName"]));

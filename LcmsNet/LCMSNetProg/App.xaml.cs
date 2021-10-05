@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using LcmsNet.Devices;
 using LcmsNet.IO.DMS;
-using LcmsNet.IO.SQLite;
 using LcmsNet.Method;
 using LcmsNet.Properties;
 using LcmsNet.SampleQueue.IO;
@@ -658,15 +657,13 @@ namespace LcmsNet
             // Create the method manager
             //LogMessage(-1, "Creating the Method Manager");
 
-            SQLiteTools.SetDefaultDirectoryPath(() => PersistDataPaths.LocalDataPath);
-            SQLiteTools.SetCacheLocation(LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME));
-            LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, SQLiteTools.CacheName);
+            CsvCache.SetDefaultDirectoryPath(() => PersistDataPaths.LocalDataPath);
+            CsvCache.SetCacheLocation(LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME));
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, CsvCache.CacheName);
             LogMessage(-1, "Loading DMS data");
 
             try
             {
-                SQLiteTools.DisableInMemoryCaching = true;
-
                 var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
             }

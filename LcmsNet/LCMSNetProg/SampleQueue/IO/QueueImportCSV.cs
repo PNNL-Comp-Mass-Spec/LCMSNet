@@ -6,7 +6,6 @@ using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue.IO
 {

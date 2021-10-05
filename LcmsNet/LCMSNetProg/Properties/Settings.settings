@@ -15,7 +15,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="CacheFileName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">LCMSCache.que</Value>
+      <Value Profile="(Default)">LCMSCache.lcms.csv</Value>
     </Setting>
     <Setting Name="ColumnName0" Type="System.String" Scope="User">
       <Value Profile="(Default)">NOTSET</Value>

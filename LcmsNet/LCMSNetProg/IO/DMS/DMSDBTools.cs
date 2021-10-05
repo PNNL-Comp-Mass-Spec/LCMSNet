@@ -9,7 +9,6 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Schema;
 using LcmsNet.Data;
-using LcmsNet.IO.SQLite;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;

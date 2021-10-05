@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using LcmsNet.Data;
-using LcmsNet.IO.SQLite;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
@@ -2047,24 +2046,21 @@ namespace LcmsNet.SampleQueue
         #region Cache and Save Operations
 
         /// <summary>
-        /// Writes each of the queue lists to a SQLite cache file
+        /// Writes each of the queue lists to a CSV cache file
         /// </summary>
-        public void CacheQueue(bool buildConnectionString)
+        public void CacheQueue()
         {
-            // This means that we have to recompile the data ...
-            if (buildConnectionString)
-            {
-                SQLiteTools.BuildConnectionString(true);
-            }
-
             // Clean up the queues first
             m_waitingQueue.RemoveAll(x => m_completeQueue.Any(y => y.Name.Equals(x.Name)));
             m_waitingQueue.RemoveAll(x => m_runningQueue.Any(y => y.Name.Equals(x.Name)));
             m_runningQueue.RemoveAll(x => m_completeQueue.Any(y => y.Name.Equals(x.Name)));
 
-            SQLiteTools.SaveQueueToCache(m_waitingQueue, DatabaseTableTypes.WaitingQueue);
-            SQLiteTools.SaveQueueToCache(m_runningQueue, DatabaseTableTypes.RunningQueue);
-            SQLiteTools.SaveQueueToCache(m_completeQueue, DatabaseTableTypes.CompletedQueue);
+            var saveQueue = new List<SampleData>();
+            saveQueue.AddRange(m_completeQueue);
+            saveQueue.AddRange(m_runningQueue);
+            saveQueue.AddRange(m_waitingQueue);
+
+            CsvCache.SaveQueueToCache(saveQueue);
             IsDirty = false;
         }
 
@@ -2074,9 +2070,9 @@ namespace LcmsNet.SampleQueue
         /// <param name="cachePath"></param>
         public void CacheQueue(string cachePath)
         {
-            SQLiteTools.SetCacheLocation(cachePath);
-            LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, SQLiteTools.CacheName);
-            CacheQueue(true);
+            CsvCache.SetCacheLocation(cachePath);
+            LCMSSettings.SetParameter(LCMSSettings.PARAM_CACHEFILENAME, CsvCache.CacheName);
+            CacheQueue();
         }
 
         /// <summary>
@@ -2084,40 +2080,10 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void RetrieveQueueFromCache()
         {
-            RetrieveQueueFromCache(true);
-        }
-
-        public void RetrieveQueueFromCache(bool buildConnectionString)
-        {
-            lock (m_completeQueue)
-            {
-                m_completeQueue = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.CompletedQueue).ToList();
-
-                foreach (var sample in m_completeQueue)
-                {
-                    sample.RunningStatus = SampleRunningStatus.Complete;
-                    m_uniqueID.Add(sample.UniqueID);
-
-                    sample.SetActualLcMethod();
-                    if (LcmsNetSDK.Method.LCMethodManager.Manager.TryGetLCMethod(sample.LCMethodName, out var method))
-                    {
-                        // reset the column data.
-                        var column = CartConfiguration.Columns[method.Column];
-                        sample.ColumnIndex = column.ID;
-                    }
-
-                    if (sample.UniqueID >= m_sampleIndex)
-                        m_sampleIndex = Convert.ToInt32(sample.UniqueID + 1);
-
-                    if (sample.SequenceID >= m_sequenceIndex)
-                        m_sequenceIndex = Convert.ToInt32(sample.SequenceID + 1);
-                }
-            }
-
             //
             // Loads the samples and creates unique sequence ID's and unique id's
             //
-            var waitingSamples = SQLiteTools.GetQueueFromCache(DatabaseTableTypes.WaitingQueue).ToList();
+            var waitingSamples = CsvCache.GetQueueFromCache().ToList();
 
             //
             // Update the Waiting Sample queue with the right LC-Methods.  This makes sure

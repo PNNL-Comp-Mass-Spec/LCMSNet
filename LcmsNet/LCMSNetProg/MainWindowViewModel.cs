@@ -14,7 +14,6 @@ using LcmsNet.Devices.Pumps.ViewModels;
 using LcmsNet.Devices.ViewModels;
 using LcmsNet.Devices.Views;
 using LcmsNet.IO;
-using LcmsNet.IO.SQLite;
 using LcmsNet.Logging.ViewModels;
 using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
@@ -168,7 +167,7 @@ namespace LcmsNet
                         ), "Confirm Queue Save", MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
-                        sampleQueue.CacheQueue(true);
+                        sampleQueue.CacheQueue();
                     }
                 }
             }
@@ -310,7 +309,6 @@ namespace LcmsNet
         private bool canSimulate = true;
         private bool isMessageError = false;
         private bool queueTabSelected = true;
-        private readonly IDisposable sqliteDisposable = SQLiteTools.GetDisposable();
 
         /// <summary>
         /// Method Scheduler and execution engine.
@@ -877,8 +875,6 @@ namespace LcmsNet
             NotificationSystemVm.Dispose();
             FluidicsDesignVm.Dispose();
             DMSDataContainer.DBTools.CloseConnection();
-            SQLiteTools.CloseConnection();
-            sqliteDisposable.Dispose();
             TaskBarManipulation.Instance.Dispose();
         }
     }

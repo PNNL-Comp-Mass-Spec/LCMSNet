@@ -10,8 +10,6 @@ using System.Windows.Media;
 using DynamicData;
 using DynamicData.Binding;
 using LcmsNet.Data;
-using LcmsNet.IO.DMS;
-using LcmsNet.IO.SQLite;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;

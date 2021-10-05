@@ -11,7 +11,6 @@ using DynamicData;
 using LcmsNet.Configuration;
 using LcmsNet.Data;
 using LcmsNet.IO.DMS;
-using LcmsNet.IO.SQLite;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using ReactiveUI;

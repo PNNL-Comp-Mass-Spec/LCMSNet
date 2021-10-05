@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
-using DynamicData;
-using LcmsNet.IO.DMS;
-using LcmsNet.IO.SQLite;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Logging;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 

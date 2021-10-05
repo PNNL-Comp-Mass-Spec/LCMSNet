@@ -40,14 +40,14 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Default extension for the queue files.
         /// </summary>
-        private const string CONST_DEFAULT_QUEUE_EXTENSION = ".que";
+        private const string CONST_DEFAULT_QUEUE_EXTENSION = ".lcms.csv";
 
         /// <summary>
         /// Reference to the DMS View.
         /// </summary>
         private readonly DMSDownloadViewModel dmsView;
 
-        private string lastSavedFileName = "queue.que";
+        private string lastSavedFileName = "queue.lcms.csv";
 
         /// <summary>
         /// Manages adding the samples to the queue.
@@ -312,7 +312,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var fileDialog = new OpenFileDialog
             {
                 Title = "Load Queue",
-                Filter = "LCMSNet Queue (*.que)|*.que|CSV file|*.csv|LCMS VB6 XML File (*.xml)|*.xml"
+                Filter = "LCMSNet Queue (*.lcms.csv)|*.lcms.csv|CSV file|*.csv|LCMS VB6 XML File (*.xml)|*.xml"
             };
 
             var result = fileDialog.ShowDialog();
@@ -330,7 +330,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                         reader = new QueueImportCSV();
                         break;
                     case CONST_DEFAULT_QUEUE_EXTENSION:
-                        reader = new QueueImportSQLite();
+                        reader = new QueueCacheLcmsCSV();
                         break;
                 }
 
@@ -476,7 +476,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             try
             {
-                sampleQueue.CacheQueue(false);
+                sampleQueue.CacheQueue();
                 ApplicationLogger.LogMessage(0,
                     "Queue saved \"" + LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME) + "\".");
             }
@@ -495,8 +495,8 @@ namespace LcmsNet.SampleQueue.ViewModels
             var saveDialog = new SaveFileDialog
             {
                 Title = "Save Queue As",
-                FileName = lastSavedFileName.Replace(".xml", ".que").Replace(".csv", ".que"),
-                Filter = "LCMSNet Queue (*.que)|*.que"
+                FileName = lastSavedFileName.Replace(".xml", ".lcms.csv").Replace(".csv", ".lcms.csv"),
+                Filter = "LCMSNet Queue (*.lcms.csv)|*.lcms.csv"
             };
 
             var result = saveDialog.ShowDialog();
@@ -520,7 +520,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var saveDialog = new SaveFileDialog
             {
                 Title = "Export Queue to XML for LCMS VB6",
-                FileName = lastSavedFileName.Replace(".que", ".xml").Replace(".csv", ".xml"),
+                FileName = lastSavedFileName.Replace(".lcms.csv", ".xml").Replace(".csv", ".xml"),
                 Filter = "LCMS VB6 XML (*.xml)|*.xml"
             };
 
@@ -541,7 +541,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var saveDialog = new SaveFileDialog
             {
                 Title = "Export Queue to CSV",
-                FileName = lastSavedFileName.Replace(".xml", ".csv").Replace(".que", ".csv"),
+                FileName = lastSavedFileName.Replace(".xml", ".csv").Replace(".lcms.csv", ".csv"),
                 Filter = "Comma Separated (*.csv)|*.csv"
             };
 
@@ -562,7 +562,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var saveDialog = new SaveFileDialog
             {
                 Title = "Export Queue to XCalibur",
-                FileName = lastSavedFileName.Replace(".xml", ".csv").Replace(".que", ".csv"),
+                FileName = lastSavedFileName.Replace(".xml", ".csv").Replace(".lcms.csv", ".csv"),
                 Filter = "Comma Separated (*.csv)|*.csv"
             };
 
