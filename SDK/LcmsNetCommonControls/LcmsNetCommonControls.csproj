@@ -48,7 +48,7 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WpfExtras">
-      <HintPath>..\..\..\ExtLib\WpfExtras.dll</HintPath>
+      <HintPath>..\..\ExtLib\WpfExtras.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

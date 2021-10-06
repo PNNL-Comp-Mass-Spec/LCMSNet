@@ -1,8 +1,8 @@
-The LcmsNet Directory contains all of the "public" parts of LcmsNet. This 
-includes the main program, lcmsnetSDK, FluidicsSDK, SQLiteTools and public 
-documentation.
+The LcmsNet, SDK, DemoFiles, and Documentation Directories contains all of the 
+"public" parts of LcmsNet. This includes the main program, lcmsnetSDK, 
+FluidicsSDK, SQLiteTools and public documentation.
 
-The lcmsnetPlugins Directory contains the solution and projects for all of our 
+The Plugins Directory contains the solution and projects for all of our 
 lcmsnet device plugins and documentation.
 These plugins must be copied over into the /bin/x86/debug directory of the 
 main program manually in order to be tested or used in testing the main 
@@ -16,7 +16,7 @@ the PNNL default configuration file. Innosetup must be installed to make use
 of the installer creation script. It will need to be modified if the directory 
 structure of the repo changes.
 
-The lcmsnetPluginHardwareDocs Directory contains vendor documentation for the 
+The PluginHardwareDocs Directory contains vendor documentation for the 
 hardware operated by the plugins so far. Some hardware does not have 
 documentation or documentation could not be found at time of this README being 
 written.
@@ -35,11 +35,3 @@ no longer be of use. One project that is of use is the LogViewer application,
 it allows viewing and filtering of an SQLite database log file, so users may 
 easily find devices causing errors or problems in methods, or other issues 
 with LcmsNet
-
-The LcmsNetDmdTools Directory contains the solution for the DMS tools used by 
-lcmsnet to retrieve samples/queues from the dms network.
-
-The InternalLibs Directory is for non-public library files such as the 
-DMSTools library. Additionally, this directory contains a .gitignore file that 
-guarantees that while the directory exists within the repo, none of the files 
-are tracked.

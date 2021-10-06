@@ -67,7 +67,7 @@
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
 
-xcopy /y /f /d "$(ProjectDir)x86\ljackuw.dll" "$(SolutionDir)pluginDLLs\x86\"
-xcopy /y /f /d "$(ProjectDir)x64\ljackuw.dll" "$(SolutionDir)pluginDLLs\x64\"</PostBuildEvent>
+xcopy /y /f /d /i "$(ProjectDir)x86\ljackuw.dll" "$(SolutionDir)pluginDLLs\x86\"
+xcopy /y /f /d /i "$(ProjectDir)x64\ljackuw.dll" "$(SolutionDir)pluginDLLs\x64\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -26,19 +26,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EMSL.DocumentGenerator.Core">
-      <HintPath>..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.Core.dll</HintPath>
+      <HintPath>..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.Core.dll</HintPath>
     </Reference>
     <Reference Include="EMSL.DocumentGenerator.PDFSharp">
-      <HintPath>..\..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.PDFSharp.dll</HintPath>
+      <HintPath>..\..\lib\SDK\DocumentGenerator\EMSL.DocumentGenerator.PDFSharp.dll</HintPath>
     </Reference>
     <Reference Include="LcmsNetSdk">
-      <HintPath>..\..\..\lib\Plugins\LCMSNet\LcmsNetSdk.dll</HintPath>
+      <HintPath>..\..\lib\Plugins\LCMSNet\LcmsNetSdk.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\lib\Plugins\LCMSNet\nunit.framework.dll</HintPath>
+      <HintPath>..\..\lib\Plugins\LCMSNet\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp-WPF">
-      <HintPath>..\..\..\lib\SDK\DocumentGenerator\PdfSharp-WPF.dll</HintPath>
+      <HintPath>..\..\lib\SDK\DocumentGenerator\PdfSharp-WPF.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

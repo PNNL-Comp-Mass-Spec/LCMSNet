@@ -1,6 +1,0 @@
-To build LcmsNet you can simply run build.bat
-
-If you wish to build manually, you must build in the following order:
-SDK\LcmsNetSDKs.sln
-SQLiteTools\SQLiteTools.sln
-lcms\LCMSnet\LCMSNet.sln

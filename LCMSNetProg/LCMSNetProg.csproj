@@ -42,15 +42,15 @@
   <ItemGroup>
     <Reference Include="FluidicsSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
+      <HintPath>..\lib\FluidicsSDK.dll</HintPath>
     </Reference>
     <Reference Include="FluidicsSimulator, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\FluidicsSimulator.dll</HintPath>
+      <HintPath>..\lib\FluidicsSimulator.dll</HintPath>
     </Reference>
     <Reference Include="PDFGen, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\PDFGen.dll</HintPath>
+      <HintPath>..\lib\PDFGen.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -65,7 +65,7 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WpfExtras">
-      <HintPath>..\..\ExtLib\WpfExtras.dll</HintPath>
+      <HintPath>..\ExtLib\WpfExtras.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
