@@ -17,17 +17,17 @@ namespace EMSL.DocumentGenerator.Granot
     {
         public void SaveDocument(string path, Document document, Core.Model.DocumentContent[] documentContents, bool overwrite = true, bool titlePage = false)
         {
-            PdfDocument pdfDoc = new PdfDocument(8.5, 11.0, UnitOfMeasure.Inch);
+            PdfDocument pdfDoc = new PdfDocument(8.5, 11.0, UnitOfMeasure.Inch, path);
 
             CreateTitlePage(document, pdfDoc);
 
-            pdfDoc.CreateFile(path);
+            pdfDoc.CreateFile();
         }
 
         private void CreateTitlePage(Document document, PdfDocument pdfDoc)
         {
             // Can't underline font, this is a limit with the writer we are using.
-            PdfFont titleFont = new PdfFont(
+            PdfFont titleFont = PdfFont.CreatePdfFont(
                 pdfDoc,
                 document.TitleFont,
                 FontStyle.Regular,
