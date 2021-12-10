@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModelTests.cs" />
+    <Compile Include="PathUtils.cs" />
     <Compile Include="PDFWriterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

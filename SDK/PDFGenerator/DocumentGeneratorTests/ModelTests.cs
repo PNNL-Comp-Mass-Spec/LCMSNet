@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Media.Imaging;
 using NUnit.Framework;
 
@@ -9,9 +10,9 @@ namespace DocumentGeneratorTests
     {
         string picturePath;
         [SetUp]
-        public void init()
+        public void Init()
         {
-            picturePath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\testbitmap.bmp";
+            picturePath = Path.Combine(PathUtils.TestFilesPath, "testbitmap.bmp");
         }
 
         [Test]
