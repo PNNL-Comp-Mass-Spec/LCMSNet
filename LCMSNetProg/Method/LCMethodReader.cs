@@ -33,6 +33,12 @@ namespace LcmsNet.Method
 
         #endregion
 
+        private static readonly Dictionary<string, string> InterfaceToImplementationMapper =
+            new Dictionary<string, string>
+            {
+                { "LcmsNetSDK.Data.ISampleInfo", "LcmsNet.Data.SampleData" }
+            };
+
         /// <summary>
         /// Loads a method from the path provided.
         /// </summary>
@@ -164,6 +170,10 @@ namespace LcmsNet.Method
 
                 // if it wasn't found, try matching it with an old device type name and translating it
                 name = OldDeviceNameTranslator.TranslateOldDeviceFullName(name);
+                if (InterfaceToImplementationMapper.TryGetValue(name, out var implementation))
+                {
+                    name = implementation;
+                }
             }
             ApplicationLogger.LogError(0, $"Failed to find type match for type name '{name}'");
 
@@ -321,7 +331,26 @@ namespace LcmsNet.Method
                                 throw new TypeLoadException();
                             }
 
-                            parameterArray[i] = Convert.ChangeType(parameterValue.Value, type);
+                            if (!string.IsNullOrWhiteSpace(parameterValue.Value))
+                            {
+                                parameterArray[i] = Convert.ChangeType(parameterValue.Value, type);
+                            }
+                            else
+                            {
+                                if (type.IsValueType)
+                                {
+                                    parameterArray[i] = Activator.CreateInstance(type);
+                                }
+                                else if (type == typeof(string))
+                                {
+                                    parameterArray[i] = "";
+                                }
+                                else
+                                {
+                                    parameterArray[i] = null;
+                                }
+                            }
+
                             parameterNameArray[i] = parameterName.Value;
                             typeArray[i] = type;
                             typeFound = true;
@@ -402,8 +431,9 @@ namespace LcmsNet.Method
                         var found = true;
                         foreach (var pinfo in parameterInfo)
                         {
-                            //if (pinfo.ParameterType.Equals(typeArray[i]) == false)
-                            if ((pinfo.ParameterType.Name == typeArray[i].Name) == false && (!pinfo.HasDefaultValue || i >= nonDefaultParamCount))
+                            //if (!pinfo.ParameterType.Equals(typeArray[i]))
+                            //if (pinfo.ParameterType.Name != typeArray[i].Name && (!pinfo.HasDefaultValue || i >= nonDefaultParamCount))
+                            if (!pinfo.ParameterType.IsAssignableFrom(typeArray[i]) && (!pinfo.HasDefaultValue || i >= nonDefaultParamCount))
                             {
                                 found = false;
                                 break;

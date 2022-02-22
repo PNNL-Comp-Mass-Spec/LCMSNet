@@ -82,7 +82,8 @@ namespace LcmsNet.Devices
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.classLogDevice", "LcmsNet.Devices.LogDevice");
             FullyQualifiedNameMapper.Add("LcmsNetDataClasses.Devices.classTimerDevice", "LcmsNetSDK.Devices.TimerDevice");
             FullyQualifiedNameMapper.Add("Newport.ESP300.classNewportStage", "LcmsNetPlugins.Newport.ESP300.NewportStage");
-            FullyQualifiedNameMapper.Add("LcmsNetDataClasses.classSampleData", "LcmsNetSDK.Data.SampleData");
+            FullyQualifiedNameMapper.Add("LcmsNetDataClasses.classSampleData", "LcmsNetSDK.Data.ISampleInfo");
+            FullyQualifiedNameMapper.Add("LcmsNetSDK.Data.SampleData", "LcmsNetSDK.Data.ISampleInfo");
 
             foreach (var map in FullyQualifiedNameMapper)
             {
