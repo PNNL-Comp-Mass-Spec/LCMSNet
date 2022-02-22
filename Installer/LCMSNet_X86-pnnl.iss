@@ -79,10 +79,6 @@ Source: "LCMSNetProg\PrismDMS.config";                                         D
 Source: "{#MyLib}\*.dll";                                                      DestDir: "{app}";          Flags: ignoreversion
 Source: "{#MyExtLib}\*.dll";                                                   DestDir: "{app}";          Flags: ignoreversion
 
-;Sample Validators
-;Core sample validator, PAL Validator    
-Source: "{#MyValidators}\*.dll";                                               DestDir: "{app}\SampleValidators\"; Flags: ignoreversion
-
 ;Plugins
 Source: "{#MyPlugins}\*.dll";                                                  DestDir: "{app}\Plugins\"; Flags: ignoreversion
 Source: "{#MyPlugins}\x86\*.dll";                                              DestDir: "{app}\Plugins\x86\"; Flags: ignoreversion
