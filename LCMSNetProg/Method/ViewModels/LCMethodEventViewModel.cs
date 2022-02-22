@@ -75,7 +75,6 @@ namespace LcmsNet.Method.ViewModels
                 UpdateSelectedDevice();
             }
 
-            this.WhenAnyValue(x => x.DevicesComboBoxOptions.Count).Select(x => x > 0).ToProperty(this, x => x.DevicesComboBoxEnabled, out devicesComboBoxEnabled);
             DevicesList.Connect().WhereReasonsAre(ListChangeReason.Add, ListChangeReason.AddRange).Subscribe(_ => this.DeviceAdded());
             var resortTrigger = DevicesList.Connect().WhenValueChanged(x => x.Name).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
             DevicesList.Connect().Sort(SortExpressionComparer<IDevice>.Ascending(x => x.Name), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var devicesBound).Subscribe();
@@ -85,6 +84,8 @@ namespace LcmsNet.Method.ViewModels
             MethodsComboBoxOptions = methodsBound;
             eventParameterList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var eventParametersBound).Subscribe();
             EventParameterList = eventParametersBound;
+
+            this.WhenAnyValue(x => x.DevicesComboBoxOptions.Count).Select(x => x > 0).ToProperty(this, x => x.DevicesComboBoxEnabled, out devicesComboBoxEnabled);
         }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace LcmsNet.Method.ViewModels
                 }
             }
 
-            EventUnlocked = (locked == false);
+            EventUnlocked = !locked;
 
             OptimizeWith = methodData.OptimizeWith;
 
