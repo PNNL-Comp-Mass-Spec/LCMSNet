@@ -26,7 +26,7 @@ namespace LcmsNet
             InitializeComponent();
             CopyrightText.Text = App.SOFTWARE_COPYRIGHT;
             Developers.Text = App.SOFTWARE_DEVELOPERS;
-            VersionText.Text = Assembly.GetEntryAssembly().GetName().Version.ToString();
+            VersionText.Text = Assembly.GetEntryAssembly().GetName().Version.ToString(3);
         }
     }
 }

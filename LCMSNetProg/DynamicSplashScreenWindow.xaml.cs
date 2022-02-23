@@ -27,7 +27,7 @@ namespace LcmsNet
             ApplicationLogger.Message += ApplicationLogger_ItemLogged;
             ApplicationLogger.Error += ApplicationLogger_ItemLogged;
 
-            Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+            Version = Assembly.GetEntryAssembly().GetName().Version.ToString(3);
             Status = "Loading...";
             SoftwareCopyright = "Copyright Battelle Memorial Institute, 2017";
             SoftwareDevelopers = "Developers: Populated at runtime";

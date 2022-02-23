@@ -39,7 +39,7 @@ namespace LcmsNetSDK
             var assemblyName = assembly.GetName();
             var ver = assemblyName.Version;
             var name = "[ApplicationInfo]\r\n";
-            name += $"Application {assemblyName.Name}\r\nVersion {ver}\r\n";
+            name += $"Application {assemblyName.Name}\r\nVersion {ver.ToString(3)}\r\n";
 
             var os = Environment.OSVersion;
             ver = os.Version;

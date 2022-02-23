@@ -196,7 +196,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 dbInUse = " (Using ?? database: " + ex.Message + ")";
             }
 
-            WindowTitle = "LcmsNet V" + Assembly.GetEntryAssembly().GetName().Version + dbInUse;
+            WindowTitle = "LcmsNet V" + Assembly.GetEntryAssembly().GetName().Version.ToString(3) + dbInUse;
 
             // Load the LC cart lists
             RefreshCartList();

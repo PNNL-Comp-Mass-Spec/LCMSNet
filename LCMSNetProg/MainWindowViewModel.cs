@@ -54,7 +54,7 @@ namespace LcmsNet
         public MainWindowViewModel()
         {
             Thread.CurrentThread.Name = "Main Thread";
-            windowTitleBase = "LcmsNet Version: " + Assembly.GetEntryAssembly().GetName().Version;
+            windowTitleBase = "LcmsNet Version: " + Assembly.GetEntryAssembly().GetName().Version.ToString(3);
             windowTitleBase += " Cart - " + LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
 
             // simulator stuff, don't add the simulator to the system if not in emulation mode.
