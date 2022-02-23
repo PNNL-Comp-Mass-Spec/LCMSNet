@@ -10,16 +10,16 @@ namespace LcmsNet.Devices.ViewModels
         {
             Device = device;
             ViewModel = viewModel;
-            //ViewModel.WhenAnyValue(x => x.Name).ToProperty(this, x => x.Name, out name);
-            Device.WhenAnyValue(x => x.Name).ToProperty(this, x => x.Name, out name);
+            //name = ViewModel.WhenAnyValue(x => x.Name).ToProperty(this, x => x.Name);
+            name = Device.WhenAnyValue(x => x.Name).ToProperty(this, x => x.Name);
             Device.WhenAnyValue(x => x.Name).Subscribe(x => NameEdit = x);
 
-            viewModel.WhenAnyValue(x => x.DeviceStatus).ToProperty(this, x => x.Status, out status);
+            status = viewModel.WhenAnyValue(x => x.DeviceStatus).ToProperty(this, x => x.Status);
         }
 
         private System.Windows.Controls.UserControl view = null;
-        private ObservableAsPropertyHelper<string> name;
-        private ObservableAsPropertyHelper<string> status;
+        private readonly ObservableAsPropertyHelper<string> name;
+        private readonly ObservableAsPropertyHelper<string> status;
         private string nameEdit = "";
 
         public IDevice Device { get; }

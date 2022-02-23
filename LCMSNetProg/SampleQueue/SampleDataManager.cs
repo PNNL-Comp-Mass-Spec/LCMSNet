@@ -171,6 +171,9 @@ namespace LcmsNet.SampleQueue
                 ApplicationLogger.LogError(0,
                     "An exception occurred while trying to build the Fsample queue controls.  Constructor 1: " + ex.Message, ex);
             }
+
+            canUndo = this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanUndo);
+            canRedo = this.WhenAnyValue(x => x.SampleQueue.CanRedo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanRedo);
         }
 
         /// <summary>
@@ -206,6 +209,9 @@ namespace LcmsNet.SampleQueue
                 ApplicationLogger.LogError(0,
                     "An exception occurred while trying to build the sample queue controls.  Constructor 2: " + ex.Message, ex);
             }
+
+            canUndo = this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanUndo);
+            canRedo = this.WhenAnyValue(x => x.SampleQueue.CanRedo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanRedo);
 
             samplesList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var samplesListBound).Subscribe();
             Samples = samplesListBound;
@@ -376,9 +382,6 @@ namespace LcmsNet.SampleQueue
                     nameof(SampleViewModel.ColumnNumber), nameof(SampleViewModel.InstrumentMethod), nameof(SampleViewModel.Sample.LCMethodName), nameof(SampleViewModel.Sample.SequenceID))
                 .Throttle(TimeSpan.FromSeconds(.25))
                 .Subscribe(this.ChangeMade);
-
-            this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanUndo, out canUndo);
-            this.WhenAnyValue(x => x.SampleQueue.CanRedo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanRedo, out canRedo);
         }
 
         #endregion
@@ -756,8 +759,8 @@ namespace LcmsNet.SampleQueue
             }
         }
 
-        private ObservableAsPropertyHelper<bool> canUndo;
-        private ObservableAsPropertyHelper<bool> canRedo;
+        private readonly ObservableAsPropertyHelper<bool> canUndo;
+        private readonly ObservableAsPropertyHelper<bool> canRedo;
 
         public bool CanUndo => canUndo?.Value ?? false;
 

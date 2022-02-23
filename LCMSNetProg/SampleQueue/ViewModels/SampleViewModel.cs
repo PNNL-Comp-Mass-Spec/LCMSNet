@@ -40,7 +40,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
             this.WhenAnyValue(x => x.Sample.ColumnIndex).Subscribe(x => this.RaisePropertyChanged(nameof(ColumnNumber)));
-            this.WhenAnyValue(x => x.ColumnData.Color).Select(x => new SolidColorBrush(x)).ToProperty(this, x => x.ColumnNumberBgColor, out columnNumberBgColor, Brushes.RoyalBlue);
+            columnNumberBgColor = this.WhenAnyValue(x => x.ColumnData.Color).Select(x => new SolidColorBrush(x)).ToProperty(this, x => x.ColumnNumberBgColor, Brushes.RoyalBlue);
 
             this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).Subscribe(x => this.IsChecked = x);
             this.WhenAnyValue(x => x.Sample.RunningStatus).Subscribe(x =>
@@ -117,7 +117,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        private ObservableAsPropertyHelper<SolidColorBrush> columnNumberBgColor;
+        private readonly ObservableAsPropertyHelper<SolidColorBrush> columnNumberBgColor;
 
         /// <summary>
         /// Define the background color for the LC Column

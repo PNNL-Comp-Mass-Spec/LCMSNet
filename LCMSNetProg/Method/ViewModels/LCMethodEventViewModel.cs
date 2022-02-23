@@ -85,7 +85,7 @@ namespace LcmsNet.Method.ViewModels
             eventParameterList.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var eventParametersBound).Subscribe();
             EventParameterList = eventParametersBound;
 
-            this.WhenAnyValue(x => x.DevicesComboBoxOptions.Count).Select(x => x > 0).ToProperty(this, x => x.DevicesComboBoxEnabled, out devicesComboBoxEnabled);
+            devicesComboBoxEnabled = this.WhenAnyValue(x => x.DevicesComboBoxOptions.Count).Select(x => x > 0).ToProperty(this, x => x.DevicesComboBoxEnabled);
         }
 
         /// <summary>

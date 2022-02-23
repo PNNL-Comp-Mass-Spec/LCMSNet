@@ -52,9 +52,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             PalVialColumnVisible = false;
             VolumeColumnVisible = false;
 
-            this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
+            columnHeader = this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
                 .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")
-                .ToProperty(this, x => x.ColumnHeader, out this.columnHeader, "Column: NOT SET");
+                .ToProperty(this, x => x.ColumnHeader, "Column: NOT SET");
 
             Column = new ColumnData() {ID = -2, Name = "DevColumn"};
             CommandsVisible = commandsAreVisible;
@@ -70,9 +70,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             SampleDataManager.SamplesSource.Connect().AutoRefreshOnObservable(x => x.WhenAnyValue(y => y.Sample.ColumnIndex), TimeSpan.FromMilliseconds(200)).Filter(filter).Sort(SortExpressionComparer<SampleViewModel>.Ascending(x => x.Sample.SequenceID), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var filteredSamples).Subscribe();
             FilteredSamples = filteredSamples;
 
-            this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
+            columnHeader = this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)
                 .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")
-                .ToProperty(this, x => x.ColumnHeader, out this.columnHeader, "Column: NOT SET");
+                .ToProperty(this, x => x.ColumnHeader, "Column: NOT SET");
 
             this.WhenAnyValue(x => x.Column.Status).Subscribe(x => this.SetColumnStatus());
 
@@ -93,7 +93,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             SetupCommands();
 
             this.WhenAnyValue(x => x.ContainsKeyboardFocus).Subscribe(x => this.SetBackground());
-            this.WhenAnyValue(x => x.Column.Status).Select(x => x != ColumnStatus.Disabled).ToProperty(this, x => x.ColumnEnabled, out columnEnabled, true);
+            columnEnabled = this.WhenAnyValue(x => x.Column.Status).Select(x => x != ColumnStatus.Disabled).ToProperty(this, x => x.ColumnEnabled, initialValue: true);
 
             Column = columnData;
             CommandsVisible = commandsAreVisible;
@@ -101,7 +101,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         private bool containsKeyboardFocus = false;
         private bool commandsVisible = true;
-        private ObservableAsPropertyHelper<bool> columnEnabled;
+        private readonly ObservableAsPropertyHelper<bool> columnEnabled;
         private SolidColorBrush normalColor = null;
 
         public bool ContainsKeyboardFocus

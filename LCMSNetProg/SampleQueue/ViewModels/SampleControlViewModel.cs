@@ -84,7 +84,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         #region Members
 
         private bool autoScroll = true;
-        private ObservableAsPropertyHelper<bool> itemsSelected;
+        private readonly ObservableAsPropertyHelper<bool> itemsSelected;
 
         /// <summary>
         /// If autoscroll during sequence run is enabled
@@ -114,7 +114,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             SampleDataManager.SamplesSource.Connect().WhenValueChanged(x => x.Sample.HasNotRun)
                 .Throttle(TimeSpan.FromMilliseconds(250)).Subscribe(x => PerformAutoScroll());
             this.WhenAnyValue(x => x.SampleDataManager.Samples).Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => this.PerformAutoScroll());
-            this.WhenAnyValue(x => x.SelectedSamples, x => x.SelectedSample, x => x.SelectedSamples.Count).Select(x => x.Item1.Count > 0 || x.Item2 != null).ToProperty(this, x => x.ItemsSelected, out this.itemsSelected, false);
+            itemsSelected = this.WhenAnyValue(x => x.SelectedSamples, x => x.SelectedSample, x => x.SelectedSamples.Count).Select(x => x.Item1.Count > 0 || x.Item2 != null).ToProperty(this, x => x.ItemsSelected, initialValue: false);
 
             SetupCommands();
         }

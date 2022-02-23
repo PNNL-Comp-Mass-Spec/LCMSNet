@@ -19,28 +19,15 @@ namespace LcmsNet.Configuration.ViewModels
         /// Calling this constructor is only for the IDE designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public ColumnConfigViewModel()
-        {
-            columnData = new ColumnData
-            {
-                ID = 0,
-                Color = Colors.Red
-            };
-
-            Initialize();
-        }
+        public ColumnConfigViewModel() : this(new ColumnData { ID = 0, Color = Colors.Red })
+        { }
 
         public ColumnConfigViewModel(ColumnData column)
         {
             columnData = column;
 
-            Initialize();
-        }
-
-        private void Initialize()
-        {
             // Set all monitors for the column before we set any local monitors, since they get run on initialization
-            this.WhenAnyValue(x => x.ColumnData.ID).ToProperty(this, x => x.ColumnId, out columnId);
+            columnId = this.WhenAnyValue(x => x.ColumnData.ID).ToProperty(this, x => x.ColumnId);
             this.WhenAnyValue(x => x.ColumnData.Status).Subscribe(x =>
             {
                 this.ColumnEnabled = x != ColumnStatus.Disabled;
@@ -85,7 +72,7 @@ namespace LcmsNet.Configuration.ViewModels
         /// </summary>
         private ColumnData columnData;
 
-        private ObservableAsPropertyHelper<int> columnId;
+        private readonly ObservableAsPropertyHelper<int> columnId;
 
         #endregion
 
