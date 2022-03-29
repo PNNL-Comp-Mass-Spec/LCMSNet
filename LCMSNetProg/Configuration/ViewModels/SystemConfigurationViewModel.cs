@@ -61,8 +61,10 @@ namespace LcmsNet.Configuration.ViewModels
             //load time zones into combobox
             TimeZoneComboBoxOptions = TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id).ToList().AsReadOnly();
             TimeZone = LCMSSettings.GetParameter(LCMSSettings.PARAM_TIMEZONE);
+            EnableUndoRedo = LCMSSettings.GetParameter(LCMSSettings.PARAM_EnableUndoRedo, true);
 
             this.WhenAnyValue(x => x.SpecialColumnEnabled).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, (!x).ToString()));
+            this.WhenAnyValue(x => x.EnableUndoRedo).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_EnableUndoRedo, x.ToString()));
 
             BrowsePdfPathCommand = ReactiveCommand.Create(BrowsePdfPath);
         }
@@ -77,6 +79,7 @@ namespace LcmsNet.Configuration.ViewModels
         private string triggerLocation = "";
         private string pdfPath = "";
         private string timeZone = "";
+        private bool enableUndoRedo = true;
         private bool specialColumnEnabled;
 
         #endregion
@@ -107,6 +110,12 @@ namespace LcmsNet.Configuration.ViewModels
         {
             get => pdfPath;
             set => this.RaiseAndSetIfChanged(ref pdfPath, value);
+        }
+
+        public bool EnableUndoRedo
+        {
+            get => enableUndoRedo;
+            set => this.RaiseAndSetIfChanged(ref enableUndoRedo, value);
         }
 
         public string CartName { get; }

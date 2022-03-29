@@ -58,6 +58,7 @@ namespace LcmsNetSDK
         public const string PARAM_TIMEZONE = "TimeZone";
         public const string PARAM_TRIGGERFILEFOLDER = "TriggerFileFolder";
         public const string PARAM_LocalDataPath = "LocalDataPath";
+        public const string PARAM_EnableUndoRedo = "EnableUndoRedo";
 
         /// <summary>
         /// String dictionary to hold settings data

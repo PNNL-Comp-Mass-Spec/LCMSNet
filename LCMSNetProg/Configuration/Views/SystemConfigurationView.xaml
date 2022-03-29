@@ -48,6 +48,7 @@
                     <TextBlock Text="Time Zone" Margin="10,0,3,0" VerticalAlignment="Center" />
                     <ComboBox Width="242" SelectedItem="{Binding TimeZone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding TimeZoneComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 </StackPanel>
+                <CheckBox Margin="5" IsChecked="{Binding EnableUndoRedo}" Content="Enable Sample Queue Undo/Redo" />
             </StackPanel>
         </TabItem>
         <TabItem Header="Remote File Writing">

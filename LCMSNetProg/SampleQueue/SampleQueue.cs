@@ -754,6 +754,12 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void AddToUndoable()
         {
+            if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_EnableUndoRedo, true))
+            {
+                undoRedoHandler.Clear();
+                return;
+            }
+
             if (isUndoRedoing || isBatchChange)
             {
                 return;
@@ -777,6 +783,12 @@ namespace LcmsNet.SampleQueue
         private void EndBatchChange(bool cancelled = false, bool changesApplied = false)
         {
             isBatchChange = false;
+            if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_EnableUndoRedo, true))
+            {
+                undoRedoHandler.Clear();
+                return;
+            }
+
             if (changesApplied)
             {
                 if (cancelled)
@@ -835,6 +847,12 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void Undo()
         {
+            if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_EnableUndoRedo, true))
+            {
+                undoRedoHandler.Clear();
+                return;
+            }
+
             if (isUndoRedoing || isBatchChange)
             {
                 return;
@@ -856,6 +874,12 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public void Redo()
         {
+            if (!LCMSSettings.GetParameter(LCMSSettings.PARAM_EnableUndoRedo, true))
+            {
+                undoRedoHandler.Clear();
+                return;
+            }
+
             if (isUndoRedoing || isBatchChange)
             {
                 return;

@@ -409,5 +409,17 @@ namespace LcmsNet.Properties {
                 return ((string)(this["LocalDataPath"]));
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableUndoRedo {
+            get {
+                return ((bool)(this["EnableUndoRedo"]));
+            }
+            set {
+                this["EnableUndoRedo"] = value;
+            }
+        }
     }
 }

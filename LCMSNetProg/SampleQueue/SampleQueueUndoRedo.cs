@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using LcmsNet.Data;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 
 namespace LcmsNet.SampleQueue
 {
@@ -172,6 +171,11 @@ namespace LcmsNet.SampleQueue
             SetCanUndoRedo();
 
             return modified;
+        }
+
+        public void Clear()
+        {
+            undoRedoList.Clear();
         }
 
         [field: NonSerialized]
