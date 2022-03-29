@@ -48,21 +48,21 @@
                     <TextBlock Text="Time Zone" Margin="10,0,3,0" VerticalAlignment="Center" />
                     <ComboBox Width="242" SelectedItem="{Binding TimeZone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding TimeZoneComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 </StackPanel>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Remote File Writing">
+            <StackPanel>
+                <GroupBox Header="Sample Method Auto-Upload" Margin="5">
+                    <StackPanel Margin ="5">
+                        <TextBlock Text="Remote Trigger File Location (for .lcmethod file writing)" />
+                        <TextBox Margin="5,0" Text="{Binding TriggerLocation}" IsReadOnly="True" />
+                    </StackPanel>
+                </GroupBox>
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="Write PDF to:" VerticalAlignment="Center" Margin="0,0,3,0" />
                     <TextBox Width="428" Text="{Binding PdfPath}" IsReadOnly="True" />
                     <Button Margin="5,0" Content="Browse" Command="{Binding BrowsePdfPathCommand}" />
                 </StackPanel>
-            </StackPanel>
-        </TabItem>
-        <TabItem Header="DMS">
-            <StackPanel>
-                <GroupBox Header="Data Auto-Upload DMS" Margin="5">
-                    <StackPanel Margin ="5">
-                        <TextBlock Text="Remote Trigger File Location" />
-                        <TextBox Margin="5,0" Text="{Binding TriggerLocation}" IsReadOnly="True" />
-                    </StackPanel>
-                </GroupBox>
             </StackPanel>
         </TabItem>
     </TabControl>
