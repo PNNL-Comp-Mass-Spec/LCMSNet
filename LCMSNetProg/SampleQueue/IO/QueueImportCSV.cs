@@ -94,8 +94,8 @@ namespace LcmsNet.SampleQueue.IO
             public SampleImportMap()
             {
                 Map(x => x.DatasetName).Name("Request Name", "Sample Name", "Dataset Name", "Sample", "Dataset", "Name").Index(0);
-                Map(x => x.PalVial).Name("PAL Vial", "Vial", "Well").Index(1).Default("");
-                Map(x => x.PalTray).Name("PAL Tray", "Tray").Index(2).Default("");
+                Map(x => x.PalVial).Name("PAL Vial", "Vial", "Well", "PALWell").Index(1).Default("");
+                Map(x => x.PalTray).Name("PAL Tray", "Tray", "PALTray").Index(2).Default("");
                 Map(x => x.Volume).Name("Volume").Index(3).Default(0);
                 Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(4).Default("");
                 Map(x => x.RequestId).Name("Request ID").Index(5).Default(0);
