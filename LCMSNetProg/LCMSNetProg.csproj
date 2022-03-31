@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="Data\DMSData.cs" />
     <Compile Include="Data\SampleData.cs" />
+    <Compile Include="Data\SampleRunningStatus.cs" />
     <Compile Include="Devices\BlockDevice.cs" />
     <Compile Include="Devices\DefaultUserDeviceView.xaml.cs">
       <DependentUpon>DefaultUserDeviceView.xaml</DependentUpon>

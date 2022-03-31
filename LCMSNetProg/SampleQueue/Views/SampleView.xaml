@@ -6,7 +6,8 @@
     xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
     xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
     xmlns:views="clr-namespace:LcmsNet.SampleQueue.Views"
-    xmlns:data="clr-namespace:LcmsNetSDK.Data;assembly=LcmsNetSdk"
+    xmlns:sdkData="clr-namespace:LcmsNetSDK.Data;assembly=LcmsNetSdk"
+    xmlns:data="clr-namespace:LcmsNet.Data"
     x:Class="LcmsNet.SampleQueue.Views.SampleView"
     d:DesignHeight="500"
     d:DesignWidth="800"
@@ -87,7 +88,7 @@
                         <Setter Property="BorderBrush" Value="DarkGreen" />
                         <Setter Property="Foreground" Value="White" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ColumnData.Status}" Value="{x:Static data:ColumnStatus.Disabled}">
+                    <DataTrigger Binding="{Binding ColumnData.Status}" Value="{x:Static sdkData:ColumnStatus.Disabled}">
                         <Setter Property="Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource ColorInvert}}" />
                         <!--
                         Can't do both the background and the border brush, and can't link their colors to the inverse of the existing setting, because it will lead to a recursive converter call with no exit condition
