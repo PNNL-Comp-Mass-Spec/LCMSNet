@@ -44,76 +44,6 @@ namespace LcmsNet.SampleQueue
     /// </summary>
     public class SampleQueue : INotifyPropertyChangedExt
     {
-        #region Utility Methods
-
-        /// <summary>
-        /// Creates a new unique ID number not used and stores it.  This always generates the largest unique ID.
-        /// </summary>
-        /// <returns>Unique ID number.</returns>
-        private long GenerateUniqueID()
-        {
-            // Get the largest unique ID in the set.
-            long uniqueID = 1;
-            if (m_uniqueID.Count > 0)
-            {
-                uniqueID = m_uniqueID.Last() + 1;
-
-                var maxID = m_uniqueID.Max();
-                if (uniqueID <= maxID)
-                    uniqueID = maxID + 1;
-            }
-
-            m_uniqueID.Add(uniqueID);
-            return uniqueID;
-        }
-
-        #endregion
-
-        #region Validation
-
-        /// <summary>
-        /// Determines if the sample is valid
-        /// </summary>
-        /// <param name="sample"></param>
-        /// <returns></returns>
-        public SampleValidResult IsSampleDataValid(SampleData sample)
-        {
-            var result = SampleValidResult.Valid;
-
-            // Determine if the sample has a duplicate request name.
-            // If it has one match, then it should be itself.
-            var data = FindSample(sample.Name);
-            if (data.Count > 1)
-            {
-                result = SampleValidResult.DuplicateRequestName;
-                return result;
-            }
-
-            return result;
-        }
-
-        #endregion
-
-        #region Delegate Definitions
-
-        /// <summary>
-        /// Delegate definition for when a sample is modified.
-        /// </summary>
-        /// <param name="sender">Sample Queue that made the call.</param>
-        /// <param name="data">Data associated with the addition.</param>
-        public delegate void DelegateSamplesAddedHandler(object sender, SampleQueueArgs data, bool replaceExistingRows);
-
-        /// <summary>
-        /// Delegate definition for when a sample is modified.
-        /// </summary>
-        /// <param name="sender">Sample Queue that made the call.</param>
-        /// <param name="data">Data associated with the addition.</param>
-        public delegate void DelegateSamplesModifiedHandler(object sender, SampleQueueArgs data);
-
-        #endregion
-
-        #region Constants
-
         /// <summary>
         /// Default new sample name.
         /// </summary>
@@ -125,10 +55,6 @@ namespace LcmsNet.SampleQueue
         public const string CONST_DEFAULT_INTEGRATE_SAMPLENAME = "(unused)";
 
         private const bool REPLACE_EXISTING_ROWS = true;
-
-        #endregion
-
-        #region Members
 
         /// <summary>
         /// Running count of the sequence index to use when running samples.
@@ -206,64 +132,6 @@ namespace LcmsNet.SampleQueue
         private bool canUndo = false;
         private bool canRedo = false;
 
-        #endregion
-
-        #region Delegated Events and Threading Events
-
-        /// <summary>
-        /// Fired when a sample is added to a queue.
-        /// </summary>
-        public event DelegateSamplesAddedHandler SamplesAdded;
-
-        /// <summary>
-        /// Fired when a sample is cancelled.
-        /// </summary>
-        public event DelegateSamplesModifiedHandler SamplesCancelled;
-
-        /// <summary>
-        /// Fired when a sample completes its run.
-        /// </summary>
-        public event DelegateSamplesModifiedHandler SamplesFinished;
-
-        /// <summary>
-        /// Fired when a sample is removed from the queue.
-        /// </summary>
-        public event DelegateSamplesModifiedHandler SamplesRemoved;
-
-        /// <summary>
-        /// Fired when a sample has started running.
-        /// </summary>
-        public event DelegateSamplesModifiedHandler SamplesStarted;
-
-        /// <summary>
-        /// Fired when sample information is updated in the queue.
-        /// </summary>
-        public event DelegateSamplesModifiedHandler SamplesUpdated;
-
-        /// <summary>
-        /// Fired when the sample execution is stopped.
-        /// </summary>
-        public event DelegateSamplesModifiedHandler SamplesStopped;
-
-        /// <summary>
-        /// Fired when a sample is reordered.
-        /// </summary>
-        public event DelegateSamplesModifiedHandler SamplesReordered;
-
-        /// <summary>
-        /// Fired when a sample has been told to run, and is waiting for a free column thread.
-        /// </summary>
-        public event DelegateSamplesModifiedHandler SamplesWaitingToRun;
-
-        /// <summary>
-        /// Event to tell listeners that the sample is waiting to be run.
-        /// </summary>
-        public AutoResetEvent m_sampleWaitingEvent;
-
-        #endregion
-
-        #region Constructor
-
         /// <summary>
         /// Default constructor for a sample queue.
         /// </summary>
@@ -304,10 +172,6 @@ namespace LcmsNet.SampleQueue
             m_columnOrders.Clear();
             m_columnOrders = CartConfiguration.BuildColumnList(true);
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the next column a sample will be added on.
@@ -383,9 +247,111 @@ namespace LcmsNet.SampleQueue
             private set => this.RaiseAndSetIfChanged(ref canRedo, value);
         }
 
-        #endregion
+        /// <summary>
+        /// Delegate definition for when a sample is modified.
+        /// </summary>
+        /// <param name="sender">Sample Queue that made the call.</param>
+        /// <param name="data">Data associated with the addition.</param>
+        public delegate void DelegateSamplesAddedHandler(object sender, SampleQueueArgs data, bool replaceExistingRows);
 
-        #region Queue Searching
+        /// <summary>
+        /// Delegate definition for when a sample is modified.
+        /// </summary>
+        /// <param name="sender">Sample Queue that made the call.</param>
+        /// <param name="data">Data associated with the addition.</param>
+        public delegate void DelegateSamplesModifiedHandler(object sender, SampleQueueArgs data);
+
+        /// <summary>
+        /// Fired when a sample is added to a queue.
+        /// </summary>
+        public event DelegateSamplesAddedHandler SamplesAdded;
+
+        /// <summary>
+        /// Fired when a sample is cancelled.
+        /// </summary>
+        public event DelegateSamplesModifiedHandler SamplesCancelled;
+
+        /// <summary>
+        /// Fired when a sample completes its run.
+        /// </summary>
+        public event DelegateSamplesModifiedHandler SamplesFinished;
+
+        /// <summary>
+        /// Fired when a sample is removed from the queue.
+        /// </summary>
+        public event DelegateSamplesModifiedHandler SamplesRemoved;
+
+        /// <summary>
+        /// Fired when a sample has started running.
+        /// </summary>
+        public event DelegateSamplesModifiedHandler SamplesStarted;
+
+        /// <summary>
+        /// Fired when sample information is updated in the queue.
+        /// </summary>
+        public event DelegateSamplesModifiedHandler SamplesUpdated;
+
+        /// <summary>
+        /// Fired when the sample execution is stopped.
+        /// </summary>
+        public event DelegateSamplesModifiedHandler SamplesStopped;
+
+        /// <summary>
+        /// Fired when a sample is reordered.
+        /// </summary>
+        public event DelegateSamplesModifiedHandler SamplesReordered;
+
+        /// <summary>
+        /// Fired when a sample has been told to run, and is waiting for a free column thread.
+        /// </summary>
+        public event DelegateSamplesModifiedHandler SamplesWaitingToRun;
+
+        /// <summary>
+        /// Event to tell listeners that the sample is waiting to be run.
+        /// </summary>
+        public AutoResetEvent m_sampleWaitingEvent;
+
+        /// <summary>
+        /// Creates a new unique ID number not used and stores it.  This always generates the largest unique ID.
+        /// </summary>
+        /// <returns>Unique ID number.</returns>
+        private long GenerateUniqueID()
+        {
+            // Get the largest unique ID in the set.
+            long uniqueID = 1;
+            if (m_uniqueID.Count > 0)
+            {
+                uniqueID = m_uniqueID.Last() + 1;
+
+                var maxID = m_uniqueID.Max();
+                if (uniqueID <= maxID)
+                    uniqueID = maxID + 1;
+            }
+
+            m_uniqueID.Add(uniqueID);
+            return uniqueID;
+        }
+
+        /// <summary>
+        /// Determines if the sample is valid
+        /// </summary>
+        /// <param name="sample"></param>
+        /// <returns></returns>
+        public SampleValidResult IsSampleDataValid(SampleData sample)
+        {
+            var result = SampleValidResult.Valid;
+
+            // Determine if the sample has a duplicate request name.
+            // If it has one match, then it should be itself.
+            var data = FindSample(sample.Name);
+            if (data.Count > 1)
+            {
+                result = SampleValidResult.DuplicateRequestName;
+                return result;
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Determines if the waiting sample queue has any unused samples.
@@ -438,10 +404,6 @@ namespace LcmsNet.SampleQueue
 
             return samples;
         }
-
-        #endregion
-
-        #region Non-Queue Specific Operation Methods
 
         /// <summary>
         /// Builds a histogram keyed on column that contains a list of samples.
@@ -590,9 +552,7 @@ namespace LcmsNet.SampleQueue
             m_sequenceIndex = startSequence;
         }
 
-        #endregion
-
-        #region Undo
+        #region Undo/Redo
 
         /// <summary>
         /// Adds the current waiting queue to the list of undoable actions
@@ -1335,8 +1295,6 @@ namespace LcmsNet.SampleQueue
 
         #endregion
 
-        #region Notification Methods
-
         /// <summary>
         /// Add a special sample to be run immediately, preempting other methods not yet run
         /// </summary>
@@ -1365,8 +1323,6 @@ namespace LcmsNet.SampleQueue
                 StartSamples();
             }
         }
-
-        #endregion
 
         #region Running Samples and Queue Operation
 
