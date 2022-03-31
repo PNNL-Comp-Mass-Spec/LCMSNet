@@ -130,19 +130,20 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Undoes the most recent operation on the queue.
         /// </summary>
-        /// <returns>true if the working queue was modified</returns>
-        public bool Undo(List<SampleData> workingQueue)
+        /// <param name="undoItems">The most recent, but not current "waiting"/"not queued to run" sample list</param>
+        /// <returns>true if undoItems is valid</returns>
+        public bool Undo(out List<SampleData> undoItems)
         {
             // Pop the first item on the queue
             var queue = GetNextOlderQueue();
+            undoItems = new List<SampleData>();
             var modified = false;
 
             // Then if popping
             if (queue != null && queue.Count > 0)
             {
                 // Transfer the new queue to our waiting queue.
-                workingQueue.Clear();
-                workingQueue.AddRange(queue);
+                undoItems.AddRange(queue);
                 modified = true;
             }
 
@@ -154,17 +155,18 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Undoes the most recent operation on the queue.
         /// </summary>
-        /// <returns>true if the working queue was modified</returns>
-        public bool Redo(List<SampleData> workingQueue)
+        /// <param name="redoItems">The most recently undone "waiting"/"not queued to run" sample list</param>
+        /// <returns>true if redoItems is valid</returns>
+        public bool Redo(out List<SampleData> redoItems)
         {
             // Pull the queue off the forward stack if one exists
             var queue = GetNextNewerQueue();
+            redoItems = new List<SampleData>();
             var modified = false;
 
             if (queue != null && queue.Count > 0)
             {
-                workingQueue.Clear();
-                workingQueue.AddRange(queue);
+                redoItems.AddRange(queue);
                 modified = true;
             }
 

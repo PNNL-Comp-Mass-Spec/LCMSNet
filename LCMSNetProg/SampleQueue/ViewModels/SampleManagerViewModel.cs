@@ -291,7 +291,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             try
             {
-                sampleQueue.SaveQueue(name, writer, true);
+                sampleQueue.SaveQueue(name, writer);
                 ApplicationLogger.LogMessage(0, string.Format("The queue was exported to {0}.", name));
             }
             catch (Exception ex)

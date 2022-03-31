@@ -28,21 +28,15 @@ namespace LcmsNet.SampleQueue
         /// <param name="data">Samples of question.</param>
         /// <param name="runningIndex"></param>
         /// <param name="running"></param>
-        /// <param name="complete"></param>
-        /// <param name="waiting"></param>
         public SampleQueueArgs(
             IEnumerable<SampleData> data,
             int runningIndex,
-            int running,
-            int complete,
-            int waiting)
+            int running)
         {
             Samples = data;
             RunningSamplePosition = runningIndex;
 
-            WaitingQueueTotal = waiting;
             RunningQueueTotal = running;
-            CompleteQueueTotal = complete;
         }
 
         /// <summary>
@@ -59,15 +53,5 @@ namespace LcmsNet.SampleQueue
         ///
         /// </summary>
         public int RunningQueueTotal { get; }
-
-        /// <summary>
-        ///
-        /// </summary>
-        public int CompleteQueueTotal { get; }
-
-        /// <summary>
-        ///
-        /// </summary>
-        public int WaitingQueueTotal { get; }
     }
 }

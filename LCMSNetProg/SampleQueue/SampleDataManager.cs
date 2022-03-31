@@ -169,7 +169,7 @@ namespace LcmsNet.SampleQueue
             catch (Exception ex)
             {
                 ApplicationLogger.LogError(0,
-                    "An exception occurred while trying to build the Fsample queue controls.  Constructor 1: " + ex.Message, ex);
+                    "An exception occurred while trying to build the sample queue controls.  Constructor 1: " + ex.Message, ex);
             }
 
             canUndo = this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanUndo);
@@ -447,8 +447,7 @@ namespace LcmsNet.SampleQueue
                             foreach (var reference in SampleValidatorManager.Instance.Validators)
                             {
 #if DEBUG
-                                Console.WriteLine("Validating sample with validator: " +
-                                                  reference.Metadata.Name);
+                                Console.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
 #endif
                                 var sampleValidator = reference.Value;
                                 errors.AddRange(sampleValidator.ValidateSamples(sample.Sample));
@@ -775,38 +774,6 @@ namespace LcmsNet.SampleQueue
 
         #region DataGridView Events and Methods
 
-        private void LogSampleIdNotFound(string callingMethod, long sampleId)
-        {
-            var knownSampleIDs = new List<long>();
-            foreach (var sample in SampleQueue.GetWaitingQueue())
-            {
-                knownSampleIDs.Add(sample.UniqueID);
-            }
-
-            foreach (var sample in SampleQueue.GetRunningQueue())
-            {
-                knownSampleIDs.Add(sample.UniqueID);
-            }
-
-            var sampleIdCount = knownSampleIDs.Count;
-
-            string sampleQueueDescription;
-            if (sampleIdCount == 0)
-                sampleQueueDescription = "SampleQueue is empty";
-            else if (sampleIdCount == 1)
-                sampleQueueDescription = "SampleQueue has one waiting or running item, ID " + knownSampleIDs.First();
-            else if (sampleIdCount < 10)
-                sampleQueueDescription = "Waiting and running items in SampleQueue are " +
-                                         string.Join(", ", knownSampleIDs);
-            else
-                sampleQueueDescription = "Waiting and running items in SampleQueue are " +
-                                         string.Join(", ", knownSampleIDs.Take(9) + " ... (" + sampleIdCount + " total items)");
-
-            var msg = callingMethod + " could not find sample ID " + sampleId + " in SampleQueue; " + sampleQueueDescription;
-            ApplicationLogger.LogError(0, msg);
-
-        }
-
         /// <summary>
         /// Updates the PAL Method Column Combo Box
         /// </summary>
@@ -843,25 +810,6 @@ namespace LcmsNet.SampleQueue
         #endregion
 
         #region Utility Methods
-
-        /// <summary>
-        /// Updates the sample with new data and alerts all listening objects.
-        /// </summary>
-        /// <param name="samples"></param>
-        public void UpdateSamples(List<SampleData> samples)
-        {
-            SampleQueue.UpdateSamples(samples);
-        }
-
-        /// <summary>
-        /// Reorders the samples provided as the argument by inserting the items in the queue.  Re-orders in place.
-        /// </summary>
-        /// <param name="newOrders">List of samples that contain the new ordering.</param>
-        /// <param name="handling"></param>
-        public void ReorderSamples(List<SampleData> newOrders, enumColumnDataHandling handling)
-        {
-            SampleQueue.ReorderSamples(newOrders, handling);
-        }
 
         public void AddDateCartnameColumnIDToDatasetName(List<SampleData> samples)
         {
@@ -1033,14 +981,7 @@ namespace LcmsNet.SampleQueue
                 var data = samplesList.Items.Last().Sample;
                 if (data != null)
                 {
-                    var actualData = SampleQueue.FindSample(data.UniqueID);
-                    if (actualData == null)
-                    {
-                        LogSampleIdNotFound("AddNewSample", data.UniqueID);
-                        return null;
-                    }
-
-                    newData = CopyRequiredSampleData(actualData);
+                    newData = CopyRequiredSampleData(data);
                 }
             }
             else
@@ -1059,27 +1000,6 @@ namespace LcmsNet.SampleQueue
                 AddSamplesToManager(new List<SampleData> { newData }, insertIntoUnused);
             }
             return newData;
-        }
-
-        /// <summary>
-        /// Adds a sample to the listview.
-        /// </summary>
-        /// <param name="sample">Sample to display in the list view.</param>
-        /// <returns>True if addition was a success, or false if adding sample failed.</returns>
-        public bool AddSamplesToList(SampleData sample)
-        {
-            if (sample == null)
-            {
-                return false;
-            }
-            if (!samplesList.Items.Any(x => x.Sample.Equals(sample)))
-            {
-                samplesList.Add(new SampleViewModel(sample));
-                // TODO: Verify: sorting should be handled by the SourceList observers
-                //samplesList.Sort((x, y) => x.Sample.SequenceID.CompareTo(y.Sample.SequenceID));
-                UpdateRow(sample);
-            }
-            return true;
         }
 
         /// <summary>
