@@ -385,7 +385,11 @@ namespace LcmsNet.SampleQueue
                     nameof(SampleData.Volume), nameof(SampleData.PAL.PALTray), nameof(SampleData.PAL.Well))
                 .Throttle(TimeSpan.FromSeconds(.25))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(this.ChangeMade);
+                .Subscribe(x =>
+                {
+                    recentlyChanged = true;
+                    SampleQueue.AddToUndoable();
+                });
         }
 
         #endregion
@@ -675,12 +679,6 @@ namespace LcmsNet.SampleQueue
         private bool RecentlyChanged()
         {
             return recentlyChanged;
-        }
-
-        private void ChangeMade(SampleData sample)
-        {
-            recentlyChanged = true;
-            SampleQueue.UpdateSample(sample);
         }
 
         /// <summary>

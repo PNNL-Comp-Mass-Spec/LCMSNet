@@ -1222,35 +1222,6 @@ namespace LcmsNet.SampleQueue
         /// <summary>
         /// Updates the sample with new data and alerts all listening objects.
         /// </summary>
-        /// <param name="data"></param>
-        public void UpdateSample(SampleData data)
-        {
-            var updated = false;
-            sampleQueue.Edit(list =>
-            {
-                // Find the sample
-                // IEquatable implementation only checks UniqueID
-                var index = list.IndexOf(data);
-                if (index >= 0 && list[index].HasNotRun)
-                {
-                    updated = true;
-                    // Update...although the reference should be updated.
-                    list[index] = data;
-                }
-            });
-
-            if (updated)
-            {
-                // Alert listening objects.
-                SamplesUpdated?.Invoke(this, new SampleQueueArgs(NotScheduledSamples));
-            }
-
-            AddToUndoable();
-        }
-
-        /// <summary>
-        /// Updates the sample with new data and alerts all listening objects.
-        /// </summary>
         /// <param name="samples"></param>
         public void UpdateSamples(List<SampleData> samples)
         {
