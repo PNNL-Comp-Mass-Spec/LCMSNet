@@ -72,11 +72,6 @@ namespace LcmsNet.SampleQueue
         private int m_sampleIndex;
 
         /// <summary>
-        /// Name of samples that are added through distribution across columns.
-        /// </summary>
-        private readonly string m_integrateName;
-
-        /// <summary>
         /// SourceList of all samples - not sorted, items are not moved in this list.
         /// </summary>
         private readonly SourceList<SampleData> sampleQueue = new SourceList<SampleData>();
@@ -139,7 +134,6 @@ namespace LcmsNet.SampleQueue
         public SampleQueue()
         {
             DefaultSampleName = CONST_DEFAULT_SAMPLENAME;
-            m_integrateName = CONST_DEFAULT_INTEGRATE_SAMPLENAME;
             AutoColumnData = true;
             m_sampleIndex = 1;
             m_sampleWaitingEvent = new AutoResetEvent(false);
@@ -194,9 +188,9 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Gets the name of the un-used sample.
+        /// Gets the name of the un-used sample - Name of samples that are added through distribution across columns.
         /// </summary>
-        public string UnusedSampleName => m_integrateName;
+        public string UnusedSampleName => CONST_DEFAULT_INTEGRATE_SAMPLENAME;
 
         /// <summary>
         /// Gets or sets the column data.
@@ -351,7 +345,7 @@ namespace LcmsNet.SampleQueue
             // Find the first sample that has an unused name
             foreach (var sample in NotScheduledSamples)
             {
-                if (sample.Name == m_integrateName)
+                if (sample.Name == UnusedSampleName)
                 {
                     return true;
                 }
@@ -370,7 +364,7 @@ namespace LcmsNet.SampleQueue
             // Find the first sample that has an unused name
             foreach (var sample in NotScheduledSamples)
             {
-                if (sample.Name == m_integrateName && column.ID == sample.ColumnIndex)
+                if (sample.Name == UnusedSampleName && column.ID == sample.ColumnIndex)
                 {
                     return true;
                 }
@@ -462,7 +456,7 @@ namespace LcmsNet.SampleQueue
                     var sampleToAdd = sample;
 
                     // Make the request an "Unused sample"
-                    sampleToAdd.Name = m_integrateName;
+                    sampleToAdd.Name = UnusedSampleName;
                     sampleToAdd.ColumnIndex = col.ID;
                     sampleToAdd.UniqueID = GenerateUniqueID();
                     data.Add(sampleToAdd);
@@ -503,7 +497,7 @@ namespace LcmsNet.SampleQueue
             // Remove excess items from the end of the list.
             var toRemove = new List<SampleData>();
             var notScheduled = NotScheduledSamples.ToList();
-            for (var i = notScheduled.Count - 1; i >= 0 && notScheduled[i].Name == m_integrateName; i--)
+            for (var i = notScheduled.Count - 1; i >= 0 && notScheduled[i].Name == UnusedSampleName; i--)
             {
                 toRemove.Add(notScheduled[i]);
             }
@@ -784,7 +778,7 @@ namespace LcmsNet.SampleQueue
                         continue;
                     }
 
-                    if (list[i].Name.Contains(m_integrateName))
+                    if (list[i].Name.Contains(UnusedSampleName))
                     {
                         var sample = samples[0];
                         samples.RemoveAt(0);
@@ -1027,7 +1021,7 @@ namespace LcmsNet.SampleQueue
             var uniqueList = new List<long>();
             foreach (var sample in NotScheduledSamples)
             {
-                if (sample.Name == m_integrateName)
+                if (sample.Name == UnusedSampleName)
                 {
                     uniqueList.Add(sample.UniqueID);
                 }
@@ -1059,7 +1053,7 @@ namespace LcmsNet.SampleQueue
             var uniqueList = new List<long>();
             foreach (var sample in NotScheduledSamples)
             {
-                if (sample.Name == m_integrateName && sample.ColumnIndex == column.ID)
+                if (sample.Name == UnusedSampleName && sample.ColumnIndex == column.ID)
                 {
                     uniqueList.Add(sample.UniqueID);
                 }
