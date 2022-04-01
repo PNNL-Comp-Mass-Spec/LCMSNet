@@ -363,7 +363,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             var newData = SampleDataManager.AddNewSample(insertIntoUnused);
 
-            System.Threading.Thread.Yield();
             if (newData != null)
             {
                 foreach (var sample in Samples.Reverse())

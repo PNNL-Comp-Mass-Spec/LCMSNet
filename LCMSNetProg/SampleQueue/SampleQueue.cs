@@ -112,9 +112,10 @@ namespace LcmsNet.SampleQueue
         private IEnumerable<SampleData> CompletedQueue => sampleQueue.Items.Where(x => x.RunningStatus == SampleRunningStatus.Complete).OrderBy(x => x.SequenceID);
 
         /// <summary>
-        /// List of unique ID's used in the sample queue.
+        /// Next unique ID to use in the sample queue.
         /// </summary>
-        private readonly List<long> m_uniqueID;
+        // TODO: Make sure this plays nice with the undo/redo capabilities.
+        private long lastUniqueId = 0;
 
         /// <summary>
         /// List of columns that are enabled or disabled.
@@ -137,8 +138,6 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public SampleQueue()
         {
-            m_uniqueID = new List<long>();
-
             DefaultSampleName = CONST_DEFAULT_SAMPLENAME;
             m_integrateName = CONST_DEFAULT_INTEGRATE_SAMPLENAME;
             AutoColumnData = true;
@@ -319,19 +318,7 @@ namespace LcmsNet.SampleQueue
         /// <returns>Unique ID number.</returns>
         private long GenerateUniqueID()
         {
-            // Get the largest unique ID in the set.
-            long uniqueID = 1;
-            if (m_uniqueID.Count > 0)
-            {
-                uniqueID = m_uniqueID.Last() + 1;
-
-                var maxID = m_uniqueID.Max();
-                if (uniqueID <= maxID)
-                    uniqueID = maxID + 1;
-            }
-
-            m_uniqueID.Add(uniqueID);
-            return uniqueID;
+            return Interlocked.Increment(ref lastUniqueId);
         }
 
         /// <summary>
