@@ -58,9 +58,10 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleControlViewModel SampleControlViewModel { get; }
 
-        public ColumnManagerViewModel ColumnManagerViewModel { get; }
-
-        public MethodManagerViewModel MethodManagerViewModel { get; }
+        // Disabled since the Column and Method view are only used with multiple methods/columns (usually 3 or more), and we currently have no cart configured for that, not even in the past 4 years (as of 2022)
+        // They also need more optimization, since they are the primary source of non-responsiveness when changing the queue
+        //public ColumnManagerViewModel ColumnManagerViewModel { get; }
+        //public MethodManagerViewModel MethodManagerViewModel { get; }
 
         public SampleDataManager SampleDataManager { get; }
 
@@ -87,8 +88,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Load up the data to the appropriate sub-controls.
             SampleDataManager = new SampleDataManager(sampleQueue);
             SampleControlViewModel = new SampleControlViewModel(dmsView, SampleDataManager);
-            ColumnManagerViewModel = new ColumnManagerViewModel(dmsView, SampleDataManager);
-            MethodManagerViewModel = new MethodManagerViewModel(dmsView, SampleDataManager);
+            // Disabled since the Column and Method view are only used with multiple methods/columns (usually 3 or more), and we currently have no cart configured for that, not even in the past 4 years (as of 2022).
+            // They also need more optimization, since they are the primary source of non-responsiveness when changing the queue
+            //ColumnManagerViewModel = new ColumnManagerViewModel(dmsView, SampleDataManager);
+            //MethodManagerViewModel = new MethodManagerViewModel(dmsView, SampleDataManager);
 
             var palMethods = new List<string>();
             for (var i = 0; i < 6; i++)

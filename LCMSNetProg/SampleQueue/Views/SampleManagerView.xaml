@@ -22,17 +22,20 @@
             <ColumnDefinition Width="110*" MaxWidth="110" />
             <ColumnDefinition Width="110*" MaxWidth="110" />
         </Grid.ColumnDefinitions>
-        <TabControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+        <!-- Disabled since the Column and Method view are only used with multiple methods/columns (usually 3 or more), and we currently have no cart configured for that, not even in the past 4 years (as of 2022).
+        They also need more optimization, since they are the primary source of non-responsiveness when changing the queue -->
+        <!--<TabControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <TabItem Header="Sequence View">
                 <views:SampleControlView x:Name="SampleControlView" />
-            </TabItem>
-            <TabItem Header="Column View">
+            </TabItem> -->
+            <!--<TabItem Header="Column View">
                 <views:ColumnManagerView x:Name="ColumnManagerView" DataContext="{Binding ColumnManagerViewModel}" />
-            </TabItem>
-            <TabItem Header="Method View">
+            </TabItem>-->
+            <!--<TabItem Header="Method View">
                 <views:MethodManagerView x:Name="MethodManagerView" DataContext="{Binding MethodManagerViewModel}" />
-            </TabItem>
-        </TabControl>
+            </TabItem>-->
+        <!--</TabControl>-->
+        <views:SampleControlView x:Name="SampleControlView" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" />
         <Button Grid.Column="0" Grid.Row="2" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding UndoCommand}" TabIndex="15" >
             <Grid>
