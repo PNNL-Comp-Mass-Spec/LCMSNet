@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reactive.Concurrency;
 using System.Text.RegularExpressions;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
+using ReactiveUI;
 
 namespace LcmsNet.Data
 {
@@ -215,6 +217,11 @@ namespace LcmsNet.Data
         /// </summary>
         private bool isDuplicateName = false;
 
+        /// <summary>
+        /// Backing variable for UI property
+        /// </summary>
+        private bool isChecked = false;
+
         private string sampleErrors = null;
         private int dmsRequestId = 0;
 
@@ -278,6 +285,10 @@ namespace LcmsNet.Data
                     if (oldIsSetToRun != IsSetToRunOrHasRun)
                     {
                         OnPropertyChanged(nameof(IsSetToRunOrHasRun));
+                        if (IsChecked != IsSetToRunOrHasRun)
+                        {
+                            RxApp.MainThreadScheduler.Schedule(() => IsChecked = IsSetToRunOrHasRun);
+                        }
                     }
                 }
             }
@@ -425,11 +436,6 @@ namespace LcmsNet.Data
         /// Unique ID for this sample not related to request name or sequence ID.
         /// </summary>
         public long UniqueID { get; set; }
-
-        /// <summary>
-        /// Backing variable for UI property
-        /// </summary>
-        private bool isChecked;
 
         /// <summary>
         /// Property for UI interaction

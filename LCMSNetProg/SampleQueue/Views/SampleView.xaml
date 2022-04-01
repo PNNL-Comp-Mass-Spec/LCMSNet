@@ -146,7 +146,7 @@
             <DataGridTemplateColumn Header="X" MinWidth="25" MaxWidth="30" Visibility="{Binding Data.CheckboxColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <CheckBox x:Name="Queued_Checkbox" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Sample.HasNotRun}" />
+                        <CheckBox x:Name="Queued_Checkbox" IsChecked="{Binding Sample.IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Sample.HasNotRun}" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
@@ -179,7 +179,7 @@
                     </Style>
                 </DataGridTextColumn.CellStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" MinWidth="120" Binding="{Binding Name}">
+            <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" MinWidth="120" Binding="{Binding Sample.Name}">
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DefaultCellStyle}" >
                         <Setter Property="ToolTip" Value="{Binding SampleNameToolTipText}" />
@@ -241,7 +241,7 @@
             <DataGridTemplateColumn Header="Instrument Method" MinWidth="80" Visibility="{Binding Data.InstrumentMethodColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <ComboBox x:Name="InstrumentMethodSelect" SelectedItem="{Binding InstrumentMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding InstrumentMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                        <ComboBox x:Name="InstrumentMethodSelect" SelectedItem="{Binding Sample.InstrumentMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" ItemsSource="{Binding InstrumentMethodComboBoxOptions}" IsEnabled="{Binding EditAllowed}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>

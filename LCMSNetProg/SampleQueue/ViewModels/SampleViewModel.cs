@@ -32,12 +32,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public SampleViewModel(SampleData sample)
         {
             Sample = sample;
-            Sample.IsChecked = Sample.IsSetToRunOrHasRun;
-
-            this.WhenAnyValue(x => x.Sample.IsChecked).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(IsChecked)));
-            this.WhenAnyValue(x => x.Sample.Name).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
-            this.WhenAnyValue(x => x.Sample.InstrumentMethod).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
-            this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => Sample.IsChecked = x);
 
             columnData = this.WhenAnyValue(x => x.Sample.ColumnIndex).Select(x => CartConfiguration.Columns[x]).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.ColumnData);
 
@@ -184,12 +178,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public string SequenceToolTipText => sequenceToolTipText.Value;
 
-        public bool IsChecked
-        {
-            get => Sample.IsChecked;
-            set => Sample.IsChecked = value;
-        }
-
         private readonly ObservableAsPropertyHelper<ColumnData> columnData;
         private readonly ObservableAsPropertyHelper<string> columnNumber;
         private readonly ObservableAsPropertyHelper<bool> editAllowed;
@@ -203,24 +191,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public bool EditAllowed => editAllowed.Value;
 
         public string Status => status.Value;
-
-        /// <summary>
-        /// Sample request name
-        /// </summary>
-        public string Name
-        {
-            get => Sample.Name;
-            set => Sample.Name = value;
-        }
-
-        /// <summary>
-        /// Sample Instrument Method
-        /// </summary>
-        public string InstrumentMethod
-        {
-            get => Sample.InstrumentMethod;
-            set => Sample.InstrumentMethod = value;
-        }
 
         public string LcMethodCueBannerText => lcMethodCueBannerText.Value;
 
