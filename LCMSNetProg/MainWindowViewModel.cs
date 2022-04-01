@@ -159,7 +159,7 @@ namespace LcmsNet
                 // Save queue to the cache
                 sampleQueue.StopRunningQueue();
 
-                if (sampleQueue.IsDirty)
+                if (sampleQueue.IsDirty || !LCMSSettings.GetParameter(LCMSSettings.PARAM_EnableUndoRedo, true))
                 {
                     var result =
                         MessageBox.Show(string.Format("Do you want to save changes to your queue: {0}",

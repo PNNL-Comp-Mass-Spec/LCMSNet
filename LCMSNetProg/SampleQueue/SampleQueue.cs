@@ -533,6 +533,7 @@ namespace LcmsNet.SampleQueue
             {
                 return;
             }
+
             undoRedoHandler.AddToUndoable(NotScheduledSamples.ToList());
             SetCanUndoRedo();
         }
@@ -626,6 +627,7 @@ namespace LcmsNet.SampleQueue
             {
                 return;
             }
+
             isUndoRedoing = true;
 
             if (undoRedoHandler.Undo(out var undoItems))
@@ -688,6 +690,7 @@ namespace LcmsNet.SampleQueue
             {
                 return;
             }
+
             isUndoRedoing = true;
 
             if (undoRedoHandler.Redo(out var redoItems))

@@ -5,7 +5,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using LcmsNet.Data;
@@ -13,13 +12,10 @@ using LcmsNet.IO.DMS;
 using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Logging;
-using LcmsNetSDK.System;
 using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
