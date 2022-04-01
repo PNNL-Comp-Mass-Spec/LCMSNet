@@ -111,9 +111,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             DMSView = dmsView;
             SampleDataManager = sampleDataManager;
             SampleDataManager.WhenAnyValue(x => x.HasData, x => x.HasValidColumns).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => SetEnabledDisabled());
-            SampleDataManager.SamplesSource.Connect().WhenValueChanged(x => x.HasNotRun).ObserveOn(RxApp.MainThreadScheduler)
+            SampleDataManager.SamplesSource.Connect().ObserveOn(RxApp.TaskpoolScheduler).WhenValueChanged(x => x.HasNotRun).ObserveOn(RxApp.MainThreadScheduler)
                 .Throttle(TimeSpan.FromMilliseconds(250)).Subscribe(x => PerformAutoScroll());
-            this.WhenAnyValue(x => x.SampleDataManager.Samples).ObserveOn(RxApp.MainThreadScheduler).Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => this.PerformAutoScroll());
+            this.WhenAnyValue(x => x.SampleDataManager.Samples).ObserveOn(RxApp.TaskpoolScheduler).Throttle(TimeSpan.FromSeconds(0.25)).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.PerformAutoScroll());
             itemsSelected = this.WhenAnyValue(x => x.SelectedSamples, x => x.SelectedSample, x => x.SelectedSamples.Count).Select(x => x.Item1.Count > 0 || x.Item2 != null).ToProperty(this, x => x.ItemsSelected, initialValue: false);
 
             SetupCommands();

@@ -157,8 +157,8 @@ namespace LcmsNet.SampleQueue
                     HasData = false;
                 }
 
-                var resortTrigger = SamplesSource.Connect().WhenValueChanged(x => x.SequenceID).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
-                SamplesSource.Connect().Transform(x => new SampleViewModel(x)).Sort(SortExpressionComparer<SampleViewModel>.Ascending(x => x.Sample.SequenceID), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var samplesListBound).Subscribe();
+                var resortTrigger = SamplesSource.Connect().ObserveOn(RxApp.TaskpoolScheduler).WhenValueChanged(x => x.SequenceID).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
+                SamplesSource.Connect().ObserveOn(RxApp.TaskpoolScheduler).Sort(SortExpressionComparer<SampleData>.Ascending(x => x.SequenceID), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Transform(x => new SampleViewModel(x)).Bind(out var samplesListBound).Subscribe();
                 Samples = samplesListBound;
 
                 Initialize();
