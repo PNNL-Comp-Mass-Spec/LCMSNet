@@ -184,7 +184,7 @@
                     <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DefaultCellStyle}" >
                         <Setter Property="ToolTip" Value="{Binding RequestNameToolTipText}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Sample.IsDuplicateRequestName}" Value="True">
+                            <DataTrigger Binding="{Binding Sample.IsDuplicateName}" Value="True">
                                 <Setter Property="Background" Value="Crimson" />
                                 <Setter Property="BorderBrush" Value="Crimson" />
                             </DataTrigger>

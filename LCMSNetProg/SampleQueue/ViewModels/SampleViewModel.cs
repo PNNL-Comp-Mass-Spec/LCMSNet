@@ -59,7 +59,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             this.WhenAnyValue(x => x.Sample.InstrumentMethod).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
 
-            this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.CheckDatasetName());
+            this.WhenAnyValue(x => x.Sample.IsDuplicateName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.CheckDatasetName());
 
             this.WhenAnyValue(x => x.Sample.SampleErrors).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(HasError)));
 
@@ -101,7 +101,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public void CheckDatasetName()
         {
             // Specially color any rows with duplicate request names
-            if (Sample.IsDuplicateRequestName)
+            if (Sample.IsDuplicateName)
             {
                 RequestNameToolTipText = "Duplicate Request Name Found!";
             }

@@ -228,7 +228,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_Queued",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
             });
@@ -236,7 +236,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_Running",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Running,
                 SampleErrors = "",
             });
@@ -244,7 +244,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_Waiting",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.WaitingToRun,
                 SampleErrors = "",
             });
@@ -252,7 +252,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_Error",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Error,
                 SampleErrors = "",
             });
@@ -260,7 +260,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_ErrorBlocked",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Error,
                 SampleErrors = "",
             });
@@ -268,7 +268,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_Stopped",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Stopped,
                 SampleErrors = "",
             });
@@ -276,7 +276,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_StoppedBlocked",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Stopped,
                 SampleErrors = "",
             });
@@ -284,7 +284,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_Complete",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Complete,
                 SampleErrors = "",
             });
@@ -292,7 +292,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_Disabled_Column",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
             });
@@ -300,7 +300,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_" + SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME,
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
             });
@@ -308,7 +308,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_HasErrorData",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "This is an error!",
             });
@@ -316,7 +316,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design_Dataset_Duplicate",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = true,
+                IsDuplicateName = true,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
             });
@@ -324,7 +324,7 @@ namespace LcmsNet.SampleQueue
             {
                 Name = "Design Dataset Bad Name",
                 ColumnIndex = 0,
-                IsDuplicateRequestName = false,
+                IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
             });
@@ -382,7 +382,7 @@ namespace LcmsNet.SampleQueue
 
             SamplesSource.Connect().WhenPropertyChanged(x => x.IsChecked).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
             SamplesSource.Connect().WhenPropertyChanged(x => x.Name).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => CheckForDuplicates(x.Sender));
-            SamplesSource.Connect().WhenPropertyChanged(x => x.IsDuplicateRequestName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender));
+            SamplesSource.Connect().WhenPropertyChanged(x => x.IsDuplicateName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender));
             // TODO: Check for side effects
             // TODO: The idea of this is that it would detect the minor changes to the queue, where a value was changed using the databinding. There needs to be a lockout for actions not taken via the databinding, since those already handle this process...
             SamplesSource.Connect().WhenAnyPropertyChanged(nameof(SampleData.Name), nameof(SampleData.PAL), nameof(SampleData.InstrumentMethod),
@@ -1092,11 +1092,11 @@ namespace LcmsNet.SampleQueue
             if (validResult == SampleValidResult.DuplicateRequestName &&
                 !data.Name.Contains(SampleQueue.UnusedSampleName))
             {
-                data.IsDuplicateRequestName = true;
+                data.IsDuplicateName = true;
             }
             else
             {
-                data.IsDuplicateRequestName = false;
+                data.IsDuplicateName = false;
             }
         }
 
@@ -1112,7 +1112,7 @@ namespace LcmsNet.SampleQueue
                 }
                 duplicateRequestNameProcessingLimiter = true;
             }
-            if (data.IsDuplicateRequestName)
+            if (data.IsDuplicateName)
             {
                 // We only need to look for duplicates matching this one's requestname
                 foreach (var sample in SamplesSource.Items.Where(x => x.Name.Equals(data.Name)))
@@ -1127,7 +1127,7 @@ namespace LcmsNet.SampleQueue
             else
             {
                 // This sample is no longer a duplicate, so we need to hit everything that was flagged as a duplicate name
-                foreach (var sample in SamplesSource.Items.Where(x => x.IsDuplicateRequestName))
+                foreach (var sample in SamplesSource.Items.Where(x => x.IsDuplicateName))
                 {
                     if (sample.Equals(data))
                     {

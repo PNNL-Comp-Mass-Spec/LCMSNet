@@ -100,7 +100,7 @@ namespace LcmsNet.Data
             LCMethodName = other.LCMethodName;
             actualMethod = other.actualMethod?.Clone() as LCMethod;
             InstrumentMethod = other.InstrumentMethod;
-            isDuplicateRequestName = other.isDuplicateRequestName;
+            isDuplicateName = other.isDuplicateName;
             sampleErrors = other.sampleErrors;
 
             // The ability to set some properties is keyed on the value of this property, so set it last.
@@ -211,9 +211,9 @@ namespace LcmsNet.Data
         private SampleRunningStatus runningStatus;
 
         /// <summary>
-        /// If the sample's request name is a duplicate
+        /// If the sample's name is a duplicate
         /// </summary>
-        private bool isDuplicateRequestName = false;
+        private bool isDuplicateName = false;
 
         private string sampleErrors = null;
         private int dmsRequestId = 0;
@@ -284,13 +284,13 @@ namespace LcmsNet.Data
         }
 
         /// <summary>
-        /// Gets or sets if the sample's request name is a duplicate
+        /// Gets or sets if the sample's name is a duplicate
         /// </summary>
         [PersistenceSetting(IgnoreProperty = true)]
-        public bool IsDuplicateRequestName
+        public bool IsDuplicateName
         {
-            get => isDuplicateRequestName;
-            set => this.RaiseAndSetIfChanged(ref isDuplicateRequestName, value, nameof(IsDuplicateRequestName));
+            get => isDuplicateName;
+            set => this.RaiseAndSetIfChanged(ref isDuplicateName, value, nameof(IsDuplicateName));
         }
 
         /// <summary>
