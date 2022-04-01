@@ -316,24 +316,42 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Determines if the sample is valid
+        /// Updates the provided row by determining if the sample data class is valid or not.
+        /// If <paramref name="sample"/> is a duplicate name, all entries that match are flagged
         /// </summary>
         /// <param name="sample"></param>
-        /// <returns></returns>
-        public SampleValidResult IsSampleDataValid(SampleData sample)
+        public void CheckForDuplicates(SampleData sample)
         {
-            var result = SampleValidResult.Valid;
-
             // Determine if the sample has a duplicate request name.
             // If it has one match, then it should be itself.
-            var data = FindSample(sample.Name);
-            if (data.Count > 1)
-            {
-                result = SampleValidResult.DuplicateRequestName;
-                return result;
-            }
+            // Search the queue and add any instance of a copy
+            var samples = sampleQueue.Items.Where(x => x.Name.Equals(sample.Name)).ToList();
 
-            return result;
+            var isDuplicate = samples.Count > 1 && !sample.Name.Contains(UnusedSampleName);
+            foreach (var item in samples)
+            {
+                item.IsDuplicateName = isDuplicate;
+            }
+        }
+
+        /// <summary>
+        /// Checks all samples marked at duplicate names to determine if that flag should be cleared.
+        /// </summary>
+        public void CheckClearDuplicateFlag()
+        {
+            // Check everything that was flagged as a duplicate name
+            foreach (var sample in sampleQueue.Items.Where(x => x.IsDuplicateName).GroupBy(x => x.Name))
+            {
+                var groupItems = sample.ToList();
+                // If it has one match, then it should be itself.
+                if (groupItems.Count == 1 || sample.Key.Contains(UnusedSampleName))
+                {
+                    foreach (var item in groupItems)
+                    {
+                        item.IsDuplicateName = false;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -371,21 +389,6 @@ namespace LcmsNet.SampleQueue
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Finds the sample object based on its sample request name.
-        /// </summary>
-        /// <param name="sampleName">Name of sample to search for.</param>
-        /// <returns>List of samples founds.</returns>
-        public List<SampleData> FindSample(string sampleName)
-        {
-            var samples = new List<SampleData>();
-
-            // Search the queue and add any instance of a copy
-            samples.AddRange(sampleQueue.Items.Where(x => x.Name.Equals(sampleName)));
-
-            return samples;
         }
 
         /// <summary>

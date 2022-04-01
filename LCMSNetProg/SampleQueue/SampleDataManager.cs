@@ -376,7 +376,7 @@ namespace LcmsNet.SampleQueue
             ShowLCSeparationMethods();
 
             SamplesSource.Connect().WhenPropertyChanged(x => x.IsChecked).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
-            SamplesSource.Connect().WhenPropertyChanged(x => x.Name).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => CheckForDuplicates(x.Sender));
+            SamplesSource.Connect().WhenPropertyChanged(x => x.Name).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => SampleQueue.CheckForDuplicates(x.Sender));
             SamplesSource.Connect().WhenPropertyChanged(x => x.IsDuplicateName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender));
             // TODO: Check for side effects
             // TODO: The idea of this is that it would detect the minor changes to the queue, where a value was changed using the databinding. There needs to be a lockout for actions not taken via the databinding, since those already handle this process...
@@ -1076,29 +1076,15 @@ namespace LcmsNet.SampleQueue
             }
         }
 
-        /// <summary>
-        /// Updates the provided row by determining if the sample data class is valid or not.
-        /// </summary>
-        /// <param name="data"></param>
-        private void CheckForDuplicates(SampleData data)
-        {
-            // Color duplicates or invalid cells with certain colors!
-            var validResult = SampleQueue.IsSampleDataValid(data);
-            if (validResult == SampleValidResult.DuplicateRequestName &&
-                !data.Name.Contains(SampleQueue.UnusedSampleName))
-            {
-                data.IsDuplicateName = true;
-            }
-            else
-            {
-                data.IsDuplicateName = false;
-            }
-        }
-
         private bool duplicateRequestNameProcessingLimiter = false;
 
         private void HandleDuplicateRequestNameChanged(SampleData data)
         {
+            if (data.IsDuplicateName)
+            {
+                // All matches are flagged when duplicates are found, so don't look again for them
+                return;
+            }
             lock (this)
             {
                 if (duplicateRequestNameProcessingLimiter)
@@ -1107,43 +1093,13 @@ namespace LcmsNet.SampleQueue
                 }
                 duplicateRequestNameProcessingLimiter = true;
             }
-            if (data.IsDuplicateName)
-            {
-                // We only need to look for duplicates matching this one's requestname
-                foreach (var sample in SamplesSource.Items.Where(x => x.Name.Equals(data.Name)))
-                {
-                    if (sample.Equals(data))
-                    {
-                        continue;
-                    }
-                    CheckForDuplicates(sample);
-                }
-            }
-            else
-            {
-                // This sample is no longer a duplicate, so we need to hit everything that was flagged as a duplicate name
-                foreach (var sample in SamplesSource.Items.Where(x => x.IsDuplicateName))
-                {
-                    if (sample.Equals(data))
-                    {
-                        continue;
-                    }
-                    CheckForDuplicates(sample);
-                }
-            }
+
+            SampleQueue.CheckClearDuplicateFlag();
+
             lock (this)
             {
                 duplicateRequestNameProcessingLimiter = false;
             }
-        }
-
-        /// <summary>
-        /// Updates the row at index with the data provided.
-        /// </summary>
-        /// <param name="sample">Index to update.</param>
-        public void UpdateRow(SampleData sample)
-        {
-            CheckForDuplicates(sample);
         }
 
         #endregion
@@ -1158,28 +1114,9 @@ namespace LcmsNet.SampleQueue
         /// <param name="data">Data arguments that contain the updated sample information.</param>
         private void SampleQueue_SamplesUpdated(object sender, SampleQueueArgs data)
         {
-            SamplesUpdated(sender, data);
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="data"></param>
-        private void SamplesUpdated(object sender, SampleQueueArgs data)
-        {
-            UpdateRows(data.Samples);
-        }
-
-        /// <summary>
-        /// Updates the rows for the given samples.
-        /// </summary>
-        /// <param name="samples">Samples to update view of.</param>
-        public void UpdateRows(IEnumerable<SampleData> samples)
-        {
-            foreach (var sample in samples)
+            foreach (var sample in data.Samples)
             {
-                UpdateRow(sample);
+                SampleQueue.CheckForDuplicates(sample);
             }
         }
 
@@ -1194,7 +1131,10 @@ namespace LcmsNet.SampleQueue
             // But track the position of the scroll bar to be nice to the user.
             // TODO: var backup = samplesList.ToList();
 
-            UpdateRows(data.Samples);
+            foreach (var sample in data.Samples)
+            {
+                SampleQueue.CheckForDuplicates(sample);
+            }
 
             // TODO: if (samplesList.Count > 0)
             // TODO: {
@@ -1222,7 +1162,10 @@ namespace LcmsNet.SampleQueue
             if (data?.Samples == null)
                 return;
 
-            UpdateRows(data.Samples);
+            foreach (var sample in data.Samples)
+            {
+                SampleQueue.CheckForDuplicates(sample);
+            }
 
             // TODO: if (samplesList.Count > 0 && sampleList.Count > 0)
             // TODO: {
@@ -1237,8 +1180,6 @@ namespace LcmsNet.SampleQueue
         /// <param name="data"></param>
         private void SampleQueue_SamplesReordered(object sender, SampleQueueArgs data)
         {
-            UpdateRows(data.Samples);
-
             // TODO: if (samplesList.Count > 0 && data.Samples.Any())
             // TODO: {
             // TODO:     ScrollIntoView(samplesList.Last(x => x.Sample.Equals(data.Samples.Last())));
