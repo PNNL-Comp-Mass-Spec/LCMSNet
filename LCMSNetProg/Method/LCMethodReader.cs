@@ -209,8 +209,8 @@ namespace LcmsNet.Method
             }
             catch
             {
-                Debug.WriteLine(
-                    "Null Reference Exception due to backwards compatibility check in LCMethodReader");
+                //Debug.WriteLine(
+                //    "Null Reference Exception due to backwards compatibility check in LCMethodReader");
                 // This is to be backwards compatible.
             }
 

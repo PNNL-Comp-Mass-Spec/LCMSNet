@@ -450,9 +450,6 @@ namespace LcmsNet.SampleQueue
                             var errors = new List<SampleValidationError>();
                             foreach (var reference in SampleValidatorManager.Instance.Validators)
                             {
-#if DEBUG
-                                Console.WriteLine("Validating sample with validator: " + reference.Metadata.Name);
-#endif
                                 var sampleValidator = reference.Value;
                                 errors.AddRange(sampleValidator.ValidateSamples(sample));
                             }

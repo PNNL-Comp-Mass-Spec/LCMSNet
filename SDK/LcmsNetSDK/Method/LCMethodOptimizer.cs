@@ -635,7 +635,8 @@ namespace LcmsNetSDK.Method
                 //System.Diagnostics.Debug.WriteLine(string.Format("Pre or Post Overlap not allowed, setting start time of Method: {0} to end of method at index {1} plus ten seconds", aligneeMethod.Name, k));
                 aligneeMethod.SetStartTime(
                     baselineMethods[k].End.AddMilliseconds(CONST_REQUIRED_LC_METHOD_SPACING_MILLISECONDS));
-                PrintAlignedMethods(baselineMethods, aligneeMethod);
+                if (false)
+                    PrintAlignedMethods(baselineMethods, aligneeMethod);
                 return true;
             }
 
@@ -705,7 +706,8 @@ namespace LcmsNetSDK.Method
                     j++;
                 }
             }
-            PrintAlignedMethods(baselineMethods, aligneeMethod);
+            if (false)
+                PrintAlignedMethods(baselineMethods, aligneeMethod);
             return true;
         }
 

@@ -266,7 +266,9 @@ namespace LcmsNet.Method.ViewModels
                 catch (Exception ex)
                 {
                     // We don't care about the exceptions if it's drawing...we just want it to keep rendering!
+#if DEBUG
                     System.Console.WriteLine(ex);
+#endif
                 }
             }
             else

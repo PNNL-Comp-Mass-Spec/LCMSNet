@@ -31,7 +31,7 @@ namespace LcmsNetSDK.Experiment
             catalog.Catalogs.Add(mmefDirectorycatalog);
             var mmefContainer = new CompositionContainer(catalog);
             mmefContainer.ComposeParts(this);
-            Debug.WriteLine($"Loaded : {Validators.Count()} sample validators");
+            //Debug.WriteLine($"Loaded : {Validators.Count()} sample validators");
         }
 
         public static SampleValidatorManager Instance => m_instance ?? (m_instance = new SampleValidatorManager());

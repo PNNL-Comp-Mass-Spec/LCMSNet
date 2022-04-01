@@ -11,7 +11,6 @@ using LcmsNet.SampleQueue.IO;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
@@ -1375,7 +1374,7 @@ namespace LcmsNet.SampleQueue
 
             // We have not started to run so optimize this way.
             var optimizer = new LCMethodOptimizer();
-            Debug.WriteLine("Optimizing samples that are queued to run before starting the queue");
+            //Debug.WriteLine("Optimizing samples that are queued to run before starting the queue");
             optimizer.AlignSamples(RunningQueue.Cast<ISampleInfo>().ToList());
 
             // Set the listening event so that time sensitive items will know that
@@ -1439,7 +1438,7 @@ namespace LcmsNet.SampleQueue
 
                 if (RunningQueue.Any() && m_nextAvailableSample > 0)
                 {
-                    Debug.WriteLine("Optimizing sample against running queue.");
+                    //Debug.WriteLine("Optimizing sample against running queue.");
                     // We aren't the first ones on the queue, but we are running,
                     // so we need to hurry up and go!
                     realSample.ActualLCMethod.SetStartTime(next);
@@ -1447,7 +1446,7 @@ namespace LcmsNet.SampleQueue
                 }
                 else if (!RunningQueue.Any())
                 {
-                    Debug.WriteLine("Setting sample start time as it is first in running queue.");
+                    //Debug.WriteLine("Setting sample start time as it is first in running queue.");
                     // Otherwise we are the first ones on the queue, but we don't need to do anything
                     // for alignment.
                     realSample.ActualLCMethod.SetStartTime(next);

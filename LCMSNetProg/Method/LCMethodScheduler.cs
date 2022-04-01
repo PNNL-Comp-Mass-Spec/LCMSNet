@@ -462,6 +462,11 @@ namespace LcmsNet.Method
                 //(startSpan.Milliseconds >= 0)
                 {
                     data = m_sampleQueue.NextSampleStart();
+                    if (data == null)
+                    {
+                        return;
+                    }
+
                     Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, EXPECTED START = {2}",
                         data.Name,
                         data.ColumnIndex + 1, data.ActualLCMethod.Start),
