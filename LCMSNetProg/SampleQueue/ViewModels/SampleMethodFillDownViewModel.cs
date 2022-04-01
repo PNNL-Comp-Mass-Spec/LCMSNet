@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
 using System.Windows;
 using LcmsNet.Data;
 using LcmsNetSDK.Configuration;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 
@@ -270,15 +268,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             foreach (var sample in Samples)
             {
                 var tempMethod = methods[i];
-
-                if (tempMethod.Column != sample.ColumnIndex)
-                {
-                    if (tempMethod.Column >= 0)
-                    {
-                        sample.ColumnIndex = CartConfiguration.Columns[tempMethod.Column].ID;
-                    }
-                }
-                sample.LCMethodName = tempMethod.Name;
+                sample.SetMethodNameAndColumnIndex(tempMethod.Name, tempMethod.Column);
 
                 i++;
                 // mod?

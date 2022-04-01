@@ -478,6 +478,27 @@ namespace LcmsNet.Data
 
         #region "Methods"
 
+        /// <summary>
+        /// Set method name and column index without any extra lookups.
+        /// </summary>
+        /// <param name="newMethodName"></param>
+        /// <param name="newColumnIndex"></param>
+        internal void SetMethodNameAndColumnIndex(string newMethodName, int newColumnIndex)
+        {
+            // Disallow method changes on queued/running/complete samples
+            if (IsSetToRunOrHasRun)
+            {
+                return;
+            }
+
+            if (newColumnIndex >= 0)
+            {
+                ColumnIndex = newColumnIndex;
+            }
+
+            this.RaiseAndSetIfChanged(ref methodName, newMethodName, nameof(LCMethodName));
+        }
+
         public bool NameCharactersValid()
         {
             if (string.IsNullOrWhiteSpace(Name))
