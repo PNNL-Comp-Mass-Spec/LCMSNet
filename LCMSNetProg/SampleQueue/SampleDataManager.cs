@@ -376,8 +376,7 @@ namespace LcmsNet.SampleQueue
             ShowLCSeparationMethods();
 
             SamplesSource.Connect().WhenPropertyChanged(x => x.IsChecked).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
-            SamplesSource.Connect().WhenPropertyChanged(x => x.Name).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => SampleQueue.CheckForDuplicates(x.Sender));
-            SamplesSource.Connect().WhenPropertyChanged(x => x.IsDuplicateName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => HandleDuplicateRequestNameChanged(x.Sender));
+            SamplesSource.Connect().WhenPropertyChanged(x => x.Name).Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => SampleQueue.CheckForDuplicateNames());
             // TODO: Check for side effects
             // TODO: The idea of this is that it would detect the minor changes to the queue, where a value was changed using the databinding. There needs to be a lockout for actions not taken via the databinding, since those already handle this process...
             SamplesSource.Connect().WhenAnyPropertyChanged(nameof(SampleData.Name), nameof(SampleData.PAL), nameof(SampleData.InstrumentMethod),
@@ -1071,32 +1070,6 @@ namespace LcmsNet.SampleQueue
             }
         }
 
-        private bool duplicateRequestNameProcessingLimiter = false;
-
-        private void HandleDuplicateRequestNameChanged(SampleData data)
-        {
-            if (data.IsDuplicateName)
-            {
-                // All matches are flagged when duplicates are found, so don't look again for them
-                return;
-            }
-            lock (this)
-            {
-                if (duplicateRequestNameProcessingLimiter)
-                {
-                    return;
-                }
-                duplicateRequestNameProcessingLimiter = true;
-            }
-
-            SampleQueue.CheckClearDuplicateFlag();
-
-            lock (this)
-            {
-                duplicateRequestNameProcessingLimiter = false;
-            }
-        }
-
         #endregion
 
         #region Queue Manager Event Handlers
@@ -1109,10 +1082,7 @@ namespace LcmsNet.SampleQueue
         /// <param name="data">Data arguments that contain the updated sample information.</param>
         private void SampleQueue_SamplesUpdated(object sender, SampleQueueArgs data)
         {
-            foreach (var sample in data.Samples)
-            {
-                SampleQueue.CheckForDuplicates(sample);
-            }
+            SampleQueue.CheckForDuplicateNames();
         }
 
         /// <summary>
@@ -1126,10 +1096,7 @@ namespace LcmsNet.SampleQueue
             // But track the position of the scroll bar to be nice to the user.
             // TODO: var backup = samplesList.ToList();
 
-            foreach (var sample in data.Samples)
-            {
-                SampleQueue.CheckForDuplicates(sample);
-            }
+            SampleQueue.CheckForDuplicateNames();
 
             // TODO: if (samplesList.Count > 0)
             // TODO: {
@@ -1157,10 +1124,7 @@ namespace LcmsNet.SampleQueue
             if (data?.Samples == null)
                 return;
 
-            foreach (var sample in data.Samples)
-            {
-                SampleQueue.CheckForDuplicates(sample);
-            }
+            SampleQueue.CheckForDuplicateNames();
 
             // TODO: if (samplesList.Count > 0 && sampleList.Count > 0)
             // TODO: {

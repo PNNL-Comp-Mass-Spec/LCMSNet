@@ -315,40 +315,19 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Updates the provided row by determining if the sample data class is valid or not.
-        /// If <paramref name="sample"/> is a duplicate name, all entries that match are flagged
+        /// Checks all samples to determine if that IsDuplicateName flag should be set or cleared.
         /// </summary>
-        /// <param name="sample"></param>
-        public void CheckForDuplicates(SampleData sample)
-        {
-            // Determine if the sample has a duplicate request name.
-            // If it has one match, then it should be itself.
-            // Search the queue and add any instance of a copy
-            var samples = sampleQueue.Items.Where(x => x.Name.Equals(sample.Name)).ToList();
-
-            var isDuplicate = samples.Count > 1 && !sample.Name.Contains(UnusedSampleName);
-            foreach (var item in samples)
-            {
-                item.IsDuplicateName = isDuplicate;
-            }
-        }
-
-        /// <summary>
-        /// Checks all samples marked at duplicate names to determine if that flag should be cleared.
-        /// </summary>
-        public void CheckClearDuplicateFlag()
+        public void CheckForDuplicateNames()
         {
             // Check everything that was flagged as a duplicate name
-            foreach (var sample in sampleQueue.Items.Where(x => x.IsDuplicateName).GroupBy(x => x.Name))
+            foreach (var sample in sampleQueue.Items.GroupBy(x => x.Name))
             {
                 var groupItems = sample.ToList();
                 // If it has one match, then it should be itself.
-                if (groupItems.Count == 1 || sample.Key.Contains(UnusedSampleName))
+                var isDuplicate = groupItems.Count > 1 && !sample.Key.Contains(UnusedSampleName);
+                foreach (var item in groupItems)
                 {
-                    foreach (var item in groupItems)
-                    {
-                        item.IsDuplicateName = false;
-                    }
+                    item.IsDuplicateName = isDuplicate;
                 }
             }
         }
