@@ -182,7 +182,7 @@
             <DataGridTextColumn x:Name="DatasetName" Header="Dataset Name" MinWidth="120" Binding="{Binding Name}">
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DefaultCellStyle}" >
-                        <Setter Property="ToolTip" Value="{Binding RequestNameToolTipText}" />
+                        <Setter Property="ToolTip" Value="{Binding SampleNameToolTipText}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Sample.IsDuplicateName}" Value="True">
                                 <Setter Property="Background" Value="Crimson" />

@@ -25,7 +25,9 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         [Obsolete("For WPF Design time use only.", true)]
         public SampleViewModel()
-        { }
+        {
+            Sample = new SampleData(true);
+        }
 
         public SampleViewModel(SampleData sample)
         {
@@ -33,47 +35,110 @@ namespace LcmsNet.SampleQueue.ViewModels
             Sample.IsChecked = Sample.IsSetToRunOrHasRun;
 
             this.WhenAnyValue(x => x.Sample.IsChecked).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(IsChecked)));
+            this.WhenAnyValue(x => x.Sample.Name).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
+            this.WhenAnyValue(x => x.Sample.InstrumentMethod).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
+            this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => Sample.IsChecked = x);
+
             columnData = this.WhenAnyValue(x => x.Sample.ColumnIndex).Select(x => CartConfiguration.Columns[x]).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.ColumnData);
 
-            this.WhenAnyValue(x => x.Sample.ColumnIndex, x => x.Sample.LCMethodName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x =>
-            {
-                this.RaisePropertyChanged(nameof(ColumnNumber));
-                this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
-            });
+            columnNumber = Sample.WhenAnyValue(x => x.ColumnIndex, x => x.SpecialColumnNumber).Select(x => !string.IsNullOrWhiteSpace(x.Item2) ? x.Item2 : (x.Item1 + CONST_COLUMN_INDEX_OFFSET).ToString()).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.ColumnNumber);
             columnNumberBgColor = this.WhenAnyValue(x => x.ColumnData.Color).Select(x => new SolidColorBrush(x)).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.ColumnNumberBgColor, Brushes.RoyalBlue);
 
-            this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => Sample.IsChecked = x);
-            this.WhenAnyValue(x => x.Sample.RunningStatus).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x =>
+            editAllowed = Sample.WhenAnyValue(x => x.IsSetToRunOrHasRun).Select(x => !x).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.EditAllowed);
+
+            status = Sample.WhenAnyValue(x => x.RunningStatus).Select(x => {
+                switch (x)
+                {
+                    case SampleRunningStatus.Complete:
+                        return "Complete";
+                    case SampleRunningStatus.Error:
+                        return IsBlockedSample ? "Block Error" : "Error";
+                    case SampleRunningStatus.Stopped:
+                        return "Stopped";
+                    case SampleRunningStatus.Queued:
+                        return "Queued";
+                    case SampleRunningStatus.Running:
+                        return "Running";
+                    case SampleRunningStatus.WaitingToRun:
+                        return "Waiting";
+                }
+
+                return null;
+            }).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.Status);
+
+            statusToolTipText = Sample.WhenAnyValue(x => x.RunningStatus).Select(x =>
             {
-                this.RaisePropertyChanged(nameof(Status));
-                this.RaisePropertyChanged(nameof(StatusToolTipText));
-            });
+                switch (x)
+                {
+                    case SampleRunningStatus.Complete:
+                        return "The sample ran successfully.";
+                    case SampleRunningStatus.Error:
+                        return IsBlockedSample ? "There was an error and this sample was part of a block.  You should re-run the block of samples" : "An error occurred while running this sample.";
+                    case SampleRunningStatus.Stopped:
+                        return IsBlockedSample ? "The sample was stopped but was part of a block.  You should re-run the block of samples" : "The sample execution was stopped.";
+                    case SampleRunningStatus.Queued:
+                        return "The sample is queued but not scheduled to run.";
+                    case SampleRunningStatus.Running:
+                        return "The sample is running.";
+                    case SampleRunningStatus.WaitingToRun:
+                        return "The sample is scheduled to run and waiting.";
+                }
 
-            this.WhenAnyValue(x => x.Sample.Name).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x =>
+                return null;
+            }).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.StatusToolTipText);
+
+            isUnusedSample = Sample.WhenAnyValue(x => x.Name).Select(x => x.Contains(SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME)).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.IsUnusedSample);
+            nameHasInvalidChars = this.WhenAnyValue(x => x.Sample, x => x.Sample.Name).Select(x => !x.Item1.NameCharactersValid()).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.NameHasInvalidChars);
+
+            sampleNameToolTipText = this.WhenAnyValue(x => x.Sample, x => x.Sample.Name, x => x.Sample.IsDuplicateName).Select(
+                x =>
+                {
+                    // Specially color any rows with duplicate request names
+                    if (x.Item3)
+                        return "Duplicate Request Name Found!";
+
+                    if (!x.Item1.NameCharactersValid())
+                        return "Request name contains invalid characters!\n" + SampleData.ValidNameCharacters;
+
+                    return null;
+                }).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.SampleNameToolTipText);
+
+            hasError = Sample.WhenAnyValue(x => x.SampleErrors).Select(x => !string.IsNullOrWhiteSpace(x)).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.HasError);
+
+            sequenceToolTipText = Sample.WhenAnyValue(x => x.RunningStatus, x => x.ActualLCMethod, x => x.ActualLCMethod.Start, x => x.ActualLCMethod.End,
+                x => x.ActualLCMethod.ActualStart, x => x.ActualLCMethod.ActualEnd).Select(x =>
             {
-                this.RaisePropertyChanged(nameof(Name));
-                this.RaisePropertyChanged(nameof(IsUnusedSample));
-                this.RaisePropertyChanged(nameof(NameHasInvalidChars));
-                this.CheckDatasetName();
-            });
+                switch (Sample.RunningStatus)
+                {
+                    case SampleRunningStatus.Complete:
+                        return $"Started: {x.Item5}\nFinished: {x.Item6}";
+                    case SampleRunningStatus.Queued:
+                    case SampleRunningStatus.Error:
+                    case SampleRunningStatus.Stopped:
+                        return null;
+                    case SampleRunningStatus.Running:
+                        return $"Started: {x.Item5}\nEstimated End: {x.Item4}";
+                    case SampleRunningStatus.WaitingToRun:
+                        return $"Estimated Start: {x.Item3}\nEstimated End: {x.Item4}";
+                }
 
-            this.WhenAnyValue(x => x.Sample.InstrumentMethod).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
-
-            this.WhenAnyValue(x => x.Sample.IsDuplicateName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.CheckDatasetName());
-
-            this.WhenAnyValue(x => x.Sample.SampleErrors).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(HasError)));
-
-            this.WhenAnyValue(x => x.Sample.ActualLCMethod, x => x.Sample.ActualLCMethod.Start, x => x.Sample.ActualLCMethod.End,
-                x => x.Sample.ActualLCMethod.ActualStart, x => x.Sample.ActualLCMethod.ActualEnd).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(SequenceToolTipText)));
+                return null;
+            }).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.SequenceToolTipText);
 
             // Extras to trigger the collection monitor when nested properties change
-            this.WhenAnyValue(x => x.Sample.LCMethodName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethodName)));
+            //Sample.WhenAnyValue(x => x.InstrumentMethod, x => x.PAL, x => x.LCMethodName)
+            //    .ObserveOn(RxApp.MainThreadScheduler)
+            //    .Subscribe(x => this.RaisePropertyChanged(nameof(Sample)));
 
-            Sample.WhenAnyValue(x => x.InstrumentMethod, x => x.PAL, x => x.LCMethodName)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x => this.RaisePropertyChanged(nameof(Sample)));
+            lcMethodCueBannerText = Sample.WhenAnyValue(x => x.IsSetToRunOrHasRun, x => x.LCMethodName, x => x.ActualLCMethod).Select(x => {
+                if (x.Item1)
+                {
+                    // Prefer the ActualMethodName over the MethodName
+                    return x.Item3?.Name ?? x.Item2;
+                }
 
-            Sample.WhenAnyValue(x => x.ActualLCMethod).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(LcMethodCueBannerText)));
+                return "Select";
+            }).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.LcMethodCueBannerText);
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
@@ -81,145 +146,43 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReadOnlyObservableCollection<string> PalTrayComboBoxOptions => SampleDataManager.PalTrayOptions;
         public ReadOnlyObservableCollection<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
 
-        #region Row and cell color control
+        private readonly ObservableAsPropertyHelper<bool> isUnusedSample;
+        private readonly ObservableAsPropertyHelper<bool> hasError;
+        private readonly ObservableAsPropertyHelper<bool> nameHasInvalidChars;
+        private readonly ObservableAsPropertyHelper<string> statusToolTipText;
+        private readonly ObservableAsPropertyHelper<string> sampleNameToolTipText;
+        private readonly ObservableAsPropertyHelper<string> sequenceToolTipText;
 
-        public bool IsBlockedSample => (Sample.DmsData?.Block ?? 0) > 0;
+        public bool IsBlockedSample => (Sample.DmsData?.Block ?? 0) > 0; // Never updates
 
         /// <summary>
         /// If the name of the sample is "(unused)", it means that the Sample Queue has backfilled the
         /// samples to help the user normalize samples on columns.
         /// </summary>
-        public bool IsUnusedSample => Sample.Name.Contains(SampleQueue.CONST_DEFAULT_INTEGRATE_SAMPLENAME);
+        public bool IsUnusedSample => isUnusedSample.Value;
 
-        public bool HasError => !string.IsNullOrWhiteSpace(Sample.SampleErrors);
+        public bool HasError => hasError.Value;
 
-        public bool NameHasInvalidChars => !Sample.NameCharactersValid();
-
-        /// <summary>
-        /// Sets the row colors based on the sample data
-        /// </summary>
-        public void CheckDatasetName()
-        {
-            // Specially color any rows with duplicate request names
-            if (Sample.IsDuplicateName)
-            {
-                RequestNameToolTipText = "Duplicate Request Name Found!";
-            }
-            else if (!Sample.NameCharactersValid())
-            {
-                RequestNameToolTipText = "Request name contains invalid characters!\n" + SampleData.ValidNameCharacters;
-            }
-            else
-            {
-                RequestNameToolTipText = null;
-            }
-        }
+        public bool NameHasInvalidChars => nameHasInvalidChars.Value;
 
         private readonly ObservableAsPropertyHelper<SolidColorBrush> columnNumberBgColor;
 
         /// <summary>
         /// Define the background color for the LC Column
         /// </summary>
-        public SolidColorBrush ColumnNumberBgColor => columnNumberBgColor != null ? columnNumberBgColor.Value : Brushes.RoyalBlue;
-
-        #endregion
-
-        #region ToolTips
-
-        private string requestNameToolTipText = null;
-        private string sequenceToolTipFormat = null;
+        public SolidColorBrush ColumnNumberBgColor => columnNumberBgColor.Value;
 
         /// <summary>
         /// Tool tip text displaying status details
         /// </summary>
-        public string StatusToolTipText
-        {
-            get
-            {
-                var statusMessage = "";
-                switch (Sample.RunningStatus)
-                {
-                    case SampleRunningStatus.Complete:
-                        statusMessage = "The sample ran successfully.";
-                        SequenceToolTipFormat = "Started: {2}\nFinished: {3}";
-                        break;
-                    case SampleRunningStatus.Error:
-                        if (Sample.DmsData != null && Sample.DmsData.Block > 0)
-                        {
-                            statusMessage =
-                                "There was an error and this sample was part of a block.  You should re-run the block of samples";
-                        }
-                        else
-                        {
-                            statusMessage = "An error occurred while running this sample.";
-                        }
-                        break;
-                    case SampleRunningStatus.Stopped:
-                        if (Sample.DmsData != null && Sample.DmsData.Block > 0)
-                        {
-                            statusMessage =
-                                "The sample was stopped but was part of a block.  You should re-run the block of samples";
-                        }
-                        else
-                        {
-                            statusMessage = "The sample execution was stopped.";
-                        }
-                        break;
-                    case SampleRunningStatus.Queued:
-                        statusMessage = "The sample is queued but not scheduled to run.";
-                        SequenceToolTipFormat = null;
-                        break;
-                    case SampleRunningStatus.Running:
-                        statusMessage = "The sample is running.";
-                        SequenceToolTipFormat = "Started: {2}\nEstimated End: {1}";
-                        break;
-                    case SampleRunningStatus.WaitingToRun:
-                        statusMessage = "The sample is scheduled to run and waiting.";
-                        SequenceToolTipFormat = "Estimated Start: {0}\nEstimated End: {1}";
-                        break;
-                    default:
-                        // Should never get here
-                        break;
-                }
-
-                return statusMessage;
-            }
-        }
+        public string StatusToolTipText => statusToolTipText.Value;
 
         /// <summary>
         /// Tool tip text displaying details about a request name error (usually for duplicate request names)
         /// </summary>
-        public string RequestNameToolTipText
-        {
-            get => requestNameToolTipText;
-            private set => this.RaiseAndSetIfChanged(ref requestNameToolTipText, value);
-        }
+        public string SampleNameToolTipText => sampleNameToolTipText.Value;
 
-        public string SequenceToolTipText
-        {
-            get
-            {
-                if (!string.IsNullOrWhiteSpace(SequenceToolTipFormat))
-                {
-                    return string.Format(SequenceToolTipFormat, Sample.ActualLCMethod?.Start, Sample.ActualLCMethod?.End, Sample.ActualLCMethod?.ActualStart, Sample.ActualLCMethod?.ActualEnd);
-                }
-                return null;
-            }
-        }
-
-        private string SequenceToolTipFormat
-        {
-            get => sequenceToolTipFormat;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref sequenceToolTipFormat, value);
-                this.RaisePropertyChanged(nameof(SequenceToolTipText));
-            }
-        }
-
-        #endregion
-
-        #region Column data
+        public string SequenceToolTipText => sequenceToolTipText.Value;
 
         public bool IsChecked
         {
@@ -228,64 +191,18 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         private readonly ObservableAsPropertyHelper<ColumnData> columnData;
+        private readonly ObservableAsPropertyHelper<string> columnNumber;
+        private readonly ObservableAsPropertyHelper<bool> editAllowed;
+        private readonly ObservableAsPropertyHelper<string> status;
+        private readonly ObservableAsPropertyHelper<string> lcMethodCueBannerText;
 
         public ColumnData ColumnData => columnData.Value;
 
-        public bool EditAllowed => !Sample.IsSetToRunOrHasRun;
+        public string ColumnNumber => columnNumber.Value;
 
-        public string ColumnNumber
-        {
-            get
-            {
-                if (!string.IsNullOrWhiteSpace(Sample.SpecialColumnNumber))
-                {
-                    return Sample.SpecialColumnNumber;
-                }
-                return (Sample.ColumnIndex + CONST_COLUMN_INDEX_OFFSET).ToString();
-            }
-        }
+        public bool EditAllowed => editAllowed.Value;
 
-        public string Status
-        {
-            get
-            {
-                var statusMessage = "";
-                CheckDatasetName();
-                switch (Sample.RunningStatus)
-                {
-                    case SampleRunningStatus.Complete:
-                        statusMessage = "Complete";
-                        break;
-                    case SampleRunningStatus.Error:
-                        if (Sample.DmsData != null && Sample.DmsData.Block > 0)
-                        {
-                            statusMessage = "Block Error";
-                        }
-                        else
-                        {
-                            statusMessage = "Error";
-                        }
-                        break;
-                    case SampleRunningStatus.Stopped:
-                        statusMessage = "Stopped";
-                        break;
-                    case SampleRunningStatus.Queued:
-                        statusMessage = "Queued";
-                        break;
-                    case SampleRunningStatus.Running:
-                        statusMessage = "Running";
-                        break;
-                    case SampleRunningStatus.WaitingToRun:
-                        statusMessage = "Waiting";
-                        break;
-                    default:
-                        // Should never get here
-                        break;
-                }
-
-                return statusMessage;
-            }
-        }
+        public string Status => status.Value;
 
         /// <summary>
         /// Sample request name
@@ -305,25 +222,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => Sample.InstrumentMethod = value;
         }
 
-        public string LcMethodCueBannerText
-        {
-            get
-            {
-                if (Sample.IsSetToRunOrHasRun)
-                {
-                    if (Sample.ActualLCMethod != null)
-                    {
-                        return Sample.ActualLCMethod.Name;
-                    }
-
-                    return Sample.LCMethodName;
-                }
-
-                return "Select";
-            }
-        }
-
-        #endregion
+        public string LcMethodCueBannerText => lcMethodCueBannerText.Value;
 
         #region Equality
 
