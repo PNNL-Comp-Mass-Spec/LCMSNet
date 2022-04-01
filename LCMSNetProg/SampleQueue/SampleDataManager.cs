@@ -146,14 +146,9 @@ namespace LcmsNet.SampleQueue
                     SamplesSource = SampleQueue.SampleQueueSource;
 
                     SampleQueue.SamplesAdded += SampleQueue_SampleAdded;
-                    SampleQueue.SamplesCancelled += SampleQueue_SampleCancelled;
-                    SampleQueue.SamplesFinished += SampleQueue_SampleFinished;
                     SampleQueue.SamplesRemoved += SampleQueue_SampleRemoved;
-                    SampleQueue.SamplesStarted += SampleQueue_SampleStarted;
                     SampleQueue.SamplesReordered += SampleQueue_SamplesReordered;
                     SampleQueue.SamplesUpdated += SampleQueue_SamplesUpdated;
-                    SampleQueue.SamplesWaitingToRun += SampleQueue_SamplesWaitingToRun;
-                    SampleQueue.SamplesStopped += SampleQueue_SamplesStopped;
                     HasData = true;
                 }
                 else
@@ -1177,39 +1172,6 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Sets the pulldownbar position and updates the view of the samples.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="data"></param>
-        private void SamplesStopped(object sender, SampleQueueArgs data)
-        {
-            SamplesUpdated(sender, data);
-        }
-
-        /// <summary>
-        /// Handled when the samples are stopped from the sample queue.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="data"></param>
-        private void SampleQueue_SamplesStopped(object sender, SampleQueueArgs data)
-        {
-            SamplesStopped(sender, data);
-        }
-
-        /// <summary>
-        /// Handles when a sample is queued for running but no open slot exists.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="data"></param>
-        private void SampleQueue_SamplesWaitingToRun(object sender, SampleQueueArgs data)
-        {
-            if (data?.Samples == null)
-                return;
-
-            UpdateRows(data.Samples);
-        }
-
-        /// <summary>
         /// Updates the rows for the given samples.
         /// </summary>
         /// <param name="samples">Samples to update view of.</param>
@@ -1219,19 +1181,6 @@ namespace LcmsNet.SampleQueue
             {
                 UpdateRow(sample);
             }
-        }
-
-        /// <summary>
-        /// Handles when a sample is started.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="data"></param>
-        private void SampleQueue_SampleStarted(object sender, SampleQueueArgs data)
-        {
-            if (data?.Samples == null)
-                return;
-
-            UpdateRows(data.Samples);
         }
 
         /// <summary>
@@ -1260,32 +1209,6 @@ namespace LcmsNet.SampleQueue
             // TODO:     }
             // TODO:     ScrollIntoView(sampleToScroll);
             // TODO: }
-        }
-
-        /// <summary>
-        /// Handles when a sample is finished.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="data"></param>
-        private void SampleQueue_SampleFinished(object sender, SampleQueueArgs data)
-        {
-            if (data?.Samples == null)
-                return;
-
-            UpdateRows(data.Samples);
-        }
-
-        /// <summary>
-        /// Handle when a sample is cancelled.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="data"></param>
-        private void SampleQueue_SampleCancelled(object sender, SampleQueueArgs data)
-        {
-            if (data?.Samples == null)
-                return;
-
-            UpdateRows(data.Samples);
         }
 
         /// <summary>
