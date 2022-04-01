@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using DynamicData;
@@ -571,12 +572,12 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
         */
 
-        public void ImportQueueFromClipboard()
+        public async Task ImportQueueFromClipboard()
         {
             try
             {
                 var samples = QueueImportClipboard.ReadSamples();
-                SampleDataManager.SampleQueue.LoadQueue(samples);
+                await Task.Run(() => SampleDataManager.SampleQueue.LoadQueue(samples));
                 ApplicationLogger.LogMessage(0, "The queue was successfully imported from clipboard.");
             }
             catch (Exception ex)
@@ -646,7 +647,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
             PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput(), this.WhenAnyValue(x => x.ItemsSelected));
             ClearAllSamplesCommand = ReactiveCommand.Create(() => this.ClearSamplesConfirm());
-            ClipboardPasteCommand = ReactiveCommand.Create(ImportQueueFromClipboard);
+            ClipboardPasteCommand = ReactiveCommand.CreateFromTask(ImportQueueFromClipboard);
         }
 
         #endregion
