@@ -65,9 +65,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, ColumnData columnData, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
-            var resortTrigger = SampleDataManager.SamplesSource.Connect().WhenValueChanged(x => x.Sample.SequenceID).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
+            var resortTrigger = SampleDataManager.SamplesSource.Connect().WhenValueChanged(x => x.SequenceID).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
             var filter = this.WhenValueChanged(x => x.Column).Select(x => new Func<SampleViewModel, bool>(y => x == null || x.ID == y.Sample.ColumnIndex));
-            SampleDataManager.SamplesSource.Connect().AutoRefreshOnObservable(x => x.WhenAnyValue(y => y.Sample.ColumnIndex), TimeSpan.FromMilliseconds(200)).Filter(filter).Sort(SortExpressionComparer<SampleViewModel>.Ascending(x => x.Sample.SequenceID), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var filteredSamples).Subscribe();
+            SampleDataManager.SamplesSource.Connect().AutoRefreshOnObservable(x => x.WhenAnyValue(y => y.ColumnIndex), TimeSpan.FromMilliseconds(200)).Transform(x => new SampleViewModel(x)).Filter(filter).Sort(SortExpressionComparer<SampleViewModel>.Ascending(x => x.Sample.SequenceID), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var filteredSamples).Subscribe();
             FilteredSamples = filteredSamples;
 
             columnHeader = this.WhenAnyValue(x => x.Column, x => x.Column.ID, x => x.Column.Name)

@@ -173,6 +173,8 @@ namespace LcmsNet.SampleQueue
             m_columnOrders = CartConfiguration.BuildColumnList(true);
         }
 
+        public IObservableList<SampleData> SampleQueueSource => sampleQueue;
+
         /// <summary>
         /// Gets the next column a sample will be added on.
         /// </summary>
@@ -1146,7 +1148,7 @@ namespace LcmsNet.SampleQueue
                         var continuousHigh = samples[sampleIndex].SequenceID;
                         samples[sampleIndex].SequenceID += offset;
                         var continuousLow = continuousHigh;
-                        for (var i = 1; i < samples.Count; i++)
+                        for (var i = sampleIndex + 1; i < samples.Count; i++)
                         {
                             var id = samples[i].SequenceID;
                             if (continuousLow - id > 1)
@@ -1193,7 +1195,7 @@ namespace LcmsNet.SampleQueue
                         var continuousLow = samples[sampleIndex].SequenceID;
                         samples[sampleIndex].SequenceID += offset;
                         var continuousHigh = continuousLow;
-                        for (var i = 1; i < samples.Count; i++)
+                        for (var i = sampleIndex + 1; i < samples.Count; i++)
                         {
                             var id = samples[i].SequenceID;
                             if (id - continuousHigh > 1)

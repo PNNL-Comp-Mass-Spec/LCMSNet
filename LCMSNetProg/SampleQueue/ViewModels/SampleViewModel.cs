@@ -30,26 +30,26 @@ namespace LcmsNet.SampleQueue.ViewModels
         public SampleViewModel(SampleData sample)
         {
             Sample = sample;
-            isChecked = Sample.IsSetToRunOrHasRun;
+            Sample.IsChecked = Sample.IsSetToRunOrHasRun;
 
-            columnData = this.WhenAnyValue(x => x.Sample.ColumnIndex).Select(x => CartConfiguration.Columns[x]).ToProperty(this, x => x.ColumnData);
+            this.WhenAnyValue(x => x.Sample.IsChecked).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(IsChecked)));
+            columnData = this.WhenAnyValue(x => x.Sample.ColumnIndex).Select(x => CartConfiguration.Columns[x]).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.ColumnData);
 
-            this.WhenAnyValue(x => x.Sample.ColumnIndex, x => x.Sample.LCMethodName).Subscribe(x =>
+            this.WhenAnyValue(x => x.Sample.ColumnIndex, x => x.Sample.LCMethodName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(ColumnNumber));
                 this.RaisePropertyChanged(nameof(ColumnNumberBgColor));
             });
-            this.WhenAnyValue(x => x.Sample.ColumnIndex).Subscribe(x => this.RaisePropertyChanged(nameof(ColumnNumber)));
-            columnNumberBgColor = this.WhenAnyValue(x => x.ColumnData.Color).Select(x => new SolidColorBrush(x)).ToProperty(this, x => x.ColumnNumberBgColor, Brushes.RoyalBlue);
+            columnNumberBgColor = this.WhenAnyValue(x => x.ColumnData.Color).Select(x => new SolidColorBrush(x)).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.ColumnNumberBgColor, Brushes.RoyalBlue);
 
-            this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).Subscribe(x => this.IsChecked = x);
-            this.WhenAnyValue(x => x.Sample.RunningStatus).Subscribe(x =>
+            this.WhenAnyValue(x => x.Sample.IsSetToRunOrHasRun).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => Sample.IsChecked = x);
+            this.WhenAnyValue(x => x.Sample.RunningStatus).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(Status));
                 this.RaisePropertyChanged(nameof(StatusToolTipText));
             });
 
-            this.WhenAnyValue(x => x.Sample.Name).Subscribe(x =>
+            this.WhenAnyValue(x => x.Sample.Name).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x =>
             {
                 this.RaisePropertyChanged(nameof(Name));
                 this.RaisePropertyChanged(nameof(IsUnusedSample));
@@ -57,25 +57,23 @@ namespace LcmsNet.SampleQueue.ViewModels
                 this.CheckDatasetName();
             });
 
-            this.WhenAnyValue(x => x.Sample.InstrumentMethod).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
+            this.WhenAnyValue(x => x.Sample.InstrumentMethod).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(InstrumentMethod)));
 
-            this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).Subscribe(x => this.CheckDatasetName());
+            this.WhenAnyValue(x => x.Sample.IsDuplicateRequestName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.CheckDatasetName());
 
-            this.WhenAnyValue(x => x.Sample.SampleErrors).Subscribe(x => this.RaisePropertyChanged(nameof(HasError)));
+            this.WhenAnyValue(x => x.Sample.SampleErrors).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(HasError)));
 
             this.WhenAnyValue(x => x.Sample.ActualLCMethod, x => x.Sample.ActualLCMethod.Start, x => x.Sample.ActualLCMethod.End,
-                x => x.Sample.ActualLCMethod.ActualStart, x => x.Sample.ActualLCMethod.ActualEnd).Subscribe(x => this.RaisePropertyChanged(nameof(SequenceToolTipText)));
+                x => x.Sample.ActualLCMethod.ActualStart, x => x.Sample.ActualLCMethod.ActualEnd).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(SequenceToolTipText)));
 
             // Extras to trigger the collection monitor when nested properties change
-            this.WhenAnyValue(x => x.Sample.PAL.PALTray, x => x.Sample.PAL.Well)
-                .Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
-            this.WhenAnyValue(x => x.Sample.SequenceID, x => x.Sample.Volume).Subscribe(x => this.RaisePropertyChanged(nameof(Name)));
-            this.WhenAnyValue(x => x.Sample.LCMethodName).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethodName)));
+            this.WhenAnyValue(x => x.Sample.LCMethodName).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(Sample.LCMethodName)));
 
             Sample.WhenAnyValue(x => x.InstrumentMethod, x => x.PAL, x => x.LCMethodName)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(x => this.RaisePropertyChanged(nameof(Sample)));
 
-            Sample.WhenAnyValue(x => x.ActualLCMethod).Subscribe(x => this.RaisePropertyChanged(nameof(LcMethodCueBannerText)));
+            Sample.WhenAnyValue(x => x.ActualLCMethod).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => this.RaisePropertyChanged(nameof(LcMethodCueBannerText)));
         }
 
         // Local "wrappers" around the static class options, for data binding purposes
@@ -223,12 +221,10 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         #region Column data
 
-        private bool isChecked;
-
         public bool IsChecked
         {
-            get => isChecked;
-            set => this.RaiseAndSetIfChanged(ref isChecked, value);
+            get => Sample.IsChecked;
+            set => Sample.IsChecked = value;
         }
 
         private readonly ObservableAsPropertyHelper<ColumnData> columnData;
@@ -237,15 +233,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public bool EditAllowed => !Sample.IsSetToRunOrHasRun;
 
-        public string SpecialColumnNumber { get; set; }
-
         public string ColumnNumber
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(SpecialColumnNumber))
+                if (!string.IsNullOrWhiteSpace(Sample.SpecialColumnNumber))
                 {
-                    return SpecialColumnNumber;
+                    return Sample.SpecialColumnNumber;
                 }
                 return (Sample.ColumnIndex + CONST_COLUMN_INDEX_OFFSET).ToString();
             }
@@ -299,14 +293,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public string Name
         {
             get => Sample.Name;
-            set
-            {
-                if (Sample.Name != value)
-                {
-                    Sample.Name = value;
-                    this.RaisePropertyChanged();
-                }
-            }
+            set => Sample.Name = value;
         }
 
         /// <summary>
@@ -315,14 +302,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public string InstrumentMethod
         {
             get => Sample.InstrumentMethod;
-            set
-            {
-                if (!object.Equals(Sample.InstrumentMethod, value))
-                {
-                    Sample.InstrumentMethod = value;
-                    this.RaisePropertyChanged();
-                }
-            }
+            set => Sample.InstrumentMethod = value;
         }
 
         public string LcMethodCueBannerText

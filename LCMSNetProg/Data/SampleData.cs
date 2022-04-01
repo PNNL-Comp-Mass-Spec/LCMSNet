@@ -417,11 +417,29 @@ namespace LcmsNet.Data
             set => this.RaiseAndSetIfChanged(ref columnIndex, value);
         }
 
+        [PersistenceSetting(IgnoreProperty = true)]
+        public string SpecialColumnNumber { get; set; }
+
         /// <summary>
         /// Gets or sets the unique ID for a sample.
         /// Unique ID for this sample not related to request name or sequence ID.
         /// </summary>
         public long UniqueID { get; set; }
+
+        /// <summary>
+        /// Backing variable for UI property
+        /// </summary>
+        private bool isChecked;
+
+        /// <summary>
+        /// Property for UI interaction
+        /// </summary>
+        [PersistenceSetting(IgnoreProperty = true)]
+        public bool IsChecked
+        {
+            get => isChecked;
+            set => this.RaiseAndSetIfChanged(ref isChecked, value);
+        }
 
         #endregion
 
