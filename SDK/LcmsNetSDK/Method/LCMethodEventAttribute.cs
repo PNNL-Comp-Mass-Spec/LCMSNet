@@ -6,6 +6,7 @@ namespace LcmsNetSDK.Method
     /// Defines the attribute the scheduling algorithm and method handler will use to determine what methods to call
     /// while running a LC method.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class LCMethodEventAttribute : Attribute
     {
         #region Constructors

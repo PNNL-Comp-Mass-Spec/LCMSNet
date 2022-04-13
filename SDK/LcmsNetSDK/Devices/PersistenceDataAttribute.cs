@@ -5,6 +5,7 @@ namespace LcmsNetSDK.Devices
     /// <summary>
     /// Attribute used to save a device's settings
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class PersistenceDataAttribute : Attribute
     {
         /// <summary>

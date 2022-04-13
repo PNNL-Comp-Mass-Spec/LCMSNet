@@ -2,6 +2,7 @@
 
 namespace LcmsNetSDK.Devices
 {
+    [AttributeUsage(AttributeTargets.Class)]
     public class DeviceControlAttribute : Attribute
     {
         public DeviceControlAttribute(Type deviceControlType, string name, string category) :
