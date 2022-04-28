@@ -27,62 +27,62 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// An object which can use the PAL dll functions.
         /// </summary>
-        private P.PalClass m_PALDrvr;
+        private P.PalClass palDriver;
 
         /// <summary>
         /// The location of the directory containing the PAL methods.
         /// </summary>
-        private String m_methodsFolder;
+        private string methodsFolder;
 
         /// <summary>
         /// A flag indicating whether or not the PAL has been initialized.
         /// </summary>
-        private bool m_accessible;
+        private bool isConnected;
 
         /// <summary>
         /// The current method to execute.
         /// </summary>
-        private string m_method = "";
+        private string currentMethod = "";
 
         /// <summary>
         /// The current tray to use.
         /// </summary>
-        private string m_tray = "";
+        private string currentTray = "";
 
         /// <summary>
         /// The current vial to use.
         /// </summary>
-        private int m_vial;
+        private int currentVial;
 
         /// <summary>
         /// The valid range of vials.
         /// </summary>
-        private VialRanges m_vialRange;// = enumVialRanges._96Well;
+        private VialRanges vialRange;// = enumVialRanges._96Well;
 
         /// <summary>
         /// The current volume setting.
         /// </summary>
-        private string m_volume = "";
+        private string currentInjectionVolume = "";
 
         /// <summary>
         /// Name for fluidics designer.
         /// </summary>
-        private string m_name;
+        private string name;
 
         /// <summary>
         /// The PAL's version information.
         /// </summary>
-        private string m_version;
+        private string palVersion;
 
         /// <summary>
         /// The current status of the PAL.
         /// </summary>
-        private DeviceStatus m_status;
+        private DeviceStatus deviceStatus;
 
         /// <summary>
         /// Indicates whether or not the PAL is in emulation mode.
         /// </summary>
-        private bool m_emulation;
+        private bool inEmulationMode;
 
         private readonly Dictionary<string, int> trayNamesAndMaxVials = new Dictionary<string, int>();
         private readonly List<string> trayNames = new List<string>();
@@ -140,8 +140,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public Pal()
         {
-            m_vialRange = VialRanges.Well96;
-            m_name = "pal";
+            vialRange = VialRanges.Well96;
+            name = "pal";
             AbortEvent = new System.Threading.ManualResetEvent(false);
             StatusPollDelay = 1;
         }
@@ -175,8 +175,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
-            get => m_emulation;
-            set => m_emulation = value;
+            get => inEmulationMode;
+            set => inEmulationMode = value;
         }
 
         /// <summary>
@@ -184,11 +184,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public DeviceStatus Status
         {
-            get => m_status;
+            get => deviceStatus;
             set
             {
                 StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
-                m_status = value;
+                deviceStatus = value;
             }
         }
 
@@ -197,10 +197,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public string Version
         {
-            get => m_version;
+            get => palVersion;
             set
             {
-                m_version = value;
+                palVersion = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -210,10 +210,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public string Name
         {
-            get => m_name;
+            get => name;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref name, value))
                 {
                     OnDeviceSaveRequired();
                 }
@@ -226,11 +226,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("MethodsFolder")]
         public string MethodsFolder
         {
-            get => m_methodsFolder;
+            get => methodsFolder;
             set
             {
-                m_methodsFolder = value;
-                if (m_emulation == false)
+                methodsFolder = value;
+                if (inEmulationMode == false)
                 {
                     if (value == null)
                     {
@@ -240,7 +240,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                     {
                         throw new System.IO.DirectoryNotFoundException("The directory does not exist: " + value + "");
                     }
-                    m_PALDrvr.SelectMethodFolder(value);
+                    palDriver.SelectMethodFolder(value);
                 }
             }
         }
@@ -251,10 +251,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("Method")]
         public string Method
         {
-            get => m_method;
+            get => currentMethod;
             set
             {
-                m_method = value;
+                currentMethod = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -265,10 +265,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("Tray")]
         public string Tray
         {
-            get => m_tray;
+            get => currentTray;
             set
             {
-                m_tray = value;
+                currentTray = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -278,8 +278,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public VialRanges VialRange
         {
-            get => m_vialRange;
-            set => this.RaiseAndSetIfChanged(ref m_vialRange, value);
+            get => vialRange;
+            set => this.RaiseAndSetIfChanged(ref vialRange, value);
         }
 
         /// <summary>
@@ -309,12 +309,12 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("Vial")]
         public int Vial
         {
-            get => m_vial;
+            get => currentVial;
             set
             {
                 if (ValidateVial(value))
                 {
-                    m_vial = value;
+                    currentVial = value;
                 }
                 else
                 {
@@ -330,10 +330,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [PersistenceData("Volume")]
         public string Volume
         {
-            get => m_volume;
+            get => currentInjectionVolume;
             set
             {
-                m_volume = value;
+                currentInjectionVolume = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -389,7 +389,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <returns></returns>
         private bool ValidateVial(int vial)
         {
-            return (vial >= 1 && vial <= (int)m_vialRange);
+            return (vial >= 1 && vial <= (int)vialRange);
         }
 
         /// <summary>
@@ -407,9 +407,9 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public bool Initialize(ref string errorMessage)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
-                m_accessible = true;
+                isConnected = true;
                 if (!AutoSamplers.ConnectedAutoSamplers.Contains(this))
                 {
                     AutoSamplers.ConnectedAutoSamplers.Add(this);
@@ -419,11 +419,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 return true;
             }
 
-            if (m_accessible == false)
+            if (!isConnected)
             {
-                if (m_PALDrvr == null)
+                if (palDriver == null)
                 {
-                    m_PALDrvr = new P.PalClass();
+                    palDriver = new P.PalClass();
                 }
 
                 if (PortName == null)
@@ -433,7 +433,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 }
 
                 //Start paldriv.exe
-                var error = m_PALDrvr.StartDriver("1", PortName);
+                var error = palDriver.StartDriver("1", PortName);
                 switch (error)
                 {
                     case CONST_PALERR_PORTUNAVAILABLE:
@@ -451,7 +451,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 if (error > 0)
                 {
                     var tempStatus = "";
-                    m_PALDrvr.GetStatus(ref tempStatus);
+                    palDriver.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
                     OnFree();
@@ -469,11 +469,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 //writer.Close();
 
                 //Reset the pal
-                error = m_PALDrvr.ResetPAL();
+                error = palDriver.ResetPAL();
                 if (error > 0)
                 {
                     var tempStatus = "";
-                    m_PALDrvr.GetStatus(ref tempStatus);
+                    palDriver.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
                     OnFree();
@@ -483,12 +483,12 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 status = WaitUntilReady(CONST_WAITTIMEOUT);
 
                 //Load configuration
-                error = m_PALDrvr.LoadConfiguration();
+                error = palDriver.LoadConfiguration();
 
                 if (error > 0)
                 {
                     var tempStatus = "";
-                    m_PALDrvr.GetStatus(ref tempStatus);
+                    palDriver.GetStatus(ref tempStatus);
                     HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                     errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
                     OnFree();
@@ -517,7 +517,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
                 WaitUntilReady(CONST_WAITTIMEOUT);
                 //If we made it this far, success! We can now access the PAL.
-                m_accessible = true;
+                isConnected = true;
                 // store the pal instance to make it available for, say, validators
                 if (!AutoSamplers.ConnectedAutoSamplers.Contains(this))
                 {
@@ -525,7 +525,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 }
 
                 // Set the methods folder the PAL uses according to the LCMSNet application settings
-                m_PALDrvr.SelectMethodFolder(MethodsFolder);
+                palDriver.SelectMethodFolder(MethodsFolder);
 
                 //list methods
                 ListMethods();
@@ -545,17 +545,17 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <param name="newFolderPath">The path to the new folder.</param>
         public void SetMethodFolder(string newFolderPath)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return;
             }
 
-            var error = m_PALDrvr.SelectMethodFolder(newFolderPath);
+            var error = palDriver.SelectMethodFolder(newFolderPath);
             //Error Checking
             if (error > 0)
             {
                 var tempStatus = "";
-                m_PALDrvr.GetStatus(ref tempStatus);
+                palDriver.GetStatus(ref tempStatus);
                 HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
                 OnFree();
                 return;
@@ -574,16 +574,16 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 AutoSamplers.ConnectedAutoSamplers.Remove(this);
             }
 
-            if (m_emulation)
+            if (inEmulationMode)
             {
-                m_accessible = false;
+                isConnected = false;
                 return true;
             }
 
-            if (m_accessible)
+            if (isConnected)
             {
-                m_PALDrvr = null;
-                m_accessible = false;
+                palDriver = null;
+                isConnected = false;
             }
             OnDeviceSaveRequired();
             return true;
@@ -599,9 +599,9 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             //
             // Find the methods from the device (or emulated one)
             //
-            if (m_emulation == false)
+            if (inEmulationMode == false)
             {
-                var error = m_PALDrvr.GetMethodNames(ref methods);
+                var error = palDriver.GetMethodNames(ref methods);
                 //TODO: Handle error.
             }
             else
@@ -655,12 +655,12 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             var trays = "";
             var tries = 0;
             var MAX_TRIES = 50;
-            if (m_emulation == false)
+            if (inEmulationMode == false)
             {
                 var error = 0; //assume success
                 while (string.IsNullOrEmpty(trays) && tries <= MAX_TRIES)
                 {
-                    error = m_PALDrvr.GetTrayNames(ref trays);
+                    error = palDriver.GetTrayNames(ref trays);
                     System.Threading.Thread.Sleep(250);
                     tries++;
                 }
@@ -731,11 +731,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <returns></returns>
         public string SelectVials(string vialTypes, string tray, string selectedVials)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return "Emulated";
             }
-            var error = m_PALDrvr.SelectVials(vialTypes, tray, ref selectedVials);
+            var error = palDriver.SelectVials(vialTypes, tray, ref selectedVials);
 
             return error.ToString() + ": " + selectedVials;
         }
@@ -759,13 +759,13 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         public bool ValidateVial(string tray, int vial, out int lastVial)
         {
             lastVial = 0;
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return false;
             }
 
             var tempStr = "";
-            var error = m_PALDrvr.ValidateVial($"{tray}:{vial}", ref tempStr);
+            var error = palDriver.ValidateVial($"{tray}:{vial}", ref tempStr);
 
             int.TryParse(tempStr, out lastVial);
 
@@ -778,12 +778,12 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <returns>A string containing the status</returns>
         public string GetStatus()
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return "Emulated";
             }
             var tempString = "";
-            var error = m_PALDrvr.GetStatus(ref tempString);
+            var error = palDriver.GetStatus(ref tempString);
             //TODO: Handle error.
             OnFree();
             return tempString;
@@ -794,12 +794,12 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public void ResetPAL()
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return;
             }
 
-            var error = m_PALDrvr.ResetPAL();
+            var error = palDriver.ResetPAL();
             //TODO: Handle error.
             OnDeviceSaveRequired();
             OnFree();
@@ -812,7 +812,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [LCMethodEvent("Start Method NonDeterm", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false, IgnoreLeftoverTime = true, EventDescription = "Start the specified PAL method. Doesn't return until reaching an error/ready/sync state.\nIgnores early 'waiting for DS' (first 20 seconds).\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public bool LoadMethod(double timeout, ISampleInfo sample, string methodName)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return true;
             }
@@ -837,7 +837,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             // We see if we ran over or not...if so then return failure, otherwise let it continue.
             //
             var status = "";
-            var statusCheckError = m_PALDrvr.GetStatus(ref status);
+            var statusCheckError = palDriver.GetStatus(ref status);
             var span = TimeKeeper.Instance.Now.Subtract(start);
             if (timeout > span.TotalSeconds)
             {
@@ -864,23 +864,23 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <param name="volume">The volume (string)</param>
         public bool LoadMethod(string method, string tray, int vial, string volume)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return true;
             }
 
-            m_method = method;
-            m_tray = tray;
+            this.currentMethod = method;
+            currentTray = tray;
             if (ValidateVial(vial))
             {
-                m_vial = vial;
+                currentVial = vial;
             }
             else
             {
                 HandleError("Vial number out of range");
                 return false;
             }
-            m_volume = volume;
+            currentInjectionVolume = volume;
             return true;
         }
 
@@ -891,13 +891,13 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             var timeout = Convert.ToInt32(waitTimeout);
 
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return true;
             }
-            var tempArgs = "Tray=" + m_tray + "; Index=" + m_vial.ToString() + "; Volume=" + m_volume;
+            var tempArgs = "Tray=" + currentTray + "; Index=" + currentVial.ToString() + "; Volume=" + currentInjectionVolume;
             var errorMessage = "";
-            var error = m_PALDrvr.StartMethod(m_method, ref tempArgs, ref errorMessage);
+            var error = palDriver.StartMethod(currentMethod, ref tempArgs, ref errorMessage);
 
             // Check for an error!
             if (error == 1)
@@ -940,7 +940,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             var delayTime = StatusPollDelay * 1000;
             while (end.Subtract(start).TotalSeconds < timeout)
             {
-                var statusCheckError = m_PALDrvr.GetStatus(ref status);
+                var statusCheckError = palDriver.GetStatus(ref status);
                 /*if (this.StatusUpdate != null)
                 {
                     this.StatusUpdate(this, new DeviceStatusEventArgs(DeviceStatus.InUseByMethod,
@@ -992,11 +992,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [LCMethodEvent("Pause Method", .5, "", -1, false, EventDescription = "Pause PAL method until resumed or stopped.\nDeterministic, next step will not be started until timeout is reached")]
         public void PauseMethod()
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return;
             }
-            m_PALDrvr.PauseMethod();
+            palDriver.PauseMethod();
             OnDeviceSaveRequired();
         }
 
@@ -1008,11 +1008,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [LCMethodEvent("Resume Method NonDeterm", 500, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Resume paused PAL method.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public void ResumeMethod()
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return;
             }
-            m_PALDrvr.ResumeMethod();
+            palDriver.ResumeMethod();
             OnDeviceSaveRequired();
         }
 
@@ -1023,18 +1023,18 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [LCMethodEvent("Continue Method NonDeterm", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Continue the PAL method (when it is waiting for a sync signal).\n\"waitForComplete\": wait until the PAL has finished the step or errors before starting the next step.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public bool ContinueMethod(double timeout, bool waitForComplete = false)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return true;
             }
 
             var result = true;
             var prevStatus = "";
-            m_PALDrvr.GetStatus(ref prevStatus);
+            palDriver.GetStatus(ref prevStatus);
 
             StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(DeviceStatus.InUseByMethod,
                 "continue method", this));
-            m_PALDrvr.ContinueMethod();
+            palDriver.ContinueMethod();
 
             if (waitForComplete)
             {
@@ -1043,14 +1043,14 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 while (status.Equals(prevStatus))
                 {
                     System.Threading.Thread.Sleep(StatusPollDelay * 500);
-                    m_PALDrvr.GetStatus(ref status);
+                    palDriver.GetStatus(ref status);
                 }
 
                 result = WaitUntilStopPoint(timeout);
             }
 
             var statusMessage = "";
-            var errorCode = m_PALDrvr.GetStatus(ref statusMessage);
+            var errorCode = palDriver.GetStatus(ref statusMessage);
             StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(DeviceStatus.InUseByMethod,
                 "continue method end", this, statusMessage + " " + errorCode.ToString()));
 
@@ -1064,11 +1064,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         [LCMethodEvent("Stop Method NonDeterm", .5, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Stops the current PAL method immediately.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public void StopMethod()
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return;
             }
-            m_PALDrvr.StopMethod();
+            palDriver.StopMethod();
         }
 
         /// <summary>
@@ -1082,7 +1082,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             var timeoutms = Convert.ToInt32(waitTimeoutms);
 
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return 0;
             }
@@ -1126,7 +1126,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <returns></returns>
         public override string ToString()
         {
-            return m_name;
+            return name;
         }
 
         #endregion
