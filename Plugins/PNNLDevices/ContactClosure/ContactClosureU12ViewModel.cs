@@ -29,12 +29,15 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <summary>
         /// The contact closure class used for triggering a pulse.
         /// </summary>
-        private ContactClosureU12 m_contactClosure;
+        private ContactClosureU12 contactClosure;
 
         private const int CONST_MINIMUMVOLTAGE = -5;
         private const int CONST_MAXIMUMVOLTAGE = 5;
         private const int CONST_MINIMUMPULSELENGTH = 0;
-        private bool m_loading;
+        private bool isLoading;
+        private int selectedPulseLength;
+        private double selectedVoltage;
+        private double selectedNormalVoltage;
         private LabjackU12OutputPorts selectedOutputPort;
 
         #endregion
@@ -46,19 +49,65 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         public override int MinimumPulseLength => CONST_MINIMUMPULSELENGTH;
 
         /// <summary>
+        /// The pulse length to run
+        /// </summary>
+        public virtual int PulseLength
+        {
+            get => contactClosure.PulseLength;
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedPulseLength, value) && isLoading == false)
+                {
+                    contactClosure.PulseLength = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The voltage of the pulse
+        /// </summary>
+        public virtual double Voltage
+        {
+            get => contactClosure.PulseVoltage;
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedVoltage, value) && isLoading == false)
+                {
+                    contactClosure.PulseVoltage = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The normal/default voltage of the output
+        /// </summary>
+        public virtual double NormalVoltage
+        {
+            get => contactClosure.NormalVoltage;
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedNormalVoltage, value) && isLoading == false)
+                {
+                    contactClosure.NormalVoltage = value;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the output port of the device.
         /// </summary>
         public override LabjackU12OutputPorts Port
         {
-            get => m_contactClosure.Port;
+            get => contactClosure.Port;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref selectedOutputPort, value) && m_loading == false)
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedOutputPort, value) && isLoading == false)
                 {
-                    m_contactClosure.Port = value;
+                    contactClosure.Port = value;
                 }
             }
         }
+
         /// <summary>
         /// Determines if the device is in emulation mode or not.
         /// </summary>
@@ -67,17 +116,17 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
             get
             {
                 var emulated = true;
-                if (m_contactClosure != null)
+                if (contactClosure != null)
                 {
-                    emulated = m_contactClosure.Emulation;
+                    emulated = contactClosure.Emulation;
                 }
                 return emulated;
             }
             set
             {
-                if (m_contactClosure != null)
+                if (contactClosure != null)
                 {
-                    m_contactClosure.Emulation = value;
+                    contactClosure.Emulation = value;
                 }
             }
         }
@@ -87,7 +136,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public override IDevice Device
         {
-            get => m_contactClosure;
+            get => contactClosure;
             set
             {
                 if (value != null)
@@ -105,17 +154,17 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
 
         private void RegisterDevice(IDevice device)
         {
-            m_loading = true;
-            m_contactClosure = device as ContactClosureU12;
+            isLoading = true;
+            contactClosure = device as ContactClosureU12;
 
-            if (m_contactClosure != null)
+            if (contactClosure != null)
             {
-                Port = m_contactClosure.Port;
+                Port = contactClosure.Port;
 
-                m_contactClosure.DeviceSaveRequired += CC_DeviceSaveRequired;
+                contactClosure.DeviceSaveRequired += CC_DeviceSaveRequired;
             }
-            SetBaseDevice(m_contactClosure);
-            m_loading = false;
+            SetBaseDevice(contactClosure);
+            isLoading = false;
         }
 
         public virtual void CC_DeviceSaveRequired(object sender, EventArgs e)
@@ -133,7 +182,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
             {
                 try
                 {
-                    m_contactClosure.Trigger(PulseLength, Voltage);
+                    contactClosure.Trigger();
                 }
                 catch (Exception ex)
                 {

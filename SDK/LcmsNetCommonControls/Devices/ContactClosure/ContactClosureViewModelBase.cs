@@ -33,6 +33,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
 
         private int pulseLength;
         private double voltage;
+        private double normalVoltage;
         private T selectedPort;
 
         #endregion
@@ -62,7 +63,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// <summary>
         /// The pulse length to run
         /// </summary>
-        public int PulseLength
+        public virtual int PulseLength
         {
             get => pulseLength;
             set => this.RaiseAndSetIfChanged(ref pulseLength, value);
@@ -71,10 +72,19 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// <summary>
         /// The voltage of the pulse
         /// </summary>
-        public double Voltage
+        public virtual double Voltage
         {
             get => voltage;
             set => this.RaiseAndSetIfChanged(ref voltage, value);
+        }
+
+        /// <summary>
+        /// The normal/default voltage of the output
+        /// </summary>
+        public virtual double NormalVoltage
+        {
+            get => normalVoltage;
+            set => this.RaiseAndSetIfChanged(ref normalVoltage, value);
         }
 
         /// <summary>

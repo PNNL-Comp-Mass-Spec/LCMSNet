@@ -32,27 +32,41 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <summary>
         /// The labjack used for signalling the pulse
         /// </summary>
-        private readonly LabjackU12 m_labjack;
+        private readonly LabjackU12 labjackDevice;
+        /// <summary>
+        /// The length of the pulse to send on the port. Defaults to 1 second.
+        /// </summary>
+        private int pulseLength = 1;
+        /// <summary>
+        /// The voltage to apply on the port for the pulse duration. Defaults to 5V.
+        /// </summary>
+        private double pulseVoltage = 5;
+        /// <summary>
+        /// The 'normal'/default voltage for the labjack port. Defaults to 0V.
+        /// </summary>
+        private double normalVoltage = CONST_ANALOGLOW;
         /// <summary>
         /// The port on the labjack on which to apply the voltage.
         /// </summary>
-        private LabjackU12OutputPorts m_port;
+        private LabjackU12OutputPorts labjackPort;
         /// <summary>
         /// The name, used in software for the symbol.
         /// </summary>
-        private string m_name;
+        private string deviceName;
         /// <summary>
         /// The version.
         /// </summary>
-        private string m_version;
+        private string deviceVersion;
         /// <summary>
         /// The current status of the Labjack.
         /// </summary>
-        private DeviceStatus m_status;
+        private DeviceStatus deviceStatus;
         /// <summary>
         /// Flag indicating if the device is in emulation mode.
         /// </summary>
-        private bool m_emulation;
+        private bool inEmulationMode;
+
+        private bool isInitialized = false;
         private const char CONST_ANALOGPREFIX = 'A';
         private const int CONST_ANALOGHIGH = 5;
         private const int CONST_DIGITALHIGH = 1;
@@ -82,9 +96,9 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public ContactClosureU12()
         {
-            m_labjack = new LabjackU12();
-            m_port    = LabjackU12OutputPorts.AO1;
-            m_name = "Contact Closure";
+            labjackDevice = new LabjackU12();
+            labjackPort    = LabjackU12OutputPorts.AO1;
+            deviceName = "Contact Closure";
         }
 
         /// <summary>
@@ -93,9 +107,9 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <param name="lj">The labjack</param>
         public ContactClosureU12(LabjackU12 lj)
         {
-            m_labjack = lj;
-            m_port    = LabjackU12OutputPorts.AO1;
-            m_name = "Contact Closure";
+            labjackDevice = lj;
+            labjackPort    = LabjackU12OutputPorts.AO1;
+            deviceName = "Contact Closure";
         }
 
         /// <summary>
@@ -104,9 +118,9 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <param name="newPort">The port on the labjack to use for the pulse</param>
         public ContactClosureU12(LabjackU12OutputPorts newPort)
         {
-            m_labjack = new LabjackU12();
-            m_port    = newPort;
-            m_name = "Contact Closure";
+            labjackDevice = new LabjackU12();
+            labjackPort    = newPort;
+            deviceName = "Contact Closure";
         }
 
         /// <summary>
@@ -116,9 +130,9 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <param name="newPort">The port on the labjack to use for the pulse</param>
         public ContactClosureU12(LabjackU12 lj, LabjackU12OutputPorts newPort)
         {
-            m_labjack = lj;
-            m_port    = newPort;
-            m_name = "Contact Closure";
+            labjackDevice = lj;
+            labjackPort    = newPort;
+            deviceName = "Contact Closure";
         }
 
         #endregion
@@ -136,8 +150,8 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
-            get => m_emulation;
-            set => m_emulation = value;
+            get => inEmulationMode;
+            set => inEmulationMode = value;
         }
 
         /// <summary>
@@ -145,15 +159,15 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public DeviceStatus Status
         {
-            get => m_status;
+            get => deviceStatus;
             set
             {
-                if (value != m_status)
+                if (value != deviceStatus)
                 {
                     StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
                 }
 
-                m_status = value;
+                deviceStatus = value;
             }
         }
 
@@ -162,10 +176,10 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public string Name
         {
-            get => m_name;
+            get => deviceName;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref deviceName, value))
                 {
                     OnDeviceSaveRequired();
                 }
@@ -177,11 +191,54 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// </summary>
         public string Version
         {
-            get => m_version;
+            get => deviceVersion;
             set
             {
-                m_version = value;
+                deviceVersion = value;
                 OnDeviceSaveRequired();
+            }
+        }
+
+        /// <summary>
+        /// The length of the pulse to send on the port. Defaults to 1 second.
+        /// </summary>
+        [PersistenceData("PulseLengthSeconds")]
+        public int PulseLength
+        {
+            get => pulseLength;
+            set
+            {
+                pulseLength = value;
+                OnDeviceSaveRequired();
+            }
+        }
+
+        /// <summary>
+        /// The voltage to apply on the port for the pulse duration. Defaults to 5V.
+        /// </summary>
+        [PersistenceData("PulseVoltage")]
+        public double PulseVoltage
+        {
+            get => pulseVoltage;
+            set
+            {
+                pulseVoltage = value;
+                OnDeviceSaveRequired();
+            }
+        }
+
+        /// <summary>
+        /// The 'normal'/default voltage for the labjack port. Defaults to 0V.
+        /// </summary>
+        [PersistenceData("NormalVoltage")]
+        public double NormalVoltage
+        {
+            get => normalVoltage;
+            set
+            {
+                normalVoltage = value;
+                OnDeviceSaveRequired();
+                SetPortNormalVoltage();
             }
         }
 
@@ -191,19 +248,20 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         [PersistenceData("Port")]
         public LabjackU12OutputPorts Port
         {
-            get => m_port;
+            get => labjackPort;
             set
             {
-                m_port = value;
+                labjackPort = value;
                 OnDeviceSaveRequired();
+                SetPortNormalVoltage();
             }
         }
 
         [PersistenceData("Labjack ID")]
         public int LabJackID
         {
-            get => m_labjack.LocalID;
-            set => m_labjack.LocalID = value;
+            get => labjackDevice.LocalID;
+            set => labjackDevice.LocalID = value;
         }
 
         #endregion
@@ -215,13 +273,15 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         public bool Initialize(ref string errorMessage)
         {
             //Get the version info
-            m_labjack.GetDriverVersion();
-            m_labjack.GetFirmwareVersion();
+            labjackDevice.GetDriverVersion();
+            labjackDevice.GetFirmwareVersion();
 
             //If we got anything, call it good
-            if (m_labjack.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 &&
-                m_labjack.DriverVersion.ToString(CultureInfo.InvariantCulture).Length > 0)
+            if (labjackDevice.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 &&
+                labjackDevice.DriverVersion.ToString(CultureInfo.InvariantCulture).Length > 0)
             {
+                isInitialized = true;
+                SetPortNormalVoltage();
                 return true;
             }
 
@@ -247,6 +307,71 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         }
 
         /// <summary>
+        /// Convert voltage for digital values, if the port is digital
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="voltage"></param>
+        /// <returns></returns>
+        private static double GetVoltageToUse(LabjackU12OutputPorts port, double voltage)
+        {
+            return GetVoltageToUse(Enum.GetName(typeof(LabjackU12OutputPorts), port), voltage);
+        }
+
+        /// <summary>
+        /// Convert voltage for digital values, if the port is digital
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="voltage"></param>
+        /// <returns></returns>
+        private static double GetVoltageToUse(string port, double voltage)
+        {
+            if (port.StartsWith("A"))
+                return voltage;
+
+            if (voltage < 2.51)
+                return CONST_DIGITALLOW;
+
+            return CONST_DIGITALHIGH;
+        }
+
+        /// <summary>
+        /// Set the normal voltage value for the port
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        private void SetPortNormalVoltage()
+        {
+            if (!isInitialized)
+            {
+                return;
+            }
+
+            var normalVoltageValue = GetVoltageToUse(Port, NormalVoltage);
+
+            try
+            {
+                labjackDevice.Write(Port, normalVoltageValue);
+            }
+            catch (LabjackU12Exception ex)
+            {
+                Error?.Invoke(this, new DeviceErrorEventArgs("Could not set the normal voltage.",
+                    ex,
+                    DeviceErrorStatus.ErrorAffectsAllColumns,
+                    this));
+                throw new Exception("Could not set the normal voltage on write.  " + ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Triggers a pulse, using the stored values.
+        /// </summary>
+        /// <param name="timeout"></param>
+        [LCMethodEvent("Trigger Fixed", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        public int Trigger(double timeout = 0)
+        {
+            return TriggerFlexible(PulseLength, Port, PulseVoltage);
+        }
+
+        /// <summary>
         /// Triggers a 5V pulse of the specified length.
         /// </summary>
         /// <param name="timeout"></param>
@@ -254,8 +379,9 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         [LCMethodEvent("Trigger", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int Trigger(double timeout, double pulseLengthSeconds)
         {
-            return Trigger(timeout, m_port, pulseLengthSeconds);
+            return Trigger(timeout, labjackPort, pulseLengthSeconds);
         }
+
         /// <summary>
         /// Triggers a 5V pulse of the specified length.
         /// </summary>
@@ -265,12 +391,12 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         [LCMethodEvent("Trigger Port", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int Trigger(double timeout, LabjackU12OutputPorts port, double pulseLengthSeconds)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return 0;
             }
 
-            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), m_port).ToString();
+            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), labjackPort);
 
             var error = 0;
 
@@ -278,11 +404,11 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
             {
                 if (tempPortName[0] == CONST_ANALOGPREFIX)
                 {
-                    m_labjack.Write(port, CONST_ANALOGHIGH);
+                    labjackDevice.Write(port, CONST_ANALOGHIGH);
                 }
                 else
                 {
-                    m_labjack.Write(port, CONST_DIGITALHIGH);
+                    labjackDevice.Write(port, CONST_DIGITALHIGH);
                 }
             }
             catch (LabjackU12Exception ex)
@@ -303,7 +429,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
 
             try
             {
-                m_labjack.Write(port, CONST_ANALOGLOW);
+                labjackDevice.Write(port, CONST_ANALOGLOW);
             }
             catch (LabjackU12Exception ex)
             {
@@ -328,7 +454,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         [LCMethodEvent("Trigger With Voltage", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, double voltage)
         {
-            return Trigger(pulseLengthSeconds, m_port, voltage);
+            return Trigger(pulseLengthSeconds, labjackPort, voltage);
         }
 
         /// <summary>
@@ -342,22 +468,22 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter, "", -1, false)]
         public int Trigger(int pulseLengthSeconds, LabjackU12OutputPorts port, double voltage)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return 0;
             }
 
-            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), m_port).ToString();
+            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), labjackPort);
             var error = 0;
             try
             {
                 if (tempPortName[0] == CONST_ANALOGPREFIX)
                 {
-                    m_labjack.Write(port, voltage);
+                    labjackDevice.Write(port, voltage);
                 }
                 else
                 {
-                    m_labjack.Write(port, CONST_DIGITALHIGH);
+                    labjackDevice.Write(port, CONST_DIGITALHIGH);
                 }
             }
             catch (LabjackU12Exception ex)
@@ -370,7 +496,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
 
             try
             {
-                m_labjack.Write(port, CONST_ANALOGLOW);
+                labjackDevice.Write(port, CONST_ANALOGLOW);
             }
             catch (LabjackU12Exception ex)
             {
@@ -379,9 +505,52 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
 
             return error;
         }
+
+        /// <summary>
+        /// Triggers a pulse of the specified voltage, lasting the specified duration.
+        /// This is intended for use particularly with ports where we need to set a 'normal' value that is not zero
+        /// </summary>
+        /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
+        /// <param name="port"></param>
+        /// <param name="voltage">The voltage to set</param>
+        private int TriggerFlexible(int pulseLengthSeconds, LabjackU12OutputPorts port, double voltage)
+        {
+            if (inEmulationMode)
+            {
+                return 0;
+            }
+
+            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), labjackPort).ToString();
+            var error = 0;
+            try
+            {
+                var useVoltage = GetVoltageToUse(tempPortName, voltage);
+                labjackDevice.Write(port, useVoltage);
+            }
+            catch (LabjackU12Exception ex)
+            {
+                throw ex;
+            }
+
+            var timer = new TimerDevice();
+            timer.WaitSeconds(pulseLengthSeconds);
+
+            try
+            {
+                var useVoltage = GetVoltageToUse(tempPortName, NormalVoltage);
+                labjackDevice.Write(port, useVoltage);
+            }
+            catch (LabjackU12Exception ex)
+            {
+                throw ex;
+            }
+
+            return error;
+        }
+
         public override string ToString()
         {
-            return m_name;
+            return deviceName;
         }
         #endregion
 
@@ -389,6 +558,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
+
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
