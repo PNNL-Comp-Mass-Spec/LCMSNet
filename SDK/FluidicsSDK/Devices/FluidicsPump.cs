@@ -131,9 +131,10 @@ namespace FluidicsSDK.Devices
 
         private void PumpOnMonitoringDataReceived(object sender, PumpDataEventArgs e)
         {
-            flowRate = e.Flowrate.Last();
-            pressure = e.Pressure.Last();
-            percentB = e.PercentB.Last();
+            var lastPoint = e.DataPoints.Last();
+            flowRate = lastPoint.FlowRate;
+            pressure = lastPoint.Pressure;
+            percentB = lastPoint.PercentB;
             lastMonitorUpdate = DateTime.Now;
             DeviceChanged?.Invoke(this, new FluidicsDevChangeEventArgs());
         }

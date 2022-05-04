@@ -35,52 +35,52 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// A 'module' object for the Agilent pump drivers
         /// </summary>
-        private Module m_module;
+        private Module communicationModule;
 
         /// <summary>
         /// Error reporting channel.
         /// </summary>
-        private Channel m_evChannel;
+        private Channel eventDataChannel;
 
         /// <summary>
         /// Channel for retrieving methods from the pumps.
         /// </summary>
-        private Channel m_listChannel;
+        private Channel listDataChannel;
 
         /// <summary>
         /// A 'channel' object for the Agilent pump drivers
         /// </summary>
-        private Channel m_inChannel;
+        private Channel commandDataChannel;
 
         /// <summary>
         /// Channel when monitoring the instrument.
         /// </summary>
-        private Channel m_monitorChannel;
+        private Channel monitorDataChannel;
 
         /// <summary>
         /// The device's name.
         /// </summary>
-        private string m_name;
+        private string deviceName;
 
         /// <summary>
         /// The flow rate (used for save/load)
         /// </summary>
-        private double m_flowrate = -1.0;
+        private double currentFlowRate = -1.0;
 
         /// <summary>
         /// Filesystem watcher for real-time updating of pump methods.
         /// </summary>
-        private static FileSystemWatcher mwatcher_methods;
+        private static FileSystemWatcher methodFileWatcher;
 
         /// <summary>
         /// Dictionary that holds a method name, key, and the method time table, value.
         /// </summary>
-        private static Dictionary<string, string> mdict_methods;
+        private static Dictionary<string, string> availableMethods;
 
         /// <summary>
         /// Status strings from the pumps.
         /// </summary>
-        private static string[] m_notificationStrings;
+        private static string[] notificationStrings;
 
         private static Dictionary<string, string> errorCodes;
         private static Dictionary<string, string> statusCodes;
@@ -103,7 +103,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Status of the device.
         /// </summary>
-        private DeviceStatus m_status;
+        private DeviceStatus deviceStatus;
 
         private const string CONST_DEFAULTPORT = "COM1";
         private const int CONST_DEFAULTTIMEOUT = 6000; //milliseconds
@@ -179,24 +179,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public event EventHandler<DeviceErrorEventArgs> Error;
 
         /// <summary>
-        /// List of times monitoring data was received.
+        /// Monitoring data - pump readbacks
         /// </summary>
-        public List<DateTime> m_times;
-
-        /// <summary>
-        /// List of pressures used throughout the run.
-        /// </summary>
-        public List<double> m_pressures;
-
-        /// <summary>
-        /// List of flowrates used throughout the run.
-        /// </summary>
-        public List<double> m_flowrates;
-
-        /// <summary>
-        /// List of %B compositions throughout the run.
-        /// </summary>
-        public List<double> m_percentB;
+        public List<PumpDataPoint> MonitoringData;
 
         #endregion
 
@@ -219,33 +204,30 @@ namespace LcmsNetPlugins.Agilent.Pumps
             CreateStatusErrorCodes();
 
             PortName = CONST_DEFAULTPORT;
-            if (mdict_methods == null)
+            if (availableMethods == null)
             {
-                mdict_methods = new Dictionary<string, string>();
+                availableMethods = new Dictionary<string, string>();
             }
-            if (mwatcher_methods == null && !skipMethodLoad)
+            if (methodFileWatcher == null && !skipMethodLoad)
             {
                 var path = PersistDataPaths.GetDirectoryLoadPathCheckFiles("PumpMethods", "*.txt");
                 //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
-                mwatcher_methods = new FileSystemWatcher(path, "*.txt");
-                mwatcher_methods.Created += mwatcher_methods_Created;
-                mwatcher_methods.Changed += mwatcher_methods_Changed;
-                mwatcher_methods.EnableRaisingEvents = true;
+                methodFileWatcher = new FileSystemWatcher(path, "*.txt");
+                methodFileWatcher.Created += mwatcher_methods_Created;
+                methodFileWatcher.Changed += mwatcher_methods_Changed;
+                methodFileWatcher.EnableRaisingEvents = true;
             }
-            m_name = "pump";
+            deviceName = "pump";
 
-            m_flowrates = new List<double>();
-            m_percentB = new List<double>();
-            m_pressures = new List<double>();
-            m_times = new List<DateTime>();
-            m_status = DeviceStatus.NotInitialized;
+            MonitoringData = new List<PumpDataPoint>();
+            deviceStatus = DeviceStatus.NotInitialized;
 
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
             TotalMonitoringSecondsElapsed = CONST_MONITORING_SECONDS_ELAPSED;
 
-            if (m_notificationStrings == null)
+            if (notificationStrings == null)
             {
-                m_notificationStrings = new[]{
+                notificationStrings = new[]{
                     CONST_FLOW_CHANGE,
                     CONST_PRESSURE_VALUE
                 };
@@ -351,12 +333,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         public DeviceStatus Status
         {
-            get => m_status;
+            get => deviceStatus;
             set
             {
-                if (value != m_status)
+                if (value != deviceStatus)
                     StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
-                m_status = value;
+                deviceStatus = value;
             }
         }
 
@@ -370,10 +352,10 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         public string Name
         {
-            get => m_name;
+            get => deviceName;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref deviceName, value))
                 {
                     OnDeviceSaveRequired();
                 }
@@ -667,7 +649,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             isMonitoringDisabled = true;
 
-            if (m_monitorChannel != null && m_monitorChannel.IsOpen)
+            if (monitorDataChannel != null && monitorDataChannel.IsOpen)
             {
                 SendCommand("MONI:STOP", out _);
             }
@@ -677,7 +659,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             isMonitoringDisabled = false;
 
-            if (m_monitorChannel != null && m_monitorChannel.IsOpen)
+            if (monitorDataChannel != null && monitorDataChannel.IsOpen)
             {
                 SendCommand($"MONI:STRT {TotalMonitoringSecondsElapsed},\"ACT:FLOW?; ACT:PRES?; ACT:COMP?\"", out _);
             }
@@ -688,12 +670,12 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         public void ClearMethods()
         {
-            mdict_methods.Clear();
+            availableMethods.Clear();
         }
 
         public void AddMethods(Dictionary<string, string> methods)
         {
-            mdict_methods = methods;
+            availableMethods = methods;
             ListMethods();
         }
 
@@ -704,15 +686,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="method">Method data to store.</param>
         public void AddMethod(string methodname, string method)
         {
-            if (mdict_methods.ContainsKey(methodname))
+            if (availableMethods.ContainsKey(methodname))
             {
-                mdict_methods[methodname] = method;
+                availableMethods[methodname] = method;
 
                 // Don't need to fire ListMethods() - the name didn't change.
             }
             else
             {
-                mdict_methods.Add(methodname, method);
+                availableMethods.Add(methodname, method);
 
                 ListMethods();
             }
@@ -725,8 +707,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             if (MethodNames != null)
             {
-                var keys = new string[mdict_methods.Keys.Count];
-                mdict_methods.Keys.CopyTo(keys, 0);
+                var keys = new string[availableMethods.Keys.Count];
+                availableMethods.Keys.CopyTo(keys, 0);
 
                 var data = new List<object>();
                 data.AddRange(keys);
@@ -760,15 +742,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return false;
             }
 
-            m_module = pumpModule.CreateModule(pumpModule.GetAccessPointIdentifier());
-            PumpModel = m_module.Type;
-            PumpSerial = m_module.Serial;
+            communicationModule = pumpModule.CreateModule(pumpModule.GetAccessPointIdentifier());
+            PumpModel = communicationModule.Type;
+            PumpSerial = communicationModule.Serial;
 
             //
             // Channel for inputs
             //
-            m_inChannel = m_module.CreateChannel("IN");
-            if (m_inChannel.TryOpen(ReadMode.Polling) == false)
+            commandDataChannel = communicationModule.CreateChannel("IN");
+            if (commandDataChannel.TryOpen(ReadMode.Polling) == false)
             {
                 //"Could not open IN channel."
                 errorMessage = "Could not open the communication channel for input";
@@ -795,8 +777,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //
             // Open a list channel to read time tables.
             //
-            m_listChannel = m_module.CreateChannel("LI");
-            if (m_listChannel.TryOpen(ReadMode.Polling) == false)
+            listDataChannel = communicationModule.CreateChannel("LI");
+            if (listDataChannel.TryOpen(ReadMode.Polling) == false)
             {
                 errorMessage = "Could not open the communication channel for time table data.";
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
@@ -806,9 +788,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //
             // And an EV channel.Channel for errors or state events
             //
-            m_evChannel = m_module.CreateChannel("EV");
-            m_evChannel.DataReceived += m_evChannel_DataReceived;
-            if (m_evChannel.TryOpen(ReadMode.Events) == false)
+            eventDataChannel = communicationModule.CreateChannel("EV");
+            eventDataChannel.DataReceived += evChannel_DataReceived;
+            if (eventDataChannel.TryOpen(ReadMode.Events) == false)
             {
                 //"Could not open EV channel."
                 errorMessage = "Could not open the communication channel for error events";
@@ -819,9 +801,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //
             // Monitoring for the pumps
             //
-            m_monitorChannel = m_module.CreateChannel("MO");
-            m_monitorChannel.DataReceived += m_monitorChannel_DataReceived;
-            if (m_monitorChannel.TryOpen(ReadMode.Events) == false)
+            monitorDataChannel = communicationModule.CreateChannel("MO");
+            monitorDataChannel.DataReceived += monitorChannel_DataReceived;
+            if (monitorDataChannel.TryOpen(ReadMode.Events) == false)
             {
                 errorMessage = "Could not open the communication channel for monitoring data";
                 HandleError(errorMessage, CONST_INITIALIZE_ERROR);
@@ -890,7 +872,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void m_evChannel_DataReceived(object sender, DataEventArgs e)
+        void evChannel_DataReceived(object sender, DataEventArgs e)
         {
             var data = e.AsciiData;
             var message = data.Split(',');
@@ -917,7 +899,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void m_monitorChannel_DataReceived(object sender, DataEventArgs e)
+        void monitorChannel_DataReceived(object sender, DataEventArgs e)
         {
             try
             {
@@ -967,46 +949,38 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var time = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
 
             // notifications
-            if (Math.Abs(m_flowrate) > float.Epsilon)
+            if (Math.Abs(currentFlowRate) > float.Epsilon)
             {
-                var percentFlowChange = (m_flowrate - flowrate) / m_flowrate;
+                var percentFlowChange = (currentFlowRate - flowrate) / currentFlowRate;
                 UpdateNotificationStatus(percentFlowChange.ToString("0.00"), CONST_FLOW_CHANGE);
             }
             UpdateNotificationStatus(pressure.ToString("0.000"), CONST_PRESSURE_VALUE);
 
-            // Update log collections.
-            m_times.Add(time);
-            m_pressures.Add(pressure);
-            m_flowrates.Add(flowrate);
-            m_percentB.Add(compositionB);
+            // Update log collection.
+            MonitoringData.Add(new PumpDataPoint(time, pressure, flowrate, compositionB));
 
-            //
             // Find old data to remove -- needs to be updated (or could be) using LINQ
-            //
-            var count = m_times.Count;
+            var count = MonitoringData.Count;
             var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondsElapsed;
             if (count >= total)
             {
                 var i = 0;
-                while (time.Subtract(m_times[i]).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < m_times.Count)
+                while (time.Subtract(MonitoringData[i].Time).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < MonitoringData.Count)
                 {
                     i++;
                 }
 
                 if (i > 0)
                 {
-                    i = Math.Min(i, m_times.Count - 1);
-                    m_times.RemoveRange(0, i);
-                    m_flowrates.RemoveRange(0, i);
-                    m_pressures.RemoveRange(0, i);
-                    m_percentB.RemoveRange(0, i);
+                    i = Math.Min(i, MonitoringData.Count - 1);
+                    MonitoringData.RemoveRange(0, i);
                 }
             }
 
             // Alert the user data is ready
             try
             {
-                MonitoringDataReceived?.Invoke(this, new PumpDataEventArgs(this, m_times, m_pressures, m_flowrates, m_percentB));
+                MonitoringDataReceived?.Invoke(this, new PumpDataEventArgs(this, MonitoringData));
             }
             catch
             {
@@ -1027,16 +1001,16 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return true;
             }
 
-            if (m_evChannel == null)
+            if (eventDataChannel == null)
                 return true;
 
             // close EV channel
-            m_evChannel.Close();
+            eventDataChannel.Close();
 
             // close IN channel
-            m_inChannel.Close();
+            commandDataChannel.Close();
 
-            m_monitorChannel.DataReceived -= m_monitorChannel_DataReceived;
+            monitorDataChannel.DataReceived -= monitorChannel_DataReceived;
 
             // disconnect
             pumpModule?.Disconnect();
@@ -1080,7 +1054,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             if (readChannel == null)
             {
-                readChannel = m_inChannel;
+                readChannel = commandDataChannel;
             }
 
             lock (pumpCommLock)
@@ -1088,7 +1062,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 //Send the command over our serial port
                 //TODO: Wrap this in exception checking
                 //      (if there is an error, send out errorstring)
-                if (m_inChannel.TryWrite(command, CONST_WRITETIMEOUT) == false)
+                if (commandDataChannel.TryWrite(command, CONST_WRITETIMEOUT) == false)
                 {
                     //Couldn't send instruction
                     ApplicationLogger.LogError(0, $"Agilent Pump \"{Name}\": Command \"{command}\" got error response \"{AgilentPumpReplyErrorCodes.Instruction_Send_Failed}\"");
@@ -1157,7 +1131,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             {
                 return;
             }
-            m_flowrate = newFlowRate;
+            currentFlowRate = newFlowRate;
             var reply = "";
             SendCommand("FLOW " + newFlowRate.ToString(CultureInfo.InvariantCulture),
                 out reply, "Attempting to set flow rate to " + newFlowRate.ToString(CultureInfo.InvariantCulture));
@@ -1222,13 +1196,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //
             // Make sure we have record of the method
             //
-            if (mdict_methods.ContainsKey(method) == false)
+            if (availableMethods.ContainsKey(method) == false)
                 throw new Exception(string.Format("The method {0} does not exist.", method));
 
             //
             // Then send commands to start the method
             //
-            var methodData = mdict_methods[method];
+            var methodData = availableMethods[method];
             var reply = "";
 
             //
@@ -1401,7 +1375,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
             else
             {
-                SendCommand("LIST \"TT\"", out methodString, "Attempting to retrieve method", m_listChannel);
+                SendCommand("LIST \"TT\"", out methodString, "Attempting to retrieve method", listDataChannel);
             }
             return methodString;
         }
@@ -1898,9 +1872,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="methodName"></param>
         private void WriteMethod(string directoryPath, string methodName)
         {
-            if (mdict_methods.ContainsKey(methodName))
+            if (availableMethods.ContainsKey(methodName))
             {
-                var methodData = mdict_methods[methodName];
+                var methodData = availableMethods[methodName];
             }
         }
 
@@ -1908,11 +1882,11 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// Writes the required data to the directory path provided.
         /// </summary>
         /// <param name="directoryPath">Path of directory to create files in.</param>
-        /// <param name="name">Name of the method the user is requesting performance data about.</param>
+        /// <param name="methodName">Name of the method the user is requesting performance data about.</param>
         /// <param name="parameters">Parameters used to create the performance data.</param>
-        public void WritePerformanceData(string directoryPath, string name, object[] parameters)
+        public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-            switch (name)
+            switch (methodName)
             {
                 case "Start Method":
                     if (parameters != null && parameters.Length > 1)
@@ -1928,7 +1902,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var notifications = new List<string>() { "Status"
                                                             };
 
-            notifications.AddRange(m_notificationStrings);
+            notifications.AddRange(notificationStrings);
 
             foreach (var value in statusCodes.Values)
             {
@@ -1971,57 +1945,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             return Name;
         }
-
-        #region IFinchComponent Members
-        /*
-        public FinchComponentData GetData()
-        {
-            FinchComponentData component = new FinchComponentData();
-            component.Status    = Status.ToString();
-            component.Name      = Name;
-            component.Type      = "Pump";
-            component.LastUpdate = DateTime.Now;
-
-            FinchScalarSignal port    = new FinchScalarSignal();
-            port.Name   = "Port";
-            port.Type   = FinchDataType.String;
-            port.Units  = "";
-            port.Value  = this.PortName.ToString();
-
-            FinchDataTuple plotPressure = new FinchDataTuple();
-            plotPressure.XUnits     = "DateTime";
-            plotPressure.YUnits     = "bar";
-            plotPressure.Name       = "Pressure";
-            plotPressure.XDataType  = FinchDataType.DateTime;
-            plotPressure.YDataType  = FinchDataType.Double;
-            plotPressure.SetX<DateTime>(m_times);
-            plotPressure.SetY<double>(m_pressures);
-            component.Signals.Add(plotPressure);
-
-            FinchDataTuple percentBPlot = new FinchDataTuple();
-            percentBPlot.XUnits     = "DateTime";
-            percentBPlot.YUnits     = "%B";
-            percentBPlot.Name       = "Composition";
-            percentBPlot.XDataType  = FinchDataType.DateTime;
-            percentBPlot.YDataType  = FinchDataType.Double;
-            percentBPlot.SetX<DateTime>(m_times);
-            percentBPlot.SetY<double>(m_percentB);
-            component.Signals.Add(percentBPlot);
-
-            FinchDataTuple flowratePlot = new FinchDataTuple();
-            flowratePlot.XUnits     = "DateTime";
-            flowratePlot.YUnits     = "ul/min";
-            flowratePlot.Name       = "Flowrate";
-            flowratePlot.XDataType  = FinchDataType.DateTime;
-            flowratePlot.YDataType  = FinchDataType.Double;
-            flowratePlot.SetX<DateTime>(m_times);
-            flowratePlot.SetY<double>(m_flowrates);
-            component.Signals.Add(flowratePlot);
-
-            return component;
-        }*/
-
-        #endregion
 
         #region IPump Members
 

@@ -77,7 +77,8 @@
     <Compile Include="Devices\IPump.cs" />
     <Compile Include="Devices\MonitoringComponent.cs" />
     <Compile Include="Devices\PersistenceDataAttribute.cs" />
-    <Compile Include="Devices\PumpDataReceivedHandler.cs" />
+    <Compile Include="Devices\PumpDataEventArgs.cs" />
+    <Compile Include="Devices\PumpDataPoint.cs" />
     <Compile Include="Devices\TimerDevice.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="Experiment\ISampleValidator.cs" />

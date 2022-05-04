@@ -41,7 +41,7 @@ namespace LcmsNetCommonControls.Devices.Pumps
         /// <summary>
         /// List for supplying data to the plots. Does not need to be an observable list because we directly trigger updates.
         /// </summary>
-        private readonly List<PlotData> plotDataList = new List<PlotData>();
+        private readonly List<PumpDataPoint> plotDataList = new List<PumpDataPoint>();
 
         /// <summary>
         /// Name of the pump
@@ -160,7 +160,7 @@ namespace LcmsNetCommonControls.Devices.Pumps
                 //MarkerType = MarkerType.Circle,
                 Color = OxyColors.Red,
                 ItemsSource = plotDataList,
-                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).Pressure),
+                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PumpDataPoint)item).Time), ((PumpDataPoint)item).Pressure),
                 RenderInLegend = false,
             };
 
@@ -170,7 +170,7 @@ namespace LcmsNetCommonControls.Devices.Pumps
                 //MarkerType = MarkerType.Triangle,
                 Color = OxyColors.DarkGreen,
                 ItemsSource = plotDataList,
-                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).Flow),
+                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PumpDataPoint)item).Time), ((PumpDataPoint)item).FlowRate),
                 RenderInLegend = false,
             };
 
@@ -180,7 +180,7 @@ namespace LcmsNetCommonControls.Devices.Pumps
                 //MarkerType = MarkerType.Square,
                 Color = OxyColors.Blue,
                 ItemsSource = plotDataList,
-                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PlotData)item).Time), ((PlotData)item).PercentB),
+                Mapping = item => new DataPoint(DateTimeAxis.ToDouble(((PumpDataPoint)item).Time), ((PumpDataPoint)item).PercentB),
                 RenderInLegend = false,
             };
 
@@ -194,12 +194,8 @@ namespace LcmsNetCommonControls.Devices.Pumps
         /// </summary>
         public void DisplayMonitoringData(object sender, PumpDataEventArgs args)
         {
-            // TODO: Change this so that we are not re-generating the whole list with every update.
             plotDataList.Clear();
-            for (var i = 0; i < args.Time.Count; i++)
-            {
-                plotDataList.Add(new PlotData(args.Time[i], args.Pressure[i], args.Flowrate[i], args.PercentB[i]));
-            }
+            plotDataList.AddRange(args.DataPoints);
 
             DataPressureMonitorPlot.InvalidatePlot(true);
             DataFlowMonitorPlot.InvalidatePlot(true);
@@ -213,47 +209,6 @@ namespace LcmsNetCommonControls.Devices.Pumps
         public void SetPumpName(string name)
         {
             PumpName = name;
-        }
-
-        /// <summary>
-        /// Class to hold information for plotting
-        /// </summary>
-        public class PlotData
-        {
-            /// <summary>
-            /// The timestamp
-            /// </summary>
-            public DateTime Time { get; }
-
-            /// <summary>
-            /// Pressure
-            /// </summary>
-            public double Pressure { get; }
-
-            /// <summary>
-            /// Flow
-            /// </summary>
-            public double Flow { get; }
-
-            /// <summary>
-            /// Percent B
-            /// </summary>
-            public double PercentB { get; }
-
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            /// <param name="time"></param>
-            /// <param name="pressure"></param>
-            /// <param name="flow"></param>
-            /// <param name="percentB"></param>
-            public PlotData(DateTime time, double pressure, double flow, double percentB)
-            {
-                Time = time;
-                Pressure = pressure;
-                Flow = flow;
-                PercentB = percentB;
-            }
         }
     }
 }
