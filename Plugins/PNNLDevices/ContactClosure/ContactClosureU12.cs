@@ -272,6 +272,11 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         //Maybe confirm that we can communicate to the labjack? I don't know.
         public bool Initialize(ref string errorMessage)
         {
+            if (Emulation)
+            {
+                return true;
+            }
+
             //Get the version info
             labjackDevice.GetDriverVersion();
             labjackDevice.GetFirmwareVersion();
@@ -340,7 +345,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
         /// <exception cref="Exception"></exception>
         private void SetPortNormalVoltage()
         {
-            if (!isInitialized)
+            if (!isInitialized || inEmulationMode)
             {
                 return;
             }
