@@ -35,11 +35,24 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluidicsSDK">
+      <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="LcmsNetCommonControls">
+      <HintPath>..\..\lib\LcmsNetCommonControls.dll</HintPath>
+    </Reference>
+    <Reference Include="LcmsNetSdk">
+      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContactClosureRead\ContactClosureReadU12.cs" />
+    <Compile Include="ContactClosureRead\ContactClosureReadU12ViewModel.cs" />
+    <Compile Include="ContactClosure\ContactClosureU12.cs" />
+    <Compile Include="ContactClosure\ContactClosureU12ViewModel.cs" />
     <Compile Include="LabjackU12.cs" />
     <Compile Include="LabjackU12Exception.cs" />
     <Compile Include="LabjackU12Ports.cs" />
@@ -47,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\labjack.png" />
     <Content Include="x64\ljackuw.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -54,6 +68,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI.WPF">
+      <Version>18.0.10</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

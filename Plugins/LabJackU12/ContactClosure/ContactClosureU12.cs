@@ -15,12 +15,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using FluidicsSDK.Devices;
-using LcmsNetPlugins.LabJackU12;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
-namespace LcmsNetPlugins.PNNLDevices.ContactClosure
+namespace LcmsNetPlugins.LabJackU12.ContactClosure
 {
     [Serializable]
     [DeviceControl(typeof(ContactClosureU12ViewModel),

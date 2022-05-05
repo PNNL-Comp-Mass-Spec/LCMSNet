@@ -1,12 +1,11 @@
 ﻿using System;
 using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.ContactClosureRead;
-using LcmsNetPlugins.LabJackU12;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using ReactiveUI;
 
-namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
+namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
 {
     /// <summary>
     /// Reads/waits for a ready signal from a mass spectrometer or other device using a labjack TTL I/O.
@@ -51,7 +50,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
             get => contactClosureRead.Port;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref selectedInputPort, value) && loading == false)
+                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedInputPort, value) && loading == false)
                 {
                     contactClosureRead.Port = value;
                     IsAnalog = value.ToString().ToUpper().StartsWith("A");

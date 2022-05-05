@@ -4,13 +4,12 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
 using FluidicsSDK.Devices;
-using LcmsNetPlugins.LabJackU12;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace LcmsNetPlugins.PNNLDevices.ContactClosureRead
+namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
 {
     [Serializable]
     [DeviceControl(typeof(ContactClosureReadU12ViewModel),

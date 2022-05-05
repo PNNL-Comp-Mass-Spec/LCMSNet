@@ -52,27 +52,14 @@
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WpfExtras">
-      <HintPath>..\..\ExtLib\WpfExtras.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContactClosureRead\ContactClosureReadU12.cs" />
-    <Compile Include="ContactClosureRead\ContactClosureReadU12ViewModel.cs" />
-    <Compile Include="ContactClosure\ContactClosureU12.cs" />
-    <Compile Include="ContactClosure\ContactClosureU12ViewModel.cs" />
     <Compile Include="NetworkStart\NetStartViewModel.cs" />
     <Compile Include="NetworkStart\Socket\NetStartArgument.cs" />
     <Compile Include="NetworkStart\Socket\NetStartMessage.cs" />
     <Compile Include="NetworkStart\Socket\NetStartSocket.cs" />
     <Compile Include="NetworkStart\Socket\NetStartMessageTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LabJackU12\LabJackU12.csproj">
-      <Project>{4e97009e-f375-426b-8108-dee8575c8d67}</Project>
-      <Name>LabJack</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DynamicData">
@@ -82,9 +69,7 @@
       <Version>18.0.10</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Resource Include="Images\labjack.png" />
     <Resource Include="Images\NetworkStart.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

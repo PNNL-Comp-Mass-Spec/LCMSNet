@@ -44,16 +44,24 @@ namespace LcmsNet.Devices
             //FullyQualifiedNameMapper.Add("FluidicsPack.WasteComponent", "FluidicsPack.WasteComponent");
             FullyQualifiedNameMapper.Add("FluidicsSDK.Base.EightPositionState", "LcmsNetPlugins.VICI.Valves.EightPositionState");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.BrukerStart.classBrukerStart", "LcmsNetPlugins.Bruker.BrukerStart");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.classContactClosureU12", "LcmsNetPlugins.PNNLDevices.ContactClosure.ContactClosureU12");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.classContactClosureU12", "LcmsNetPlugins.LabJackU12.ContactClosure.ContactClosureU12");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosureRead.ContactClosureReadU12", "LcmsNetPlugins.LabJackU12.ContactClosureRead.ContactClosureReadU12");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosureRead.ContactClosureReadU12+ContactClosureState", "LcmsNetPlugins.LabJackU12.ContactClosureRead.ContactClosureReadU12+ContactClosureState");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.enumLabjackU12Ports", "LcmsNetPlugins.LabJackU12.LabjackU12Ports");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.enumLabjackU12InputPorts", "LcmsNetPlugins.LabJackU12.LabjackU12InPorts");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.enumLabjackU12OutputPorts", "LcmsNetPlugins.LabJackU12.LabjackU12OutputPorts");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.classContactClosureU3", "LcmsNetPlugins.LabJackU3.ContactClosureU3");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosureRead.ContactClosureReadU12", "LcmsNetPlugins.PNNLDevices.ContactClosureRead.ContactClosureReadU12");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosureRead.ContactClosureReadU12+ContactClosureState", "LcmsNetPlugins.PNNLDevices.ContactClosureRead.ContactClosureReadU12+ContactClosureState");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.enumLabjackU12Ports", "LcmsNetPlugins.LabJack.LabjackU12Ports");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.enumLabjackU12InputPorts", "LcmsNetPlugins.LabJack.LabjackU12InPorts");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.enumLabjackU12OutputPorts", "LcmsNetPlugins.LabJack.LabjackU12OutputPorts");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.enumLabjackU3Ports", "LcmsNetPlugins.LabJackU3.LabjackU3Ports");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.enumLabjackU3InputPorts", "LcmsNetPlugins.LabJackU3.LabjackU3InPorts");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.ContactClosure.enumLabjackU3OutputPorts", "LcmsNetPlugins.LabJackU3.LabjackU3OutputPorts");
+
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.PNNLDevices.ContactClosure.ContactClosureU12", "LcmsNetPlugins.LabJackU12.ContactClosure.ContactClosureU12");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.PNNLDevices.ContactClosureRead.ContactClosureReadU12", "LcmsNetPlugins.LabJackU12.ContactClosureRead.ContactClosureReadU12");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.PNNLDevices.ContactClosureRead.ContactClosureReadU12+ContactClosureState", "LcmsNetPlugins.LabJackU12.ContactClosureRead.ContactClosureReadU12+ContactClosureState");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.LabJack.LabjackU12Ports", "LcmsNetPlugins.LabJackU12.LabjackU12Ports");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.LabJack.LabjackU12InPorts", "LcmsNetPlugins.LabJackU12.LabjackU12InPorts");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.LabJack.LabjackU12OutputPorts", "LcmsNetPlugins.LabJackU12.LabjackU12OutputPorts");
+
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.NetworkStart.Socket.classNetStartSocket", "LcmsNetPlugins.PNNLDevices.NetworkStart.Socket.NetStartSocket");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Pal.classPal", "LcmsNetPlugins.PALAutoSampler.Pal.Pal");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Pumps.classPumpIsco", "LcmsNetPlugins.Teledyne.Pumps.IscoPump");
@@ -90,7 +98,10 @@ namespace LcmsNet.Devices
                 var lower = map.Key.ToLower();
                 FullyQualifiedLowerNameMapper.Add(lower, map.Value);
                 var name = lower.Split('.').Last();
-                LowerNameMapper.Add(name, map.Value);
+                if (!LowerNameMapper.ContainsKey(name))
+                {
+                    LowerNameMapper.Add(name, map.Value);
+                }
             }
         }
 

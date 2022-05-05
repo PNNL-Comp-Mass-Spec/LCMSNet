@@ -1,12 +1,11 @@
 ﻿using System;
 using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.ContactClosure;
-using LcmsNetPlugins.LabJackU12;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using ReactiveUI;
 
-namespace LcmsNetPlugins.PNNLDevices.ContactClosure
+namespace LcmsNetPlugins.LabJackU12.ContactClosure
 {
     /// <summary>
     /// Triggers a mass spectrometer or other device using a labjack TTL pulse.
@@ -56,7 +55,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
             get => contactClosure.PulseLength;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref selectedPulseLength, value) && isLoading == false)
+                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedPulseLength, value) && isLoading == false)
                 {
                     contactClosure.PulseLength = value;
                 }
@@ -71,7 +70,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
             get => contactClosure.PulseVoltage;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref selectedVoltage, value) && isLoading == false)
+                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedVoltage, value) && isLoading == false)
                 {
                     contactClosure.PulseVoltage = value;
                 }
@@ -86,7 +85,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
             get => contactClosure.NormalVoltage;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref selectedNormalVoltage, value) && isLoading == false)
+                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedNormalVoltage, value) && isLoading == false)
                 {
                     contactClosure.NormalVoltage = value;
                 }
@@ -101,7 +100,7 @@ namespace LcmsNetPlugins.PNNLDevices.ContactClosure
             get => contactClosure.Port;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref selectedOutputPort, value) && isLoading == false)
+                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedOutputPort, value) && isLoading == false)
                 {
                     contactClosure.Port = value;
                 }
