@@ -1,4 +1,4 @@
-﻿namespace LcmsNetPlugins.LabJack
+﻿namespace LcmsNetPlugins.LabJackU12
 {
     /// <summary>
     /// All available ports on the Labjack U12

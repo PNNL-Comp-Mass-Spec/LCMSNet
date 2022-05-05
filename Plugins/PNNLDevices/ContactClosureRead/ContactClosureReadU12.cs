@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
 using FluidicsSDK.Devices;
-using LcmsNetPlugins.LabJack;
+using LcmsNetPlugins.LabJackU12;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;

@@ -8,7 +8,7 @@ using System.Text;
 // ReSharper disable StringLiteralTypo
 // ReSharper disable CommentTypo
 
-namespace LcmsNetPlugins.LabJack
+namespace LcmsNetPlugins.LabJackU12
 {
     public class LabJackU12Wrapper
     {

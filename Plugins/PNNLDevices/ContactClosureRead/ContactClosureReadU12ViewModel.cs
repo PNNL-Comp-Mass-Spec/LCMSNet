@@ -1,7 +1,7 @@
 ﻿using System;
 using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.ContactClosureRead;
-using LcmsNetPlugins.LabJack;
+using LcmsNetPlugins.LabJackU12;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using ReactiveUI;

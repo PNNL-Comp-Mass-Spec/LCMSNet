@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabJack", "..\LabJack\LabJack.csproj", "{4E97009E-F375-426B-8108-DEE8575C8D67}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabJackU12", "..\LabJackU12\LabJackU12.csproj", "{4E97009E-F375-426B-8108-DEE8575C8D67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabJackU12Tests", "LabJackU12Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject

@@ -6,8 +6,8 @@
     <ProjectGuid>{4E97009E-F375-426B-8108-DEE8575C8D67}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LcmsNetPlugins.LabJack</RootNamespace>
-    <AssemblyName>LabJack</AssemblyName>
+    <RootNamespace>LcmsNetPlugins.LabJackU12</RootNamespace>
+    <AssemblyName>LabJackU12</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -22,7 +22,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <NoWarn>1591</NoWarn>
-    <DocumentationFile>bin\Debug\LabJack.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\LabJackU12.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -31,7 +31,7 @@
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Release\LabJack.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\LabJackU12.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>

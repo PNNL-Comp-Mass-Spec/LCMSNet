@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LcmsNetPlugins.LabJack
+namespace LcmsNetPlugins.LabJackU12
 {
     [Serializable]
     public class LabjackU12

@@ -79,7 +79,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LabJack\LabJack.csproj">
+    <ProjectReference Include="..\LabJackU12\LabJackU12.csproj">
       <Project>{4e97009e-f375-426b-8108-dee8575c8d67}</Project>
       <Name>LabJack</Name>
     </ProjectReference>
