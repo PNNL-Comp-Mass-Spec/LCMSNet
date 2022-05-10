@@ -385,7 +385,9 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
                 closureState = state.Equals(0) ? ContactClosureState.Open : ContactClosureState.Closed;
                 while (TimeKeeper.Instance.Now < endTime && !target.HasFlag(closureState))
                 {
-                    Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                    // Maximum read speed: 50Hz (every 20 milliseconds).
+                    // For faster read speeds, there are burst and streaming modes that would require processing array data (for analog in and IO inputs)
+                    Thread.Sleep(TimeSpan.FromMilliseconds(50));
                     state = m_labjack.Read(port);
                     closureState = state.Equals(0) ? ContactClosureState.Open : ContactClosureState.Closed;
                 }
@@ -408,7 +410,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
 
         /// <summary>
         /// Read a port's status
-        /// This is intended for use on the analog output ports--if it is a digital
+        /// This is intended for use on the analog input ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
@@ -421,7 +423,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         }
         /// <summary>
         /// Read a port's status
-        /// This is intended for use on the analog output ports--if it is a digital
+        /// This is intended for use on the analog input ports--if it is a digital
         /// port the specified voltage will be disregarded.
         /// </summary>
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
@@ -446,7 +448,9 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
                 closureState = outVoltage < voltage ? ContactClosureState.Open : ContactClosureState.Closed;
                 while (TimeKeeper.Instance.Now < endTime && !target.HasFlag(closureState))
                 {
-                    Thread.Sleep(TimeSpan.FromMilliseconds(200));
+                    // Maximum read speed: 50Hz (every 20 milliseconds).
+                    // For faster read speeds, there are burst and streaming modes that would require processing array data (for analog in and IO inputs)
+                    Thread.Sleep(TimeSpan.FromMilliseconds(50));
                     outVoltage = m_labjack.Read(port);
                     closureState = outVoltage < voltage ? ContactClosureState.Open : ContactClosureState.Closed;
                 }
