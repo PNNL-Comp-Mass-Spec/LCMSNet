@@ -28,27 +28,27 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <summary>
         /// The labjack used for reading the ready signal
         /// </summary>
-        private readonly LabjackU12 m_labjack;
+        private readonly LabjackU12 labjackDevice;
         /// <summary>
         /// The port on the labjack on which to read the voltage.
         /// </summary>
-        private LabjackU12InputPorts m_port;
+        private LabjackU12InputPorts labjackPort;
         /// <summary>
         /// The name, used in software for the symbol.
         /// </summary>
-        private string m_name;
+        private string deviceName;
         /// <summary>
         /// The version.
         /// </summary>
-        private string m_version;
+        private string deviceVersion;
         /// <summary>
         /// The current status of the Labjack.
         /// </summary>
-        private DeviceStatus m_status;
+        private DeviceStatus deviceStatus;
         /// <summary>
         /// Flag indicating if the device is in emulation mode.
         /// </summary>
-        private bool m_emulation;
+        private bool inEmulationMode;
         private const char CONST_ANALOGPREFIX = 'A';
         private const int CONST_ANALOGHIGH = 5;
         private const int CONST_DIGITALHIGH = 1;
@@ -78,9 +78,9 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// </summary>
         public ContactClosureReadU12()
         {
-            m_labjack = new LabjackU12();
-            m_port = LabjackU12InputPorts.AI1;
-            m_name = "Contact Closure Reader";
+            labjackDevice = new LabjackU12();
+            labjackPort = LabjackU12InputPorts.AI1;
+            deviceName = "Contact Closure Reader";
         }
 
         /// <summary>
@@ -89,9 +89,9 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <param name="lj">The labjack</param>
         public ContactClosureReadU12(LabjackU12 lj)
         {
-            m_labjack = lj;
-            m_port = LabjackU12InputPorts.AI1;
-            m_name = "Contact Closure Reader";
+            labjackDevice = lj;
+            labjackPort = LabjackU12InputPorts.AI1;
+            deviceName = "Contact Closure Reader";
         }
 
         /// <summary>
@@ -100,9 +100,9 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <param name="newPort">The port on the labjack to use for reading the ready signal</param>
         public ContactClosureReadU12(LabjackU12InputPorts newPort)
         {
-            m_labjack = new LabjackU12();
-            m_port = newPort;
-            m_name = "Contact Closure Reader";
+            labjackDevice = new LabjackU12();
+            labjackPort = newPort;
+            deviceName = "Contact Closure Reader";
         }
 
         /// <summary>
@@ -112,9 +112,9 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <param name="newPort">The port on the labjack to use for reading the ready signal</param>
         public ContactClosureReadU12(LabjackU12 lj, LabjackU12InputPorts newPort)
         {
-            m_labjack = lj;
-            m_port = newPort;
-            m_name = "Contact Closure Reader";
+            labjackDevice = lj;
+            labjackPort = newPort;
+            deviceName = "Contact Closure Reader";
         }
 
         #endregion
@@ -132,8 +132,8 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         //[PersistenceDataAttribute("Emulated")]
         public bool Emulation
         {
-            get => m_emulation;
-            set => m_emulation = value;
+            get => inEmulationMode;
+            set => inEmulationMode = value;
         }
 
         /// <summary>
@@ -141,15 +141,15 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// </summary>
         public DeviceStatus Status
         {
-            get => m_status;
+            get => deviceStatus;
             set
             {
-                if (value != m_status)
+                if (value != deviceStatus)
                 {
                     StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
                 }
 
-                m_status = value;
+                deviceStatus = value;
             }
         }
 
@@ -158,10 +158,10 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// </summary>
         public string Name
         {
-            get => m_name;
+            get => deviceName;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref deviceName, value))
                 {
                     OnDeviceSaveRequired();
                 }
@@ -173,10 +173,10 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// </summary>
         public string Version
         {
-            get => m_version;
+            get => deviceVersion;
             set
             {
-                m_version = value;
+                deviceVersion = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -187,10 +187,10 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         [PersistenceData("Port")]
         public LabjackU12InputPorts Port
         {
-            get => m_port;
+            get => labjackPort;
             set
             {
-                m_port = value;
+                labjackPort = value;
                 OnDeviceSaveRequired();
             }
         }
@@ -198,8 +198,8 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         [PersistenceData("Labjack ID")]
         public int LabJackID
         {
-            get => m_labjack.LocalID;
-            set => m_labjack.LocalID = value;
+            get => labjackDevice.LocalID;
+            set => labjackDevice.LocalID = value;
         }
 
         #endregion
@@ -211,12 +211,12 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         public bool Initialize(ref string errorMessage)
         {
             //Get the version info
-            m_labjack.GetDriverVersion();
-            m_labjack.GetFirmwareVersion();
+            labjackDevice.GetDriverVersion();
+            labjackDevice.GetFirmwareVersion();
 
             //If we got anything, call it good
-            if (m_labjack.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 &&
-                m_labjack.DriverVersion.ToString(CultureInfo.InvariantCulture).Length > 0)
+            if (labjackDevice.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 &&
+                labjackDevice.DriverVersion.ToString(CultureInfo.InvariantCulture).Length > 0)
             {
                 return true;
             }
@@ -244,7 +244,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
 
         public float ReadVoltage()
         {
-            return ReadVoltage(m_port);
+            return ReadVoltage(labjackPort);
         }
 
         public float ReadVoltage(LabjackU12InputPorts port)
@@ -253,7 +253,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
 
             try
             {
-                state = m_labjack.Read(port);
+                state = labjackDevice.Read(port);
             }
             catch (LabjackU12Exception)
             {
@@ -284,7 +284,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         [LCMethodEvent("Read Digital", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
         public bool ReadStatusDigital(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            return ReadStatusDigital(timeout, m_port, target);
+            return ReadStatusDigital(timeout, labjackPort, target);
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         [LCMethodEvent("Read Analog", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
         public bool ReadStatusAnalog(double timeout, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            return ReadStatusAnalog(timeout, m_port, voltage, target);
+            return ReadStatusAnalog(timeout, labjackPort, voltage, target);
         }
         /// <summary>
         /// Reads a port's status, returning a bool for success if the state was matched
@@ -342,11 +342,11 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         {
             if ((int) Port <= (int) LabjackU12InputPorts.AI7)
             {
-                return ReadStateAnalog(timeout, m_port, 2.5, target);
+                return ReadStateAnalog(timeout, labjackPort, 2.5, target);
             }
             else
             {
-                return ReadStateDigital(timeout, m_port, target);
+                return ReadStateDigital(timeout, labjackPort, target);
             }
         }
 
@@ -358,7 +358,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <returns>the state of the contact closure</returns>
         public ContactClosureState ReadStateDigital(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            return ReadStateDigital(timeout, m_port, target);
+            return ReadStateDigital(timeout, labjackPort, target);
         }
 
         /// <summary>
@@ -370,7 +370,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <returns>the state of the contact closure</returns>
         public ContactClosureState ReadStateDigital(double timeout, LabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return 0;
             }
@@ -381,14 +381,14 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             {
                 var startTime = TimeKeeper.Instance.Now;
                 var endTime = startTime.Add(TimeSpan.FromSeconds(timeout));
-                var state = m_labjack.Read(port);
+                var state = labjackDevice.Read(port);
                 closureState = state.Equals(0) ? ContactClosureState.Open : ContactClosureState.Closed;
                 while (TimeKeeper.Instance.Now < endTime && !target.HasFlag(closureState))
                 {
                     // Maximum read speed: 50Hz (every 20 milliseconds).
                     // For faster read speeds, there are burst and streaming modes that would require processing array data (for analog in and IO inputs)
                     Thread.Sleep(TimeSpan.FromMilliseconds(50));
-                    state = m_labjack.Read(port);
+                    state = labjackDevice.Read(port);
                     closureState = state.Equals(0) ? ContactClosureState.Open : ContactClosureState.Closed;
                 }
             }
@@ -419,7 +419,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <returns>the state of the contact closure</returns>
         public ContactClosureState ReadStateAnalog(double timeout, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            return ReadStateAnalog(timeout, m_port, voltage, target);
+            return ReadStateAnalog(timeout, labjackPort, voltage, target);
         }
         /// <summary>
         /// Read a port's status
@@ -433,7 +433,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <returns>the state of the contact closure</returns>
         public ContactClosureState ReadStateAnalog(double timeout, LabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            if (m_emulation)
+            if (inEmulationMode)
             {
                 return 0;
             }
@@ -444,14 +444,14 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             {
                 var startTime = TimeKeeper.Instance.Now;
                 var endTime = startTime.Add(TimeSpan.FromSeconds(timeout));
-                var outVoltage = m_labjack.Read(port);
+                var outVoltage = labjackDevice.Read(port);
                 closureState = outVoltage < voltage ? ContactClosureState.Open : ContactClosureState.Closed;
                 while (TimeKeeper.Instance.Now < endTime && !target.HasFlag(closureState))
                 {
                     // Maximum read speed: 50Hz (every 20 milliseconds).
                     // For faster read speeds, there are burst and streaming modes that would require processing array data (for analog in and IO inputs)
                     Thread.Sleep(TimeSpan.FromMilliseconds(50));
-                    outVoltage = m_labjack.Read(port);
+                    outVoltage = labjackDevice.Read(port);
                     closureState = outVoltage < voltage ? ContactClosureState.Open : ContactClosureState.Closed;
                 }
             }
@@ -473,7 +473,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
 
         public override string ToString()
         {
-            return m_name;
+            return deviceName;
         }
 
         #endregion

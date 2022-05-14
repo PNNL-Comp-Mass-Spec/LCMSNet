@@ -400,7 +400,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
                 return 0;
             }
 
-            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), labjackPort);
+            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), port);
 
             var error = 0;
 
@@ -477,7 +477,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
                 return 0;
             }
 
-            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), labjackPort);
+            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), port);
             var error = 0;
             try
             {
@@ -524,7 +524,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
                 return 0;
             }
 
-            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), labjackPort).ToString();
+            var tempPortName = Enum.GetName(typeof(LabjackU12OutputPorts), port);
             var error = 0;
             try
             {
