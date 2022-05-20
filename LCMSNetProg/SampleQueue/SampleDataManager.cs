@@ -423,7 +423,7 @@ namespace LcmsNet.SampleQueue
                 {
                     var foundError = false;
                     // Queue samples
-                    foreach (var sample in SamplesSource.Items.OrderBy(x => x.UniqueID))
+                    foreach (var sample in SamplesSource.Items.OrderBy(x => x.SequenceID))
                     {
                         // bypass samples already in running queue
                         if (sample.IsSetToRunOrHasRun)
@@ -431,7 +431,7 @@ namespace LcmsNet.SampleQueue
                             continue;
                         }
 
-                        if (sample.UniqueID > changedSample.UniqueID)
+                        if (sample.SequenceID > changedSample.SequenceID)
                         {
                             // Safety check: we've already gone past the sample that was changed.
                             break;
@@ -490,7 +490,7 @@ namespace LcmsNet.SampleQueue
                 else
                 {
                     // Dequeue samples - iterate in reverse
-                    foreach (var sample in SamplesSource.Items.OrderBy(x => x.UniqueID).Reverse())
+                    foreach (var sample in SamplesSource.Items.OrderBy(x => x.SequenceID).Reverse())
                     {
                         // bypass samples not set to run
                         if (!sample.IsSetToRunOrHasRun ||
@@ -500,7 +500,7 @@ namespace LcmsNet.SampleQueue
                             continue;
                         }
 
-                        if (sample.UniqueID < changedSample.UniqueID)
+                        if (sample.SequenceID < changedSample.SequenceID)
                         {
                             // Safety check: we've already gone past the sample that was changed.
                             break;
