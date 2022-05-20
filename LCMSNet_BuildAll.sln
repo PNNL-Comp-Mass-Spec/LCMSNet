@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29613.14
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidicsSimulator", "SDK\FluidicsSimulator\FluidicsSimulator.csproj", "{36D7F168-8910-4126-A2C8-F0C78398D64D}"
 EndProject
@@ -113,8 +113,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsnetUnitTest", "LcmsnetU
 		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85} = {DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogViewer", "ExternalApplications\LogViewer\LogViewer.csproj", "{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDKs", "SDKs", "{CCF1478E-6C1C-4470-8FA9-9282A3969582}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B05505B1-7DF9-4CE5-82E0-E3A21DB55DE9}"
@@ -207,10 +205,6 @@ Global
 		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Debug|x86.Build.0 = Debug|x86
 		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Release|x86.ActiveCfg = Debug|x86
 		{08F2C18B-27E7-4DD4-A47F-760E52C2D552}.Release|x86.Build.0 = Debug|x86
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.Debug|x86.Build.0 = Debug|Any CPU
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.Release|x86.ActiveCfg = Release|Any CPU
-		{82DBCBCC-6FC8-4E62-98EB-46DA1DDA27F4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

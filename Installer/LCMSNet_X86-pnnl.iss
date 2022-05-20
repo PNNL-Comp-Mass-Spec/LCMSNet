@@ -60,18 +60,12 @@ Source: LCMSNetProg\bin\x86\Release\Microsoft.WindowsAPICodePack*.dll;         D
 Source: LCMSNetProg\bin\x86\Release\OxyPlot*.dll;                              DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\Reactive*.dll;                             DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\Splat*.dll;                                DestDir: "{app}";          Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\Release\System.Data.SQLite.dll;                    DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\System.Reactive*.dll;                      DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\System.Runtime.CompilerServices.Unsafe.dll; DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\System.Threading.Tasks.Extensions.dll;     DestDir: "{app}";          Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\Release\System.ValueTuple.dll;                     DestDir: "{app}";          Flags: ignoreversion
 Source: LCMSNetProg\bin\x86\Release\Xceed.Wpf*.dll;                            DestDir: "{app}";          Flags: ignoreversion
 
 ; DLLs are copied below in the "DLLs" section, sourced from {#MyLib}\*
-
-; Copy SQLite.Interop.dll (both x86 and x64, even though we're likely compiling against x86)
-Source: LCMSNetProg\bin\x86\Release\x86\*.dll;                                 DestDir: "{app}\x86";      Flags: ignoreversion
-Source: LCMSNetProg\bin\x86\Release\x64\*.dll;                                 DestDir: "{app}\x64";      Flags: ignoreversion
 
 Source: "LCMSNetProg\PrismDMS.config";                                         DestDir: "{app}";          Flags: ignoreversion
 

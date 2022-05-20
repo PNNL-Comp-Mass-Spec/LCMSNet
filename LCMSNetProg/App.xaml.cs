@@ -122,7 +122,7 @@ namespace LcmsNet
                 window = splashScreen;
             }
             window.ShowMessage("Shutting down due to unhandled error: " + message + " \nFor additional information, see the log files at " +
-                            DbLogger.Instance.LogFolderPath + "\\");
+                               Path.Combine(PersistDataPaths.LocalDataPath, "Log") + "\\");
 
             ShutDownLogging();
 
@@ -160,7 +160,7 @@ namespace LcmsNet
         private void ShutDownLogging()
         {
             ApplicationLogger.ShutDownLogging();
-            DbLogger.Instance.Dispose();
+            //DbLogger.Instance.Dispose();
             FileLogger.Instance.Dispose();
         }
 
@@ -494,8 +494,8 @@ namespace LcmsNet
             ApplicationLogger.Message += FileLogger.Instance.LogMessage;
 
             // Now lets initialize logging to SQLite database.
-            ApplicationLogger.Error += DbLogger.Instance.LogError;
-            ApplicationLogger.Message += DbLogger.Instance.LogMessage;
+            //ApplicationLogger.Error += DbLogger.Instance.LogError;
+            //ApplicationLogger.Message += DbLogger.Instance.LogMessage;
 
             // Catch up on messages we want logged.
             if (abandonedMutex)

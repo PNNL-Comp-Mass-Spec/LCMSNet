@@ -88,8 +88,6 @@
     <Compile Include="Experiment\SampleValidatorManager.cs" />
     <Compile Include="INotifyPropertyChangedExtensions.cs" />
     <Compile Include="Logging\ApplicationLogger.cs" />
-    <Compile Include="Logging\DbLogger.cs" />
-    <Compile Include="Logging\DbLoggerException.cs" />
     <Compile Include="Logging\ErrorLoggerArgs.cs" />
     <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\IDeviceHealthWriter.cs" />
@@ -123,11 +121,6 @@
     <Compile Include="System\PersistDataPaths.cs" />
     <Compile Include="System\TimeKeeper.cs" />
     <Compile Include="WpfConversions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Data.SQLite.Core">
-      <Version>1.0.115.5</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
