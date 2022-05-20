@@ -214,9 +214,9 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             labjackDevice.GetDriverVersion();
             labjackDevice.GetFirmwareVersion();
 
-            //If we got anything, call it good
-            if (labjackDevice.FirmwareVersion.ToString(CultureInfo.InvariantCulture).Length > 0 &&
-                labjackDevice.DriverVersion.ToString(CultureInfo.InvariantCulture).Length > 0)
+            //If either FirmwareVersion or DriverVersion is zero, it means we have a communication failure.
+            if (labjackDevice.FirmwareVersion > 0 &&
+                labjackDevice.DriverVersion > 0)
             {
                 return true;
             }
