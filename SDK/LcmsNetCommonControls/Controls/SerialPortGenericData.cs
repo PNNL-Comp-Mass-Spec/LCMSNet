@@ -234,7 +234,7 @@ namespace LcmsNetCommonControls.Controls
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read EdgePort configuration information from the registry. If no EdgePort USB-to-Serial adapter is connected, this warning can be ignored.", ex);
+                ApplicationLogger.LogMessage(LogLevel.Warning, "Unable to read EdgePort configuration information from the registry. If no EdgePort USB-to-Serial adapter is connected, this warning can be ignored.", ex);
             }
             finally
             {
@@ -288,7 +288,7 @@ namespace LcmsNetCommonControls.Controls
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read serial port information from WMI. Extra detail about COM ports might not be available.", ex);
+                ApplicationLogger.LogMessage(LogLevel.Warning, "Unable to read serial port information from WMI (Win32_PnPEntity). Extra detail about COM ports might not be available.", ex);
             }
 
             return data;
@@ -326,7 +326,7 @@ namespace LcmsNetCommonControls.Controls
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read serial port information from WMI. Extra detail about COM ports will not be displayed.", ex);
+                ApplicationLogger.LogMessage(LogLevel.Warning, "Unable to read serial port information from WMI (Win32_SerialPort). Extra detail about COM ports will not be displayed.", ex);
             }
 
             return data;
