@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using DynamicData;
+using LcmsNetCommonControls.Devices;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 
@@ -47,9 +48,7 @@ namespace LcmsNet.Method.ViewModels
             get => selectedOption;
             set
             {
-                var oldValue = selectedOption;
-                this.RaiseAndSetIfChanged(ref selectedOption, value);
-                if (!Equals(oldValue, selectedOption))
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedOption, value))
                 {
                     OnEventChanged();
                 }
@@ -75,9 +74,9 @@ namespace LcmsNet.Method.ViewModels
                 }
             });
 
-            if (comboBoxOptions.Count > 0 && (SelectedOption == null || !ComboBoxOptions.Contains(SelectedOption)))
+            if (comboBoxOptions.Count > 0 && (SelectedOption == null || !data.Contains(SelectedOption)))
             {
-                SelectedOption = ComboBoxOptions.FirstOrDefault();
+                SelectedOption = data.FirstOrDefault();
             }
         }
 

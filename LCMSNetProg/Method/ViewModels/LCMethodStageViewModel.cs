@@ -85,7 +85,7 @@ namespace LcmsNet.Method.ViewModels
         private bool allowPreOverlap;
         private bool allowPostOverlap;
         private string selectedSavedMethod = "";
-        private string selectedColumn = "";
+        private string selectedColumn = "1";
         private bool canSave;
         private bool canBuild;
         private bool canUpdate;
