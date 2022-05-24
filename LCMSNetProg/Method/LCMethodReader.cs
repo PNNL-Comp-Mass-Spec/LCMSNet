@@ -487,22 +487,28 @@ namespace LcmsNet.Method
             }
             lcEvent.Method = method;
 
-            //
             // Get the method attributes for this method as well.
-            // Here we assume that there should only be ONE method attribute per method.
             // Otherwise this breaks specification, so it should be there. If the method was saved
             // then it should have also been persisted into the XML.  Otherwise...not a chance?
-            //
             try
             {
                 var methodAttributes = method.GetCustomAttributes(false);
                 foreach (var attr in methodAttributes)
                 {
-                    var meth = attr as LCMethodEventAttribute;
-                    if (meth != null)
+                    if (attr is LCMethodEventAttribute meth)
                     {
-                        lcEvent.MethodAttribute = meth;
-                        break;
+                        // Check all for a match
+                        if (meth.Name.Equals(lcEvent.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            lcEvent.MethodAttribute = meth;
+                            break;
+                        }
+
+                        // Default (if no name match) is the first LCMethodEventAttribute
+                        if (lcEvent.MethodAttribute == null)
+                        {
+                            lcEvent.MethodAttribute = meth;
+                        }
                     }
                 }
             }
