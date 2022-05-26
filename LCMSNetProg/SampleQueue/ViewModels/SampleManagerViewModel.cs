@@ -13,8 +13,8 @@ using LcmsNet.SampleQueue.IO;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Logging;
+using LcmsNetSDK.SampleValidation;
 using Microsoft.Win32;
 using ReactiveUI;
 

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using LcmsNet.Data;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Experiment;
+using LcmsNetSDK.SampleValidation;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

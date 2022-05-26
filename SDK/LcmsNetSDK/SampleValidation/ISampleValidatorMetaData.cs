@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace LcmsNetSDK.Experiment
+namespace LcmsNetSDK.SampleValidation
 {
     public interface ISampleValidatorMetaData
     {

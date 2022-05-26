@@ -5,8 +5,7 @@
 #define MySource "..\"
 #define MyLib    "lib"
 #define MyExtLib  "ExtLib"
-#define MyPlugins "PluginDlls" 
-#define MyValidators "SampleValidators"
+#define MyPlugins "PluginDlls"
 #define MyAppName "LCMSNet"
 #define MyAppDataPath "C:\LCMSNet"
 #define MyAppVis  "PNNL"
@@ -39,7 +38,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Dirs]
 Name: "{#MyAppDataPath}\Log"
-Name: "{app}\SampleValidators"
 Name: "{app}\Plugins"
 Name: "{app}\x86"
 Name: "{app}\x64"

@@ -14,9 +14,9 @@ using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.SampleValidation;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue

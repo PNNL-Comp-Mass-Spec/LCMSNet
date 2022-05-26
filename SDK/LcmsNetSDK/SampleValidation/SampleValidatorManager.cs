@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNetSDK.Experiment
+namespace LcmsNetSDK.SampleValidation
 {
     public class SampleValidatorManager
     {
@@ -29,6 +27,9 @@ namespace LcmsNetSDK.Experiment
 
             var mmefDirectorycatalog = new DirectoryCatalog(validatorPath);
             catalog.Catalogs.Add(mmefDirectorycatalog);
+            // MEF automatically pulls in the DLL-internal Exports, it appears.
+            //var defaultDirectoryCatalog = new DirectoryCatalog(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+            //catalog.Catalogs.Add(defaultDirectoryCatalog);
             var mmefContainer = new CompositionContainer(catalog);
             mmefContainer.ComposeParts(this);
             //Debug.WriteLine($"Loaded : {Validators.Count()} sample validators");

@@ -2,10 +2,9 @@
 using System.ComponentModel.Composition;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Method;
 
-namespace CoreSampleValidator
+namespace LcmsNetSDK.SampleValidation
 {
     /// <summary>
     /// Validates a sample for the basics before it can be run by LCMSNet.

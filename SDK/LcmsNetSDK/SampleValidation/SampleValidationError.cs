@@ -1,4 +1,4 @@
-﻿namespace LcmsNetSDK.Experiment
+﻿namespace LcmsNetSDK.SampleValidation
 {
     /// <summary>
     /// Holds information regarding the type of error that

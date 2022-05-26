@@ -3,8 +3,8 @@ using System.ComponentModel.Composition;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Experiment;
 using LcmsNetSDK.Logging;
+using LcmsNetSDK.SampleValidation;
 
 namespace LcmsNetPlugins.PALAutoSampler.Validator
 {

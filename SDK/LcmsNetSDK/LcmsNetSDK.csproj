@@ -81,11 +81,6 @@
     <Compile Include="Devices\PumpDataPoint.cs" />
     <Compile Include="Devices\TimerDevice.cs" />
     <Compile Include="EnumExtensions.cs" />
-    <Compile Include="Experiment\ISampleValidator.cs" />
-    <Compile Include="Experiment\ISampleValidatorMetaData.cs" />
-    <Compile Include="Experiment\SampleValidationError.cs" />
-    <Compile Include="Experiment\SampleValidationErrorType.cs" />
-    <Compile Include="Experiment\SampleValidatorManager.cs" />
     <Compile Include="INotifyPropertyChangedExtensions.cs" />
     <Compile Include="Logging\ApplicationLogger.cs" />
     <Compile Include="Logging\ErrorLoggerArgs.cs" />
@@ -109,6 +104,12 @@
     <Compile Include="Method\LCMethodParameterNumericRange.cs" />
     <Compile Include="Method\MethodOperationTimeoutType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleValidation\CoreSampleValidator.cs" />
+    <Compile Include="SampleValidation\ISampleValidator.cs" />
+    <Compile Include="SampleValidation\ISampleValidatorMetaData.cs" />
+    <Compile Include="SampleValidation\SampleValidationError.cs" />
+    <Compile Include="SampleValidation\SampleValidationErrorType.cs" />
+    <Compile Include="SampleValidation\SampleValidatorManager.cs" />
     <Compile Include="SystemInformationReporter.cs" />
     <Compile Include="System\INotifier.cs" />
     <Compile Include="IFluidicsModelChecker.cs" />
