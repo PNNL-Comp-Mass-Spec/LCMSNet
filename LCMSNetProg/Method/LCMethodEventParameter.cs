@@ -1,4 +1,6 @@
-﻿namespace LcmsNetSDK.Method
+﻿using LcmsNetSDK.Method;
+
+namespace LcmsNet.Method
 {
     public class LCMethodEventParameter
     {

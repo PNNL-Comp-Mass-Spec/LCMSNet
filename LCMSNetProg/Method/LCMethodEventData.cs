@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
-namespace LcmsNetSDK.Method
+namespace LcmsNet.Method
 {
     public class BreakEventArgs : EventArgs
     {
@@ -18,7 +19,7 @@ namespace LcmsNetSDK.Method
     /// <summary>
     /// Class that holds the selected event and the value to pass for the parameters.
     /// </summary>
-    public class LCMethodEventData
+    public class LCMethodEventData : ILCMethodEvent
     {
         /// <summary>
         /// Constructor that takes a event, and the value to call it with.
@@ -109,8 +110,6 @@ namespace LcmsNetSDK.Method
             return string.IsNullOrWhiteSpace(MethodEventAttribute.Name) ? "Undefined method/event" : MethodEventAttribute.Name;
         }
 
-        #region Properties
-
         public IDevice Device { get; set; }
 
         /// <summary>
@@ -136,7 +135,5 @@ namespace LcmsNetSDK.Method
         public bool BreakPoint { get; set; }
 
         public bool Executing { get; set; }
-
-        #endregion
     }
 }

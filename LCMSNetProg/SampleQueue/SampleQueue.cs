@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using DynamicData;
 using LcmsNet.Data;
+using LcmsNet.Method;
 using LcmsNet.SampleQueue.IO;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
-using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
 namespace LcmsNet.SampleQueue

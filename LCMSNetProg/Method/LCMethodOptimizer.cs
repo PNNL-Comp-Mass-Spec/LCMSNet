@@ -6,9 +6,10 @@ using System.Reflection;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
+using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace LcmsNetSDK.Method
+namespace LcmsNet.Method
 {
     public class LCMethodOptimizer
     {

@@ -53,7 +53,7 @@ namespace LcmsNetSDK.Method
             HasDiscreteStates = false;
             IsIndeterminant = false;
             //ensures that MethodData isn't null for the simulator.
-            MethodData = new LCMethodEventData(null, null, null, null);
+            MethodData = new LCMethodEventEmpty();
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// gets or sets the method data associated with this event
         /// </summary>
-        public LCMethodEventData MethodData { get; set; }
+        public ILCMethodEvent MethodData { get; set; }
 
         /// <summary>
         /// Gets or sets the duration for this action.

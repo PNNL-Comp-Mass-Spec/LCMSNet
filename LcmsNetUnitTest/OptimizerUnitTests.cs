@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DemoPluginLibrary;
+using LcmsNet.Method;
 using LcmsNetSDK.Method;
 using NUnit.Framework;
 

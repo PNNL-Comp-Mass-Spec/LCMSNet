@@ -4,12 +4,12 @@ using System.Linq;
 using System.Windows.Media;
 using DemoPluginLibrary;
 using LcmsNet.Data;
+using LcmsNet.Method;
 using LcmsNet.SampleQueue;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 using NUnit.Framework;
 
 namespace LcmsnetUnitTest

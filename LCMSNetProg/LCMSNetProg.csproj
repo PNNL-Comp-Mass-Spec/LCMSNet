@@ -138,6 +138,10 @@
     <Compile Include="IO\DMS\BlockValidator.cs" />
     <Compile Include="IO\DMS\DatabaseConnectionStringException.cs" />
     <Compile Include="IO\DMS\DmsDownloadData.cs" />
+    <Compile Include="Method\ILCEventParameter.cs" />
+    <Compile Include="Method\LCMethodEventData.cs" />
+    <Compile Include="Method\LCMethodEventParameter.cs" />
+    <Compile Include="Method\LCMethodOptimizer.cs" />
     <Compile Include="SampleQueue\IO\ConvertVialPosition.cs" />
     <Compile Include="IO\DMS\SampleQueryData.cs" />
     <Compile Include="IO\DMS\DMSDBTools.cs" />

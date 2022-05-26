@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LcmsNetSDK.Method
+namespace LcmsNet.Method
 {
     /// <summary>
     /// Abstract Control class that allows the user to define how the value is grabbed
