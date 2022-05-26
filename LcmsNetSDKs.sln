@@ -11,13 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetSDK", "SDK\LcmsNetSD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidicsSDK", "SDK\FluidicsSDK\FluidicsSDK.csproj", "{150D2DD0-F6AE-4E64-9499-B91B7A01D5AD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D6317C97-85E3-400C-B374-3FAA2A3226D6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LcmsNetSDKUnitTests", "SDK\LcmsNetSDKUnitTests\LcmsNetSDKUnitTests.csproj", "{21CFC3A0-B761-46D2-9E41-E7D75E3AE1B9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85} = {DDCCB3F9-7B2B-43F2-B98F-40644BEA2A85}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidicsSDKUnitTests", "SDK\FluidicsSDKUnitTests\FluidicsSDKUnitTests.csproj", "{3DE94267-3EEE-4B9D-887D-B97A6CD07698}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluidicsPack", "SDK\FluidicsPack\FluidicsPack.csproj", "{6544BDEA-10AE-4867-AFC2-8113D7983D7D}"
@@ -54,10 +47,6 @@ Global
 		{150D2DD0-F6AE-4E64-9499-B91B7A01D5AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{150D2DD0-F6AE-4E64-9499-B91B7A01D5AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{150D2DD0-F6AE-4E64-9499-B91B7A01D5AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21CFC3A0-B761-46D2-9E41-E7D75E3AE1B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21CFC3A0-B761-46D2-9E41-E7D75E3AE1B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21CFC3A0-B761-46D2-9E41-E7D75E3AE1B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21CFC3A0-B761-46D2-9E41-E7D75E3AE1B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DE94267-3EEE-4B9D-887D-B97A6CD07698}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -85,10 +74,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{21CFC3A0-B761-46D2-9E41-E7D75E3AE1B9} = {D6317C97-85E3-400C-B374-3FAA2A3226D6}
-		{3DE94267-3EEE-4B9D-887D-B97A6CD07698} = {D6317C97-85E3-400C-B374-3FAA2A3226D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D606F50-AACD-4D30-BC5D-A96B81896C4B}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using LcmsNetSDK.System;
 using NUnit.Framework;
 
@@ -34,14 +35,12 @@ namespace LcmsnetUnitTest
             var now = DateTime.UtcNow;
             var timeKeeperTime = TimeKeeper.Instance.Now;
             var nowAet = TimeZoneInfo.ConvertTimeFromUtc(now, aet);
-            // timekeeper time should be waaay different from aet time as it's set to pst.
+            // timekeeper time should be waaay different from AET time as it's set to pst.
             // but mathematically, they would be the same(or close to the same) so we check the strings
             // to see if they actually are different
-            Assert.IsFalse(nowAet.ToString() == timeKeeperTime.ToString());
+            Assert.IsFalse(nowAet.ToString(CultureInfo.InvariantCulture) == timeKeeperTime.ToString(CultureInfo.InvariantCulture));
             TimeKeeper.Instance.TimeZone = aet;
-            Assert.IsTrue(nowAet.ToString() ==
-                                          TimeKeeper.Instance.ConvertToTimeZone(timeKeeperTime,
-                                              "AUS Eastern Standard Time").ToString());
+            Assert.IsTrue(nowAet.Subtract(TimeKeeper.Instance.ConvertToTimeZone(timeKeeperTime, "AUS Eastern Standard Time")).TotalMilliseconds < 2);
         }
 
         [Test]
@@ -52,7 +51,7 @@ namespace LcmsnetUnitTest
             TimeKeeper.Instance.TimeZone = pst;
             var timeKeeperTime = TimeKeeper.Instance.Now;
             var nowPst = TimeZoneInfo.ConvertTimeFromUtc(now, pst);
-            Assert.IsTrue(nowPst.ToString() == timeKeeperTime.ToString());
+            Assert.IsTrue(nowPst.Subtract(timeKeeperTime).TotalMilliseconds < 2);
         }
     }
 }
