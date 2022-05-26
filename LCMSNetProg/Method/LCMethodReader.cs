@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
 using LcmsNet.Data;
 using LcmsNet.Devices;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
@@ -218,20 +216,9 @@ namespace LcmsNet.Method
             value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_START);
             lcEvent.Start = Convert.ToDateTime(value.Value);
 
-            // Hold Time
-            TimeSpan span;
-            value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_HOLD_TIME);
-            if (TimeSpan.TryParse(value.Value, out span))
-            {
-                lcEvent.HoldTime = span;
-            }
-            else
-            {
-                throw new InvalidTimeSpanException("Could not read the hold time in the method.");
-            }
-
+            // Duration
             value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_DURATION);
-            if (TimeSpan.TryParse(value.Value, out span))
+            if (TimeSpan.TryParse(value.Value, out var span))
             {
                 lcEvent.Duration = span;
             }

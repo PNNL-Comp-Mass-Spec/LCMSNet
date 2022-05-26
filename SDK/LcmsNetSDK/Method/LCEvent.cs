@@ -67,7 +67,6 @@ namespace LcmsNetSDK.Method
                 Device = Device,
                 Duration = Duration,
                 HasDiscreteStates = HasDiscreteStates,
-                HoldTime = HoldTime,
                 Method = Method,
                 Name = Name,
                 OptimizeWith = OptimizeWith,
@@ -151,19 +150,12 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets the end time for the event.
         /// </summary>
-        public DateTime End => Start.Add(Duration.Add(HoldTime));
+        public DateTime End => Start.Add(Duration);
 
         /// <summary>
         /// Gets or sets if this event has discrete states that can be compared.
         /// </summary>
         public bool HasDiscreteStates { get; set; }
-
-        /// <summary>
-        /// Gets or sets the time to hold past the duration of this event in case
-        /// the device has a method that needs to be held in a certain state for
-        /// longer than it takes to execute the method.
-        /// </summary>
-        public TimeSpan HoldTime { get; set; }
 
         /// <summary>
         /// Gets or sets the method used to perform the deterministic action required.
@@ -214,7 +206,7 @@ namespace LcmsNetSDK.Method
             if (ReferenceEquals(this, other)) return true;
             return Equals(RelativeMethod, other.RelativeMethod) && IsIndeterminant == other.IsIndeterminant &&
                    Equals(MethodAttribute, other.MethodAttribute) && Equals(MethodData, other.MethodData) && Equals(Device, other.Device) &&
-                   HasDiscreteStates == other.HasDiscreteStates && HoldTime.Equals(other.HoldTime) && Equals(Method, other.Method) &&
+                   HasDiscreteStates == other.HasDiscreteStates && Equals(Method, other.Method) &&
                    string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase) && OptimizeWith == other.OptimizeWith &&
                    Equals(Parameters, other.Parameters) && Equals(ParameterNames, other.ParameterNames) && Start.Equals(other.Start) &&
                    HadError == other.HadError;
@@ -238,7 +230,6 @@ namespace LcmsNetSDK.Method
                 hashCode = (hashCode * 397) ^ (MethodData != null ? MethodData.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (Device != null ? Device.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ HasDiscreteStates.GetHashCode();
-                hashCode = (hashCode * 397) ^ HoldTime.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Method != null ? Method.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (Name != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(Name) : 0);
                 hashCode = (hashCode * 397) ^ OptimizeWith.GetHashCode();

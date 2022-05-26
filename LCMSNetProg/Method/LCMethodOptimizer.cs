@@ -15,11 +15,6 @@ namespace LcmsNet.Method
     {
         public delegate void DelegateUpdateUserInterface(LCMethodOptimizer sender);
 
-        ///// <summary>
-        ///// Number of columns aligning on.
-        ///// </summary>
-        // private int m_numberOfColumns;
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -73,10 +68,8 @@ namespace LcmsNet.Method
                 var device = lcEvent.Device;
                 if (device != null && device.GetType() != typeof (TimerDevice))
                 {
-                    //
                     // If the key exists, then we add to the list of events
                     // Otherwise, we create a new list of events
-                    //
                     if (hash.ContainsKey(device))
                     {
                         hash[device].Add(lcEvent);
@@ -109,12 +102,10 @@ namespace LcmsNet.Method
                 var differenceStart = controlEvent.Start.Subtract(endTime);
                 var differenceEnd = controlEvent.End.Subtract(startTime);
 
-                //
                 // We only have to assert that:
                 //     1. The end time is less than the start time - so continue until we find overlaps
                 //     2. The start time is greater than the end time, since these are ordered sequentially,
                 //        then we know we have looked outside our window.
-                //
                 if (differenceEnd.TotalMilliseconds < 0)
                 {
                 }
@@ -140,7 +131,6 @@ namespace LcmsNet.Method
         {
             var requiredOffset = CONST_NON_OVERLAPPING_EVENTS_OFFSET;
 
-            //
             // We need to figure out what events are overlapping.
             //
             // 1.  Starting point of comparison:
@@ -162,20 +152,16 @@ namespace LcmsNet.Method
             // Finally, notice that if the event list is empty, the count = 0, and i = -1.
             // Since i would be lt 0 then this loop would not be executed, and the required
             // offset value would be -1.0
-            //
             for (var i = events.Count - 1; i >= 0; i--)
             {
                 var lastEvent = events[events.Count - 1];
-                //
+
                 // Compare discrete states if we have to
-                //
                 if (lastEvent.HasDiscreteStates)
                 {
                     if (lastEvent.Parameters.Length == aligneeEvent.Parameters.Length)
                     {
-                        //
                         // Check to see if the states are equal.
-                        //
                         for (var j = 0; j < lastEvent.Parameters.Length; j++)
                         {
                             var isAssignableA =
@@ -200,9 +186,7 @@ namespace LcmsNet.Method
                 }
                 else
                 {
-                    //
                     // Otherwise, we have a continuous state, so exit the loop here!
-                    //
                     return lastEvent.End.Subtract(aligneeEvent.Start).TotalSeconds;
                 }
             }
@@ -219,22 +203,18 @@ namespace LcmsNet.Method
         {
             var isOverlapped = true;
 
-            //
             // Test to see if the alignee method start time comes before the baseline end time.
             //
             // If so, then we potentially have an overlap.  Otherwise, we need to make sure the
             // alignee method end time doesnt come before the baseline method time.
-            //
             var span = aligneeMethod.Start.Subtract(baselineMethod.End);
             isOverlapped = (span.TotalMilliseconds <= 0.0);
 
-            //
             // Test here to make sure that we do indeed have an overlap, the
             // end time of the alignee method should come after the start time
             // of the baseline method, If less than zero, than we know that
             // the alignee method ends before the baseline has begun.  And it must be
             // > 0 for an overlap to not occur.
-            //
             if (isOverlapped)
             {
                 span = aligneeMethod.End.Subtract(baselineMethod.Start);
@@ -257,17 +237,13 @@ namespace LcmsNet.Method
 
             var events = new List<LCEvent>();
 
-            //
             // Every event control should have a selected method value.
-            //
             foreach (var data in methods)
             {
                 LCEvent lcEvent = null;
 
-                //
                 // Make sure that we have some method data here!
                 // Otherwise the event was never assigned!! BAD!
-                //
                 if (data == null)
                 {
                     //TODO:  Should we throw an exception?
@@ -289,24 +265,18 @@ namespace LcmsNet.Method
                     lcEvent.Name = data.MethodEventAttribute.Name;
                     lcEvent.MethodData = data;
 
-                    //
                     // This tells any optimizer or scheduler that the event has discrete parameters.
                     //
                     // This is useful if we are trying to optimize two methods that use the same valve, but
                     // don't require it to change the state.
-                    //
                     lcEvent.HasDiscreteStates = data.MethodEventAttribute.HasDiscreteParameters;
 
-                    //
                     // Check to see if the device is a timer so we can space out the events
-                    //
                     var timer = data.Device as TimerDevice;
                     if (timer != null)
                     {
-                        //
                         // Construct a new instance of the timer since timers are only for waiting
                         // and not for device control.
-                        //
                         var newTimer = new TimerDevice { Name = timer.Name };
                         lcEvent.Device = newTimer;
                         lcEvent.Duration = new TimeSpan(0, 0, 0,
@@ -316,10 +286,7 @@ namespace LcmsNet.Method
                     {
                         var time = Convert.ToInt32(data.MethodEventAttribute.OperationTime);
 
-                        //
-                        // Check to see if the operation time is specified by the first parameter of the
-                        // method.
-                        //
+                        // Check to see if the operation time is specified by the first parameter of the method.
                         if (data.MethodEventAttribute.TimeoutType == MethodOperationTimeoutType.Parameter)
                         {
                             time = Convert.ToInt32(data.Parameters[0].Value);
@@ -349,19 +316,14 @@ namespace LcmsNet.Method
                         }
                         else if (time <= 0)
                         {
-                            //
                             // Otherwise force the time here to be the standard event spacing
-                            //
                             time = CONST_REQUIRED_LC_EVENT_SPACING_SECONDS;
                         }
 
                         lcEvent.Duration = new TimeSpan(0, 0, 0, time);
                     }
 
-                    //
                     // Add
-                    //
-                    //lcEvent.HoldTime = lcEvent.Duration;
                     span.Add(lcEvent.Duration);
                     span = span.Add(new TimeSpan(0, 0, 0, CONST_REQUIRED_LC_EVENT_SPACING_SECONDS));
 
@@ -389,9 +351,7 @@ namespace LcmsNet.Method
                     methods.Add(sample.ActualLCMethod);
             }
 
-            //
             // If there is nothing to align, then just return.
-            //
             if (methods.Count < 1)
                 return true;
 
@@ -415,9 +375,7 @@ namespace LcmsNet.Method
                     methods.Add(sample.ActualLCMethod);
             }
 
-            //
             // If there is nothing to align, then just return.
-            //
             if (methods.Count < 1)
                 return true;
             var done = AlignMethods(methods, aligneeSample.ActualLCMethod);
@@ -456,21 +414,17 @@ namespace LcmsNet.Method
             double secondsToAdd = 0;
             var requiredAlignment = false; // Flag indicating that an adjustment to the alignee method was made.
 
-            //
             // Build a hash -- based on devices of all the LC - events to happen in time.
             //     We do this because we are looking only for overlaps on the devices
             //     This reduces search times for overlapping events considerably to O(m)
             //         where m = # of events for a given device
             //     instead of O(n*m) where n is the number of events defined in the method, and n > m.
-            //
             var baselineDeviceHash = BuildDeviceHash(baselineMethod);
 
-            //
             // We dont force the start time of the alignee method to come after
             // the baseline start, however, here we allow the user to pass a flag indicating to do
             // such a thing, so that the baseline will be the start of the alignee method.
             // We'll base adjustments after that.
-            //
             var startTime = aligneeMethod.Start;
             if (startAligneeAtBaselineStart)
             {
@@ -479,7 +433,6 @@ namespace LcmsNet.Method
 
             do
             {
-                //
                 // Set the start time for the method
                 //     - Noting that the start time may be adjusted by seconds to add
                 //     - Or that the start time may be running for the first time.
@@ -487,49 +440,35 @@ namespace LcmsNet.Method
                 //System.Diagnostics.Debug.WriteLine(string.Format("Checking Alignment method: {0} against baseline method.", aligneeMethod.Name));
                 aligneeMethod.SetStartTime(startTime.AddSeconds(secondsToAdd));
 
-                //
                 // Set this flag to true, because we assume that the events are aligned.
                 // If someone finds a conflicting event, then this flag will be set to false
                 // and we will try again.
-                //
                 aligned = true;
 
-                //
                 // Look at each event in the alignee method, and compare it to the baseline method
                 //     1.  Compare them
-                //
                 foreach (var aligneeEvent in aligneeMethod.Events)
                 {
-                    //
                     // Find any overlapping events for the alignee device.
-                    //
                     if (aligneeEvent.Device != null)
                     {
-                        //
                         // If the baseline does not have the key, then don't worry about aligning this method
-                        //
                         if (baselineDeviceHash.ContainsKey(aligneeEvent.Device))
                         {
                             var deviceEvents = baselineDeviceHash[aligneeEvent.Device];
-                            //
                             // If there are no events for this device, then we don't need to worry about alignment.
-                            //
                             if (deviceEvents.Count > 0)
                             {
                                 var overlappingEvents = FindOverlappingEvents(deviceEvents,
-                                    aligneeEvent.Start, aligneeEvent.Duration.Add(aligneeEvent.HoldTime));
+                                    aligneeEvent.Start, aligneeEvent.Duration);
 
-                                //
                                 // Now that we have the overlapping events, we can compare their states (if discreet) to the states of the alignee event.
-                                //
                                 var requiredOffset = CompareOverlappingEvent(aligneeEvent, overlappingEvents);
 
-                                //
                                 // If we have a required offset then we had conflicting overlap the scheduler found.
                                 // So we have to add to the baseline start, and shift the events over by this aggregate amount.
                                 //
                                 // This also means that we have to start the beginning and recalculate the number of conflicts.
-                                //
                                 if (requiredOffset > 0)
                                 {
                                     secondsToAdd += requiredOffset;
@@ -557,9 +496,8 @@ namespace LcmsNet.Method
                 AdjustForDaylightSavingsTransition(aligneeMethod);
                 aligned = true;
             }
-            //
+
             // Return whether the method was re-aligned or not
-            //
             return requiredAlignment;
         }
 
@@ -600,7 +538,7 @@ namespace LcmsNet.Method
             }
 
             var j = 0;
-            //
+
             // Here we want to find out what the earliest possible time is that we could possibly
             // have device overlap is.  So we search, starting with the earliest possible time,
             // i.e. the method before us = k. And work our way backwards to see what previous methods
@@ -610,7 +548,6 @@ namespace LcmsNet.Method
             //
             // We also want to look for things that are on the same column as us.  The end of that method
             // j' will be the earliest possible time that we can start.
-            //
             var k = baselineMethods.Count - 1;
             var lastColumnContention = -1; // This marks the last column contention we saw
             // where method i's column = method j''s column.
@@ -677,21 +614,16 @@ namespace LcmsNet.Method
 
             while (j < baselineMethods.Count)
             {
-                //
                 // Only try to align if methods are overlapping, otherwise who cares
-                //
                 if (IsMethodOverlapping(baselineMethods[j], aligneeMethod))
                 {
-                    //
                     // Align, but don't reset the start time of the alignee method, just add to it to perform any alignment.
-                    //
                     var alignmentOccurred = AlignMethods(baselineMethods[j],
                         aligneeMethod,
                         false);
-                    //
+
                     // If alignment occurred, then we need to re-check all the previously overlapping methods!
                     //     This way we can never overlap critical sections in i-1, or i-n methods.
-                    //
                     if (alignmentOccurred)
                     {
                         // This prevents the alignment portion from entering an infinite loop.
@@ -718,9 +650,7 @@ namespace LcmsNet.Method
         /// <param name="methods">Methods to align.</param>
         public bool AlignMethods(List<LCMethod> methods)
         {
-            //
             // Align methods
-            //
             Methods = methods;
             var alignedMethods = new List<LCMethod>();
             foreach (var method in methods)
@@ -729,9 +659,7 @@ namespace LcmsNet.Method
                 alignedMethods.Add(method);
             }
 
-            //
             // Now we aren't aligning methods.
-            //
             Methods = null;
 
             return true;

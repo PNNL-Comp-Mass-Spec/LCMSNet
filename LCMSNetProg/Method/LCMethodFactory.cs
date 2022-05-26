@@ -78,11 +78,6 @@
         public const string CONST_XPATH_HAS_DISCREET_STATES = "HasDiscreetStates";
 
         /// <summary>
-        /// X-Path string for lc-method name node.
-        /// </summary>
-        public const string CONST_XPATH_HOLD_TIME = "HoldTime";
-
-        /// <summary>
         /// X-Path string for if a parameter is sample specific for an LC-Event XML Node.
         /// </summary>
         public const string CONST_IS_SAMPLE_SPECIFIC = "IsSampleSpecific";

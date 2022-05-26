@@ -171,9 +171,8 @@ namespace LcmsNet.Method.Drawing
                 var span = lcEvent.Start.Subtract(start);
 
                 var startX = Convert.ToSingle(span.TotalSeconds) * ppt;
-                var length = Convert.ToSingle(lcEvent.HoldTime.TotalSeconds) * ppt;
                 var x = bounds.X + startX;
-                g.DrawRectangle(brush, null, new Rect(x, y, length, height));
+                g.DrawRectangle(brush, null, new Rect(x, y, 1, height));
             }
         }
 
