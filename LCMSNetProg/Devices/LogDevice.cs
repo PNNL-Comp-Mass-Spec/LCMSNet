@@ -83,14 +83,14 @@ namespace LcmsNet.Devices
         /// Prints the message provided to the debug console.
         /// </summary>
         /// <param name="message">Message to write.</param>
-        [LCMethodEvent("Write Message", 3, false, "", -1, false)]
+        [LCMethodEvent("Write Message", 3)]
         public void DebugWrite(string message)
         {
             Debug.WriteLine("\t\t{0} -- {1}", m_name, message);
             Debug.Flush();
         }
 
-        [LCMethodEvent("Update status!", 3, false, "", -1, false)]
+        [LCMethodEvent("Update status!", 3)]
         public void UpdateStatus()
         {
         }

@@ -247,7 +247,7 @@ namespace LcmsNetPlugins.VICI.Valves
             return ValveErrors.BadArgument;
         }
 
-        [LCMethodEvent("Step Full Cycles", MethodOperationTimeoutType.CallMethod, "", -1, false, EventDescription = "Cycle the valve through cycleCount full rotations, with a set time in each position (includes move time)", IgnoreLeftoverTime = true, TimeoutCalculationMethod = nameof(CalculateFullCycleSteppedTime))]
+        [LCMethodEvent("Step Full Cycles", MethodOperationTimeoutType.CallMethod, EventDescription = "Cycle the valve through cycleCount full rotations, with a set time in each position (includes move time)", IgnoreLeftoverTime = true, TimeoutCalculationMethod = nameof(CalculateFullCycleSteppedTime))]
         public ValveErrors FullCycleStepped(int cycleCount, int delayEachStepSeconds)
         {
             if (cycleCount == 0)
@@ -324,7 +324,7 @@ namespace LcmsNetPlugins.VICI.Valves
             return (int)Math.Ceiling(msTotal / 1000.0);
         }
 
-        [LCMethodEvent("Step N Positions", MethodOperationTimeoutType.CallMethod, "", -1, false, EventDescription = "Step the valve the specified number of times, with a set time in each position (includes move time)", IgnoreLeftoverTime = true, TimeoutCalculationMethod = nameof(CalculateStepNPositionsTime))]
+        [LCMethodEvent("Step N Positions", MethodOperationTimeoutType.CallMethod, EventDescription = "Step the valve the specified number of times, with a set time in each position (includes move time)", IgnoreLeftoverTime = true, TimeoutCalculationMethod = nameof(CalculateStepNPositionsTime))]
         public ValveErrors StepNPositions(int stepCount, int delayEachStepSeconds)
         {
             if (stepCount <= 0)

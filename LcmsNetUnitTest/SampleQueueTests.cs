@@ -91,7 +91,7 @@ namespace LcmsnetUnitTest
             lcEvent.Parameters[0] = 1;
             lcEvent.ParameterNames = new string[1];
             lcEvent.ParameterNames[0] = "rate";
-            lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
             var testLcMethod = new LCMethod()
             {
@@ -140,7 +140,7 @@ namespace LcmsnetUnitTest
             lcEvent.Parameters[0] = 1;
             lcEvent.ParameterNames = new string[1];
             lcEvent.ParameterNames[0] = "rate";
-            lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
             var testLcMethod = new LCMethod()
             {
@@ -201,7 +201,7 @@ namespace LcmsnetUnitTest
             lcEvent.Parameters[0] = 1;
             lcEvent.ParameterNames = new string[1];
             lcEvent.ParameterNames[0] = "rate";
-            lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00, string.Empty, -1, false);
+            lcEvent.MethodAttribute = new LCMethodEventAttribute("SetFlowRate", 1.00);
             lcEvent.Method = pump.GetType().GetMethod("SetFlowRate");
             var testLcMethod = new LCMethod()
             {

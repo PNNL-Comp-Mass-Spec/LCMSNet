@@ -929,8 +929,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        [LCMethodEvent("Wait for SyncPoint", MethodOperationTimeoutType.Parameter, "", -1, false, EventDescription = "Wait for the PAL to reach an error, ready, or 'waiting for DS' state.\nDeterministic, next step will not be started until timeout is reached")]
-        [LCMethodEvent("Wait for SyncPoint NonDeterm", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Wait for the PAL to reach an error, ready, or 'waiting for DS' state.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        [LCMethodEvent("Wait for SyncPoint", MethodOperationTimeoutType.Parameter, EventDescription = "Wait for the PAL to reach an error, ready, or 'waiting for DS' state.\nDeterministic, next step will not be started until timeout is reached")]
+        [LCMethodEvent("Wait for SyncPoint NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Wait for the PAL to reach an error, ready, or 'waiting for DS' state.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public bool WaitUntilStopPoint(double timeout)
         {
             var status = "";
@@ -979,7 +979,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             return false;
         }
 
-        [LCMethodEvent("Throwup", MethodOperationTimeoutType.Parameter, "", -1, false, EventDescription = "Simply fire a device error. No communication with the PAL.")]
+        [LCMethodEvent("Throwup", MethodOperationTimeoutType.Parameter, EventDescription = "Simply fire a device error. No communication with the PAL.")]
         public void ThrowError(int timeToThrowup)
         {
             Error?.Invoke(this, new DeviceErrorEventArgs("AHHH!", null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "None"));
@@ -989,7 +989,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// Pauses the currently running method.
         /// </summary>
         ///
-        [LCMethodEvent("Pause Method", .5, "", -1, false, EventDescription = "Pause PAL method until resumed or stopped.\nDeterministic, next step will not be started until timeout is reached")]
+        [LCMethodEvent("Pause Method", .5, EventDescription = "Pause PAL method until resumed or stopped.\nDeterministic, next step will not be started until timeout is reached")]
         public void PauseMethod()
         {
             if (inEmulationMode)
@@ -1004,8 +1004,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// Resumes the method.
         /// </summary>
         ///
-        [LCMethodEvent("Resume Method", 500, "", -1, false, EventDescription = "Resume paused PAL method.\nDeterministic, next step will not be started until timeout is reached")]
-        [LCMethodEvent("Resume Method NonDeterm", 500, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Resume paused PAL method.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        [LCMethodEvent("Resume Method", 500, EventDescription = "Resume paused PAL method.\nDeterministic, next step will not be started until timeout is reached")]
+        [LCMethodEvent("Resume Method NonDeterm", 500, IgnoreLeftoverTime = true, EventDescription = "Resume paused PAL method.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public void ResumeMethod()
         {
             if (inEmulationMode)
@@ -1019,8 +1019,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Continues the method. This is way different than ResumeMethod.
         /// </summary>
-        [LCMethodEvent("Continue Method", MethodOperationTimeoutType.Parameter, "", -1, false, EventDescription = "Continue the PAL method (when it is waiting for a sync signal).\n\"waitForComplete\": wait until the PAL has finished the step or errors before starting the next step.\nDeterministic, next step will not be started until timeout is reached")]
-        [LCMethodEvent("Continue Method NonDeterm", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Continue the PAL method (when it is waiting for a sync signal).\n\"waitForComplete\": wait until the PAL has finished the step or errors before starting the next step.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        [LCMethodEvent("Continue Method", MethodOperationTimeoutType.Parameter, EventDescription = "Continue the PAL method (when it is waiting for a sync signal).\n\"waitForComplete\": wait until the PAL has finished the step or errors before starting the next step.\nDeterministic, next step will not be started until timeout is reached")]
+        [LCMethodEvent("Continue Method NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Continue the PAL method (when it is waiting for a sync signal).\n\"waitForComplete\": wait until the PAL has finished the step or errors before starting the next step.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public bool ContinueMethod(double timeout, bool waitForComplete = false)
         {
             if (inEmulationMode)
@@ -1060,8 +1060,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Stops the currently running method.
         /// </summary>
-        [LCMethodEvent("Stop Method", .5, "", -1, false, EventDescription = "Stops the current PAL method immediately.\nDeterministic, next step will not be started until timeout is reached")]
-        [LCMethodEvent("Stop Method NonDeterm", .5, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Stops the current PAL method immediately.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        [LCMethodEvent("Stop Method", .5, EventDescription = "Stops the current PAL method immediately.\nDeterministic, next step will not be started until timeout is reached")]
+        [LCMethodEvent("Stop Method NonDeterm", .5, IgnoreLeftoverTime = true, EventDescription = "Stops the current PAL method immediately.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public void StopMethod()
         {
             if (inEmulationMode)
@@ -1076,8 +1076,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         /// <param name="waitTimeoutms">The timeout value, in milliseconds.</param>
         /// <returns>Integer error code.</returns>
-        [LCMethodEvent("Wait Until Ready", MethodOperationTimeoutType.Parameter, "", -1, false, EventDescription = "Wait until the PAL is reporting state \"READY\".\nDeterministic, next step will not be started until timeout is reached")]
-        [LCMethodEvent("Wait Until Ready NonDeterm", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Wait until the PAL is reporting state \"READY\".\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        [LCMethodEvent("Wait Until Ready", MethodOperationTimeoutType.Parameter, EventDescription = "Wait until the PAL is reporting state \"READY\".\nDeterministic, next step will not be started until timeout is reached")]
+        [LCMethodEvent("Wait Until Ready NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Wait until the PAL is reporting state \"READY\".\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public int WaitUntilReady(double waitTimeoutms)
         {
             var timeoutms = Convert.ToInt32(waitTimeoutms);

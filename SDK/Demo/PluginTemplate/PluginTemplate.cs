@@ -16,7 +16,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
 
     //This is a template for a method exposed to LcmsNet to operate the device, copy+paste as many as you need.
     // for full understanding of the following attribute please see the LcmsNetSDK.
-    [LCMethodEventAttribute("YourMethodHere", 1.0, false, "", -1, false)]
+    [LCMethodEventAttribute("YourMethodHere", 1.0, false)]
     public void YourMethodHere()
     {
         // operation code goes here

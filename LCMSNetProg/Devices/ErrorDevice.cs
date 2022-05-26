@@ -138,7 +138,7 @@ namespace LcmsNet.Devices
         /// <summary>
         /// Throws an exception.
         /// </summary>
-        [LCMethodEvent("Throw Exception", 1, false, "", -1, false)]
+        [LCMethodEvent("Throw Exception", 1)]
         public bool ThrowException()
         {
             var dummyCode = false;
@@ -147,13 +147,13 @@ namespace LcmsNet.Devices
             return false;
         }
 
-        [LCMethodEvent("Return Error", 1, false, "", -1, false)]
+        [LCMethodEvent("Return Error", 1)]
         public bool ReturnError()
         {
             return false;
         }
 
-        [LCMethodEvent("Event Error", 1, false, "", -1, false)]
+        [LCMethodEvent("Event Error", 1)]
         public void EventError()
         {
             Error?.Invoke(this,
@@ -164,7 +164,7 @@ namespace LcmsNet.Devices
         /// This method times out, waiting indefinitely.
         /// </summary>
         /// <returns>False</returns>
-        [LCMethodEvent("Timeout", 1, false, "", -1, false)]
+        [LCMethodEvent("Timeout", 1)]
         public bool Timeout()
         {
             Thread.Sleep(4000);
@@ -175,7 +175,7 @@ namespace LcmsNet.Devices
         /// This method times out, waiting indefinitely.
         /// </summary>
         /// <returns>False</returns>
-        [LCMethodEvent("Wait Full Timeout", 1, false, "", -1, false)]
+        [LCMethodEvent("Wait Full Timeout", 1)]
         public bool WaitUntilTimeout()
         {
             Thread.Sleep(1000);

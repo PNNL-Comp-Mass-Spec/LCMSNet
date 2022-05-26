@@ -50,7 +50,7 @@ namespace LcmsNet.Devices
 
         #region LC-Method Registered Methods
 
-        [LCMethodEvent("Block", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Block", MethodOperationTimeoutType.Parameter)]
         public void Block(double timeToBlock)
         {
             var timer = new TimerDevice {

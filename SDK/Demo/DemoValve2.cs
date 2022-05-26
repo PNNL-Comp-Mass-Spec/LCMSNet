@@ -74,7 +74,7 @@ namespace DemoPluginLibrary
             return new List<string>();
         }
 
-        [LCMethodEvent("GetPosition", 1.0, "", -1, false)]
+        [LCMethodEvent("GetPosition", 1.0)]
         public int GetPosition()
         {
             return Position;
@@ -88,7 +88,7 @@ namespace DemoPluginLibrary
             }
         }
 
-        [LCMethodEvent("SetPosition", 1.0, "", -1, false)]
+        [LCMethodEvent("SetPosition", 1.0)]
         public void SetPosition(EightPositionState position)
         {
             if ((int)position < 1 || (int)position > 8)

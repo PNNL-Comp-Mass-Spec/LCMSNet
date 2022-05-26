@@ -175,7 +175,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// Sets the position of the valve (A or B).
         /// </summary>
         /// <param name="newPosition">The new position.</param>
-        [LCMethodEvent("Set Position", 1, true, "", -1, false)]
+        [LCMethodEvent("Set Position", 1, HasDiscreteParameters = true)]
         public ValveErrors SetPosition(TwoPositionState newPosition)
         {
 #if DEBUG

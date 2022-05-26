@@ -62,13 +62,13 @@ namespace DemoPluginLibrary
             return new List<string>();
         }
 
-        [LCMethodEvent("GetPosition", 1.0, "", -1, false)]
+        [LCMethodEvent("GetPosition", 1.0)]
         public int GetPosition()
         {
             return Position;
         }
 
-        [LCMethodEvent("SetPosition", 1.0, "", -1, false)]
+        [LCMethodEvent("SetPosition", 1.0)]
         public void SetPosition(TwoPositionState position)
         {
             if ((int)position < 0 || (int)position > 2)

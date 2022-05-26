@@ -108,7 +108,7 @@ namespace DemoPluginLibrary
             return true;
         }
 
-        [LCMethodEvent("Stop Method", 1.0, "", -1, false)]
+        [LCMethodEvent("Stop Method", 1.0)]
         public bool StopMethod()
         {
             return true;

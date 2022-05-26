@@ -454,7 +454,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="flow"></param>
         /// <param name="numberOfMinutes"></param>
         /// <returns></returns>
-        [LCMethodEvent("Purge Channel", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Purge Channel", MethodOperationTimeoutType.Parameter)]
         public AgilentPumpReplyErrorCodes PurgePump(double timeout, PumpPurgeChannel channel, double flow, double numberOfMinutes)
         {
             var command = string.Format("PG{0} {1}, {2}", channel, Convert.ToInt32(flow), numberOfMinutes);
@@ -493,7 +493,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        [LCMethodEvent("Abort Purge", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Abort Purge", MethodOperationTimeoutType.Parameter)]
         public AgilentPumpReplyErrorCodes AbortPurges(double timeout)
         {
             var reply = "";
@@ -1107,7 +1107,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// Sets the pump mode.
         /// </summary>
         /// <param name="newMode">The new mode</param>
-        [LCMethodEvent("Set Mode", 1, "", -1, false)]
+        [LCMethodEvent("Set Mode", 1)]
         public void SetMode(AgilentPumpModes newMode)
         {
             if (Emulation)
@@ -1124,7 +1124,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         /// <param name="newFlowRate">The new flow rate.</param>
         ///
-        [LCMethodEvent("Set Flow Rate", 1, "", -1, false)]
+        [LCMethodEvent("Set Flow Rate", 1)]
         public void SetFlowRate(double newFlowRate)
         {
             if (Emulation)
@@ -1141,7 +1141,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         ///// Sets the mixer volume
         ///// </summary>
         ///// <param name="newVolumeuL">The new mixer volume, in uL</param>
-        //[LCMethodEvent("Set Mixer Volume", 1, "", -1, false)]
+        //[LCMethodEvent("Set Mixer Volume", 1)]
         //public void SetMixerVolume(double newVolumeuL)
         //{
         //    if (Emulation)
@@ -1159,7 +1159,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// Sets the percent B concentration.
         /// </summary>
         /// <param name="percent">Percent B concentration to have.</param>
-        [LCMethodEvent("Set Percent B", 1, "", -1, false)]
+        [LCMethodEvent("Set Percent B", 1)]
         public void SetPercentB(double percent)
         {
             var reply = "";
@@ -1228,7 +1228,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Stops the currently running method.
         /// </summary>
-        [LCMethodEvent("Stop Method", 1, "", -1, false)]
+        [LCMethodEvent("Stop Method", 1)]
         public void StopMethod()
         {
             var reply = "";
@@ -1238,7 +1238,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Turns the pumps on.
         /// </summary>
-        [LCMethodEvent("Turn Pump On", 1, "", -1, false)]
+        [LCMethodEvent("Turn Pump On", 1)]
         public void PumpOn()
         {
             var reply = "";
@@ -1249,7 +1249,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Turns the pumps off
         /// </summary>
-        [LCMethodEvent("Turn Pump Off", 1, "", -1, false)]
+        [LCMethodEvent("Turn Pump Off", 1)]
         public void PumpOff()
         {
             var reply = "";
@@ -1260,7 +1260,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Turns the pumps to standby
         /// </summary>
-        [LCMethodEvent("Turn Pump Standby", 1, "", -1, false)]
+        [LCMethodEvent("Turn Pump Standby", 1)]
         public void PumpStandby()
         {
             var reply = "";

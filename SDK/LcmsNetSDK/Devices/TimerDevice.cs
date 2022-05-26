@@ -87,7 +87,7 @@ namespace LcmsNetSDK.Devices
         /// Waits for N milliseconds.
         /// </summary>
         /// <param name="seconds">Total number of milliseconds to wait.</param>
-        [LCMethodEvent("Wait N Seconds", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Wait N Seconds", MethodOperationTimeoutType.Parameter)]
         // Note, the timeout is converted by the optimizer.
         public void WaitSeconds(double seconds)
         {

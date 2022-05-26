@@ -429,7 +429,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// <summary>
         /// Stops instrument acquisition.
         /// </summary>
-        [LCMethodEvent("Stop Acquisition", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Stop Acquisition", MethodOperationTimeoutType.Parameter)]
         public bool StopAcquisition(double delayTime)
         {
             var startTime = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));

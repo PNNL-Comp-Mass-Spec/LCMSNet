@@ -268,7 +268,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
+        [LCMethodEvent("Read", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
         public bool ReadStatusAuto(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             var closureState = ReadStateAuto(timeout, target);
@@ -281,7 +281,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <param name="timeout">Timeout, for when to consider the device has errored</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read Digital", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
+        [LCMethodEvent("Read Digital", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
         public bool ReadStatusDigital(double timeout, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             return ReadStatusDigital(timeout, labjackPort, target);
@@ -294,7 +294,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <param name="port">The LabJack port</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read Port Digital", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
+        [LCMethodEvent("Read Port Digital", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
         public bool ReadStatusDigital(double timeout, LabjackU12InputPorts port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             var closureState = ReadStateDigital(timeout, port, target);
@@ -310,7 +310,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <param name="voltage">The midpoint voltage - readVoltage >= voltage will be "closed" state</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read Analog", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
+        [LCMethodEvent("Read Analog", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
         public bool ReadStatusAnalog(double timeout, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             return ReadStatusAnalog(timeout, labjackPort, voltage, target);
@@ -325,7 +325,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <param name="voltage">The midpoint voltage - readVoltage >= voltage will be "closed" state</param>
         /// <param name="target">The desired state of the contact closure</param>
         /// <returns>True if the state of the contact closure matched the target state</returns>
-        [LCMethodEvent("Read Port Analog", MethodOperationTimeoutType.Parameter, "", -1, false, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
+        [LCMethodEvent("Read Port Analog", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Non-deterministic: Timeout is maximum time allowed, but next step will be started as soon as the desired state is read")]
         public bool ReadStatusAnalog(double timeout, LabjackU12InputPorts port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
             var closureState = ReadStateAnalog(timeout, port, voltage, target);

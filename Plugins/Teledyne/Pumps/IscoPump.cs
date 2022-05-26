@@ -471,7 +471,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 return false;
             }
         }
-        [LCMethodEvent("Set Mode", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Set Mode", MethodOperationTimeoutType.Parameter)]
         public bool SetOperationMode(double timeout, IscoOperationMode newMode)
         {
             return SetOperationMode(newMode);
@@ -1052,7 +1052,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             return ParseRangeMessage(resp);
         }
 
-        [LCMethodEvent("Refill", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Refill", MethodOperationTimeoutType.Parameter)]
         //public bool StartRefill(double timeout, int pumpIndx, double refillRate)
         public bool StartRefill(double timeout, ISCOPumpChannels pump, double refillRate)
         {
@@ -1126,7 +1126,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="timeout"></param>
         /// <param name="pump"></param>
         /// <returns></returns>
-        [LCMethodEvent("Start Pump", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Start Pump", MethodOperationTimeoutType.Parameter)]
         public bool StartPump(double timeout, ISCOPumpChannels pump)
         {
             return StartPump(timeout, (int)pump);
@@ -1182,7 +1182,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="timeout"></param>
         /// <param name="pump">Pump to stop</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
-        [LCMethodEvent("Stop Pump", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Stop Pump", MethodOperationTimeoutType.Parameter)]
         public bool StopPump(double timeout, ISCOPumpChannels pump)
         {
             return StopPump(timeout, (int)pump);
@@ -1231,7 +1231,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             StatusUpdate?.Invoke(this, statusArgs);
             return true;
         }
-        [LCMethodEvent("Set Flow Rate", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Set Flow Rate", MethodOperationTimeoutType.Parameter)]
         //public bool SetFlow(double timeout, int pumpIndx, double newFlow)
         public bool SetFlow(double timeout, ISCOPumpChannels pump, double newFlow)
         {
@@ -1288,7 +1288,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <param name="pump">Pump to set</param>
         /// <param name="newPress">New pressure setpoint</param>
         /// <returns>TRUE for success; FALSE otherwise</returns>
-        [LCMethodEvent("Set Pressure", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Set Pressure", MethodOperationTimeoutType.Parameter)]
         public bool SetPressure(double timeout, ISCOPumpChannels pump, double newPress)
         {
             return SetPressure((int)pump, newPress);

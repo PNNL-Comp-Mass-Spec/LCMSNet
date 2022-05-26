@@ -109,7 +109,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [LCMethodEvent("Inject Failure", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Inject Failure", MethodOperationTimeoutType.Parameter)]
         public bool MethodFailure(double timeout)
         {
             if (this.Error != null)
@@ -130,7 +130,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [LCMethodEvent("Send Number", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Send Number", MethodOperationTimeoutType.Parameter)]
         public bool SendNumber(double timeout, double number)
         {
             if (StatusUpdate != null)
@@ -176,7 +176,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [LCMethodEvent("Inject Status", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Inject Status", MethodOperationTimeoutType.Parameter)]
         public bool MethodStatus(double timeout)
         {
             if (this.StatusUpdate != null)

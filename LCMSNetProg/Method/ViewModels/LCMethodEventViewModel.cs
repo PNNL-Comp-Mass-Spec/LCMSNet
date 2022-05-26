@@ -125,7 +125,7 @@ namespace LcmsNet.Method.ViewModels
             if (locked)
             {
                 // Create a dummy classLCMethodData
-                var tempObj = new LCMethodEventData(null, null, new LCMethodEventAttribute("Unlock", 0.0, "", 0, false), null);
+                var tempObj = new LCMethodEventData(null, null, new LCMethodEventAttribute("Unlock", 0.0), null);
                 methodsComboBoxOptions.Add(tempObj);
                 SelectedLCEvent = tempObj;
             }

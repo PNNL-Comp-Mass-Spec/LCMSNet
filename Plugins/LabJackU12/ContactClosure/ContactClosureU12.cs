@@ -369,7 +369,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// Triggers a pulse, using the stored values.
         /// </summary>
         /// <param name="timeout"></param>
-        [LCMethodEvent("Trigger Fixed", MethodOperationTimeoutType.Parameter, "", -1, false, EventDescription = "Send a trigger using the saved parameters for this hardware device. Can be used to send low-pulse triggers.")]
+        [LCMethodEvent("Trigger Fixed", MethodOperationTimeoutType.Parameter, EventDescription = "Send a trigger using the saved parameters for this hardware device. Can be used to send low-pulse triggers.")]
         public int Trigger(double timeout = 0)
         {
             return TriggerFlexible(PulseLength, Port, PulseVoltage);
@@ -380,7 +380,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
-        [LCMethodEvent("Trigger", MethodOperationTimeoutType.Parameter, "", -1, false, EventDescription = "Send a high-pulse trigger using the saved port parameter for this hardware device, for the provided time")]
+        [LCMethodEvent("Trigger", MethodOperationTimeoutType.Parameter, EventDescription = "Send a high-pulse trigger using the saved port parameter for this hardware device, for the provided time")]
         public int Trigger(double timeout, double pulseLengthSeconds)
         {
             return Trigger(timeout, labjackPort, pulseLengthSeconds);
@@ -392,7 +392,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// <param name="timeout"></param>
         /// <param name="port"></param>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
-        [LCMethodEvent("Trigger Port", MethodOperationTimeoutType.Parameter, "", -1, false, EventDescription = "Send a high-pulse trigger to the provided port, for the provided time")]
+        [LCMethodEvent("Trigger Port", MethodOperationTimeoutType.Parameter, EventDescription = "Send a high-pulse trigger to the provided port, for the provided time")]
         public int Trigger(double timeout, LabjackU12OutputPorts port, double pulseLengthSeconds)
         {
             if (inEmulationMode)
@@ -455,7 +455,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// </summary>
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="voltage">The voltage to set</param>
-        [LCMethodEvent("Trigger With Voltage", MethodOperationTimeoutType.Parameter, "", -1, false, EventDescription = "Send a non-zero-pulse trigger using the saved port parameter for this hardware device, for the provided time\nFor analog ports, the set voltage is used, for digital ports digital 'high' is sent")]
+        [LCMethodEvent("Trigger With Voltage", MethodOperationTimeoutType.Parameter, EventDescription = "Send a non-zero-pulse trigger using the saved port parameter for this hardware device, for the provided time\nFor analog ports, the set voltage is used, for digital ports digital 'high' is sent")]
         public int Trigger(int pulseLengthSeconds, double voltage)
         {
             return Trigger(pulseLengthSeconds, labjackPort, voltage);
@@ -469,7 +469,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>
-        [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter, "", -1, false, EventDescription = "Send a non-zero-pulse trigger to the provided port, for the provided time\nFor analog ports, the set voltage is used, for digital ports digital 'high' is sent")]
+        [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter, EventDescription = "Send a non-zero-pulse trigger to the provided port, for the provided time\nFor analog ports, the set voltage is used, for digital ports digital 'high' is sent")]
         public int Trigger(int pulseLengthSeconds, LabjackU12OutputPorts port, double voltage)
         {
             if (inEmulationMode)

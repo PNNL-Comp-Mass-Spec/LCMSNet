@@ -65,7 +65,7 @@ namespace DemoPluginLibrary
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="portName">The port to send the voltage on</param>
         /// <param name="voltage">The voltage to set</param>
-        [LCMethodEvent("Trigger With Voltage", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Trigger With Voltage", MethodOperationTimeoutType.Parameter)]
         public bool Trigger(int pulseLengthSeconds, string portName, double voltage)
         {
             //interact with hardware here.

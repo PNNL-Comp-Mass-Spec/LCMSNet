@@ -260,7 +260,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// <param name="pulseLengthSeconds">The length of the pulse in seconds</param>
         /// <param name="port"></param>
         /// <param name="voltage">The voltage to set</param>
-        [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter)]
         public int Trigger(double pulseLengthSeconds, LabjackU3OutputPorts port, double voltage)
         {
             if (m_emulation)
