@@ -120,7 +120,6 @@
     <Compile Include="LCMSSettings.cs" />
     <Compile Include="System\PersistDataPaths.cs" />
     <Compile Include="System\TimeKeeper.cs" />
-    <Compile Include="WpfConversions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

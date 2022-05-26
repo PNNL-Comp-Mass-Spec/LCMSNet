@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Graphic;
 using FluidicsSDK.Managers;
-using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Base
@@ -67,7 +66,8 @@ namespace FluidicsSDK.Base
             m_primitives.Clear();
         }
 
-        protected readonly double ElevenPoint = WpfConversions.GetWpfLength("11pt");
+        // Convert value from '11pt' to the equivalent in pixels, since WPF uses pixels instead. See source for System.Windows.LengthConverter.
+        protected readonly double ElevenPoint = 14.667; // 11.0 * 4.0 / 3.0;
 
         public void RegisterDevice(IDevice device)
         {

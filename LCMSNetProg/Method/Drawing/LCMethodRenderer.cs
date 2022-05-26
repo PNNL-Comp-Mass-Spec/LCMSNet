@@ -5,8 +5,6 @@ using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK;
 using LcmsNet.Data;
-using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
@@ -35,8 +33,9 @@ namespace LcmsNet.Method.Drawing
         /// </summary>
         public SolidColorBrush AcquisitionColor { get; set; }
 
-        protected readonly double SixPt = WpfConversions.GetWpfLength("6pt");
-        protected readonly double EightPt = WpfConversions.GetWpfLength("8pt");
+        // Convert value from '6pt'/'8pt' to the equivalent in pixels, since WPF uses pixels instead. See source for System.Windows.LengthConverter.
+        protected readonly double SixPt = 8.0; // 6.0 * 4.0 / 3.0;
+        protected readonly double EightPt = 10.667; // 8.0 * 4.0 / 3.0;
 
         #region Time Conversions
 
