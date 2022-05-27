@@ -14,14 +14,32 @@ namespace LcmsNet.Method
         /// <summary>
         /// Writes the LC-Event from the specified node.
         /// </summary>
-        private void WriteEventNode(XmlDocument document, XmlElement eventRoot, LCEvent lcEvent)
+        /// <param name="document"></param>
+        /// <param name="eventRoot"></param>
+        /// <param name="lcEvent"></param>
+        /// <param name="isSampleReport">Supply true to write extra information that isn't needed for method loading</param>
+        /// <param name="previousEventTimeTotal">Supply true to write the specific start time (when a sample ran) rather than just a cumulative start time</param>
+        private void WriteEventNode(XmlDocument document, XmlElement eventRoot, LCEvent lcEvent, bool isSampleReport, bool reportStartTime, TimeSpan previousEventTimeTotal)
         {
             // Set all of the event attributes
             eventRoot.SetAttribute(LCMethodFactory.CONST_XPATH_NAME, lcEvent.Name);
-            eventRoot.SetAttribute(LCMethodFactory.CONST_XPATH_START, lcEvent.Start.ToString(CultureInfo.InvariantCulture));
+
+            // write timespan for stored methods, write DateTime for actual/complete/incomplete methods
+            var startTime = lcEvent.Start.ToString(CultureInfo.InvariantCulture);
+            if (!reportStartTime)
+            {
+                startTime = previousEventTimeTotal.ToString();
+            }
+            eventRoot.SetAttribute(LCMethodFactory.CONST_XPATH_START, startTime);
+
             eventRoot.SetAttribute(LCMethodFactory.CONST_XPATH_DURATION, lcEvent.Duration.ToString());
-            eventRoot.SetAttribute(LCMethodFactory.CONST_XPATH_HAS_DISCREET_STATES,
-                lcEvent.HasDiscreteStates.ToString());
+            if (isSampleReport)
+            {
+                // This is set from event details, and can be re-set by "building" the method after loading
+                eventRoot.SetAttribute(LCMethodFactory.CONST_XPATH_HAS_DISCREET_STATES,
+                    lcEvent.HasDiscreteStates.ToString());
+            }
+
             eventRoot.SetAttribute(LCMethodFactory.CONST_XPATH_OPTIMIZE_WITH, lcEvent.OptimizeWith.ToString());
 
             // Store the device data
@@ -111,6 +129,7 @@ namespace LcmsNet.Method
                 return false;
 
             var document = new XmlDocument();
+            var isSampleReport = method.ActualEvents.Count > 0;
 
             // Method Name and Flag if it is "special"
             var rootElement = document.CreateElement(LCMethodFactory.CONST_XPATH_METHOD);
@@ -122,11 +141,13 @@ namespace LcmsNet.Method
                 method.AllowPreOverlap.ToString());
             rootElement.SetAttribute(LCMethodFactory.CONST_XPATH_COLUMN_DATA, method.Column.ToString());
 
+            var timeTotal = new TimeSpan();
             // Then construct the events.
             foreach (var lcEvent in method.Events)
             {
                 var eventElement = document.CreateElement(LCMethodFactory.CONST_XPATH_EVENTS);
-                WriteEventNode(document, eventElement, lcEvent);
+                WriteEventNode(document, eventElement, lcEvent, isSampleReport, false, timeTotal);
+                timeTotal = timeTotal.Add(lcEvent.Duration);
                 rootElement.AppendChild(eventElement);
             }
 
@@ -136,11 +157,13 @@ namespace LcmsNet.Method
 
             if (method.ActualEvents.Count > 0)
             {
+                timeTotal = new TimeSpan();
                 // Then construct the events.
                 foreach (var lcActualEvent in method.ActualEvents)
                 {
                     var actualEventElement = document.CreateElement(LCMethodFactory.CONST_XPATH_EVENTS);
-                    WriteEventNode(document, actualEventElement, lcActualEvent);
+                    WriteEventNode(document, actualEventElement, lcActualEvent, isSampleReport, true, timeTotal);
+                    timeTotal = timeTotal.Add(lcActualEvent.Duration);
                     rootActualElement.AppendChild(actualEventElement);
                 }
                 rootElement.AppendChild(rootActualElement); // How the method actually ran.

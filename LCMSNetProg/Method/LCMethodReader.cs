@@ -198,12 +198,18 @@ namespace LcmsNet.Method
             var value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_OPTIMIZE_WITH);
             lcEvent.OptimizeWith = Convert.ToBoolean(value.Value);
             value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_HAS_DISCREET_STATES);
-            lcEvent.HasDiscreteStates = Convert.ToBoolean(value.Value);
+            if (value != null)
+            {
+                lcEvent.HasDiscreteStates = Convert.ToBoolean(value.Value);
+            }
 
             try
             {
                 value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_IS_EVENT_INDETERMINANT);
-                lcEvent.IsIndeterminant = Convert.ToBoolean(value.Value);
+                if (value != null)
+                {
+                    lcEvent.IsIndeterminant = Convert.ToBoolean(value.Value);
+                }
             }
             catch
             {
@@ -214,7 +220,14 @@ namespace LcmsNet.Method
 
             // Start Time
             value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_START);
-            lcEvent.Start = Convert.ToDateTime(value.Value);
+            if (TimeSpan.TryParse(value.Value, out var startSpan))
+            {
+                lcEvent.Start = DateTime.MinValue.Add(startSpan);
+            }
+            else
+            {
+                lcEvent.Start = Convert.ToDateTime(value.Value);
+            }
 
             // Duration
             value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_DURATION);
@@ -472,6 +485,7 @@ namespace LcmsNet.Method
             {
                 throw new Exception("Could not read the LC Method.  ", ex);
             }
+
             lcEvent.Method = method;
 
             // Get the method attributes for this method as well.
@@ -504,6 +518,13 @@ namespace LcmsNet.Method
                 var ex = new Exception("Could not read the LC-method event for device " + deviceName, exOld);
                 throw ex;
             }
+
+            if (lcEvent.MethodAttribute != null)
+            {
+                // Set this value based on the method attribute
+                lcEvent.HasDiscreteStates = lcEvent.MethodAttribute.HasDiscreteParameters;
+            }
+
             return lcEvent;
         }
 
@@ -644,6 +665,7 @@ namespace LcmsNet.Method
                     errors.Add(newException);
                 }
             }
+
             return method;
         }
     }
