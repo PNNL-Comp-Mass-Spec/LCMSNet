@@ -169,6 +169,9 @@ namespace LcmsNet.SampleQueue.ViewModels
                 SampleDataManager.AddDateCartnameColumnIDToDatasetName(samples);
             }
 
+            if (samples.Count < 1)
+                return;
+
             // Re-select the first sample
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
