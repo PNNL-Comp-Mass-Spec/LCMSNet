@@ -104,7 +104,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Serial port name
         /// </summary>
-        [PersistenceData("PortName")]
+        [DeviceSavedSetting("PortName")]
         public string PortName
         {
             get => m_SerialPort.PortName;
@@ -119,7 +119,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Serial port baud rate
         /// </summary>
-        [PersistenceData("BaudRate")]
+        [DeviceSavedSetting("BaudRate")]
         public int BaudRate
         {
             get => m_SerialPort.BaudRate;
@@ -129,7 +129,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Serial port read timeout (msec)
         /// </summary>
-        [PersistenceData("ReadTimeout")]
+        [DeviceSavedSetting("ReadTimeout")]
         public int ReadTimeout
         {
             get => m_SerialPort.ReadTimeout;
@@ -139,7 +139,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Serial port write timeout (msec)
         /// </summary>
-        [PersistenceData("WriteTimeout")]
+        [DeviceSavedSetting("WriteTimeout")]
         public int WriteTimeout
         {
             get => m_SerialPort.WriteTimeout;
@@ -154,7 +154,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Number of pumps connected to this controller (1 min, 3 max)
         /// </summary>
-        [PersistenceData("PumpCount")]
+        [DeviceSavedSetting("PumpCount")]
         public int PumpCount
         {
             get => m_PumpCount;
@@ -164,7 +164,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Address for the pump controller
         /// </summary>
-        [PersistenceData("UnitAddress")]
+        [DeviceSavedSetting("UnitAddress")]
         public int UnitAddress
         {
             get => m_UnitAddr;

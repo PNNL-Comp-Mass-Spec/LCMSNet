@@ -121,7 +121,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         ///
         /// </summary>
-        [PersistenceData("NumberOfPositions")]
+        [DeviceSavedSetting("NumberOfPositions")]
         public int NumberOfPositions
         {
             get => numberOfPositions;

@@ -201,7 +201,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// <summary>
         /// The length of the pulse to send on the port. Defaults to 1 second.
         /// </summary>
-        [PersistenceData("PulseLengthSeconds")]
+        [DeviceSavedSetting("PulseLengthSeconds")]
         public int PulseLength
         {
             get => pulseLength;
@@ -215,7 +215,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// <summary>
         /// The voltage to apply on the port for the pulse duration. Defaults to 5V.
         /// </summary>
-        [PersistenceData("PulseVoltage")]
+        [DeviceSavedSetting("PulseVoltage")]
         public double PulseVoltage
         {
             get => pulseVoltage;
@@ -229,7 +229,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// <summary>
         /// The 'normal'/default voltage for the labjack port. Defaults to 0V.
         /// </summary>
-        [PersistenceData("NormalVoltage")]
+        [DeviceSavedSetting("NormalVoltage")]
         public double NormalVoltage
         {
             get => normalVoltage;
@@ -244,7 +244,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// <summary>
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
-        [PersistenceData("Port")]
+        [DeviceSavedSetting("Port")]
         public LabjackU12OutputPorts Port
         {
             get => labjackPort;
@@ -256,7 +256,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
             }
         }
 
-        [PersistenceData("Labjack ID")]
+        [DeviceSavedSetting("Labjack ID")]
         public int LabJackID
         {
             get => labjackDevice.LocalID;

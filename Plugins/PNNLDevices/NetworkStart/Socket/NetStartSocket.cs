@@ -116,17 +116,17 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// <summary>
         /// Gets or sets the send timeout for the socket.
         /// </summary>
-        [PersistenceData("SendTimeout")]
+        [DeviceSavedSetting("SendTimeout")]
         public int SendTimeout { get; set; }
         /// <summary>
         /// Gets or sets the receive timeout for the socket.
         /// </summary>
-        [PersistenceData("ReceiveTimeout")]
+        [DeviceSavedSetting("ReceiveTimeout")]
         public int ReceiveTimeout { get; set; }
         /// <summary>
         /// Gets or sets the IP address or DNS name of the server instrument.
         /// </summary>
-        [PersistenceData("IPAddress")]
+        [DeviceSavedSetting("IPAddress")]
         public string Address
         {
             get => m_address;
@@ -135,7 +135,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// <summary>
         /// Gets or sets the port used to connect to the server.
         /// </summary>
-        [PersistenceData("Port")]
+        [DeviceSavedSetting("Port")]
         public int Port
         {
             get => m_port;

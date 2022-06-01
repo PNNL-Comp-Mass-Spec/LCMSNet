@@ -169,7 +169,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         ///
         /// </summary>
-        [PersistenceData("PortName")]
+        [DeviceSavedSetting("PortName")]
         public string PortName
         {
             get => Port.PortName;
@@ -183,7 +183,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         ///
         /// </summary>
-        [PersistenceData("ReadTimeout")]
+        [DeviceSavedSetting("ReadTimeout")]
         public int ReadTimeout
         {
             get => Port.ReadTimeout;
@@ -197,7 +197,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         ///
         /// </summary>
-        [PersistenceData("WriteTimeout")]
+        [DeviceSavedSetting("WriteTimeout")]
         public int WriteTimeout
         {
             get => Port.WriteTimeout;
@@ -211,7 +211,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// Gets and sets the valve's ID in the software. DOES NOT CHANGE THE VALVE'S HARDWARE ID (Must call SetHardwareID to do that).
         /// </summary>
-        [PersistenceData("SoftwareID")]
+        [DeviceSavedSetting("SoftwareID")]
         public char SoftwareID
         {
             get => valveID;

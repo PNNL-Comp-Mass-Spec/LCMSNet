@@ -337,10 +337,10 @@ namespace LcmsNetSDK.Devices
                 var propertyMap = new Dictionary<string, PropertyInfo>();
                 foreach (var property in properties)
                 {
-                    var attributes = property.GetCustomAttributes(typeof (PersistenceDataAttribute), true);
+                    var attributes = property.GetCustomAttributes(typeof (DeviceSavedSettingAttribute), true);
                     foreach (var o in attributes)
                     {
-                        var setting = o as PersistenceDataAttribute;
+                        var setting = o as DeviceSavedSettingAttribute;
                         if (setting != null)
                         {
                             propertyMap.Add(setting.SettingName, property);
@@ -474,7 +474,7 @@ namespace LcmsNetSDK.Devices
                         continue;
 
                     var attributes = property.GetCustomAttributes(
-                        typeof (PersistenceDataAttribute),
+                        typeof (DeviceSavedSettingAttribute),
                         true);
                     // Make sure the property is tagged to be persisted.
                     if (attributes.Length < 1)
@@ -483,7 +483,7 @@ namespace LcmsNetSDK.Devices
                     foreach (var attributeObject in attributes)
                     {
                         var settingAttribute =
-                            attributeObject as PersistenceDataAttribute;
+                            attributeObject as DeviceSavedSettingAttribute;
 
                         if (settingAttribute != null)
                         {

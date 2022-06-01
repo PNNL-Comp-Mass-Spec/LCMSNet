@@ -6,13 +6,13 @@ namespace LcmsNetSDK.Devices
     /// Attribute used to save a device's settings
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public class PersistenceDataAttribute : Attribute
+    public class DeviceSavedSettingAttribute : Attribute
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="settingName"></param>
-        public PersistenceDataAttribute(string settingName)
+        public DeviceSavedSettingAttribute(string settingName)
         {
             SettingName = settingName;
         }

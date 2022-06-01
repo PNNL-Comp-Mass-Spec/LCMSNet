@@ -176,7 +176,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// <summary>
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
-        [PersistenceData("Port")]
+        [DeviceSavedSetting("Port")]
         public LabjackU3OutputPorts Port
         {
             get => m_port;
@@ -187,7 +187,7 @@ namespace LcmsNetPlugins.LabJackU3
             }
         }
 
-        [PersistenceData("Labjack ID")]
+        [DeviceSavedSetting("Labjack ID")]
         public int LabJackID
         {
             get => m_labjack.LocalID;

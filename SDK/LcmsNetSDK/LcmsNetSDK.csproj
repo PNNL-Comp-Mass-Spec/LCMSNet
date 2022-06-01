@@ -64,6 +64,7 @@
     <Compile Include="Devices\DeviceManager.cs" />
     <Compile Include="Devices\DeviceManagerStatusArgs.cs" />
     <Compile Include="Devices\DevicePluginInformation.cs" />
+    <Compile Include="Devices\DeviceSavedSettingAttribute.cs" />
     <Compile Include="Devices\DeviceStatus.cs" />
     <Compile Include="Devices\DeviceStatusEventArgs.cs" />
     <Compile Include="Devices\DeviceType.cs" />
@@ -75,7 +76,6 @@
     <Compile Include="Devices\INetworkStart.cs" />
     <Compile Include="Devices\IPump.cs" />
     <Compile Include="Devices\MonitoringComponent.cs" />
-    <Compile Include="Devices\PersistenceDataAttribute.cs" />
     <Compile Include="Devices\PumpDataEventArgs.cs" />
     <Compile Include="Devices\PumpDataPoint.cs" />
     <Compile Include="Devices\TimerDevice.cs" />
@@ -113,7 +113,6 @@
     <Compile Include="IPDF.cs" />
     <Compile Include="ModelStatus.cs" />
     <Compile Include="ModelStatusChangeEventArgs.cs" />
-    <Compile Include="PlugInDisplayNameAttribute.cs" />
     <Compile Include="LCMSSettings.cs" />
     <Compile Include="System\PersistDataPaths.cs" />
     <Compile Include="System\TimeKeeper.cs" />

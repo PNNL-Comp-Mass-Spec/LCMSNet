@@ -317,10 +317,10 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         #region Properties
 
-        [PersistenceData("TotalMonitoringMinutes")]
+        [DeviceSavedSetting("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep { get; set; }
 
-        [PersistenceData("TotalMonitoringSecondsElapsed")]
+        [DeviceSavedSetting("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondsElapsed { get; set; }
 
         /// <summary>
@@ -370,7 +370,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Gets or sets the port name to use to communicate with the pumps.
         /// </summary>
-        [PersistenceData("PortName")]
+        [DeviceSavedSetting("PortName")]
         public string PortName { get; set; }
 
         /// <summary>

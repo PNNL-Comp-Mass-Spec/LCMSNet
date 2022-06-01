@@ -184,7 +184,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// <summary>
         /// Gets or sets the port on the labjack used for the pulse. Defaults to AO0.
         /// </summary>
-        [PersistenceData("Port")]
+        [DeviceSavedSetting("Port")]
         public LabjackU12InputPorts Port
         {
             get => labjackPort;
@@ -195,7 +195,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             }
         }
 
-        [PersistenceData("Labjack ID")]
+        [DeviceSavedSetting("Labjack ID")]
         public int LabJackID
         {
             get => labjackDevice.LocalID;

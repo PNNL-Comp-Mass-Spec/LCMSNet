@@ -223,7 +223,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Gets or sets the folder containing the PAL method files.
         /// </summary>
-        [PersistenceData("MethodsFolder")]
+        [DeviceSavedSetting("MethodsFolder")]
         public string MethodsFolder
         {
             get => methodsFolder;
@@ -248,7 +248,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Gets or sets the method for the PAL to run.
         /// </summary>
-        [PersistenceData("Method")]
+        [DeviceSavedSetting("Method")]
         public string Method
         {
             get => currentMethod;
@@ -262,7 +262,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Gets or sets the tray for the PAL to use.
         /// </summary>
-        [PersistenceData("Tray")]
+        [DeviceSavedSetting("Tray")]
         public string Tray
         {
             get => currentTray;
@@ -285,7 +285,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// The maximum valid vial number
         /// </summary>
-        [PersistenceData("VialRange")]
+        [DeviceSavedSetting("VialRange")]
         public int MaxVial
         {
             get => (int) VialRange;
@@ -306,7 +306,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Gets or sets the vial for the PAL to use.
         /// </summary>
-        [PersistenceData("Vial")]
+        [DeviceSavedSetting("Vial")]
         public int Vial
         {
             get => currentVial;
@@ -327,7 +327,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Gets or sets the volume (in uL).
         /// </summary>
-        [PersistenceData("Volume")]
+        [DeviceSavedSetting("Volume")]
         public string Volume
         {
             get => currentInjectionVolume;
@@ -341,13 +341,13 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Gets or sets the serial port which the PAL is connected to.
         /// </summary>
-        [PersistenceData("Port")]
+        [DeviceSavedSetting("Port")]
         public string PortName { get; set; }
 
         /// <summary>
         /// Gets or sets the delay when polling for system status in seconds
         /// </summary>
-        [PersistenceData("StatusPollDelay")]
+        [DeviceSavedSetting("StatusPollDelay")]
         public int StatusPollDelay { get; set; }
 
         public DeviceErrorStatus ErrorType { get; set; }
