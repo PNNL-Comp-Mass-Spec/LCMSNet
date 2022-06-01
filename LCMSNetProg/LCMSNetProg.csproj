@@ -158,12 +158,10 @@
     <Compile Include="IO\Sequence\ISampleQueueReader.cs" />
     <Compile Include="IO\Sequence\ISampleQueueWriter.cs" />
     <Compile Include="IO\Sequence\QueueCacheLcmsCSV.cs" />
-    <Compile Include="IO\Sequence\QueueExportCSV.cs" />
+    <Compile Include="IO\Sequence\QueueCsvFile.cs" />
     <Compile Include="IO\Sequence\QueueExportXcaliburCSV.cs" />
-    <Compile Include="IO\Sequence\QueueExportXML.cs" />
-    <Compile Include="IO\Sequence\QueueImportXML.cs" />
     <Compile Include="IO\Sequence\QueueImportClipboard.cs" />
-    <Compile Include="IO\Sequence\QueueImportCSV.cs" />
+    <Compile Include="IO\Sequence\QueueXmlFile.cs" />
     <Compile Include="IO\Sequence\SampleCacheData.cs" />
     <Compile Include="IO\Sequence\SampleImportInfo.cs" />
     <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />

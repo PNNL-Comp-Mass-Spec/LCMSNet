@@ -1,4 +1,5 @@
-﻿using LcmsNet.Data;
+﻿using CsvHelper.Configuration;
+using LcmsNet.Data;
 
 namespace LcmsNet.IO.Sequence
 {
@@ -10,6 +11,7 @@ namespace LcmsNet.IO.Sequence
         public string PalVial { get; set; } = "";
         public double Volume { get; set; } = 0;
         public string LcMethod { get; set; } = "";
+        public int SequenceId { get; set; } = 0;
 
         public SampleData GetSampleData()
         {
@@ -51,6 +53,21 @@ namespace LcmsNet.IO.Sequence
             }
 
             return sampleData;
+        }
+    }
+
+    public sealed class SampleImportMap : ClassMap<SampleImportInfo>
+    {
+        public SampleImportMap()
+        {
+            Map(x => x.DatasetName).Name("Request Name", "Sample Name", "Dataset Name", "Sample", "Dataset", "Name").Index(0);
+            Map(x => x.PalVial).Name("PAL Vial", "Vial", "Well", "PALWell").Index(1).Default("");
+            Map(x => x.PalTray).Name("PAL Tray", "Tray", "PALTray").Index(2).Default("");
+            Map(x => x.Volume).Name("Volume").Index(3).Default(0);
+            Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(4).Default("");
+            Map(x => x.SequenceId).Name("ID", "SequenceID").Index(5).Default(0);
+            Map(x => x.RequestId).Name("Request ID").Index(6).Default(0);
+            // TODO: Add block and run order?
         }
     }
 }

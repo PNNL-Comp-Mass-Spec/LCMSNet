@@ -323,10 +323,17 @@ namespace LcmsNet.SampleQueue.ViewModels
                 switch (extension)
                 {
                     case ".xml":
-                        reader = new QueueImportXML();
+                        reader = new QueueXmlFile();
                         break;
                     case ".csv":
-                        reader = new QueueImportCSV();
+                        if (fileDialog.FileName.EndsWith(CONST_DEFAULT_QUEUE_EXTENSION, StringComparison.OrdinalIgnoreCase))
+                        {
+                            reader = new QueueCacheLcmsCSV();
+                        }
+                        else
+                        {
+                            reader = new QueueCsvFile();
+                        }
                         break;
                     case CONST_DEFAULT_QUEUE_EXTENSION:
                         reader = new QueueCacheLcmsCSV();
@@ -372,7 +379,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 try
                 {
-                    var reader = new QueueImportCSV();
+                    var reader = new QueueCsvFile();
                     sampleQueue.LoadQueue(fileDialog.FileName, reader);
                     ApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
                 }
@@ -527,7 +534,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
-                ISampleQueueWriter writer = new QueueExportXML();
+                ISampleQueueWriter writer = new QueueXmlFile();
                 ExportQueue(saveDialog.FileName, writer);
             }
         }
@@ -548,7 +555,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
-                ISampleQueueWriter writer = new QueueExportCSV();
+                ISampleQueueWriter writer = new QueueCsvFile();
                 ExportQueue(saveDialog.FileName, writer);
             }
         }

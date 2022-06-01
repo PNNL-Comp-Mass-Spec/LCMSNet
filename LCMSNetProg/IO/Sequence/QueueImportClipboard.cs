@@ -19,7 +19,7 @@ namespace LcmsNet.IO.Sequence
             {
                 // Handle data copied from Excel.
                 var data = Clipboard.GetText(TextDataFormat.CommaSeparatedValue);
-                return QueueImportCSV.ReadCsvString(data);
+                return QueueCsvFile.ReadCsvString(data);
             }
 
             // Clipboard not from Excel - assume a single row, or (if not) ignore all after the first space (in each line)

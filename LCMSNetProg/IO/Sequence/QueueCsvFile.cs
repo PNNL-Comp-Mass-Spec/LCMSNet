@@ -3,34 +3,61 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using CsvHelper;
-using CsvHelper.Configuration;
 using LcmsNet.Data;
+using LcmsNet.SampleQueue;
+using LcmsNetSDK.Logging;
 
 namespace LcmsNet.IO.Sequence
 {
-    public class QueueImportCSV : ISampleQueueReader
+    /// <summary>
+    /// Imports/Exports a queue from/to a CSV file
+    /// </summary>
+    public class QueueCsvFile : ISampleQueueReader, ISampleQueueWriter
     {
-        public List<SampleData> ReadSamples(string path)
+        /// <summary>
+        /// Saves the specified sample list to the specified file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="data"></param>
+        public void WriteSamples(string path, List<SampleData> data)
         {
-            return ReadCsvFile(path).Where(x => !string.IsNullOrWhiteSpace(x.DatasetName)).Select(x => x.GetSampleData()).ToList();
+            try
+            {
+                WriteCsvText(path, data.Select(x => new SampleCacheData(x)));
+                ApplicationLogger.LogMessage(0, "Queue exported to CSV file " + path);
+            }
+            catch (Exception ex)
+            {
+                var errMsg = "Could not write samples to file " + path;
+                ApplicationLogger.LogError(0, errMsg, ex);
+                throw new DataExportException(errMsg, ex);
+            }
         }
 
-        public static List<SampleImportInfo> ReadCsvFile(string filePath)
+        private static void WriteCsvText(string filePath, IEnumerable<SampleCacheData> samples)
         {
-            using (var importStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+            using (var sw = new StreamWriter(fs))
+            using (var csv = new CsvWriter(sw, CultureInfo.InvariantCulture))
             {
-                return ReadCsvStream(importStream);
+                csv.Configuration.RegisterClassMap(new SampleCacheData.SampleCacheMap());
+                csv.Configuration.Delimiter = ",";
+
+                csv.WriteRecords(samples);
             }
         }
 
         /// <summary>
-        /// Read CSV data from a stream
+        /// Read CSV data from a file
         /// </summary>
-        /// <param name="importStream">Input stream, must be seekable</param>
+        /// <param name="path">full path to file</param>
         /// <returns></returns>
-        public static List<SampleImportInfo> ReadCsvStream(Stream importStream)
+        public List<SampleData> ReadSamples(string path)
         {
+            List<SampleImportInfo> data = null;
+            using (var importStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var sr = new StreamReader(importStream))
             {
                 var hasHeaders = true;
@@ -43,10 +70,17 @@ namespace LcmsNet.IO.Sequence
                     importStream.Seek(0, SeekOrigin.Begin);
                 }
 
-                return ReadCsvText(sr, hasHeaders);
+                data = ReadCsvText(sr, hasHeaders);
             }
+
+            return data.Where(x => !string.IsNullOrWhiteSpace(x.DatasetName)).Select(x => x.GetSampleData()).ToList();
         }
 
+        /// <summary>
+        /// Read CSV data from a string
+        /// </summary>
+        /// <param name="csvData"></param>
+        /// <returns></returns>
         public static List<SampleImportInfo> ReadCsvString(string csvData)
         {
             if (string.IsNullOrWhiteSpace(csvData))
@@ -54,7 +88,7 @@ namespace LcmsNet.IO.Sequence
                 return new List<SampleImportInfo>();
             }
 
-            var headerLine = csvData.Split(new char[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)[0];
+            var headerLine = csvData.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)[0];
             // Check for presence of "name" column, if it isn't present, then read using an index
             var hasHeaders = CheckHeaderLine(headerLine);
 
@@ -86,19 +120,6 @@ namespace LcmsNet.IO.Sequence
                 var records = csv.GetRecords<SampleImportInfo>();
 
                 return records.ToList();
-            }
-        }
-
-        public sealed class SampleImportMap : ClassMap<SampleImportInfo>
-        {
-            public SampleImportMap()
-            {
-                Map(x => x.DatasetName).Name("Request Name", "Sample Name", "Dataset Name", "Sample", "Dataset", "Name").Index(0);
-                Map(x => x.PalVial).Name("PAL Vial", "Vial", "Well", "PALWell").Index(1).Default("");
-                Map(x => x.PalTray).Name("PAL Tray", "Tray", "PALTray").Index(2).Default("");
-                Map(x => x.Volume).Name("Volume").Index(3).Default(0);
-                Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(4).Default("");
-                Map(x => x.RequestId).Name("Request ID").Index(5).Default(0);
             }
         }
     }
