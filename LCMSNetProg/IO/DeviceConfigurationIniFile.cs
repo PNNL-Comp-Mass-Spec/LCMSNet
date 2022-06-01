@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using LcmsNet.Devices;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 
-namespace LcmsNet.Devices
+namespace LcmsNet.IO
 {
-    public class DeviceConfigurationINIReader : IDeviceConfigurationReader
+    public class DeviceConfigurationIniFile : IDeviceConfigurationFile
     {
         /// <summary>
         /// Tag used above every device.
@@ -21,8 +23,6 @@ namespace LcmsNet.Devices
         /// Delimiter of file.
         /// </summary>
         private const string CONST_DELIMITER = " = ";
-
-        #region IDeviceConfigurationReader Members
 
         public DeviceConfiguration ReadConfiguration(string path)
         {
@@ -103,6 +103,36 @@ namespace LcmsNet.Devices
             return configuration;
         }
 
-        #endregion
+        /// <summary>
+        /// Writes the configuration to file.
+        /// </summary>
+        /// <param name="path">Path to write configuration to.</param>
+        /// <param name="configuration"></param>
+        public void WriteConfiguration(string path, DeviceConfiguration configuration)
+        {
+            using (TextWriter writer = File.CreateText(path))
+            {
+                var systemInformation = SystemInformationReporter.BuildSystemInformation();
+                writer.WriteLine(systemInformation);
+
+                for (var i = 0; i < configuration.DeviceCount; i++)
+                {
+                    writer.WriteLine(CONST_DEVICE_HEADER_TAG);
+                    var deviceName = configuration[i];
+                    var settings = configuration.GetDeviceSettings(deviceName);
+                    foreach (var setting in settings.Keys)
+                    {
+                        var value = settings[setting];
+                        writer.WriteLine("{0}{1}{2}", setting, CONST_DELIMITER, value);
+                    }
+                }
+                writer.WriteLine(CONST_CONNECTIONS_HEADER_TAG);
+                var connections = configuration.GetConnections();
+                foreach (var connID in connections.Keys)
+                {
+                    writer.WriteLine(connections[connID]);
+                }
+            }
+        }
     }
 }

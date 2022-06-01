@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using FluidicsSDK;
 using LcmsNet.Devices.ViewModels;
 using LcmsNet.Devices.Views;
+using LcmsNet.IO;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
@@ -253,7 +254,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 }
             }
 
-            var writer = new DeviceConfigurationINIWriter();
+            var writer = new DeviceConfigurationIniFile();
             if (path.Equals(CONST_DEFAULT_CONFIG_FILEPATH))
             {
                 path = PersistDataPaths.GetFileSavePath(path);
@@ -286,7 +287,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         public void LoadConfiguration(string path)
         {
             fluidicsMod.BeginModelSuspension();
-            var reader = new DeviceConfigurationINIReader();
+            var reader = new DeviceConfigurationIniFile();
             var configuration = reader.ReadConfiguration(path);
 
             DeviceManager.Manager.LoadPersistentConfiguration(configuration);

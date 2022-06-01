@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using FluidicsSDK;
+using LcmsNet.IO;
 using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
 using LcmsNetSDK;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Simulator.ViewModels
@@ -88,15 +88,12 @@ namespace LcmsNet.Simulator.ViewModels
             if (method == null)
                 return false;
 
-            // Create a new writer.
-            var writer = new LCMethodWriter();
-
             // Construct the path
             var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = Path.Combine(path, method.Name + LCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!
-            return writer.WriteMethod(path, method);
+            return LCMethodXmlFile.WriteMethod(path, method);
         }
     }
 }

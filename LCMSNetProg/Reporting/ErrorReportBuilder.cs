@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
-using LcmsNet.Method;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using LcmsNet.IO;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
@@ -239,12 +239,11 @@ namespace LcmsNet.Reporting
         /// <param name="methods"></param>
         private void SaveMethods(string path, List<LCMethod> methods)
         {
-            var writer = new LCMethodWriter();
             foreach (var method in methods)
             {
                 try
                 {
-                    writer.WriteMethod(Path.Combine(path, method.Name) + ".xml", method);
+                    LCMethodXmlFile.WriteMethod(Path.Combine(path, method.Name) + ".xml", method);
                 }
                 catch (Exception ex)
                 {

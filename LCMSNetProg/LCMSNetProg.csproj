@@ -72,6 +72,9 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Configuration\DMSDataContainer.cs" />
     <Compile Include="Configuration\ViewModels\ColumnConfigViewModel.cs" />
     <Compile Include="Configuration\ViewModels\SystemConfigurationViewModel.cs" />
@@ -90,6 +93,7 @@
     </Compile>
     <Compile Include="Devices\DefaultUserDeviceViewModel.cs" />
     <Compile Include="Devices\DeviceAddController.cs" />
+    <Compile Include="Devices\ErrorDevice.cs" />
     <Compile Include="Devices\Fluidics\ViewModels\FluidicsControlViewModel.cs" />
     <Compile Include="Devices\Fluidics\ViewModels\FluidicsDesignViewModel.cs" />
     <Compile Include="Devices\Fluidics\Views\FluidicsControlView.xaml.cs">
@@ -99,6 +103,7 @@
       <DependentUpon>FluidicsDesignView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\OldDeviceNameTranslator.cs" />
+    <Compile Include="Devices\LogDevice.cs" />
     <Compile Include="Devices\Pumps\ViewModels\PumpDisplaysViewModel.cs" />
     <Compile Include="Devices\Pumps\Views\MobilePhaseEditorView.xaml.cs">
       <DependentUpon>MobilePhaseEditorView.xaml</DependentUpon>
@@ -135,37 +140,46 @@
     <Compile Include="DynamicSplashScreenWindow.xaml.cs">
       <DependentUpon>DynamicSplashScreenWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IO\DeviceConfigurationIniFile.cs" />
     <Compile Include="IO\DMS\BlockValidator.cs" />
     <Compile Include="IO\DMS\DatabaseConnectionStringException.cs" />
-    <Compile Include="IO\DMS\DmsDownloadData.cs" />
-    <Compile Include="Method\ILCEventParameter.cs" />
-    <Compile Include="Method\LCMethodEventData.cs" />
-    <Compile Include="Method\LCMethodEventParameter.cs" />
-    <Compile Include="Method\LCMethodOptimizer.cs" />
-    <Compile Include="SampleQueue\IO\ConvertVialPosition.cs" />
-    <Compile Include="IO\DMS\SampleQueryData.cs" />
-    <Compile Include="IO\DMS\DMSDBTools.cs" />
-    <Compile Include="IO\DMS\ExtensionMethods.cs" />
     <Compile Include="IO\DMS\DatabaseDataException.cs" />
-    <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />
-    <Compile Include="IO\DeviceNotifierConfigurationXMLWriter.cs" />
-    <Compile Include="IO\DeviceNotifierConfigurationXMLReader.cs" />
+    <Compile Include="IO\DMS\DMSDBTools.cs" />
+    <Compile Include="IO\DMS\DmsDownloadData.cs" />
+    <Compile Include="IO\DMS\ExtensionMethods.cs" />
+    <Compile Include="IO\DMS\SampleQueryData.cs" />
     <Compile Include="IO\FileUtilities.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="IO\IDeviceConfigurationFile.cs" />
+    <Compile Include="IO\LCMethodXmlFile.cs" />
+    <Compile Include="IO\MethodFileTools.cs" />
+    <Compile Include="IO\NotifierConfigurationXmlFile.cs" />
+    <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />
     <Compile Include="Logging\ViewModels\MessagesViewModel.cs" />
     <Compile Include="Logging\Views\MessagesView.xaml.cs">
       <DependentUpon>MessagesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Method\ColumnArgs.cs" />
     <Compile Include="Method\ColumnException.cs" />
+    <Compile Include="Method\ColumnThread.cs" />
+    <Compile Include="Method\DeviceNotFoundException.cs" />
     <Compile Include="Method\Drawing\LCMethodColumnModeRenderer.cs" />
     <Compile Include="Method\Drawing\LCMethodConversationRenderer.cs" />
     <Compile Include="Method\Drawing\LCMethodRenderer.cs" />
     <Compile Include="Method\Drawing\LCRendererFactory.cs" />
+    <Compile Include="Method\ILCEventParameter.cs" />
+    <Compile Include="Method\LCMethodEventData.cs" />
+    <Compile Include="Method\LCMethodEventParameter.cs" />
+    <Compile Include="Method\LCMethodFactory.cs" />
+    <Compile Include="Method\LCMethodOptimizer.cs" />
     <Compile Include="Method\LCMethodRenderMode.cs" />
+    <Compile Include="Method\LCMethodScheduler.cs" />
+    <Compile Include="Method\LCMethodBuilder.cs" />
+    <Compile Include="Method\LCMethodSchedulerDelegates.cs" />
+    <Compile Include="Method\MethodPreviewOptions.cs" />
     <Compile Include="Method\ViewModels\BreakpointViewModel.cs" />
     <Compile Include="Method\ViewModels\ColumnSampleProgressViewModel.cs" />
     <Compile Include="Method\ViewModels\ConvertToolViewModel.cs" />
@@ -231,22 +245,6 @@
     <Compile Include="Notification\NotificationManager.cs" />
     <Compile Include="Notification\NotificationSetting.cs" />
     <Compile Include="Notification\Notifier.cs" />
-    <Compile Include="Devices\ErrorDevice.cs" />
-    <Compile Include="IO\DeviceConfigurationINIReader.cs" />
-    <Compile Include="IO\DeviceConfigurationINIWriter.cs" />
-    <Compile Include="Devices\LogDevice.cs" />
-    <Compile Include="IO\IDeviceConfigurationReader.cs" />
-    <Compile Include="IO\IDeviceConfigurationWriter.cs" />
-    <Compile Include="Method\ColumnThread.cs" />
-    <Compile Include="Method\DeviceNotFoundException.cs" />
-    <Compile Include="Method\LCMethodDeviceArgs.cs" />
-    <Compile Include="Method\LCMethodFactory.cs" />
-    <Compile Include="Method\LCMethodReader.cs" />
-    <Compile Include="Method\LCMethodScheduler.cs" />
-    <Compile Include="Method\LCMethodWriter.cs" />
-    <Compile Include="Method\LCMethodBuilder.cs" />
-    <Compile Include="Method\MethodPreviewOptions.cs" />
-    <Compile Include="Method\LCMethodSchedulerDelegates.cs" />
     <Compile Include="Notification\DeviceNotificationAction.cs" />
     <Compile Include="Notification\NotificationConfiguration.cs" />
     <Compile Include="Notification\NotificationSettingAlways.cs" />
@@ -270,8 +268,15 @@
     </Compile>
     <Compile Include="SampleQueue\DataExportException.cs" />
     <Compile Include="SampleQueue\DataImportException.cs" />
+    <Compile Include="SampleQueue\IO\ConvertVialPosition.cs" />
     <Compile Include="SampleQueue\IO\CsvCache.cs" />
+    <Compile Include="SampleQueue\IO\ISampleQueueReader.cs" />
+    <Compile Include="SampleQueue\IO\ISampleQueueWriter.cs" />
     <Compile Include="SampleQueue\IO\QueueCacheLcmsCSV.cs" />
+    <Compile Include="SampleQueue\IO\QueueExportCSV.cs" />
+    <Compile Include="SampleQueue\IO\QueueExportXcaliburCSV.cs" />
+    <Compile Include="SampleQueue\IO\QueueExportXML.cs" />
+    <Compile Include="SampleQueue\IO\QueueImportXML.cs" />
     <Compile Include="SampleQueue\IO\QueueImportClipboard.cs" />
     <Compile Include="SampleQueue\IO\QueueImportCSV.cs" />
     <Compile Include="SampleQueue\IO\SampleCacheData.cs" />
@@ -280,13 +285,6 @@
     <Compile Include="SampleQueue\SampleQueueArgs.cs" />
     <Compile Include="SampleQueue\SequenceComparer.cs" />
     <Compile Include="SampleQueue\MoveSampleType.cs" />
-    <Compile Include="SampleQueue\IO\ISampleQueueReader.cs" />
-    <Compile Include="SampleQueue\IO\ISampleQueueWriter.cs" />
-    <Compile Include="SampleQueue\IO\MethodFileTools.cs" />
-    <Compile Include="SampleQueue\IO\QueueExportCSV.cs" />
-    <Compile Include="SampleQueue\IO\QueueExportXcaliburCSV.cs" />
-    <Compile Include="SampleQueue\IO\QueueExportXML.cs" />
-    <Compile Include="SampleQueue\IO\QueueImportXML.cs" />
     <Compile Include="SampleQueue\SampleDataManager.cs" />
     <Compile Include="SampleQueue\SampleQueueUndoRedo.cs" />
     <Compile Include="SampleQueue\ViewModels\DMSDownloadDataViewModel.cs" />
@@ -385,9 +383,6 @@
     </Compile>
     <Compile Include="Simulator\Views\SimulatorControlsAndChartsView.xaml.cs">
       <DependentUpon>SimulatorControlsAndChartsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

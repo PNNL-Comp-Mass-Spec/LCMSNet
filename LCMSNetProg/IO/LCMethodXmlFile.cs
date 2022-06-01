@@ -1,41 +1,154 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
 using LcmsNet.Data;
 using LcmsNet.Devices;
+using LcmsNet.Method;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
-namespace LcmsNet.Method
+namespace LcmsNet.IO
 {
     /// <summary>
-    /// Class that can handle reading a method from a file path.
+    /// Class that can handle reading/writing a method from/to a file path.
     /// </summary>
-    public class LCMethodReader
+    public class LCMethodXmlFile
     {
-        private const string CONST_METHOD_EXTENSION = "*.xml";
-
-        #region Events and Delegates
+        /// <summary>
+        /// X-Path string for a LC-method if it is special (not run on a specific column).
+        /// </summary>
+        public const string CONST_XPATH_IS_SPECIAL = "IsSpecial";
 
         /// <summary>
-        /// Definition for a method that
+        /// X-Path string for a LC-method if it is special (not run on a specific column).
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public delegate bool DelegateValidateDevice(object sender, LCMethodDeviceArgs args);
+        public const string CONST_XPATH_ALLOW_PRE_OVERLAP = "AllowPreOverlap";
 
-        #endregion
+        /// <summary>
+        /// X-Path string for a LC-method if it is special (not run on a specific column).
+        /// </summary>
+        public const string CONST_XPATH_ALLOW_POST_OVERLAP = "AllowPostOverlap";
+
+        /// <summary>
+        /// X-path string for a LC-Method Column list (integers).
+        /// </summary>
+        public const string CONST_XPATH_COLUMN_DATA = "Column";
+
+        /// <summary>
+        /// X-path string for a LC-Method Column list (integers).
+        /// </summary>
+        public const string CONST_XPATH_COLUMN_DATA_NUMBER = "Number";
+
+        /// <summary>
+        /// LC Methods folder name.
+        /// </summary>
+        public const string CONST_LC_METHOD_FOLDER = @"C:\LCMSNet\LCMethods";
+
+        /// <summary>
+        /// Deterministic or non-deterministic events.
+        /// </summary>
+        public const string CONST_IS_EVENT_INDETERMINANT = "Indeterminant";
+
+        /// <summary>
+        /// LC Methods folder name.
+        /// </summary>
+        public const string CONST_LC_METHOD_EXTENSION = ".xml";
+
+        /// <summary>
+        /// X-Path string for lc-events node.
+        /// </summary>
+        public const string CONST_XPATH_EVENTS = "LCEvent";
+
+        /// <summary>
+        /// X-Path string for lc-events node.
+        /// </summary>
+        public const string CONST_XPATH_ACTUAL_EVENTS = "LCEventActual";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_NAME = "name";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_DEVICE = "Device";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_DURATION = "Duration";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_HAS_DISCREET_STATES = "HasDiscreetStates";
+
+        /// <summary>
+        /// X-Path string for if a parameter is sample specific for an LC-Event XML Node.
+        /// </summary>
+        public const string CONST_IS_SAMPLE_SPECIFIC = "IsSampleSpecific";
+
+        /// <summary>
+        /// X-Path string for root lc-method node.
+        /// </summary>
+        public const string CONST_XPATH_METHOD = "LCMethod";
+
+        /// <summary>
+        /// X-Path string for root lc-method node.
+        /// </summary>
+        public const string CONST_XPATH_ACTUAL_METHOD = "MethodPerformanceData";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_METHOD_INFO = "MethodInfo";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_OPTIMIZE_WITH = "OptimizeWith";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_PARAMETERS = "Parameters";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_PARAMETER = "Parameter";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_START = "StartTime";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_TYPE = "type";
+
+        /// <summary>
+        /// X-Path string for lc-method name node.
+        /// </summary>
+        public const string CONST_XPATH_VALUE = "value";
+
+        private const string CONST_METHOD_EXTENSION = "*.xml";
 
         private static readonly Dictionary<string, string> InterfaceToImplementationMapper =
             new Dictionary<string, string>
             {
                 { "LcmsNetSDK.Data.ISampleInfo", "LcmsNet.Data.SampleData" }
             };
+
 
         /// <summary>
         /// Loads a method from the path provided.
@@ -46,11 +159,10 @@ namespace LcmsNet.Method
         {
             //bool retValue = false;
 
-            var reader = new LCMethodReader();
             LCMethod method;
             try
             {
-                method = reader.ReadMethod(filePath, errors);
+                method = ReadMethod(filePath, errors);
             }
             catch (Exception ex)
             {
@@ -115,14 +227,51 @@ namespace LcmsNet.Method
             return errors;
         }
 
-        public LCMethodReader()
+        /// <summary>
+        /// Reads the method contained in the XML file path.
+        /// </summary>
+        /// <param name="filePath">Path of file that contains method.</param>
+        /// <param name="errors"></param>
+        /// <returns>Null if the path does not exist. New method object if successful.</returns>
+        public static LCMethod ReadMethod(string filePath, List<Exception> errors)
         {
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            return ReadMethod(filePath, false, errors);
         }
 
-        Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        /// <summary>
+        /// Reads the method from the filepath.
+        /// </summary>
+        /// <param name="filePath">Path of the method file to read.</param>
+        /// <param name="readActuals">Flag indicating whether to read the actual event information (if it exists).</param>
+        /// <param name="errors"></param>
+        /// <returns>LC-Method read from the file.</returns>
+        public static LCMethod ReadMethod(string filePath, bool readActuals, List<Exception> errors)
         {
-            return null;
+            if (File.Exists(filePath) == false)
+                return null;
+
+            //
+            // Load the document,
+            //     Catch XML errors and authorization errors.
+            //     We have made sure the file exists.
+            //
+            var document = new XmlDocument();
+            try
+            {
+                document.Load(filePath);
+            }
+            catch (XmlException ex)
+            {
+                throw new Exception("The LC-method file was corrupt.", ex);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new Exception("You do not have authorization to open the method file.",
+                    ex);
+            }
+            var root = document.SelectSingleNode(CONST_XPATH_METHOD);
+
+            return ReadEventList(root, false, errors);
         }
 
         /// <summary>
@@ -130,7 +279,7 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private Type FindType(string name)
+        private static Type FindType(string name)
         {
             Type constructedParameterType = null;
             // This could be a bit slow.  It's intended to load the
@@ -183,21 +332,21 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="node">Node that contains the event definition</param>
         /// <returns>An LC-Event</returns>
-        private LCEvent ReadEventNode(XmlNode node)
+        private static LCEvent ReadEventNode(XmlNode node)
         {
             var lcEvent = new LCEvent();
 
             // Read the name
             if (node.Attributes != null)
             {
-                var nameAttribute = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_NAME);
+                var nameAttribute = node.Attributes.GetNamedItem(CONST_XPATH_NAME);
                 lcEvent.Name = nameAttribute.Value;
             }
 
             // Construct flags
-            var value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_OPTIMIZE_WITH);
+            var value = node.Attributes.GetNamedItem(CONST_XPATH_OPTIMIZE_WITH);
             lcEvent.OptimizeWith = Convert.ToBoolean(value.Value);
-            value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_HAS_DISCREET_STATES);
+            value = node.Attributes.GetNamedItem(CONST_XPATH_HAS_DISCREET_STATES);
             if (value != null)
             {
                 lcEvent.HasDiscreteStates = Convert.ToBoolean(value.Value);
@@ -205,7 +354,7 @@ namespace LcmsNet.Method
 
             try
             {
-                value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_IS_EVENT_INDETERMINANT);
+                value = node.Attributes.GetNamedItem(CONST_IS_EVENT_INDETERMINANT);
                 if (value != null)
                 {
                     lcEvent.IsIndeterminant = Convert.ToBoolean(value.Value);
@@ -219,7 +368,7 @@ namespace LcmsNet.Method
             }
 
             // Start Time
-            value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_START);
+            value = node.Attributes.GetNamedItem(CONST_XPATH_START);
             if (TimeSpan.TryParse(value.Value, out var startSpan))
             {
                 lcEvent.Start = DateTime.MinValue.Add(startSpan);
@@ -230,7 +379,7 @@ namespace LcmsNet.Method
             }
 
             // Duration
-            value = node.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_DURATION);
+            value = node.Attributes.GetNamedItem(CONST_XPATH_DURATION);
             if (TimeSpan.TryParse(value.Value, out var span))
             {
                 lcEvent.Duration = span;
@@ -241,8 +390,8 @@ namespace LcmsNet.Method
             }
 
             // Read the parameters
-            var parameters = node.SelectSingleNode(LCMethodFactory.CONST_XPATH_PARAMETERS);
-            var parameterList = parameters.SelectNodes(LCMethodFactory.CONST_XPATH_PARAMETER);
+            var parameters = node.SelectSingleNode(CONST_XPATH_PARAMETERS);
+            var parameterList = parameters.SelectNodes(CONST_XPATH_PARAMETER);
 
             // Create an array of expected parameters.
             var parameterArray = new object[parameterList.Count];
@@ -255,9 +404,9 @@ namespace LcmsNet.Method
             {
                 var parameterNode = parameterList[i];
 
-                var parameterValue = parameterNode.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_VALUE);
-                var parameterType = parameterNode.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_TYPE);
-                var parameterName = parameterNode.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_NAME);
+                var parameterValue = parameterNode.Attributes.GetNamedItem(CONST_XPATH_VALUE);
+                var parameterType = parameterNode.Attributes.GetNamedItem(CONST_XPATH_TYPE);
+                var parameterName = parameterNode.Attributes.GetNamedItem(CONST_XPATH_NAME);
 
                 //
                 // Create a parameter type, if it fails?! well...
@@ -392,10 +541,10 @@ namespace LcmsNet.Method
             //
             // Device Initialization
             //
-            value = node.SelectSingleNode(LCMethodFactory.CONST_XPATH_DEVICE);
-            var attribute = value.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_NAME);
+            value = node.SelectSingleNode(CONST_XPATH_DEVICE);
+            var attribute = value.Attributes.GetNamedItem(CONST_XPATH_NAME);
             var deviceName = attribute.Value;
-            attribute = value.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_TYPE);
+            attribute = value.Attributes.GetNamedItem(CONST_XPATH_TYPE);
             var deviceTypeName = attribute.Value;
 
             var devicetype = FindType(deviceTypeName);
@@ -409,8 +558,8 @@ namespace LcmsNet.Method
             //
             // Method Info for invoking the device's method.
             //
-            value = node.SelectSingleNode(LCMethodFactory.CONST_XPATH_METHOD_INFO);
-            attribute = value.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_NAME);
+            value = node.SelectSingleNode(CONST_XPATH_METHOD_INFO);
+            attribute = value.Attributes.GetNamedItem(CONST_XPATH_NAME);
             var methodName = attribute.Value;
             MethodInfo method = null;
             try
@@ -529,60 +678,13 @@ namespace LcmsNet.Method
         }
 
         /// <summary>
-        /// Reads the method contained in the XML file path.
-        /// </summary>
-        /// <param name="filePath">Path of file that contains method.</param>
-        /// <param name="errors"></param>
-        /// <returns>Null if the path does not exist. New method object if successful.</returns>
-        public LCMethod ReadMethod(string filePath, List<Exception> errors)
-        {
-            return ReadMethod(filePath, false, errors);
-        }
-
-        /// <summary>
-        /// Reads the method from the filepath.
-        /// </summary>
-        /// <param name="filePath">Path of the method file to read.</param>
-        /// <param name="readActuals">Flag indicating whether to read the actual event information (if it exists).</param>
-        /// <param name="errors"></param>
-        /// <returns>LC-Method read from the file.</returns>
-        public LCMethod ReadMethod(string filePath, bool readActuals, List<Exception> errors)
-        {
-            if (File.Exists(filePath) == false)
-                return null;
-
-            //
-            // Load the document,
-            //     Catch XML errors and authorization errors.
-            //     We have made sure the file exists.
-            //
-            var document = new XmlDocument();
-            try
-            {
-                document.Load(filePath);
-            }
-            catch (XmlException ex)
-            {
-                throw new Exception("The LC-method file was corrupt.", ex);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                throw new Exception("You do not have authorization to open the method file.",
-                    ex);
-            }
-            var root = document.SelectSingleNode(LCMethodFactory.CONST_XPATH_METHOD);
-
-            return ReadEventList(root, false, errors);
-        }
-
-        /// <summary>
         /// Reads the event list from the document provided.
         /// </summary>
         /// <param name="root">Root item in the document.</param>
         /// <param name="readActual">Flag indicating whether to read the actual data instead of the proposed data.</param>
         /// <param name="errors"></param>
         /// <returns>LC-Method containing all event information.</returns>
-        private LCMethod ReadEventList(XmlNode root, bool readActual, List<Exception> errors)
+        private static LCMethod ReadEventList(XmlNode root, bool readActual, List<Exception> errors)
         {
             LCMethod method = null;
 
@@ -592,12 +694,13 @@ namespace LcmsNet.Method
 
             try
             {
-                var nameAttribute = root.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_NAME);
-                method = new LCMethod {
+                var nameAttribute = root.Attributes.GetNamedItem(CONST_XPATH_NAME);
+                method = new LCMethod
+                {
                     Name = nameAttribute.Value
                 };
 
-                nameAttribute = root.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_IS_SPECIAL);
+                nameAttribute = root.Attributes.GetNamedItem(CONST_XPATH_IS_SPECIAL);
                 if (nameAttribute != null)
                 {
                     method.IsSpecialMethod = bool.Parse(nameAttribute.Value);
@@ -607,13 +710,13 @@ namespace LcmsNet.Method
                     }
                     else
                     {
-                        nameAttribute = root.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_COLUMN_DATA);
+                        nameAttribute = root.Attributes.GetNamedItem(CONST_XPATH_COLUMN_DATA);
                         method.Column = int.Parse(nameAttribute.Value);
                     }
-                    nameAttribute = root.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_ALLOW_POST_OVERLAP);
+                    nameAttribute = root.Attributes.GetNamedItem(CONST_XPATH_ALLOW_POST_OVERLAP);
                     method.AllowPostOverlap = bool.Parse(nameAttribute.Value);
 
-                    nameAttribute = root.Attributes.GetNamedItem(LCMethodFactory.CONST_XPATH_ALLOW_PRE_OVERLAP);
+                    nameAttribute = root.Attributes.GetNamedItem(CONST_XPATH_ALLOW_PRE_OVERLAP);
                     method.AllowPreOverlap = bool.Parse(nameAttribute.Value);
                 }
             }
@@ -624,7 +727,7 @@ namespace LcmsNet.Method
             //
             // Now get the list and parse each item
             //
-            var eventListNode = root.SelectNodes(LCMethodFactory.CONST_XPATH_EVENTS);
+            var eventListNode = root.SelectNodes(CONST_XPATH_EVENTS);
 
             //
             // If the user really wanted to read the actual data, then read it instead
@@ -637,7 +740,7 @@ namespace LcmsNet.Method
                 //
                 // Make sure we have some kind of events
                 //
-                eventListNode = root.SelectNodes(LCMethodFactory.CONST_XPATH_ACTUAL_METHOD);
+                eventListNode = root.SelectNodes(CONST_XPATH_ACTUAL_METHOD);
                 if (eventListNode == null || eventListNode.Count < 1)
                     return null;
             }
@@ -667,6 +770,183 @@ namespace LcmsNet.Method
             }
 
             return method;
+        }
+
+        /// <summary>
+        /// Writes the LC-Event from the specified node.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="eventRoot"></param>
+        /// <param name="lcEvent"></param>
+        /// <param name="isSampleReport">Supply true to write extra information that isn't needed for method loading</param>
+        /// <param name="previousEventTimeTotal">Supply true to write the specific start time (when a sample ran) rather than just a cumulative start time</param>
+        private static void WriteEventNode(XmlDocument document, XmlElement eventRoot, LCEvent lcEvent, bool isSampleReport, bool reportStartTime, TimeSpan previousEventTimeTotal)
+        {
+            // Set all of the event attributes
+            eventRoot.SetAttribute(CONST_XPATH_NAME, lcEvent.Name);
+
+            // write timespan for stored methods, write DateTime for actual/complete/incomplete methods
+            var startTime = lcEvent.Start.ToString(CultureInfo.InvariantCulture);
+            if (!reportStartTime)
+            {
+                startTime = previousEventTimeTotal.ToString();
+            }
+            eventRoot.SetAttribute(CONST_XPATH_START, startTime);
+
+            eventRoot.SetAttribute(CONST_XPATH_DURATION, lcEvent.Duration.ToString());
+            if (isSampleReport)
+            {
+                // This is set from event details, and can be re-set by "building" the method after loading
+                eventRoot.SetAttribute(CONST_XPATH_HAS_DISCREET_STATES,
+                    lcEvent.HasDiscreteStates.ToString());
+            }
+
+            eventRoot.SetAttribute(CONST_XPATH_OPTIMIZE_WITH, lcEvent.OptimizeWith.ToString());
+
+            // Store the device data
+            var device = document.CreateElement(CONST_XPATH_DEVICE);
+            device.SetAttribute(CONST_XPATH_NAME, lcEvent.Device.Name);
+
+            // Alternatively use .AssemblyQualifiedName;
+            device.SetAttribute(CONST_XPATH_TYPE, lcEvent.Device.GetType().FullName);
+
+            // Store the method name
+            var methodInfo = document.CreateElement(CONST_XPATH_METHOD_INFO);
+            methodInfo.SetAttribute(CONST_XPATH_NAME, lcEvent.Method.Name);
+
+            // Store the parameter information
+            var parameters = document.CreateElement(CONST_XPATH_PARAMETERS);
+            for (var i = 0; i < lcEvent.Parameters.Length; i++)
+            {
+                var parameter = lcEvent.Parameters[i];
+                var parameterName = lcEvent.ParameterNames[i];
+
+                //TODO: Fix this sample thing, coupling
+                if (parameter == null && lcEvent.MethodAttribute.SampleParameterIndex != i)
+                {
+                    throw new NullReferenceException(
+                        string.Format("The parameter {0} was not set for LC Event {1}.  Device: {2}.",
+                            parameterName,
+                            lcEvent.Name,
+                            lcEvent.Device.Name,
+                            lcEvent.Method.Name));
+                }
+
+                var parameterInfo = document.CreateElement(CONST_XPATH_PARAMETER);
+                parameterInfo.SetAttribute(CONST_XPATH_NAME, parameterName);
+
+                var sampleSpecific = false;
+                string value;
+                string type;
+
+                // Here we write if the parameter is a sample data object.
+                if (lcEvent.MethodAttribute.SampleParameterIndex == i)
+                {
+                    sampleSpecific = true;
+
+                    // Alternatively use .AssemblyQualifiedName;
+                    type = typeof(SampleData).FullName;
+                    value = "";
+                }
+                else
+                {
+                    value = Convert.ToString(parameter);
+
+                    // Alternatively use .AssemblyQualifiedName;
+                    if (parameter != null)
+                        type = parameter.GetType().FullName;
+                    else
+                        type = "";
+                }
+
+                parameterInfo.SetAttribute(CONST_IS_EVENT_INDETERMINANT,
+                    lcEvent.IsIndeterminant.ToString());
+                parameterInfo.SetAttribute(CONST_XPATH_NAME, parameterName);
+                parameterInfo.SetAttribute(CONST_XPATH_TYPE, type);
+                parameterInfo.SetAttribute(CONST_XPATH_VALUE, value);
+                parameterInfo.SetAttribute(CONST_IS_SAMPLE_SPECIFIC, sampleSpecific.ToString());
+
+                // Add it to the list of parameters
+                parameters.AppendChild(parameterInfo);
+            }
+
+            // Add all of the nodes
+            eventRoot.AppendChild(device);
+            eventRoot.AppendChild(methodInfo);
+            eventRoot.AppendChild(parameters);
+
+        }
+
+        /// <summary>
+        /// Writes the method to the XML file path.
+        /// </summary>
+        /// <param name="filePath">Path of file that contains method.</param>
+        /// <param name="method"></param>
+        /// <returns>Null if the path does not exist. New method object if successful.</returns>
+        public static bool WriteMethod(string filePath, LCMethod method)
+        {
+            // Don't write if the method is null.
+            if (method == null)
+                return false;
+
+            var document = new XmlDocument();
+            var isSampleReport = method.ActualEvents.Count > 0;
+
+            // Method Name and Flag if it is "special"
+            var rootElement = document.CreateElement(CONST_XPATH_METHOD);
+            rootElement.SetAttribute(CONST_XPATH_NAME, method.Name);
+            rootElement.SetAttribute(CONST_XPATH_IS_SPECIAL, method.IsSpecialMethod.ToString());
+            rootElement.SetAttribute(CONST_XPATH_ALLOW_POST_OVERLAP,
+                method.AllowPostOverlap.ToString());
+            rootElement.SetAttribute(CONST_XPATH_ALLOW_PRE_OVERLAP,
+                method.AllowPreOverlap.ToString());
+            rootElement.SetAttribute(CONST_XPATH_COLUMN_DATA, method.Column.ToString());
+
+            var timeTotal = new TimeSpan();
+            // Then construct the events.
+            foreach (var lcEvent in method.Events)
+            {
+                var eventElement = document.CreateElement(CONST_XPATH_EVENTS);
+                WriteEventNode(document, eventElement, lcEvent, isSampleReport, false, timeTotal);
+                timeTotal = timeTotal.Add(lcEvent.Duration);
+                rootElement.AppendChild(eventElement);
+            }
+
+            // Dump the actual events
+            var rootActualElement = document.CreateElement(CONST_XPATH_ACTUAL_METHOD);
+            rootActualElement.SetAttribute(CONST_XPATH_NAME, method.Name);
+
+            if (method.ActualEvents.Count > 0)
+            {
+                timeTotal = new TimeSpan();
+                // Then construct the events.
+                foreach (var lcActualEvent in method.ActualEvents)
+                {
+                    var actualEventElement = document.CreateElement(CONST_XPATH_EVENTS);
+                    WriteEventNode(document, actualEventElement, lcActualEvent, isSampleReport, true, timeTotal);
+                    timeTotal = timeTotal.Add(lcActualEvent.Duration);
+                    rootActualElement.AppendChild(actualEventElement);
+                }
+                rootElement.AppendChild(rootActualElement); // How the method actually ran.
+            }
+
+            // Finally, write the method out
+            try
+            {
+                document.AppendChild(rootElement); // How the method is supposed to run.
+                document.Save(filePath);
+            }
+            catch (XmlException ex)
+            {
+                throw new Exception("The configuration file was corrupt.", ex);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new Exception("You do not have authorization to open the method file.",
+                    ex);
+            }
+
+            return true;
         }
     }
 }

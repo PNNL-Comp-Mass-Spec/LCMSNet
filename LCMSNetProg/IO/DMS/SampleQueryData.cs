@@ -9,17 +9,11 @@ namespace LcmsNet.IO.DMS
     /// </summary>
     public class SampleQueryData
     {
-        #region "Class variables"
-
         /// <summary>
         /// Dictionary of filters to apply when finding requested runs
         /// </summary>
         /// <remarks>Keys are RequestName, MinRequestNum, MaxRequestNum, BatchID, Block, Cart, or Wellplate</remarks>
         readonly Dictionary<string, string> m_QueryParams = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-        #endregion
-
-        #region "Properties"
 
         /// <summary>
         /// Requested run name
@@ -83,10 +77,6 @@ namespace LcmsNet.IO.DMS
 
         [Obsolete("This property is unused")]
         public bool UnassignedOnly { get; set; }
-
-        #endregion
-
-        #region "Methods"
 
         /// <summary>
         /// Constructor
@@ -179,7 +169,5 @@ namespace LcmsNet.IO.DMS
         {
             return BuildSqlString();
         }
-
-        #endregion
     }
 }

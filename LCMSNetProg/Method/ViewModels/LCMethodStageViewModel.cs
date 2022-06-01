@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using DynamicData;
 using DynamicData.Binding;
+using LcmsNet.IO;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
@@ -791,16 +792,13 @@ namespace LcmsNet.Method.ViewModels
             if (method == null)
                 return false;
 
-            // Create a new writer.
-            var writer = new LCMethodWriter();
-
             // Construct the path
             var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
             path = Path.Combine(path, method.Name + LCMethodFactory.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!
             ApplicationLogger.LogMessage(0, "Writing method to file " + path);
-            return writer.WriteMethod(path, method);
+            return LCMethodXmlFile.WriteMethod(path, method);
         }
 
         /// <summary>
@@ -841,9 +839,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         public void OpenMethod(string path)
         {
-            var reader = new LCMethodReader();
             var errors = new List<Exception>();
-            var method = reader.ReadMethod(path, errors);
+            var method = LCMethodXmlFile.ReadMethod(path, errors);
 
             if (method != null)
             {

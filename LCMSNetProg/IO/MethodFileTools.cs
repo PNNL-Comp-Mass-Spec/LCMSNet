@@ -2,13 +2,12 @@
 using System.IO;
 using System.Threading.Tasks;
 using LcmsNet.Data;
-using LcmsNet.Method;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO
 {
     /// <summary>
     /// Methods for copying method files and other data to DMS.
@@ -68,19 +67,14 @@ namespace LcmsNet.SampleQueue.IO
             // ----------------------------------------------------------------------------------------------------
             var methodFileName = GetMethodFileName(sample, ".incompleteLcmethod");
             var lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
-            var lcWriter = new LCMethodWriter();
             try
             {
-                lcWriter.WriteMethod(lcMethodFileNamePath, sample.ActualLCMethod);
+                LCMethodXmlFile.WriteMethod(lcMethodFileNamePath, sample.ActualLCMethod);
             }
             catch (Exception ex)
             {
                 var msg = "Could not write the LC Method file for: " + sample.ActualLCMethod.Name;
                 ApplicationLogger.LogError(0, msg, ex, sample);
-            }
-            finally
-            {
-                lcWriter = null;
             }
         }
 
@@ -126,23 +120,17 @@ namespace LcmsNet.SampleQueue.IO
             // ----------------------------------------------------------------------------------------------------
             // Write the LC Method file
             // ----------------------------------------------------------------------------------------------------
-            var methodWriter = new LCMethodWriter();
             var methodFileName = GetMethodFileName(sample, ".lcmethod");
             var lcMethodFileNamePath = Path.Combine(localFolder, methodFileName);
-            var lcWriter = new LCMethodWriter();
             try
             {
-                lcWriter.WriteMethod(lcMethodFileNamePath, sample.ActualLCMethod);
+                LCMethodXmlFile.WriteMethod(lcMethodFileNamePath, sample.ActualLCMethod);
             }
             catch (Exception ex)
             {
                 var msg = "Could not write the LC Method file for: " + sample.ActualLCMethod.Name;
                 ApplicationLogger.LogError(0, msg, ex, sample);
                 return;
-            }
-            finally
-            {
-                methodWriter = null;
             }
 
             // ----------------------------------------------------------------------------------------------------

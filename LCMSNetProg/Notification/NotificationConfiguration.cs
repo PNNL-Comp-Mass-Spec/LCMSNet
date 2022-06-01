@@ -28,23 +28,15 @@ namespace LcmsNet.Notification
         /// </summary>
         public bool IgnoreNotifications { get; set; }
 
-        #region IEnumerable<IDevice> Members
-
         public IEnumerator<INotifier> GetEnumerator()
         {
             return m_settings.Keys.GetEnumerator();
         }
 
-        #endregion
-
-        #region IEnumerable Members
-
         IEnumerator IEnumerable.GetEnumerator()
         {
             return m_settings.Keys.GetEnumerator();
         }
-
-        #endregion
 
         /// <summary>
         /// Adds a setting for the given device.
