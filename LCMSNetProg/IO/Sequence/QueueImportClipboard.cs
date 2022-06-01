@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     public static class QueueImportClipboard //: ISampleQueueReader
     {

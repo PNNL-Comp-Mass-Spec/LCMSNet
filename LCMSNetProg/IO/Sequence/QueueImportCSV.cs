@@ -7,7 +7,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using LcmsNet.Data;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     public class QueueImportCSV : ISampleQueueReader
     {

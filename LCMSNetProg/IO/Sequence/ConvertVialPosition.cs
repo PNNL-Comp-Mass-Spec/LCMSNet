@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     /// <summary>
     /// Utilities for converting Vial (aka Well) position between LCMSNet and LCMS values

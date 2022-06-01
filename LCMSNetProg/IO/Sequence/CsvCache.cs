@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using LcmsNet.Data;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     public class CsvCache
     {

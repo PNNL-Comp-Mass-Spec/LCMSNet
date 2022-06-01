@@ -1,4 +1,4 @@
-﻿using LcmsNet.SampleQueue.IO;
+﻿using LcmsNet.IO.Sequence;
 using NUnit.Framework;
 
 namespace LcmsnetUnitTest

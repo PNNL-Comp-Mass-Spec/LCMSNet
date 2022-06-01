@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
+using LcmsNet.SampleQueue;
 using LcmsNetSDK.Logging;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     /// <summary>
     /// Imports an XML file from LCMS

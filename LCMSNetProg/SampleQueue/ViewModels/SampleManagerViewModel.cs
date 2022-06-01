@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using LcmsNet.Data;
 using LcmsNet.IO.DMS;
-using LcmsNet.SampleQueue.IO;
+using LcmsNet.IO.Sequence;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;

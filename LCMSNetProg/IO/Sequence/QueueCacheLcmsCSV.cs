@@ -6,7 +6,7 @@ using System.Linq;
 using CsvHelper;
 using LcmsNet.Data;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     public class QueueCacheLcmsCSV : ISampleQueueReader, ISampleQueueWriter
     {

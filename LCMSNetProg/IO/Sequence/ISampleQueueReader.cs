@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using LcmsNet.Data;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     /// <summary>
     /// Abstract base class for reading sample data from a file path.

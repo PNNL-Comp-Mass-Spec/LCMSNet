@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using LcmsNet.Data;
+using LcmsNet.SampleQueue;
 using LcmsNetSDK.Logging;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     /// <summary>
     /// Exports specified queue to CSV file specifically tailored to Xcalibur import
     /// </summary>
     class QueueExportXcaliburCSV : ISampleQueueWriter
     {
-
-        #region "Methods"
-
         /// <summary>
         /// Saves the specified sample list to the specified file
         /// </summary>
@@ -67,7 +65,5 @@ namespace LcmsNet.SampleQueue.IO
                 throw new DataExportException(errMsg, ex);
             }
         }
-
-        #endregion
     }
 }

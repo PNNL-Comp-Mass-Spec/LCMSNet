@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LcmsNet.Data;
-using LcmsNet.SampleQueue.IO;
+using LcmsNet.IO.Sequence;
 using NUnit.Framework;
 
 namespace LcmsnetUnitTest

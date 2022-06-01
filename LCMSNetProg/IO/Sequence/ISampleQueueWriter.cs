@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using LcmsNet.Data;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     /// <summary>
     /// Abstract base class for writing sample data to a file path.

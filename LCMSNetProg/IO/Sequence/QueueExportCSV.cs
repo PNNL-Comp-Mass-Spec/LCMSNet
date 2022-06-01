@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using LcmsNet.Data;
+using LcmsNet.SampleQueue;
 using LcmsNetSDK.Logging;
 
-namespace LcmsNet.SampleQueue.IO
+namespace LcmsNet.IO.Sequence
 {
     public class QueueExportCSV : ISampleQueueWriter
     {
