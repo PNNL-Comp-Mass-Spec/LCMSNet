@@ -40,13 +40,11 @@ namespace LcmsNet.IO.DMS
         /// Name of request in DMS. Becomes sample name in LCMS and forms part
         /// of dataset name sample after run
         /// </summary>
-        [PersistenceSetting(IsUniqueColumn = true)]
         public string RequestName { get; set; }
 
         /// <summary>
         /// Numeric ID of request in DMS
         /// </summary>
-        [PersistenceSetting(IsUniqueColumn = true)]
         public int RequestID { get; set; }
 
         /// <summary>

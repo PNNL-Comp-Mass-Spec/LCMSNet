@@ -232,14 +232,12 @@ namespace LcmsNet.Data
         /// <summary>
         /// Name of the sample (also used for the file name)
         /// </summary>
-        [PersistenceSetting(ColumnName = "DMS.DatasetName", IsUniqueColumn = true)]
         public string Name
         {
             get => name;
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        [PersistenceSetting(IgnoreProperty = true)]
         public string SampleErrors
         {
             get => sampleErrors;
@@ -257,7 +255,6 @@ namespace LcmsNet.Data
         /// Whether this is possibly a dummy sample, and a real sample needs to be looked up before we perform any operations
         /// Default value is true; exists to prevent excessive lookups of the real sample.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public bool IsDummySample { get; private set; }
 
         /// <summary>
@@ -297,7 +294,6 @@ namespace LcmsNet.Data
         /// <summary>
         /// Gets or sets if the sample's name is a duplicate
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public bool IsDuplicateName
         {
             get => isDuplicateName;
@@ -307,26 +303,22 @@ namespace LcmsNet.Data
         /// <summary>
         /// True when changing the Running status manually is enabled
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public bool HasNotRun => !(RunningStatus == SampleRunningStatus.Complete || RunningStatus == SampleRunningStatus.Running);
 
         /// <summary>
         /// True when the sample has been set to run or has run
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public bool IsSetToRunOrHasRun => RunningStatus == SampleRunningStatus.WaitingToRun || !HasNotRun;
 
         /// <summary>
         /// Gets or sets the instrument method.
         /// </summary>
-        [PersistenceSetting(ColumnName = "Ins.MethodName")]
         public string InstrumentMethod
         {
             get => instrumentMethod;
             set => this.RaiseAndSetIfChanged(ref instrumentMethod, value, nameof(InstrumentMethod));
         }
 
-        [PersistenceSetting(ColumnName = "DMS.RequestID", IsUniqueColumn = true)]
         public int DmsRequestId
         {
             get => DmsData?.RequestID ?? dmsRequestId;
@@ -336,19 +328,16 @@ namespace LcmsNet.Data
         /// <summary>
         /// Gets or sets the list of data downloaded from DMS for this sample
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public DMSData DmsData { get; }
 
         /// <summary>
         /// Gets or sets the pal data associated with this sample.
         /// </summary>
-        [PersistenceSetting(ColumnNamePrefix = "PAL.")]
         public PalData PAL { get; }
 
         /// <summary>
         /// Gets the experiment object data.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public LCMethod ActualLCMethod
         {
             get => actualMethod;
@@ -367,7 +356,6 @@ namespace LcmsNet.Data
         /// <summary>
         /// Gets or sets the experiment setup object data.
         /// </summary>
-        [PersistenceSetting(ColumnName = "exp.ExperimentName", PropertyGetOverrideMethod = nameof(GetLcMethodToPersist))]
         public string LCMethodName
         {
             get => methodName;
@@ -421,14 +409,12 @@ namespace LcmsNet.Data
         /// <summary>
         /// Gets or sets the column data this sample is/was run on.
         /// </summary>
-        [PersistenceSetting(ColumnName = "Col.ID")]
         public int ColumnIndex
         {
             get => columnIndex;
             set => this.RaiseAndSetIfChanged(ref columnIndex, value);
         }
 
-        [PersistenceSetting(IgnoreProperty = true)]
         public string SpecialColumnNumber { get; set; }
 
         /// <summary>
@@ -440,7 +426,6 @@ namespace LcmsNet.Data
         /// <summary>
         /// Property for UI interaction
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public bool IsChecked
         {
             get => isChecked;
@@ -452,15 +437,12 @@ namespace LcmsNet.Data
         #region ITriggerFilePalData Implementation
 
         /// <inheritdoc />
-        [PersistenceSetting(IgnoreProperty = true)]
         public virtual DateTime RunStart => ActualLCMethod?.ActualStart ?? DateTime.MinValue;
 
         /// <inheritdoc />
-        [PersistenceSetting(IgnoreProperty = true)]
         public virtual DateTime RunFinish => ActualLCMethod?.ActualEnd ?? DateTime.MinValue;
 
         /// <inheritdoc />
-        [PersistenceSetting(IgnoreProperty = true)]
         public virtual string ColumnName
         {
             get
@@ -538,22 +520,6 @@ namespace LcmsNet.Data
             {
                 ActualLCMethod = (LCMethod) method.Clone();
             }
-        }
-
-        private string GetLcMethodToPersist()
-        {
-            var methodToExport = "";
-            if (ActualLCMethod != null && RunningStatus == SampleRunningStatus.Complete)
-            {
-                // Store the actual LCMethod rather than the current version of it
-                methodToExport = ActualLCMethod.Name;
-            }
-            else if (LCMethodName != null)
-            {
-                methodToExport = LCMethodName;
-            }
-
-            return methodToExport;
         }
 
         #endregion

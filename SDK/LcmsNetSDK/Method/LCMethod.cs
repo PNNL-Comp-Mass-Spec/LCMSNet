@@ -90,13 +90,11 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets or sets the duration for this action.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public TimeSpan Duration => methodDuration;
 
         /// <summary>
         /// Gets the end time of the action.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public DateTime End
         {
             get
@@ -109,19 +107,16 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets or sets the name of the Method.
         /// </summary>
-        [PersistenceSetting(ColumnName = "ExperimentName")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets the start time of this action.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public DateTime Start => startTime;
 
         /// <summary>
         /// Gets the actual start of the sample.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public DateTime ActualStart
         {
             get => actualStart;
@@ -131,7 +126,6 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets the actual end time of the sample.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public DateTime ActualEnd
         {
             get => actualEnd;
@@ -141,25 +135,21 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets the actual duration of the experiment that was run.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public TimeSpan ActualDuration => ActualEnd.Subtract(ActualStart);
 
         /// <summary>
         /// Gets or sets the method for a
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public LCEventRelative RelativeMethod { get; set; }
 
         /// <summary>
         /// Gets or sets whether this has a deterministic start or not.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public bool HasNonDeterministicStart { get; set; }
 
         /// <summary>
         /// Gets or sets the LC-Events to be performed by this method.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public List<LCEvent> Events
         {
             get => events;
@@ -169,7 +159,6 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets or sets the LC-Events data that were performed by this method.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public List<LCEvent> ActualEvents
         {
             get => actualEvents;
@@ -179,32 +168,27 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Gets or sets the event number being executed.  -1 = not run, 0-N is the current event, where N is the total events defined in LCEvents.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public int CurrentEventNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the index of the column that this method is associated with.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public int Column { get; set; }
 
         /// <summary>
         /// Gets or sets whether the method is special.  This means that the method
         /// is not targeted to run on a column.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public bool IsSpecialMethod { get; set; }
 
         /// <summary>
         /// Gets or sets whether to allow pre-method overlap.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public bool AllowPreOverlap { get; set; }
 
         /// <summary>
         /// Gets or sets whether to allow post-method overlap.
         /// </summary>
-        [PersistenceSetting(IgnoreProperty = true)]
         public bool AllowPostOverlap { get; set; }
 
         #endregion

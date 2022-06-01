@@ -55,7 +55,6 @@
     <Compile Include="Data\ISampleInfo.cs" />
     <Compile Include="Data\MobilePhase.cs" />
     <Compile Include="Data\PalData.cs" />
-    <Compile Include="Data\PersistenceSettingAttribute.cs" />
     <Compile Include="Devices\BaseDeviceControlViewModel.cs" />
     <Compile Include="Devices\DeviceConfiguration.cs" />
     <Compile Include="Devices\DeviceControlAttribute.cs" />
