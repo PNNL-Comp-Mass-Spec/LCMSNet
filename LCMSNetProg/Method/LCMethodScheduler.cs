@@ -464,9 +464,9 @@ namespace LcmsNet.Method
                         return;
                     }
 
-                    Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, EXPECTED START = {2}",
-                        data.Name,
-                        data.ColumnIndex + 1, data.ActualLCMethod.Start),
+                    Print(string.Format("START SAMPLE = {0} \t COLUMN = {1}, METHOD = {2}, EXPECTED START = {3}",
+                        data.Name, data.ColumnIndex + 1,
+                        data.ActualLCMethod.Name, data.ActualLCMethod.Start),
                         CONST_VERBOSE_LEAST, null, data);
 
                     //
