@@ -525,12 +525,41 @@ namespace LcmsNet.Method.ViewModels
                     methodEventData.BreakPointEvent -= BreakPointEvent_Handler;
                     methodEventData.Simulated -= Simulated_Handler;
                 }
+
+                var oldData = methodEventData;
                 // Create a clone of the method event so that we don't accidentally link multiple events together (same data) until the method is reloaded.
                 methodEventData = method?.Clone();
                 if (method != null)
                 {
                     methodEventData.BreakPointEvent += BreakPointEvent_Handler;
                     methodEventData.Simulated += Simulated_Handler;
+
+                    // If the change is to a different event on the same method, copy the values over.
+                    // Also permit same method name/different overload, copying to matching name parameters
+                    // TODO: Add checks for same method name, different overload, for parameter types
+                    if (oldData != null && methodEventData.Method.Name.Equals(oldData.Method.Name))
+                    {
+                        foreach (var entry in methodEventData.Parameters)
+                        {
+                            foreach (var old in oldData.Parameters)
+                            {
+                                if (old.Name.Equals(entry.Name))
+                                {
+                                    if (old.ViewModel != null)
+                                    {
+                                        entry.Value = old.ViewModel.ParameterValue;
+                                    }
+                                    else
+                                    {
+                                        entry.Value = old.Value;
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     if (SelectedDevice != null)
                     {
                         LoadMethodEventParameters(methodEventData);
