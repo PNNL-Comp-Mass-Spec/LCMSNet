@@ -164,7 +164,6 @@
     <Compile Include="IO\Sequence\QueueXmlFile.cs" />
     <Compile Include="IO\Sequence\SampleCacheData.cs" />
     <Compile Include="IO\Sequence\SampleImportInfo.cs" />
-    <Compile Include="IO\SystemHealthMonitorXMLWriter.cs" />
     <Compile Include="Logging\ViewModels\MessagesViewModel.cs" />
     <Compile Include="Logging\Views\MessagesView.xaml.cs">
       <DependentUpon>MessagesView.xaml</DependentUpon>
@@ -173,6 +172,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="MessageBoxDisplayExtension.cs" />
     <Compile Include="Method\ColumnArgs.cs" />
     <Compile Include="Method\ColumnException.cs" />
     <Compile Include="Method\ColumnThread.cs" />

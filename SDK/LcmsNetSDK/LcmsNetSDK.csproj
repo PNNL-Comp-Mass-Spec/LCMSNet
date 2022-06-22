@@ -75,7 +75,6 @@
     <Compile Include="Devices\IDeviceManager.cs" />
     <Compile Include="Devices\INetworkStart.cs" />
     <Compile Include="Devices\IPump.cs" />
-    <Compile Include="Devices\MonitoringComponent.cs" />
     <Compile Include="Devices\PumpDataEventArgs.cs" />
     <Compile Include="Devices\PumpDataPoint.cs" />
     <Compile Include="Devices\TimerDevice.cs" />
@@ -84,13 +83,11 @@
     <Compile Include="Logging\ApplicationLogger.cs" />
     <Compile Include="Logging\ErrorLoggerArgs.cs" />
     <Compile Include="Logging\FileLogger.cs" />
-    <Compile Include="Logging\IDeviceHealthWriter.cs" />
     <Compile Include="Logging\IHandlesLogging.cs" />
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Logging\LogWriterBase.cs" />
     <Compile Include="Logging\MessageLoggerArgs.cs" />
     <Compile Include="Logging\ThreadedLogger.cs" />
-    <Compile Include="MessageBoxDisplayExtension.cs" />
     <Compile Include="Method\ILCMethodEvent.cs" />
     <Compile Include="Method\InvalidTimeSpanException.cs" />
     <Compile Include="Method\LCEvent.cs" />
