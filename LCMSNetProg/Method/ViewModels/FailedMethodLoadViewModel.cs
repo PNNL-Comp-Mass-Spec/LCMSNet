@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using DynamicData.Binding;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

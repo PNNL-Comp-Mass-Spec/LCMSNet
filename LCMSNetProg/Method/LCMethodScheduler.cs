@@ -56,26 +56,20 @@ namespace LcmsNet.Method
             }
             Name = "Scheduler";
 
-            //
             // worker thread.
-            //
             m_thread = null;
             m_stopping = false;
 
             m_notifyOnKill = false;
 
-            //
             // Reference to the sample queue so that we can grab samples
             // when we need them.
-            //
             m_sampleQueue = sampleQueue;
 
             // Register yourself with the notification system.
             NotificationBroadcaster.Manager.AddNotifier(this);
 
-            //
             // This is the event to tell the scheduler to shut everything down!
-            //
             m_abortWaiting = new ManualResetEvent(false);
             m_stoppedSamples = new ManualResetEvent(false);
             m_stopSamples = new ManualResetEvent(false);
@@ -167,7 +161,6 @@ namespace LcmsNet.Method
         /// </summary>
         private readonly ManualResetEvent m_stoppedSamples;
 
-        //
         // Here we hold a copy of the samples that are running, so we can do things like
         // report status and interrogate when things should be done, without having
         // to use locks or critical sections that will chew up time
@@ -182,7 +175,6 @@ namespace LcmsNet.Method
         // threads themselves. This is a more reliable way to synchronize the scheduler with the columns, since
         // state updates to the scheduler occur as they happen on the columns, instead of waiting for the
         // scheduler thread to get around to dealing with the report.
-        //
         readonly SampleData[] samples;
 
         //
@@ -236,10 +228,8 @@ namespace LcmsNet.Method
             {
                 try
                 {
-                    //
                     // Turn off the flag so the worker thread knows
                     // to stop doing what its doing when the flag is set to false
-                    //
                     m_isRunning = false;
                     m_thread.Abort();
                 }
@@ -315,9 +305,7 @@ namespace LcmsNet.Method
                     Monitor.Enter(m_threadLocks[i]); // since we are shutting down, we want to block here.
                     if (samples[i] != null)
                     {
-                        //
                         // Tell the column thread to die..
-                        //
 
                         Print("Killing column: " + i, CONST_VERBOSE_EVENTS);
                         if (m_columnWorkers[i].IsBusy)
@@ -328,14 +316,10 @@ namespace LcmsNet.Method
                             m_columnWorkers[i].CancelAsync();
                         }
 
-                        //
                         // Tell the sample queue to stop doing what it is doing
-                        //
                         m_sampleQueue.CancelRunningSample(samples[i], false);
 
-                        //
                         // Don't hold a reference to the sample if we don't need it.
-                        //
                         samples[i] = null;
                     }
                 }
@@ -418,10 +402,8 @@ namespace LcmsNet.Method
         {
             var data = m_sampleQueue.NextSampleQuery();
 
-            //
             // See if the sample is legit, then if we have an idle column.
             // We also need to check if the column is not disabled.
-            //
             if (data == null)
             {
                 return;
@@ -436,11 +418,8 @@ namespace LcmsNet.Method
             }
             if (!m_columnWorkers[sampleColumnID].IsBusy)
             {
-                //
                 // Can we start this guy? make sure he starts after some time.
-                //
                 //TimeSpan startSpan = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(data.LCMethod.Start);
-
                 if (!data.ActualLCMethod.AllowPreOverlap && !data.ActualLCMethod.AllowPostOverlap && !m_columnWorkers.Any(x => x.IsBusy))
                 {
                     // No method overlap is allowed, so if we are "early" on time, it's because we had some early-continue events in the previously ran method.
@@ -450,11 +429,9 @@ namespace LcmsNet.Method
                     }
                 }
 
-                //
                 // If we have a positive integer, then that means the lcmethod's start time is good enough
                 // basically, we want to ensure that a method doesn't start before it's expected start time
                 // has occurred.
-                //
                 if (TimeKeeper.Instance.Now.CompareTo(data.ActualLCMethod.Start) >= 0)
                 //(startSpan.Milliseconds >= 0)
                 {
@@ -469,9 +446,7 @@ namespace LcmsNet.Method
                         data.ActualLCMethod.Name, data.ActualLCMethod.Start),
                         CONST_VERBOSE_LEAST, null, data);
 
-                    //
                     // Hold on to a copy of the sample
-                    //
                     if (data.ActualLCMethod.Events.Count > 0)
                     {
                         // Original code that relies on events firing properly
@@ -514,13 +489,10 @@ namespace LcmsNet.Method
         private void RunThreaded()
         {
             Thread.CurrentThread.Name = "Scheduler Thread";
-            //
             // A list of events to listen for
             var events = new WaitHandle[CONST_NUMBER_OF_SCHEDULER_EVENTS];
 
-            //
             // Setup the event table
-            //
             var j = 0;
             events[j++] = m_abortWaiting;
             events[j++] = m_stopSamples;
@@ -533,19 +505,14 @@ namespace LcmsNet.Method
                 m_columnThreads[i].Initialize();
             }
 
-            //
             // This is the meat of it, here is where we manage the column threads and send them
             // samples to run.  Here is also where we do things like monitor the thread to make
             // sure its not going to timeout or run over its allocated time.
-            //
             while (m_isRunning)
             {
-                //
                 // Wait to be told to stop, if not told to stop within 100ms,
                 // then check to see if a method is overdue or a column is ready for another sample.
-                //
                 var eventNumber = WaitHandle.WaitAny(events, CONST_THREAD_WAITTIMEOUT_MS);
-
 
                 switch (eventNumber)
                 {
@@ -566,11 +533,9 @@ namespace LcmsNet.Method
                         m_stoppedSamples.Set();
                         break;
                     default:
-                        //
                         // Figure out if it's worth looking at the next sample.  This is better
                         // than acquiring locks and being turned down later because the state of a
                         // column is running or disabled.
-                        //
                         var now = TimeKeeper.Instance.Now;
                         int columnID;
                         for (columnID = 0; columnID < currentEvent.Length; columnID++)
@@ -585,9 +550,7 @@ namespace LcmsNet.Method
 
                             try
                             {
-                                //
                                 // Test to see if the sample has gone past due
-                                //
                                 if (sampleEndTime[columnID] != DateTime.MinValue)
                                 {
                                     var overdueSpan = now.Subtract(sampleEndTime[columnID]);
@@ -595,12 +558,10 @@ namespace LcmsNet.Method
 
                                     if (Convert.ToInt32(Math.Floor(timeElapsedOverdue)) >= CONST_OVER_EVENT_TIME_LIMIT_SECONDS)
                                     {
-                                        //
                                         // Here we shut down the method killing any execution of it.
                                         // We do our state-cleanup here because the BackgroundWorker
                                         // doesn't allow us to return the necessary information to
                                         // do so to the ColumnWorkerComplete_Handler event handler.
-                                        //
                                         m_columnThreads[columnID].Abort();
                                         m_columnWorkers[columnID].CancelAsync();
 
@@ -646,10 +607,8 @@ namespace LcmsNet.Method
                                         MethodFileTools.WriteIncompleteMethodFilesAsync(m_columnThreads[setColumnId].Sample);
                                     }
                                 }
-                                //
                                 // We don't only look for == IDLE so that we pull off the
                                 // dead samples if the column is disabled.
-                                //
                                 else if (currentEvent[columnID] == CONST_IDLE_FLAG && !m_stopping)
                                 {
                                     RunNextSample();
@@ -726,15 +685,11 @@ namespace LcmsNet.Method
                 if (samples[columnID] == null || columnCurrentEvent < 0)
                     return;
 
-                //
                 // Make sure we have another event to process.
-                //
                 if (samples[columnID].ActualLCMethod.Events.Count <= columnCurrentEvent)
                     return;
 
-                //
                 // Now update the expected end time for the current event.
-                //
                 sampleEndTime[columnID] = columnEndOfCurrentEvent;
                 samples[columnID].ActualLCMethod.CurrentEventNumber = columnCurrentEvent;
 
@@ -879,10 +834,9 @@ namespace LcmsNet.Method
                                                                                   samples[columnID],
                                                                                   SampleProgressType.Complete));
                     m_sampleQueue.FinishSampleRun(samples[columnID]); // Then tell the sample queue that we are done!
-                    //
+
                     // Write the method file and other data in a separate thread. I/O is expensive and we don't
                     // want to bog down time critical functions waiting on it. So let's toss it in a threadpool thread.
-                    //
                     MethodFileTools.WriteMethodFilesAsync(m_columnThreads[columnID].Sample);
                     samples[columnID] = null;
                 }

@@ -170,9 +170,7 @@ namespace LcmsNet.IO
                 throw;
             }
 
-            //
             // If the method failed to load...then...return false
-            //
             if (method == null)
                 throw new Exception("The method was not able to be read.");
 
@@ -184,9 +182,7 @@ namespace LcmsNet.IO
                 ApplicationLogger.LogMessage(0, errorMessage);
                 throw new Exception(errorMessage);
             }
-            //
             // Otherwise, add the method so it can be registered with appropriate objects
-            //
             LCMethodManager.Manager.AddOrUpdateMethod(method);
         }
 
@@ -408,9 +404,7 @@ namespace LcmsNet.IO
                 var parameterType = parameterNode.Attributes.GetNamedItem(CONST_XPATH_TYPE);
                 var parameterName = parameterNode.Attributes.GetNamedItem(CONST_XPATH_NAME);
 
-                //
                 // Create a parameter type, if it fails?! well...
-                //
                 Type constructedParameterType = null;
                 try
                 {
@@ -538,9 +532,7 @@ namespace LcmsNet.IO
             lcEvent.Parameters = parameterArray;
             lcEvent.ParameterNames = parameterNameArray;
 
-            //
             // Device Initialization
-            //
             value = node.SelectSingleNode(CONST_XPATH_DEVICE);
             var attribute = value.Attributes.GetNamedItem(CONST_XPATH_NAME);
             var deviceName = attribute.Value;
@@ -555,20 +547,15 @@ namespace LcmsNet.IO
             }
             lcEvent.Device = device;
 
-            //
             // Method Info for invoking the device's method.
-            //
             value = node.SelectSingleNode(CONST_XPATH_METHOD_INFO);
             attribute = value.Attributes.GetNamedItem(CONST_XPATH_NAME);
             var methodName = attribute.Value;
             MethodInfo method = null;
             try
             {
-                //
-                // There is no way to disambiguate overloaded methods...so we
-                // have to see if the parameters match of the methods
+                // There is no way to disambiguate overloaded methods...so we have to see if the parameters match of the methods
                 // that have the name provided.
-                //
                 var methods = devicetype.GetMethods();
                 foreach (var info in methods)
                 {
@@ -688,9 +675,7 @@ namespace LcmsNet.IO
         {
             LCMethod method = null;
 
-            //
             // Get the name of the lc-method
-            //
 
             try
             {
@@ -724,17 +709,14 @@ namespace LcmsNet.IO
             {
                 return null;
             }
-            //
+
             // Now get the list and parse each item
-            //
             var eventListNode = root.SelectNodes(CONST_XPATH_EVENTS);
 
-            //
             // If the user really wanted to read the actual data, then read it instead
             // of reading the proposed method events. Actual data is stored after
             // a run in the XML file if requested.  This provides information about
             // the performance of the software and control.
-            //
             if (readActual)
             {
                 //

@@ -1,5 +1,4 @@
 ﻿using System;
-using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

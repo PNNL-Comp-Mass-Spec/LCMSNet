@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using DynamicData;
 using LcmsNetCommonControls.Devices;
-using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

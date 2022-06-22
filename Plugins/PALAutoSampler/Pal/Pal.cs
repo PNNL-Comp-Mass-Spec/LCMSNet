@@ -596,9 +596,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         public List<string> ListMethods()
         {
             var methods = "";
-            //
             // Find the methods from the device (or emulated one)
-            //
             if (inEmulationMode == false)
             {
                 var error = palDriver.GetMethodNames(ref methods);
@@ -608,10 +606,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             {
                 methods = "Example;Dance;Headstand;Self-Destruct";
             }
-            //
-            // Now to update the user interface, get the method names
-            // and send them to any listeners.
-            //
+
+            // Now to update the user interface, get the method names and send them to any listeners.
             var methodsList = new List<string>();
             if (methods != null)
             {
@@ -674,9 +670,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 trays = "emuTray01;emuTray02;emuTray03;emuTray04;emuTray05;emuTray06";
             }
 
-            //
             // Do the parsing for us !
-            //
             var trayList = new List<string>();
             if (!string.IsNullOrEmpty(trays))
             {
@@ -817,14 +811,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 return true;
             }
 
-            //
             // We let start method run
-            //
             var start = TimeKeeper.Instance.Now;
 
-            //
             // Load the method...
-            //
             sample.PAL.Method = methodName;
             LoadMethod(sample.PAL.Method,
                         sample.PAL.PALTray,
@@ -833,9 +823,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
             StartMethod(timeout);
 
-            //
             // We see if we ran over or not...if so then return failure, otherwise let it continue.
-            //
             var status = "";
             var statusCheckError = palDriver.GetStatus(ref status);
             var span = TimeKeeper.Instance.Now.Subtract(start);
@@ -988,7 +976,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Pauses the currently running method.
         /// </summary>
-        ///
         [LCMethodEvent("Pause Method", .5, EventDescription = "Pause PAL method until resumed or stopped.\nDeterministic, next step will not be started until timeout is reached")]
         public void PauseMethod()
         {
@@ -1003,7 +990,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Resumes the method.
         /// </summary>
-        ///
         [LCMethodEvent("Resume Method", 500, EventDescription = "Resume paused PAL method.\nDeterministic, next step will not be started until timeout is reached")]
         [LCMethodEvent("Resume Method NonDeterm", 500, IgnoreLeftoverTime = true, EventDescription = "Resume paused PAL method.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public void ResumeMethod()

@@ -1,9 +1,10 @@
-﻿using LcmsNetSDK.Method;
-
-namespace LcmsNet.Method
+﻿namespace LcmsNet.Method
 {
     public class LCMethodEventParameter
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         /// <param name="value">Parameter value to add.</param>
         /// <param name="viewModel">Edit ViewModel to use.</param>
         /// <param name="name"></param>
