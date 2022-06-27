@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using LcmsNet.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
@@ -50,6 +51,15 @@ namespace LcmsNet.IO
                 i++;
             }
 
+            var exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            var exeDir = Path.GetDirectoryName(Path.GetFullPath(exePath)) + "\\";
+            var pathStartsToRemove = new string[]
+            {
+                exeDir,
+                @"C:\Program Files (x86)\LCMSNet\",
+                @"C:\Program Files\LCMSNet\",
+            };
+
             var configuration = new DeviceConfiguration();
             for (i = 0; i < deviceHeaders.Count; i++)
             {
@@ -66,7 +76,7 @@ namespace LcmsNet.IO
                 }
 
                 var deviceName = "";
-                var data = new Dictionary<string, object>();
+                var data = new Dictionary<string, string>();
                 var delimiter = new[] {CONST_DELIMITER};
                 for (var j = startIndex + 1; j < lastIndex; j++)
                 {
@@ -84,8 +94,31 @@ namespace LcmsNet.IO
                     var value = data[key];
                     if (key.Equals("DeviceType"))
                     {
-                        value = OldDeviceNameTranslator.TranslateOldDeviceFullName(value.ToString());
+                        // Update device names/full namespace from old versions to new
+                        value = OldDeviceNameTranslator.TranslateOldDeviceFullName(value);
                     }
+
+                    if (key.Equals("PluginPath"))
+                    {
+                        // Part 1: truncate the full path to be a relative path
+                        foreach (var start in pathStartsToRemove)
+                        {
+                            if (value.StartsWith(start, StringComparison.OrdinalIgnoreCase))
+                            {
+                                //value = value.Replace(start, ""); // Not case-insensitive
+                                value = value.Substring(start.Length); // Sufficient because we only care about removing the start of the string; if there are multiple occurrences, that's a problem anyway.
+                                break;
+                            }
+                        }
+
+                        // Part 2: update U12 contact closure DLL from PNNLDevices to LabJackU12
+                        if (data.TryGetValue("DeviceType", out var fullName) && fullName.Contains("ContactClosure") &&
+                            value.EndsWith("PNNLDevices.dll", StringComparison.OrdinalIgnoreCase))
+                        {
+                            value = Regex.Replace(value, "PNNLDevices", "LabJackU12", RegexOptions.IgnoreCase);
+                        }
+                    }
+
                     configuration.AddSetting(deviceName, key, value);
                 }
             }
