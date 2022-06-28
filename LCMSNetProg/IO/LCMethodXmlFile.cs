@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -551,108 +549,186 @@ namespace LcmsNet.IO
             value = node.SelectSingleNode(CONST_XPATH_METHOD_INFO);
             attribute = value.Attributes.GetNamedItem(CONST_XPATH_NAME);
             var methodName = attribute.Value;
-            MethodInfo method = null;
             try
             {
-                // There is no way to disambiguate overloaded methods...so we have to see if the parameters match of the methods
-                // that have the name provided.
+                // Load list of methods with matching names, then check each matching method for attribute match and parameter match (but with the attribute match, allow mismatched parameter upgrades)
                 var methods = devicetype.GetMethods();
-                foreach (var info in methods)
+                var matchedMethods = methods.Where(x => x.Name == methodName).ToList();
+
+                // Load all matching (by name) method attributes, and give them priority, also store all non-matching method attributes with the associated method, for backup behavior
+                var matchedAttributes = new List<KeyValuePair<LCMethodEventAttribute, MethodInfo>>();
+                var unmatchedAttributes = new List<KeyValuePair<LCMethodEventAttribute, MethodInfo>>();
+                foreach (var info in matchedMethods)
                 {
-                    var parameterInfo = info.GetParameters();
-                    var nonDefaultParamCount = parameterInfo.Count(x => !x.HasDefaultValue);
-                    if (info.Name == methodName && (parameterInfo.Length == lcEvent.Parameters.Length || lcEvent.Parameters.Length == nonDefaultParamCount))
+                    // Get the method attributes for this method as well.
+                    // Otherwise this breaks specification, so it should be there. If the method was saved
+                    // then it should have also been persisted into the XML.  Otherwise...not a chance?
+                    LCMethodEventAttribute methodAttribute = null;
+                    var matched = false;
+                    try
                     {
-                        var i = 0;
-                        var found = true;
-                        foreach (var pinfo in parameterInfo)
+                        var methodAttributes = info.GetCustomAttributes(false);
+                        foreach (var attr in methodAttributes)
                         {
-                            //if (!pinfo.ParameterType.Equals(typeArray[i]))
-                            //if (pinfo.ParameterType.Name != typeArray[i].Name && (!pinfo.HasDefaultValue || i >= nonDefaultParamCount))
-                            if (!pinfo.ParameterType.IsAssignableFrom(typeArray[i]) && (!pinfo.HasDefaultValue || i >= nonDefaultParamCount))
+                            if (attr is LCMethodEventAttribute meth)
                             {
-                                found = false;
-                                break;
-                            }
-                            i++;
-
-                            if (i >= typeArray.Length)
-                            {
-                                break;
-                            }
-                        }
-
-                        if (found)
-                        {
-                            if (lcEvent.Parameters.Length < parameterInfo.Length)
-                            {
-                                // Add in newer default parameters
-                                var newTypes = new Type[parameterInfo.Length];
-                                var newParamNames = new string[parameterInfo.Length];
-                                var newParams = new object[parameterInfo.Length];
-                                Array.Copy(typeArray, newTypes, typeArray.Length);
-                                Array.Copy(lcEvent.ParameterNames, newParamNames, lcEvent.ParameterNames.Length);
-                                Array.Copy(lcEvent.Parameters, newParams, lcEvent.Parameters.Length);
-
-                                for (var j = typeArray.Length; j < parameterInfo.Length; j++)
+                                // Check all for a match
+                                if (meth.Name.Equals(lcEvent.Name, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    newTypes[j] = parameterInfo[j].ParameterType;
-                                    newParamNames[j] = parameterInfo[j].Name;
-                                    newParams[j] = parameterInfo[j].DefaultValue;
+                                    methodAttribute = meth;
+                                    matched = true;
+                                    break;
                                 }
 
-                                typeArray = newTypes;
-                                lcEvent.ParameterNames = newParamNames;
-                                lcEvent.Parameters = newParams;
+                                // Default (if no name match) is the first LCMethodEventAttribute
+                                if (methodAttribute == null)
+                                {
+                                    methodAttribute = meth;
+                                }
                             }
-
-                            method = info;
-                            break;
                         }
+                    }
+                    catch (Exception exOld)
+                    {
+                        var ex = new Exception("Could not read the LC-method event for device " + deviceName, exOld);
+                        throw ex;
+                    }
+
+                    if (matched)
+                    {
+                        matchedAttributes.Add(new KeyValuePair<LCMethodEventAttribute, MethodInfo>(methodAttribute, info));
+                    }
+                    else
+                    {
+                        unmatchedAttributes.Add(new KeyValuePair<LCMethodEventAttribute, MethodInfo>(methodAttribute, info));
                     }
                 }
 
-                if (method == null)
+                // If only one matched method event attribute, use it (regardless of parameters)
+                // If more than one matched method event attribute, check parameters (this shouldn't happen, but there is nothing in the code enforcing unique method event attribute names per class)
+                // If no matched method event attribute, then check all unmatched based on parameters.
+                if (matchedAttributes.Count == 1)
                 {
-                    throw new Exception($"Could not find a method with name '{methodName}' and {typeArray.Length} parameters of types '{string.Join(", ", typeArray.Select(x => x.FullName))}' (param names: '{string.Join(", ", lcEvent.ParameterNames)}').");
+                    lcEvent.MethodAttribute = matchedAttributes[0].Key;
+                    lcEvent.Method = matchedAttributes[0].Value;
+
+                    // Update/fix parameters...
+                    var parameterInfo = lcEvent.Method.GetParameters();
+                    if (lcEvent.Parameters.Length != parameterInfo.Length)
+                    {
+                        // Add in newer default parameters, remove now-missing parameters
+                        var newTypes = new Type[parameterInfo.Length];
+                        var newParamNames = new string[parameterInfo.Length];
+                        var newParams = new object[parameterInfo.Length];
+
+                        for (var i = 0; i < parameterInfo.Length; i++)
+                        {
+                            var paramInfo = parameterInfo[i];
+                            newTypes[i] = paramInfo.ParameterType;
+                            newParamNames[i] = paramInfo.Name;
+                            if (paramInfo.HasDefaultValue)
+                            {
+                                newParams[i] = paramInfo.DefaultValue;
+                            }
+                            else if (paramInfo.ParameterType.IsValueType)
+                            {
+                                newParams[i] = Activator.CreateInstance(paramInfo.ParameterType);
+                            }
+                            else
+                            {
+                                newParams[i] = null;
+                            }
+
+                            for (var j = 0; j < typeArray.Length; j++)
+                            {
+                                if (typeArray[j] == paramInfo.ParameterType && lcEvent.ParameterNames[j] == paramInfo.Name)
+                                {
+                                    newParams[i] = lcEvent.Parameters[j];
+                                    break;
+                                }
+                            }
+                        }
+
+                        typeArray = newTypes;
+                        lcEvent.ParameterNames = newParamNames;
+                        lcEvent.Parameters = newParams;
+                    }
+                }
+                else
+                {
+                    var methodList = matchedAttributes;
+                    if (methodList.Count == 0)
+                    {
+                        methodList = unmatchedAttributes;
+                    }
+
+                    // There is no way to disambiguate overloaded methods...so we have to see if the parameters match of the methods that have the name provided.
+                    foreach (var methodEvent in methodList)
+                    {
+                        var info = methodEvent.Value;
+                        var parameterInfo = info.GetParameters();
+                        var nonDefaultParamCount = parameterInfo.Count(x => !x.HasDefaultValue);
+                        if (info.Name == methodName && (parameterInfo.Length == lcEvent.Parameters.Length || lcEvent.Parameters.Length == nonDefaultParamCount))
+                        {
+                            var i = 0;
+                            var found = true;
+                            foreach (var pinfo in parameterInfo)
+                            {
+                                //if (!pinfo.ParameterType.Equals(typeArray[i]))
+                                //if (pinfo.ParameterType.Name != typeArray[i].Name && (!pinfo.HasDefaultValue || i >= nonDefaultParamCount))
+                                if (!pinfo.ParameterType.IsAssignableFrom(typeArray[i]) && (!pinfo.HasDefaultValue || i >= nonDefaultParamCount))
+                                {
+                                    found = false;
+                                    break;
+                                }
+                                i++;
+
+                                if (i >= typeArray.Length)
+                                {
+                                    break;
+                                }
+                            }
+
+                            if (found)
+                            {
+                                if (lcEvent.Parameters.Length < parameterInfo.Length)
+                                {
+                                    // Add in newer default parameters
+                                    var newTypes = new Type[parameterInfo.Length];
+                                    var newParamNames = new string[parameterInfo.Length];
+                                    var newParams = new object[parameterInfo.Length];
+                                    Array.Copy(typeArray, newTypes, typeArray.Length);
+                                    Array.Copy(lcEvent.ParameterNames, newParamNames, lcEvent.ParameterNames.Length);
+                                    Array.Copy(lcEvent.Parameters, newParams, lcEvent.Parameters.Length);
+
+                                    for (var j = typeArray.Length; j < parameterInfo.Length; j++)
+                                    {
+                                        newTypes[j] = parameterInfo[j].ParameterType;
+                                        newParamNames[j] = parameterInfo[j].Name;
+                                        newParams[j] = parameterInfo[j].DefaultValue;
+                                    }
+
+                                    typeArray = newTypes;
+                                    lcEvent.ParameterNames = newParamNames;
+                                    lcEvent.Parameters = newParams;
+                                }
+
+                                lcEvent.Method = info;
+                                lcEvent.MethodAttribute = methodEvent.Key;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (lcEvent.Method == null)
+                    {
+                        throw new Exception($"Could not find a method with name '{methodName}' and {typeArray.Length} parameters of types '{string.Join(", ", typeArray.Select(x => x.FullName))}' (param names: '{string.Join(", ", lcEvent.ParameterNames)}').");
+                    }
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception("Could not read the LC Method.  ", ex);
-            }
-
-            lcEvent.Method = method;
-
-            // Get the method attributes for this method as well.
-            // Otherwise this breaks specification, so it should be there. If the method was saved
-            // then it should have also been persisted into the XML.  Otherwise...not a chance?
-            try
-            {
-                var methodAttributes = method.GetCustomAttributes(false);
-                foreach (var attr in methodAttributes)
-                {
-                    if (attr is LCMethodEventAttribute meth)
-                    {
-                        // Check all for a match
-                        if (meth.Name.Equals(lcEvent.Name, StringComparison.OrdinalIgnoreCase))
-                        {
-                            lcEvent.MethodAttribute = meth;
-                            break;
-                        }
-
-                        // Default (if no name match) is the first LCMethodEventAttribute
-                        if (lcEvent.MethodAttribute == null)
-                        {
-                            lcEvent.MethodAttribute = meth;
-                        }
-                    }
-                }
-            }
-            catch (Exception exOld)
-            {
-                var ex = new Exception("Could not read the LC-method event for device " + deviceName, exOld);
-                throw ex;
             }
 
             if (lcEvent.MethodAttribute != null)
