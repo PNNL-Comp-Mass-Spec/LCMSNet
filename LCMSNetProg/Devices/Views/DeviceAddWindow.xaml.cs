@@ -55,14 +55,12 @@ namespace LcmsNet.Devices.Views
 
         private void ListboxDevices_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var dc = this.DataContext as DeviceAddViewModel;
-            if (dc == null)
+            if (!(this.DataContext is DeviceAddViewModel dc))
             {
                 return;
             }
 
-            var selector = sender as ListBox;
-            if (selector == null)
+            if (!(sender is ListBox selector))
             {
                 return;
             }
@@ -85,8 +83,7 @@ namespace LcmsNet.Devices.Views
 
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            var dc = this.DataContext as DeviceAddViewModel;
-            if (dc == null)
+            if (!(this.DataContext is DeviceAddViewModel dc))
             {
                 return;
             }

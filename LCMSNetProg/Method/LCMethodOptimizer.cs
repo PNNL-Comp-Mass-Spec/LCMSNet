@@ -264,8 +264,7 @@ namespace LcmsNet.Method
                     lcEvent.HasDiscreteStates = data.MethodEventAttribute.HasDiscreteParameters;
 
                     // Check to see if the device is a timer so we can space out the events
-                    var timer = data.Device as TimerDevice;
-                    if (timer != null)
+                    if (data.Device is TimerDevice timer)
                     {
                         // Construct a new instance of the timer since timers are only for waiting
                         // and not for device control.

@@ -318,8 +318,7 @@ namespace LcmsNetSDK.Devices
                     var attributes = property.GetCustomAttributes(typeof (DeviceSavedSettingAttribute), true);
                     foreach (var o in attributes)
                     {
-                        var setting = o as DeviceSavedSettingAttribute;
-                        if (setting != null)
+                        if (o is DeviceSavedSettingAttribute setting)
                         {
                             propertyMap.Add(setting.SettingName, property);
                         }
@@ -355,8 +354,7 @@ namespace LcmsNetSDK.Devices
                     }
                 }
 
-                var pump = device as IPump;
-                if (pump == null)
+                if (!(device is IPump pump))
                 {
                     // Add the device.
                     AddDevice(device);
@@ -649,8 +647,7 @@ namespace LcmsNetSDK.Devices
         /// <returns>True if successful, False if it fails.</returns>
         public bool AddDevice(DevicePluginInformation plugin, bool initialize)
         {
-            var device = Activator.CreateInstance(plugin.DeviceType) as IDevice;
-            if (device == null)
+            if (!(Activator.CreateInstance(plugin.DeviceType) is IDevice device))
             {
                 return false;
             }
@@ -975,8 +972,7 @@ namespace LcmsNetSDK.Devices
                     var attributes = objectType.GetCustomAttributes(typeof (DeviceControlAttribute), true);
                     foreach (var attribute in attributes)
                     {
-                        var control = attribute as DeviceControlAttribute;
-                        if (control != null)
+                        if (attribute is DeviceControlAttribute control)
                         {
                             //TODO: Brian changed this...kind of chris made him do it...but we are going to revisit all of the bad things that could happen
                             // if we left this thing uncommented...basically trying to transition from this crap anyway...

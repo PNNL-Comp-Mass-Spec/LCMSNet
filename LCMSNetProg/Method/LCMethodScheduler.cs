@@ -442,8 +442,7 @@ namespace LcmsNet.Method
                     data.ActualLCMethod.ActualStart = TimeKeeper.Instance.Now;
                     samples[sampleColumnID] = data;
                     // This is an alternate option to the above line, but has undesired side effects (like unlinking what is shown in the progress UI from what is actually running)
-                    //var dataClone = data.Clone() as SampleData;
-                    //if (dataClone == null)
+                    //if (!(data.Clone() is SampleData dataClone))
                     //{
                     //    dataClone = new SampleData();
                     //    dataClone.LCMethodName = data.LCMethodName;
@@ -637,9 +636,7 @@ namespace LcmsNet.Method
 
         public void ColumnProgressChanged_Handler(object sender, ProgressChangedEventArgs e)
         {
-            var columnState = e.UserState as List<Object>;
-
-            if (columnState == null)
+            if (!(e.UserState is List<object> columnState))
                 return;
 
             var columnID = (int)columnState[0];

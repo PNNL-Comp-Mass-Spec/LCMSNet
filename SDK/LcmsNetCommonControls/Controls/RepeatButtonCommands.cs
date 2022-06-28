@@ -107,8 +107,7 @@ namespace LcmsNetCommonControls.Controls
                 var parameter = ReleaseCommandParameter;
                 var target = ReleaseCommandTarget;
 
-                var routed = command as RoutedCommand;
-                if (routed != null)
+                if (command is RoutedCommand routed)
                 {
                     if (target == null)
                     {

@@ -627,9 +627,7 @@ namespace LcmsNet.Method.ViewModels
 
                 foreach (var parameter in data.Parameters)
                 {
-                    var combo = parameter.ViewModel as EventParameterEnumViewModel;
-
-                    if (combo == null)
+                    if (!(parameter.ViewModel is EventParameterEnumViewModel combo))
                         continue;
 
                     var key = parameter.DataProviderName;

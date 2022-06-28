@@ -24,14 +24,12 @@ namespace LcmsNet.Method.Views
         /// <param name="e"></param>
         private void MethodList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var dc = this.DataContext as LCMethodSelectionViewModel;
-            if (dc == null)
+            if (!(this.DataContext is LCMethodSelectionViewModel dc))
             {
                 return;
             }
 
-            var selector = sender as ListBox;
-            if (selector == null)
+            if (!(sender is ListBox selector))
             {
                 return;
             }
@@ -59,9 +57,10 @@ namespace LcmsNet.Method.Views
                 return;
             }
 
-            var dc = this.DataContext as LCMethodSelectionViewModel;
-
-            dc?.AddCommand.Execute().Subscribe();
+            if (this.DataContext is LCMethodSelectionViewModel dc)
+            {
+                dc.AddCommand.Execute().Subscribe();
+            }
         }
     }
 }

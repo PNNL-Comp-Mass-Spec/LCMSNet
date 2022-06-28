@@ -33,10 +33,7 @@ namespace FluidicsSDKUnitTests
                 dm.Add(pump1);
                 dm.Add(pump2);
                 dm.Add(t);
-                var p1 = dm.FindDevice(pump1) as FluidicsPump;
-                var p2 = dm.FindDevice(pump2) as FluidicsPump;
-                var t1 = dm.FindDevice(t) as FluidicsTee;
-                if (t1 != null && p2 != null && p1 != null)
+                if (dm.FindDevice(t) is FluidicsTee t1 && dm.FindDevice(pump2) is FluidicsPump p2 && dm.FindDevice(pump1) is FluidicsPump p1)
                 {
                     cm.Connect(t1.Ports[2], p2.Ports[0]);
                     cm.Connect(t1.Ports[0], p1.Ports[0]); // these two lines create a loop in the system.

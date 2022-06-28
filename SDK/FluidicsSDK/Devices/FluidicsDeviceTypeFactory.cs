@@ -67,8 +67,7 @@ namespace FluidicsSDK.Devices
             var attributes = deviceType.GetCustomAttributes(typeof(DeviceControlAttribute), false);
             foreach (var o in attributes)
             {
-                var monitorAttribute = o as DeviceControlAttribute;
-                if (monitorAttribute != null)
+                if (o is DeviceControlAttribute monitorAttribute)
                 {
                     var fluidicsDeviceType = monitorAttribute.FluidicsDeviceType;
                     // Create a provider instance.

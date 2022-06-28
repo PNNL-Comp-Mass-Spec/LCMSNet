@@ -50,14 +50,12 @@ namespace LcmsNet.SampleQueue.Views
         /// <param name="e"></param>
         private void SampleGrid_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var dc = this.DataContext as SampleControlViewModel;
-            if (dc == null)
+            if (!(this.DataContext is SampleControlViewModel dc))
             {
                 return;
             }
 
-            var selector = sender as MultiSelector;
-            if (selector == null)
+            if (!(sender is MultiSelector selector))
             {
                 return;
             }

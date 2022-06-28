@@ -17,14 +17,12 @@ namespace LcmsNet.Reporting
 
         private void MethodList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var dc = this.DataContext as CreateErrorReportViewModel;
-            if (dc == null)
+            if (!(this.DataContext is CreateErrorReportViewModel dc))
             {
                 return;
             }
 
-            var selector = sender as ListBox;
-            if (selector == null)
+            if (!(sender is ListBox selector))
             {
                 return;
             }

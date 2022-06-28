@@ -17,14 +17,12 @@ namespace LcmsNet.SampleQueue.Views
 
         private void DataGrid_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var dc = this.DataContext as TrayVialViewModel;
-            if (dc == null)
+            if (!(this.DataContext is TrayVialViewModel dc))
             {
                 return;
             }
 
-            var selector = sender as MultiSelector;
-            if (selector == null)
+            if (!(sender is MultiSelector selector))
             {
                 return;
             }

@@ -591,8 +591,7 @@ namespace LcmsNet.Method.ViewModels
                 foreach (var objAttribute in customAttributes)
                 {
                     // If the method has a custom LC Method Attribute, then we want to look at the parameters used
-                    var attr = objAttribute as LCMethodEventAttribute;
-                    if (attr != null)
+                    if (objAttribute is LCMethodEventAttribute attr)
                     {
                         // Grab the parameters used for this method
                         var info = method.GetParameters();

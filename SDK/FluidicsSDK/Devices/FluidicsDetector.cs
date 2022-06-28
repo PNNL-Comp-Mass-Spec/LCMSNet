@@ -26,8 +26,7 @@ namespace FluidicsSDK.Devices
 
         protected override void SetDevice(IDevice device)
         {
-            var detector = device as IFluidicsClosure;
-            if (detector != null)
+            if (device is IFluidicsClosure detector)
             {
                 ClosureType = detector.GetClosureType();
             }

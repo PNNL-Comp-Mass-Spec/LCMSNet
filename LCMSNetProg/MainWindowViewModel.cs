@@ -111,8 +111,7 @@ namespace LcmsNet
 
         void Column_NameChanged(object sender, string name, string oldName)
         {
-            var column = sender as ColumnData;
-            if (column != null)
+            if (sender is ColumnData column)
             {
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNNAME + column.ID, column.Name);
             }
@@ -120,8 +119,7 @@ namespace LcmsNet
 
         void Column_StatusChanged(object sender, ColumnStatus status, ColumnStatus oldStatus)
         {
-            var column = sender as ColumnData;
-            if (column != null && status != ColumnStatus.Running && oldStatus != ColumnStatus.Running)
+            if (sender is ColumnData column && status != ColumnStatus.Running && oldStatus != ColumnStatus.Running)
             {
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLED + column.ID, (column.Status == ColumnStatus.Disabled).ToString());
             }
@@ -533,14 +531,12 @@ namespace LcmsNet
         /// <param name="device"></param>
         private void RegisterDeviceEventHandlers(IDevice device)
         {
-            var sampler = device as IAutoSampler;
-            if (sampler != null)
+            if (device is IAutoSampler sampler)
             {
                 sampler.TrayNamesRead += SampleManagerVm.AutoSamplerTrayList;
             }
 
-            var network = device as INetworkStart;
-            if (network != null)
+            if (device is INetworkStart network)
             {
                 network.MethodNames += SampleManagerVm.InstrumentMethodList;
             }
@@ -555,15 +551,13 @@ namespace LcmsNet
             var type = device.GetType();
             if (type.IsAssignableFrom(typeof(IAutoSampler)))
             {
-                var sampler = device as IAutoSampler;
-                if (sampler != null)
+                if (device is IAutoSampler sampler)
                     sampler.TrayNamesRead -= SampleManagerVm.AutoSamplerTrayList;
             }
 
             if (type.IsAssignableFrom(typeof(INetworkStart)))
             {
-                var network = device as INetworkStart;
-                if (network != null)
+                if (device is INetworkStart network)
                     network.MethodNames -= SampleManagerVm.InstrumentMethodList;
             }
         }

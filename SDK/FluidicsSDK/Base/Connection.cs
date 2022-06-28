@@ -131,15 +131,14 @@ namespace FluidicsSDK.Base
                 {
                     midPoint = new Point(P2.Center.X, P1.Center.Y);
                 }
-                var lineA = graphicPrimitives[0] as FluidicsLine;
-                if (lineA != null)
+
+                if (graphicPrimitives[0] is FluidicsLine lineA)
                 {
                     lineA.Origin = P1.Center;
                     lineA.Term = midPoint;
                 }
 
-                var lineB = graphicPrimitives[1] as FluidicsLine;
-                if (lineB != null)
+                if (graphicPrimitives[1] is FluidicsLine lineB)
                 {
                     lineB.Origin = midPoint;
                     lineB.Term = P2.Center;
@@ -147,8 +146,7 @@ namespace FluidicsSDK.Base
             }
             else
             {
-                var line = graphicPrimitives[0] as FluidicsLine;
-                if (line != null)
+                if (graphicPrimitives[0] is FluidicsLine line)
                 {
                     line.Origin = P1.Center;
                     line.Term = P2.Center;

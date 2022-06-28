@@ -248,8 +248,7 @@ namespace LcmsNet.Method.ViewModels
             //Render scroll buttons
             if (RenderMode == LCMethodRenderMode.Conversation)
             {
-                var classLcMethodConversationRenderer = renderer as LCMethodConversationRenderer;
-                if (classLcMethodConversationRenderer != null)
+                if (renderer is LCMethodConversationRenderer classLcMethodConversationRenderer)
                     buttonLocations = classLcMethodConversationRenderer.GetButtonLocations();
 
                 var upButton = buttonLocations[0];

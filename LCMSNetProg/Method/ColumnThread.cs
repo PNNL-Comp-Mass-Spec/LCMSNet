@@ -114,8 +114,7 @@ namespace LcmsNet.Method
             //Initialization
             m_abortEvent.Reset();
 
-            var args = e.Argument as ColumnArgs;
-            if (args != null)
+            if (e.Argument is ColumnArgs args)
                 m_sampleData = args.Sample;
 
             var method = m_sampleData.ActualLCMethod;

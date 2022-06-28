@@ -21,14 +21,12 @@ namespace LcmsNet.SampleQueue.Views
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var dc = this.DataContext as DMSDownloadDataViewModel;
-            if (dc == null)
+            if (!(this.DataContext is DMSDownloadDataViewModel dc))
             {
                 return;
             }
 
-            var selector = sender as MultiSelector;
-            if (selector == null)
+            if (!(sender is MultiSelector selector))
             {
                 return;
             }

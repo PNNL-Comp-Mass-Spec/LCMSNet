@@ -116,8 +116,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         private void Manager_DeviceRemoved(object sender, IDevice device)
         {
             // Is this a pump?
-            var pump = device as IPump;
-            if (pump == null)
+            if (!(device is IPump pump))
                 return;
 
             // Make sure we have the pump
@@ -141,8 +140,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         /// <param name="sender"></param>
         private void pump_DeviceSaveRequired(object sender, EventArgs e)
         {
-            var pump = sender as IPump;
-            if (pump == null)
+            if (!(sender is IPump pump))
                 return;
 
             if (pumpMonitorDictionary.ContainsKey(pump) == false)
@@ -159,8 +157,7 @@ namespace LcmsNet.Devices.Pumps.ViewModels
         private void Manager_DeviceAdded(object sender, IDevice device)
         {
             // Make sure the device is a pump.
-            var pump = device as IPump;
-            if (pump == null)
+            if (!(device is IPump pump))
                 return;
 
             // Make sure we have a reference to the pump

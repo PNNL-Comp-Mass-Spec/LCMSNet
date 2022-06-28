@@ -307,8 +307,7 @@ namespace LcmsNetSDK.Method
             {
                 foreach (var lcEvent in Events)
                 {
-                    var clonedEvent = lcEvent.Clone() as LCEvent;
-                    if (clonedEvent != null)
+                    if (lcEvent.Clone() is LCEvent clonedEvent)
                     {
                         newMethod.Events.Add(clonedEvent);
                     }
