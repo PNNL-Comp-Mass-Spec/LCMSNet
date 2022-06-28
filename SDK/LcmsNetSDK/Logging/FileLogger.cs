@@ -71,9 +71,7 @@ namespace LcmsNetSDK.Logging
                 msgStr.Append(message);
                 msgStr.Append("\t");
 
-                //
                 // Make sure this is not just an error message with no relevant exception.
-                //
                 if (args.Exception != null)
                 {
                     // Get all exception messages if exceptions are nested
@@ -143,12 +141,10 @@ namespace LcmsNetSDK.Logging
             {
                 FileInfo logFile;
 
-                //
                 // We always create a new file every time we run the program.
                 // Here we check to see that the file has been created before
                 // because our file names will be Date_TimeOfDay which
                 // will change.
-                //
                 if (logFileCreated == false || string.IsNullOrWhiteSpace(LogPath))
                 {
                     var path = CreateLogFilePath();
@@ -166,9 +162,7 @@ namespace LcmsNetSDK.Logging
                 if (logFile.Directory == null)
                     return false;
 
-                //
                 // Create the folder if it does not exist
-                //
                 if (!logFile.Directory.Exists)
                 {
                     logFile.Directory.Create();

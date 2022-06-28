@@ -184,7 +184,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveCommand<Unit, Unit> StopQueueCommand { get; }
 
         /// <summary>
-        ///
+        /// Toggle the state of the Run/Stop buttons
         /// </summary>
         /// <param name="runButtonState"></param>
         /// <param name="stopButtonState"></param>
@@ -230,7 +230,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         /// <summary>
-        ///
+        /// Event handler method
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="data"></param>

@@ -528,7 +528,7 @@ namespace LcmsNet
         }
 
         /// <summary>
-        ///
+        /// Register important event handlers for autosampler and instrument devices.
         /// </summary>
         /// <param name="device"></param>
         private void RegisterDeviceEventHandlers(IDevice device)
@@ -547,7 +547,7 @@ namespace LcmsNet
         }
 
         /// <summary>
-        ///
+        /// Unregister important event handlers for autosampler and instrument devices.
         /// </summary>
         /// <param name="device"></param>
         private void DeRegisterDeviceEventHandlers(IDevice device)
@@ -676,9 +676,7 @@ namespace LcmsNet
             LCMethod lcMethod;
             var isError = false;
 
-            //
             // Construct the message to display
-            //
             switch (args.ProgressType)
             {
                 case SampleProgressType.RunningNextEvent:

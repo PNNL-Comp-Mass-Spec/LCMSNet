@@ -70,10 +70,8 @@ namespace LcmsNetPlugins.VICI.Valves
                 WriteTimeout = writeTimeout,
             };
 
-            //
             // Set ID to a space (i.e. nonexistent)
             // NOTE: Spaces are ignored by the controller in sent commands
-            //
             valveID = ' ';
             Version = "";
 
@@ -153,7 +151,7 @@ namespace LcmsNetPlugins.VICI.Valves
         public SerialPort Port { get; }
 
         /// <summary>
-        ///
+        /// Serial port name
         /// </summary>
         [DeviceSavedSetting("PortName")]
         public string PortName
@@ -167,7 +165,7 @@ namespace LcmsNetPlugins.VICI.Valves
         }
 
         /// <summary>
-        ///
+        /// Timeout to read status from valve
         /// </summary>
         [DeviceSavedSetting("ReadTimeout")]
         public int ReadTimeout
@@ -181,7 +179,7 @@ namespace LcmsNetPlugins.VICI.Valves
         }
 
         /// <summary>
-        ///
+        /// Timeout to write command to valve
         /// </summary>
         [DeviceSavedSetting("WriteTimeout")]
         public int WriteTimeout

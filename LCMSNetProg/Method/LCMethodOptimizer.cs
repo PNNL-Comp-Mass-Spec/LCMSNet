@@ -54,9 +54,7 @@ namespace LcmsNet.Method
         {
             var hash = new Dictionary<IDevice, List<LCEvent>>();
 
-            //
             // Build the event table for each device.
-            //
             foreach (var lcEvent in method.Events)
             {
                 var device = lcEvent.Device;
@@ -126,22 +124,22 @@ namespace LcmsNet.Method
             var requiredOffset = CONST_NON_OVERLAPPING_EVENTS_OFFSET;
 
             // We need to figure out what events are overlapping.
-            //
+
             // 1.  Starting point of comparison:
             // We start with the last event, and work backwards.  Because if they are overlapping
             // then the last event will be the event that we would need to ultimately align to.
-            //
+
             // 2.  State comparisons:
             // While we work backwards, we see if the states are discrete. If so then we can
             // compare their values to see if just because they are overlapping events,
             // they may be in the same state.
-            //
+
             // If we have a conflict (overlapping continuous state or conflicting discrete state)
             // then we just adjust by the last event we found.  We get this offset value and report it.
             // Chances are we will return to this comparison of states (overlapping + discrete).
             // But we need/want to handle any further alignment here, we just need to know the minimal
             // amount of time we need to offset the first event by to make the alignment happy.
-            //
+
             // Required Offset Note:  (EMPTY Events List)
             // Finally, notice that if the event list is empty, the count = 0, and i = -1.
             // Since i would be lt 0 then this loop would not be executed, and the required
@@ -198,7 +196,7 @@ namespace LcmsNet.Method
             var isOverlapped = true;
 
             // Test to see if the alignee method start time comes before the baseline end time.
-            //
+
             // If so, then we potentially have an overlap.  Otherwise, we need to make sure the
             // alignee method end time doesnt come before the baseline method time.
             var span = aligneeMethod.Start.Subtract(baselineMethod.End);
@@ -260,7 +258,7 @@ namespace LcmsNet.Method
                     lcEvent.MethodData = data;
 
                     // This tells any optimizer or scheduler that the event has discrete parameters.
-                    //
+
                     // This is useful if we are trying to optimize two methods that use the same valve, but
                     // don't require it to change the state.
                     lcEvent.HasDiscreteStates = data.MethodEventAttribute.HasDiscreteParameters;
@@ -426,7 +424,7 @@ namespace LcmsNet.Method
                 // Set the start time for the method
                 //     - Noting that the start time may be adjusted by seconds to add
                 //     - Or that the start time may be running for the first time.
-                //
+
                 //System.Diagnostics.Debug.WriteLine(string.Format("Checking Alignment method: {0} against baseline method.", aligneeMethod.Name));
                 aligneeMethod.SetStartTime(startTime.AddSeconds(secondsToAdd));
 
@@ -457,7 +455,7 @@ namespace LcmsNet.Method
 
                                 // If we have a required offset then we had conflicting overlap the scheduler found.
                                 // So we have to add to the baseline start, and shift the events over by this aggregate amount.
-                                //
+
                                 // This also means that we have to start the beginning and recalculate the number of conflicts.
                                 if (requiredOffset > 0)
                                 {
@@ -535,7 +533,7 @@ namespace LcmsNet.Method
             // that method K overlaps with.  We cannot start before k, and because k is already
             // aligned and optimized, we know that k-j is the earliest method that could possibly
             // provide conflict for us.
-            //
+
             // We also want to look for things that are on the same column as us.  The end of that method
             // j' will be the earliest possible time that we can start.
             var k = baselineMethods.Count - 1;

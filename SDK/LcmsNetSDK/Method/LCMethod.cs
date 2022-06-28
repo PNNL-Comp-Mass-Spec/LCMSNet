@@ -213,17 +213,13 @@ namespace LcmsNetSDK.Method
         /// <param name="directoryPath">Path of directory to write data to.</param>
         public void WritePerformanceData(string directoryPath)
         {
-            //
             // For each event, we tell the device to write the required used data.
-            //
             foreach (var lcEvent in events)
             {
-                //
                 // Only write this if we have performance data for this method....
                 // meaning that it has something we need to know or save for later
                 // to reproduce performance information to understand when the
                 // cart misbehaves.
-                //
                 if (lcEvent.MethodAttribute.HasPerformanceData)
                 {
                     lcEvent.Device.WritePerformanceData(directoryPath, lcEvent.MethodAttribute.Name, lcEvent.Parameters);
@@ -237,16 +233,12 @@ namespace LcmsNetSDK.Method
         /// <param name="start">Time to start the method.</param>
         public void SetStartTime(DateTime start)
         {
-            //
             // Update the start time and cascade the calculation so that
             // the event times are all updated allowing us to calculate
             // the duration and end time of the entire method.
-            //
             UpdateEventTimes(start);
 
-            //
             // Calculate the duration of the method.
-            //
             var duration = TimeSpan.Zero;
             if (Events.Count > 0)
             {
@@ -283,10 +275,8 @@ namespace LcmsNetSDK.Method
         private void UpdateEventTimes(DateTime newStartTime)
         {
             var adjustedStart = newStartTime;
-            //
             // Iterate through each event (ultimately) and
             // adjust the start times of the event based on the time span provided.
-            //
             foreach (var controlEvent in Events)
             {
                 controlEvent.Start = adjustedStart;

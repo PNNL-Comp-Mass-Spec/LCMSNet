@@ -534,12 +534,10 @@ namespace LcmsNetSDK.Devices
         {
             IDevice device = null;
 
-            //
             // Find the device in the list, might be better if we used a
             // dictionary instead.
-            //
+
             // Then see if the device type matches as well...
-            //
             foreach (var dev in m_devices)
             {
                 var devType = dev.GetType();
@@ -561,12 +559,10 @@ namespace LcmsNetSDK.Devices
         {
             IDevice device = null;
 
-            //
             // Find the device in the list, might be better if we used a
             // dictionary instead.
-            //
+
             // Then see if the device type matches as well...
-            //
             foreach (var dev in m_devices)
             {
                 if (dev.Name.Equals(deviceName, StringComparison.OrdinalIgnoreCase))
@@ -607,10 +603,8 @@ namespace LcmsNetSDK.Devices
         {
             var oldName = device.Name;
 
-            //
             // If this happens, then they are trying to name the device
             // the same thing....
-            //
             if (basename.Equals(oldName, StringComparison.OrdinalIgnoreCase))
                 return;
 
@@ -626,21 +620,15 @@ namespace LcmsNetSDK.Devices
         /// <returns>True if the device was added.  False if device was not added.</returns>
         public bool AddDevice(IDevice device)
         {
-            //
             // No null devices allowed.
-            //
             if (device == null)
                 return false;
 
-            //
             // No duplicate references allowed.
-            //
             if (m_devices.Contains(device))
                 return false;
 
-            //
             // No duplicate names allowed.
-            //
             if (DeviceNameExists(device.Name))
                 return false;
 
@@ -684,9 +672,7 @@ namespace LcmsNetSDK.Devices
         /// <returns>True if device was removed successfully.  False if the device could not be removed at that time.</returns>
         public bool RemoveDevice(IDevice device)
         {
-            //
             // Make sure we have the reference
-            //
             if (m_devices.Contains(device) == false)
                 return false;
 
@@ -711,7 +697,7 @@ namespace LcmsNetSDK.Devices
         }
 
         /// <summary>
-        ///
+        /// Call the shutdown method for each device
         /// </summary>
         /// <returns></returns>
         public bool ShutdownDevices()
@@ -1032,7 +1018,7 @@ namespace LcmsNetSDK.Devices
     }
 
     /// <summary>
-    ///
+    /// Exception wrapper for device initialization errors
     /// </summary>
     public class DeviceInitializationException : Exception
     {

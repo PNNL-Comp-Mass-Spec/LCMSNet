@@ -404,7 +404,7 @@ namespace LcmsNet
 
             // Note that we used icons from here for the gears on the main form window.
             //     http://labs.chemist2dio.com/free-vector-gears.php/
-            //
+
             // Use a mutex to ensure a single copy of program is running. If we can create a new mutex then
             //      no instance of the application is running. Otherwise, we exit.
             // Code adapted from K. Scott Allen's OdeToCode.com at

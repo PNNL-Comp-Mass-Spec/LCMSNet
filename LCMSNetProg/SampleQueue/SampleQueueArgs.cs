@@ -45,7 +45,7 @@ namespace LcmsNet.SampleQueue
         public IEnumerable<SampleData> Samples { get; }
 
         /// <summary>
-        ///
+        /// Total number of samples in the running queue
         /// </summary>
         public int RunningQueueTotal { get; }
     }

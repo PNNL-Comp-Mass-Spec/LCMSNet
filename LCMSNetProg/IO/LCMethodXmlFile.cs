@@ -193,9 +193,7 @@ namespace LcmsNet.IO
         {
             var errors = new Dictionary<string, List<Exception>>();
 
-            //
             // Find each file in the directory
-            //
             var filePaths = Directory.GetFiles(path, CONST_METHOD_EXTENSION, SearchOption.TopDirectoryOnly);
             foreach (var filePath in filePaths)
             {
@@ -244,11 +242,9 @@ namespace LcmsNet.IO
             if (File.Exists(filePath) == false)
                 return null;
 
-            //
             // Load the document,
             //     Catch XML errors and authorization errors.
             //     We have made sure the file exists.
-            //
             var document = new XmlDocument();
             try
             {
@@ -795,9 +791,7 @@ namespace LcmsNet.IO
             // the performance of the software and control.
             if (readActual)
             {
-                //
                 // Make sure we have some kind of events
-                //
                 eventListNode = root.SelectNodes(CONST_XPATH_ACTUAL_METHOD);
                 if (eventListNode == null || eventListNode.Count < 1)
                     return null;

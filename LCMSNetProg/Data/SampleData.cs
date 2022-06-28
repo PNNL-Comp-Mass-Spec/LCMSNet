@@ -57,17 +57,14 @@ namespace LcmsNet.Data
             columnIndex = 0;
             InstrumentMethod = "";
 
-            //
             // Set the default column to the first column,
             // and sequence number to non-existent.
-            //
             sequenceNumber = -1;
 
             LCMethodName = "";
             Volume = CartConfiguration.MinimumSampleVolume;
-            //
+
             // Default state is always to be queued but not waiting to run.
-            //
             RunningStatus = SampleRunningStatus.Queued;
         }
 

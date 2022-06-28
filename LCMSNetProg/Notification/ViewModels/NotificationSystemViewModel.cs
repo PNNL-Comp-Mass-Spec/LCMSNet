@@ -384,7 +384,7 @@ namespace LcmsNet.Notification.ViewModels
         }
 
         /// <summary>
-        ///
+        /// Save the notification configuration to file
         /// </summary>
         public void SaveNotificationFile()
         {

@@ -55,7 +55,7 @@ namespace LcmsNet.Reporting
         public ReactiveCommand<Unit, Unit> CreateReportCommand { get; }
 
         /// <summary>
-        ///
+        /// Create the error report and copy it to the server error report shared folder
         /// </summary>
         private void CreateReport()
         {

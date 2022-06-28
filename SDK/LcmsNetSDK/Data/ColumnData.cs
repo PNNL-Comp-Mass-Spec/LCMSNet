@@ -152,10 +152,7 @@ namespace LcmsNetSDK.Data
             get => m_status;
             set
             {
-                //
-                // If the status has changed,
-                // let someone know.
-                //
+                // If the status has changed, let someone know.
                 var previousStatus = m_status;
                 if (this.RaiseAndSetIfChangedRetBool(ref m_status, value, nameof(Status)))
                 {

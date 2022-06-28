@@ -568,7 +568,6 @@ namespace FluidicsSDK.Base
         /// <summary>
         /// stateless devices should return -1
         /// </summary>
-        ///
         public abstract int CurrentState { get; set; }
 
         public bool Source { get; set; }

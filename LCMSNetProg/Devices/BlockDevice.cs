@@ -9,7 +9,7 @@ using LcmsNetSDK.Method;
 namespace LcmsNet.Devices
 {
     /// <summary>
-    ///
+    /// LC event device: Stop everything (?) for a set amount of time
     /// </summary>
     public class BlockDevice : IDevice
     {

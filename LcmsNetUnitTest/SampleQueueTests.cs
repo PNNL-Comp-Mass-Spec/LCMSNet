@@ -22,9 +22,7 @@ namespace LcmsnetUnitTest
         {
             if (q == null)
             {
-                //
                 // Create system data with columns.
-                //
                 var columnOne = new ColumnData
                 {
                     ID = 0,

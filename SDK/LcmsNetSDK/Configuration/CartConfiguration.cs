@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using LcmsNetSDK.Data;
 
 namespace LcmsNetSDK.Configuration
@@ -24,25 +25,8 @@ namespace LcmsNetSDK.Configuration
         /// <summary>
         /// Gets the number of enabled columns.
         /// </summary>
-        public static int NumberOfEnabledColumns
-        {
-            get
-            {
-                var n = 0;
-
-                //
-                // Figure out what columns are enabled or disabled.
-                //
-                foreach (var col in Columns)
-                {
-                    if (col.Status != ColumnStatus.Disabled)
-                    {
-                        n++;
-                    }
-                }
-                return n;
-            }
-        }
+        // Figure out what columns are enabled or disabled.
+        public static int NumberOfEnabledColumns => Columns.Count(col => col.Status != ColumnStatus.Disabled);
 
         /// <summary>
         /// Gets or sets the list of columns available.
@@ -65,10 +49,8 @@ namespace LcmsNetSDK.Configuration
             if (orderByFirst == false)
                 return orderList;
 
-            //
             // For every column add it to the build list,
             // if it is not disabled to run
-            //
             var tempList1 = new List<ColumnData>();
             var tempList2 = new List<ColumnData>();
             var ptrList = tempList1;

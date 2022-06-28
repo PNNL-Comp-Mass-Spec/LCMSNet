@@ -31,7 +31,6 @@ namespace LcmsNetSDK.Method
     /// <summary>
     /// An atomic object operation used by stages in a method.
     /// </summary>
-    ///
     [Serializable]
     public class LCEvent : ICloneable, IEquatable<LCEvent>
     {
@@ -103,10 +102,8 @@ namespace LcmsNetSDK.Method
 
         /// <summary>
         /// Gets or sets the duration for this action.
-        ///
-        /// Throws:
-        ///     classInvalidDurationException (value &lt; 0)
         /// </summary>
+        /// <exception cref="InvalidTimeSpanException">when set value &lt; 0</exception>
         public TimeSpan Duration
         {
             get => mtimespan_duration;

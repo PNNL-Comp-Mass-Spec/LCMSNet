@@ -31,9 +31,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Validator
                 return errors;
             }
 
-            //
             // We've validated the method, and the devices... Now we need to validate the PAL settings.
-            //
             if (string.IsNullOrEmpty(sample.PAL.Method))
                 errors.Add(new SampleValidationError("The PAL Method is not set.", SampleValidationErrorType.PalMethodNotSpecified));
 
@@ -51,9 +49,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Validator
                 errors.Add(new SampleValidationError("The dataset name is not correct.", SampleValidationErrorType.DatasetNameError));
             }
 
-            //
             // Make sure the volume is set.
-            //
             if (sample.Volume < CartConfiguration.MinimumVolume)
             {
                 errors.Add(new SampleValidationError("The Sample Volume is lower than the instrument can handle.", SampleValidationErrorType.InjectionVolumeOutOfRange));

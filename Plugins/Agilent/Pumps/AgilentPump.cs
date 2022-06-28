@@ -685,9 +685,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             pumpModule = new Instrument(CONST_DEFAULTTIMEOUT, CONST_DEFAULTTIMEOUT);
             pumpModule.ErrorOccurred += PumpErrorOccurred;
 
-            //
             // Try initial connection
-            //
             if (pumpModule.TryConnect(PortName, CONST_DEFAULTTIMEOUT) == false)
             {
                 errorMessage = "Could not connect to the Agilent Pumps.";
@@ -700,9 +698,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             PumpModel = communicationModule.Type;
             PumpSerial = communicationModule.Serial;
 
-            //
             // Channel for inputs
-            //
             commandDataChannel = communicationModule.CreateChannel("IN");
             if (commandDataChannel.TryOpen(ReadMode.Polling) == false)
             {
@@ -728,9 +724,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             GetPumpInformation();
             GetPumpStatus();
 
-            //
             // Open a list channel to read time tables.
-            //
             listDataChannel = communicationModule.CreateChannel("LI");
             if (listDataChannel.TryOpen(ReadMode.Polling) == false)
             {
@@ -739,9 +733,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return false;
             }
 
-            //
             // And an EV channel.Channel for errors or state events
-            //
             eventDataChannel = communicationModule.CreateChannel("EV");
             eventDataChannel.DataReceived += evChannel_DataReceived;
             if (eventDataChannel.TryOpen(ReadMode.Events) == false)
@@ -752,9 +744,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return false;
             }
 
-            //
             // Monitoring for the pumps
-            //
             monitorDataChannel = communicationModule.CreateChannel("MO");
             monitorDataChannel.DataReceived += monitorChannel_DataReceived;
             if (monitorDataChannel.TryOpen(ReadMode.Events) == false)
@@ -870,7 +860,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 //    var data = dataArray[1].Replace(";ACT:", ",");
                 //    data = data.Replace("COMP", "");
                 //    data = data.Replace("PRES", "");
-                //
+
                 //    var values = data.Split(',');
                 //    flowrate = Convert.ToDouble(values[0]);
                 //    pressure = Convert.ToDouble(values[1]);
@@ -988,7 +978,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         }
 
         /// <summary>
-        ///
+        /// Send a command to the Agilent pump
         /// </summary>
         /// <param name="command"></param>
         /// <param name="reply"></param>
@@ -1069,7 +1059,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// Sets the flow rate.
         /// </summary>
         /// <param name="newFlowRate">The new flow rate.</param>
-        ///
         [LCMethodEvent("Set Flow Rate", 1)]
         public void SetFlowRate(double newFlowRate)
         {
@@ -1094,7 +1083,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         //    {
         //        return;
         //    }
-        //
+
         //    var reply = "";
         //    if (newVolumeuL >= 0 && newVolumeuL <= 2000)
         //        SendCommand("MVOL " + newVolumeuL.ToString(CultureInfo.InvariantCulture),
@@ -1124,9 +1113,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             StartMethod(method);
 
-            //
             // We see if we ran over or not...if so then return failure, otherwise let it continue.
-            //
             var span = TimeKeeper.Instance.Now.Subtract(start);
 
             var timer = new TimerDevice();
@@ -1139,22 +1126,17 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="method">Method to run stored on the pumps.</param>
         public void StartMethod(string method)
         {
-            //
             // Make sure we have record of the method
-            //
             if (availableMethods.ContainsKey(method) == false)
                 throw new Exception(string.Format("The method {0} does not exist.", method));
 
-            //
             // Then send commands to start the method
-            //
             var methodData = availableMethods[method];
             var reply = "";
 
-            //
             // The reason why we delete the time table, is to clear out any
             // existing methods that might have been downloaded to the pump.
-            //
+
             // For example, if a time table was loaded and has entry:
             //     5 mins  - 30% B
             //     75 mins - 40%  B
@@ -1165,7 +1147,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //     65 mins - 0%   B
             // when the time table is done the pumps may resort back to the final
             // entries and set the %B to 40 instead of the 0 we desire.
-            //
             SendCommand("AT:DEL ", out reply, "Clearing time table.");
             SendCommand(methodData, out reply, "Loading method.");
             SendCommand("STRT", out reply, "Attempting to start method.");

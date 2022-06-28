@@ -140,10 +140,7 @@ namespace LcmsNetSDK.Devices
         /// <returns></returns>
         public bool Initialize(ref string errorMessage)
         {
-            //
             // No initialization required.
-            //
-
             return true;
         }
 

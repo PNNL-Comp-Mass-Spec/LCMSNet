@@ -159,11 +159,11 @@ namespace LcmsNet.Method
         // report status and interrogate when things should be done, without having
         // to use locks or critical sections that will chew up time
         // spent by the column thread actually running the methods.
-        //
+
         // In a sense we hide latency of running the experiment here, in the scheduler.
         // We do all the administrative tasks, and let the column thread just set
         // threaded events.
-        //
+
         // A note: The above is no longer strictly true. The code for handling the administrative tasks does indeed
         // reside here in the scheduler, but it is in the form of callbacks to events that are run on the column
         // threads themselves. This is a more reliable way to synchronize the scheduler with the columns, since
@@ -171,10 +171,8 @@ namespace LcmsNet.Method
         // scheduler thread to get around to dealing with the report.
         readonly SampleData[] samples;
 
-        //
         // These two arrays tell us when the sample should finish
         // and what event of the LC method the current column thread is on.
-        //
         readonly DateTime[] sampleEndTime;
         readonly int[] currentEvent;
 
@@ -452,7 +450,7 @@ namespace LcmsNet.Method
                     //    dataClone.SetActualLcMethod();
                     //    dataClone.RunningStatus = data.RunningStatus;
                     //}
-                    //
+
                     //samples[sampleColumnID] = dataClone;
 
                     m_columnWorkers[sampleColumnID].RunWorkerAsync(new ColumnArgs(data));
@@ -494,9 +492,7 @@ namespace LcmsNet.Method
 
                 switch (eventNumber)
                 {
-                    //
                     // Stops samples from being run.
-                    //
                     case CONST_EVENT_NUM_STOP_SAMPLES:
                         m_stopSamples.Reset();
                         Print("Killing all samples on all columns.", CONST_VERBOSE_EVENTS);

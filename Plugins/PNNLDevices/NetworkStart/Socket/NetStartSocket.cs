@@ -230,9 +230,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                 }
             }
 
-            //
             // Alert listeners that we have new methods!
-            //
             if (MethodNames != null)
             {
                 var methodObjects = new List<object>();
@@ -324,9 +322,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         {
             if (Emulation)
             {
-                //
                 // Emulate starting an acquisition
-                //
                 return true;
             }
 
@@ -359,29 +355,21 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 
                     outputString = streamReader.ReadLine();     //RECEIVED
 
-                    //
                     // Now see if the system is ready
-                    //
                     SendMessage(streamWriter, NetStartMessageTypes.Query, i++, "ACQREADY", arguments);
                     outputString = streamReader.ReadLine();     //READY
 
                     if (UnpackMessage(outputString).Descriptor == "ACQREADY")
                     {
-                        //
                         // Tell the system to prepare for acquisition
-                        //
                         SendMessage(streamWriter, NetStartMessageTypes.Post, i++, "ACQPREPARE", arguments);
                         outputString = streamReader.ReadLine();     // Read off auto-response
 
-                        //
                         // Then ask if it is prepared...this should be in some kind of loop
-                        //
                         {
                             SendMessage(streamWriter, NetStartMessageTypes.Query, i++, "ACQPREPARED", arguments);
 
-                            //
                             // Check to see if it is prepared...
-                            //
                             outputString = streamReader.ReadLine();     // Read off response for PREPARED
                             var preparedMessage = UnpackMessage(outputString);
                             if (preparedMessage.ArgumentList.Count > 0 && preparedMessage.ArgumentList[0].Value.ToUpper() == "TRUE")
@@ -427,9 +415,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 
             if (Emulation)
             {
-                //
                 // Emulate stopping an acquisition
-                //
                 return true;
             }
 

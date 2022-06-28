@@ -105,7 +105,7 @@ namespace LcmsNetPlugins.VICI.Valves
         public int LastSentPosition { get; private set; }
 
         /// <summary>
-        ///
+        /// Number of positions in the valve (software setting)
         /// </summary>
         [DeviceSavedSetting("NumberOfPositions")]
         public int NumberOfPositions
