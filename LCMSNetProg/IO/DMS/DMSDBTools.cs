@@ -68,8 +68,6 @@ namespace LcmsNet.IO.DMS
             UseConnectionPooling = true;
         }
 
-        #region Instance
-
         private SqlConnection connection;
         private string lastConnectionString = "";
         private DateTime lastConnectionAttempt = DateTime.MinValue;
@@ -231,10 +229,6 @@ namespace LcmsNet.IO.DMS
                 connection?.Dispose();
             }
         }
-
-        #endregion
-
-        #region Private Methods
 
         /// <summary>
         /// Loads DMS configuration from file
@@ -494,8 +488,6 @@ namespace LcmsNet.IO.DMS
             }
             return retStr;
         }
-
-        #endregion
 
         /// <summary>
         /// Gets a list of instrument carts from DMS and stores it in cache

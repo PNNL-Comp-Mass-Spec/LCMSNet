@@ -36,8 +36,6 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
             Closed = 2
         }
 
-        #region Constructors
-
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -51,10 +49,6 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
             AnalogVoltageThreshold = 2.5;
         }
 
-        #endregion
-
-        #region Members
-
         private double voltage;
         private double analogVoltageThreshold;
         private double minimumAnalogVoltage;
@@ -63,10 +57,6 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         private T selectedPort;
         private bool isAnalog;
         private ContactClosureState status = ContactClosureState.Unknown;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The Port options to show in the ComboBox
@@ -150,10 +140,6 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
             set => this.RaiseAndSetIfChanged(ref status, value);
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Get the Default view for this view model
         /// </summary>
@@ -167,7 +153,5 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// Handles reading the status of the signal when the user presses the button to do so.
         /// </summary>
         protected abstract void ReadStatus();
-
-        #endregion
     }
 }

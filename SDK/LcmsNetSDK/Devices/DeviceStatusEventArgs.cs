@@ -30,8 +30,6 @@ namespace LcmsNetSDK.Devices
 
         public INotifier Notifier { get; }
 
-        #region Properties
-
         /// <summary>
         /// Gets the device status.
         /// </summary>
@@ -51,7 +49,5 @@ namespace LcmsNetSDK.Devices
         /// How the event should be logged
         /// </summary>
         public DeviceEventLoggingType LoggingType { get; set; }
-
-        #endregion
     }
 }

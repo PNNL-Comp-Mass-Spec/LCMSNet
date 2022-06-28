@@ -6,16 +6,10 @@ namespace LcmsNetSDK.Devices
 {
     public interface IDevice : INotifier
     {
-        #region Events
-
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
         event EventHandler DeviceSaveRequired;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Calls an initialization sequence for the device to perform after construction.
@@ -51,10 +45,6 @@ namespace LcmsNetSDK.Devices
         /// <param name="parameters">Parameter data to use when writing output.</param>
         void WritePerformanceData(string directoryPath, string methodName, object[] parameters);
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets the version name of the hardware if applicable.
         /// </summary>
@@ -84,7 +74,5 @@ namespace LcmsNetSDK.Devices
         /// Gets or sets whether the device is emulation mode or not.
         /// </summary>
         bool Emulation { get; set; }
-
-        #endregion
     }
 }

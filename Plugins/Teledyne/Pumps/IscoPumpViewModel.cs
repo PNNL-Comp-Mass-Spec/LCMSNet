@@ -15,8 +15,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 {
     public class IscoPumpViewModel : BaseDeviceControlViewModelReactive, IDeviceControl
     {
-        #region "Constructors"
-
         public IscoPumpViewModel()
         {
             ControlModesComboBoxOptions = Enum.GetValues(typeof(IscoControlMode)).Cast<IscoControlMode>()
@@ -85,10 +83,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             SetPortSettingsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetPortProperties));
             SetOperationModeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetOperationMode));
         }
-
-        #endregion
-
-        #region "Class variables"
 
         public class RefillData : ReactiveObject
         {
@@ -177,10 +171,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         private int portWriteTimeout = 500;
         private int portBaudRate = 9600;
 
-        #endregion
-
-        #region "Properties"
-
         public ReadOnlyCollection<IscoPumpDisplayViewModel> PumpDisplays { get; }
         public ReadOnlyCollection<IscoControlMode> ControlModesComboBoxOptions { get; }
         public ReadOnlyCollection<int> PumpCountComboBoxOptions { get; }
@@ -256,10 +246,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             set => pump.Emulation = value;
         }
 
-        #endregion
-
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> SetControlModeCommand { get; }
         public ReactiveCommand<Unit, Unit> StartAllCommand { get; }
         public ReactiveCommand<Unit, Unit> StopAllCommand { get; }
@@ -269,10 +255,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         public ReactiveCommand<Unit, Unit> UpdateDisplaysCommand { get; }
         public ReactiveCommand<Unit, Unit> SetPortSettingsCommand { get; }
         public ReactiveCommand<Unit, Unit> SetOperationModeCommand { get; }
-
-        #endregion
-
-        #region "Methods"
 
         public override UserControl GetDefaultView()
         {
@@ -421,10 +403,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 LimitsList[9].SetLimit(indx, RefillRates[indx].MaxRefillRate.ToString("0.000"));
             }
         }
-
-        #endregion
-
-        #region "Form event handlers"
 
         /// <summary>
         /// Starts refill for a single pump
@@ -719,10 +697,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             }
         }
 
-        #endregion
-
-        #region "Misc event handlers"
-
         /// <summary>
         /// Refresh complete handler
         /// </summary>
@@ -848,7 +822,5 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             LogDebugMessage(msg);
         }
 #endif
-
-        #endregion
     }
 }

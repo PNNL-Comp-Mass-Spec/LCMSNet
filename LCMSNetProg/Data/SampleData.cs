@@ -33,18 +33,12 @@ namespace LcmsNet.Data
         /// </summary>
         public static readonly Regex NameValidationRegex = new Regex(ValidNameRegexString, RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
-        #region Delegate Definitions
-
         /// <summary>
         /// Delegate method definition to be called when a sample is modified.
         /// </summary>
         /// <param name="modifiedData">Modified sample.</param>
         /// <param name="propertyName">Name of the property that was changed.</param>
         public delegate void DelegateSamplePropertyChangedHandler(SampleData modifiedData, string propertyName);
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Default constructor
@@ -119,8 +113,6 @@ namespace LcmsNet.Data
             return new SampleData(this, cloneDmsData);
         }
 
-        #endregion
-
         public static string BuildCartColumnName(SampleData sample)
         {
             var cartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
@@ -173,8 +165,6 @@ namespace LcmsNet.Data
             return SequenceID.ToString();
         }
 
-        #region "Members"
-
         private string name = "";
 
         /// <summary>
@@ -224,10 +214,6 @@ namespace LcmsNet.Data
 
         private string sampleErrors = null;
         private int dmsRequestId = 0;
-
-        #endregion
-
-        #region "Properties"
 
         /// <summary>
         /// Name of the sample (also used for the file name)
@@ -432,10 +418,6 @@ namespace LcmsNet.Data
             set => this.RaiseAndSetIfChanged(ref isChecked, value);
         }
 
-        #endregion
-
-        #region ITriggerFilePalData Implementation
-
         /// <inheritdoc />
         public virtual DateTime RunStart => ActualLCMethod?.ActualStart ?? DateTime.MinValue;
 
@@ -455,10 +437,6 @@ namespace LcmsNet.Data
                 return "";
             }
         }
-
-        #endregion
-
-        #region "Methods"
 
         /// <summary>
         /// Set method name and column index without any extra lookups.
@@ -522,10 +500,6 @@ namespace LcmsNet.Data
             }
         }
 
-        #endregion
-
-        #region "PropertyChanged" event handlers
-
         private void PalDataChanged(object sender, PropertyChangedEventArgs args)
         {
             if (args.PropertyName.Equals(nameof(PAL.PALTray)) || args.PropertyName.Equals(nameof(PAL.Well)))
@@ -533,10 +507,6 @@ namespace LcmsNet.Data
                 OnPropertyChanged(nameof(PAL));
             }
         }
-
-        #endregion
-
-        #region "IEquatable Implementation"
 
         public bool Equals(SampleData other)
         {
@@ -558,10 +528,6 @@ namespace LcmsNet.Data
             return UniqueID.GetHashCode();
         }
 
-        #endregion
-
-        #region "INotifyPropertyChanged implementation"
-
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -569,7 +535,5 @@ namespace LcmsNet.Data
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        #endregion
     }
 }

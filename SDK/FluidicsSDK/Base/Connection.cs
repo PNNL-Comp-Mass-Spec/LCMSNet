@@ -8,7 +8,6 @@ namespace FluidicsSDK.Base
 {
     public sealed class Connection : IRenderable
     {
-        #region Members
         // the list of line primitives that make up the device
         private List<GraphicsPrimitive> graphicPrimitives;
 
@@ -25,10 +24,6 @@ namespace FluidicsSDK.Base
         //we want each connection to have a unique id, this tracks the next available id..first connection made will get ID 0, next connection 1, next connection 2, etc.
         //no need for it to be a GUUID or such, since it's incredibly unlikely that any program would need 2^64 -1 ports.
         private static long availableId;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// empty constructor..does not create a useful connection, must still have
@@ -262,9 +257,6 @@ namespace FluidicsSDK.Base
 
             return P1;
         }
-        #endregion
-
-        #region Properties
 
 
         /// <summary>
@@ -337,7 +329,5 @@ namespace FluidicsSDK.Base
         public double Diameter { get; set; }
 
         public ConnectionStyles ConnectionStyle { get; set; }
-
-        #endregion
     }
 }

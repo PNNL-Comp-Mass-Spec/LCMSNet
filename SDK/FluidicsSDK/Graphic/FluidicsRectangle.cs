@@ -5,13 +5,7 @@ namespace FluidicsSDK.Graphic
 {
     public class FluidicsRectangle : GraphicsPrimitive
     {
-        #region Members
-
         Rect m_rect;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// class constructor
@@ -85,10 +79,6 @@ namespace FluidicsSDK.Graphic
             m_rect.Y += relativeValues.Y;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Property to determine the location of the rectangle
         /// </summary>
@@ -111,7 +101,5 @@ namespace FluidicsSDK.Graphic
         /// The boundaries of the primitive
         /// </summary>
         public override Rect Bounds => new Rect(m_rect.Location, m_rect.Size);
-
-        #endregion
     }
 }

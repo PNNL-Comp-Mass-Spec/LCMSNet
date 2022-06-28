@@ -15,7 +15,6 @@ namespace FluidicsSDK
     /// </summary>
     public class FluidicsModerator : IModelCheckController
     {
-        #region Members
         private static FluidicsModerator m_instance;
         private readonly ConnectionManager m_conManager;
         private readonly FluidicsDeviceManager m_fluidicsDevManager;
@@ -33,10 +32,6 @@ namespace FluidicsSDK
         private readonly bool m_holdModelUpdates;
         private readonly List<IFluidicsModelChecker> m_fluidicsCheckers;
         private int m_suspendCounter;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Private class constructor, private due to the fluidics moderator being a singleton.
@@ -125,6 +120,7 @@ namespace FluidicsSDK
             m_suspendCounter++;
 
         }
+
         /// <summary>
         /// Causes any model updates to immediately resume (and invoke).
         /// </summary>
@@ -665,10 +661,6 @@ namespace FluidicsSDK
             OnModelChanged();
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// the "world view" of the fluidics system. All fluidics devices exist/move around within this world view.
         /// it controls the boundaries
@@ -690,9 +682,6 @@ namespace FluidicsSDK
         /// </summary>
         public double DrawingScaleFactor { get; set; }
 
-        #endregion
-
-        #region EventHandlers
         /// <summary>
         /// Event handler for the FluidicsDeviceManager's Device change events
         /// </summary>
@@ -718,7 +707,6 @@ namespace FluidicsSDK
             //System.Diagnostics.Trace.WriteLine("PortChange sender: " + sender.ToString());
             OnModelChanged();
         }
-        #endregion
 
         public IEnumerable<Connection> GetConnections()
         {

@@ -113,8 +113,6 @@ namespace LcmsNet.Logging.ViewModels
             messageList.Clear();
         }
 
-        #region Members
-
         /// <summary>
         /// Level of messages to show.  Messages greater than are ignored.
         /// </summary>
@@ -127,10 +125,6 @@ namespace LcmsNet.Logging.ViewModels
 
         private readonly SourceList<string> messageList = new SourceList<string>();
         private readonly SourceList<string> errorMessages = new SourceList<string>();
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the message filter level.  Messages greater than level are not shown.
@@ -173,7 +167,5 @@ namespace LcmsNet.Logging.ViewModels
 
         public ReactiveCommand<Unit, Unit> AcknowledgeErrorsCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearMessagesCommand { get; }
-
-        #endregion
     }
 }

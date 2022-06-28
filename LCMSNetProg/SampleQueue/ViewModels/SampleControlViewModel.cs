@@ -38,8 +38,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public ObservableCollectionExtended<SampleViewModel> SelectedSamples { get; } = new ObservableCollectionExtended<SampleViewModel>();
 
-        #region Manipulation Enablement
-
         /// <summary>
         /// Sets enabled to true if we have data and valid columns
         /// </summary>
@@ -71,18 +69,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             protected set => this.RaiseAndSetIfChanged(ref backColor, value);
         }
 
-        #endregion
-
-        #region Constants
-
         /// <summary>
         /// String that should be displayed when new data is added but is not initialized.
         /// </summary>
         public const string CONST_NOT_SELECTED = "(Select)";
-
-        #endregion
-
-        #region Members
 
         private bool autoScroll = true;
         private readonly ObservableAsPropertyHelper<bool> itemsSelected;
@@ -99,10 +89,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public bool ItemsSelected => this.itemsSelected?.Value ?? false;
 
         public SampleDataManager SampleDataManager { get; }
-
-        #endregion
-
-        #region Constructors and Initialization
 
         /// <summary>
         /// Constructor that accepts dmsView and sampleDataManager
@@ -131,10 +117,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             SampleDataManager = new SampleDataManager();
         }
 
-        #endregion
-
-        #region Virtual Queue Methods
-
         /// <summary>
         /// Adds a sequence of samples to the manager.
         /// </summary>
@@ -145,18 +127,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             SampleDataManager.AddSamplesToManager(samples, insertIntoUnused);
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets or sets the DMS View form.
         /// </summary>
         public virtual DMSDownloadViewModel DMSView { get; }
-
-        #endregion
-
-        #region Utility Methods
 
         public void AddDateCartnameColumnIDToDatasetName()
         {
@@ -356,10 +330,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        #endregion
-
-        #region Queue User Interface Methods
-
         /// <summary>
         /// Adds a new sample to the list view.
         /// </summary>
@@ -465,10 +435,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        #endregion
-
-        #region Column visibility
-
         private bool checkboxColumnVisible = true;
         private bool statusColumnVisible = true;
         private bool columnIdColumnVisible = true;
@@ -553,10 +519,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             set => this.RaiseAndSetIfChanged(ref runOrderColumnVisible, value);
         }
 
-        #endregion
-
-        #region Form Control Event Handlers
-
         /// <summary>
         /// Gets or sets how to handle samples being deleted from columns
         /// </summary>
@@ -607,14 +569,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        #endregion
-
         public void RestoreUserUIState()
         {
             ScrollIntoView(SelectedSample);
         }
-
-        #region ReactiveCommands
 
         public ReactiveCommand<Unit, SampleData> AddBlankCommand { get; protected set; }
         public ReactiveCommand<Unit, SampleData> AddBlankToUnusedCommand { get; protected set; }
@@ -652,8 +610,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             ClearAllSamplesCommand = ReactiveCommand.Create(() => this.ClearSamplesConfirm());
             ClipboardPasteCommand = ReactiveCommand.CreateFromTask(ImportQueueFromClipboard);
         }
-
-        #endregion
 
         private void PerformAutoScroll()
         {

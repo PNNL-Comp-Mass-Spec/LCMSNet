@@ -120,8 +120,6 @@ namespace LcmsNet.Reporting
             }
         }
 
-        #region
-
         /// <summary>
         /// Creates an image from a control as a screenshot.
         /// </summary>
@@ -257,7 +255,5 @@ namespace LcmsNet.Reporting
         {
             ZipFile.CreateFromDirectory(sourcePath, zipPath);
         }
-
-        #endregion
     }
 }

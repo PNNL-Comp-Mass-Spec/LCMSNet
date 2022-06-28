@@ -22,8 +22,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                                  "Auto-Samplers")]
     public class Pal : IDevice, IAutoSampler, IFluidicsSampler
     {
-        #region Members
-
         /// <summary>
         /// An object which can use the PAL dll functions.
         /// </summary>
@@ -92,10 +90,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         private const int CONST_PALERR_PORTINUSE = 3;
         private const int CONST_WAITTIMEOUT = 10000; //milliseconds
 
-        #endregion
-
-        #region Events
-
         /// <summary>
         /// Indicates that a change requiring saving in the Fluidics designer has occurred.
         /// </summary>
@@ -131,10 +125,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// </summary>
         public event DelegateDeviceHasData Methods;
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -145,9 +135,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             AbortEvent = new System.Threading.ManualResetEvent(false);
             StatusPollDelay = 1;
         }
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The list of trays addressable by the Pal. Populated by <see cref="ListTrays()"/>
@@ -353,10 +340,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.Component;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Indicates that the device is not busy and can accept commands.
@@ -1127,10 +1110,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             return name;
         }
 
-        #endregion
-
-        #region INotifer Methods
-
         public List<string> GetStatusNotificationList()
         {
             return new List<string>() { "Status", "Done Injecting start method", "continue method", "continue method end" };
@@ -1140,10 +1119,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             return new List<string>() { "AspirationError" };
         }
-
-        #endregion
-
-        #region IDevice Data Provider Methods
 
         /// <summary>
         /// Registers the method with a data provider.
@@ -1175,8 +1150,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                     break;
             }
         }
-
-        #endregion
 
         /// <summary>
         /// Writes any performance data for the last method used.

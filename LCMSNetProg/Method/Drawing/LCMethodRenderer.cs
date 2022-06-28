@@ -37,8 +37,6 @@ namespace LcmsNet.Method.Drawing
         protected readonly double SixPt = 8.0; // 6.0 * 4.0 / 3.0;
         protected readonly double EightPt = 10.667; // 8.0 * 4.0 / 3.0;
 
-        #region Time Conversions
-
         /// <summary>
         /// Finds the start time and duration of the samples provided.
         /// </summary>
@@ -60,10 +58,6 @@ namespace LcmsNet.Method.Drawing
             }
             duration = end.Subtract(start);
         }
-
-        #endregion
-
-        #region Data Construction
 
         /// <summary>
         /// Creates a map from a device to a color.
@@ -102,20 +96,12 @@ namespace LcmsNet.Method.Drawing
             return deviceMap;
         }
 
-        #endregion
-
-        #region CONSTANTS
-
         protected const float CONST_HEADER_PADDING = .25F;
         protected const float CONST_HEADER_PADDING_MAX = 27.0F;
         protected const float CONST_TRIANGLE_HEIGHT = 15.0F;
         protected const float CONST_MIN_HEIGHT = 8.0F;
         protected const float CONST_MID_HEIGHT = 30.0F;
         protected const float CONST_MAX_HEIGHT = 60.0F;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the pixel padding to enforce against the clipping region bounds.
@@ -142,10 +128,6 @@ namespace LcmsNet.Method.Drawing
         public int StartEventIndex { get; set; }
 
         public int StopEventIndex { get; set; }
-
-        #endregion
-
-        #region Rendering
 
         /// <summary>
         /// Draws when the instrument is acquiring data.
@@ -232,7 +214,6 @@ namespace LcmsNet.Method.Drawing
 
                 //if (TimelineDrawRelativeTimes == false)
                 //    dateString = start.AddSeconds(currentTime).ToShortTimeString();
-
 
                 var x = bounds.X + (pixelsPerDate * Convert.ToSingle(i));
 
@@ -437,7 +418,6 @@ namespace LcmsNet.Method.Drawing
                 if (colorMap.ContainsKey(lcEvent.Device))
                     color = colorMap[lcEvent.Device];
 
-
                 if (lcEvent.OptimizeWith)
                 {
                     var alignedBounds = new Rect(x, y - 15.0F, eventWidth, bounds.Height + 20.0F);
@@ -600,7 +580,5 @@ namespace LcmsNet.Method.Drawing
 
             RenderLCMethod(graphics, bounds, methods, startTime, duration, colorMap, progress);
         }
-
-        #endregion
     }
 }

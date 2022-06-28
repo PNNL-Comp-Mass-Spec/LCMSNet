@@ -24,7 +24,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             Closed = 0x2,
         }
 
-        #region Members
         /// <summary>
         /// The labjack used for reading the ready signal
         /// </summary>
@@ -54,9 +53,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         private const int CONST_DIGITALHIGH = 1;
         private const int CONST_ANALOGLOW = 0;
         private const int CONST_DIGITALLOW = 0;
-        #endregion
 
-        #region Events
         /// <summary>
         /// Fired when the status changes.
         /// </summary>
@@ -70,9 +67,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// Fired when a property changes in the device.
         /// </summary>
         public event EventHandler DeviceSaveRequired;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Default constructor--no labjack assigned!
         /// </summary>
@@ -116,10 +111,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             labjackPort = newPort;
             deviceName = "Contact Closure Reader";
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -201,10 +192,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             get => labjackDevice.LocalID;
             set => labjackDevice.LocalID = value;
         }
-
-        #endregion
-
-        #region Methods
 
         //Initialize/Shutdown don't really apply
         //Maybe confirm that we can communicate to the labjack? I don't know.
@@ -315,6 +302,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         {
             return ReadStatusAnalog(timeout, labjackPort, voltage, target);
         }
+
         /// <summary>
         /// Reads a port's status, returning a bool for success if the state was matched
         /// This is intended for use on the analog output ports--if it is a digital
@@ -421,6 +409,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         {
             return ReadStateAnalog(timeout, labjackPort, voltage, target);
         }
+
         /// <summary>
         /// Read a port's status
         /// This is intended for use on the analog input ports--if it is a digital
@@ -476,16 +465,13 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             return deviceName;
         }
 
-        #endregion
-
-        #region IDevice Data Provider Methods
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
+
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
-        #endregion
 
         /// <summary>
         /// Writes any performance data cached to directory path provided.
@@ -497,8 +483,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         {
         }
 
-        #region IDevice Members
-
         /// <summary>
         /// Gets or sets the error type of last error.
         /// </summary>
@@ -509,10 +493,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         /// </summary>
         public DeviceType DeviceType => DeviceType.Component;
 
-        #endregion
-
-        #region IDevice Members
-
         public List<string> GetStatusNotificationList()
         {
             return new List<string>() { "Status" };
@@ -522,8 +502,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
         {
             return new List<string>() { "Read State Not Matched", "Read Failure" };
         }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

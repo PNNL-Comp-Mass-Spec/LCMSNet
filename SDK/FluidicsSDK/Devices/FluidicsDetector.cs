@@ -42,6 +42,7 @@ namespace FluidicsSDK.Devices
         {
             return ClosureType;
         }
+
         public override int CurrentState
         {
             get => -1;

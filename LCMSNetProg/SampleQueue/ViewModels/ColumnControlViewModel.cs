@@ -143,16 +143,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public override int NumFrozenColumns => 0;
 
-        #region Members
-
         /// <summary>
         /// Data object reference to synchronize column data with.
         /// </summary>
         private ColumnData m_columnData;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the column number id for this control.
@@ -162,10 +156,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             get => m_columnData;
             private set => this.RaiseAndSetIfChanged(ref m_columnData, value);
         }
-
-        #endregion
-
-        #region Commands
 
         public ReactiveCommand<Unit, SampleData> AddBlankAppendCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> MoveToColumnCommand { get; protected set; }
@@ -181,10 +171,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
             MoveToColumnCommand = ReactiveCommand.Create(() => this.MoveSamplesToColumn(enumColumnDataHandling.CreateUnused), this.WhenAnyValue(x => x.ItemsSelected));
         }
-
-        #endregion
-
-        #region Column Event Handlers and Methods
 
         /// <summary>
         /// Sets the user controls status
@@ -203,10 +189,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 BackColor = Brushes.White;
             }
         }
-
-        #endregion
-
-        #region Sample Queue Management Interface Methods
 
         /// <summary>
         /// Adds a new sample to the list view.
@@ -372,7 +354,5 @@ namespace LcmsNet.SampleQueue.ViewModels
                 SelectedSample = Samples.First(x => x.Sample.Equals(selectedSamples.First()));
             }
         }
-
-        #endregion
     }
 }

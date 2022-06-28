@@ -53,8 +53,6 @@ namespace LcmsNet.Reporting
         public ReadOnlyObservableCollection<LCMethod> LCMethodsList { get; }
         public ObservableCollectionExtended<LCMethod> LCMethodsSelected { get; }
 
-        #region Button Handler Events
-
         public ReactiveCommand<Unit, Unit> CreateReportCommand { get; }
 
         /// <summary>
@@ -72,10 +70,6 @@ namespace LcmsNet.Reporting
 
             ErrorReportBuilder.CopyReportToServer(path, cartName, errorReportPath);
         }
-
-        #endregion
-
-        #region Method Manager Updates
 
         /// <summary>
         /// Removes the LC Method from the listbox.
@@ -104,7 +98,5 @@ namespace LcmsNet.Reporting
                 }
             });
         }
-
-        #endregion
     }
 }

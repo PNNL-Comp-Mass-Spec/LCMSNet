@@ -10,8 +10,6 @@ namespace FluidicsSDK.Graphic
     /// </summary>
     public abstract class GraphicsPrimitive
     {
-        #region Members
-
         /// <summary>
         ///   Should the object drawn be filled with the FillColor or not.
         /// </summary>
@@ -50,10 +48,6 @@ namespace FluidicsSDK.Graphic
         private static readonly Color DEFAULT_HIGHLIGHT = Colors.DarkGray;
         private static readonly Color DEFAULT_COLOR = Colors.Black;
         private static readonly Color DEFAULT_ERROR = Colors.Red;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         ///  Base class constructor
@@ -130,10 +124,6 @@ namespace FluidicsSDK.Graphic
         public abstract bool Contains(Point point, int max_variance);
 
         public abstract void MoveBy(Point relativeValues);
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// toggle fill status of graphics object. True to fill object, False not to.
@@ -224,7 +214,5 @@ namespace FluidicsSDK.Graphic
         /// The boundaries of the primitive
         /// </summary>
         public abstract Rect Bounds { get; }
-
-        #endregion
     }
 }

@@ -26,8 +26,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
     {
         private const string CONST_PUMP_METHOD_PATH = "PumpMethods";
 
-        #region Constructors
-
         /// <summary>
         /// The default Constructor.
         /// </summary>
@@ -143,10 +141,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
         }
 
-        #endregion
-
-        #region Members
-
         /// <summary>
         /// A pump object to use.
         /// </summary>
@@ -177,10 +171,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private readonly ObservableAsPropertyHelper<string> pumpSerial;
         private readonly ObservableAsPropertyHelper<string> pumpFirmware;
         private readonly ObservableAsPropertyHelper<PumpState> pumpState;
-
-        #endregion
-
-        #region Properties
 
         public ReadOnlyCollection<AgilentPumpModes> ModeComboBoxOptions { get; }
         public ReadOnlyObservableCollection<string> MethodComboBoxOptions { get; }
@@ -292,10 +282,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             set => this.RaiseAndSetIfChanged(ref newModuleName, value);
         }
 
-        #endregion
-
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> SetFlowRateCommand { get; }
         public ReactiveCommand<Unit, double> ReadFlowRateCommand { get; }
         //public ReactiveCommand<Unit, Unit> SetMixerVolumeCommand { get; }
@@ -321,10 +307,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; }
         public ReactiveCommand<Unit, Unit> IdentifyCommand { get; }
 
-        #endregion
-
-        #region Methods
-
         public override UserControl GetDefaultView()
         {
             return new AgilentPumpView();
@@ -338,10 +320,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         //{
         //    return classDeviceManager.Manager.RemoveDevice(this.Device);
         //}
-
-        #endregion
-
-        #region Plotting and Monitoring Data Handling
 
         /// <summary>
         /// Initialize the plots for monitoring data.
@@ -357,10 +335,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             PumpDisplay.DisplayMonitoringData(sender, args);
         }
-
-        #endregion
-
-        #region Pump Event Handlers and methods
 
         private void PumpAgilent_NewMethodAvailable(object sender, EventArgs e)
         {
@@ -454,10 +428,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //#endif
         }
 
-        #endregion
-
-        #region Control Event Handlers
-
         /// <summary>
         /// Saves the Pump method to file.
         /// </summary>
@@ -541,7 +511,5 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             Pump.PortName = SelectedComPort;
         }
-
-        #endregion
     }
 }

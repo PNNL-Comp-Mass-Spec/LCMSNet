@@ -6,16 +6,10 @@ namespace FluidicsSDK.Graphic
 {
     public class FluidicsLine : GraphicsPrimitive
     {
-        #region Members
-
         // origination of line
         private Point m_orig;
         // termination of line
         private Point m_term;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// class constructor
@@ -81,9 +75,6 @@ namespace FluidicsSDK.Graphic
             m_orig.Y += relativeValues.Y;
             m_term.Y += relativeValues.Y;
         }
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// property for the size of the line..only throws an error since lines don't have a size
@@ -133,7 +124,5 @@ namespace FluidicsSDK.Graphic
         //var maxY = Math.Max(Origin.Y, Term.Y);
         //return new Rect(minX, minY, maxX - minX, maxY - minY);
         public override Rect Bounds => new Rect(Origin, Term);
-
-        #endregion
     }
 }

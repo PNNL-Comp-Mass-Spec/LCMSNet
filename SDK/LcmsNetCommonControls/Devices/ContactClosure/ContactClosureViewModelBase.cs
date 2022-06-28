@@ -15,8 +15,6 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
     /// <typeparam name="T">Enum, with the output port options</typeparam>
     public abstract class ContactClosureViewModelBase<T> : BaseDeviceControlViewModelReactive, IDeviceControl where T : struct
     {
-        #region Constructors
-
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -27,18 +25,10 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
             SendPulseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SendPulse()));
         }
 
-        #endregion
-
-        #region Members
-
         private int pulseLength;
         private double voltage;
         private double normalVoltage;
         private T selectedPort;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The Port options to show in the ComboBox
@@ -101,10 +91,6 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
             set => this.RaiseAndSetIfChanged(ref selectedPort, value);
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Get the Default view for this view model
         /// </summary>
@@ -118,7 +104,5 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         /// Handles sending a pulse to the Contact Closure when the user presses the button to do so.
         /// </summary>
         protected abstract void SendPulse();
-
-        #endregion
     }
 }

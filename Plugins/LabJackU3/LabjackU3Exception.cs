@@ -11,10 +11,12 @@ namespace LcmsNetPlugins.LabJackU3
             : base()
         {
         }
+
         public LabjackU3Exception(string message)
             : base(message)
         {
         }
+
         public LabjackU3Exception(string message, Exception ex)
             : base(message, ex)
         {

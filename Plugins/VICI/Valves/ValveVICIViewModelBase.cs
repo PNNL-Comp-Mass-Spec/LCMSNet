@@ -14,8 +14,6 @@ namespace LcmsNetPlugins.VICI.Valves
 {
     public abstract class ValveVICIViewModelBase : BaseDeviceControlViewModelReactive, IDeviceControl
     {
-        #region Constructors
-
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -59,10 +57,6 @@ namespace LcmsNetPlugins.VICI.Valves
             ComPort = valve.Port;
         }
 
-        #endregion
-
-        #region Members
-
         //public ValveEventListener ValveEventListener;
 
         protected readonly bool IsInDesignMode = false;
@@ -74,10 +68,6 @@ namespace LcmsNetPlugins.VICI.Valves
         private bool valveControlTabSelected = false;
         private SerialPort comPort;
         private ValveVICIBase valve = null;
-
-        #endregion
-
-        #region Properties
 
         public ReadOnlyObservableCollection<char> ValveIdComboBoxOptions { get; }
 
@@ -120,10 +110,6 @@ namespace LcmsNetPlugins.VICI.Valves
             private set => this.RaiseAndSetIfChanged(ref comPort, value);
         }
 
-        #endregion
-
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> ClearValveIdCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshValveIdCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshValvePositionCommand { get; }
@@ -131,10 +117,6 @@ namespace LcmsNetPlugins.VICI.Valves
         public ReactiveCommand<Unit, Unit> OpenPortCommand { get; }
         public ReactiveCommand<Unit, Unit> ClosePortCommand { get; }
         public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; }
-
-        #endregion
-
-        #region Methods
 
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
@@ -353,7 +335,5 @@ namespace LcmsNetPlugins.VICI.Valves
                 ShowError("Unauthorized access when attempting to clear valve ID", ex);
             }
         }
-
-        #endregion
     }
 }

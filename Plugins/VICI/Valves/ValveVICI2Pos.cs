@@ -34,24 +34,14 @@ namespace LcmsNetPlugins.VICI.Valves
     ]*/
     public class ValveVICI2Pos : ValveVICIBase, IDevice, ITwoPositionValve
     {
-
-        #region Members
-
         private static readonly int RotationDelayTimeMsec = 145;  //milliseconds
         private const int CONST_READTIMEOUT = 500;          //milliseconds
         private const int CONST_WRITETIMEOUT = 500;         //milliseconds
-        #endregion
-
-        #region Events
 
         /// <summary>
         /// Indicates that the valve position has changed
         /// </summary>
         public event EventHandler<ValvePositionEventArgs<TwoPositionState>> PositionChanged;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Default constructor
@@ -74,10 +64,6 @@ namespace LcmsNetPlugins.VICI.Valves
             LastSentPosition = TwoPositionState.Unknown;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// The last measured position of the valve.
         /// </summary>
@@ -92,10 +78,6 @@ namespace LcmsNetPlugins.VICI.Valves
         /// Display string for the Last Measured Position
         /// </summary>
         public override string LastMeasuredPositionDisplay => LastMeasuredPosition.GetEnumDescription();
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Indicates that the device's position has changed.
@@ -162,10 +144,6 @@ namespace LcmsNetPlugins.VICI.Valves
             }
         }
 
-        #endregion
-
-        #region Method Editor Enabled Methods
-
         void ITwoPositionValve.SetPosition(TwoPositionState newPosition)
         {
             SetPosition(newPosition);
@@ -222,7 +200,5 @@ namespace LcmsNetPlugins.VICI.Valves
             OnPositionChanged(LastMeasuredPosition);
             return ValveErrors.Success;
         }
-
-        #endregion
     }
 }

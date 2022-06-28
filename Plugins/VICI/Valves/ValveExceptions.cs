@@ -11,10 +11,12 @@ namespace LcmsNetPlugins.VICI.Valves
             : base()
         {
         }
+
         public ValveExceptionUnauthorizedAccess(string message)
             : base(message)
         {
         }
+
         public ValveExceptionUnauthorizedAccess(string message, Exception ex)
             : base(message, ex)
         {
@@ -30,10 +32,12 @@ namespace LcmsNetPlugins.VICI.Valves
             : base()
         {
         }
+
         public ValveExceptionReadTimeout(string message)
             : base(message)
         {
         }
+
         public ValveExceptionReadTimeout(string message, Exception ex)
             : base(message, ex)
         {
@@ -49,10 +53,12 @@ namespace LcmsNetPlugins.VICI.Valves
             : base()
         {
         }
+
         public ValveExceptionWriteTimeout(string message)
             : base(message)
         {
         }
+
         public ValveExceptionWriteTimeout(string message, Exception ex)
             : base(message, ex)
         {
@@ -68,10 +74,12 @@ namespace LcmsNetPlugins.VICI.Valves
             : base()
         {
         }
+
         public ValveExceptionPositionMismatch(string message)
             : base(message)
         {
         }
+
         public ValveExceptionPositionMismatch(string message, Exception ex)
             : base(message, ex)
         {

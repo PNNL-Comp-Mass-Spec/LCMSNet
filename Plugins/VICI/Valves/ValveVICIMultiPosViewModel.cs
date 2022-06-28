@@ -15,8 +15,6 @@ namespace LcmsNetPlugins.VICI.Valves
 {
     public class ValveVICIMultiPosViewModel : ValveVICIViewModelBase
     {
-        #region Constructors
-
         public ValveVICIMultiPosViewModel()
         {
             //Populate the combobox
@@ -47,19 +45,11 @@ namespace LcmsNetPlugins.VICI.Valves
             }
         }
 
-        #endregion
-
-        #region Events
-
         //Position change
         public virtual void OnPosChanged(object sender, ValvePositionEventArgs<int> newPosition)
         {
             RxApp.MainThreadScheduler.Schedule(() => CurrentValvePosition = newPosition.Position.ToString());
         }
-
-        #endregion
-
-        #region Members
 
         /// <summary>
         /// Class that interfaces the hardware.
@@ -68,10 +58,6 @@ namespace LcmsNetPlugins.VICI.Valves
 
         private ReadOnlyCollection<string> valvePositionComboBoxOptions = new List<string>().AsReadOnly();
         private string selectedValvePosition = "";
-
-        #endregion
-
-        #region Properties
 
         public ReadOnlyCollection<string> ValvePositionComboBoxOptions
         {
@@ -117,10 +103,6 @@ namespace LcmsNetPlugins.VICI.Valves
 
         public ReactiveCommand<Unit, Unit> SetValvePositionCommand { get; }
 
-        #endregion
-
-        #region Methods
-
         public override UserControl GetDefaultView()
         {
             return new ValveVICIMultiPosView();
@@ -144,7 +126,5 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             valve.SetPosition(pos);
         }
-
-        #endregion
     }
 }

@@ -6,8 +6,6 @@ namespace LcmsNetSDK.Devices
 {
     public abstract class BaseDeviceControlViewModel : IDeviceControl, INotifyPropertyChangedExt
     {
-        #region Methods
-
         protected BaseDeviceControlViewModel()
         {
             this.PropertyChanged += (sender, args) =>
@@ -28,14 +26,10 @@ namespace LcmsNetSDK.Devices
             Name = device?.Name;
         }
 
-        #endregion
-
         protected virtual void UpdateStatusDisplay(string message)
         {
             DeviceStatus = "Status: " + message;
         }
-
-        #region Events
 
         /// <summary>
         /// An event that indicates the name has changed.
@@ -56,10 +50,6 @@ namespace LcmsNetSDK.Devices
         {
             SaveRequired?.Invoke();
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Indicates whether the device is currently running or not.
@@ -97,8 +87,6 @@ namespace LcmsNetSDK.Devices
 
         private string name = "";
         private string deviceStatus = "";
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

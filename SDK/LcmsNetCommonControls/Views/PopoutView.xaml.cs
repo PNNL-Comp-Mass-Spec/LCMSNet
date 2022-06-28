@@ -31,8 +31,6 @@ namespace LcmsNetCommonControls.Views
             }
         }
 
-        #region Button Positioning
-
         /// <summary>
         /// Button horizontal position dependency property
         /// </summary>
@@ -224,8 +222,6 @@ namespace LcmsNetCommonControls.Views
             pv.ButtonGridRow = row;
             pv.ButtonGridColumn = column;
         }
-
-        #endregion
 
         private void PopoutView_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {

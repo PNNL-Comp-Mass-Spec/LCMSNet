@@ -14,6 +14,7 @@
         {
             WriteSystemHealth();
         }
+
         /// <summary>
         /// Writes the system health to
         /// </summary>
@@ -40,6 +41,7 @@
                 LcmsNet.Devices.classDeviceManager.Manager.WriteSystemHealth(newPath);
             }
         }
+
         /// <summary>
         /// Writes the system health to
         /// </summary>

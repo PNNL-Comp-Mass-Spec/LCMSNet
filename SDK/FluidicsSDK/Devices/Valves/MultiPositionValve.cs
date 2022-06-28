@@ -15,15 +15,10 @@ namespace FluidicsSDK.Devices.Valves
     // used as a base class for other valve glyphs
     public class MultiPositionValve : FluidicsDevice
     {
-        #region Members
         // radius of the valve's circle primitive in pixels, arbitrarily chosen
         private const int _radius = 75;
         protected Dictionary<int, List<Tuple<int, int>>> _states;
         private IMultiPositionValve _valve;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// constructor
@@ -213,17 +208,11 @@ namespace FluidicsSDK.Devices.Valves
             return stateConnection;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// gets the center point of the valve on screen.
         /// </summary>
         public Point Center => ((Graphic.FluidicsCircle)m_primitives[PRIMARY_PRIMITIVE]).Center;
 
         public override int CurrentState { get; set; }
-
-        #endregion
     }
 }

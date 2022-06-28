@@ -101,18 +101,15 @@ namespace LcmsNetSDK.Data
         /// </summary>
         public string WellPlate { get; set; }
 
-        //  /// <summary>
-
-        //#region Well Plate - Vial Conversions
-        //  /// Converts a given vial number to a well plate index.
-        //  /// </summary>
-        //  /// <param name="vialNumber">Number to convert to a well plate location.</param>
-        //  /// <returns></returns>
-        //  public static string ConvertVialToWellPlateLocation(int vialNumber)
-        //  {
-        //      return vialNumber.ToString();
-        //  }
-        //  #endregion
+        ///// <summary>
+        ///// Converts a given vial number to a well plate index.
+        ///// </summary>
+        ///// <param name="vialNumber">Number to convert to a well plate location.</param>
+        ///// <returns></returns>
+        //public static string ConvertVialToWellPlateLocation(int vialNumber)
+        //{
+        //    return vialNumber.ToString();
+        //}
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;

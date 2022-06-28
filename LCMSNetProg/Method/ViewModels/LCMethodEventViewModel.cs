@@ -22,8 +22,6 @@ namespace LcmsNet.Method.ViewModels
     /// </summary>
     public class LCMethodEventViewModel : ReactiveObject
     {
-        #region Static Data
-
         /// <summary>
         /// List of device methods and parameters to use.
         /// </summary>
@@ -40,8 +38,6 @@ namespace LcmsNet.Method.ViewModels
             DeviceManager.Manager.DeviceAdded += Manager_DeviceAdded;
             DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
         }
-
-        #endregion
 
         /// <summary>
         /// Default constructor for the event view model that takes no arguments
@@ -190,8 +186,6 @@ namespace LcmsNet.Method.ViewModels
                 methodEventData.BreakPoint = e.IsSet;
         }
 
-        #region Members
-
         /// <summary>
         /// Method data that has been selected to be displayed.
         /// </summary>
@@ -206,10 +200,6 @@ namespace LcmsNet.Method.ViewModels
         private readonly SourceList<ILCEventParameter> eventParameterList = new SourceList<ILCEventParameter>();
         private bool isSelected = false;
         private readonly ObservableAsPropertyHelper<bool> devicesComboBoxEnabled;
-
-        #endregion
-
-        #region Properties
 
         public BreakpointViewModel Breakpoint
         {
@@ -323,10 +313,6 @@ namespace LcmsNet.Method.ViewModels
 
         private bool StoppedHere { get; set; }
 
-        #endregion
-
-        #region Device Manager Event Listeners (static)
-
         /// <summary>
         /// Updates the list of available devices.
         /// </summary>
@@ -365,10 +351,6 @@ namespace LcmsNet.Method.ViewModels
                 DeviceMappings.Add(device, methodPairs);
             }
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Handles automatically selecting a device when there were no available devices before
@@ -576,10 +558,6 @@ namespace LcmsNet.Method.ViewModels
             EventChanged?.Invoke(this, null);
         }
 
-        #endregion
-
-        #region Registration and Reflection (static)
-
         /// <summary>
         /// Registers the devices with the user interface from the device manager.
         /// </summary>
@@ -737,10 +715,6 @@ namespace LcmsNet.Method.ViewModels
             return control;
         }
 
-        #endregion
-
-        #region Event handlers
-
         private void BreakPointEvent_Handler(object sender, BreakEventArgs e)
         {
             StoppedHere = e.IsStopped;
@@ -798,7 +772,5 @@ namespace LcmsNet.Method.ViewModels
 
             return eventData;
         }
-
-        #endregion
     }
 }

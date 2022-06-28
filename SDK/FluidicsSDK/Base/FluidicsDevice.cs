@@ -13,7 +13,6 @@ namespace FluidicsSDK.Base
 {
     public abstract class FluidicsDevice
     {
-        #region Members
         //graphics primitives that make up the device
         protected List<GraphicsPrimitive> m_primitives;
         /* location of the primary primitive in the m_primitives list*/
@@ -38,9 +37,6 @@ namespace FluidicsSDK.Base
         /// Last rendered (at scale 1) bounds of the controls (name, status, actions)
         /// </summary>
         protected Rect lastRenderedUnscaledControlsBounds = new Rect(0, 0, 100, 100);
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Constructor
@@ -463,10 +459,6 @@ namespace FluidicsSDK.Base
         /// <returns></returns>
         public abstract string StateString();
 
-        #endregion
-
-        #region Properties
-
         public int MaxVariance { get; set; }
 
         /// <summary>
@@ -583,12 +575,7 @@ namespace FluidicsSDK.Base
 
         public bool Sink { get; set; }
 
-        #endregion
-
-        #region Events
-
         //event for when device changes
         public virtual event EventHandler<FluidicsDevChangeEventArgs> DeviceChanged;
-        #endregion
     }
 }

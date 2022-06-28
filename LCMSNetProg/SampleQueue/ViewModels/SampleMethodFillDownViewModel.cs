@@ -12,8 +12,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class SampleMethodFillDownViewModel : ReactiveObject
     {
-        #region Property Backing Fields
-
         private bool applyGroup1 = true;
         private bool applyGroup2;
         private bool applyGroup3;
@@ -30,10 +28,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         private double volumeGroup2 = 7.0;
         private double volumeGroup3 = 7.0;
         private double volumeGroup4 = 7.0;
-
-        #endregion
-
-        #region UI interface binding properties
 
         public bool ApplyGroup1
         {
@@ -137,25 +131,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public double VolumeMinimum => CartConfiguration.MinimumVolume;
 
-        #endregion
-
-        #region ReactiveCommands
-
         public ReactiveCommand<Unit, Unit> ApplyLCMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyInstrumentMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyVolumeCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyAllCommand { get; }
         public ReactiveCommand<Unit, Unit> CloseWindowCommand { get; }
 
-        #endregion
-
-        #region Properties
-
         public List<SampleData> Samples { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         public SampleMethodFillDownViewModel()
         {
@@ -174,10 +156,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Set initial dropdown values
             EnsureItemsAreSelected();
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Set a selected value for each combo box, if one hasn't already been set.
@@ -371,7 +349,5 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void CloseWindow()
         {
         }
-
-        #endregion
     }
 }

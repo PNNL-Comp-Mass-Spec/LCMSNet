@@ -35,8 +35,6 @@ namespace LcmsNet.Devices
             return m_name;
         }
 
-        #region Members
-
         /// <summary>
         /// Name of the device.
         /// </summary>
@@ -46,10 +44,6 @@ namespace LcmsNet.Devices
         /// Status of the device currently.
         /// </summary>
         private DeviceStatus m_status;
-
-        #endregion
-
-        #region Events
 
         /// <summary>
         /// Fired when the status changes.
@@ -75,10 +69,6 @@ namespace LcmsNet.Devices
             remove { }
         }
 
-        #endregion
-
-        #region LC-Method Registered Methods
-
         /// <summary>
         /// Prints the message provided to the debug console.
         /// </summary>
@@ -95,10 +85,6 @@ namespace LcmsNet.Devices
         {
         }
 
-        #endregion
-
-        #region IDevice Data Provider Methods
-
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
@@ -106,10 +92,6 @@ namespace LcmsNet.Devices
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
-
-        #endregion
-
-        #region IDevice Members
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -200,15 +182,9 @@ namespace LcmsNet.Devices
             return new List<string>();
         }
 
-        #endregion
-
-        #region IDevice Members
-
         public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.BuiltIn;
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

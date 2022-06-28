@@ -10,8 +10,6 @@ namespace LcmsNet.Devices
         {
         }
 
-        #region IDeviceControl Members
-
         public IDevice Device { get; set; }
         public string Name { get; set; }
         public string DeviceStatus { get; } = string.Empty;
@@ -46,7 +44,5 @@ namespace LcmsNet.Devices
             add { }
             remove { }
         }
-
-        #endregion
     }
 }

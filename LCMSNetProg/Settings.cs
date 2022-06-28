@@ -9,9 +9,6 @@ namespace LcmsNet.Properties
     /// <remarks>Original code developed by Nathan Trimble, PNNL</remarks>
     internal sealed partial class Settings
     {
-
-        #region "Constructors"
-
         public Settings()
         {
             PropertyChanged += Settings_PropertyChanged;
@@ -24,10 +21,6 @@ namespace LcmsNet.Properties
             }
         }
 
-        #endregion
-
-        #region "EventHandlers"
-
         /// <summary>
         /// Handler for PropertyChanged event
         /// </summary>
@@ -37,7 +30,5 @@ namespace LcmsNet.Properties
         {
             Save();
         }
-
-        #endregion
     }
 }

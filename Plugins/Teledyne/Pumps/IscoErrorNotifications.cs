@@ -8,11 +8,8 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// </summary>
     public static class IscoErrorNotifications
     {
-        #region "Class variables"
         static readonly Dictionary<string, string> m_NotifyList = new Dictionary<string, string>();
-        #endregion
 
-        #region "Constructor"
         static IscoErrorNotifications()
         {
             //NOTE: This method may need updating if the enums it's based on change!!!
@@ -65,9 +62,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             return name;
         }
 
-        #endregion
-
-        #region "Methods"
         /// <summary>
         /// Gets specified notification string
         /// </summary>
@@ -98,6 +92,5 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             return returnList;
         }
-        #endregion
     }
 }

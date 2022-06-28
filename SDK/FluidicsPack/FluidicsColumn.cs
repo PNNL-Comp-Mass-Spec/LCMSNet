@@ -15,8 +15,8 @@ namespace FluidicsPack
             Name = "Column";
         }
 
-        public double InnerDiameter     { get; set; }
-        public double Length            { get; set; }
-        public string PackingMaterial   { get; set; }
+        public double InnerDiameter { get; set; }
+        public double Length { get; set; }
+        public string PackingMaterial { get; set; }
     }
 }

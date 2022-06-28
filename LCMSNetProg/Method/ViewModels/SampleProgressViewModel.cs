@@ -292,8 +292,6 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        #region Constants
-
         /// <summary>
         /// Total Number of columns.
         /// </summary>
@@ -301,10 +299,6 @@ namespace LcmsNet.Method.ViewModels
 
         private const int CONST_PREVIEW_MINUTES = 30;
         private const int CONST_PREVIEW_SECONDS = 1;
-
-        #endregion
-
-        #region Device-Color Mapping Methods
 
         /// <summary>
         /// Remaps the devices to colors.
@@ -335,11 +329,7 @@ namespace LcmsNet.Method.ViewModels
             deviceColorMappings = LCMethodRenderer.ConstructDeviceColorMap(DeviceManager.Manager.Devices);
         }
 
-        #endregion
-
         public event EventHandler<EventArgs> RefreshView;
-
-        #region Members
 
         private int previewMinutes = CONST_PREVIEW_MINUTES;
         private int previewSeconds = CONST_PREVIEW_SECONDS;
@@ -361,10 +351,6 @@ namespace LcmsNet.Method.ViewModels
         /// Maintains a list of errors that happened on the column.
         /// </summary>
         private readonly Dictionary<int, List<LCEvent>> errors;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the total time in minutes to show a preview of.
@@ -410,8 +396,6 @@ namespace LcmsNet.Method.ViewModels
             get => renderWindow;
             set => this.RaiseAndSetIfChanged(ref renderWindow, value);
         }
-
-        #endregion
 
         public void UpdatePreviewTime(int minutes, int seconds)
         {

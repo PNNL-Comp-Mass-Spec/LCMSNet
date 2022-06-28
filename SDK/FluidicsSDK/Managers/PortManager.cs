@@ -8,13 +8,9 @@ namespace FluidicsSDK.Managers
 {
     public class PortManager
     {
-        #region Members
         private readonly List<Port> m_ports;
         private static PortManager m_instance;
         public event EventHandler<PortChangedEventArgs<Port>> PortChanged;
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// default constructor
@@ -60,6 +56,7 @@ namespace FluidicsSDK.Managers
             m_ports.Add(port);
             PortChanged?.Invoke(this, new PortChangedEventArgs<Port>());
         }
+
         /// <summary>
         /// remove a port from the list of ports managed
         /// </summary>
@@ -137,9 +134,7 @@ namespace FluidicsSDK.Managers
         {
             port.Deselect();
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Property for retrieving the class instance of the port manager
         /// </summary>
@@ -147,7 +142,5 @@ namespace FluidicsSDK.Managers
 
 
         public List<Port> Ports => m_ports;
-
-        #endregion
     }
 }

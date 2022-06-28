@@ -13,11 +13,10 @@ namespace DemoPluginLibrary
                                  "Demo")]
     public class DemoUnion:IDevice
     {
-        #region Methods
-         public DemoUnion()
-         {
-             Name = "Demo Union";
-         }
+        public DemoUnion()
+        {
+            Name = "Demo Union";
+        }
 
         public bool Initialize(ref string errorMessage)
         {
@@ -55,9 +54,7 @@ namespace DemoPluginLibrary
         {
             return new List<string>();
         }
-        #endregion
 
-        #region Events
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
@@ -76,9 +73,6 @@ namespace DemoPluginLibrary
             remove { }
         }
 
-        #endregion
-
-        #region Properties
         public DeviceType DeviceType => DeviceType.Component;
 
         public DeviceErrorStatus ErrorType { get; set; }
@@ -97,8 +91,6 @@ namespace DemoPluginLibrary
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
         public bool Emulation { get; set; }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

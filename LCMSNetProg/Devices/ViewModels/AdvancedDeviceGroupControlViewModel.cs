@@ -146,8 +146,6 @@ namespace LcmsNet.Devices.ViewModels
                 SelectedDevice.Device.Status = DeviceStatus.Initialized;
         }
 
-        #region Public Methods For Adding and Removing Devices for the UI
-
         public void RemoveDevice(IDevice device)
         {
             if (deviceToViewModelMap.ContainsKey(device))
@@ -171,10 +169,6 @@ namespace LcmsNet.Devices.ViewModels
             deviceToViewModelMap.Add(device, deviceVm);
         }
 
-        #endregion
-
-        #region Equality
-
         public bool Equals(AdvancedDeviceGroupControlViewModel other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -194,7 +188,5 @@ namespace LcmsNet.Devices.ViewModels
         {
             return Name.GetHashCode();
         }
-
-        #endregion
     }
 }

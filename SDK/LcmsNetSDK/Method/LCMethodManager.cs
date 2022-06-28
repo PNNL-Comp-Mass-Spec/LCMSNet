@@ -12,8 +12,6 @@ namespace LcmsNetSDK.Method
 
         }
 
-        #region Events
-
         /// <summary>
         /// Fired when a LC method is added.
         /// </summary>
@@ -28,8 +26,6 @@ namespace LcmsNetSDK.Method
         /// Fired when a LC method is updated.
         /// </summary>
         public event EventHandler<LCMethod> MethodUpdated;
-
-        #endregion
 
         /// <summary>
         /// Gets the list of LC methods available to run.

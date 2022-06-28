@@ -14,9 +14,6 @@ namespace DemoPluginLibrary
                                  "Demo")]
     public class DemoSPE : IDevice, ISolidPhaseExtractor
     {
-
-        #region Methods
-
         public DemoSPE()
         {
             Name = "Demo SPE";
@@ -78,9 +75,7 @@ namespace DemoPluginLibrary
 
             PositionChanged?.Invoke(this, new ValvePositionEventArgs<TwoPositionState>(position));
         }
-        #endregion
 
-        #region Events
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
@@ -100,9 +95,7 @@ namespace DemoPluginLibrary
         }
 
         public event EventHandler<ValvePositionEventArgs<TwoPositionState>> PositionChanged;
-        #endregion
 
-        #region Properties
         public DeviceType DeviceType => DeviceType.Component;
 
         public DeviceErrorStatus ErrorType { get; set; }
@@ -124,8 +117,6 @@ namespace DemoPluginLibrary
         public bool Emulation { get; set; }
 
         public int Position { get; set; }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

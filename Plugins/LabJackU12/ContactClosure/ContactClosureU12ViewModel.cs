@@ -12,18 +12,12 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
     /// </summary>
     public class ContactClosureU12ViewModel : ContactClosureViewModelBase<LabjackU12OutputPorts>
     {
-        #region Constructors
-
         /// <summary>
         /// Default constructor.
         /// </summary>
         public ContactClosureU12ViewModel()
         {
         }
-
-        #endregion
-
-        #region Members
 
         /// <summary>
         /// The contact closure class used for triggering a pulse.
@@ -38,10 +32,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         private double selectedVoltage;
         private double selectedNormalVoltage;
         private LabjackU12OutputPorts selectedOutputPort;
-
-        #endregion
-
-        #region Properties
 
         public override double MinimumVoltage => CONST_MINIMUMVOLTAGE;
         public override double MaximumVoltage => CONST_MAXIMUMVOLTAGE;
@@ -147,10 +137,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
             }
         }
 
-        #endregion
-
-        #region Methods
-
         private void RegisterDevice(IDevice device)
         {
             isLoading = true;
@@ -189,7 +175,5 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
                 }
             }
         }
-
-        #endregion
     }
 }

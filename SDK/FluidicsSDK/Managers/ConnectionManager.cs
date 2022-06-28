@@ -8,15 +8,9 @@ namespace FluidicsSDK.Managers
 {
     public class ConnectionManager
     {
-        #region Members
-
         private static ConnectionManager m_instance;
         private readonly List<Connection> m_connections;
         public event EventHandler<ConnectionChangedEventArgs<Connection>> ConnectionChanged;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// default constructor
@@ -192,15 +186,9 @@ namespace FluidicsSDK.Managers
             return m_connections;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Property to return class instance of classConnectionManager
         /// </summary>
         public static ConnectionManager GetConnectionManager => m_instance ?? (m_instance = new ConnectionManager());
-
-        #endregion
     }
 }

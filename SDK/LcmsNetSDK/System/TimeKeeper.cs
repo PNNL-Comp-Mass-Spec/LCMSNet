@@ -5,14 +5,8 @@ namespace LcmsNetSDK.System
 {
     public class TimeKeeper
     {
-        #region Members
-
         private TimeZoneInfo m_current_timezone;
         private static TimeKeeper m_instance;
-
-        #endregion
-
-        #region Methods
 
         private TimeKeeper()
         {
@@ -177,10 +171,6 @@ namespace LcmsNetSDK.System
                                 transition.TimeOfDay.Minute, transition.TimeOfDay.Second);
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Get current time as defined by the currently selected timezone
         /// </summary>
@@ -198,7 +188,5 @@ namespace LcmsNetSDK.System
         }
 
         public static TimeKeeper Instance => m_instance ?? (m_instance = new TimeKeeper());
-
-        #endregion
     }
 }

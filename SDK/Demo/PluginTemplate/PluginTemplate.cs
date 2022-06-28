@@ -6,7 +6,6 @@
 [DeviceControlAttribute(typeof(YOURUSERCONTROLHERE), typeof(YOURCUSTOMFLUIDICSGLYPHHERE), "RenameThisTemplate", "DeviceCategoryGoesHere")]
 public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK glyph, you should inherit the interface for that glyph, instead of using its type in the attribute above.
 {
-    #region PluginMethods
     // constructor
     public RenameThisTemplate()
     {
@@ -21,9 +20,6 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     {
         // operation code goes here
     }
-    #endregion
-
-    #region IDeviceMethods
 
     /// <summary>
     /// Calls an initialization sequence for the device to perform after construction.
@@ -34,6 +30,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
         // initialization code goes here
         return true;
     }
+
     /// <summary>
     /// Calls a shutdown sequence for the device to stop all acquiring/control.
     /// </summary>
@@ -43,6 +40,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
         //shutdown code goes here
         return true;
     }
+
     /// <summary>
     /// Register controls that are being disposed for a given data provider.
     /// </summary>
@@ -52,6 +50,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     {
         // register here
     }
+
     /// <summary>
     /// De-register controls that are being disposed for a given data provider.
     /// </summary>
@@ -61,6 +60,7 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     {
         // unregister here
     }
+
     /// <summary>
     /// Write the performance data and other required information associated with this device after a run.
     /// </summary>
@@ -72,16 +72,10 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
         // write data here
     }
 
-    #endregion
-
-    #region Events
     /// <summary>
     /// Fired when a property changes in the device.
     /// </summary>
     event EventHandler DeviceSaveRequired;
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the version name of the hardware if applicable.
@@ -107,6 +101,5 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     /// Gets or sets whether the device is emulation mode or not.
     /// </summary>
     bool Emulation { get; set; }
-    #endregion
 }
 */

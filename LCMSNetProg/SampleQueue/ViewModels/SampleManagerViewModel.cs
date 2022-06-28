@@ -22,16 +22,10 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class SampleManagerViewModel : ReactiveObject
     {
-        #region Events
-
         /// <summary>
         /// Fired when a sample run should be stopped.
         /// </summary>
         public event EventHandler Stop;
-
-        #endregion
-
-        #region  Members
 
         /// <summary>
         /// Default extension for the queue files.
@@ -62,10 +56,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public SampleDataManager SampleDataManager { get; }
 
         private SynchronizationContext synchronizationContext;
-
-        #endregion
-
-        #region "Constructors"
 
         /// <summary>
         /// Default constructor that takes cart configuration data.
@@ -114,10 +104,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public SampleManagerViewModel()
         {
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Method to update UI column visibility based on configured devices.
@@ -274,10 +260,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             SampleDataManager.InstrumentMethods = methods;
         }
 
-        #endregion
-
-        #region Exporting and Importing
-
         /// <summary>
         /// Handles exporting the queue to a csv file, xml file, or LCMS sample queue.
         /// </summary>
@@ -298,10 +280,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 ApplicationLogger.LogError(0, "Export Failed!  " + ex.Message, ex);
             }
         }
-
-        #endregion
-
-        #region Form Event Handlers
 
         /// <summary>
         /// Imports the queue into LCMS.
@@ -580,8 +558,6 @@ namespace LcmsNet.SampleQueue.ViewModels
                 ExportQueue(saveDialog.FileName, writer);
             }
         }
-
-        #endregion
 
         public void RestoreUserUIState()
         {

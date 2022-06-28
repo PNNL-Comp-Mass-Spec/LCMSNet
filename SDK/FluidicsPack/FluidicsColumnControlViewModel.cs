@@ -54,8 +54,6 @@ namespace FluidicsPack
             set => this.RaiseAndSetIfChanged(ref length, value);
         }
 
-        #region IDeviceControl Members
-
         public event EventHandler<string> NameChanged;
 
         public event Action SaveRequired;
@@ -73,14 +71,13 @@ namespace FluidicsPack
             get => name;
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
+
         public string DeviceStatus { get; } = string.Empty;
 
         public UserControl GetDefaultView()
         {
             return new FluidicsColumnControlView();
         }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

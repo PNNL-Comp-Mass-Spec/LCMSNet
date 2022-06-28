@@ -11,18 +11,12 @@ namespace LcmsNetPlugins.LabJackU3
     /// </summary>
     public class ContactClosureU3ViewModel : ContactClosureViewModelBase<LabjackU3OutputPorts>
     {
-        #region Constructors
-
         /// <summary>
         /// Default constructor.
         /// </summary>
         public ContactClosureU3ViewModel()
         {
         }
-
-        #endregion
-
-        #region Members
 
         /// <summary>
         /// The contact closure class used for triggering a pulse.
@@ -34,10 +28,6 @@ namespace LcmsNetPlugins.LabJackU3
         private const int CONST_MINIMUMPULSELENGTH = 0;
         private bool m_loading;
         private LabjackU3OutputPorts selectedOutputPort;
-
-        #endregion
-
-        #region Properties
 
         public override double MinimumVoltage => CONST_MINIMUMVOLTAGE;
         public override double MaximumVoltage => CONST_MAXIMUMVOLTAGE;
@@ -57,6 +47,7 @@ namespace LcmsNetPlugins.LabJackU3
                 }
             }
         }
+
         /// <summary>
         /// Determines if the device is in emulation mode or not.
         /// </summary>
@@ -94,10 +85,6 @@ namespace LcmsNetPlugins.LabJackU3
                 }
             }
         }
-
-        #endregion
-
-        #region Methods
 
         private void RegisterDevice(IDevice device)
         {
@@ -139,7 +126,5 @@ namespace LcmsNetPlugins.LabJackU3
                 }
             }
         }
-
-        #endregion
     }
 }

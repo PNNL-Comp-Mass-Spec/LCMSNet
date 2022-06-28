@@ -57,18 +57,12 @@ namespace LcmsNet.Devices
             return Name;
         }
 
-        #region Members
-
         /// <summary>
         /// Status of the device currently.
         /// </summary>
         private DeviceStatus m_status;
 
         private string name;
-
-        #endregion
-
-        #region IDevice Members
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -131,10 +125,6 @@ namespace LcmsNet.Devices
             return errors;
         }
 
-        #endregion
-
-        #region LC-Method Registered Methods
-
         /// <summary>
         /// Throws an exception.
         /// </summary>
@@ -182,10 +172,6 @@ namespace LcmsNet.Devices
             return true;
         }
 
-        #endregion
-
-        #region IDevice Data Provider Methods
-
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
@@ -194,15 +180,9 @@ namespace LcmsNet.Devices
         {
         }
 
-        #endregion
-
-        #region IDevice Members
-
         public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.BuiltIn;
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

@@ -515,8 +515,6 @@ namespace LcmsNet.SampleQueue
             m_sequenceIndex = startSequence;
         }
 
-        #region Undo/Redo
-
         /// <summary>
         /// Adds the current waiting queue to the list of undoable actions
         /// </summary>
@@ -736,10 +734,6 @@ namespace LcmsNet.SampleQueue
             SetCanUndoRedo();
             isUndoRedoing = false;
         }
-
-        #endregion
-
-        #region Adding, Removing, Updating Samples from Queue
 
         /// <summary>
         /// Inserts samples into the
@@ -1230,8 +1224,6 @@ namespace LcmsNet.SampleQueue
             AddToUndoable();
         }
 
-        #endregion
-
         /// <summary>
         /// Add a special sample to be run immediately, preempting other methods not yet run
         /// </summary>
@@ -1260,8 +1252,6 @@ namespace LcmsNet.SampleQueue
                 StartSamples();
             }
         }
-
-        #region Running Samples and Queue Operation
 
         /// <summary>
         /// Gets a value indicating if samples are ready to be run.
@@ -1589,10 +1579,6 @@ namespace LcmsNet.SampleQueue
             return WaitingToRunQueue.FirstOrDefault();
         }
 
-        #endregion
-
-        #region Cache and Save Operations
-
         /// <summary>
         /// Writes each of the queue lists to a CSV cache file
         /// </summary>
@@ -1733,8 +1719,6 @@ namespace LcmsNet.SampleQueue
 
             QueueSamples(waitingSamples, enumColumnDataHandling.LeaveAlone);
         }
-
-        #endregion
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;

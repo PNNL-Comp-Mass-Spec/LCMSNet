@@ -14,7 +14,6 @@ namespace PDFGenerator
     /// </summary>
     public class PDFGen : IPDF
     {
-        #region Methods
         /// <summary>
         /// create a PDF and write it to documentPath.
         /// </summary>
@@ -284,7 +283,5 @@ namespace PDFGenerator
             formattedString += string.Format(stringFormatter.ToString(), data);
             return formattedString;
         }
-
-        #endregion
     }
 }

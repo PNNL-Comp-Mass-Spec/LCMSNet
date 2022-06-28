@@ -21,12 +21,9 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     [DeviceControl(typeof(IscoPumpViewModel), typeof(IscoPumpGlyph), "ISCO Pump", "Pumps")]
     public class IscoPump : IDevice, IDisposable
     {
-        #region "Constants"
         const int CONST_MAX_PUMPS = 3;
         const long CONST_DEFAULT_TIMER_INTERVAL = 10000; //10000ms = 10 seconds = 6 times/min
-        #endregion
 
-        #region "Class variables"
         // Device name
         string m_Name;
 
@@ -77,21 +74,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// Pump models
         /// </summary>
         readonly ISCOModel[] models; // up to 3 per controller...
-        #endregion
 
-        #region "Delegates"
-        #endregion
-
-        #region "Events"
         public event DelegateIscoPumpRefreshCompleteHandler RefreshComplete;
         public event DelegateIscoPumpInitializationCompleteHandler InitializationComplete;
         public event DelegateIscoPumpInitializingHandler Initializing;
         public event DelegateIscoPumpControlModeSetHandler ControlModeSet;
         public event DelegateIscoPumpOpModeSetHandler OperationModeSet;
         public event DelegateIscoPumpDisconnected Disconnected;
-        #endregion
 
-        #region "Properties"
         /// <summary>
         /// Emulation mode
         /// </summary>
@@ -208,9 +198,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public IscoPumpData[] PumpData => m_PumpData;
 
-        #endregion
-
-        #region "Constructors"
         public IscoPump()
         {
             m_Name = "Isco Pump";
@@ -251,9 +238,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             GC.SuppressFinalize(this);
         }
 
-        #endregion
-
-        #region "Methods"
         /// <summary>
         /// Converts a numeric (zero-based) pump index into an alpha pump designation
         /// </summary>
@@ -336,9 +320,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             return null;
         }
-        #endregion
 
-        #region "Pump control and monitoring methods"
         /// <summary>
         /// Closes serial port and resets selected parameters
         /// </summary>
@@ -471,11 +453,13 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 return false;
             }
         }
+
         [LCMethodEvent("Set Mode", MethodOperationTimeoutType.Parameter)]
         public bool SetOperationMode(double timeout, IscoOperationMode newMode)
         {
             return SetOperationMode(newMode);
         }
+
         /// <summary>
         /// Sets the operation mode for all pumps (Const flow/Const pressure)
         /// </summary>
@@ -1058,6 +1042,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             return StartRefill((int)pump, refillRate);
         }
+
         /// <summary>
         /// Starts a refill for specified pump
         /// </summary>
@@ -1231,12 +1216,14 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             StatusUpdate?.Invoke(this, statusArgs);
             return true;
         }
+
         [LCMethodEvent("Set Flow Rate", MethodOperationTimeoutType.Parameter)]
         //public bool SetFlow(double timeout, int pumpIndx, double newFlow)
         public bool SetFlow(double timeout, ISCOPumpChannels pump, double newFlow)
         {
             return SetFlow((int)pump, newFlow);
         }
+
         /// <summary>
         /// Sets the flow rate for a pump in constant flow mode
         /// </summary>
@@ -1481,9 +1468,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             return ParseNumericValue(resp);
         }
-        #endregion
 
-        #region "Serial port operation methods"
         /// <summary>
         /// Configures the serial port
         /// </summary>
@@ -1695,9 +1680,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 }
             }
 #endif
-        #endregion
 
-        #region "Message handling methods"
         /// <summary>
         /// Sums the ASCII codes for all characters in a string
         /// </summary>
@@ -2195,9 +2178,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             return true;
         }
-        #endregion
 
-        #region "IDevice Properties"
         /// <summary>
         /// Device name
         /// </summary>
@@ -2243,9 +2224,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public DeviceType DeviceType => DeviceType.Component;
 
-        #endregion
-
-        #region "IDevice Methods"
         public bool Initialize(ref string errorMessage)
         {
             var notifyStr = IscoStatusNotifications.GetNotificationString(IscoOperationStatus.Initializing.ToString());
@@ -2371,15 +2349,12 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             return IscoErrorNotifications.GetNotificationListStrings();
         }
-        #endregion
 
-        #region "IDevice Events"
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         public event EventHandler<DeviceErrorEventArgs> Error;
 
         public event EventHandler DeviceSaveRequired;
-        #endregion
 
         public override string ToString()
         {

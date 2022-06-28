@@ -7,12 +7,9 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// </summary>
     public static class IscoConversions
     {
-        #region "Class variables"
         static IscoFlowUnits m_FlowUnits = IscoFlowUnits.ul_min;
         static IscoPressureUnits menu_PressUnits = IscoPressureUnits.psi;
-        #endregion
 
-        #region "Properties"
         public static IscoFlowUnits FlowUnits
         {
             get => m_FlowUnits;
@@ -24,9 +21,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             get => menu_PressUnits;
             set => menu_PressUnits = value;
         }
-        #endregion
 
-        #region "Methods"
         /// <summary>
         /// Converts flow represented by G&amp; return string to user units
         /// (Overload to use default units specifier stored in class)
@@ -316,6 +311,5 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 
             return retVal;
         }
-        #endregion
     }
 }

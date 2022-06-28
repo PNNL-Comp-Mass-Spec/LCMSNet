@@ -16,14 +16,10 @@ namespace LcmsNetSDK.Devices
         private const string CONST_MOBILE_PHASE_NAME = "mobilephase-";
         private const string CONST_MOBILE_PHASE_COMMENT = "mobilephase-comment-";
 
-        #region Static Property
-
         /// <summary>
         /// Gets or sets the static device manager reference.
         /// </summary>
         public static DeviceManager Manager => m_deviceManager ?? (m_deviceManager = new DeviceManager());
-
-        #endregion
 
         public void OnSettingChanged(object sender, SettingChangedEventArgs e)
         {
@@ -32,8 +28,6 @@ namespace LcmsNetSDK.Devices
                 Emulate = Convert.ToBoolean(e.SettingValue);
             }
         }
-
-        #region Members
 
         /// <summary>
         /// A current list of devices the application is using.
@@ -115,10 +109,6 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         private bool m_emulateDevices;
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Default constructor.  Sets the static device manager object reference to this.
         /// </summary>
@@ -176,10 +166,6 @@ namespace LcmsNetSDK.Devices
             GC.SuppressFinalize(this);
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets the list of registered devices.
         /// </summary>
@@ -228,10 +214,6 @@ namespace LcmsNetSDK.Devices
                 return total;
             }
         }
-
-        #endregion
-
-        #region Configuration Extraction and Loading
 
         /// <summary>
         /// Loads a device
@@ -528,10 +510,6 @@ namespace LcmsNetSDK.Devices
 
         }
 
-        #endregion
-
-        #region Device Naming, Usage, Add, Delete
-
         /// <summary>
         /// Searches the device manager for a device with the same name.
         /// </summary>
@@ -736,10 +714,6 @@ namespace LcmsNetSDK.Devices
             }
         }
 
-        #endregion
-
-        #region Shutdown and Initialization
-
         /// <summary>
         ///
         /// </summary>
@@ -879,10 +853,6 @@ namespace LcmsNetSDK.Devices
         {
             return InitializeDevices(true);
         }
-
-        #endregion
-
-        #region Plug-in Management
 
         /// <summary>
         /// Loads the satellite assemblies required for type checking.
@@ -1063,8 +1033,6 @@ namespace LcmsNetSDK.Devices
 
             return supportedTypes;
         }
-
-        #endregion
     }
 
     /// <summary>

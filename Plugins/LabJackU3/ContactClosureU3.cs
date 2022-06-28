@@ -16,7 +16,6 @@ namespace LcmsNetPlugins.LabJackU3
                                  "Contact Closures")]
     public class ContactClosureU3 : IDevice, IContactClosure
     {
-         #region Members
         /// <summary>
         /// The labjack used for signalling the pulse
         /// </summary>
@@ -44,9 +43,7 @@ namespace LcmsNetPlugins.LabJackU3
         private const double CONST_ANALOGHIGH = 5.0;
         private const double CONST_DIGITALHIGH = 1.0;
         private const double CONST_LOW = 0;
-        #endregion
 
-        #region Events
         /// <summary>
         /// Fired when the status changes.
         /// </summary>
@@ -62,9 +59,7 @@ namespace LcmsNetPlugins.LabJackU3
         /// Fired when a property changes in the device.
         /// </summary>
         public event EventHandler DeviceSaveRequired;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Default constructor--no labjack assigned!
         /// </summary>
@@ -108,10 +103,6 @@ namespace LcmsNetPlugins.LabJackU3
             m_port    = newPort;
             m_name = "Contact Closure";
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -193,10 +184,6 @@ namespace LcmsNetPlugins.LabJackU3
             get => m_labjack.LocalID;
             set => m_labjack.LocalID = value;
         }
-
-        #endregion
-
-        #region Methods
 
         //Initialize/Shutdown don't really apply
         //Maybe confirm that we can communicate to the labjack? I don't know.
@@ -299,20 +286,19 @@ namespace LcmsNetPlugins.LabJackU3
 
             return error;
         }
+
         public override string ToString()
         {
             return m_name;
         }
-        #endregion
 
-        #region IDevice Data Provider Methods
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
+
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
-        #endregion
 
         /// <summary>
         /// Writes any performance data cached to directory path provided.
@@ -324,8 +310,6 @@ namespace LcmsNetPlugins.LabJackU3
         {
         }
 
-        #region IDevice Members
-
         /// <summary>
         /// Gets or sets the error type of last error.
         /// </summary>
@@ -336,10 +320,6 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         public DeviceType DeviceType => DeviceType.Component;
 
-        #endregion
-
-        #region IDevice Members
-
         public List<string> GetStatusNotificationList()
         {
             return new List<string>() { "Status" };
@@ -349,8 +329,6 @@ namespace LcmsNetPlugins.LabJackU3
         {
             return new List<string>();
         }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

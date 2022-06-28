@@ -124,8 +124,6 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        #region Members
-
         /// <summary>
         /// The list of methods to render.
         /// </summary>
@@ -139,10 +137,6 @@ namespace LcmsNet.Method.ViewModels
         //member variables for scrolling
         private int index; //tracks index
         private Rect[] buttonLocations; // used for scroll buttons on conversation view
-
-        #endregion
-
-        #region Device-Color Mapping Methods
 
         /// <summary>
         /// Remaps the devices to colors.
@@ -172,10 +166,6 @@ namespace LcmsNet.Method.ViewModels
             // Clear the list so we can re-adjust the mappings
             deviceColorMappings = LCMethodRenderer.ConstructDeviceColorMap(DeviceManager.Manager.Devices);
         }
-
-        #endregion
-
-        #region Rendering and Render Invoking
 
         /// <summary>
         /// Renders the method provided.
@@ -290,7 +280,5 @@ namespace LcmsNet.Method.ViewModels
                 e.DrawGeometry(Brushes.Black, null, downGeometry);
             }
         }
-
-        #endregion
     }
 }

@@ -11,8 +11,6 @@ namespace LcmsNetSDK.Data
     [Serializable]
     public class ColumnData : INotifyPropertyChangedExt, IEquatable<ColumnData>, ICloneable
     {
-        #region Constructors
-
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -43,14 +41,10 @@ namespace LcmsNetSDK.Data
             return newColumnData;
         }
 
-        #endregion
-
         public override string ToString()
         {
             return $"ID = {ID} Name = {Name}";
         }
-
-        #region Delegate Definitions
 
         public delegate void DelegateStatusChanged(
             object sender, ColumnStatus previousStatus, ColumnStatus newStatus);
@@ -65,10 +59,6 @@ namespace LcmsNetSDK.Data
         public delegate void DelegateColorChanged(object sender, Color previousColor, Color newColor);
 
         public delegate void DelegateNameChanged(object sender, string name, string oldName);
-
-        #endregion
-
-        #region Members
 
         /// <summary>
         /// Index of the column.
@@ -140,10 +130,6 @@ namespace LcmsNetSDK.Data
         {
             colorString = TypeDescriptor.GetConverter(typeof(Color)).ConvertToString(m_columnColor);
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets if the column is the first column designated to run.
@@ -224,8 +210,6 @@ namespace LcmsNetSDK.Data
                 }
             }
         }
-
-        #endregion
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;

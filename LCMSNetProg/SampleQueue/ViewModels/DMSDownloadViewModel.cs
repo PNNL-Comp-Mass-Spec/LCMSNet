@@ -22,8 +22,6 @@ namespace LcmsNet.SampleQueue.ViewModels
     /// </summary>
     public class DMSDownloadViewModel : ReactiveObject
     {
-        #region "Properties"
-
         /// <summary>
         /// Connection string for DMS SQL Server connection
         /// </summary>
@@ -48,10 +46,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// Command to sort available requests by batch, block, and run order
         /// </summary>
         public ReactiveCommand<Unit, Unit> SortByBatchBlockRunOrderCommand { get; }
-
-        #endregion
-
-        #region "Class variables"
 
         private readonly List<DmsDownloadData> dmsRequestList = new List<DmsDownloadData>();
         private string matchString;
@@ -158,10 +152,6 @@ namespace LcmsNet.SampleQueue.ViewModels
             get => blockingEnabled;
             set => this.RaiseAndSetIfChanged(ref blockingEnabled, value);
         }
-
-        #endregion
-
-        #region "Methods"
 
         /// <summary>
         /// Constructor
@@ -517,8 +507,5 @@ namespace LcmsNet.SampleQueue.ViewModels
 //            classStatusTools.SendStatusMsg("Adding " + retList.Count.ToString() + " samples from DMS");
             return retList;
         }
-
-        #endregion
-
     }
 }

@@ -9,8 +9,6 @@ namespace FluidicsSDK.Devices
 {
     public sealed class ContactClosure : FluidicsDevice
     {
-        #region members
-
         /// <summary>
         /// defines minimum distance from the primary primitive of the pump for others to be drawn
         /// </summary>
@@ -29,10 +27,6 @@ namespace FluidicsSDK.Devices
         const int MAX_PIXEL_VARIANCE = 5;
 
         IContactClosure m_pump;
-
-        #endregion
-
-        #region Methods
 
         public override void ActivateState(int state)
         {
@@ -86,10 +80,6 @@ namespace FluidicsSDK.Devices
             return string.Empty;
         }
 
-        #endregion
-
-        #region Properties
-
         public override int CurrentState
         {
             //pumps don't have a state of this kind.
@@ -99,7 +89,5 @@ namespace FluidicsSDK.Devices
                 //do nothing
             }
         }
-
-        #endregion
     }
 }

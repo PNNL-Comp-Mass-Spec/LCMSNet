@@ -9,10 +9,6 @@ namespace LcmsNet.SampleQueue
     /// </summary>
     public class SampleQueueArgs
     {
-        #region Members
-
-        #endregion
-
         /// <summary>
         /// Constructor that takes an array of samples that were operated upon.
         /// </summary>

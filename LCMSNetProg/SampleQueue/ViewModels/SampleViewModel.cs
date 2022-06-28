@@ -11,15 +11,11 @@ namespace LcmsNet.SampleQueue.ViewModels
 {
     public class SampleViewModel : ReactiveObject, IEquatable<SampleViewModel>
     {
-        #region Constants
-
         /// <summary>
         /// Index Offset for going from a zero based array for configuration data to the
         /// user-readable column display.
         /// </summary>
         protected const int CONST_COLUMN_INDEX_OFFSET = 1;
-
-        #endregion
 
         public SampleData Sample { get; }
 
@@ -194,8 +190,6 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public string LcMethodCueBannerText => lcMethodCueBannerText.Value;
 
-        #region Equality
-
         public bool Equals(SampleViewModel other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -215,7 +209,5 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             return (Sample != null ? Sample.GetHashCode() : 0);
         }
-
-        #endregion
     }
 }

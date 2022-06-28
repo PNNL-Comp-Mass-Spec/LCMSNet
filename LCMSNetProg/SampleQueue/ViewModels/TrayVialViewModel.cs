@@ -14,8 +14,6 @@ namespace LcmsNet.SampleQueue.ViewModels
     /// </summary>
     public class TrayVialViewModel : ReactiveObject
     {
-        #region "Constructors"
-
         /// <summary>
         /// Calling this constructor is only for the windows WPF designer.
         /// </summary>
@@ -63,18 +61,10 @@ namespace LcmsNet.SampleQueue.ViewModels
             MoveToUnassignedCommand = ReactiveCommand.Create(() => UpdateTrayAssignment(0), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
         }
 
-        #endregion
-
-        #region "Class variables"
-
         private bool showUnassigned = true;
         private readonly bool masterView = false;
         private int assignVial = 54;
         private int maxVials = 54;
-
-        #endregion
-
-        #region "Properties"
 
         public ReadOnlyObservableCollection<TrayVialSampleViewModel> FilteredSamples { get; }
 
@@ -109,10 +99,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReactiveCommand<Unit, Unit> MoveToTray5Command { get; }
         public ReactiveCommand<Unit, Unit> MoveToTray6Command { get; }
         public ReactiveCommand<Unit, Unit> MoveToUnassignedCommand { get; }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Updates tray assignments for selected samples
@@ -171,7 +157,5 @@ namespace LcmsNet.SampleQueue.ViewModels
                 sample.Vial = vial;
             }
         }
-
-        #endregion
     }
 }

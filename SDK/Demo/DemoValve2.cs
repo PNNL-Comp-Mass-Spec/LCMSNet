@@ -27,7 +27,6 @@ namespace DemoPluginLibrary
                                     "Demo")]
     public class DemoValve2 : IDevice, IMultiPositionValve
     {
-        #region Methods
         public DemoValve2()
         {
             Name = "Demo Valve";
@@ -99,9 +98,6 @@ namespace DemoPluginLibrary
             PosChanged?.Invoke(this, new ValvePositionEventArgs<int>((int)position));
         }
 
-        #endregion
-
-        #region Events
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
@@ -122,9 +118,6 @@ namespace DemoPluginLibrary
 
         public event EventHandler<ValvePositionEventArgs<int>> PosChanged;
 
-        #endregion
-
-        #region Properties
         public DeviceType DeviceType => DeviceType.Component;
 
         public DeviceErrorStatus ErrorType { get; set; }
@@ -148,8 +141,6 @@ namespace DemoPluginLibrary
         public int Position { get; set; }
 
         public int NumberOfPositions { get; }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

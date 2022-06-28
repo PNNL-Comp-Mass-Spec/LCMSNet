@@ -29,8 +29,6 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
             Name = "Failure Injector";
         }
 
-        #region IDevice Members
-
         private string name;
         public string Name
         {
@@ -78,32 +76,33 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
             StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(this.Status, "Initialized", this));
             return true;
         }
+
         public bool Shutdown()
         {
             return true;
         }
+
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
+
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
+
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
         }
-        public MonitoringComponent GetHealthData()
-        {
-            return null;
-        }
+
         public List<string> GetStatusNotificationList()
         {
             return new List<string>() { "Inject Status", "Method Status", "Initialized", "Status", "Number Change"};
         }
+
         public List<string> GetErrorNotificationList()
         {
             return new List<string>() { "Inject Failure", "Method Failure" };
         }
-        #endregion
 
         /// <summary>
         /// Injects a failure into the system.
@@ -145,6 +144,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
             }
             return true;
         }
+
         /// <summary>
         /// Injects a failure into the system.
         /// </summary>
@@ -166,6 +166,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
             }
             return false;
         }
+
         public bool InjectStatus(string status)
         {
             ApplicationLogger.LogMessage(1, status);
@@ -190,6 +191,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
             }
             return true;
         }
+
         /// <summary>
         /// Injects a failure into the system.
         /// </summary>

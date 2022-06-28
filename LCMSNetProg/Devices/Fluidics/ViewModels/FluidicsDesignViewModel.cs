@@ -61,8 +61,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             Dispose();
         }
 
-        #region Members
-
         // fluidics moderator, controls access to fluidics managers and provides interface for working with them
         private readonly FluidicsModerator fluidicsMod;
 
@@ -81,10 +79,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         private FluidicsControlViewModel fluidicsControlVm;
         private ModelCheckReportsViewModel reporterVm;
         private AdvancedDeviceControlPanelViewModel advancedDeviceControlPanel;
-
-        #endregion
-
-        #region Properties
 
         public event EventHandler RefreshEvent;
 
@@ -139,10 +133,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             private set => this.RaiseAndSetIfChanged(ref advancedDeviceControlPanel, value);
         }
 
-        #endregion
-
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> LoadCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveAsCommand { get; }
@@ -152,10 +142,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         public ReactiveCommand<Unit, Unit> RemoveCommand { get; }
         public ReactiveCommand<Unit, Unit> ConnectCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
-
-        #endregion
-
-        #region Methods
 
         private void Manager_DeviceRenamed(object sender, IDevice device)
         {
@@ -424,10 +410,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             }
         }
 
-        #endregion
-
-        #region Events
-
         /// <summary>
         /// Initialize devices.
         /// </summary>
@@ -567,7 +549,5 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 ShowError(ex);
             }
         }
-
-        #endregion
     }
 }

@@ -108,8 +108,6 @@ namespace LcmsNet.Devices.Pumps.ViewModels
             PumpName = pump.Name;
         }
 
-        #region Device Manager Event Handlers
-
         /// <summary>
         /// Handles when the device manager removes a device.
         /// </summary>
@@ -193,7 +191,5 @@ namespace LcmsNet.Devices.Pumps.ViewModels
                 });
             }
         }
-
-        #endregion
     }
 }

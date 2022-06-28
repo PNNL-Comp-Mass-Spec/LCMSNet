@@ -21,8 +21,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 {
     public class PalViewModel : BaseDeviceControlViewModelReactive, IDeviceControl, IDisposable
     {
-        #region Constructors
-
         /// <summary>
         /// The main constructor. Creates the PAL class and initializes the port.
         /// </summary>
@@ -85,18 +83,10 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             SetBaseDevice(Pal);
         }
 
-        #endregion
-
-        #region Events
-
         /// <summary>
         /// Indicates that the device is available to take commands
         /// </summary>
         public event Action Free;
-
-        #endregion
-
-        #region Members
 
         /// <summary>
         /// The class which controls the PAL itself.
@@ -120,10 +110,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         private string selectVialsTray;
         private string selectVialsOutput;
         private string timeReport = "";
-
-        #endregion
-
-        #region Properties
 
         public ReadOnlyObservableCollection<string> MethodComboBoxOptions { get; }
         public ReadOnlyObservableCollection<string> TrayComboBoxOptions { get; }
@@ -275,10 +261,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             }
         }
 
-        #endregion
-
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> RefreshMethodListCommand { get; }
         public ReactiveCommand<Unit, Unit> RunMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> StopMethodCommand { get; }
@@ -294,10 +276,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
             SelectVialsOutput = result;
         }
-
-        #endregion
-
-        #region Methods
 
         public override UserControl GetDefaultView()
         {
@@ -549,7 +527,5 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             }
             MonitorStatus = false;
         }
-
-        #endregion
     }
 }

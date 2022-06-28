@@ -13,8 +13,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
     /// </summary>
     public class NetStartViewModel : NetStartViewModelBase
     {
-        #region "Constructors"
-
         public NetStartViewModel()
         {
         }
@@ -32,10 +30,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
             SetBaseDevice(m_netStart);
         }
 
-        #endregion
-
-        #region Members
-
         /// <summary>
         /// A NesStart object to use
         /// </summary>
@@ -45,10 +39,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
         /// Fired when the instrument methods are updated.
         /// </summary>
         public event DelegateNameListReceived InstrumentMethodListReceived;
-
-        #endregion
-
-        #region "Properties"
 
         /// <summary>
         /// Device associated with this control
@@ -67,10 +57,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
             get => m_netStart.Emulation;
             set => m_netStart.Emulation = value;
         }
-
-        #endregion
-
-        #region Network Start Events
 
         /// <summary>
         /// Handles when the device has an error!
@@ -95,8 +81,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
             InstrumentMethodListReceived?.Invoke(methodNames);
         }
 
-        #endregion
-
         /// <summary>
         /// Updates the user interface.
         /// </summary>
@@ -116,8 +100,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
         {
             Status = "Status: " + m_netStart.Status + " - " + message;
         }
-
-        #region Form Event Handlers
 
         /// <summary>
         /// Manually starts the acquisition.
@@ -164,7 +146,5 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart
             m_netStart.Port = Port;
             OnSaveRequired();
         }
-
-        #endregion
     }
 }

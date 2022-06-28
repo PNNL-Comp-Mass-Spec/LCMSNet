@@ -8,8 +8,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
 {
     public class IscoPumpDisplayViewModel : ReactiveObject
     {
-        #region "Constructors"
-
         public IscoPumpDisplayViewModel()
         {
             this.WhenAnyValue(x => x.MinFlowSp, x => x.MaxFlowSp, x => x.MinPressSp, x => x.MaxPressSp).Subscribe(x => UpdateSetpointLimits());
@@ -26,18 +24,10 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             SetPumpIndex(index);
         }
 
-        #endregion
-
-        #region "Events"
-
         public event DelegateIscoPumpDisplaySetpointHandler SetpointChanged;
         public event DelegateIscoPumpDisplayHandler StartRefill;
         public event DelegateIscoPumpDisplayHandler StartPump;
         public event DelegateIscoPumpDisplayHandler StopPump;
-
-        #endregion
-
-        #region "Class variables"
 
         private int pumpIndex;
         private IscoOperationMode operationMode;
@@ -57,10 +47,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         private double maxFlowLimit = 50D;
         private double maxPressSp = 10000D;
         private double minPressSp = 10D;
-
-        #endregion
-
-        #region "Properties"
 
         public string PumpName
         {
@@ -210,18 +196,10 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             private set => this.RaiseAndSetIfChanged(ref problemStatusString, value);
         }
 
-        #endregion
-
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> SetSetpointCommand { get; }
         public ReactiveCommand<Unit, Unit> StartPumpCommand { get; }
         public ReactiveCommand<Unit, Unit> StopPumpCommand { get; }
         public ReactiveCommand<Unit, Unit> RefillCommand { get; }
-
-        #endregion
-
-        #region "Methods"
 
         /// <summary>
         /// Initializes the pump display
@@ -385,7 +363,5 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         {
             StopPump?.Invoke(this, pumpIndex);
         }
-
-        #endregion
     }
 }

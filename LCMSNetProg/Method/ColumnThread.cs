@@ -18,8 +18,6 @@ namespace LcmsNet.Method
     /// </summary>
     public class ColumnThread
     {
-        #region Members and Constants
-
         /// <summary>
         /// The ID of the column this thread is working on.
         /// </summary>
@@ -44,10 +42,6 @@ namespace LcmsNet.Method
         private const int CONST_VERBOSE_LEAST = 0;
         private const int CONST_VERBOSE_EVENTS = 1;
 
-        #endregion
-
-        #region Properties
-
         public string Name { get; set; }
 
         public SampleData Sample => m_sampleData;
@@ -58,10 +52,6 @@ namespace LcmsNet.Method
         /// Gets or sets how verbose to make the debug output.
         /// </summary>
         public int VerboseLevel { get; set; }
-
-        #endregion
-
-        #region Class Methods
 
         public ColumnThread(int id, BackgroundWorker worker)
         {
@@ -89,10 +79,6 @@ namespace LcmsNet.Method
                 Trace.Flush();
             }
         }
-
-        #endregion
-
-        #region Method/Event Execution
 
         /// <summary>
         /// aborts current wait timer.
@@ -333,7 +319,5 @@ namespace LcmsNet.Method
         {
             ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message);
         }
-
-        #endregion
     }
 }

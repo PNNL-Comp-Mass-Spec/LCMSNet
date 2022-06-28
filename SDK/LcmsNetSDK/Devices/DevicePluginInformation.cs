@@ -34,8 +34,6 @@ namespace LcmsNetSDK.Devices
             return name;
         }
 
-        #region Properties
-
         /// <summary>
         /// Gets or sets the device type.
         /// </summary>
@@ -45,7 +43,5 @@ namespace LcmsNetSDK.Devices
         /// Gets or sets the attribute of the device.
         /// </summary>
         public DeviceControlAttribute DeviceAttribute { get; set; }
-
-        #endregion
     }
 }

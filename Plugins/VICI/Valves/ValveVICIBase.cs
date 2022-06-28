@@ -10,8 +10,6 @@ namespace LcmsNetPlugins.VICI.Valves
 {
     public abstract class ValveVICIBase : IDevice
     {
-        #region Members
-
         /// <summary>
         /// The valve's ID.
         /// </summary>
@@ -32,10 +30,6 @@ namespace LcmsNetPlugins.VICI.Valves
         protected static readonly int IDChangeDelayTimeMsec = 325;  //milliseconds
         protected const int MinTimeBetweenCommandsMs = 100; // milliseconds
 
-        #endregion
-
-        #region Events
-
         /// <summary>
         /// Fired when a property changes in the device.
         /// </summary>
@@ -50,10 +44,6 @@ namespace LcmsNetPlugins.VICI.Valves
         /// Fired when an error occurs in the device.
         /// </summary>
         public event EventHandler<DeviceErrorEventArgs> Error;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Default constructor
@@ -108,10 +98,6 @@ namespace LcmsNetPlugins.VICI.Valves
             //deviceName        = classDeviceManager.Manager.CreateUniqueDeviceName("valve");
             deviceName = defaultName;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
@@ -237,10 +223,6 @@ namespace LcmsNetPlugins.VICI.Valves
         /// Display string for the Last Measured Position
         /// </summary>
         public abstract string LastMeasuredPositionDisplay { get; }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Indicates that a save in the Fluidics designer is required
@@ -425,6 +407,7 @@ namespace LcmsNetPlugins.VICI.Valves
             Version = version;
             return version;
         }
+
         /// <summary>
         /// Get the hardware ID of the connected valve.
         /// </summary>
@@ -774,10 +757,6 @@ namespace LcmsNetPlugins.VICI.Valves
             return deviceName;
         }
 
-        #endregion
-
-        #region IDevice Members
-
         /// <summary>
         /// Gets or sets the abort event for scheduling.
         /// </summary>
@@ -812,6 +791,7 @@ namespace LcmsNetPlugins.VICI.Valves
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
+
         public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
@@ -823,8 +803,6 @@ namespace LcmsNetPlugins.VICI.Valves
         public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.Component;
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

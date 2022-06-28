@@ -8,11 +8,9 @@ namespace FluidicsPack
         "Fluidics Components")]
     public class Tee : FluidicsComponentBase
     {
-        #region Methods
         public Tee()
         {
             Name = "Tee";
         }
-        #endregion
     }
 }

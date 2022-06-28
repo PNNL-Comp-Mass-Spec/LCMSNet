@@ -5,8 +5,6 @@
     /// </summary>
     public class LCMethodFactory
     {
-        #region Constants
-
         /// <summary>
         /// X-Path string for a LC-method if it is special (not run on a specific column).
         /// </summary>
@@ -126,7 +124,5 @@
         /// X-Path string for lc-method name node.
         /// </summary>
         public const string CONST_XPATH_VALUE = "value";
-
-        #endregion
     }
 }

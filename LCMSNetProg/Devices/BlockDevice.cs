@@ -48,8 +48,6 @@ namespace LcmsNet.Devices
             remove { }
         }
 
-        #region LC-Method Registered Methods
-
         [LCMethodEvent("Block", MethodOperationTimeoutType.Parameter)]
         public void Block(double timeToBlock)
         {
@@ -58,8 +56,6 @@ namespace LcmsNet.Devices
             };
             timer.WaitSeconds(timeToBlock);
         }
-
-        #endregion
 
         /// <summary>
         /// Returns the name of this device.
@@ -70,18 +66,12 @@ namespace LcmsNet.Devices
             return Name;
         }
 
-        #region Members
-
         /// <summary>
         /// Status of the device currently.
         /// </summary>
         private DeviceStatus m_status;
 
         private string name;
-
-        #endregion
-
-        #region IDevice Members
 
         /// <summary>
         /// Gets or sets the abort event for scheduling.
@@ -157,8 +147,6 @@ namespace LcmsNet.Devices
         public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.BuiltIn;
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

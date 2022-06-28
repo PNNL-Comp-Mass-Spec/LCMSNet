@@ -10,8 +10,6 @@ namespace LcmsNetCommonControls.Devices
     /// </summary>
     public abstract class BaseDeviceControlViewModelReactive : ReactiveObject, IDeviceControl
     {
-        #region Methods
-
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -35,8 +33,6 @@ namespace LcmsNetCommonControls.Devices
             Name = device?.Name;
         }
 
-        #endregion
-
         /// <summary>
         /// Updates the device status line
         /// </summary>
@@ -45,8 +41,6 @@ namespace LcmsNetCommonControls.Devices
         {
             DeviceStatus = "Status: " + message;
         }
-
-        #region Events
 
         /// <summary>
         /// An event that indicates the name has changed.
@@ -74,10 +68,6 @@ namespace LcmsNetCommonControls.Devices
         {
             SaveRequired?.Invoke();
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Indicates whether the device is currently running or not.
@@ -115,7 +105,5 @@ namespace LcmsNetCommonControls.Devices
 
         private string name = "";
         private string deviceStatus = "";
-
-        #endregion
     }
 }

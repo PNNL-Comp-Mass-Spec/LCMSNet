@@ -67,8 +67,6 @@ namespace LcmsNetSDK.Devices
             return string.IsNullOrWhiteSpace(m_name) ? "Undefined timer" : m_name;
         }
 
-        #region Members
-
         /// <summary>
         /// Name of the device.
         /// </summary>
@@ -78,10 +76,6 @@ namespace LcmsNetSDK.Devices
         /// Status of the device currently.
         /// </summary>
         private DeviceStatus m_status;
-
-        #endregion
-
-        #region LC-Method Registered Methods..
 
         /// <summary>
         /// Waits for N milliseconds.
@@ -113,10 +107,6 @@ namespace LcmsNetSDK.Devices
         {
             resetEvent.WaitOne(milliSeconds);
         }
-
-        #endregion
-
-        #region IDevice Members
 
         /// <summary>
         /// Gets or sets whether the device is emulated or not.
@@ -183,10 +173,6 @@ namespace LcmsNetSDK.Devices
             }
         }
 
-        #endregion
-
-        #region IDevice Data Provider Methods
-
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
         }
@@ -195,17 +181,9 @@ namespace LcmsNetSDK.Devices
         {
         }
 
-        #endregion
-
-        #region IDevice Members
-
         public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.Virtual;
-
-        #endregion
-
-        #region IDevice Members
 
         public List<string> GetStatusNotificationList()
         {
@@ -216,8 +194,6 @@ namespace LcmsNetSDK.Devices
         {
             return new List<string>();
         }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

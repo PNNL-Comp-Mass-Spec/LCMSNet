@@ -33,10 +33,6 @@ namespace LcmsNetSDK.Logging
             logFileStreamTimeout = new Timer(CloseLogFile, this, TimeSpan.FromHours(1), TimeSpan.FromHours(1));
         }
 
-        #region Properties
-
-        #region Events
-
         /// <summary>
         /// Delegate method handler defining how an error event will be called.
         /// </summary>
@@ -48,16 +44,10 @@ namespace LcmsNetSDK.Logging
         /// </summary>
         public static event DelegateLogPathReporter LogFilePathDefined;
 
-        #endregion
-
         /// <summary>
         /// Gets the file log path.
         /// </summary>
         public static string LogPath { get; private set; }
-
-        #endregion
-
-        #region "Methods"
 
         public override void LogError(int errorLevel, ErrorLoggerArgs args)
         {
@@ -256,8 +246,6 @@ namespace LcmsNetSDK.Logging
             var logFileName = "Log_" + TimeKeeper.Instance.Now.ToString("yyyyMMdd_HHmmss") + ".txt";
             return Path.Combine(Path.Combine(basePath, "Log"), logFileName);
         }
-
-        #endregion
 
         public void Dispose()
         {

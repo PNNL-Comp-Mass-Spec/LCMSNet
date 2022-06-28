@@ -7,8 +7,6 @@ namespace LcmsNetPlugins.LabJackU12
     [Serializable]
     public class LabjackU12
     {
-        #region Members
-
         /// <summary>
         /// The Labjack's ID. Defaults to 0.
         /// </summary>
@@ -27,10 +25,6 @@ namespace LcmsNetPlugins.LabJackU12
         private const int CONST_ERROR_INVALIDINPUT = 40;
         private static readonly Dictionary<int, object> lockObjects = new Dictionary<int, object>(1);
         private static readonly object dictionaryLock = new object();
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Default constructor.
@@ -69,10 +63,6 @@ namespace LcmsNetPlugins.LabJackU12
             }
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets or sets the labjack's local ID, which is probably 0.
         /// This doesn't change the hardware ID of the labjack itself, just the ID the software uses to communicate.
@@ -92,10 +82,6 @@ namespace LcmsNetPlugins.LabJackU12
         /// Gets the driver version, as set by the getDriverVersion() function
         /// </summary>
         public float DriverVersion { get; private set; }
-
-        #endregion
-
-        #region Methods
 
         private object GetLockObject()
         {
@@ -483,7 +469,5 @@ namespace LcmsNetPlugins.LabJackU12
 
             throw new LabjackU12Exception(msg + ":\r\n\r\n" + errorString);
         }
-
-        #endregion
     }
 }

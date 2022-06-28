@@ -35,14 +35,10 @@ namespace LcmsNetSDK.Method
     [Serializable]
     public class LCEvent : ICloneable, IEquatable<LCEvent>
     {
-        #region Members
-
         /// <summary>
         /// Duration of the event.
         /// </summary>
         private TimeSpan mtimespan_duration;
-
-        #endregion
 
         /// <summary>
         /// Constructor.
@@ -84,8 +80,6 @@ namespace LcmsNetSDK.Method
 
             return newEvent;
         }
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the method to be started when an event is indeterminant.
@@ -197,8 +191,6 @@ namespace LcmsNetSDK.Method
             get => MethodData.BreakPoint;
             private set => MethodData.BreakPoint = value;
         }
-
-        #endregion
 
         public bool Equals(LCEvent other)
         {

@@ -11,15 +11,12 @@ namespace FluidicsSDK.Managers
 {
     public class FluidicsDeviceManager
     {
-        #region Members
         private static FluidicsDeviceManager m_instance;
         private readonly List<FluidicsDevice> m_devices;
         public event EventHandler<FluidicsDeviceChangeEventArgs> DeviceAdded;
         public event EventHandler<FluidicsDeviceChangeEventArgs> DeviceRemoved;
         public event EventHandler DeviceChanged;
-        #endregion
 
-        #region Methods
         /// <summary>
         ///  default constructor
         /// </summary>
@@ -235,16 +232,11 @@ namespace FluidicsSDK.Managers
         {
             return m_devices;
         }
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Property to access class instance of the fluidics device manager.
         /// </summary>
         public static FluidicsDeviceManager DeviceManager => m_instance ?? (m_instance = new FluidicsDeviceManager());
-
-        #endregion
 
         /// <summary>
         /// find a device by it's associated IDevice

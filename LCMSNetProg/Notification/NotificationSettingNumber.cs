@@ -53,8 +53,6 @@ namespace LcmsNet.Notification
             return false;
         }
 
-        #region Util
-
         /// <summary>
         /// Returns true if the type is a double, short, long, int, uint, ushort, ulong, or float.
         /// </summary>
@@ -76,7 +74,5 @@ namespace LcmsNet.Notification
             isNumeric = isNumeric || (typeof (float) == t);
             return isNumeric;
         }
-
-        #endregion
     }
 }

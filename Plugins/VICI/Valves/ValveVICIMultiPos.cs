@@ -31,8 +31,6 @@ namespace LcmsNetPlugins.VICI.Valves
         //     Data Bits   8
         //     Handshake   None
 
-        #region Members
-
         private int lastMeasuredPosition;
         private int numberOfPositions;
         private int hardwarePositions;
@@ -52,10 +50,6 @@ namespace LcmsNetPlugins.VICI.Valves
         private static readonly int StepRotationDelayTimeMsec = 1170; // max rotation time for a single step for a 4-port valve.
         private const int CONST_DEFAULT_TIMEOUT = 1500;
 
-        #endregion
-
-        #region Events
-
         //Position change
         public event EventHandler<ValvePositionEventArgs<int>> PosChanged;
         protected virtual void OnPosChanged(int position)
@@ -67,10 +61,6 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             return typeof(FifteenPositionState);
         }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Default constructor
@@ -99,10 +89,6 @@ namespace LcmsNetPlugins.VICI.Valves
             NumberOfPositions  = numPositions;
             HardwarePositions = numPositions;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The last measured position of the valve.
@@ -142,10 +128,6 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public override string LastMeasuredPositionDisplay =>
             LastMeasuredPosition > 0 ? LastMeasuredPosition.ToString() : "Unknown";
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Initialize the valve in the software.
@@ -485,6 +467,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
             return ValveErrors.Success;
         }
+
         /// <summary>
         /// Gets the number of positions from the device.
         /// </summary>
@@ -649,10 +632,5 @@ namespace LcmsNetPlugins.VICI.Valves
 
             return false;
         }
-
-        #endregion
-
-        #region Method Editor Enabled Methods
-        #endregion
     }
 }

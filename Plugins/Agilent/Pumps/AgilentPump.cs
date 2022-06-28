@@ -25,8 +25,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                                  "Pumps")]
     public class AgilentPump : IDevice, IPump, IFluidicsPump, IDisposable
     {
-        #region Members
-
         /// <summary>
         /// An 'instrument' object for the Agilent pump drivers
         /// </summary>
@@ -94,12 +92,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private readonly object pumpCommLock = new object();
         private bool isMonitoringDisabled = false;
 
-        #endregion
-
-        #region Constants
-
-        #region COMConstants
-
         /// <summary>
         /// Status of the device.
         /// </summary>
@@ -111,10 +103,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private const int CONST_READTIMEOUT = 10000; //milliseconds
         private const int CONST_MONITORING_MINUTES = 10;
         private const int CONST_MONITORING_SECONDS_ELAPSED = 10;
-
-        #endregion
-
-        #region Status Constants
 
         /// <summary>
         /// Notification string for flow changes
@@ -131,10 +119,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private const string CONST_ERROR_FLOW_EXCEEDS = "Flow Exceeds limit while pressure control";
         private const string CONST_ERROR_FLOW_UNSTABLE = "Column flow is unstable";
 
-        #endregion
-
-        #region Error Constants
-
         /// <summary>
         /// The error message was not set.
         /// </summary>
@@ -146,12 +130,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private const string CONST_FLOW_SET = "Failed to set flow rate";
         private const string CONST_PRESSURE_SET = "Failed to set pressure";
         private const string CONST_VOLUME_SET = "Failed to set volume";
-
-        #endregion
-
-        #endregion
-
-        #region Events
 
         /// <summary>
         /// Fired when monitoring data is received from the instrument.
@@ -182,10 +160,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// Monitoring data - pump readbacks
         /// </summary>
         public List<PumpDataPoint> MonitoringData;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Default constructor - for use within LCMSNet
@@ -313,10 +287,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " created.");
         }
 
-        #endregion
-
-        #region Properties
-
         [DeviceSavedSetting("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep { get; set; }
 
@@ -431,10 +401,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public bool IsMonitoringDiabled => isMonitoringDisabled;
 
-        #endregion
-
-        #region Pump Purging
-
         public bool LoadPurgeData()
         {
             return GetPurgeData(PurgeA1) && GetPurgeData(PurgeA2) && GetPurgeData(PurgeB1) && GetPurgeData(PurgeB2);
@@ -501,10 +467,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             var worked = SendCommand(command, out reply);
             return worked;
         }
-
-        #endregion
-
-        #region Pump Status Code Converters
 
         private void CreateErrorCodes()
         {
@@ -615,10 +577,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
         }
 
-        #endregion
-
-        #region Pump Event Handlers
-
         /// <summary>
         /// Handles events when a pump error occurs
         /// </summary>
@@ -640,10 +598,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 HandleError("Pump " + Name + " failed " + e.Message, CONST_PUMP_ERROR);
             }
         }
-
-        #endregion
-
-        #region Methods
 
         public void DisableMonitoring()
         {
@@ -865,8 +819,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
         }
 
-        #region Pump Events
-
         /// <summary>
         /// Handles errors from the pump.
         /// </summary>
@@ -988,8 +940,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
         }
 
-        #endregion
-
         /// <summary>
         /// Closes the connection to the device
         /// </summary>
@@ -1098,10 +1048,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             return errorCode;
         }
-
-        #endregion
-
-        #region LC Methods - and method editor visible.
 
         /// <summary>
         /// Sets the pump mode.
@@ -1267,10 +1213,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             SendCommand("PUMP 2", out reply, "Attempting to turn pumps to standby.");
             GetPumpState();
         }
-
-        #endregion
-
-        #region Pump Interface methods
 
         public PumpState GetPumpState()
         {
@@ -1817,10 +1759,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             GetPumpInformation();
         }
 
-        #endregion
-
-        #region Settings and Saving Methods
-
         /// <summary>
         /// Indicates that a save is required in the Fluidics Designer
         /// </summary>
@@ -1829,9 +1767,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             DeviceSaveRequired?.Invoke(this, null);
         }
 
-        #endregion
-
-        #region IDevice Data Provider Methods
         /// <summary>
         /// Registers the method with a data provider.
         /// </summary>
@@ -1847,6 +1782,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     break;
             }
         }
+
         /// <summary>
         /// Unregisters the method from the data provider.
         /// </summary>
@@ -1861,9 +1797,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     break;
             }
         }
-        #endregion
-
-        #region Performance and Error Notifications
 
         /// <summary>
         /// Writes the pump method time-table to the directory provided.
@@ -1935,8 +1868,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
             return notifications;
         }
 
-        #endregion
-
         /// <summary>
         /// Returns the name of the device.
         /// </summary>
@@ -1946,11 +1877,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             return Name;
         }
 
-        #region IPump Members
-
         public List<MobilePhase> MobilePhases { get; set; }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

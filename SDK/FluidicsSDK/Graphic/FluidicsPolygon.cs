@@ -15,16 +15,10 @@ namespace FluidicsSDK.Graphic
 
     public class FluidicsPolyline : GraphicsPrimitive
     {
-        #region members
-
         private List<Point> vertices;
         Rect BoundingBox;
         private float m_scale;
         private readonly bool isPolygon = false;
-
-        #endregion
-
-        #region methods
 
         public FluidicsPolyline()
         {
@@ -151,10 +145,6 @@ namespace FluidicsSDK.Graphic
             return BoundingBox.Contains(point);
         }
 
-        #endregion
-
-        #region Properties
-
         public List<Point> Points
         {
             get => vertices;
@@ -177,7 +167,5 @@ namespace FluidicsSDK.Graphic
         /// The boundaries of the primitive
         /// </summary>
         public override Rect Bounds => new Rect(BoundingBox.Location, BoundingBox.Size);
-
-        #endregion
     }
 }

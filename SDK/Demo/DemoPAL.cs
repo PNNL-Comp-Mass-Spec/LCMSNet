@@ -107,6 +107,7 @@ namespace DemoPluginLibrary
         {
             return new List<string>();
         }
+
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }

@@ -63,6 +63,7 @@ namespace LcmsNet.IO.Sequence
         {
             defaultDirectoryPathGetMethod = pathGetMethod;
         }
+
         /// <summary>
         /// Sets the cache location to the path provided
         /// </summary>

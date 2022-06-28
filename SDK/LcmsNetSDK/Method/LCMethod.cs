@@ -46,8 +46,6 @@ namespace LcmsNetSDK.Method
             actualEvents = new List<LCEvent>();
         }
 
-        #region Members
-
         /// <summary>
         /// Start time of the method
         /// </summary>
@@ -82,10 +80,6 @@ namespace LcmsNetSDK.Method
         /// List of LC-events whose values should reflect the actual start times and durations for an LC-Event.
         /// </summary>
         [NonSerialized] private List<LCEvent> actualEvents;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the duration for this action.
@@ -190,10 +184,6 @@ namespace LcmsNetSDK.Method
         /// Gets or sets whether to allow post-method overlap.
         /// </summary>
         public bool AllowPostOverlap { get; set; }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Set the method start time and duration
@@ -345,10 +335,6 @@ namespace LcmsNetSDK.Method
             return newMethod;
         }
 
-        #endregion
-
-        #region "IEquatable Implementation"
-
         public bool Equals(LCMethod other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -382,10 +368,6 @@ namespace LcmsNetSDK.Method
             }
         }
 
-        #endregion
-
-        #region "INotifyPropertyChanged implementation"
-
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -393,7 +375,5 @@ namespace LcmsNetSDK.Method
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        #endregion
     }
 }

@@ -8,13 +8,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// </summary>
     public class IscoPumpData
     {
-        #region "Member variables"
-
         IscoOperationMode m_OpMode = IscoOperationMode.ConstantPressure;
-
-        #endregion
-
-        #region "Properties"
 
         /// <summary>
         /// Pump pressure
@@ -70,10 +64,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// </summary>
         public double RefillRate { get; set; }
 
-        #endregion
-
-        #region "Constructors"
-
         /// <summary>
         /// Constructor overload requiring no parameters
         /// </summary>
@@ -110,7 +100,5 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             ProblemStatus = probStatus;
             PointTime = currTime;
         }
-
-        #endregion
     } //End class
 }

@@ -94,8 +94,6 @@ namespace LcmsNetSDK.Configuration
             return ptrList;
         }
 
-        #region Properties
-
         /// <summary>
         /// Gets or sets the name of the cart.
         /// </summary>
@@ -114,7 +112,5 @@ namespace LcmsNetSDK.Configuration
             }
             set => LCMSSettings.SetParameter(LCMSSettings.PARAM_MINIMUMVOLUME, value.ToString(CultureInfo.InvariantCulture));
         }
-
-        #endregion
     }
 }

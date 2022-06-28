@@ -17,8 +17,6 @@ namespace LcmsNet.Configuration.ViewModels
     /// </summary>
     public class SystemConfigurationViewModel : ReactiveObject
     {
-        #region "Constructors"
-
         /// <summary>
         ///  Default constructor for displaying column data.
         /// </summary>
@@ -69,11 +67,7 @@ namespace LcmsNet.Configuration.ViewModels
             BrowsePdfPathCommand = ReactiveCommand.Create(BrowsePdfPath);
         }
 
-        #endregion
-
         public event EventHandler ColumnNameChanged;
-
-        #region "Class variables"
 
         private double minVolume = 1;
         private string triggerLocation = "";
@@ -81,10 +75,6 @@ namespace LcmsNet.Configuration.ViewModels
         private string timeZone = "";
         private bool enableUndoRedo = true;
         private bool specialColumnEnabled;
-
-        #endregion
-
-        #region Properties
 
         public double MinVolume
         {
@@ -163,10 +153,6 @@ namespace LcmsNet.Configuration.ViewModels
         public ReadOnlyCollection<string> TimeZoneComboBoxOptions { get; }
         public ReactiveCommand<Unit, Unit> BrowsePdfPathCommand { get; }
 
-        #endregion
-
-        #region "Methods"
-
         private void BrowsePdfPath()
         {
             var dialog = new CommonOpenFileDialog()
@@ -204,8 +190,6 @@ namespace LcmsNet.Configuration.ViewModels
             //checkBox_createMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_CREATEMETHODFOLDERS, false));
             //checkBox_copyMethodFolders.Checked = LCMSSettings.GetParameter(LCMSSettings.PARAM_COPYMETHODFOLDERS, false));
         }
-
-        #endregion
 
         ///// <summary>
         ///// Handles the event when the column status is changed.

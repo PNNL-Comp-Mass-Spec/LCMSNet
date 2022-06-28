@@ -48,8 +48,6 @@ namespace FluidicsSimulator
     /// </summary>
     public class FluidicsSimulator: IModelCheckController
     {
-        #region Members
-
         /// <summary>
         /// instance of the fluidics simulator, for singleton pattern
         /// </summary>
@@ -93,10 +91,6 @@ namespace FluidicsSimulator
         private Timer m_simulationTimer;
         private const int DEFAULT_TIMER_INTERVAL = 500; // 1/2 second
 
-        #endregion
-
-        #region Methods
-
         // <summary>
         // private class constructor as per singleton pattern
         // </summary>
@@ -115,6 +109,7 @@ namespace FluidicsSimulator
             StopOnStatusLevel = WantedStatusChanges.All;
             CategoriesRequested = WantedStatusChanges.All;
         }
+
         /// <summary>
         /// simulate events until either a breakpoint is reached, an error has occurred, or all events simulated.
         /// </summary>
@@ -231,10 +226,6 @@ namespace FluidicsSimulator
         {
             Step(this);
         }
-
-        #endregion
-
-        #region StepMethods
 
         private void Step(object caller)
         {
@@ -390,9 +381,6 @@ namespace FluidicsSimulator
             Step(null);
         }
 
-        #endregion
-
-        #region ModelChecking
         /// <summary>
         /// Add a model check to the simulator, will not add the same check object more than once, and will not add objects with the same name as another.
         /// </summary>
@@ -421,6 +409,7 @@ namespace FluidicsSimulator
                 ModelCheckRemoved?.Invoke(this, new ModelCheckControllerEventArgs(check));
             }
         }
+
         /// <summary>
         ///  remove a model check from the simulator by name
         /// </summary>
@@ -502,10 +491,6 @@ namespace FluidicsSimulator
             }
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// gets or sets if the simulator is to stop on model status changes
         /// </summary>
@@ -546,10 +531,6 @@ namespace FluidicsSimulator
         /// </summary>
         public static FluidicsSimulator GetInstance => m_instance ?? (m_instance = new FluidicsSimulator());
 
-        #endregion
-
-        #region Events
-
 #pragma warning disable 67
         public event EventHandler<SimulatedEventArgs> EventExecuting
         {
@@ -563,7 +544,5 @@ namespace FluidicsSimulator
         public event EventHandler<ModelStatusChangeEventArgs> ModelStatusChangeEvent;
         public event EventHandler<ModelCheckControllerEventArgs> ModelCheckAdded;
         public event EventHandler<ModelCheckControllerEventArgs> ModelCheckRemoved;
-
-        #endregion
     }
 }

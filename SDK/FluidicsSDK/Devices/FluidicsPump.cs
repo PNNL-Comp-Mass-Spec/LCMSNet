@@ -11,8 +11,6 @@ namespace FluidicsSDK.Devices
 {
     public sealed class FluidicsPump : FluidicsDevice
     {
-        #region members
-
         /// <summary>
         /// defines minimum distance from the primary primitive of the pump for others to be drawn
         /// </summary>
@@ -38,10 +36,6 @@ namespace FluidicsSDK.Devices
         private double percentB = 0;
         private DateTime lastStatusUpdate = DateTime.MinValue;
         private DateTime lastMonitorUpdate = DateTime.MinValue;
-
-        #endregion
-
-        #region Methods
 
         public override void ActivateState(int state)
         {
@@ -169,10 +163,6 @@ namespace FluidicsSDK.Devices
             return stateString.ToString();
         }
 
-        #endregion
-
-        #region Properties
-
         public override int CurrentState
         {
             //pumps don't have a state of this kind.
@@ -183,12 +173,7 @@ namespace FluidicsSDK.Devices
             }
         }
 
-        #endregion
-
-        #region Events
-
         //event for when device changes
         public override event EventHandler<FluidicsDevChangeEventArgs> DeviceChanged;
-        #endregion
     }
 }

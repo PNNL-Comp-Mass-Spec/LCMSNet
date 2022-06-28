@@ -13,7 +13,6 @@ namespace DemoPluginLibrary
                                    "Demo")]
     public class DemoTee:IDevice
     {
-        #region Methods
         public DemoTee()
         {
             Name = "Demo Tee";
@@ -56,9 +55,6 @@ namespace DemoPluginLibrary
             return new List<string>();
         }
 
-        #endregion
-
-        #region Events
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
@@ -77,9 +73,6 @@ namespace DemoPluginLibrary
             remove { }
         }
 
-        #endregion
-
-        #region Properties
         public DeviceType DeviceType => DeviceType.Component;
 
         public DeviceErrorStatus ErrorType { get; set; }
@@ -98,8 +91,6 @@ namespace DemoPluginLibrary
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
         public bool Emulation { get; set; }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

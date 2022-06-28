@@ -37,10 +37,12 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             : base(msg)
         {
         }
+
         public IscoExceptionReadTimeout(string msg, Exception ex)
             : base(msg, ex)
         {
         }
+
     }
 
     /// <summary>
@@ -57,6 +59,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             : base(msg)
         {
         }
+
         public IscoExceptionWriteTimeout(string msg, Exception ex)
             : base(msg, ex)
         {

@@ -152,8 +152,6 @@ namespace LcmsNet.Notification.ViewModels
             SettingsDisabled = true;
         }
 
-        #region Members
-
         /// <summary>
         /// Maintains map between device and object that holds the notifications settings.
         /// </summary>
@@ -215,10 +213,6 @@ namespace LcmsNet.Notification.ViewModels
         private readonly SourceList<string> eventsList = new SourceList<string>();
         private readonly SourceList<string> assignedEventsList = new SourceList<string>();
         private readonly SourceList<LCMethod> methodsComboBoxOptions = new SourceList<LCMethod>();
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets whether to ignore messages for the time being or not.
@@ -350,19 +344,11 @@ namespace LcmsNet.Notification.ViewModels
         public ReadOnlyObservableCollection<LCMethod> MethodsComboBoxOptions { get; }
 
 
-        #endregion
-
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
         public ReactiveCommand<Unit, Unit> EnableCommand { get; }
         public ReactiveCommand<Unit, Unit> DisableCommand { get; }
         public ReactiveCommand<Unit, DeviceNotificationAction> IgnoreSettingCommand { get; }
         public ReactiveCommand<Unit, Unit> IgnoreAllCommand { get; }
-
-        #endregion
-
-        #region Loading and Saving
 
         /// <summary>
         /// Loads the notification file from path.
@@ -427,10 +413,6 @@ namespace LcmsNet.Notification.ViewModels
             ApplicationLogger.LogMessage(0, "Notification file saved to: " + Settings.Default.NotificationFilePath);
         }
 
-        #endregion
-
-        #region Method Manager Events
-
         private void Manager_MethodUpdated(object sender, LCMethod method)
         {
             methodsComboBoxOptions.Edit(list =>
@@ -458,10 +440,6 @@ namespace LcmsNet.Notification.ViewModels
                 }
             });
         }
-
-        #endregion
-
-        #region Device Manager Events
 
         /// <summary>
         /// Renames the device in the listview
@@ -568,10 +546,6 @@ namespace LcmsNet.Notification.ViewModels
         {
             RemoveNotifier(device);
         }
-
-        #endregion
-
-        #region Events
 
         /// <summary>
         /// Handles events from the devices.
@@ -716,10 +690,6 @@ namespace LcmsNet.Notification.ViewModels
             }
         }
 
-        #endregion
-
-        #region Timer Event Setup And Events
-
         /// <summary>
         /// Updates the timer - if notifications should be sent, and if so how often to send them.
         /// </summary>
@@ -754,10 +724,6 @@ namespace LcmsNet.Notification.ViewModels
                 // classNotifier.WriteSystemHealth();
             }
         }
-
-        #endregion
-
-        #region Setting Actions and Methods
 
         /// <summary>
         /// Sets the action for the current notification.
@@ -810,10 +776,6 @@ namespace LcmsNet.Notification.ViewModels
             }
         }
 
-        #endregion
-
-        #region Form Event Handlers that change the action view.
-
         private void StoreNotificationSettings()
         {
             if (string.IsNullOrWhiteSpace(SelectedEvent))
@@ -849,10 +811,6 @@ namespace LcmsNet.Notification.ViewModels
             currentSetting = setting;
             deviceEventTable[currentDevice].EventMap[currentNotification] = setting;
         }
-
-        #endregion
-
-        #region Form Event Handlers that set the action view
 
         //TODO: Remove this reference if the current device is ever removed.
         private void SelectedDeviceChanged()
@@ -1024,7 +982,5 @@ namespace LcmsNet.Notification.ViewModels
                 EventSettingsEnabled = false;
             }
         }
-
-        #endregion
     }
 }

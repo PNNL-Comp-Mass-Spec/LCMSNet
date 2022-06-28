@@ -6,8 +6,6 @@ namespace LcmsNetPlugins.LabJackU3
     [Serializable]
     public class LabjackU3
     {
-        #region Members
-
         // The Labjack's ID. Defaults to 0.
         private int m_localID;
         // The U12 returned float, the U3 returns double
@@ -17,10 +15,6 @@ namespace LcmsNetPlugins.LabJackU3
         private const int CONST_ERROR_STRING_BUFFER_SIZE = 256;
 
         private U3 m_device;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Default constructor.
@@ -39,10 +33,6 @@ namespace LcmsNetPlugins.LabJackU3
             m_firmwareVersion = 0;
             m_driverVersion    = 0;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the labjack's local ID, which is probably 0.
@@ -64,8 +54,6 @@ namespace LcmsNetPlugins.LabJackU3
         /// </summary>
         public double DriverVersion => m_driverVersion;
 
-        #endregion
-
         public void Initialize()
         {
             // Per example code
@@ -76,8 +64,6 @@ namespace LcmsNetPlugins.LabJackU3
             //pin assignments are in the factory default condition.
             LJUD.ePut(m_device.ljhandle, LJUD.IO.PIN_CONFIGURATION_RESET, 0, 0, 0);
         }
-
-        #region Methods
 
         /// <summary>
         /// General method for writing to a port
@@ -125,6 +111,7 @@ namespace LcmsNetPlugins.LabJackU3
                 return (-1);    //Is this a bad idea? Theoretically, we're never going to be here.
             }
         }
+
         private void ValidateDevice()
         {
             if (m_device == null)
@@ -132,6 +119,7 @@ namespace LcmsNetPlugins.LabJackU3
                 throw new Exception("The labjack is not initialized properly.");
             }
         }
+
         /// <summary>
         /// Reads the current voltage on an analog input channel (AI0-AI7)
         /// </summary>
@@ -274,9 +262,6 @@ namespace LcmsNetPlugins.LabJackU3
             throw new LabjackU3Exception(msg + ":\r\n\r\n" + errorString);
         }
 
-        #endregion
-
-        #region ObsoleteMethods
         /***********************************************************************
         * The WriteIO method may be unnecessary for the U3
         * --Chris
@@ -322,6 +307,5 @@ namespace LcmsNetPlugins.LabJackU3
 
             return state;
         }
-        #endregion
     }
 }

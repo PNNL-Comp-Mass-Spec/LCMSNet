@@ -94,8 +94,6 @@ namespace LcmsNet.Method.ViewModels
         private readonly SourceList<string> columnComboBoxOptions = new SourceList<string>();
         private readonly SourceList<LCMethodEventViewModel> lcMethodEvents = new SourceList<LCMethodEventViewModel>();
 
-        #region Properties
-
         public string MethodName
         {
             get => methodName;
@@ -181,8 +179,6 @@ namespace LcmsNet.Method.ViewModels
         public ReactiveCommand<Unit, Unit> MoveEventDownCommand { get; }
         public ReactiveCommand<Unit, Unit> SelectAllCommand { get; }
         public ReactiveCommand<Unit, Unit> DeselectAllCommand { get; }
-
-        #endregion
 
         private void Manager_MethodUpdated(object sender, LCMethod method)
         {
@@ -473,8 +469,6 @@ namespace LcmsNet.Method.ViewModels
             return false;
         }
 
-        #region Event List Control for Adding, Deleting, Moving, and Rendering LC-Events
-
         /// <summary>
         /// Returns a list of selected events.
         /// </summary>
@@ -731,10 +725,6 @@ namespace LcmsNet.Method.ViewModels
             ApplicationLogger.LogMessage(0, "Control event moved down.");
         }
 
-        #endregion
-
-        #region Control Event Handlers
-
         /// <summary>
         /// Adds a new event.
         /// </summary>
@@ -778,10 +768,6 @@ namespace LcmsNet.Method.ViewModels
                 lcEvent.IsSelected = selected;
             }
         }
-
-        #endregion
-
-        #region Saving and Loading
 
         /// <summary>
         /// Saves the given method to file.
@@ -863,7 +849,5 @@ namespace LcmsNet.Method.ViewModels
 
             ApplicationLogger.LogMessage(0, "Methods loaded.");
         }
-
-        #endregion
     }
 }

@@ -37,15 +37,10 @@ namespace LcmsNet
 {
     public class MainWindowViewModel : ReactiveObject, IDisposable, IHandlesLogging
     {
-
-        #region Constants
-
         /// <summary>
         /// Log File folder name.
         /// </summary>
         public const string CONST_LC_LOG_FOLDER = "Log";
-
-        #endregion
 
         /// <summary>
         /// Default constructor.
@@ -94,8 +89,6 @@ namespace LcmsNet
             this.WhenAnyValue(x => x.SampleManagerVm.TitleBarTextAddition).Subscribe(x => this.RaisePropertyChanged(nameof(WindowTitle)));
         }
 
-        #region Commands
-
         public ReactiveCommand<Unit, Unit> ShowAboutCommand { get; }
         public ReactiveCommand<ContentControl[], Unit> ReportErrorCommand { get; }
         public ReactiveCommand<Unit, Unit> OpenQueueCommand { get; }
@@ -107,8 +100,6 @@ namespace LcmsNet
         public ReactiveCommand<Unit, Unit> ExportQueueToCsvCommand { get; }
         public ReactiveCommand<Unit, Unit> ExportQueueToXcaliburCommand { get; }
 
-        #endregion
-
         /// <summary>
         /// Show the About box
         /// </summary>
@@ -117,8 +108,6 @@ namespace LcmsNet
             var about = new AboutWindow();
             about.ShowDialog();
         }
-
-        #region "Column event handlers"
 
         void Column_NameChanged(object sender, string name, string oldName)
         {
@@ -137,10 +126,6 @@ namespace LcmsNet
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLED + column.ID, (column.Status == ColumnStatus.Disabled).ToString());
             }
         }
-
-        #endregion
-
-        #region Cleanup Methods
 
         /// <summary>
         /// Calls all objects to shutdown and finish doing what they are doing before disposal.
@@ -178,10 +163,6 @@ namespace LcmsNet
 
             //TODO: Check to see if things shutdown.
         }
-
-        #endregion
-
-        #region Properties
 
         public string WindowTitle => windowTitleBase + " " + SampleManagerVm.TitleBarTextAddition;
 
@@ -299,10 +280,6 @@ namespace LcmsNet
             set => MessageLevel = (int)value;
         }
 
-        #endregion
-
-        #region Members
-
         private readonly string windowTitleBase;
         private string statusMessage = "Status";
         private bool canSimulate = true;
@@ -323,10 +300,6 @@ namespace LcmsNet
         /// default PDF generator, used to generate a pdf of information after a sample run.
         /// </summary>
         private readonly IPDF pdfGen = new PDFGen();
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes all the forms and objects
@@ -441,14 +414,10 @@ namespace LcmsNet
             }
         }
 
-        #endregion
-
         private void SystemConfiguration_ColumnNameChanged(object sender, EventArgs e)
         {
             sampleQueue.UpdateAllSamples();
         }
-
-        #region Notification System.
 
         /// <summary>
         /// Handles events from the notification system.
@@ -542,8 +511,6 @@ namespace LcmsNet
             }
         }
 
-        #endregion
-
         private void Messages_ErrorPresent(object sender, EventArgs e)
         {
             IsMessageError = true;
@@ -559,8 +526,6 @@ namespace LcmsNet
             SampleManagerVm.DevicesChanged();
             ApplicationLogger.LogMessage(0, "Device initialization complete.");
         }
-
-        #region Device Manager Events
 
         /// <summary>
         ///
@@ -687,10 +652,6 @@ namespace LcmsNet
         {
             ApplicationLogger_Message(msgLevel, args);
         }
-
-        #endregion
-
-        #region Scheduler and Related Events
 
         /// <summary>
         /// Handles the stop event to stop any sample runs.
@@ -843,10 +804,6 @@ namespace LcmsNet
             UpdateSampleProgress(sender, args);
         }
 
-        #endregion
-
-        #region Error Reporting
-
         private void ReportError(ContentControl[] controls)
         {
             var manager = LCMethodManager.Manager;
@@ -865,8 +822,6 @@ namespace LcmsNet
             reportWindow.ShowDialog();
             about.Close();
         }
-
-        #endregion
 
         public void Dispose()
         {

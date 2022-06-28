@@ -10,12 +10,9 @@ namespace FluidicsPack
 {
     public sealed class FluidicsUnion : FluidicsDevice
     {
-        #region Members
         private const int MAIN_RECT_WIDTH = 50;
         private const int MAIN_RECT_HEIGHT = 20;
-        #endregion
 
-        #region Methods
         public FluidicsUnion()
         {
             const int startPointYOffset = 12; // Also the height of the top shape, compared to the middle rectangle, plus 2
@@ -129,10 +126,6 @@ namespace FluidicsPack
             return string.Empty;
         }
 
-        #endregion
-
-        #region Properties
-
         public override int CurrentState
         {
             get => -1;
@@ -141,7 +134,5 @@ namespace FluidicsPack
                 //do nothing
             }
         }
-
-        #endregion
     }
 }

@@ -75,8 +75,6 @@ namespace LcmsNet.Method
             m_stopSamples = new ManualResetEvent(false);
         }
 
-        #region Constants
-
         /// <summary>
         /// The number of events the scheduler uses to synchronize with other objects besides the column threads.
         /// </summary>
@@ -123,10 +121,6 @@ namespace LcmsNet.Method
         private const int CONST_VERBOSE_LEAST = 0;
 
         private const int CONST_COLUMN_DISPLAY_ADJUSTMENT = 1;
-
-        #endregion
-
-        #region Members
 
         private bool m_stopping;
 
@@ -201,10 +195,6 @@ namespace LcmsNet.Method
 
         private string name;
 
-        #endregion
-
-        #region Events
-
         /// <summary>
         /// Fired when an error occurs on a column.
         /// </summary>
@@ -214,10 +204,6 @@ namespace LcmsNet.Method
         /// Fired when there is sample progress on a column, such as a new event is executed.
         /// </summary>
         public event DelegateSampleProgress SampleProgress;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Kills the scheduler thread.
@@ -372,18 +358,10 @@ namespace LcmsNet.Method
             }
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets or sets how verbose to make the debug output.
         /// </summary>
         public int VerboseLevel { get; set; }
-
-        #endregion
-
-        #region Main Thread and Background worker
 
         /// <summary>
         /// Alert listeners that an error has occurred.
@@ -633,10 +611,6 @@ namespace LcmsNet.Method
             }
         }
 
-        #endregion
-
-        #region INotifier Members
-
         public List<string> GetStatusNotificationList()
         {
             return new List<string> { CONST_ERROR_STOPPED };
@@ -664,10 +638,6 @@ namespace LcmsNet.Method
             add { }
             remove { }
         }
-
-        #endregion
-
-        #region Column BackgroundWorker Event Handlers
 
         public void ColumnProgressChanged_Handler(object sender, ProgressChangedEventArgs e)
         {
@@ -852,8 +822,6 @@ namespace LcmsNet.Method
             }
             return returnVal;
         }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

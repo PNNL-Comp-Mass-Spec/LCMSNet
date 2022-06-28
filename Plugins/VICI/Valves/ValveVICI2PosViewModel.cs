@@ -13,8 +13,6 @@ namespace LcmsNetPlugins.VICI.Valves
 {
     public class ValveVICI2PosViewModel : ValveVICIViewModelBase
     {
-        #region Constructors
-
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -38,18 +36,10 @@ namespace LcmsNetPlugins.VICI.Valves
             RegisterBaseDevice(valve);
         }
 
-        #endregion
-
-        #region Members
-
         /// <summary>
         /// The valve object
         /// </summary>
         protected ValveVICI2Pos valve;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the associated device.
@@ -68,10 +58,6 @@ namespace LcmsNetPlugins.VICI.Valves
 
         public ReactiveCommand<Unit, Unit> SetPositionACommand { get; }
         public ReactiveCommand<Unit, Unit> SetPositionBCommand { get; }
-
-        #endregion
-
-        #region Methods
 
         public override UserControl GetDefaultView()
         {
@@ -156,7 +142,5 @@ namespace LcmsNetPlugins.VICI.Valves
                 ShowError("Valve position mismatch", ex);
             }
         }
-
-        #endregion
     }
 }

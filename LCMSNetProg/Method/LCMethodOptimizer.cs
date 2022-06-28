@@ -30,8 +30,6 @@ namespace LcmsNet.Method
 
         public event DelegateUpdateUserInterface UpdateRequired;
 
-        #region Constants
-
         /// <summary>
         /// Required number of seconds to space each LC-event by.
         /// </summary>
@@ -46,10 +44,6 @@ namespace LcmsNet.Method
         /// Offset of non-overlapping events
         /// </summary>
         private const double CONST_NON_OVERLAPPING_EVENTS_OFFSET = -1.0;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Builds the hashmap of events for distinct devices.
@@ -332,10 +326,6 @@ namespace LcmsNet.Method
             }
             return events;
         }
-
-        #endregion
-
-        #region Method Alignment
 
         /// <summary>
         /// Aligns a list of samples.
@@ -680,7 +670,5 @@ namespace LcmsNet.Method
                 "OPTIMIZATION occurred around a Daylight Savings Time Transition. Some methods have been moved to start one hour later in order to prevent odd behavior.");
             method.SetStartTime(method.Start.Add(new TimeSpan(1, 0, 0)));
         }
-
-        #endregion
     }
 }

@@ -75,8 +75,6 @@ namespace LcmsNet.Method.ViewModels
         public ReactiveCommand<Unit, Unit> MoveUpCommand { get; }
         public ReactiveCommand<Unit, Unit> MoveDownCommand { get; }
 
-        #region Events and Delegates
-
         /// <summary>
         /// Definition for when a LC method is added or removed from the preview.
         /// </summary>
@@ -97,10 +95,6 @@ namespace LcmsNet.Method.ViewModels
         /// Fired when the order of the methods have changed.
         /// </summary>
         public event DelegateLCMethodSelected MethodUpdated;
-
-        #endregion
-
-        #region Methods and Event Handlers
 
         /// <summary>
         /// Removes the method from the user interface when it's removed from the manager.
@@ -289,7 +283,5 @@ namespace LcmsNet.Method.ViewModels
             // Alerts listening objects that the order of the methods has changed.
             MethodUpdated?.Invoke(this);
         }
-
-        #endregion
     }
 }

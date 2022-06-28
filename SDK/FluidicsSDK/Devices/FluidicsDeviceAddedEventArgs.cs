@@ -12,6 +12,7 @@ namespace FluidicsSDK.Devices
         {
             Device = device;
         }
+
         /// <summary>
         /// Gets the device that was added.
         /// </summary>

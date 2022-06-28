@@ -7,8 +7,6 @@ namespace LcmsNet.SampleQueue
     /// </summary>
     class DataImportException : Exception
     {
-        #region "Methods"
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -18,23 +16,5 @@ namespace LcmsNet.SampleQueue
             base(message, ex)
         {
         }
-
-        #endregion
-
-        #region "Constants"
-
-        #endregion
-
-        #region "Class variables"
-
-        #endregion
-
-        #region "Events"
-
-        #endregion
-
-        #region "Properties"
-
-        #endregion
     }
 }

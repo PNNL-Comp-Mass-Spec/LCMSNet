@@ -9,7 +9,6 @@ namespace FluidicsSDK.Base
 {
     public sealed class Port : IRenderable
     {
-        #region Members
         //fluids currently passing through port/being injected/whatever.
         private List<Fluid> m_fluids;
         //graphics primitive representing the port
@@ -18,9 +17,6 @@ namespace FluidicsSDK.Base
         private const int MAX_PIXEL_VARIANCE = 7;
         private Dictionary<long, Connection> m_connections;
         public const int PORT_DEFAULT_RADIUS = 10;
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// default constructor
@@ -148,10 +144,6 @@ namespace FluidicsSDK.Base
             m_connections.Remove(id);
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// property for determining parent device of the port
         /// </summary>
@@ -217,7 +209,5 @@ namespace FluidicsSDK.Base
         }
 
         public string ID { get; set; }
-
-        #endregion
     }
 }

@@ -6,16 +6,10 @@ namespace FluidicsSDK.Graphic
 {
     public class FluidicsCircle : GraphicsPrimitive
     {
-        #region Members
-
         Rect m_rect;
         // Used for default constructor
         const int DEFAULT_RADIUS = 10;
         readonly int m_myRadius;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// default constructor
@@ -98,10 +92,6 @@ namespace FluidicsSDK.Graphic
             m_rect.Y += relativeValues.Y;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Property determining the location of the circle on screen
         /// </summary>
@@ -130,7 +120,5 @@ namespace FluidicsSDK.Graphic
         /// Property for finding the center point of the circle
         /// </summary>
         public Point Center => new Point(Loc.X + m_myRadius, Loc.Y + m_myRadius);
-
-        #endregion
     }
 }

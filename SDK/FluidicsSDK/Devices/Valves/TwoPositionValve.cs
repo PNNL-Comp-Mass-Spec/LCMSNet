@@ -14,8 +14,6 @@ namespace FluidicsSDK.Devices.Valves
     // used as a base class for other valve glyphs
     public abstract class TwoPositionValve : FluidicsDevice
     {
-        #region Members
-
         // radius of the valve's circle primitive in pixels, arbitrarily chosen
         const int m_radius = 75;
 
@@ -25,10 +23,6 @@ namespace FluidicsSDK.Devices.Valves
         private readonly int m_numberOfPorts;
         protected Dictionary<TwoPositionState, List<Tuple<int, int>>> m_states;
         protected TwoPositionState m_currentState;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// constructor
@@ -100,10 +94,6 @@ namespace FluidicsSDK.Devices.Valves
             }
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// gets the center point of the valve on screen.
         /// </summary>
@@ -114,7 +104,5 @@ namespace FluidicsSDK.Devices.Valves
             get => (int) m_currentState;
             set => m_currentState = (TwoPositionState) value;
         }
-
-        #endregion
     }
 }

@@ -60,7 +60,6 @@ namespace DemoPluginLibrary
             return new List<string>();
         }
 
-        #region Events
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
@@ -88,9 +87,6 @@ namespace DemoPluginLibrary
 #pragma warning restore 67
 
 
-        #endregion
-
-        #region Properties
         public DeviceType DeviceType => DeviceType.Component;
 
         public DeviceErrorStatus ErrorType { get; set; }
@@ -111,8 +107,6 @@ namespace DemoPluginLibrary
         public bool Emulation { get; set; }
 
         public int Position { get; set; }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

@@ -121,14 +121,10 @@ namespace FluidicsSDK.Devices
             }
         }
 
-        #region IFluidicsDevice Members
-
         public event EventHandler DeviceSaveRequired
         {
             add { }
             remove { }
         }
-
-        #endregion
     }
 }

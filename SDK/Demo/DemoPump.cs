@@ -15,14 +15,11 @@ namespace DemoPluginLibrary
                                  "Demo")]
     public class DemoPump : IDevice, IPump, IFluidicsPump
     {
-        #region Members
         double m_flowrate;
         double m_pressure;
         double m_percentB;
         private string name;
-        #endregion
 
-        #region Methods
         public DemoPump()
         {
             Name = "DemoPump";
@@ -114,9 +111,6 @@ namespace DemoPluginLibrary
             return true;
         }
 
-        #endregion
-
-        #region Events
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
@@ -149,10 +143,6 @@ namespace DemoPluginLibrary
             add { }
             remove { }
         }
-
-        #endregion
-
-        #region Properties
 
         public string Name
         {
@@ -242,8 +232,6 @@ namespace DemoPluginLibrary
         /// Gets or sets the list of mobile phases associated with the pump.
         /// </summary>
         public List<MobilePhase> MobilePhases { get; set; }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

@@ -35,8 +35,6 @@ namespace LcmsNet.Notification
         /// <returns></returns>
         public abstract bool ActionRequired(string value);
 
-        #region Properties
-
         /// <summary>
         /// Gets or sets the method to run if notification setting is set to run a method.
         /// </summary>
@@ -51,7 +49,5 @@ namespace LcmsNet.Notification
         /// Gets or sets the name of the setting.
         /// </summary>
         public string Name { get; set; }
-
-        #endregion
     }
 }

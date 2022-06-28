@@ -12,8 +12,6 @@ namespace LcmsNet.Configuration.ViewModels
 {
     public class ColumnConfigViewModel : ReactiveObject
     {
-        #region "Constructors"
-
         /// <summary>
         /// Default constructor for the column config view control that takes no arguments
         /// Calling this constructor is only for the IDE designer.
@@ -61,10 +59,6 @@ namespace LcmsNet.Configuration.ViewModels
             });
         }
 
-        #endregion
-
-        #region "Class variables"
-
         private bool columnEnabled = true;
 
         /// <summary>
@@ -74,21 +68,9 @@ namespace LcmsNet.Configuration.ViewModels
 
         private readonly ObservableAsPropertyHelper<int> columnId;
 
-        #endregion
-
-        #region "Delegates"
-
         public delegate void delegateColumnNamesChanged();
 
-        #endregion
-
-        #region "Events"
-
         public event delegateColumnNamesChanged ColumnNameChanged;
-
-        #endregion
-
-        #region Properties
 
         public bool ColumnEnabled
         {
@@ -107,10 +89,6 @@ namespace LcmsNet.Configuration.ViewModels
             private set => this.RaiseAndSetIfChanged(ref columnData, value);
         }
 
-        #endregion
-
-        #region Column Data Event Handlers
-
         /// <summary>
         /// Handles when the status for a column changes.
         /// </summary>
@@ -120,7 +98,5 @@ namespace LcmsNet.Configuration.ViewModels
             //TODO: change this magic number into a constant.
             ApplicationLogger.LogMessage(1, statusMessage);
         }
-
-        #endregion
     }
 }

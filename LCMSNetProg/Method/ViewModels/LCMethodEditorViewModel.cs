@@ -72,8 +72,6 @@ namespace LcmsNet.Method.ViewModels
             renderUpdateCount = 0;
         }
 
-        #region Column Defintion Check Event Handlers And Configuration
-
         /// <summary>
         /// Updates the configuration data and the user interface.
         /// </summary>
@@ -81,10 +79,6 @@ namespace LcmsNet.Method.ViewModels
         {
             AcquisitionStage.UpdateConfiguration();
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the method animation preview options.
@@ -120,10 +114,6 @@ namespace LcmsNet.Method.ViewModels
 
         public ReadOnlyCollection<LCMethodRenderMode> PreviewModeComboBoxOptions { get; }
 
-        #endregion
-
-        #region Method Selection Events
-
         /// <summary>
         /// Updates the alignment preview.
         /// </summary>
@@ -150,10 +140,6 @@ namespace LcmsNet.Method.ViewModels
         {
             RenderAlignMethods();
         }
-
-        #endregion
-
-        #region Building, Registering, Rendering Methods
 
         /// <summary>
         /// Builds the LC Method.
@@ -240,10 +226,6 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        #endregion
-
-        #region Saving and Loading
-
         /// <summary>
         /// Saves the given method to file.
         /// </summary>
@@ -291,8 +273,6 @@ namespace LcmsNet.Method.ViewModels
 
             ApplicationLogger.LogMessage(0, "Methods loaded.");
         }
-
-        #endregion
     }
 
     public class MethodEditingEventArgs : EventArgs

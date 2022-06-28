@@ -170,18 +170,12 @@ namespace LcmsNet
         private readonly object unhandledErrorLock = new object();
         private readonly object cleanedUpLock = new object();
 
-        #region "Constants"
-
         public const string SOFTWARE_COPYRIGHT = "Copyright Battelle Memorial Institute, 2017";
 
         public const string SOFTWARE_DEVELOPERS =
             "Brian LaMarche, Christopher Walters, " +
             "Gordon Anderson, David Clark, Bryson Gibbons, Derek Hopkins, " +
             "Matthew Monroe, Ron Moore, Danny Orton, John Ryan, Richard Smith";
-
-        #endregion
-
-        #region "Class variables"
 
         /// <summary>
         /// Reference to splash screen window.
@@ -197,10 +191,6 @@ namespace LcmsNet
         private MainWindowViewModel mainVm = null;
 
         private Mutex singleInstanceMutex = null;
-
-        #endregion
-
-        #region Configuration Loading
 
         /// <summary>
         /// Loads the application settings.
@@ -249,8 +239,6 @@ namespace LcmsNet
             return loadErrors;
         }
 
-        #endregion
-
         public void LogVersionNumbers()
         {
             var information = SystemInformationReporter.BuildApplicationInformation();
@@ -279,18 +267,12 @@ namespace LcmsNet
             Settings.Default.Save();
         }
 
-        #region "Constants"
-
         /// <summary>
         /// Default logging levels
         /// </summary>
         private const int CONST_DEFAULT_ERROR_LOG_LEVEL = 5;
 
         private const int CONST_DEFAULT_MESSAGE_LOG_LEVEL = 5;
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Kills any hanging PAL exe processes.
@@ -412,10 +394,6 @@ namespace LcmsNet
             CartConfiguration.Columns = new List<ColumnData> {
                 columnOne, columnTwo, columnThree, columnFour};
         }
-
-        #endregion
-
-        #region Application entry point
 
         /// <summary>
         /// The main entry point for the application.
@@ -697,7 +675,5 @@ namespace LcmsNet
         {
             FileLogger.Instance.LogMessage(msgLevel, new MessageLoggerArgs(msgLevel, message));
         }
-
-        #endregion
     }
 }

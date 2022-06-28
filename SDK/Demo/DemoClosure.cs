@@ -19,7 +19,6 @@ namespace DemoPluginLibrary
             Name = "Demo Closure";
         }
 
-        #region Methods
         public bool Initialize(ref string errorMessage)
         {
             Status = DeviceStatus.Initialized;
@@ -71,9 +70,7 @@ namespace DemoPluginLibrary
             //interact with hardware here.
             return true;
         }
-        #endregion
 
-        #region Events
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
@@ -91,9 +88,7 @@ namespace DemoPluginLibrary
             add { }
             remove { }
         }
-        #endregion
 
-        #region Properties
         public DeviceType DeviceType => DeviceType.Component;
 
         public DeviceErrorStatus ErrorType { get; set; }
@@ -112,8 +107,6 @@ namespace DemoPluginLibrary
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
         public bool Emulation { get; set; }
-
-        #endregion
 
         public string GetClosureType()
         {

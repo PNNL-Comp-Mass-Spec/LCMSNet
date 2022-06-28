@@ -30,15 +30,14 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
             m_driver = device as NotificationDriver;
             SetBaseDevice(m_driver);
         }
-        #region IDeviceControl Members
 
-        public IDevice Device
+        public override IDevice Device
         {
             get => m_driver;
             set => RegisterDevice(value);
         }
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new NotificationDriverView();
         }
@@ -46,6 +45,5 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
         public void ShowProps()
         {
         }
-        #endregion
     }
 }

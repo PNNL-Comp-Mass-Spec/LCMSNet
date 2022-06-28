@@ -5,39 +5,35 @@
     /// </summary>
     public class IscoPumpRangeData
     {
-        #region "Properties"
-            /// <summary>
-            /// Max pressure (PSI)
-            /// </summary>
-            public double MaxPressure { get; set; }
+        /// <summary>
+        /// Max pressure (PSI)
+        /// </summary>
+        public double MaxPressure { get; set; }
 
-            /// <summary>
-            /// Max flow rate (ml/min)
-            /// </summary>
-            public double MaxFlowRate { get; set; }
+        /// <summary>
+        /// Max flow rate (ml/min)
+        /// </summary>
+        public double MaxFlowRate { get; set; }
 
-            /// <summary>
-            /// Max refill rate (ml/min)
-            /// </summary>
-            public double MaxRefillRate { get; set; }
+        /// <summary>
+        /// Max refill rate (ml/min)
+        /// </summary>
+        public double MaxRefillRate { get; set; }
 
-            /// <summary>
-            /// Max volume (ml)
-            /// </summary>
-            public double MaxVolume { get; set; }
-        #endregion
+        /// <summary>
+        /// Max volume (ml)
+        /// </summary>
+        public double MaxVolume { get; set; }
 
-        #region "Constructors"
-            /// <summary>
-            /// Default constructor
-            /// </summary>
-            public IscoPumpRangeData()
-            {
-                MaxPressure = 10000D;
-                MaxFlowRate = 25D;
-                MaxRefillRate = 30D;
-                MaxVolume = 102.96D;
-            }
-        #endregion
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public IscoPumpRangeData()
+        {
+            MaxPressure = 10000D;
+            MaxFlowRate = 25D;
+            MaxRefillRate = 30D;
+            MaxVolume = 102.96D;
+        }
     }
 }

@@ -12,8 +12,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
     /// </summary>
     public class ContactClosureReadU12ViewModel : ContactClosureReadViewModelBase<LabjackU12InputPorts>
     {
-        #region Constructors
-
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -26,10 +24,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             IsAnalog = true;
         }
 
-        #endregion
-
-        #region Members
-
         /// <summary>
         /// The contact closure read class used for reading a ready signal.
         /// </summary>
@@ -37,10 +31,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
 
         private bool loading;
         private LabjackU12InputPorts selectedInputPort;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the output port of the device.
@@ -57,6 +47,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
                 }
             }
         }
+
         /// <summary>
         /// Determines if the device is in emulation mode or not.
         /// </summary>
@@ -97,10 +88,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
                 }
             }
         }
-
-        #endregion
-
-        #region Methods
 
         private void RegisterDevice(IDevice device)
         {
@@ -158,7 +145,5 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
                 ApplicationLogger.LogError(0, "Could not manually read a voltage or state in the contact closure read.", ex);
             }
         }
-
-        #endregion
     }
 }

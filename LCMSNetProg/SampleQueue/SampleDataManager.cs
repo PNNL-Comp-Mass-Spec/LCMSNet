@@ -29,8 +29,6 @@ namespace LcmsNet.SampleQueue
         public ReadOnlyObservableCollection<SampleViewModel> Samples { get; }
         public IObservableList<SampleData> SamplesSource { get; }
 
-        #region Column Events
-
         /// <summary>
         /// Handles when a property about a column changes and rebuilds the column ordering list.
         /// </summary>
@@ -71,10 +69,6 @@ namespace LcmsNet.SampleQueue
             private set => this.RaiseAndSetIfChanged(ref hasData, value);
         }
 
-        #endregion
-
-        #region Members
-
         /// <summary>
         /// Names of the methods available on the PAL
         /// </summary>
@@ -113,10 +107,6 @@ namespace LcmsNet.SampleQueue
             get => cycleColumns;
             set => this.RaiseAndSetIfChanged(ref cycleColumns, value);
         }
-
-        #endregion
-
-        #region Constructors and Initialization
 
         /// <summary>
         /// Constructor that accepts dmsView and sampleQueue
@@ -218,7 +208,6 @@ namespace LcmsNet.SampleQueue
             samplesList.Connect().Transform(x => new SampleViewModel(x)).ObserveOn(RxApp.MainThreadScheduler).Bind(out var samplesListBound).Subscribe();
             Samples = samplesListBound;
 
-            #region DesignTimeData
             samplesList.Add(new SampleData()
             {
                 Name = "Design_Dataset_Queued",
@@ -323,7 +312,6 @@ namespace LcmsNet.SampleQueue
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
             });
-            #endregion
         }
 
         private void LCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
@@ -390,10 +378,6 @@ namespace LcmsNet.SampleQueue
                     SampleQueue.AddToUndoable();
                 });
         }
-
-        #endregion
-
-        #region Queue handling
 
         private bool currentlyProcessingQueueChange = false;
 
@@ -553,10 +537,6 @@ namespace LcmsNet.SampleQueue
             return isValid;
         }
 
-        #endregion
-
-        #region LC Method Manager Events
-
         /// <summary>
         /// Handles removing a method from the list of available running methods.
         /// </summary>
@@ -653,10 +633,6 @@ namespace LcmsNet.SampleQueue
             }
         }
 
-        #endregion
-
-        #region Virtual Queue Methods
-
         /// <summary>
         /// Undoes the last operation on the queue.
         /// </summary>
@@ -706,10 +682,6 @@ namespace LcmsNet.SampleQueue
                 SampleQueue.InsertIntoUnusedSamples(samples, ColumnHandling);
             }
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the sample queue that handles all queue management at a low level.
@@ -768,10 +740,6 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public string UnusedSampleName => SampleQueue.UnusedSampleName;
 
-        #endregion
-
-        #region DataGridView Events and Methods
-
         /// <summary>
         /// Updates the PAL Method Column Combo Box
         /// </summary>
@@ -804,10 +772,6 @@ namespace LcmsNet.SampleQueue
         {
             SetLCMethods(LCMethodManager.Manager.AllLCMethods);
         }
-
-        #endregion
-
-        #region Utility Methods
 
         public void AddDateCartnameColumnIDToDatasetName(List<SampleData> samples)
         {
@@ -962,10 +926,6 @@ namespace LcmsNet.SampleQueue
             return newSample;
         }
 
-        #endregion
-
-        #region Queue User Interface Methods
-
         /// <summary>
         /// Adds a new sample to the list view.
         /// </summary>
@@ -1070,10 +1030,6 @@ namespace LcmsNet.SampleQueue
             }
         }
 
-        #endregion
-
-        #region Queue Manager Event Handlers
-
         /// <summary>
         /// Handles when a sample is updated somewhere and the user interface needs to be updated
         /// for that cell.
@@ -1145,18 +1101,10 @@ namespace LcmsNet.SampleQueue
             // TODO: }
         }
 
-        #endregion
-
-        #region Form Control Event Handlers
-
         /// <summary>
         /// Gets or sets how to handle samples being deleted from columns
         /// </summary>
         public enumColumnDataHandling ColumnHandling { get; set; }
-
-        #endregion
-
-        #region Static data - ComboBoxOptions
 
         private static readonly SourceList<LCMethod> lcMethodOptions = new SourceList<LCMethod>();
         private static readonly SourceList<string> instrumentMethodOptions = new SourceList<string>();
@@ -1285,7 +1233,5 @@ namespace LcmsNet.SampleQueue
                 lcMethodOptions.Remove(oFound);
             }
         }
-
-        #endregion
     }
 }

@@ -8,8 +8,6 @@ namespace LcmsNet.IO.Sequence
     /// </summary>
     public class ConvertVialPosition
     {
-        #region "Methods"
-
         /// <summary>
         /// Converts a vial position in LCMS format (integer 1 - 96) to LCMSNet format (string A01 - H12)
         /// Supports vials beyond 97, where vial 312 is vial Z12, then vial 313 is AA01, 314 is AA02, etc.
@@ -180,6 +178,5 @@ namespace LcmsNet.IO.Sequence
             }
 
         }
-        #endregion
     }
 }

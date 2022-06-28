@@ -9,8 +9,6 @@ namespace LcmsNetSDK.Method
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class LCMethodEventAttribute : Attribute
     {
-        #region Constructors
-
         private LCMethodEventAttribute()
         {
             IgnoreLeftoverTime = false;
@@ -147,10 +145,6 @@ namespace LcmsNetSDK.Method
             SampleParameterIndex = sampleParameterIndex;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets whether the method has performance data that should be associated with it or not.
         /// </summary>
@@ -219,7 +213,5 @@ namespace LcmsNetSDK.Method
         {
             return string.IsNullOrWhiteSpace(Name) ? "Undefined method" : Name;
         }
-
-        #endregion
     }
 }

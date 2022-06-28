@@ -9,12 +9,9 @@ namespace FluidicsPack
 {
     public sealed class FluidicsSprayNeedle : FluidicsDevice
     {
-        #region Members
         private const int MAIN_RECT_WIDTH = 50;
         private const int MAIN_RECT_HEIGHT = 20;
-        #endregion
 
-        #region Methods
         public FluidicsSprayNeedle()
         {
             const int startPointYOffset = 12; // Also the height of the top shape, compared to the middle rectangle, plus 2 for full line coverage
@@ -156,10 +153,6 @@ namespace FluidicsPack
             return string.Empty;
         }
 
-        #endregion
-
-        #region Properties
-
         public override int CurrentState
         {
             //pumps don't have a state of this kind.
@@ -169,7 +162,5 @@ namespace FluidicsPack
                 //do nothing
             }
         }
-
-        #endregion
     }
 }

@@ -23,7 +23,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
     ]
     public class NetStartSocket: IDevice, IFluidicsClosure
     {
-        #region Members
         /// <summary>
         /// Minimum timeout for receiving data in seconds.
         /// </summary>
@@ -73,9 +72,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// Status of the device.
         /// </summary>
         private DeviceStatus m_status;
-        #endregion
 
-        #region Events
         /// <summary>
         /// Fired when the status changes for the device.
         /// </summary>
@@ -93,9 +90,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// Fired when a property changes in the device.
         /// </summary>
         public event EventHandler DeviceSaveRequired;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -110,9 +105,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             AbortEvent      = new System.Threading.ManualResetEvent(false);
             Emulation       = true;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the send timeout for the socket.
         /// </summary>
@@ -134,6 +127,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             get => m_address;
             set => m_address = value;
         }
+
         /// <summary>
         /// Gets or sets the port used to connect to the server.
         /// </summary>
@@ -143,9 +137,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             get => m_port;
             set => m_port = value;
         }
-        #endregion
 
-        #region Connection Methods
         /// <summary>
         /// Connects to the server (instrument).
         /// </summary>
@@ -202,9 +194,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             }
             return false;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Returns a list of methods stored on the instrument.
         /// </summary>
@@ -254,9 +244,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 
             return methods;
         }
-        #endregion
 
-        #region Method Packing / Sending and Unpacking
         /// <summary>
         /// Sends a message to the instrument.
         /// </summary>
@@ -275,6 +263,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             Console.WriteLine("Send: " + message);
             streamWriter.Flush();
         }
+
         private string PackMessage(NetStartMessageTypes type, int sequence, string descriptor, List<NetStartArgument> arglist)
         {
             var message = type.GetHashCode().ToString() + ":" + sequence.ToString() + "|" + descriptor;
@@ -323,9 +312,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 
             return msg;
         }
-        #endregion
-
-        #region Acquisition Start/Stop methods.
 
         /// <summary>
         /// Starts instrument acquisition.
@@ -469,9 +455,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             }
             return success;
         }
-        #endregion
 
-        #region IDevice Properties
         /// <summary>
         /// Gets or sets the name of the device.
         /// </summary>
@@ -520,9 +504,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// </summary>
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
-        #endregion
-
-        #region IDevice Methods
         /// <summary>
         /// Initializes the device connecting to the server to get the instrument methods.
         /// </summary>
@@ -585,18 +566,11 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             return new List<string>();
         }
 
-        #endregion
-
-        #region IFluidicsCLosure Members
-
         public string GetClosureType()
         {
             return "Network Start";
         }
 
-        #endregion
-
-        #region Settings and Saving Methods
         /// <summary>
         /// Indicates that a save is required in the Fluidics Designer
         /// </summary>
@@ -605,7 +579,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             DeviceSaveRequired?.Invoke(this, null);
         }
 
-        #region IDevice Data Provider Methods
         /// <summary>
         /// Registers the method with a data provider.
         /// </summary>
@@ -637,8 +610,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             }
         }
 
-        #endregion
-
         /// <summary>
         /// Returns the name of the device.
         /// </summary>
@@ -647,7 +618,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         {
             return Name;
         }
-        #endregion
 
         /// <summary>
         /// Handles the error internally for propogating to external error handling objects.
@@ -663,12 +633,8 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                                  "None"));
         }
 
-        #region IDevice Members
-
         public DeviceErrorStatus ErrorType { get; set; }
         public DeviceType DeviceType => DeviceType.Component;
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

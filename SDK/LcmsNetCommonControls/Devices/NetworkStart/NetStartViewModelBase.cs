@@ -16,8 +16,6 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
     /// </summary>
     public abstract class NetStartViewModelBase : BaseDeviceControlViewModelReactive, IDeviceControl
     {
-        #region "Constructors"
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -33,10 +31,6 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
             MethodComboBoxOptions = methodComboBoxOptionsBound;
         }
 
-        #endregion
-
-        #region Members
-
         /// <summary>
         /// MethodComboBoxOptions backing field
         /// </summary>
@@ -47,10 +41,6 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         private string status = "";
         private string ipAddress = "localhost";
         private int port = 4771;
-
-        #endregion
-
-        #region "Properties"
 
         /// <summary>
         /// The methods to show in the ComboBox
@@ -102,10 +92,6 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
             set => this.RaiseAndSetIfChanged(ref port, value);
         }
 
-        #endregion
-
-        #region Commands
-
         /// <summary>
         /// Command to refresh the methods list
         /// </summary>
@@ -120,10 +106,6 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
         /// Command to stop acquisition
         /// </summary>
         public ReactiveUI.ReactiveCommand<Unit, Unit> StopAcquisitionCommand { get; }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// The default view to use with this view model
@@ -175,7 +157,5 @@ namespace LcmsNetCommonControls.Devices.NetworkStart
                 PortUpdated();
             }
         }
-
-        #endregion
     }
 }

@@ -12,7 +12,6 @@ namespace FluidicsPack
         "Fluidics Components")]
     public class Union : IDevice
     {
-        #region Methods
         public Union()
         {
             Name = "Union";
@@ -55,9 +54,6 @@ namespace FluidicsPack
             return new List<string>();
         }
 
-        #endregion
-
-        #region Events
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate
         {
             add { }
@@ -76,9 +72,6 @@ namespace FluidicsPack
             remove { }
         }
 
-        #endregion
-
-        #region Properties
         public DeviceType DeviceType => DeviceType.Component;
 
         public DeviceErrorStatus ErrorType { get; set; }
@@ -97,8 +90,6 @@ namespace FluidicsPack
         public System.Threading.ManualResetEvent AbortEvent { get; set; }
 
         public bool Emulation { get; set; }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

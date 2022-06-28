@@ -7,8 +7,6 @@ namespace LcmsNetSDK.Devices
     /// </summary>
     public interface IDeviceControl
     {
-        #region "Events"
-
         /// <summary>
         ///  An event that indicates the name has changed. The parameter is the new name
         /// </summary>
@@ -18,10 +16,6 @@ namespace LcmsNetSDK.Devices
         /// An event that indicates the control needs to be saved
         /// </summary>
         event Action SaveRequired;
-
-        #endregion
-
-        #region "Properties"
 
         /// <summary>
         /// Indicates control state
@@ -48,7 +42,5 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         /// <returns></returns>
         global::System.Windows.Controls.UserControl GetDefaultView();
-
-        #endregion
     }
 }

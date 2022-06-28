@@ -16,6 +16,7 @@ namespace FluidicsPack
             Position = 1;
             AbortEvent = new System.Threading.ManualResetEvent(false);
         }
+
         public int Position { get; set; }
     }
 }

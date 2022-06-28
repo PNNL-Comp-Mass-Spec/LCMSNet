@@ -52,8 +52,6 @@ namespace LcmsNet.Notification
             Name = name;
         }
 
-        #region Properties
-
         /// <summary>
         /// Gets the name.
         /// </summary>
@@ -63,7 +61,5 @@ namespace LcmsNet.Notification
         /// Gets or sets map that strings a notification to an action.
         /// </summary>
         public Dictionary<string, NotificationSetting> EventMap { get; set; }
-
-        #endregion
     }
 }
