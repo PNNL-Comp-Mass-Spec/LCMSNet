@@ -1005,8 +1005,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Continues the method. This is way different than ResumeMethod.
         /// </summary>
+        /// <param name="timeout"></param>
+        /// <param name="waitForComplete">If true, wait for timeout/PAL error/PAL Ready/PAL "waiting for DS" before returning</param>
         [LCMethodEvent("Continue Method", MethodOperationTimeoutType.Parameter, EventDescription = "Continue the PAL method (when it is waiting for a sync signal).\n\"waitForComplete\": wait until the PAL has finished the step or errors before starting the next step.\nDeterministic, next step will not be started until timeout is reached")]
-        [LCMethodEvent("Continue Method NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Continue the PAL method (when it is waiting for a sync signal).\n\"waitForComplete\": wait until the PAL has finished the step or errors before starting the next step.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        // ReSharper disable once MethodOverloadWithOptionalParameter
+        // waitForComplete: optional to avoid any errors when upgrading from older LCMSNet that did not have the parameter. This method with the default parameter has different behavior than the current overload without the optional parameter.
         public bool ContinueMethod(double timeout, bool waitForComplete = false)
         {
             if (inEmulationMode)
@@ -1041,6 +1044,15 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 "continue method end", this, statusMessage + " " + errorCode.ToString()));
 
             return result;
+        }
+
+        /// <summary>
+        /// Continues the method. This is way different than ResumeMethod. Overloaded, because allowing "waitForComplete = false" is pointless with the non-deterministic method event.
+        /// </summary>
+        [LCMethodEvent("Continue Method NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Continue the PAL method (when it is waiting for a sync signal); blocks until PAL finishes step.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        public bool ContinueMethod(double timeout)
+        {
+            return ContinueMethod(timeout, true);
         }
 
         /// <summary>
