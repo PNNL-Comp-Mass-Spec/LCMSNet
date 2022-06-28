@@ -525,34 +525,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
 
         #endregion
 
-        /*/// <summary>
-        /// Returns a set of health information.
-        /// </summary>
-        /// <returns></returns>
-        public FinchComponentData GetData()
-        {
-            FinchComponentData component = new FinchComponentData();
-            component.Status    = Status.ToString();
-            component.Name      = Name;
-            component.Type = "Contact Closure";
-            component.LastUpdate = DateTime.Now;
-
-            FinchScalarSignal measurement = new FinchScalarSignal();
-            measurement.Name        = "ID";
-            measurement.Type        = FinchDataType.String;
-            measurement.Units       = "";
-            measurement.Value       = LabJackID.ToString();
-            component.Signals.Add(measurement);
-
-            FinchScalarSignal port = new FinchScalarSignal();
-            port.Name           = "Port";
-            port.Type           = FinchDataType.String;
-            port.Units          = "";
-            port.Value          = this.Port.ToString();
-            component.Signals.Add(port);
-
-            return component;
-        } */
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string propertyName = "")

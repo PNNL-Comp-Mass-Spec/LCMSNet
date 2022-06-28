@@ -97,11 +97,6 @@ namespace LcmsNet.Devices
 
         #endregion
 
-        /*public Finch.Data.FinchComponentData GetData()
-        {
-            return null;
-        }*/
-
         #region IDevice Data Provider Methods
 
         public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)

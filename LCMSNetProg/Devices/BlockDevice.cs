@@ -160,10 +160,6 @@ namespace LcmsNet.Devices
 
         #endregion
 
-        /*public Finch.Data.FinchComponentData GetData()
-        {
-            return null;
-        }*/
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string propertyName = "")

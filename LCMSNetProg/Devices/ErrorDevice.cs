@@ -196,11 +196,6 @@ namespace LcmsNet.Devices
 
         #endregion
 
-        /*public Finch.Data.FinchComponentData GetData()
-        {
-            return null;
-        }*/
-
         #region IDevice Members
 
         public DeviceErrorStatus ErrorType { get; set; }

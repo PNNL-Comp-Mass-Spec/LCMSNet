@@ -1178,8 +1178,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         #endregion
 
-        #region Finch Methods
-
         /// <summary>
         /// Writes any performance data for the last method used.
         /// </summary>
@@ -1189,59 +1187,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
         }
-
-        /*
-        /// <summary>
-        /// Returns the health of this device in a component data structure.
-        /// </summary>
-        /// <returns></returns>
-        public FinchComponentData GetData()
-        {
-            FinchComponentData component = new FinchComponentData();
-            component.Status        = Status.ToString();
-            component.Name          = Name;
-            component.Type          = "Auto-sampler";
-            component.LastUpdate = DateTime.Now;
-
-            FinchScalarSignal measurement = new FinchScalarSignal();
-            measurement.Name        = "Last Vial";
-            measurement.Type = FinchDataType.String;
-            measurement.Units       = "";
-            measurement.Value       = Vial.ToString();
-            component.Signals.Add(measurement);
-
-            FinchScalarSignal measurementTray = new FinchScalarSignal();
-            measurementTray.Name        = "Last Tray";
-            measurementTray.Type        = FinchDataType.String;
-            measurementTray.Units       = "";
-            measurementTray.Value       = Tray;
-            component.Signals.Add(measurementTray);
-
-            FinchScalarSignal measurementVolume = new FinchScalarSignal();
-            measurementVolume.Name        = "Last Volume";
-            measurementVolume.Type        = FinchDataType.Double;
-            measurementVolume.Units       = "uL";
-            measurementVolume.Value       = Volume.ToString();
-            component.Signals.Add(measurementVolume);
-
-            FinchScalarSignal measurementMethod = new FinchScalarSignal();
-            measurementMethod.Name        = "Last Method";
-            measurementMethod.Type        = FinchDataType.String;
-            measurementMethod.Units       = "";
-            measurementMethod.Value       = Method;
-            component.Signals.Add(measurementMethod);
-
-            FinchScalarSignal measurementPort = new FinchScalarSignal();
-            measurementPort.Name        = "Port";
-            measurementPort.Type        = FinchDataType.String;
-            measurementPort.Units       = "";
-            measurementPort.Value       = this.PortName;
-            component.Signals.Add(measurementPort);
-
-            return component;
-        }*/
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

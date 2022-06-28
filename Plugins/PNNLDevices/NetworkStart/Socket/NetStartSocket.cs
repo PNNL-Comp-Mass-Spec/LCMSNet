@@ -118,11 +118,13 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// </summary>
         [DeviceSavedSetting("SendTimeout")]
         public int SendTimeout { get; set; }
+
         /// <summary>
         /// Gets or sets the receive timeout for the socket.
         /// </summary>
         [DeviceSavedSetting("ReceiveTimeout")]
         public int ReceiveTimeout { get; set; }
+
         /// <summary>
         /// Gets or sets the IP address or DNS name of the server instrument.
         /// </summary>
@@ -176,6 +178,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             }
             return connected;
         }
+
         /// <summary>
         /// Disconnects from instrument if connected.
         /// </summary>
@@ -292,6 +295,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 
             return message;
         }
+
         /// <summary>
         /// Unpacks the EOL packing string into an object that can be deciphered.
         /// </summary>
@@ -426,6 +430,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 
             return success;
         }
+
         /// <summary>
         /// Stops instrument acquisition.
         /// </summary>
@@ -481,6 +486,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                 }
             }
         }
+
         /// <summary>
         /// The device's verion.
         /// </summary>
@@ -494,6 +500,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         {
             get;set;
         }
+
         /// <summary>
         /// Gets or sets the device's status.
         /// </summary>
@@ -546,6 +553,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             }
             return success;
         }
+
         /// <summary>
         /// Shuts the connection to the instrument down if it exists.
         /// </summary>
@@ -555,6 +563,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
             //TODO: Shutdown for network start socket.
             return true;
         }
+
         /// <summary>
         /// Writes performance data to the directory provided.
         /// </summary>
@@ -565,15 +574,17 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         {
             //pass
         }
-          public List<string> GetStatusNotificationList()
+
+        public List<string> GetStatusNotificationList()
         {
             return new List<string>();
-          }
+        }
 
-          public List<string> GetErrorNotificationList()
-          {
-              return new List<string>();
-          }
+        public List<string> GetErrorNotificationList()
+        {
+            return new List<string>();
+        }
+
         #endregion
 
         #region IFluidicsCLosure Members
@@ -610,6 +621,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                     break;
             }
         }
+
         /// <summary>
         /// Unregisters the method from the data provider.
         /// </summary>
@@ -658,48 +670,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
 
         #endregion
 
-        /*/// <summary>
-        ///
-        /// </summary>
-        /// <returns></returns>
-        public FinchComponentData GetData()
-        {
-            FinchComponentData component    = new FinchComponentData();
-            component.Status                = Status.ToString();
-            component.Name                  = Name;
-            component.Type                  = "Network Start";
-            component.LastUpdate = DateTime.Now;
-
-            FinchScalarSignal measurementSendTimeout  = new FinchScalarSignal();
-            measurementSendTimeout.Name             = "Send Timeout";
-            measurementSendTimeout.Type             = FinchDataType.Integer;
-            measurementSendTimeout.Units            = "";
-            measurementSendTimeout.Value            = this.SendTimeout.ToString();
-            component.Signals.Add(measurementSendTimeout);
-
-            FinchScalarSignal measurementReceiveTimeout   = new FinchScalarSignal();
-            measurementReceiveTimeout.Name              = "Receive Timeout";
-            measurementReceiveTimeout.Type              = FinchDataType.Integer;
-            measurementReceiveTimeout.Units             = "";
-            measurementReceiveTimeout.Value             = this.ReceiveTimeout.ToString();
-            component.Signals.Add(measurementReceiveTimeout);
-
-            FinchScalarSignal measurementAddress   = new FinchScalarSignal();
-            measurementAddress.Name              = "Address";
-            measurementAddress.Type              =  FinchDataType.String;
-            measurementAddress.Units             = "";
-            measurementAddress.Value             = this.Address.ToString();
-            component.Signals.Add(measurementAddress);
-
-            FinchScalarSignal port = new FinchScalarSignal();
-            port.Name           = "Port";
-            port.Type           = FinchDataType.String;
-            port.Units          = "";
-            port.Value          = this.Port.ToString();
-            component.Signals.Add(port);
-
-            return component;
-        }*/
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string propertyName = "")

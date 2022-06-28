@@ -224,37 +224,5 @@ namespace LcmsNetPlugins.VICI.Valves
         }
 
         #endregion
-
-        /*public override FinchComponentData GetData()
-          {
-              FinchComponentData component = new FinchComponentData();
-              component.Status = Status.ToString();
-              component.Name = Name;
-              component.Type = "Valve";
-              component.LastUpdate = DateTime.Now;
-
-              FinchScalarSignal measurementSentPosition = new FinchScalarSignal();
-              measurementSentPosition.Name = "Set Position";
-              measurementSentPosition.Type = FinchDataType.Integer;
-              measurementSentPosition.Units = "";
-              measurementSentPosition.Value = this.LastSentPosition.ToString();
-              component.Signals.Add(measurementSentPosition);
-
-              FinchScalarSignal measurementMeasuredPosition = new FinchScalarSignal();
-              measurementMeasuredPosition.Name = "Measured Position";
-              measurementMeasuredPosition.Type = FinchDataType.Integer;
-              measurementMeasuredPosition.Units = "";
-              measurementMeasuredPosition.Value = this.LastMeasuredPosition.ToString();
-              component.Signals.Add(measurementMeasuredPosition);
-
-              FinchScalarSignal port = new FinchScalarSignal();
-              port.Name = "Port";
-              port.Type = FinchDataType.String;
-              port.Units = "";
-              port.Value = this.PortName.ToString();
-              component.Signals.Add(port);
-
-              return component;
-          }*/
     }
 }

@@ -826,8 +826,6 @@ namespace LcmsNetPlugins.VICI.Valves
 
         #endregion
 
-        /*public abstract FinchComponentData GetData();*/
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string propertyName = "")
