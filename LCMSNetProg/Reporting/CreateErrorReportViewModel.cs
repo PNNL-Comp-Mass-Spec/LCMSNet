@@ -8,7 +8,6 @@ using DynamicData;
 using DynamicData.Binding;
 using LcmsNetSDK;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Reporting

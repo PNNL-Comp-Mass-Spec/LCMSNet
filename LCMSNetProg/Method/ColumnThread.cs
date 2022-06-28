@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Threading;
 using LcmsNet.Data;
 using LcmsNetSDK.Configuration;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;

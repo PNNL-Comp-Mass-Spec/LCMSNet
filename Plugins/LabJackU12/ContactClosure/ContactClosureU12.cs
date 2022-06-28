@@ -13,7 +13,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;

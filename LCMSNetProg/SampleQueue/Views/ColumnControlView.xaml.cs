@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using LcmsNet.SampleQueue.ViewModels;
 
 namespace LcmsNet.SampleQueue.Views

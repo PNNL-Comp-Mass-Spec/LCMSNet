@@ -14,7 +14,6 @@ using LcmsNet.IO.Sequence;
 using LcmsNet.Method.ViewModels;
 using LcmsNet.Method.Views;
 using LcmsNet.SampleQueue.Views;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
 using ReactiveUI;

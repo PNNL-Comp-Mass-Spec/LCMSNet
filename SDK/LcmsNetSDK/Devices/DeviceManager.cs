@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
-using LcmsNetSDK.System;
 
 namespace LcmsNetSDK.Devices
 {

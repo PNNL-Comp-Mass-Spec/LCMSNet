@@ -10,7 +10,6 @@ using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
-using LcmsNetSDK.System;
 
 namespace LcmsNet.Method.Drawing
 {

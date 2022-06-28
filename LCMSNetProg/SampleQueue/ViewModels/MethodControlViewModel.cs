@@ -10,7 +10,6 @@ using DynamicData.Binding;
 using LcmsNet.Data;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetSDK.Configuration;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 

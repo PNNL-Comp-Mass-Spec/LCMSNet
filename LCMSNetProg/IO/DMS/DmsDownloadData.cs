@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 // ReSharper disable CommentTypo
 
 namespace LcmsNet.IO.DMS

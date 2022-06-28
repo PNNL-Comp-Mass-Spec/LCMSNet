@@ -1,5 +1,4 @@
-﻿using System;
-using LcmsNetSDK.Devices;
+﻿using LcmsNetSDK.Devices;
 
 namespace LcmsNetCommonControls.Devices.ContactClosureRead
 {

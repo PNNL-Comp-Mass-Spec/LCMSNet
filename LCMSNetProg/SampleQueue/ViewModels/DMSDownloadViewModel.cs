@@ -11,8 +11,6 @@ using DynamicData;
 using LcmsNet.Configuration;
 using LcmsNet.Data;
 using LcmsNet.IO.DMS;
-using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Windows.Media;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
-using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.Configuration.ViewModels

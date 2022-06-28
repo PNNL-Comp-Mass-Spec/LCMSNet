@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using DynamicData;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

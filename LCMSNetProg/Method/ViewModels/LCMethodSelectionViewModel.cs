@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Windows.Data;
 using DynamicData;
 using DynamicData.Binding;
 using LcmsNetSDK.Method;

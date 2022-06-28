@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
-using FluidicsSDK.Graphic;
 using LcmsNetSDK.Devices;
 
 namespace FluidicsPack

@@ -1,6 +1,5 @@
 ﻿using System;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
 
 namespace LcmsNet.Method
 {
