@@ -10,16 +10,7 @@ namespace LcmsNetSDK.System
         /// <summary>
         /// Name of the app - used for ProgramData directory name
         /// </summary>
-        public static string AppName { get; private set; } = "LCMSNet";
-
-        /// <summary>
-        /// Sets the app name to a non-default value
-        /// </summary>
-        /// <param name="appName"></param>
-        public static void SetAppName(string appName)
-        {
-            AppName = appName;
-        }
+        public static string AppName => "LCMSNet";
 
         /// <summary>
         /// The directory where the exe file is located, and where data may have been persisted before

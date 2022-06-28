@@ -211,11 +211,6 @@ namespace LcmsNet.IO.DMS
                 return connection.CreateCommand();
             }
 
-            public SqlTransaction BeginTransaction()
-            {
-                return connection.BeginTransaction();
-            }
-
             public void Dispose()
             {
                 if (!closeConnectionOnDispose)

@@ -118,9 +118,6 @@ namespace LcmsNetSDK.Devices
             m_plugins = new Dictionary<string, List<DevicePluginInformation>>();
             AvailablePlugins = new List<DevicePluginInformation>();
             m_devices = new List<IDevice>();
-            //Manager              = this;
-
-            // var bridge = new DeviceManagerBridge(this);
 
             m_loadingPlugins = false;
             m_emulateDevices = true;

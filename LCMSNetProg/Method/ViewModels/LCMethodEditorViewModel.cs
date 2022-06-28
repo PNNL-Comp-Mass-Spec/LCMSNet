@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Threading;
 using System.Windows;
-using LcmsNet.IO;
-using LcmsNetSDK;
-using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 using ReactiveUI;
@@ -142,34 +138,6 @@ namespace LcmsNet.Method.ViewModels
         }
 
         /// <summary>
-        /// Builds the LC Method.
-        /// </summary>
-        /// <returns>A LC-Method if events are defined.  Null if events are not.</returns>
-        public LCMethod BuildMethod()
-        {
-            var method = LCMethodBuilder.BuildMethod(AcquisitionStage.LCEvents);
-            if (method == null)
-            {
-                ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_USER, "Cannot create the LC-method from an empty event list.  You need to add events to the method.");
-                return null;
-            }
-
-            var column = AcquisitionStage.GetColumn();
-            if (column < 0)
-            {
-                method.IsSpecialMethod = true;
-            }
-            else
-            {
-                method.IsSpecialMethod = false;
-            }
-            method.Column = column;
-            method.AllowPreOverlap = AcquisitionStage.AllowPreOverlap;
-            method.AllowPostOverlap = AcquisitionStage.AllowPostOverlap;
-            return method;
-        }
-
-        /// <summary>
         /// Renders the throughput timelines.
         /// </summary>
         /// <param name="methods">Methods to render for showing throughput.</param>
@@ -225,63 +193,5 @@ namespace LcmsNet.Method.ViewModels
                 Thread.Sleep(MethodPreviewOptions.AnimateDelay);
             }
         }
-
-        /// <summary>
-        /// Saves the given method to file.
-        /// </summary>
-        /// <param name="method"></param>
-        public bool SaveMethod(LCMethod method)
-        {
-            // Method is null!!! OH MAN - that isn't my fault so we'll ignore it!
-            if (method == null)
-                return false;
-
-            // Construct the path
-            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path = Path.Combine(path, method.Name + LCMethodFactory.CONST_LC_METHOD_EXTENSION);
-
-            // Write the method out!
-            return LCMethodXmlFile.WriteMethod(path, method);
-        }
-
-        /// <summary>
-        /// Opens a method.
-        /// </summary>
-        public void OpenMethod(string path)
-        {
-            var errors = new List<Exception>();
-            var method = LCMethodXmlFile.ReadMethod(path, errors);
-
-            if (method != null)
-            {
-                LCMethodManager.Manager.AddOrUpdateMethod(method);
-            }
-        }
-
-        /// <summary>
-        /// Loads method stored in the method folder directory.
-        /// </summary>
-        public void LoadMethods()
-        {
-            var methodPath = PersistDataPaths.GetDirectoryLoadPathCheckFiles(MethodFolderPath, "*.xml");
-            var methods = Directory.GetFiles(methodPath, "*.xml");
-            foreach (var method in methods)
-            {
-                ApplicationLogger.LogMessage(0, "Loading method " + method);
-                OpenMethod(method);
-            }
-
-            ApplicationLogger.LogMessage(0, "Methods loaded.");
-        }
-    }
-
-    public class MethodEditingEventArgs : EventArgs
-    {
-        public MethodEditingEventArgs(string methodName)
-        {
-            Name = methodName;
-        }
-
-        public string Name { get; }
     }
 }

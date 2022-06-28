@@ -19,11 +19,6 @@ namespace LcmsNet.Method.Drawing
     public class LCMethodColumnModeRenderer : LCMethodRenderer
     {
         /// <summary>
-        /// Constant defining the number of columns to use.
-        /// </summary>
-        private const int CONST_NUMBER_OF_COLUMNS = 4;
-
-        /// <summary>
         /// Number of pixels to pad the column background streak.
         /// </summary>
         private const int CONST_COLUMN_BACKGROUND_HEIGHT_PADDING = 15;

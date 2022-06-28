@@ -1,11 +1,6 @@
 ﻿using System;
-using System.IO;
 using FluidicsSDK;
-using LcmsNet.IO;
-using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
-using LcmsNetSDK;
-using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Simulator.ViewModels
@@ -29,18 +24,15 @@ namespace LcmsNet.Simulator.ViewModels
         {
             simInstance = FluidicsSimulator.FluidicsSimulator.GetInstance;
 
-            checkList = new ModelCheckListViewModel(FluidicsModerator.Moderator, FluidicsModerator.Moderator.GetModelCheckers());
+            CheckList = new ModelCheckListViewModel(FluidicsModerator.Moderator, FluidicsModerator.Moderator.GetModelCheckers());
 
-            chartsVm = new ChartViewModel();
-            methodStageVm = new LCMethodStageViewModel();
+            ChartsVm = new ChartViewModel();
+            MethodStageVm = new LCMethodStageViewModel();
         }
 
         private static SimulatorControlsAndChartsViewModel instance;
 
         private readonly FluidicsSimulator.FluidicsSimulator simInstance;
-        private readonly ModelCheckListViewModel checkList;
-        private readonly LCMethodStageViewModel methodStageVm;
-        private readonly ChartViewModel chartsVm;
         private int simDelayMs = 500;
 
         public static SimulatorControlsAndChartsViewModel GetInstance
@@ -55,9 +47,9 @@ namespace LcmsNet.Simulator.ViewModels
             }
         }
 
-        public ModelCheckListViewModel CheckList => checkList;
-        public ChartViewModel ChartsVm => chartsVm;
-        public LCMethodStageViewModel MethodStageVm => methodStageVm;
+        public ModelCheckListViewModel CheckList { get; }
+        public ChartViewModel ChartsVm { get; }
+        public LCMethodStageViewModel MethodStageVm { get; }
 
         public int SimDelayMs
         {
@@ -71,29 +63,6 @@ namespace LcmsNet.Simulator.ViewModels
                     simInstance.SimulationSpeed = simDelayMs;
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets or sets the method animation preview options.
-        /// </summary>
-        public MethodPreviewOptions MethodPreviewOptions { get; set; }
-
-        /// <summary>
-        /// Saves the given method to file.
-        /// </summary>
-        /// <param name="method"></param>
-        public bool SaveMethod(LCMethod method)
-        {
-            // Method is null!!! OH MAN - that isn't my fault so we'll ignore it!
-            if (method == null)
-                return false;
-
-            // Construct the path
-            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), LCMethodFactory.CONST_LC_METHOD_FOLDER);
-            path = Path.Combine(path, method.Name + LCMethodFactory.CONST_LC_METHOD_EXTENSION);
-
-            // Write the method out!
-            return LCMethodXmlFile.WriteMethod(path, method);
         }
     }
 }

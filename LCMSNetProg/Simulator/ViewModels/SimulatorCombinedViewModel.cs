@@ -8,25 +8,21 @@ namespace LcmsNet.Simulator.ViewModels
     {
         public SimulatorCombinedViewModel()
         {
-            controls = SimulatorControlsAndChartsViewModel.GetInstance;
-            config = SimConfigurationViewModel.GetInstance;
-            configPopoutVm = new PopoutViewModel(config);
-            controlsPopoutVm = new PopoutViewModel(controls);
+            ControlsVm = SimulatorControlsAndChartsViewModel.GetInstance;
+            ConfigVm = SimConfigurationViewModel.GetInstance;
+            ConfigPopoutVm = new PopoutViewModel(ConfigVm);
+            ControlsPopoutVm = new PopoutViewModel(ConfigVm);
 
             this.WhenAnyValue(x => x.ConfigPopoutVm.Child, x => x.ConfigPopoutVm.Tacked).Subscribe(x => TackChangeRules(x.Item1, x.Item2));
             this.WhenAnyValue(x => x.ControlsPopoutVm.Child, x => x.ControlsPopoutVm.Tacked).Subscribe(x => TackChangeRules(x.Item1, x.Item2));
         }
 
-        private readonly SimConfigurationViewModel config;
-        private readonly SimulatorControlsAndChartsViewModel controls;
-        private readonly PopoutViewModel configPopoutVm;
-        private readonly PopoutViewModel controlsPopoutVm;
         private bool bothTacked = true;
 
-        public SimConfigurationViewModel ConfigVm => config;
-        public SimulatorControlsAndChartsViewModel ControlsVm => controls;
-        public PopoutViewModel ConfigPopoutVm => configPopoutVm;
-        public PopoutViewModel ControlsPopoutVm => controlsPopoutVm;
+        public SimConfigurationViewModel ConfigVm { get; }
+        public SimulatorControlsAndChartsViewModel ControlsVm { get; }
+        public PopoutViewModel ConfigPopoutVm { get; }
+        public PopoutViewModel ControlsPopoutVm { get; }
 
         public bool BothTacked
         {

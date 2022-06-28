@@ -12,7 +12,7 @@ namespace LcmsNet.IO
     /// <summary>
     /// Methods for copying method files and other data to DMS.
     /// </summary>
-    public class MethodFileTools : IMethodWriter
+    public class MethodFileTools
     {
         private const string METHOD_FOLDER_NAME = "MethodFiles";
         private const string LOCAL_METHOD_FOLDER_NAME = "CompletedMethods";
@@ -316,27 +316,6 @@ namespace LcmsNet.IO
             var quarter = (month / 4) + 1;
             path = Path.Combine(path, string.Format("{0}_{1}", year, quarter));
             return path;
-        }
-
-        void IMethodWriter.WriteMethodFiles(ISampleInfo sample)
-        {
-            if (sample is SampleData sampleData)
-                WriteMethodFiles(sampleData);
-        }
-
-        bool IMethodWriter.CheckLocalMethodFolders()
-        {
-            return CheckLocalMethodFolders();
-        }
-
-        void IMethodWriter.MoveLocalMethodFiles()
-        {
-            MoveLocalMethodFiles();
-        }
-
-        string IMethodWriter.CreateRemoteFolderPath()
-        {
-            return CreateRemoteFolderPath();
         }
     }
 }

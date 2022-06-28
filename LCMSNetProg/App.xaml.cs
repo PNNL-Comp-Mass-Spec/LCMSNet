@@ -14,7 +14,6 @@ using LcmsNet.Devices;
 using LcmsNet.IO;
 using LcmsNet.IO.DMS;
 using LcmsNet.IO.Sequence;
-using LcmsNet.Method;
 using LcmsNet.Properties;
 using LcmsNetSDK;
 using LcmsNetSDK.Configuration;
@@ -564,7 +563,7 @@ namespace LcmsNet
             // Make sure we can log/error report locally before we do anything!
             try
             {
-                CreatePath(LCMethodFactory.CONST_LC_METHOD_FOLDER);
+                CreatePath(LCMethodXmlFile.CONST_LC_METHOD_FOLDER);
                 CreatePath(DeviceManager.CONST_PUMP_METHOD_PATH);
                 CreatePath(Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONPATH), DeviceManager.CONST_DEVICE_PLUGIN_PATH));
             }
