@@ -24,8 +24,8 @@ namespace PDFGenerator
         /// <param name="columnData">a list of classColumnData for each enabled column</param>
         /// <param name="devices">a list of 3-tuples of string containing device name, status, and error type</param>
         /// <param name="fluidicsImage">a bitmap containing the current fluidics design</param>
-        public void WritePDF(string documentPath, string title, ISampleInfo sample, string numEnabledColumns, List<ColumnData> columnData,
-            List<IDevice> devices, BitmapSource fluidicsImage)
+        public void WritePDF(string documentPath, string title, ISampleInfo sample, string numEnabledColumns, IReadOnlyList<ColumnData> columnData,
+            IReadOnlyList<IDevice> devices, BitmapSource fluidicsImage)
         {
             // instantiate PDFSharp writer library, EMSL document model, and setup options.
             EMSL.DocumentGenerator.Core.Services.IDocumentWriter writer = new EMSL.DocumentGenerator.PDFSharp.PDFWriter();
@@ -118,7 +118,7 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="devices">Tuples of strings containing device names, status, and error types</param>
         /// <returns>a formatted string of device data</returns>
-        private static string CreateDeviceString(List<IDevice> devices)
+        private static string CreateDeviceString(IReadOnlyList<IDevice> devices)
         {
             var formattedString = string.Empty;
             int[] fieldWidths = { -20, -20, -20 };
@@ -201,7 +201,7 @@ namespace PDFGenerator
         /// </summary>
         /// <param name="columnData">a list containing data for the columns</param>
         /// <returns>a formatted string of column data</returns>
-        private static string CreateColumnString(List<ColumnData> columnData)
+        private static string CreateColumnString(IReadOnlyList<ColumnData> columnData)
         {
             //Column data, we want to be able to determine other column names and status..but this would only happen at the *end* of the run, perhaps not so useful?
             int[] FieldWidths = { -20, -20};
