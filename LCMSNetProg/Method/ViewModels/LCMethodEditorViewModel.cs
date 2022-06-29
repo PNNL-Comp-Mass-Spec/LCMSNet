@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
+using LcmsNet.Configuration;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 using ReactiveUI;
@@ -34,10 +36,8 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private int renderUpdateCount;
 
-        private LCMethodTimelineViewModel methodTimelineThroughput;
-        private LCMethodStageViewModel acquisitionStage;
         private LCMethodSelectionViewModel selectedMethods;
-        private MethodPreviewOptions methodPreviewOptions;
+        private readonly ObservableAsPropertyHelper<bool> multipleColumnsEnabled;
 
         /// <summary>
         /// Constructor that allows for users to edit methods.
@@ -47,7 +47,6 @@ namespace LcmsNet.Method.ViewModels
             MethodTimelineThroughput = new LCMethodTimelineViewModel();
             AcquisitionStage = new LCMethodStageViewModel();
             SelectedMethods = new LCMethodSelectionViewModel();
-            MethodPreviewOptions = new MethodPreviewOptions();
 
             MethodFolderPath = CONST_METHOD_FOLDER_PATH;
 
@@ -66,6 +65,9 @@ namespace LcmsNet.Method.ViewModels
                 AnimateDelay = CONST_DEFAULT_ANIMATION_DELAY_TIME
             };
             renderUpdateCount = 0;
+
+            multipleColumnsEnabled = CartConfiguration.Instance.WhenAnyValue(x => x.NumberOfColumnsEnabled)
+                .Select(x => x > 1).ToProperty(this, x => x.MultipleColumnsEnabled);
         }
 
         /// <summary>
@@ -76,31 +78,21 @@ namespace LcmsNet.Method.ViewModels
             AcquisitionStage.UpdateConfiguration();
         }
 
+        public bool MultipleColumnsEnabled => multipleColumnsEnabled.Value;
+
         /// <summary>
         /// Gets or sets the method animation preview options.
         /// </summary>
-        public MethodPreviewOptions MethodPreviewOptions
-        {
-            get => methodPreviewOptions;
-            set => this.RaiseAndSetIfChanged(ref methodPreviewOptions, value);
-        }
+        public MethodPreviewOptions MethodPreviewOptions { get; }
 
         /// <summary>
         /// Gets or sets what folder path the methods are stored in.
         /// </summary>
         public string MethodFolderPath { get; set; }
 
-        public LCMethodTimelineViewModel MethodTimelineThroughput
-        {
-            get => methodTimelineThroughput;
-            set => this.RaiseAndSetIfChanged(ref methodTimelineThroughput, value);
-        }
+        public LCMethodTimelineViewModel MethodTimelineThroughput { get; }
 
-        public LCMethodStageViewModel AcquisitionStage
-        {
-            get => acquisitionStage;
-            set => this.RaiseAndSetIfChanged(ref acquisitionStage, value);
-        }
+        public LCMethodStageViewModel AcquisitionStage { get; }
 
         public LCMethodSelectionViewModel SelectedMethods
         {

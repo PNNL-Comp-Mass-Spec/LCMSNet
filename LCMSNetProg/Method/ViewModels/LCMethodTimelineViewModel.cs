@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Simulator;
@@ -43,9 +44,13 @@ namespace LcmsNet.Method.ViewModels
             index = 0;
 
             this.WhenAnyValue(x => x.RenderMode).Subscribe(x => this.Refresh());
+
+            multipleColumnsEnabled = CartConfiguration.Instance.WhenAnyValue(x => x.NumberOfColumnsEnabled)
+                .Select(x => x > 1).ToProperty(this, x => x.MultipleColumnsEnabled);
         }
 
         private LCMethodRenderMode renderMode;
+        private readonly ObservableAsPropertyHelper<bool> multipleColumnsEnabled;
 
         /// <summary>
         /// Gets or sets the type of rendering to perform.
@@ -55,6 +60,8 @@ namespace LcmsNet.Method.ViewModels
             get => renderMode;
             set => this.RaiseAndSetIfChanged(ref renderMode, value);
         }
+
+        public bool MultipleColumnsEnabled => multipleColumnsEnabled.Value;
 
         public int StartEventIndex
         {

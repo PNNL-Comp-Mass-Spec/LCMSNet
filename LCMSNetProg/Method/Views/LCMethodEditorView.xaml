@@ -13,8 +13,31 @@
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodEditorViewModel}, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height ="8" />
+            <!-- Styles and DataTriggers: Hide the top row and horizontal divider unless there are multiple columns enabled -->
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="1*" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MultipleColumnsEnabled}" Value="False">
+                                <Setter Property="Height" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="8" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MultipleColumnsEnabled}" Value="False">
+                                <Setter Property="Height" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -22,7 +45,18 @@
             <ColumnDefinition Width="8" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <views:LCMethodTimelineView Grid.Row="0" Grid.Column="0" DataContext="{Binding MethodTimelineThroughput}" />
+        <views:LCMethodTimelineView Grid.Row="0" Grid.Column="0" DataContext="{Binding MethodTimelineThroughput}">
+            <views:LCMethodTimelineView.Style>
+                <Style TargetType="{x:Type views:LCMethodTimelineView}">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding MultipleColumnsEnabled}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </views:LCMethodTimelineView.Style>
+        </views:LCMethodTimelineView>
         <GridSplitter Grid.Row="0" Grid.Column="1" BorderThickness="1,0" BorderBrush="DimGray" ShowsPreview="False" Width="8" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Style="{styles:LcmsNetStyles GridSplitterWithDotsStyleVertical}" />
         <TabControl Grid.Row="0" Grid.Column="2">
             <TabItem Header="Method Preview">
