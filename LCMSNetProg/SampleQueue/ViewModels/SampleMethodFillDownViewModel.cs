@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Windows;
 using LcmsNet.Data;
-using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Method;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -129,7 +129,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ReadOnlyObservableCollection<string> LcMethodComboBoxOptions => SampleDataManager.LcMethodNameOptions;
         public ReadOnlyObservableCollection<string> InstrumentMethodComboBoxOptions => SampleDataManager.InstrumentMethodOptions;
 
-        public double VolumeMinimum => CartConfiguration.MinimumVolume;
+        public double VolumeMinimum => CartLimits.MinimumVolume;
 
         public ReactiveCommand<Unit, Unit> ApplyLCMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyInstrumentMethodCommand { get; }

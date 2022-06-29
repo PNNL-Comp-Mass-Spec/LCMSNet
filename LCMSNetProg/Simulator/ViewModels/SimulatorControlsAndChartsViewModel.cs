@@ -1,5 +1,6 @@
 ﻿using System;
 using FluidicsSDK;
+using FluidicsSDK.Simulator;
 using LcmsNet.Method.ViewModels;
 using ReactiveUI;
 
@@ -22,7 +23,7 @@ namespace LcmsNet.Simulator.ViewModels
         /// <param name="anything">really, anything; only there to differentiate from the public no-parameter constructor</param>
         private SimulatorControlsAndChartsViewModel(object anything)
         {
-            simInstance = FluidicsSimulator.FluidicsSimulator.GetInstance;
+            simInstance = FluidicsSimulator.GetInstance;
 
             CheckList = new ModelCheckListViewModel(FluidicsModerator.Moderator, FluidicsModerator.Moderator.GetModelCheckers());
 
@@ -32,7 +33,7 @@ namespace LcmsNet.Simulator.ViewModels
 
         private static SimulatorControlsAndChartsViewModel instance;
 
-        private readonly FluidicsSimulator.FluidicsSimulator simInstance;
+        private readonly FluidicsSimulator simInstance;
         private int simDelayMs = 500;
 
         public static SimulatorControlsAndChartsViewModel GetInstance

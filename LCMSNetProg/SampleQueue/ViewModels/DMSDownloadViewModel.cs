@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using DynamicData;
-using LcmsNet.Configuration;
 using LcmsNet.Data;
 using LcmsNet.IO.DMS;
 using ReactiveUI;
@@ -170,7 +169,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             string dbInUse;
             try
             {
-                if (LcmsNet.Configuration.DMSDataContainer.DBTools.DMSVersion.Contains("_T3"))
+                if (DMSConnectionManager.DBTools.DMSVersion.Contains("_T3"))
                 {
                     dbInUse = " (Using Development Database)";
                 }
@@ -206,7 +205,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Get the list of carts from DMS
             try
             {
-                cartList = DMSDataContainer.DBTools.GetCartListFromDMS();
+                cartList = DMSConnectionManager.DBTools.GetCartListFromDMS();
             }
             catch (DatabaseConnectionStringException ex)
             {
@@ -361,7 +360,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Get a list of requests from DMS
             try
             {
-                var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
+                var dmsTools = DMSConnectionManager.DBTools;
                 tempRequestList = dmsTools.GetRequestedRunsFromDMS(queryData).ToList();
             }
             catch (DatabaseConnectionStringException ex)

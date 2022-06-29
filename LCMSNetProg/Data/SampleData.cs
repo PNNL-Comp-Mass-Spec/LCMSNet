@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Concurrency;
 using System.Text.RegularExpressions;
+using LcmsNet.Configuration;
 using LcmsNetSDK;
-using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
@@ -62,7 +62,7 @@ namespace LcmsNet.Data
             sequenceNumber = -1;
 
             LCMethodName = "";
-            Volume = CartConfiguration.MinimumSampleVolume;
+            Volume = CartLimits.MinimumSampleVolume;
 
             // Default state is always to be queued but not waiting to run.
             RunningStatus = SampleRunningStatus.Queued;
@@ -379,7 +379,7 @@ namespace LcmsNet.Data
             get => volume;
             set
             {
-                if (value < CartConfiguration.MinimumVolume)
+                if (value < CartLimits.MinimumVolume)
                 {
                     // Report property changed to force UI refresh
                     this.RaisePropertyChanged(nameof(Volume));

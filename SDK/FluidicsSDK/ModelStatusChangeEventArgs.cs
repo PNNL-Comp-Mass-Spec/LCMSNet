@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LcmsNetSDK
+namespace FluidicsSDK
 {
     /// <summary>
     /// Event args for ModelCheck event

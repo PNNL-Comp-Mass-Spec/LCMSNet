@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using LcmsNetSDK;
 using LcmsNetSDK.System;
 
-namespace LcmsNetSDK
+namespace FluidicsSDK
 {
     /// <summary>
     /// interface for checking validity of fluidics models

@@ -14,6 +14,7 @@ using LcmsNet.Devices.Pumps.ViewModels;
 using LcmsNet.Devices.ViewModels;
 using LcmsNet.Devices.Views;
 using LcmsNet.IO;
+using LcmsNet.IO.DMS;
 using LcmsNet.Logging.ViewModels;
 using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
@@ -25,7 +26,6 @@ using LcmsNet.SampleQueue.ViewModels;
 using LcmsNet.Simulator.ViewModels;
 using LcmsNetCommonControls.ViewModels;
 using LcmsNetSDK;
-using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
@@ -820,7 +820,7 @@ namespace LcmsNet
             SampleProgressVm.Dispose();
             NotificationSystemVm.Dispose();
             FluidicsDesignVm.Dispose();
-            DMSDataContainer.DBTools.CloseConnection();
+            DMSConnectionManager.DBTools.CloseConnection();
             TaskBarManipulation.Instance.Dispose();
         }
     }

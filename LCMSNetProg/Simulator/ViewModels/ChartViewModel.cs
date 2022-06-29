@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Windows;
 using FluidicsSDK;
-using FluidicsSimulator;
+using FluidicsSDK.Simulator;
 using LcmsNet.Devices.ViewModels;
 using LcmsNet.Method;
 using LcmsNet.Method.ViewModels;
@@ -21,7 +21,7 @@ namespace LcmsNet.Simulator.ViewModels
     {
         public ChartViewModel()
         {
-            simInstance = FluidicsSimulator.FluidicsSimulator.GetInstance;
+            simInstance = FluidicsSimulator.GetInstance;
             simInstance.EventExecuting += SimInstance_EventExecuting;
             simInstance.EventSimulated += SimInstance_EventExecuting;
             simInstance.SimulationComplete += SimInstance_SimulationComplete;
@@ -49,7 +49,7 @@ namespace LcmsNet.Simulator.ViewModels
         }
 
         private DateTime startTime;
-        private readonly FluidicsSimulator.FluidicsSimulator simInstance;
+        private readonly FluidicsSimulator simInstance;
 
         public LCMethodSelectionViewModel SelectedMethods { get; }
         public ModelCheckReportsViewModel Reporter { get; }
@@ -177,7 +177,7 @@ namespace LcmsNet.Simulator.ViewModels
             var count = 0;
             var optimizer = new LCMethodOptimizer();
             optimizer.AlignMethods(methods);
-            var queue = FluidicsSimulator.FluidicsSimulator.BuildEventList(methods, methods[0].Start);
+            var queue = FluidicsSimulator.BuildEventList(methods, methods[0].Start);
             foreach (var list in queue)
             {
                 if (list.Exists(lcEvent => lcEvent.Name == e.Event.Name && lcEvent.Start == e.Event.Start))

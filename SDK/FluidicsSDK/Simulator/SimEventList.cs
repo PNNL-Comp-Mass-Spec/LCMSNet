@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using LcmsNetSDK.Method;
 
-namespace FluidicsSimulator
+namespace FluidicsSDK.Simulator
 {
     /// <summary>
     /// This list is meant to hold concurrent events.

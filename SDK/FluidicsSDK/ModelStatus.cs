@@ -3,7 +3,7 @@ using System.Text;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.System;
 
-namespace LcmsNetSDK
+namespace FluidicsSDK
 {
     public enum ModelStatusCategory
     {

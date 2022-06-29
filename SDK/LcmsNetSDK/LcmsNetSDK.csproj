@@ -47,7 +47,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\CartConfiguration.cs" />
     <Compile Include="Data\ColumnData.cs" />
     <Compile Include="Data\ColumnStatus.cs" />
     <Compile Include="Data\DummySampleInfo.cs" />
@@ -103,12 +102,9 @@
     <Compile Include="SampleValidation\SampleValidationErrorType.cs" />
     <Compile Include="SampleValidation\SampleValidatorManager.cs" />
     <Compile Include="SystemInformationReporter.cs" />
+    <Compile Include="System\CartLimits.cs" />
     <Compile Include="System\INotifier.cs" />
-    <Compile Include="IFluidicsModelChecker.cs" />
-    <Compile Include="IModelCheckController.cs" />
     <Compile Include="IPDF.cs" />
-    <Compile Include="ModelStatus.cs" />
-    <Compile Include="ModelStatusChangeEventArgs.cs" />
     <Compile Include="LCMSSettings.cs" />
     <Compile Include="System\PersistDataPaths.cs" />
     <Compile Include="System\TimeKeeper.cs" />

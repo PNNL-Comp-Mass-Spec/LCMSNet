@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
-using LcmsNetSDK;
+using FluidicsSDK;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels

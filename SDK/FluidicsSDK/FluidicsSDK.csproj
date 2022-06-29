@@ -89,6 +89,8 @@
     <Compile Include="Graphic\FluidicsTriangle.cs" />
     <Compile Include="Graphic\GraphicsPrimitive.cs" />
     <Compile Include="Graphic\StateControlPrimitive.cs" />
+    <Compile Include="IFluidicsModelChecker.cs" />
+    <Compile Include="IModelCheckController.cs" />
     <Compile Include="Managers\ConnectionChangedEventArgs.cs" />
     <Compile Include="Managers\ConnectionManager.cs" />
     <Compile Include="Managers\FluidicsDeviceManager.cs" />
@@ -98,10 +100,14 @@
     <Compile Include="ModelCheckers\MultipleSourcesModelCheck.cs" />
     <Compile Include="ModelCheckers\NoSinksModelCheck.cs" />
     <Compile Include="ModelCheckers\TestModelCheck.cs" />
+    <Compile Include="ModelStatus.cs" />
+    <Compile Include="ModelStatusChangeEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FluidicsModerator.cs" />
     <Compile Include="IRenderable.cs" />
     <Compile Include="RenderLayer.cs" />
+    <Compile Include="Simulator\FluidicsSimulator.cs" />
+    <Compile Include="Simulator\SimEventList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">

@@ -1,7 +1,7 @@
 ﻿using System;
 using FluidicsSDK;
 using FluidicsSDK.ModelCheckers;
-using FluidicsSimulator;
+using FluidicsSDK.Simulator;
 using LcmsNet.Devices.Fluidics.ViewModels;
 using ReactiveUI;
 
@@ -28,7 +28,7 @@ namespace LcmsNet.Simulator.ViewModels
             mod.ModelChanged += ModelChangedHandler;
             Elapsed = "+00:00:00";
 
-            FluidicsSimulator.FluidicsSimulator.GetInstance.EventSimulated += EventSimulated_Handler;
+            FluidicsSimulator.GetInstance.EventSimulated += EventSimulated_Handler;
 
             var sinkCheck = new NoSinksModelCheck();
             sinkCheck.IsEnabled = false;
@@ -42,10 +42,10 @@ namespace LcmsNet.Simulator.ViewModels
             var testCheck = new TestModelCheck();
             testCheck.IsEnabled = false;
 
-            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(sinkCheck);
-            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(sourceCheck);
-            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(cycleCheck);
-            FluidicsSimulator.FluidicsSimulator.GetInstance.AddModelCheck(testCheck);
+            FluidicsSimulator.GetInstance.AddModelCheck(sinkCheck);
+            FluidicsSimulator.GetInstance.AddModelCheck(sourceCheck);
+            FluidicsSimulator.GetInstance.AddModelCheck(cycleCheck);
+            FluidicsSimulator.GetInstance.AddModelCheck(testCheck);
             //fluidicsControlVm = new FluidicsControlViewModel();
         }
 

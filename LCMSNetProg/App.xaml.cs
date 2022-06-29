@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using LcmsNet.Configuration;
 using LcmsNet.Devices;
 using LcmsNet.IO;
 using LcmsNet.IO.DMS;
 using LcmsNet.IO.Sequence;
 using LcmsNet.Properties;
 using LcmsNetSDK;
-using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
@@ -642,7 +642,7 @@ namespace LcmsNet
 
             try
             {
-                var dmsTools = LcmsNet.Configuration.DMSDataContainer.DBTools;
+                var dmsTools = DMSConnectionManager.DBTools;
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
             }
             catch (Exception ex)

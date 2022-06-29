@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK;
+using FluidicsSDK.Simulator;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
@@ -154,7 +155,7 @@ namespace LcmsNet.Method.Drawing
                     method.Events.ForEach(u => methodMap.Add(u, method));
                 }
 
-                var eventList = FluidicsSimulator.FluidicsSimulator.BuildEventList(methods, startTime);
+                var eventList = FluidicsSimulator.BuildEventList(methods, startTime);
                 float eventHeight = 48;
                 float eventPadding = 5;
 

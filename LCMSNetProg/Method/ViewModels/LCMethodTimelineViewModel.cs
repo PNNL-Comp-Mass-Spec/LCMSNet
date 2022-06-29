@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
+using FluidicsSDK.Simulator;
+using LcmsNet.Configuration;
 using LcmsNet.Method.Drawing;
-using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
@@ -81,7 +82,7 @@ namespace LcmsNet.Method.ViewModels
             {
                 if (methods.Count > 0)
                 {
-                    var maxIndex = FluidicsSimulator.FluidicsSimulator.BuildEventList(methods, methods[0].Start).Count - 1;
+                    var maxIndex = FluidicsSimulator.BuildEventList(methods, methods[0].Start).Count - 1;
                     if (StartEventIndex + 1 <= maxIndex)
                     {
                         StartEventIndex++;
@@ -101,7 +102,7 @@ namespace LcmsNet.Method.ViewModels
             var eventHeight = 48; // from LCMethodConversationRenderer
             if (methods.Count > 0)
             {
-                var maxIndex = FluidicsSimulator.FluidicsSimulator.BuildEventList(methods, methods[0].Start).Count - 1;
+                var maxIndex = FluidicsSimulator.BuildEventList(methods, methods[0].Start).Count - 1;
                 //number of lists of events that happen at the same time. This is the upper bound of the index we are trying to change and track.
                 if (indexChange <= -eventHeight)
                 {

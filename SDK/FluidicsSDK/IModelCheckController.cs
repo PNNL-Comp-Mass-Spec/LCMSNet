@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using LcmsNetSDK;
 
-namespace LcmsNetSDK
+namespace FluidicsSDK
 {
     public class ModelCheckControllerEventArgs : EventArgs
     {

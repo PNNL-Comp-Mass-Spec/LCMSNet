@@ -1,15 +1,13 @@
-﻿using LcmsNet.IO.DMS;
-
-namespace LcmsNet.Configuration
+﻿namespace LcmsNet.IO.DMS
 {
-    public static class DMSDataContainer
+    public static class DMSConnectionManager
     {
         public static DMSDBTools DBTools { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        static DMSDataContainer()
+        static DMSConnectionManager()
         {
             DBTools = new DMSDBTools();
         }

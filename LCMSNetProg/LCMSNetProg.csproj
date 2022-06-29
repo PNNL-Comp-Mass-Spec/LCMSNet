@@ -44,10 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\FluidicsSDK.dll</HintPath>
     </Reference>
-    <Reference Include="FluidicsSimulator, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\FluidicsSimulator.dll</HintPath>
-    </Reference>
     <Reference Include="PDFGen, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\PDFGen.dll</HintPath>
@@ -75,7 +71,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Configuration\DMSDataContainer.cs" />
+    <Compile Include="Configuration\CartConfiguration.cs" />
     <Compile Include="Configuration\ViewModels\ColumnConfigViewModel.cs" />
     <Compile Include="Configuration\ViewModels\SystemConfigurationViewModel.cs" />
     <Compile Include="Configuration\Views\ColumnConfigView.xaml.cs">
@@ -144,6 +140,7 @@
     <Compile Include="IO\DMS\BlockValidator.cs" />
     <Compile Include="IO\DMS\DatabaseConnectionStringException.cs" />
     <Compile Include="IO\DMS\DatabaseDataException.cs" />
+    <Compile Include="IO\DMS\DMSConnectionManager.cs" />
     <Compile Include="IO\DMS\DMSDBTools.cs" />
     <Compile Include="IO\DMS\DmsDownloadData.cs" />
     <Compile Include="IO\DMS\ExtensionMethods.cs" />

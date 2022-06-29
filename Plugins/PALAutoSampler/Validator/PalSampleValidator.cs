@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.SampleValidation;
+using LcmsNetSDK.System;
 
 namespace LcmsNetPlugins.PALAutoSampler.Validator
 {
@@ -50,7 +50,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Validator
             }
 
             // Make sure the volume is set.
-            if (sample.Volume < CartConfiguration.MinimumVolume)
+            if (sample.Volume < CartLimits.MinimumVolume)
             {
                 errors.Add(new SampleValidationError("The Sample Volume is lower than the instrument can handle.", SampleValidationErrorType.InjectionVolumeOutOfRange));
             }

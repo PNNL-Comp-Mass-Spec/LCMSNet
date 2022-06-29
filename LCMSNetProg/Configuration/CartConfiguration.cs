@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using LcmsNetSDK.Data;
 
-namespace LcmsNetSDK.Configuration
+namespace LcmsNet.Configuration
 {
     /// <summary>
     /// Class that encapsulates the configuration of the cart from
@@ -12,11 +10,6 @@ namespace LcmsNetSDK.Configuration
     /// </summary>
     public static class CartConfiguration
     {
-        /// <summary>
-        /// The minimum sample volume for this system.
-        /// </summary>
-        public const double MinimumSampleVolume = 0.1;
-
         static CartConfiguration()
         {
             Columns = new List<ColumnData>();
@@ -73,25 +66,6 @@ namespace LcmsNetSDK.Configuration
             }
 
             return ptrList;
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the cart.
-        /// </summary>
-        public static string CartName
-        {
-            get => LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
-            set => LCMSSettings.SetParameter(LCMSSettings.PARAM_CARTNAME, value);
-        }
-
-        public static double MinimumVolume
-        {
-            get
-            {
-                var volume = LCMSSettings.GetParameter(LCMSSettings.PARAM_MINIMUMVOLUME, 0.0);
-                return Math.Max(volume, MinimumSampleVolume);
-            }
-            set => LCMSSettings.SetParameter(LCMSSettings.PARAM_MINIMUMVOLUME, value.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

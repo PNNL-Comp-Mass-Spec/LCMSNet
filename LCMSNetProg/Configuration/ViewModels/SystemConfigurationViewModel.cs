@@ -5,8 +5,8 @@ using System.Reactive;
 using System.Windows;
 using System.Windows.Media;
 using LcmsNetSDK;
-using LcmsNetSDK.Configuration;
 using LcmsNetSDK.Data;
+using LcmsNetSDK.System;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 
@@ -50,11 +50,11 @@ namespace LcmsNet.Configuration.ViewModels
             SpecialColumnEnabled = !LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true);
 
             // Cart name
-            CartName = CartConfiguration.CartName;
+            CartName = LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME);
 
             LoadApplicationSettings();
 
-            MinVolume = CartConfiguration.MinimumVolume;
+            MinVolume = CartLimits.MinimumVolume;
 
             //load time zones into combobox
             TimeZoneComboBoxOptions = TimeZoneInfo.GetSystemTimeZones().Select(x => x.Id).ToList().AsReadOnly();
@@ -85,7 +85,7 @@ namespace LcmsNet.Configuration.ViewModels
                 this.RaiseAndSetIfChanged(ref minVolume, value);
                 if (!oldValue.Equals(minVolume))
                 {
-                    CartConfiguration.MinimumVolume = minVolume;
+                    CartLimits.MinimumVolume = minVolume;
                 }
             }
         }

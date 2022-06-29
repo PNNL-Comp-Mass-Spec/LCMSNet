@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
-namespace FluidicsSimulator
+namespace FluidicsSDK.Simulator
 {
     /// <summary>
     /// Event args for LCEvent simulation event

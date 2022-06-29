@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetSDK;
+using FluidicsSDK;
 using ReactiveUI;
 
 namespace LcmsNet.Devices.ViewModels
