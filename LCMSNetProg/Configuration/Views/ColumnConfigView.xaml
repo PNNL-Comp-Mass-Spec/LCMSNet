@@ -32,7 +32,7 @@
         <xctk:ColorPicker Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="3,3,3,20" Opacity="0" DisplayColorAndName="False" SelectedColor="{Binding ColumnData.Color}" IsEnabled="{Binding ColumnEnabled}" ShowAvailableColors="True" ShowStandardColors="True" ShowDropDownButton="False" />
         <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="3" Text="{Binding ColumnData.Name}" IsEnabled="{Binding ColumnEnabled}" VerticalAlignment="Center" />
         <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <CheckBox VerticalAlignment="Center" Margin="5,0" IsChecked="{Binding ColumnEnabled}" Content="Enabled" />
+            <CheckBox VerticalAlignment="Center" Margin="5,0" IsChecked="{Binding ColumnEnabled}" Content="Enabled" IsEnabled="{Binding AllowDisableColumn}" />
             <TextBlock VerticalAlignment="Center" Margin="5,0" Text="{Binding ColumnData.Status, StringFormat=Status: {0}}" />
         </StackPanel>
     </Grid>

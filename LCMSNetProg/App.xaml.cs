@@ -331,70 +331,6 @@ namespace LcmsNet
         }
 
         /// <summary>
-        /// Creates the configurations for the columns and systems
-        /// </summary>
-        private void InitializeSystemConfigurations()
-        {
-            var columnStatus1 = ColumnStatus.Idle;
-            var columnStatus2 = ColumnStatus.Idle;
-            var columnStatus3 = ColumnStatus.Idle;
-            var columnStatus4 = ColumnStatus.Idle;
-            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLED0, false))
-            {
-                columnStatus1 = ColumnStatus.Disabled;
-            }
-            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLED1, false))
-            {
-                columnStatus2 = ColumnStatus.Disabled;
-            }
-            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLED2, false))
-            {
-                columnStatus3 = ColumnStatus.Disabled;
-            }
-            if (LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLED3, false))
-            {
-                columnStatus4 = ColumnStatus.Disabled;
-            }
-
-            // Create system data with columns.
-            var columnOne = new ColumnData
-            {
-                ID = 0,
-                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME0),
-                Status = columnStatus1,
-                Color = Colors.Tomato,
-                First = true
-            };
-
-            var columnTwo = new ColumnData
-            {
-                ID = 1,
-                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME1),
-                Status = columnStatus2,
-                Color = Colors.Lime
-            };
-
-            var columnThree = new ColumnData
-            {
-                ID = 2,
-                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME2),
-                Status = columnStatus3,
-                Color = Colors.LightSteelBlue
-            };
-
-            var columnFour = new ColumnData
-            {
-                ID = 3,
-                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME3),
-                Status = columnStatus4,
-                Color = Colors.LightSalmon
-            };
-
-            CartConfiguration.Columns = new List<ColumnData> {
-                columnOne, columnTwo, columnThree, columnFour};
-        }
-
-        /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
@@ -584,7 +520,7 @@ namespace LcmsNet
             LCMSSettings.SettingChanged += LCMSSettings_SettingChanged;
 
             //LogMessage(-1, "Creating Initial System Configurations");
-            InitializeSystemConfigurations();
+            CartConfiguration.Initialize();
 
             // Create a device manager.
             //LogMessage(-1, "Creating the Device Manager");

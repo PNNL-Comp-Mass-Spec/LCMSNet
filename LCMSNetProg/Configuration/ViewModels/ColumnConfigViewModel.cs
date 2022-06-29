@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Windows.Media;
-using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 using ReactiveUI;
@@ -35,28 +35,17 @@ namespace LcmsNet.Configuration.ViewModels
             {
                 if (ColumnData != null)
                 {
-                    if (ColumnEnabled)
-                    {
-                        columnData.Status = ColumnStatus.Idle;
-                    }
-                    else
-                    {
-                        // Don't allow disabling if this is the last column that was still enabled
-                        if (CartConfiguration.NumberOfEnabledColumns == 1 &&
-                            LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true))
-                        {
-                            ColumnEnabled = true;
-                        }
-                        else
-                        {
-                            columnData.Status = ColumnStatus.Disabled;
-                        }
-                    }
+                    columnData.Status = ColumnEnabled ? ColumnStatus.Idle : ColumnStatus.Disabled;
                 }
             });
+
+            allowDisableColumn = this.WhenAnyValue(x => x.ColumnEnabled, x => x.CartConfig.NumberOfColumnsEnabled)
+                .Select(x => !x.Item1 || x.Item2 > 1).ToProperty(this, x => x.AllowDisableColumn);
         }
 
+        private CartConfiguration CartConfig => CartConfiguration.Instance;
         private bool columnEnabled = true;
+        private readonly ObservableAsPropertyHelper<bool> allowDisableColumn;
 
         /// <summary>
         /// Column configuration object.
@@ -72,8 +61,22 @@ namespace LcmsNet.Configuration.ViewModels
         public bool ColumnEnabled
         {
             get => columnEnabled;
-            set => this.RaiseAndSetIfChanged(ref columnEnabled, value);
+            set
+            {
+                // Don't allow disabling if this is the last column that was still enabled
+                if (value || CartConfiguration.NumberOfEnabledColumns > 1)
+                {
+                    this.RaiseAndSetIfChanged(ref columnEnabled, value);
+                }
+                else
+                {
+                    // Trigger UI refresh of the unchanged value.
+                    this.RaisePropertyChanged();
+                }
+            }
         }
+
+        public bool AllowDisableColumn => allowDisableColumn.Value;
 
         public int ColumnId => columnId?.Value + 1 ?? 0;
 

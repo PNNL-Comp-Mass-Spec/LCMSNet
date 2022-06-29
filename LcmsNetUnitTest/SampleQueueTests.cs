@@ -23,41 +23,7 @@ namespace LcmsnetUnitTest
             if (q == null)
             {
                 // Create system data with columns.
-                var columnOne = new ColumnData
-                {
-                    ID = 0,
-                    Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME0),
-                    Status = ColumnStatus.Idle,
-                    Color = Colors.Tomato,
-                    First = true
-                };
-
-                var columnTwo = new ColumnData
-                {
-                    ID = 1,
-                    Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME1),
-                    Status =ColumnStatus.Idle,
-                    Color = Colors.Lime
-                };
-
-                var columnThree = new ColumnData
-                {
-                    ID = 2,
-                    Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME2),
-                    Status =ColumnStatus.Idle,
-                    Color = Colors.LightSteelBlue
-                };
-
-                var columnFour = new ColumnData
-                {
-                    ID = 3,
-                    Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME3),
-                    Status =ColumnStatus.Idle,
-                    Color = Colors.LightSalmon
-                };
-
-                CartConfiguration.Columns = new List<ColumnData> {
-                    columnOne, columnTwo, columnThree, columnFour};
+                CartConfiguration.Initialize();
 
                 optimizer = new LCMethodOptimizer();
             }
