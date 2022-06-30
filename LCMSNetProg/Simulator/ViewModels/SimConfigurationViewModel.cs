@@ -76,7 +76,7 @@ namespace LcmsNet.Simulator.ViewModels
         /// </summary>
         private void ModelChangedHandler()
         {
-            ChangeHandler(this, new EventArgs());
+            ChangeHandler(this, EventArgs.Empty);
         }
 
         private void ChangeHandler(object sender, EventArgs e)

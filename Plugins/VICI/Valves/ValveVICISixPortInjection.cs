@@ -41,7 +41,7 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref injectionVolume, value))
                 {
-                    InjectionVolumeChanged?.Invoke(this, new EventArgs());
+                    InjectionVolumeChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }

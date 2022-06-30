@@ -115,7 +115,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
         public void Refresh()
         {
-            RefreshView?.Invoke(this, new EventArgs());
+            RefreshView?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

@@ -816,7 +816,7 @@ namespace LcmsNetSDK.Devices
                 }
             }
 
-            DevicesInitialized?.Invoke(this, new EventArgs());
+            DevicesInitialized?.Invoke(this, EventArgs.Empty);
             return devices;
         }
 

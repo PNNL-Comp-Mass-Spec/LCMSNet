@@ -376,7 +376,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // This tells anyone else using the samples to STOP!
             // For the scheduler this would tell him to stop first
             // so that he can move the samples appropriately.
-            Stop?.Invoke(this, new EventArgs());
+            Stop?.Invoke(this, EventArgs.Empty);
 
             // Moves the samples from the running queue back onto the
             // waiting queue.

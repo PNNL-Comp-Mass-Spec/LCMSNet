@@ -78,7 +78,7 @@ namespace LcmsNet.Logging.ViewModels
 
         private void InsertError(ErrorLoggerArgs error)
         {
-            ErrorPresent?.Invoke(this, new EventArgs());
+            ErrorPresent?.Invoke(this, EventArgs.Empty);
             // Use .Edit to make the whole set a single change (both synchronized, and single notification)
             errorMessages.Edit(sourceList =>
             {
@@ -104,7 +104,7 @@ namespace LcmsNet.Logging.ViewModels
         private void AcknowledgeErrors()
         {
             errorMessages.Clear();
-            ErrorCleared?.Invoke(this, new EventArgs());
+            ErrorCleared?.Invoke(this, EventArgs.Empty);
         }
 
         private void ClearMessages()

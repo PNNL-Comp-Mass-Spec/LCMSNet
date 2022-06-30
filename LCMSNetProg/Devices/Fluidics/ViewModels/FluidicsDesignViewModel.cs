@@ -150,7 +150,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
         public void Refresh()
         {
-            RefreshEvent?.Invoke(this, new EventArgs());
+            RefreshEvent?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -494,7 +494,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// </summary>
         private void FluidicsModelChanged()
         {
-            ChangeHandler(this, new EventArgs());
+            ChangeHandler(this, EventArgs.Empty);
         }
 
         /// <summary>

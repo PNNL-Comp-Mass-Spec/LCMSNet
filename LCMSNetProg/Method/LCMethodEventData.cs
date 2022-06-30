@@ -76,14 +76,14 @@ namespace LcmsNet.Method
         public void IsDone()
         {
             Executing = false;
-            Simulated?.Invoke(this, new EventArgs());
+            Simulated?.Invoke(this, EventArgs.Empty);
         }
 
         /// <inheritdoc />
         public void IsCurrent()
         {
             Executing = true;
-            SimulatingEvent?.Invoke(this, new EventArgs());
+            SimulatingEvent?.Invoke(this, EventArgs.Empty);
         }
 
         public LCMethodEventData Clone()
