@@ -101,7 +101,7 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="sender">Object who sent the method.</param>
         /// <param name="method">Method to remove.</param>
         /// <returns>True always, that the method was removed.</returns>
-        private void Manager_MethodRemoved(object sender, LCMethod method)
+        private void Manager_MethodRemoved(object sender, ILCMethod method)
         {
             // Finds and removes the method in the listbox
             foreach (var removeMethod in ListSelectedLCMethods.Where(lcMethod => lcMethod.Name.Equals(method.Name)).ToList())
@@ -124,11 +124,11 @@ namespace LcmsNet.Method.ViewModels
         /// Adds the method to the user interface when it's added to the manager.
         /// </summary>
         /// <param name="sender">Object who sent the method.</param>
-        /// <param name="method">Method to add.</param>
+        /// <param name="ilcMethod">Method to add.</param>
         /// <returns>True if a method was added, false if the method was null.</returns>
-        private void Manager_MethodAdded(object sender, LCMethod method)
+        private void Manager_MethodAdded(object sender, ILCMethod ilcMethod)
         {
-            if (method == null)
+            if (!(ilcMethod is LCMethod method))
                 return;
 
             // Update the combo box so that the method has the right number of events,

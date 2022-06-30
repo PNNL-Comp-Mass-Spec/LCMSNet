@@ -7,7 +7,6 @@ using LcmsNet.Configuration;
 using LcmsNet.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
-using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
 namespace LcmsNet.Method

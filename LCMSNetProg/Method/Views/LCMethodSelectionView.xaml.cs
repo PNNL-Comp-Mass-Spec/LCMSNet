@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using LcmsNet.Method.ViewModels;
-using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Views
 {

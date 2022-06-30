@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Windows;
 using LcmsNet.Data;
+using LcmsNet.Method;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 using ReactiveUI;
@@ -221,22 +222,22 @@ namespace LcmsNet.SampleQueue.ViewModels
             var methods = new List<LCMethod>();
             if (ApplyGroup1)
             {
-                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup1);
+                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup1) as LCMethod;
                 methods.Add(method);
             }
             if (ApplyGroup2)
             {
-                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup2);
+                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup2) as LCMethod;
                 methods.Add(method);
             }
             if (ApplyGroup3)
             {
-                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup3);
+                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup3) as LCMethod;
                 methods.Add(method);
             }
             if (ApplyGroup4)
             {
-                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup4);
+                var method = LCMethodManager.Manager.GetLCMethodByName(LCMethodGroup4) as LCMethod;
                 methods.Add(method);
             }
             if (methods.Count < 1)

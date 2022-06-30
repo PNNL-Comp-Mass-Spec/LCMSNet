@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Media;
 using DemoPluginLibrary;
 using LcmsNet.Configuration;
 using LcmsNet.Data;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue;
-using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
 using NUnit.Framework;
 
@@ -80,7 +76,7 @@ namespace LcmsnetUnitTest
             samples.Add(sampleA);
             samples.Add(sampleB);
 
-            optimizer.AlignSamples(samples.Cast<ISampleInfo>().ToList());
+            optimizer.AlignSamples(samples);
             q.QueueSamples(samples, enumColumnDataHandling.LeaveAlone);
             Assert.IsTrue(q.GetWaitingQueue().Contains(sampleA) && q.GetWaitingQueue().Contains(sampleB));
         }
@@ -129,7 +125,7 @@ namespace LcmsnetUnitTest
             samples.Add(sampleA);
             samples.Add(sampleB);
 
-            optimizer.AlignSamples(samples.Cast<ISampleInfo>().ToList());
+            optimizer.AlignSamples(samples);
             q.QueueSamples(samples, enumColumnDataHandling.LeaveAlone);
             q.MoveSamplesToRunningQueue(samples);
             q.StartSamples();
@@ -190,7 +186,7 @@ namespace LcmsnetUnitTest
             samples.Add(sampleA);
             samples.Add(sampleB);
 
-            optimizer.AlignSamples(samples.Cast<ISampleInfo>().ToList());
+            optimizer.AlignSamples(samples);
             q.QueueSamples(samples, enumColumnDataHandling.LeaveAlone);
             q.MoveSamplesToRunningQueue(samples);
             q.StartSamples();

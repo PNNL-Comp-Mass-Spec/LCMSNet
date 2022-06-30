@@ -15,26 +15,26 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Fired when a LC method is added.
         /// </summary>
-        public event EventHandler<LCMethod> MethodAdded;
+        public event EventHandler<ILCMethod> MethodAdded;
 
         /// <summary>
         /// Fired when a LC method is removed.
         /// </summary>
-        public event EventHandler<LCMethod> MethodRemoved;
+        public event EventHandler<ILCMethod> MethodRemoved;
 
         /// <summary>
         /// Fired when a LC method is updated.
         /// </summary>
-        public event EventHandler<LCMethod> MethodUpdated;
+        public event EventHandler<ILCMethod> MethodUpdated;
 
         /// <summary>
         /// Gets the list of LC methods available to run.
         /// </summary>
-        private readonly Dictionary<string, LCMethod> methods = new Dictionary<string, LCMethod>();
+        private readonly Dictionary<string, ILCMethod> methods = new Dictionary<string, ILCMethod>();
 
-        public IEnumerable<LCMethod> AllLCMethods => methods.Values;
+        public IEnumerable<ILCMethod> AllLCMethods => methods.Values;
 
-        public LCMethod GetLCMethodByName(string methodName)
+        public ILCMethod GetLCMethodByName(string methodName)
         {
             if (TryGetLCMethod(methodName, out var method))
             {
@@ -44,7 +44,7 @@ namespace LcmsNetSDK.Method
             return null;
         }
 
-        public bool TryGetLCMethod(string methodName, out LCMethod method)
+        public bool TryGetLCMethod(string methodName, out ILCMethod method)
         {
             if (string.IsNullOrWhiteSpace(methodName))
             {
@@ -65,7 +65,7 @@ namespace LcmsNetSDK.Method
         /// </summary>
         /// <param name="method">Method to add</param>
         /// <returns>True if the method was added.  False if the method already existed.</returns>
-        public bool AddOrUpdateMethod(LCMethod method)
+        public bool AddOrUpdateMethod(ILCMethod method)
         {
             if (method?.Name == null)
                 return false;
@@ -100,7 +100,7 @@ namespace LcmsNetSDK.Method
 
                 if (!method.Name.Equals(methodName))
                 {
-                    method = (LCMethod)method.Clone();
+                    method = (ILCMethod)method.Clone();
                     method.Name = methodName;
                 }
 

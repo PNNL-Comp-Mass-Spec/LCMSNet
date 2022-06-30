@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using LcmsNetSDK.Data;
+using LcmsNet.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
@@ -26,7 +26,7 @@ namespace LcmsNet.Method
         /// <summary>
         /// Gets the list of methods currently being optimized.
         /// </summary>
-        public List<LCMethod> Methods { get; private set; }
+        public IReadOnlyList<LCMethod> Methods { get; private set; }
 
         public event DelegateUpdateUserInterface UpdateRequired;
 
@@ -330,7 +330,7 @@ namespace LcmsNet.Method
         /// </summary>
         /// <param name="samples">Samples to align.</param>
         /// <returns>True if aligned, false if not.</returns>
-        public bool AlignSamples(List<ISampleInfo> samples)
+        public bool AlignSamples(IReadOnlyList<SampleData> samples)
         {
             var methods = new List<LCMethod>();
             foreach (var sample in samples)
@@ -354,7 +354,7 @@ namespace LcmsNet.Method
         /// <param name="baselineSamples">Samples to align data to.</param>
         /// <param name="aligneeSample">Samples to align.</param>
         /// <returns>True if aligned, false if could not be.</returns>
-        public bool AlignSamples(List<ISampleInfo> baselineSamples, ISampleInfo aligneeSample)
+        public bool AlignSamples(IReadOnlyList<SampleData> baselineSamples, SampleData aligneeSample)
         {
             var methods = new List<LCMethod>();
             foreach (var sample in baselineSamples)
@@ -371,7 +371,7 @@ namespace LcmsNet.Method
             return done;
         }
 
-        private void PrintAlignedMethods(List<LCMethod> methods, LCMethod alignedMethod = null)
+        private void PrintAlignedMethods(IReadOnlyList<LCMethod> methods, LCMethod alignedMethod = null)
         {
             Debug.WriteLine("Optimized Methods: ");
             var formatStr = "method: {0} start time: {1} end time {2}";
@@ -516,7 +516,7 @@ namespace LcmsNet.Method
         /// <param name="baselineMethods">Methods to align to.</param>
         /// <param name="aligneeMethod"></param>
         /// <returns></returns>
-        public bool AlignMethods(List<LCMethod> baselineMethods, LCMethod aligneeMethod)
+        public bool AlignMethods(IReadOnlyList<LCMethod> baselineMethods, LCMethod aligneeMethod)
         {
             // No need to align self to self.
             if (baselineMethods.Count == 0)
@@ -636,7 +636,7 @@ namespace LcmsNet.Method
         /// Aligns the list of methods together.
         /// </summary>
         /// <param name="methods">Methods to align.</param>
-        public bool AlignMethods(List<LCMethod> methods)
+        public bool AlignMethods(IReadOnlyList<LCMethod> methods)
         {
             // Align methods
             Methods = methods;

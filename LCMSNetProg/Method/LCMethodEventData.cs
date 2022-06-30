@@ -60,22 +60,26 @@ namespace LcmsNet.Method
             }
         }
 
+        /// <inheritdoc />
         public void Break()
         {
             BreakPointEvent?.Invoke(this, new BreakEventArgs(true));
         }
 
+        /// <inheritdoc />
         public void PassBreakPoint()
         {
             BreakPointEvent?.Invoke(this, new BreakEventArgs(false));
         }
 
+        /// <inheritdoc />
         public void IsDone()
         {
             Executing = false;
             Simulated?.Invoke(this, new EventArgs());
         }
 
+        /// <inheritdoc />
         public void IsCurrent()
         {
             Executing = true;
@@ -137,8 +141,10 @@ namespace LcmsNet.Method
         /// </summary>
         public bool OptimizeWith { get; set; }
 
+        /// <inheritdoc />
         public bool BreakPoint { get; set; }
 
+        /// <inheritdoc />
         public bool Executing { get; set; }
     }
 }

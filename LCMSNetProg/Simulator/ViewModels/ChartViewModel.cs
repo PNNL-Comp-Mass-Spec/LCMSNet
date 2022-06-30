@@ -11,7 +11,6 @@ using LcmsNet.Simulator.Views;
 using LcmsNetCommonControls.ViewModels;
 using LcmsNetSDK;
 using LcmsNetSDK.Logging;
-using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 using ReactiveUI;
 

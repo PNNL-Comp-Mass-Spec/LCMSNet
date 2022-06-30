@@ -40,10 +40,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluidicsSDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\FluidicsSDK.dll</HintPath>
-    </Reference>
     <Reference Include="PDFGen, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\PDFGen.dll</HintPath>
@@ -179,6 +175,9 @@
     <Compile Include="Method\Drawing\LCMethodRenderer.cs" />
     <Compile Include="Method\Drawing\LCRendererFactory.cs" />
     <Compile Include="Method\ILCEventParameter.cs" />
+    <Compile Include="Method\InvalidTimeSpanException.cs" />
+    <Compile Include="Method\LCEvent.cs" />
+    <Compile Include="Method\LCMethod.cs" />
     <Compile Include="Method\LCMethodEventData.cs" />
     <Compile Include="Method\LCMethodEventParameter.cs" />
     <Compile Include="Method\LCMethodOptimizer.cs" />
@@ -778,6 +777,10 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SDK\FluidicsSDK\FluidicsSDK.csproj">
+      <Project>{150d2dd0-f6ae-4e64-9499-b91b7a01d5ad}</Project>
+      <Name>FluidicsSDK</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SDK\LcmsNetCommonControls\LcmsNetCommonControls.csproj">
       <Project>{176aacc9-480e-4425-ba4b-40bb7b8a2e04}</Project>
       <Name>LcmsNetCommonControls</Name>

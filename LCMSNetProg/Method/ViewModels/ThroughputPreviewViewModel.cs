@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
-using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.ViewModels
 {
@@ -22,7 +19,7 @@ namespace LcmsNet.Method.ViewModels
         /// Displays the alignment for the samples.
         /// </summary>
         /// <param name="samples"></param>
-        public void ShowAlignmentForSamples(List<SampleData> samples)
+        public void ShowAlignmentForSamples(IReadOnlyList<SampleData> samples)
         {
             // Show the samples
             UpdateSampleMethods(samples);
@@ -30,7 +27,7 @@ namespace LcmsNet.Method.ViewModels
             // Align the samples
             var optimizer = new LCMethodOptimizer();
             optimizer.UpdateRequired += optimizer_UpdateRequired;
-            optimizer.AlignSamples(samples.Cast<ISampleInfo>().ToList());
+            optimizer.AlignSamples(samples);
 
             // Display end product
             if (optimizer.Methods != null)
@@ -49,7 +46,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Renders the sample methods.
         /// </summary>
-        void UpdateSampleMethods(List<SampleData> samples)
+        void UpdateSampleMethods(IReadOnlyList<SampleData> samples)
         {
             var methods = new List<LCMethod>();
             foreach (var sample in samples)
@@ -71,7 +68,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders all of the methods.
         /// </summary>
         /// <param name="methods"></param>
-        private void RenderMethods(List<LCMethod> methods)
+        private void RenderMethods(IReadOnlyList<LCMethod> methods)
         {
             RenderLCMethod(methods);
         }

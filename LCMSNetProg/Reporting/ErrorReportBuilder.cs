@@ -7,8 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using LcmsNet.IO;
+using LcmsNet.Method;
 using LcmsNetSDK.Logging;
-using LcmsNetSDK.Method;
 
 namespace LcmsNet.Reporting
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using LcmsNetSDK.Method;
+using LcmsNet.Method;
 
 namespace LcmsNet.Notification
 {

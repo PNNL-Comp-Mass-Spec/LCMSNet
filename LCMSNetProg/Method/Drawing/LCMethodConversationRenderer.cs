@@ -7,7 +7,6 @@ using System.Windows.Media;
 using FluidicsSDK;
 using FluidicsSDK.Simulator;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Drawing
 {
@@ -74,7 +73,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, IReadOnlyList<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             // Calculate formatting paddings.
             // This tells us how far down from the top of the rendering area we are before we draw anything!
@@ -152,7 +151,10 @@ namespace LcmsNet.Method.Drawing
                 var methodMap = new Dictionary<LCEvent, LCMethod>();
                 foreach (var method in methods)
                 {
-                    method.Events.ForEach(u => methodMap.Add(u, method));
+                    foreach (var eventItem in method.Events)
+                    {
+                        methodMap.Add(eventItem, method);
+                    }
                 }
 
                 var eventList = FluidicsSimulator.BuildEventList(methods, startTime);
@@ -181,7 +183,7 @@ namespace LcmsNet.Method.Drawing
                         graphics.DrawText(timeSpanSinceStartText, new Point(0, top));
                         graphics.DrawText(simListStart, new Point(0, top + timeSpanSinceStartText.Height));
                         graphics.DrawLine(linePen, new Point(0, top + eventHeight), new Point(bounds.Width - CONST_COLUMN_SPACING, top + eventHeight));
-                        foreach (var lcEvent in simList)
+                        foreach (var lcEvent in simList.Cast<LCEvent>())
                         {
                             var method = methodMap[lcEvent];
 

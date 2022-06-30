@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using LcmsNetSDK.Method;
+using LcmsNet.Method;
 
 namespace LcmsNet.Reporting
 {

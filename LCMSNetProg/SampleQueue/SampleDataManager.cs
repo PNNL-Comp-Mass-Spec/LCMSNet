@@ -11,6 +11,7 @@ using DynamicData;
 using DynamicData.Binding;
 using LcmsNet.Configuration;
 using LcmsNet.Data;
+using LcmsNet.Method;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
@@ -541,10 +542,13 @@ namespace LcmsNet.SampleQueue
         /// Handles removing a method from the list of available running methods.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="method"></param>
-        private void Manager_MethodRemoved(object sender, LCMethod method)
+        /// <param name="ilcMethod"></param>
+        private void Manager_MethodRemoved(object sender, ILCMethod ilcMethod)
         {
-            RemoveMethod(method);
+            if (ilcMethod is LCMethod method)
+            {
+                RemoveMethod(method);
+            }
         }
 
         /// <summary>
@@ -578,10 +582,13 @@ namespace LcmsNet.SampleQueue
         /// Updates the column ID's if needed.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="method"></param>
+        /// <param name="ilcMethod"></param>
         /// <returns></returns>
-        private void Manager_MethodUpdated(object sender, LCMethod method)
+        private void Manager_MethodUpdated(object sender, ILCMethod ilcMethod)
         {
+            if (!(ilcMethod is LCMethod method))
+                return;
+
             // Update the samples first, then update the methods list.
             var samples = SampleQueue.GetWaitingQueue();
             var updateSamples = new List<SampleData>();
@@ -612,9 +619,12 @@ namespace LcmsNet.SampleQueue
         /// Handles adding a new method to the list of available running methods
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="method"></param>
-        private void Manager_MethodAdded(object sender, LCMethod method)
+        /// <param name="ilcMethod"></param>
+        private void Manager_MethodAdded(object sender, ILCMethod ilcMethod)
         {
+            if (!(ilcMethod is LCMethod method))
+                return;
+
             var success = AddOrUpdateLCMethod(method);
             if (!success)
             {
@@ -770,7 +780,7 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         private void ShowLCSeparationMethods()
         {
-            SetLCMethods(LCMethodManager.Manager.AllLCMethods);
+            SetLCMethods(LCMethodManager.Manager.AllLCMethods.Where(x => x is LCMethod).Cast<LCMethod>().ToList());
         }
 
         public void AddDateCartnameColumnIDToDatasetName(List<SampleData> samples)

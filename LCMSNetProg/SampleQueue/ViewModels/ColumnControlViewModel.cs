@@ -9,9 +9,9 @@ using DynamicData;
 using DynamicData.Binding;
 using LcmsNet.Configuration;
 using LcmsNet.Data;
+using LcmsNet.Method;
 using LcmsNet.SampleQueue.Views;
 using LcmsNetSDK.Data;
-using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

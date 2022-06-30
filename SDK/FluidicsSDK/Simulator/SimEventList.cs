@@ -7,7 +7,7 @@ namespace FluidicsSDK.Simulator
     /// <summary>
     /// This list is meant to hold concurrent events.
     /// </summary>
-    public class SimEventList : List<LCEvent>, IComparable
+    public class SimEventList : List<ILCEvent>, IComparable
     {
         /// <summary>
         /// Just to make sure that this list can't be instantiated without a time...this is private

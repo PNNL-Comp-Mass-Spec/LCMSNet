@@ -5,7 +5,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using LcmsNet.Data;
 using LcmsNetSDK.Logging;
-using LcmsNetSDK.Method;
 using ReactiveUI;
 
 namespace LcmsNet.Method.ViewModels

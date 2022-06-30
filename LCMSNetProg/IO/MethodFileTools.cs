@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using LcmsNet.Data;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
 
@@ -205,7 +204,7 @@ namespace LcmsNet.IO
         /// </summary>
         /// <param name="sample">Sample we're making a request for</param>
         /// <returns>On success, string containing folder name/path; empty string on failure</returns>
-        private static string MakeLocalMethodFolder(ISampleInfo sample)
+        private static string MakeLocalMethodFolder(SampleData sample)
         {
             // TODO: this line is here for upgrade compatibility - if the folder does not exist in ProgramData, but does in ProgramFiles, this will copy all existing contents.
             var loader = PersistDataPaths.GetDirectorySavePath(LOCAL_METHOD_FOLDER_NAME);

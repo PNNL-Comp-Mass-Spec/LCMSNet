@@ -10,7 +10,7 @@ namespace LcmsNetSDK.Data
             Name = "DummySample";
             ColumnName = "";
             PAL = new PalData();
-            ActualLCMethod = new LCMethod();
+            ActualLCMethod = new LCMethodDummy();
             InstrumentMethod = "";
             LCMethodName = "";
         }
@@ -22,7 +22,8 @@ namespace LcmsNetSDK.Data
         public double Volume { get; set; }
         public string InstrumentMethod { get; set; }
         public string LCMethodName { get; }
-        public LCMethod ActualLCMethod { get; }
+        public LCMethodDummy ActualLCMethod { get; }
+        ILCMethod ISampleInfo.ActualLCMethod => ActualLCMethod;
 
         public List<string[]> GetExportValuePairs()
         {

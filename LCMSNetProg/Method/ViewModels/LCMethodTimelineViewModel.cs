@@ -8,7 +8,6 @@ using LcmsNet.Configuration;
 using LcmsNet.Method.Drawing;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 using ReactiveUI;
 
@@ -190,7 +189,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders the method provided.
         /// </summary>
         /// <param name="methodList"></param>
-        public void RenderLCMethod(List<LCMethod> methodList)
+        public void RenderLCMethod(IReadOnlyList<LCMethod> methodList)
         {
             methods.Clear();
             methods.AddRange(methodList);

@@ -11,8 +11,8 @@ using DynamicData;
 using FluidicsSDK;
 using LcmsNet.Devices;
 using LcmsNet.IO;
+using LcmsNet.Method;
 using LcmsNet.Properties;
-using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
@@ -413,8 +413,11 @@ namespace LcmsNet.Notification.ViewModels
             ApplicationLogger.LogMessage(0, "Notification file saved to: " + Settings.Default.NotificationFilePath);
         }
 
-        private void Manager_MethodUpdated(object sender, LCMethod method)
+        private void Manager_MethodUpdated(object sender, ILCMethod ilcMethod)
         {
+            if (!(ilcMethod is LCMethod method))
+                return;
+
             methodsComboBoxOptions.Edit(list =>
             {
                 if (list.Contains(method))
@@ -425,13 +428,19 @@ namespace LcmsNet.Notification.ViewModels
             });
         }
 
-        private void Manager_MethodRemoved(object sender, LCMethod method)
+        private void Manager_MethodRemoved(object sender, ILCMethod ilcMethod)
         {
-            methodsComboBoxOptions.Remove(method);
+            if (ilcMethod is LCMethod method)
+            {
+                methodsComboBoxOptions.Remove(method);
+            }
         }
 
-        private void Manager_MethodAdded(object sender, LCMethod method)
+        private void Manager_MethodAdded(object sender, ILCMethod ilcMethod)
         {
+            if (!(ilcMethod is LCMethod method))
+                return;
+
             methodsComboBoxOptions.Edit(list =>
             {
                 if (!list.Contains(method))

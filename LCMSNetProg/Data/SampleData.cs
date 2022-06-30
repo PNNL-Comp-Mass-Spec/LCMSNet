@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Reactive.Concurrency;
 using System.Text.RegularExpressions;
 using LcmsNet.Configuration;
+using LcmsNet.Method;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Method;
@@ -335,6 +336,8 @@ namespace LcmsNet.Data
                 this.RaiseAndSetIfChanged(ref actualMethod, value, nameof(ActualLCMethod));
             }
         }
+
+        ILCMethod ISampleInfo.ActualLCMethod => ActualLCMethod;
 
         /// <summary>
         /// Gets or sets the experiment setup object data.

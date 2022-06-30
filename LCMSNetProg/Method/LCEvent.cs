@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
 
-namespace LcmsNetSDK.Method
+namespace LcmsNet.Method
 {
     /// <summary>
     /// Class that holds data for relative starting of LC-methods/events
@@ -32,7 +33,7 @@ namespace LcmsNetSDK.Method
     /// An atomic object operation used by stages in a method.
     /// </summary>
     [Serializable]
-    public class LCEvent : ICloneable, IEquatable<LCEvent>
+    public class LCEvent : ILCEvent, ICloneable, IEquatable<LCEvent>
     {
         /// <summary>
         /// Duration of the event.
@@ -54,7 +55,7 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// Soft copies the current object returning a new classLCEvent.
         /// </summary>
-        /// <returns>classLCEvent with same parameters as used with this method.</returns>
+        /// <returns>LCEvent with same parameters as used with this method.</returns>
         public object Clone()
         {
             var newEvent = new LCEvent
@@ -69,7 +70,6 @@ namespace LcmsNetSDK.Method
                 ParameterNames = new string[ParameterNames.Length],
                 MethodAttribute = MethodAttribute,
                 IsIndeterminant = IsIndeterminant,
-                BreakPoint = BreakPoint,
                 Start = Start,
                 MethodData = MethodData
             };
@@ -115,22 +115,6 @@ namespace LcmsNetSDK.Method
 
                 mtimespan_duration = value;
             }
-        }
-
-        /// <summary>
-        /// Notify UI that we're stopping simulation on this event as it is a breakpoint
-        /// </summary>
-        public void BreakHere()
-        {
-            MethodData.Break();
-        }
-
-        /// <summary>
-        /// Notify UI that we're moving passed this breakpoint.
-        /// </summary>
-        public void PassBreakPoint()
-        {
-            MethodData.PassBreakPoint();
         }
 
         /// <summary>
@@ -187,12 +171,6 @@ namespace LcmsNetSDK.Method
         /// Flag indicating an error occurred during event execution.
         /// </summary>
         public bool HadError { get; set; }
-
-        public bool BreakPoint
-        {
-            get => MethodData.BreakPoint;
-            private set => MethodData.BreakPoint = value;
-        }
 
         public bool Equals(LCEvent other)
         {

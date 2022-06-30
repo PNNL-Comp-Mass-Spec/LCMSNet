@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using LcmsNet.Method;
 using LcmsNet.Notification;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
@@ -124,7 +125,7 @@ namespace LcmsNet.IO
                     setting.Name = name;
                     if (!string.IsNullOrEmpty(method))
                     {
-                        if (LCMethodManager.Manager.TryGetLCMethod(method, out var lcMethod))
+                        if (LCMethodManager.Manager.TryGetLCMethod(method, out var ilcMethod) && ilcMethod is LCMethod lcMethod)
                         {
                             setting.Method = lcMethod;
                         }

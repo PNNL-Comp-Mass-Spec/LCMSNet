@@ -197,8 +197,11 @@ namespace LcmsNet.Method.ViewModels
         public ReactiveCommand<Unit, Unit> SelectAllCommand { get; }
         public ReactiveCommand<Unit, Unit> DeselectAllCommand { get; }
 
-        private void Manager_MethodUpdated(object sender, LCMethod method)
+        private void Manager_MethodUpdated(object sender, ILCMethod ilcMethod)
         {
+            if (!(ilcMethod is LCMethod method))
+                return;
+
             //only stages that already have this method loaded should reload it.
             if (MethodName == method.Name && !triggeredUpdate)
             {
@@ -210,27 +213,21 @@ namespace LcmsNet.Method.ViewModels
             }
         }
 
-        private void Manager_MethodRemoved(object sender, LCMethod method)
+        private void Manager_MethodRemoved(object sender, ILCMethod ilcMethod)
         {
-            if (method != null)
+            if (ilcMethod is LCMethod method && methodMap.ContainsKey(method.Name))
             {
-                if (methodMap.ContainsKey(method.Name))
-                {
-                    methodMap.Remove(method.Name);
-                    savedMethodsComboBoxOptions.Remove(method.Name);
-                }
+                methodMap.Remove(method.Name);
+                savedMethodsComboBoxOptions.Remove(method.Name);
             }
         }
 
-        private void Manager_MethodAdded(object sender, LCMethod method)
+        private void Manager_MethodAdded(object sender, ILCMethod ilcMethod)
         {
-            if (method != null)
+            if (ilcMethod is LCMethod method && !methodMap.ContainsKey(method.Name))
             {
-                if (!methodMap.ContainsKey(method.Name))
-                {
-                    methodMap.Add(method.Name, method.Name);
-                    savedMethodsComboBoxOptions.Add(method.Name);
-                }
+                methodMap.Add(method.Name, method.Name);
+                savedMethodsComboBoxOptions.Add(method.Name);
             }
         }
 
@@ -241,7 +238,7 @@ namespace LcmsNet.Method.ViewModels
         /// <returns></returns>
         private LCMethod FindMethods(string name)
         {
-            return LCMethodManager.Manager.GetLCMethodByName(name);
+            return LCMethodManager.Manager.GetLCMethodByName(name) as LCMethod;
         }
 
         /// <summary>
@@ -577,7 +574,7 @@ namespace LcmsNet.Method.ViewModels
 
                 // Construct an event.  We send false as locked because it's not a locking event.
                 var eventVm = new LCMethodEventViewModel(data, false, SharedUISettings);
-                eventVm.SetBreakPoint(lcEvent.BreakPoint);
+                eventVm.SetBreakPoint(lcEvent.MethodData.BreakPoint);
                 eventVm.EventNumber = eventNumber++;
                 eventsList.Add(eventVm);
             }

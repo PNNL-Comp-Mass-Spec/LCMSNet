@@ -6,7 +6,6 @@ using System.Windows.Media;
 using FluidicsSDK;
 using LcmsNet.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Drawing
 {
@@ -43,7 +42,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="methods">Samples to analyze</param>
         /// <param name="start">Starting time.</param>
         /// <param name="duration">Duration.</param>
-        protected void FindTimeExtrema(List<LCMethod> methods, out DateTime start, out TimeSpan duration)
+        protected void FindTimeExtrema(IReadOnlyList<LCMethod> methods, out DateTime start, out TimeSpan duration)
         {
             start = DateTime.MaxValue;
             var end = DateTime.MinValue;
@@ -237,7 +236,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="start"></param>
         /// <param name="duration"></param>
         /// <param name="methods"></param>
-        public virtual void RenderOptimizationsOnTimeline(DrawingContext graphics, Rect bounds, DateTime start, TimeSpan duration, List<LCMethod> methods)
+        public virtual void RenderOptimizationsOnTimeline(DrawingContext graphics, Rect bounds, DateTime start, TimeSpan duration, IReadOnlyList<LCMethod> methods)
         {
             if (methods == null || methods.Count == 0)
                 return;
@@ -380,7 +379,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="startTime"></param>
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
-        public virtual void RenderLCEvent(DrawingContext graphics, Rect allBounds, List<LCEvent> events, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap)
+        public virtual void RenderLCEvent(DrawingContext graphics, Rect allBounds, IReadOnlyList<LCEvent> events, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap)
         {
             if (events == null || events.Count == 0)
             {
@@ -518,7 +517,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, List<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public virtual void RenderLCMethod(DrawingContext graphics, Rect bounds, IReadOnlyList<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             if (methods != null && methods.Count > 0)
             {

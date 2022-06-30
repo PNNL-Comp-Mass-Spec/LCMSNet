@@ -1317,7 +1317,7 @@ namespace LcmsNet.SampleQueue
             // We have not started to run so optimize this way.
             var optimizer = new LCMethodOptimizer();
             //Debug.WriteLine("Optimizing samples that are queued to run before starting the queue");
-            optimizer.AlignSamples(RunningQueue.Cast<ISampleInfo>().ToList());
+            optimizer.AlignSamples(RunningQueue.ToList());
 
             // Set the listening event so that time sensitive items will know that
             // a sample is waiting on the running queue.
@@ -1384,7 +1384,7 @@ namespace LcmsNet.SampleQueue
                     // We aren't the first ones on the queue, but we are running,
                     // so we need to hurry up and go!
                     realSample.ActualLCMethod.SetStartTime(next);
-                    optimizer.AlignSamples(RunningQueue.Cast<ISampleInfo>().ToList(), realSample);
+                    optimizer.AlignSamples(RunningQueue.ToList(), realSample);
                 }
                 else if (!RunningQueue.Any())
                 {

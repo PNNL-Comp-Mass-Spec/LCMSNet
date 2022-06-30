@@ -12,7 +12,7 @@ namespace LcmsNetSDK.Data
         double Volume { get; }
         string InstrumentMethod { get; }
         string LCMethodName { get; }
-        LCMethod ActualLCMethod { get; }
+        ILCMethod ActualLCMethod { get; }
         List<string[]> GetExportValuePairs();
     }
 }

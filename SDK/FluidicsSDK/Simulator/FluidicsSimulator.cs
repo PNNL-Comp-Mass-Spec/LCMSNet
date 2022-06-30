@@ -17,7 +17,7 @@ namespace FluidicsSDK.Simulator
         /// </summary>
         /// <param name="lcEvent"></param>
         /// <param name="elapsed"></param>
-        public SimulatedEventArgs(LCEvent lcEvent, TimeSpan elapsed)
+        public SimulatedEventArgs(ILCEvent lcEvent, TimeSpan elapsed)
         {
             Event = lcEvent;
             SimulatedTimeElapsed = elapsed;
@@ -26,7 +26,7 @@ namespace FluidicsSDK.Simulator
         /// <summary>
         /// LC Event
         /// </summary>
-        public LCEvent Event { get; set; }
+        public ILCEvent Event { get; set; }
 
         /// <summary>
         /// Elapsed time
@@ -66,7 +66,7 @@ namespace FluidicsSDK.Simulator
         /// <summary>
         /// Stack to hold the completed events, lets us step backwards through simulation.
         /// </summary>
-        private readonly Stack<LCEvent> m_completedEvents;
+        private readonly Stack<ILCEvent> m_completedEvents;
 
         /// <summary>
         /// Sorted Set allows us to enumerate over simulation event lists as if they were in a priority queue.
@@ -79,7 +79,7 @@ namespace FluidicsSDK.Simulator
         /// </summary>
         private SimEventList m_runningEvents;
 
-        private LCEvent m_breakEvent;
+        private ILCEvent m_breakEvent;
         private DateTime m_FirstStartTime;
         private DateTime m_currentStartTime;
         private TimeSpan m_elapsedTime;
@@ -95,7 +95,7 @@ namespace FluidicsSDK.Simulator
         // </summary>
         private FluidicsSimulator()
         {
-            m_completedEvents = new Stack<LCEvent>();
+            m_completedEvents = new Stack<ILCEvent>();
             m_simulationQueue = new SortedSet<SimEventList>();
             m_runningEvents = null;
             SimulationSpeed = DEFAULT_TIMER_INTERVAL;
@@ -166,21 +166,21 @@ namespace FluidicsSDK.Simulator
         /// Take an optimized list of LCMethods and prepare to simulate it
         /// </summary>
         /// <param name="methods"></param>
-        public void PrepSimulation(List<LCMethod> methods)
+        public void PrepSimulation(IEnumerable<ILCMethod> methods)
         {
             ClearSimulator();
             try
             {
                 // break the list of events into several SimEventLists of events that happen "concurrently" then add
                 // them into our sortedset to get the effect of a priority queue
-                if (methods.Count == 0)
+                var startTime = DateTime.Now;
+
+                m_simulationQueue = BuildEventList(methods, startTime);
+                if (m_simulationQueue.Count == 0)
                 {
                     IsReady = false;
                     return;
                 }
-                var startTime = DateTime.Now;
-
-                m_simulationQueue = BuildEventList(methods, startTime);
                 m_FirstStartTime = m_simulationQueue.Min.Time;
                 // set simulator as ready to go.
                 IsReady = true;
@@ -191,7 +191,7 @@ namespace FluidicsSDK.Simulator
             }
         }
 
-        public static SortedSet<SimEventList> BuildEventList(IEnumerable<LCMethod> methods, DateTime startTime)
+        public static SortedSet<SimEventList> BuildEventList(IEnumerable<ILCMethod> methods, DateTime startTime)
         {
             var sequence = new SortedSet<SimEventList>();
 
@@ -269,15 +269,15 @@ namespace FluidicsSDK.Simulator
             }
         }
 
-        private void CheckForBreakpointExecuteEventIfNot(LCEvent currentEvent)
+        private void CheckForBreakpointExecuteEventIfNot(ILCEvent currentEvent)
         {
             //if the prepared event is a breakpoint, temporarily halt operations, if however, the current event is a breakpoint AND we've already stopped
             // at this breakpoint, let it pass through and execute it.
-            if (currentEvent.BreakPoint && (m_breakEvent != currentEvent) && InProgress)
+            if (currentEvent.MethodData.BreakPoint && (m_breakEvent != currentEvent) && InProgress)
             {
                 m_simulationTimer.Dispose();
                 InProgress = false;
-                currentEvent.BreakHere();
+                currentEvent.MethodData.Break();
                 m_breakEvent = currentEvent;
                 AtBreakPoint = true;
             }
@@ -292,14 +292,14 @@ namespace FluidicsSDK.Simulator
         /// prepare an event to be executed
         /// </summary>
         /// <returns></returns>
-        private LCEvent PrepareEventForExecution()
+        private ILCEvent PrepareEventForExecution()
         {
-            LCEvent currentEvent;
+            ILCEvent currentEvent;
 
             //if we are tat a breakpoint, we want to run the event that we halted at
             if (AtBreakPoint)
             {
-                m_breakEvent.PassBreakPoint();
+                m_breakEvent.MethodData.PassBreakPoint();
                 currentEvent = m_breakEvent;
                 AtBreakPoint = false;
                 return currentEvent;
@@ -355,8 +355,8 @@ namespace FluidicsSDK.Simulator
         /// <summary>
         /// Execute the current LCEvent
         /// </summary>
-        /// <param name="currentEvent">the classLCEvent to execute</param>
-        private void ExecuteEvent(LCEvent currentEvent)
+        /// <param name="currentEvent">the LCEvent to execute</param>
+        private void ExecuteEvent(ILCEvent currentEvent)
         {
             // if device is a builtin or virtual, just mark it as complete, don't actually try to invoke it
             // this keeps odd events from happening, such as timers from actually causing the simulator
@@ -472,7 +472,7 @@ namespace FluidicsSDK.Simulator
         /// <summary>
         /// Check the fluidics model for any status changes
         /// </summary>
-        private void CheckModel(LCEvent lcEvent)
+        private void CheckModel(ILCEvent lcEvent)
         {
             foreach (var check in m_modelCheckers)
             {

@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Windows.Controls;
 using DynamicData;
 using DynamicData.Binding;
+using LcmsNet.Method;
 using LcmsNetSDK;
 using LcmsNetSDK.Method;
 using ReactiveUI;
@@ -32,8 +33,11 @@ namespace LcmsNet.Reporting
             this.logPath = logPath;
             this.controls = controls;
 
-            foreach (var method in methodManager.AllLCMethods)
+            foreach (var lcMethod in methodManager.AllLCMethods)
             {
+                if (!(lcMethod is LCMethod method))
+                    continue;
+
                 if (!LCMethodsList.Contains(method))
                 {
                     lcMethodsList.Add(method);
@@ -74,21 +78,27 @@ namespace LcmsNet.Reporting
         /// Removes the LC Method from the listbox.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="method"></param>
+        /// <param name="ilcMethod"></param>
         /// <returns></returns>
-        private void MethodManager_MethodRemoved(object sender, LCMethod method)
+        private void MethodManager_MethodRemoved(object sender, ILCMethod ilcMethod)
         {
-            lcMethodsList.Remove(method);
+            if (ilcMethod is LCMethod method)
+            {
+                lcMethodsList.Remove(method);
+            }
         }
 
         /// <summary>
         /// Adds a new LC Method to the list box.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="method"></param>
+        /// <param name="ilcMethod"></param>
         /// <returns></returns>
-        private void MethodManager_MethodAdded(object sender, LCMethod method)
+        private void MethodManager_MethodAdded(object sender, ILCMethod ilcMethod)
         {
+            if (!(ilcMethod is LCMethod method))
+                return;
+
             lcMethodsList.Edit(list =>
             {
                 if (!list.Contains(method))

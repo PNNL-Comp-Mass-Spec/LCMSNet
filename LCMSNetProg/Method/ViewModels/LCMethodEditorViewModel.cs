@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using LcmsNet.Configuration;
-using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 using ReactiveUI;
 
@@ -133,7 +132,7 @@ namespace LcmsNet.Method.ViewModels
         /// Renders the throughput timelines.
         /// </summary>
         /// <param name="methods">Methods to render for showing throughput.</param>
-        private void RenderThroughput(List<LCMethod> methods)
+        private void RenderThroughput(IReadOnlyList<LCMethod> methods)
         {
             if (methods == null)
                 return;

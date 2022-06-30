@@ -9,7 +9,6 @@ using LcmsNet.Configuration;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
-using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method.Drawing
 {
@@ -69,7 +68,7 @@ namespace LcmsNet.Method.Drawing
         /// <param name="duration"></param>
         /// <param name="colorMap"></param>
         /// <param name="progress"></param>
-        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, List<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
+        public override void RenderLCMethod(DrawingContext graphics, Rect bounds, IReadOnlyList<LCMethod> methods, DateTime startTime, TimeSpan duration, Dictionary<IDevice, Color> colorMap, DateTime progress)
         {
             // Calculate formatting paddings.
             // This tells us how far down from the top of the rendering area we are before we draw anything!

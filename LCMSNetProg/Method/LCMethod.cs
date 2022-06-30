@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using LcmsNetSDK;
+using LcmsNetSDK.Method;
 
-namespace LcmsNetSDK.Method
+namespace LcmsNet.Method
 {
     /// <summary>
     /// A method is a collection of LC-Events that define physical actions used to pipeline the control in an experiment.
     /// </summary>
     [Serializable]
-    public class LCMethod : ICloneable, IEquatable<LCMethod>, INotifyPropertyChangedExt
+    public class LCMethod : ILCMethod, ICloneable, IEquatable<LCMethod>, INotifyPropertyChangedExt
     {
         /// <summary>
         /// Number indicating that a sample has not run.
@@ -56,11 +58,6 @@ namespace LcmsNetSDK.Method
         [NonSerialized] private TimeSpan methodDuration;
 
         /// <summary>
-        /// End date only calculated at call of End property to get around serialization issues.
-        /// </summary>
-        private DateTime endTime;
-
-        /// <summary>
         /// Actual start time of the method
         /// </summary>
         [NonSerialized] private DateTime actualStart;
@@ -88,14 +85,7 @@ namespace LcmsNetSDK.Method
         /// <summary>
         /// End time of the action.
         /// </summary>
-        public DateTime End
-        {
-            get
-            {
-                endTime = Start.Add(methodDuration);
-                return endTime;
-            }
-        }
+        public DateTime End => Start.Add(methodDuration);
 
         /// <summary>
         /// Method name
@@ -148,6 +138,8 @@ namespace LcmsNetSDK.Method
             get => events;
             set => events = value;
         }
+
+        IReadOnlyList<ILCEvent> ILCMethod.Events => Events;
 
         /// <summary>
         /// LC-Events data that were performed by this method.

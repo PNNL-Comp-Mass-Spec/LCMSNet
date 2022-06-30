@@ -86,10 +86,11 @@
     <Compile Include="Logging\LogWriterBase.cs" />
     <Compile Include="Logging\MessageLoggerArgs.cs" />
     <Compile Include="Logging\ThreadedLogger.cs" />
+    <Compile Include="Method\ILCEvent.cs" />
+    <Compile Include="Method\ILCMethod.cs" />
     <Compile Include="Method\ILCMethodEvent.cs" />
-    <Compile Include="Method\InvalidTimeSpanException.cs" />
-    <Compile Include="Method\LCEvent.cs" />
-    <Compile Include="Method\LCMethod.cs" />
+    <Compile Include="Method\LCEventDummy.cs" />
+    <Compile Include="Method\LCMethodDummy.cs" />
     <Compile Include="Method\LCMethodEventAttribute.cs" />
     <Compile Include="Method\LCMethodEventEmpty.cs" />
     <Compile Include="Method\LCMethodManager.cs" />
