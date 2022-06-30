@@ -81,12 +81,12 @@ namespace LcmsNetSDK.Method
         [NonSerialized] private List<LCEvent> actualEvents;
 
         /// <summary>
-        /// Gets or sets the duration for this action.
+        /// Duration for this action.
         /// </summary>
         public TimeSpan Duration => methodDuration;
 
         /// <summary>
-        /// Gets the end time of the action.
+        /// End time of the action.
         /// </summary>
         public DateTime End
         {
@@ -98,17 +98,17 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Gets or sets the name of the Method.
+        /// Method name
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets the start time of this action.
+        /// Start time of this action.
         /// </summary>
         public DateTime Start => startTime;
 
         /// <summary>
-        /// Gets the actual start of the sample.
+        /// Actual start of the sample.
         /// </summary>
         public DateTime ActualStart
         {
@@ -117,7 +117,7 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Gets the actual end time of the sample.
+        /// Actual end time of the sample.
         /// </summary>
         public DateTime ActualEnd
         {
@@ -126,22 +126,22 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Gets the actual duration of the experiment that was run.
+        /// Actual duration of the experiment that was run.
         /// </summary>
         public TimeSpan ActualDuration => ActualEnd.Subtract(ActualStart);
 
         /// <summary>
-        /// Gets or sets the method for a
+        /// The method for a
         /// </summary>
         public LCEventRelative RelativeMethod { get; set; }
 
         /// <summary>
-        /// Gets or sets whether this has a deterministic start or not.
+        /// Whether this has a deterministic start or not.
         /// </summary>
         public bool HasNonDeterministicStart { get; set; }
 
         /// <summary>
-        /// Gets or sets the LC-Events to be performed by this method.
+        /// LC-Events to be performed by this method.
         /// </summary>
         public List<LCEvent> Events
         {
@@ -150,7 +150,7 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Gets or sets the LC-Events data that were performed by this method.
+        /// LC-Events data that were performed by this method.
         /// </summary>
         public List<LCEvent> ActualEvents
         {
@@ -159,30 +159,34 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Gets or sets the event number being executed.  -1 = not run, 0-N is the current event, where N is the total events defined in LCEvents.
+        /// Event number being executed.  -1 = not run, 0-N is the current event, where N is the total events defined in LCEvents.
         /// </summary>
         public int CurrentEventNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets the index of the column that this method is associated with.
+        /// Index of the column that this method is associated with.
         /// </summary>
         public int Column { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the method is special.  This means that the method
-        /// is not targeted to run on a column.
+        /// Whether the method is special.  This means that the method is not targeted to run on a column.
         /// </summary>
         public bool IsSpecialMethod { get; set; }
 
         /// <summary>
-        /// Gets or sets whether to allow pre-method overlap.
+        /// Whether to allow pre-method overlap.
         /// </summary>
         public bool AllowPreOverlap { get; set; }
 
         /// <summary>
-        /// Gets or sets whether to allow post-method overlap.
+        /// Whether to allow post-method overlap.
         /// </summary>
         public bool AllowPostOverlap { get; set; }
+
+        /// <summary>
+        /// Method comment.
+        /// </summary>
+        public string Comment { get; set; }
 
         /// <summary>
         /// Set the method start time and duration
@@ -328,7 +332,7 @@ namespace LcmsNetSDK.Method
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return HasNonDeterministicStart == other.HasNonDeterministicStart &&
-                   string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase) && Column == other.Column &&
+                   string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase) && string.Equals(Comment, other.Comment, StringComparison.OrdinalIgnoreCase) && Column == other.Column &&
                    IsSpecialMethod == other.IsSpecialMethod && AllowPreOverlap == other.AllowPreOverlap && AllowPostOverlap == other.AllowPostOverlap &&
                    Events.Distinct().Aggregate(0, (x,y) => x.GetHashCode() ^ y.GetHashCode()) == other.Events.Distinct().Aggregate(0, (x, y) => x.GetHashCode() ^ y.GetHashCode());
         }
@@ -347,6 +351,7 @@ namespace LcmsNetSDK.Method
             {
                 var hashCode = HasNonDeterministicStart.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Name != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(Name) : 0);
+                hashCode = (hashCode * 397) ^ (Comment != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(Comment) : 0);
                 hashCode = (hashCode * 397) ^ Column;
                 hashCode = (hashCode * 397) ^ IsSpecialMethod.GetHashCode();
                 hashCode = (hashCode * 397) ^ AllowPreOverlap.GetHashCode();

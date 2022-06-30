@@ -198,6 +198,7 @@
     <Compile Include="Method\ViewModels\LCMethodEditorViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodEventViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodSelectionViewModel.cs" />
+    <Compile Include="Method\ViewModels\LCMethodStageSharedSettings.cs" />
     <Compile Include="Method\ViewModels\LCMethodStageViewModel.cs" />
     <Compile Include="Method\ViewModels\LCMethodTimelineViewModel.cs" />
     <Compile Include="Method\ViewModels\SampleProgressViewModel.cs" />

@@ -96,7 +96,7 @@ namespace LcmsNet.Method
                 parameters.Add(new LCMethodEventParameter(parameter.Name, parameter.Value, vm, parameter.DataProviderName));
             }
 
-            var copy = new LCMethodEventData(Device, Method, MethodEventAttribute, parameters);
+            var copy = new LCMethodEventData(Device, Method, MethodEventAttribute, parameters) { OptimizeWith = OptimizeWith, Comment = Comment };
 
             return copy;
         }
@@ -116,6 +116,11 @@ namespace LcmsNet.Method
         /// Method that holds the given parameters.
         /// </summary>
         public MethodInfo Method { get; set; }
+
+        /// <summary>
+        /// Comment for the event
+        /// </summary>
+        public string Comment { get; set; }
 
         /// <summary>
         /// Gets or sets the method attribute information for this method.

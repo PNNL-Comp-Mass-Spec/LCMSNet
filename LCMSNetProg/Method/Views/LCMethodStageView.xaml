@@ -9,6 +9,9 @@
              mc:Ignorable="d"
              d:DesignHeight="551" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodStageViewModel}, IsDesignTimeCreatable=True}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
             <TextBlock DockPanel.Dock="Left" Margin="5" Foreground="Blue" Text="Method Name:" VerticalAlignment="Center" />
@@ -26,6 +29,7 @@
                     <TextBlock Text="Update" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
+            <CheckBox DockPanel.Dock="Left" Margin="3" VerticalAlignment="Center" IsChecked="{Binding SharedUISettings.CommentsEnabled}" IsThreeState="True" Content="Show Comments" />
             <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAllMethodsCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{StaticResource SaveWithIndicatorImage}" MaxHeight="24" />
@@ -65,6 +69,7 @@
             <TextBlock DockPanel.Dock="Left" Margin="5" Foreground="Blue" Text="Column" VerticalAlignment="Center" />
             <ComboBox DockPanel.Dock="Left" Margin="3" Width="120" VerticalAlignment="Center" SelectedItem="{Binding SelectedColumn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ColumnComboBoxOptions}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
         </DockPanel>
+        <TextBox DockPanel.Dock="Top" Margin="3" Text="{Binding MethodComment}" Visibility="{Binding ShowComment, Converter={StaticResource BoolToVis}}" TextWrapping="Wrap" />
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding LCMethodEvents}">
                 <ItemsControl.ItemsPanel>
@@ -74,7 +79,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <views:LCMethodEventView VerticalAlignment="Top" Height="33" DataContext="{Binding BindsDirectlyToSource=True}" />
+                        <views:LCMethodEventView VerticalAlignment="Top" MinHeight="33" DataContext="{Binding BindsDirectlyToSource=True}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

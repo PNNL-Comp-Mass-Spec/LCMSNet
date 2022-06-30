@@ -7,26 +7,35 @@
              xmlns:viewModels="clr-namespace:LcmsNet.Method.ViewModels"
              xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
              mc:Ignorable="d"
-             d:DesignHeight="31" d:DesignWidth="975"
+             d:DesignHeight="55" d:DesignWidth="975"
              d:DataContext="{d:DesignInstance {x:Type viewModels:LCMethodEventViewModel}, IsDesignTimeCreatable=True}"
              Background="{Binding EventBackColor}"
              BorderBrush="DimGray"
              BorderThickness="1">
-    <DockPanel LastChildFill="True">
-        <DockPanel.Resources>
-            <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        </DockPanel.Resources>
-        <TextBlock DockPanel.Dock="Left" MinWidth="32" VerticalAlignment="Center" Margin="3" Text="{Binding EventNumber}" />
-        <views:BreakpointView DockPanel.Dock="Left" Margin="3" DataContext="{Binding Breakpoint}" />
-        <CheckBox DockPanel.Dock="Left" VerticalAlignment="Center" Margin="3" Background="Silver" IsChecked="{Binding IsSelected}" />
-        <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DevicesComboBoxOptions}" IsEnabled="{Binding DevicesComboBoxEnabled}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-        <ComboBox DockPanel.Dock="Left" Margin="3" Width="147" SelectedItem="{Binding SelectedLCEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" IsEnabled="{Binding EventUnlocked}" cueBannerOverlay:CueBannerService.CueBanner="Select" ToolTip="{Binding SelectedLCEvent.MethodEventAttribute.EventDescription}" />
-        <CheckBox DockPanel.Dock="Right" Margin="3" VerticalAlignment="Center" ToolTip="Optimize" Background="{Binding EventBackColor}" Visibility="{Binding EventUnlocked, Converter={StaticResource BoolToVis}}" IsChecked="{Binding OptimizeWith}">
-            <Image Source="{StaticResource HighlighterImage}" />
-        </CheckBox>
-        <StackPanel DockPanel.Dock="Right" Background="{Binding EventBackColor}" Visibility="{Binding EventUnlocked, Converter={StaticResource BoolToVis}}">
-        </StackPanel>
-        <ItemsControl ItemsSource="{Binding EventParameterList}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" MinWidth="32" VerticalAlignment="Center" Margin="3" Text="{Binding EventNumber}" />
+        <views:BreakpointView Grid.Row="0" Grid.Column="1" Margin="3" DataContext="{Binding Breakpoint}" />
+        <CheckBox Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="3" Background="Silver" IsChecked="{Binding IsSelected}" />
+        <ComboBox Grid.Row="0" Grid.Column="3" Margin="3" Width="147" SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding DevicesComboBoxOptions}" IsEnabled="{Binding DevicesComboBoxEnabled}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+        <ComboBox Grid.Row="0" Grid.Column="4" Margin="3" Width="147" SelectedItem="{Binding SelectedLCEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding MethodsComboBoxOptions}" IsEnabled="{Binding EventUnlocked}" cueBannerOverlay:CueBannerService.CueBanner="Select" ToolTip="{Binding SelectedLCEvent.MethodEventAttribute.EventDescription}" />
+        <ItemsControl Grid.Row="0" Grid.Column="5" ItemsSource="{Binding EventParameterList}">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type viewModels:EventParameterBoolViewModel}">
                     <views:EventParameterBoolView DataContext="{Binding BindsDirectlyToSource=True}" />
@@ -47,5 +56,10 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-    </DockPanel>
+        <StackPanel Grid.Row="0" Grid.Column="6" Background="{Binding EventBackColor}" Visibility="{Binding EventUnlocked, Converter={StaticResource BoolToVis}}" />
+        <CheckBox Grid.Row="0" Grid.Column="7" Margin="3" VerticalAlignment="Center" ToolTip="Optimize" Background="{Binding EventBackColor}" Visibility="{Binding EventUnlocked, Converter={StaticResource BoolToVis}}" IsChecked="{Binding OptimizeWith}">
+            <Image Source="{StaticResource HighlighterImage}" />
+        </CheckBox>
+        <TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Margin="3" Text="{Binding EventComment}" Visibility="{Binding ShowComment, Converter={StaticResource BoolToVis}}" TextWrapping="Wrap" />
+    </Grid>
 </UserControl>

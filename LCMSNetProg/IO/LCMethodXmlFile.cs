@@ -105,6 +105,11 @@ namespace LcmsNet.IO
         public const string CONST_XPATH_ACTUAL_METHOD = "MethodPerformanceData";
 
         /// <summary>
+        /// X-Path string for lc-method or lc-event comment node.
+        /// </summary>
+        public const string CONST_XPATH_COMMENT = "Comment";
+
+        /// <summary>
         /// X-Path string for lc-method name node.
         /// </summary>
         public const string CONST_XPATH_METHOD_INFO = "MethodInfo";
@@ -377,6 +382,13 @@ namespace LcmsNet.IO
             else
             {
                 throw new InvalidTimeSpanException("Could not read the duration of the method.");
+            }
+
+            // Get the event comment and store it
+            var methodCommentNode = node.SelectSingleNode(CONST_XPATH_COMMENT);
+            if (methodCommentNode != null)
+            {
+                lcEvent.Comment = methodCommentNode.InnerText;
             }
 
             // Read the parameters
@@ -782,6 +794,13 @@ namespace LcmsNet.IO
                 return null;
             }
 
+            // Get the method comment and store it
+            var methodCommentNode = root.SelectSingleNode(CONST_XPATH_COMMENT);
+            if (methodCommentNode != null)
+            {
+                method.Comment = methodCommentNode.InnerText;
+            }
+
             // Now get the list and parse each item
             var eventListNode = root.SelectNodes(CONST_XPATH_EVENTS);
 
@@ -865,6 +884,10 @@ namespace LcmsNet.IO
             // Store the method name
             var methodInfo = document.CreateElement(CONST_XPATH_METHOD_INFO);
             methodInfo.SetAttribute(CONST_XPATH_NAME, lcEvent.Method.Name);
+
+            var methodComment = document.CreateElement(CONST_XPATH_COMMENT);
+            methodComment.InnerText = lcEvent.Comment;
+            eventRoot.AppendChild(methodComment);
 
             // Store the parameter information
             var parameters = document.CreateElement(CONST_XPATH_PARAMETERS);
@@ -953,6 +976,10 @@ namespace LcmsNet.IO
             rootElement.SetAttribute(CONST_XPATH_ALLOW_PRE_OVERLAP,
                 method.AllowPreOverlap.ToString());
             rootElement.SetAttribute(CONST_XPATH_COLUMN_DATA, method.Column.ToString());
+
+            var methodComment = document.CreateElement(CONST_XPATH_COMMENT);
+            methodComment.InnerText = method.Comment;
+            rootElement.AppendChild(methodComment);
 
             var timeTotal = new TimeSpan();
             // Then construct the events.

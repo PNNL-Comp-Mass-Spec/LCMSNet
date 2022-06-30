@@ -1660,7 +1660,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Saves the queue to the appropriate object.
+        /// Loads a queue from the supplied reader.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="reader"></param>
@@ -1681,7 +1681,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Saves the queue to the appropriate object.
+        /// Loads a queue from the supplied sample list.
         /// </summary>
         /// <param name="newSamples"></param>
         public void LoadQueue(List<SampleData> newSamples)
@@ -1701,7 +1701,7 @@ namespace LcmsNet.SampleQueue
         }
 
         /// <summary>
-        /// Saves the queue to the appropriate object.
+        /// Loads a queue from the supplied reader.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="reader"></param>

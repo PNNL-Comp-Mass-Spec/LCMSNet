@@ -78,11 +78,18 @@ namespace LcmsNet.Method.ViewModels
             this.WhenAnyValue(x => x.SelectedColumn, x => x.AllowPreOverlap, x => x.AllowPostOverlap).Subscribe(x => this.OnEventChanged());
             this.WhenAnyValue(x => x.SelectedSavedMethod).Subscribe(x => this.SelectedSavedMethodChanged());
             this.WhenAnyValue(x => x.MethodName).Subscribe(x => this.MethodNameChanged());
+            this.WhenAnyValue(x => x.MethodComment).Subscribe(x => this.MethodCommentChanged());
+            showComment = this.WhenAnyValue(x => x.SharedUISettings.CommentsEnabled, x => x.MethodComment)
+                .Select(x => x.Item1 == true || (x.Item1 == null && !string.IsNullOrWhiteSpace(x.Item2)))
+                .ToProperty(this, x => x.ShowComment);
         }
 
         private bool IgnoreUpdates { get; set; }
 
         private string methodName = "";
+        private bool? commentsEnabled = null;
+        private readonly ObservableAsPropertyHelper<bool> showComment;
+        private string methodComment = "";
         private bool allowPreOverlap;
         private bool allowPostOverlap;
         private string selectedSavedMethod = "";
@@ -98,6 +105,16 @@ namespace LcmsNet.Method.ViewModels
         {
             get => methodName;
             set => this.RaiseAndSetIfChanged(ref methodName, value);
+        }
+
+        public LCMethodStageSharedSettings SharedUISettings { get; } = new LCMethodStageSharedSettings();
+
+        public bool ShowComment => showComment.Value;
+
+        public string MethodComment
+        {
+            get => methodComment;
+            set => this.RaiseAndSetIfChanged(ref methodComment, value);
         }
 
         public bool AllowPreOverlap
@@ -237,6 +254,7 @@ namespace LcmsNet.Method.ViewModels
             {
                 LoadMethodEvents(method);
                 MethodName = method.Name;
+                MethodComment = method.Comment;
             }
         }
 
@@ -250,6 +268,7 @@ namespace LcmsNet.Method.ViewModels
             IgnoreUpdates = true;
             LoadMethod(method);
             MethodName = name;
+            MethodComment = method?.Comment;
             IgnoreUpdates = false;
 
             CanBuild = false;
@@ -293,6 +312,14 @@ namespace LcmsNet.Method.ViewModels
                 UpdateUserInterface(false);
                 OnEventChanged();
             }
+        }
+
+        /// <summary>
+        /// Updates the button text when the user types a method name.
+        /// </summary>
+        private void MethodCommentChanged()
+        {
+            UpdateUserInterface(true);
         }
 
         /// <summary>
@@ -401,6 +428,7 @@ namespace LcmsNet.Method.ViewModels
                 return;
 
             method.Name = MethodName;
+            method.Comment = MethodComment;
 
             // Renders the method built
             //currentMethod = method;
@@ -545,10 +573,10 @@ namespace LcmsNet.Method.ViewModels
                 }
 
                 var data = new LCMethodEventData(lcEvent.Device, lcEvent.Method, lcEvent.MethodAttribute, parameters)
-                    { OptimizeWith = lcEvent.OptimizeWith };
+                    { OptimizeWith = lcEvent.OptimizeWith, Comment = lcEvent.Comment };
 
-                // Construct an event.  We send false as locked because its not a locking event.
-                var eventVm = new LCMethodEventViewModel(data, false);
+                // Construct an event.  We send false as locked because it's not a locking event.
+                var eventVm = new LCMethodEventViewModel(data, false, SharedUISettings);
                 eventVm.SetBreakPoint(lcEvent.BreakPoint);
                 eventVm.EventNumber = eventNumber++;
                 eventsList.Add(eventVm);
@@ -597,7 +625,7 @@ namespace LcmsNet.Method.ViewModels
                 return;
 
             var senderEvent = sender as LCMethodEventViewModel;
-            var newEvent = new LCMethodEventViewModel(method, true);
+            var newEvent = new LCMethodEventViewModel(method, true, SharedUISettings);
             lcMethodEvents.Add(RegisterNewEventEventHandlers(newEvent));
         }
 
@@ -728,7 +756,7 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private void AddEvent()
         {
-            lcMethodEvents.Add(RegisterNewEventEventHandlers(new LCMethodEventViewModel(lcMethodEvents.Count + 1)));
+            lcMethodEvents.Add(RegisterNewEventEventHandlers(new LCMethodEventViewModel(lcMethodEvents.Count + 1, SharedUISettings)));
             OnEventChanged();
         }
 

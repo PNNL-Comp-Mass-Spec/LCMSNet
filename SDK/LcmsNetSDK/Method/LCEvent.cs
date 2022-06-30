@@ -81,27 +81,27 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Gets or sets the method to be started when an event is indeterminant.
+        /// Method to be started when an event is indeterminant.
         /// </summary>
         public LCEventRelative RelativeMethod { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the event is determinant or not.
+        /// Whether the event is determinant or not.
         /// </summary>
         public bool IsIndeterminant { get; set; }
 
         /// <summary>
-        /// Gets or sets the method attributed reflected from the method.
+        /// Method attribute reflected from the method.
         /// </summary>
         public LCMethodEventAttribute MethodAttribute { get; set; }
 
         /// <summary>
-        /// gets or sets the method data associated with this event
+        /// Method data associated with this event
         /// </summary>
         public ILCMethodEvent MethodData { get; set; }
 
         /// <summary>
-        /// Gets or sets the duration for this action.
+        /// Duration for this action.
         /// </summary>
         /// <exception cref="InvalidTimeSpanException">when set value &lt; 0</exception>
         public TimeSpan Duration
@@ -126,7 +126,7 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// notify UI that we're moving passed this breakpoint.
+        /// Notify UI that we're moving passed this breakpoint.
         /// </summary>
         public void PassBreakPoint()
         {
@@ -134,52 +134,57 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Gets or sets the associated device to this method.
+        /// Device associated with this method.
         /// </summary>
         public IDevice Device { get; set; }
 
         /// <summary>
-        /// Gets the end time for the event.
+        /// End time for the event.
         /// </summary>
         public DateTime End => Start.Add(Duration);
 
         /// <summary>
-        /// Gets or sets if this event has discrete states that can be compared.
+        /// Whether this event has discrete states that can be compared.
         /// </summary>
         public bool HasDiscreteStates { get; set; }
 
         /// <summary>
-        /// Gets or sets the method used to perform the deterministic action required.
+        /// Class method used to perform the deterministic action required.
         /// </summary>
         public MethodInfo Method { get; set; }
 
         /// <summary>
-        /// Gets or set the name of the event.
+        /// Event name
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets whether to use this event for optimizing a method against.
+        /// Whether to use this event for optimizing a method against.
         /// </summary>
         public bool OptimizeWith { get; set; }
 
         /// <summary>
-        /// Gets or sets the parameters to use when calling the method.
+        /// Parameters to use when calling the method.
         /// </summary>
         public object[] Parameters { get; set; }
 
         /// <summary>
-        /// Gets or sets the array of parameter names.
+        /// Array of parameter names.
         /// </summary>
         public string[] ParameterNames { get; set; }
 
         /// <summary>
-        /// Gets or sets the start time of this action.
+        /// Start time of this action.
         /// </summary>
         public DateTime Start { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag indicating an error occurred during event execution.
+        /// Event comment
+        /// </summary>
+        public string Comment { get; set; }
+
+        /// <summary>
+        /// Flag indicating an error occurred during event execution.
         /// </summary>
         public bool HadError { get; set; }
 
@@ -198,7 +203,7 @@ namespace LcmsNetSDK.Method
                    HasDiscreteStates == other.HasDiscreteStates && Equals(Method, other.Method) &&
                    string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase) && OptimizeWith == other.OptimizeWith &&
                    Equals(Parameters, other.Parameters) && Equals(ParameterNames, other.ParameterNames) && Start.Equals(other.Start) &&
-                   HadError == other.HadError;
+                   string.Equals(Comment, other.Comment, StringComparison.OrdinalIgnoreCase) && HadError == other.HadError;
         }
 
         public override bool Equals(object obj)
@@ -225,6 +230,7 @@ namespace LcmsNetSDK.Method
                 hashCode = (hashCode * 397) ^ (Parameters != null ? Parameters.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (ParameterNames != null ? ParameterNames.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ Start.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Comment != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(Comment) : 0);
                 hashCode = (hashCode * 397) ^ HadError.GetHashCode();
                 return hashCode;
             }

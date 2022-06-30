@@ -44,18 +44,19 @@ namespace LcmsNet.Method.ViewModels
         /// Calling this constructor is only for the IDE designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public LCMethodEventViewModel() : this(1)
+        public LCMethodEventViewModel() : this(1, null)
         { }
 
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public LCMethodEventViewModel(int eventNum)
+        public LCMethodEventViewModel(int eventNum, LCMethodStageSharedSettings sharedSettings)
         {
             SelectedDevice = null;
             EventNumber = eventNum;
             StoppedHere = false;
             EventUnlocked = true;
+            sharedUISettings = sharedSettings;
 
             Breakpoint = new BreakpointViewModel();
 
@@ -63,6 +64,7 @@ namespace LcmsNet.Method.ViewModels
             this.WhenAnyValue(x => x.SelectedDevice).Subscribe(x => this.SelectedDeviceChanged());
             this.WhenAnyValue(x => x.SelectedLCEvent).Subscribe(x => this.SelectedMethodEventChanged());
             this.WhenAnyValue(x => x.OptimizeWith).Subscribe(x => this.OptimizeForChanged());
+            this.WhenAnyValue(x => x.EventComment).Subscribe(x => this.EventCommentChanged());
             Breakpoint.BreakpointChanged += Breakpoint_Changed;
 
             if (DevicesList.Count > 0)
@@ -82,6 +84,10 @@ namespace LcmsNet.Method.ViewModels
             EventParameterList = eventParametersBound;
 
             devicesComboBoxEnabled = this.WhenAnyValue(x => x.DevicesComboBoxOptions.Count).Select(x => x > 0).ToProperty(this, x => x.DevicesComboBoxEnabled);
+
+            showComment = this.WhenAnyValue(x => x.sharedUISettings.CommentsEnabled, x => x.EventComment)
+                .Select(x => x.Item1 == true || (x.Item1 == null && !string.IsNullOrWhiteSpace(x.Item2)))
+                .ToProperty(this, x => x.ShowComment);
         }
 
         /// <summary>
@@ -89,7 +95,7 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         /// <param name="methodData"></param>
         /// <param name="locked"></param>
-        public LCMethodEventViewModel(LCMethodEventData methodData, bool locked) : this(1)
+        public LCMethodEventViewModel(LCMethodEventData methodData, bool locked, LCMethodStageSharedSettings sharedSettings) : this(1, sharedSettings)
         {
             SelectedDevice = methodData.Device;
             // Every device is a reference held in the device manager...except for the timer
@@ -117,6 +123,7 @@ namespace LcmsNet.Method.ViewModels
             EventUnlocked = !locked;
 
             OptimizeWith = methodData.OptimizeWith;
+            EventComment = methodData.Comment;
 
             if (locked)
             {
@@ -191,11 +198,15 @@ namespace LcmsNet.Method.ViewModels
         /// </summary>
         private LCMethodEventData methodEventData;
 
+        private readonly LCMethodStageSharedSettings sharedUISettings;
+
         private BreakpointViewModel breakpoint;
         private int eventNumber = 1;
         private bool optimizeWith = false;
         private IDevice selectedDevice = null;
         private LCMethodEventData selectedLCEvent = null;
+        private readonly ObservableAsPropertyHelper<bool> showComment;
+        private string eventComment = "";
         private readonly SourceList<LCMethodEventData> methodsComboBoxOptions = new SourceList<LCMethodEventData>();
         private readonly SourceList<ILCEventParameter> eventParameterList = new SourceList<ILCEventParameter>();
         private bool isSelected = false;
@@ -231,6 +242,14 @@ namespace LcmsNet.Method.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedLCEvent, value);
         }
 
+        public bool ShowComment => showComment.Value;
+
+        public string EventComment
+        {
+            get => eventComment;
+            set => this.RaiseAndSetIfChanged(ref eventComment, value);
+        }
+
         public ReadOnlyObservableCollection<IDevice> DevicesComboBoxOptions { get; }
         public ReadOnlyObservableCollection<LCMethodEventData> MethodsComboBoxOptions { get; }
         public ReadOnlyObservableCollection<ILCEventParameter> EventParameterList { get; }
@@ -255,6 +274,7 @@ namespace LcmsNet.Method.ViewModels
                     // Link the method to a device
                     methodEventData.Device = SelectedDevice;
                     methodEventData.OptimizeWith = OptimizeWith;
+                    methodEventData.Comment = EventComment;
                     methodEventData.BreakPoint = Breakpoint.IsSet;
 
                     // Make sure that we build the method so that the values are updated
@@ -758,6 +778,16 @@ namespace LcmsNet.Method.ViewModels
             UseForOptimization?.Invoke(this, OptimizeWith);
             if (methodEventData != null)
                 methodEventData.OptimizeWith = OptimizeWith;
+            OnEventChanged();
+        }
+
+        /// <summary>
+        /// Updates the stored comment for this event.
+        /// </summary>
+        private void EventCommentChanged()
+        {
+            if (methodEventData != null)
+                methodEventData.Comment = EventComment;
             OnEventChanged();
         }
 

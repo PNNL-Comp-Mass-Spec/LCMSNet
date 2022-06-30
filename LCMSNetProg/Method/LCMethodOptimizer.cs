@@ -247,6 +247,7 @@ namespace LcmsNet.Method
                     lcEvent.Method = data.Method;
                     lcEvent.MethodAttribute = data.MethodEventAttribute;
                     lcEvent.OptimizeWith = data.OptimizeWith;
+                    lcEvent.Comment = data.Comment;
 
                     var parameters = data.Parameters.Select(x => x.Value).ToArray();
                     var parameterNames = data.Parameters.Select(x => x.Name).ToArray();
