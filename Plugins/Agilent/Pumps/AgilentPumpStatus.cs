@@ -19,61 +19,61 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public string BoardTemperatureC
         {
             get => boardTemperatureC;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref boardTemperatureC, value);
+            set => this.RaiseAndSetIfChanged(ref boardTemperatureC, value);
         }
 
         public string LeakSensorCurrentMa
         {
             get => leakSensorCurrentMa;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref leakSensorCurrentMa, value);
+            set => this.RaiseAndSetIfChanged(ref leakSensorCurrentMa, value);
         }
 
         public string LeakState
         {
             get => leakState;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref leakState, value);
+            set => this.RaiseAndSetIfChanged(ref leakState, value);
         }
 
         public AgilentPumpStateGeneric GenericState
         {
             get => genericState;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref genericState, value);
+            set => this.RaiseAndSetIfChanged(ref genericState, value);
         }
 
         public AgilentPumpStateAnalysis AnalysisState
         {
             get => analysisState;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref analysisState, value);
+            set => this.RaiseAndSetIfChanged(ref analysisState, value);
         }
 
         public AgilentPumpStateError ErrorState
         {
             get => errorState;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref errorState, value);
+            set => this.RaiseAndSetIfChanged(ref errorState, value);
         }
 
         public AgilentPumpStateNotReady NotReadyState
         {
             get => notReadyState;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref notReadyState, value);
+            set => this.RaiseAndSetIfChanged(ref notReadyState, value);
         }
 
         public AgilentPumpStateTest TestState
         {
             get => testState;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref testState, value);
+            set => this.RaiseAndSetIfChanged(ref testState, value);
         }
 
         public AgilentPumpNotReadyStates NotReadyReasons
         {
             get => notReadyReasons;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref notReadyReasons, value);
+            set => this.RaiseAndSetIfChanged(ref notReadyReasons, value);
         }
 
         public AgilentPumpStartNotReadyStates StartNotReadyReasons
         {
             get => startNotReadyReasons;
-            set => NotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref startNotReadyReasons, value);
+            set => this.RaiseAndSetIfChanged(ref startNotReadyReasons, value);
         }
 
         public void UpdateValues(AgilentPumpStatus other)

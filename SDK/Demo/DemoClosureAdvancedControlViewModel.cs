@@ -12,7 +12,7 @@ namespace DemoPluginLibrary
 
         public DemoClosureAdvancedControlViewModel()
         {
-            SendCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Send()));
+            SendCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(Send));
         }
 
         public void RegisterDevice(IDevice device)

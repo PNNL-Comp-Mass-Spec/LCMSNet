@@ -232,8 +232,6 @@ namespace LcmsNet.Method
             // Every event control should have a selected method value.
             foreach (var data in methods)
             {
-                LCEvent lcEvent = null;
-
                 // Make sure that we have some method data here!
                 // Otherwise the event was never assigned!! BAD!
                 if (data == null)
@@ -242,27 +240,26 @@ namespace LcmsNet.Method
                 }
                 else
                 {
-                    lcEvent = new LCEvent();
-                    lcEvent.Device = data.Device;
-                    lcEvent.Method = data.Method;
-                    lcEvent.MethodAttribute = data.MethodEventAttribute;
-                    lcEvent.OptimizeWith = data.OptimizeWith;
-                    lcEvent.Comment = data.Comment;
-
                     var parameters = data.Parameters.Select(x => x.Value).ToArray();
                     var parameterNames = data.Parameters.Select(x => x.Name).ToArray();
 
-                    lcEvent.Parameters = parameters;
-                    lcEvent.ParameterNames = parameterNames;
-                    lcEvent.Start = startTime.Add(span);
-                    lcEvent.Name = data.MethodEventAttribute.Name;
-                    lcEvent.MethodData = data;
-
-                    // This tells any optimizer or scheduler that the event has discrete parameters.
-
-                    // This is useful if we are trying to optimize two methods that use the same valve, but
-                    // don't require it to change the state.
-                    lcEvent.HasDiscreteStates = data.MethodEventAttribute.HasDiscreteParameters;
+                    var lcEvent = new LCEvent
+                    {
+                        Device = data.Device,
+                        Method = data.Method,
+                        MethodAttribute = data.MethodEventAttribute,
+                        OptimizeWith = data.OptimizeWith,
+                        Comment = data.Comment,
+                        Parameters = parameters,
+                        ParameterNames = parameterNames,
+                        Start = startTime.Add(span),
+                        Name = data.MethodEventAttribute.Name,
+                        MethodData = data,
+                        // This tells any optimizer or scheduler that the event has discrete parameters.
+                        // This is useful if we are trying to optimize two methods that use the same valve, but
+                        // don't require it to change the state.
+                        HasDiscreteStates = data.MethodEventAttribute.HasDiscreteParameters
+                    };
 
                     // Check to see if the device is a timer so we can space out the events
                     if (data.Device is TimerDevice timer)

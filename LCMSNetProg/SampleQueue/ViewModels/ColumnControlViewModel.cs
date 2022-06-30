@@ -116,7 +116,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             private set => this.RaiseAndSetIfChanged(ref commandsVisible, value);
         }
 
-        public bool ColumnEnabled => columnEnabled != null ? columnEnabled.Value : true;
+        public bool ColumnEnabled => columnEnabled?.Value ?? true;
 
         private void SetBackground()
         {

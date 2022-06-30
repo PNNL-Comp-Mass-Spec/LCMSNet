@@ -11,7 +11,7 @@ namespace LcmsNetPlugins.VICI.Valves
     {
         public SixPortInjectionValveViewModel()
         {
-            SetInjectionVolumeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetInjectionVolume()));
+            SetInjectionVolumeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetInjectionVolume));
         }
 
         private void SetInjectionVolume()

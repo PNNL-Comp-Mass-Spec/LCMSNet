@@ -7,9 +7,7 @@ namespace LcmsNet.Notification
 {
     public class TaskBarManipulation : IDisposable
     {
-        private static readonly TaskBarManipulation instance = new TaskBarManipulation();
-
-        public static TaskBarManipulation Instance => instance;
+        public static TaskBarManipulation Instance { get; } = new TaskBarManipulation();
 
         private TaskBarManipulation()
         {

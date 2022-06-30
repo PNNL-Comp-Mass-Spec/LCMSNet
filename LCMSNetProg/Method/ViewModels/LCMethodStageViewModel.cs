@@ -87,7 +87,6 @@ namespace LcmsNet.Method.ViewModels
         private bool IgnoreUpdates { get; set; }
 
         private string methodName = "";
-        private bool? commentsEnabled = null;
         private readonly ObservableAsPropertyHelper<bool> showComment;
         private string methodComment = "";
         private bool allowPreOverlap;
@@ -582,7 +581,7 @@ namespace LcmsNet.Method.ViewModels
             lcMethodEvents.Edit(list =>
             {
                 list.Clear();
-                list.AddRange(eventsList.Select(x => RegisterNewEventEventHandlers(x)));
+                list.AddRange(eventsList.Select(RegisterNewEventEventHandlers));
             });
 
             // Then set all the check boxes accordingly.

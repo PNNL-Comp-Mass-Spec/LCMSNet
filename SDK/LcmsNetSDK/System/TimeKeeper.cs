@@ -62,9 +62,7 @@ namespace LcmsNetSDK.System
         public bool DoDateTimesSpanDaylightSavingsTransition(DateTime start, DateTime end)
         {
             //Construct DateTimes representing DST transition
-            TimeZoneInfo.TransitionTime startTransTime;
-            TimeZoneInfo.TransitionTime endTransTime;
-            FindDSTTransitions(start.Year, out startTransTime, out endTransTime);
+            FindDSTTransitions(start.Year, out var startTransTime, out var endTransTime);
             var springTransition = ConvertToDateTime(startTransTime, start.Year);
             var fallTransition = ConvertToDateTime(endTransTime, end.Year);
             //determine if a DST transition occurs between start and end (inclusive of both)

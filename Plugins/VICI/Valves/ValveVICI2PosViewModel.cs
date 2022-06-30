@@ -18,8 +18,8 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         public ValveVICI2PosViewModel()
         {
-            SetPositionACommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPositionA()));
-            SetPositionBCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetPositionB()));
+            SetPositionACommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetPositionA));
+            SetPositionBCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetPositionB));
         }
 
         protected override void RegisterDevice(IDevice device)

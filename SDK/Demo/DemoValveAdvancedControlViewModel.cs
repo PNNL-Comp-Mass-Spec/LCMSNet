@@ -14,9 +14,9 @@ namespace DemoPluginLibrary
 
         public DemoValveAdvancedControlViewModel()
         {
-            SetACommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetStateA()));
-            SetBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetStateB()));
-            RefreshCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Refresh()));
+            SetACommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(SetStateA));
+            SetBCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(SetStateB));
+            RefreshCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(Refresh));
         }
 
         private void SetStateA()

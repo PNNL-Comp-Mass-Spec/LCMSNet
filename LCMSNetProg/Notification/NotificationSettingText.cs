@@ -20,8 +20,7 @@ namespace LcmsNet.Notification
 
         public override NotificationConditionNode GetConditions()
         {
-            var node = new NotificationConditionNode();
-            node.Name = "Text";
+            var node = new NotificationConditionNode { Name = "Text" };
             node.Conditions.Add("equals", Text);
             return node;
         }

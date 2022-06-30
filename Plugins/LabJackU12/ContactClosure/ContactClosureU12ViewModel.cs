@@ -40,12 +40,12 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// <summary>
         /// The pulse length to run
         /// </summary>
-        public virtual int PulseLength
+        public override int PulseLength
         {
             get => contactClosure.PulseLength;
             set
             {
-                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedPulseLength, value) && isLoading == false)
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedPulseLength, value) && isLoading == false)
                 {
                     contactClosure.PulseLength = value;
                 }
@@ -55,12 +55,12 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// <summary>
         /// The voltage of the pulse
         /// </summary>
-        public virtual double Voltage
+        public override double Voltage
         {
             get => contactClosure.PulseVoltage;
             set
             {
-                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedVoltage, value) && isLoading == false)
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedVoltage, value) && isLoading == false)
                 {
                     contactClosure.PulseVoltage = value;
                 }
@@ -70,12 +70,12 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// <summary>
         /// The normal/default voltage of the output
         /// </summary>
-        public virtual double NormalVoltage
+        public override double NormalVoltage
         {
             get => contactClosure.NormalVoltage;
             set
             {
-                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedNormalVoltage, value) && isLoading == false)
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedNormalVoltage, value) && isLoading == false)
                 {
                     contactClosure.NormalVoltage = value;
                 }
@@ -90,7 +90,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
             get => contactClosure.Port;
             set
             {
-                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedOutputPort, value) && isLoading == false)
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedOutputPort, value) && isLoading == false)
                 {
                     contactClosure.Port = value;
                 }

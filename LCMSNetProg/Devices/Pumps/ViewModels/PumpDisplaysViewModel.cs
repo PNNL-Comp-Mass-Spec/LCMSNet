@@ -44,8 +44,8 @@ namespace LcmsNet.Devices.Pumps.ViewModels
             DeviceManager.Manager.DeviceRemoved += Manager_DeviceRemoved;
             CurrentPump = 0;
 
-            MoveLeftCommand = ReactiveCommand.Create(() => this.MoveLeft(), this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x - 1 && x - 1 < pumps.Count));
-            MoveRightCommand = ReactiveCommand.Create(() => this.MoveRight(), this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x + 1 && x + 1 < pumps.Count));
+            MoveLeftCommand = ReactiveCommand.Create(MoveLeft, this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x - 1 && x - 1 < pumps.Count));
+            MoveRightCommand = ReactiveCommand.Create(MoveRight, this.WhenAnyValue(x => x.CurrentPump).Select(x => 0 <= x + 1 && x + 1 < pumps.Count));
         }
 
         private int currentPump;

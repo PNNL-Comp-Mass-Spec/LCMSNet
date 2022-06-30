@@ -44,7 +44,7 @@ namespace LcmsNet.Method.Views
             }
             if (!Dispatcher.CheckAccess())
             {
-                Dispatcher.Invoke(() => RefreshVisualInternal());
+                Dispatcher.Invoke(RefreshVisualInternal);
             }
             else
             {

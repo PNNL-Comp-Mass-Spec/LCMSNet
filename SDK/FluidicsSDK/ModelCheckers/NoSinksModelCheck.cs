@@ -106,8 +106,7 @@ namespace FluidicsSDK.ModelCheckers
             var sources = Managers.PortManager.GetPortManager.Ports.FindAll(x => x.Source);
             foreach (var p in sources)
             {
-                List<Connection> pathTaken;
-                var sinkFound = FindSinks(p, out pathTaken);
+                var sinkFound = FindSinks(p, out var pathTaken);
 
                 // if found a sink for this path, move on to the next source and check it
                 if (sinkFound) continue;

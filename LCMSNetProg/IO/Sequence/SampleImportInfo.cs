@@ -15,8 +15,7 @@ namespace LcmsNet.IO.Sequence
 
         public SampleData GetSampleData()
         {
-            var sampleData = new SampleData(false);
-            sampleData.Name = DatasetName;
+            var sampleData = new SampleData(false) { Name = DatasetName };
 
             if (RequestId > 0)
             {

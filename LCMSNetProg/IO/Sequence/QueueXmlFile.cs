@@ -182,7 +182,7 @@ namespace LcmsNet.IO.Sequence
 
             // Add ItemCount node
             var itemCount = AddElementWithTypeAttribute("ItemCount", queueSettingsElement, "Integer",
-                inputSamples.Count().ToString());
+                inputSamples.Count.ToString());
 
             // Loop through the queue and add nodes for each queued sample
             var itemCounter = 1;

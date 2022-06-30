@@ -22,7 +22,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosure
         {
             // Use List<T>.AsReadOnly and ReadOnlyCollection<T> to get a non-modifiable list of the options; there is no reason for this to be modifiable.
             OutputPortComboBoxOptions = Enum.GetValues(typeof(T)).Cast<T>().ToList().AsReadOnly();
-            SendPulseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SendPulse()));
+            SendPulseCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(SendPulse));
         }
 
         private int pulseLength;

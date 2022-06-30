@@ -235,7 +235,7 @@ namespace LcmsNetCommonControls.Views
         {
             if (!Dispatcher.CheckAccess())
             {
-                Dispatcher.Invoke(() => PopoutToWindow());
+                Dispatcher.Invoke(PopoutToWindow);
                 return;
             }
             if (this.DataContext is PopoutViewModel pvm && !pvm.Tacked)

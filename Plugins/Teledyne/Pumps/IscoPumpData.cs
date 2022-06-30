@@ -8,8 +8,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
     /// </summary>
     public class IscoPumpData
     {
-        IscoOperationMode m_OpMode = IscoOperationMode.ConstantPressure;
-
         /// <summary>
         /// Pump pressure
         /// </summary>
@@ -43,11 +41,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         /// <summary>
         /// Pump operation mode
         /// </summary>
-        public IscoOperationMode OperationMode
-        {
-            get => m_OpMode;
-            set => m_OpMode = value;
-        }
+        public IscoOperationMode OperationMode { get; set; } = IscoOperationMode.ConstantPressure;
 
         /// <summary>
         /// Current setpoint value

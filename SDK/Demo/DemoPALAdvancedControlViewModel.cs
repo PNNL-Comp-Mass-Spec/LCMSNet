@@ -15,7 +15,7 @@ namespace DemoPluginLibrary
         public DemoPALAdvancedControlViewModel()
         {
             MethodsComboBoxOptions = new ReadOnlyObservableCollection<string>(new ObservableCollection<string>{ "Example Method 1", "Example Method 2" });
-            RunCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Run()));
+            RunCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(Run));
         }
 
         public void RegisterDevice(IDevice device)

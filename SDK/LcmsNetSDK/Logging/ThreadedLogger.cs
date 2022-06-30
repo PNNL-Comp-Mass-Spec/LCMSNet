@@ -87,7 +87,7 @@ namespace LcmsNetSDK.Logging
         /// <param name="actionOnConsume"></param>
         public ThreadedLogger(Action<T> actionOnConsume)
         {
-            consumerThread = new Thread(() => ConsumeAll());
+            consumerThread = new Thread(ConsumeAll);
             consumeAction = actionOnConsume ?? throw new ArgumentNullException(nameof(actionOnConsume));
             consumerThread.Start();
         }

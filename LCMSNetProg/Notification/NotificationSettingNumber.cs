@@ -20,8 +20,7 @@ namespace LcmsNet.Notification
 
         public override NotificationConditionNode GetConditions()
         {
-            var node = new NotificationConditionNode();
-            node.Name = "Number";
+            var node = new NotificationConditionNode { Name = "Number" };
             node.Conditions.Add("minimum", Minimum);
             node.Conditions.Add("maximum", Maximum);
             return node;
@@ -44,8 +43,7 @@ namespace LcmsNet.Notification
             //if (isNumeric)
             if (value != null)
             {
-                double result = 0;
-                if (double.TryParse(value, out result))
+                if (double.TryParse(value, out var result))
                 {
                     return result < Maximum && result < Minimum;
                 }

@@ -358,14 +358,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         }
 
         /// <summary>
-        /// Internal error handler that propagates the error message to listening objects.
-        /// </summary>
-        private void HandleError(string message)
-        {
-            HandleError(message, null);
-        }
-
-        /// <summary>
         /// Validates a particular vial number
         /// </summary>
         /// <param name="vial">The vial number to check</param>
@@ -378,7 +370,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Internal error handler that propagates the error message to listening objects.
         /// </summary>
-        private void HandleError(string message, Exception ex)
+        private void HandleError(string message, Exception ex = null)
         {
             Error?.Invoke(this, new DeviceErrorEventArgs(message, ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, message));
         }

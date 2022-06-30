@@ -16,8 +16,8 @@ namespace DemoPluginLibrary
         public DemoValve2AdvancedControlViewModel()
         {
             ValvePositionComboBoxOptions = Enum.GetValues(typeof(EightPositionState)).Cast<EightPositionState>().Where(x => x != EightPositionState.Unknown).ToList().AsReadOnly();
-            SetCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Set()));
-            RefreshCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Refresh()));
+            SetCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(Set));
+            RefreshCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(Refresh));
         }
 
         public void RegisterDevice(IDevice device)

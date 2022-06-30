@@ -708,10 +708,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return false;
             }
 
-            var reply = "";
             // Get the firmware revision of the running system
             // "IDN? gets "<manufacturer>,<model>,<serialNumber>,<running firmware revision>"; "IDN" causes "Identify by frontend LED"
-            var gotIdent = SendCommand("IDN?", out reply, "");
+            var gotIdent = SendCommand("IDN?", out var reply, "");
             var firmware = "";
             //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
             if (gotIdent == AgilentPumpReplyErrorCodes.No_Error)
@@ -779,15 +778,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Internal error handler that propagates the error message to listening objects.
         /// </summary>
-        private void HandleError(string message, string type)
-        {
-            HandleError(message, type, null);
-        }
-
-        /// <summary>
-        /// Internal error handler that propagates the error message to listening objects.
-        /// </summary>
-        private void HandleError(string message, string type, Exception ex)
+        private void HandleError(string message, string type, Exception ex = null)
         {
             if (Error != null)
             {
@@ -1204,9 +1195,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
             try
             {
-                var reply = "";
                 //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PUMP?'");
-                var success = SendCommand($"ACT:PUMP?", out reply, $"Attempting to query pump state");
+                var success = SendCommand($"ACT:PUMP?", out var reply, $"Attempting to query pump state");
                 //ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
 
                 //We expect something like:
@@ -1251,8 +1241,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             {
                 return 0.0;
             }
-            var reply = "";
-            SendCommand("ACT:COMP?", out reply, "Attempting to query composition of solvent B.");
+
+            SendCommand("ACT:COMP?", out var reply, "Attempting to query composition of solvent B.");
             //expect: RA 0000 ACT:COMP 16.00,84.00,-1.0,-1.0
 
             if (reply.Contains("COMP"))
@@ -1313,8 +1303,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             {
                 return 0.0;
             }
-            var reply = "";
-            SendCommand("FLOW?", out reply, "Attempting to query flow rate.");
+
+            SendCommand("FLOW?", out var reply, "Attempting to query flow rate.");
             //We expect something like:
             //reply = "RA 0000 FLOW 2.000";
             var start = reply.IndexOf("FLOW", StringComparison.InvariantCultureIgnoreCase);
@@ -1387,10 +1377,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return false;
             }
 
-            var reply = "";
             var purgeChannelText = purgeData.Channel.ToString();
             //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PG{purgeChannelText}?'");
-            var success = SendCommand($"PG{purgeChannelText}?", out reply, $"Attempting to query purge settings for channel {purgeChannelText}");
+            var success = SendCommand($"PG{purgeChannelText}?", out var reply, $"Attempting to query purge settings for channel {purgeChannelText}");
             //ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
 
             //We expect something like:
@@ -1421,9 +1410,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 return 0;
             }
 
-            var reply = "";
             //ApplicationLogger.LogMessage(2, $"{Name}: Sending 'PRGE?'");
-            var success = SendCommand($"PRGE?", out reply, $"Attempting to query channel purge states");
+            var success = SendCommand($"PRGE?", out var reply, $"Attempting to query channel purge states");
             //ApplicationLogger.LogMessage(2, $"{Name}: Got '{reply}'");
 
             //We expect something like:
@@ -1448,8 +1436,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             {
                 return 0.0;
             }
-            var reply = "";
-            SendCommand("ACT:PRES?", out reply, "Attempting to query pressure.");
+
+            SendCommand("ACT:PRES?", out var reply, "Attempting to query pressure.");
             //expect: RA 0000 ACT:PRES 16.00
 
             if (reply.Contains("ACT:PRES"))
@@ -1520,8 +1508,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             {
                 return 0.0;
             }
-            var reply = "";
-            SendCommand("ACT:FLOW?", out reply, "Attempting to query actual flow.");
+
+            SendCommand("ACT:FLOW?", out var reply, "Attempting to query actual flow.");
             var start = reply.IndexOf("ACT:FLOW", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
             {
@@ -1548,8 +1536,8 @@ namespace LcmsNetPlugins.Agilent.Pumps
             {
                 return AgilentPumpModes.Unknown;
             }
-            var reply = "";
-            SendCommand("MODE?", out reply, "Attempting to query mode.");
+
+            SendCommand("MODE?", out var reply, "Attempting to query mode.");
             //reply = "RA 000 MODE 1
             var start = reply.IndexOf("MODE", StringComparison.InvariantCultureIgnoreCase);
             if (start == -1)
@@ -1573,11 +1561,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             try
             {
-                var reply = "";
-
                 // Get the firmware revision of the running system
                 // "IDN? gets "<manufacturer>,<model>,<serialNumber>,<running firmware revision>"; "IDN" causes "Identify by frontend LED"
-                var gotIdent = SendCommand("IDN?", out reply);
+                var gotIdent = SendCommand("IDN?", out var reply);
                 //ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
                 if (gotIdent == AgilentPumpReplyErrorCodes.No_Error)
                 {
@@ -1646,9 +1632,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         {
             try
             {
-                var reply = "";
-                string[] split;
-
                 //// STAT? and ACT:STAT? get module states, STAT? gets the states in ASCII format, ACT:STAT? in decimal format
                 //SendCommand("STAT?", out reply, errorMessage);
                 //split = reply.Substring(14).Split(new char[] {'"', ',', ' '}, StringSplitOptions.RemoveEmptyEntries);
@@ -1660,10 +1643,10 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 ////ApplicationLogger.LogMessage(2, $"Pump {Name}: Got reply \"{reply}\"");
 
                 // STAT? and ACT:STAT? get module states, STAT? gets the states in ASCII format, ACT:STAT? in decimal format
-                SendCommand("ACT:STAT?", out reply);
+                SendCommand("ACT:STAT?", out var reply);
 
                 var loc = reply.IndexOf("ACT:STAT", StringComparison.OrdinalIgnoreCase);
-                split = reply.Substring(loc + 9).Split(new char[] { '"', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var split = reply.Substring(loc + 9).Split(new char[] { '"', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 PumpStatus.GenericState = (AgilentPumpStateGeneric)int.Parse(split[0]);
                 PumpStatus.AnalysisState = (AgilentPumpStateAnalysis)int.Parse(split[1]);
                 PumpStatus.ErrorState = (AgilentPumpStateError)int.Parse(split[2]);

@@ -42,7 +42,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Manages adding the samples to the queue.
         /// </summary>
-        private SampleQueue sampleQueue;
+        private readonly SampleQueue sampleQueue;
 
         private const int TIME_SYNCH_WAIT_TIME_MILLISECONDS = 2000;
 
@@ -55,7 +55,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public SampleDataManager SampleDataManager { get; }
 
-        private SynchronizationContext synchronizationContext;
+        private readonly SynchronizationContext synchronizationContext;
 
         /// <summary>
         /// Default constructor that takes cart configuration data.
@@ -93,8 +93,8 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             UndoCommand = ReactiveCommand.Create(() => sampleQueue.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
             RedoCommand = ReactiveCommand.Create(() => sampleQueue.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
-            RunQueueCommand = ReactiveCommand.Create(() => this.RunQueue(), this.WhenAnyValue(x => x.IsRunButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
-            StopQueueCommand = ReactiveCommand.Create(() => this.StopQueue(), this.WhenAnyValue(x => x.IsStopButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
+            RunQueueCommand = ReactiveCommand.Create(RunQueue, this.WhenAnyValue(x => x.IsRunButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
+            StopQueueCommand = ReactiveCommand.Create(StopQueue, this.WhenAnyValue(x => x.IsStopButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
         }
 
         /// <summary>
@@ -397,8 +397,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             var samples = sampleQueue.GetRunningQueue();
 
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
-            samples.RemoveAll(
-                delegate (SampleData data) { return data.RunningStatus != SampleRunningStatus.WaitingToRun; });
+            samples.RemoveAll(data => data.RunningStatus != SampleRunningStatus.WaitingToRun);
 
             if (samples.Count < 1)
                 return;

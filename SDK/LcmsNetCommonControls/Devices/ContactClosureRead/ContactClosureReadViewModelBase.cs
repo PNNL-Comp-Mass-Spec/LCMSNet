@@ -43,7 +43,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         {
             // Use List<T>.AsReadOnly and ReadOnlyCollection<T> to get a non-modifiable list of the options; there is no reason for this to be modifiable.
             InputPortComboBoxOptions = Enum.GetValues(typeof(T)).Cast<T>().ToList().AsReadOnly();
-            ReadStatusCommand = ReactiveUI.ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ReadStatus()));
+            ReadStatusCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ReadStatus));
             MinimumAnalogVoltage = 0;
             MaximumAnalogVoltage = 5;
             AnalogVoltageThreshold = 2.5;
@@ -66,7 +66,7 @@ namespace LcmsNetCommonControls.Devices.ContactClosureRead
         /// <summary>
         /// Command to read the signal
         /// </summary>
-        public ReactiveUI.ReactiveCommand<Unit, Unit> ReadStatusCommand { get; }
+        public ReactiveCommand<Unit, Unit> ReadStatusCommand { get; }
 
         /// <summary>
         /// The voltage at the input

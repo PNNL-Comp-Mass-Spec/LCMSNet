@@ -369,9 +369,8 @@ namespace LcmsNetSDK.Devices
                 {
                     var isComment = key.Contains(CONST_MOBILE_PHASE_COMMENT);
                     var isName = key.Contains(CONST_MOBILE_PHASE_NAME);
-                    int phaseId;
 
-                    if (isComment && int.TryParse(key.Replace(CONST_MOBILE_PHASE_COMMENT, ""), out phaseId))
+                    if (isComment && int.TryParse(key.Replace(CONST_MOBILE_PHASE_COMMENT, ""), out var phaseId))
                     {
                         if (!phases.ContainsKey(phaseId))
                         {
@@ -458,10 +457,7 @@ namespace LcmsNetSDK.Devices
 
                     foreach (var attributeObject in attributes)
                     {
-                        var settingAttribute =
-                            attributeObject as DeviceSavedSettingAttribute;
-
-                        if (settingAttribute != null)
+                        if (attributeObject is DeviceSavedSettingAttribute settingAttribute)
                         {
                             var data = property.GetValue(device, BindingFlags.GetProperty,
                                 null,

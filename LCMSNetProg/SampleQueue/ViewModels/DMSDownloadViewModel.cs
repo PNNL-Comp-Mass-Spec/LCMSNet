@@ -244,8 +244,6 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         private async Task FindDmsRequests()
         {
-            List<DmsDownloadData> tempRequestList;
-
             // Fill an object with the data from the UI, then pass to DMSTools class to run the query
             var queryData = new SampleQueryData {
                 RequestName = this.RequestName
@@ -292,7 +290,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Clear the available datasets listview
             AvailableRequestData.ClearSamples();
 
-            tempRequestList = await Task.Run(() => GetDMSData(queryData));
+            var tempRequestList = await Task.Run(() => GetDMSData(queryData));
 
             if (tempRequestList == null)
             {

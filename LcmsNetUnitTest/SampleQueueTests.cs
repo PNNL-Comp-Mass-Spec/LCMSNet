@@ -133,9 +133,11 @@ namespace LcmsnetUnitTest
             //ensure that the query returns the sample that will actually be returned to run
             Assert.AreSame(q.NextSampleQuery(), q.NextSampleStart());
             q.StopRunningQueue();
-            var ids = new List<long>();
-            ids.Add(sampleA.UniqueID);
-            ids.Add(sampleB.UniqueID);
+            var ids = new List<long>
+            {
+                sampleA.UniqueID,
+                sampleB.UniqueID
+            };
             q.RemoveSample(ids, enumColumnDataHandling.LeaveAlone);
         }
 
@@ -194,9 +196,11 @@ namespace LcmsnetUnitTest
             //Sample A should be run first.
             Assert.AreSame(sampleA, q.NextSampleStart());
             q.StopRunningQueue();
-            var ids = new List<long>();
-            ids.Add(sampleA.UniqueID);
-            ids.Add(sampleB.UniqueID);
+            var ids = new List<long>
+            {
+                sampleA.UniqueID,
+                sampleB.UniqueID
+            };
             q.RemoveSample(ids, enumColumnDataHandling.LeaveAlone);
         }
     }

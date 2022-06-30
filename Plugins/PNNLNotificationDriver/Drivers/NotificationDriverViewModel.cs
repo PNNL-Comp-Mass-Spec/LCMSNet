@@ -15,7 +15,7 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
 
         public NotificationDriverViewModel()
         {
-            InjectFailureCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InjectFailure()));
+            InjectFailureCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(InjectFailure));
         }
 
         public ReactiveCommand<Unit, Unit> InjectFailureCommand { get; }

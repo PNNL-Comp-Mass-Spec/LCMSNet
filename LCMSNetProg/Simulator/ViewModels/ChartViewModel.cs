@@ -31,10 +31,8 @@ namespace LcmsNet.Simulator.ViewModels
             SelectedMethods.MethodUpdated += SelectedMethods_MethodUpdated;
 
             Reporter = new ModelCheckReportsViewModel(FluidicsModerator.Moderator);
-            GanttChartTimelineVm = new LCMethodTimelineViewModel();
-            GanttChartTimelineVm.RenderMode = LCMethodRenderMode.Column;
-            ConversationChartTimelineVm = new LCMethodTimelineViewModel();
-            ConversationChartTimelineVm.RenderMode = LCMethodRenderMode.Conversation;
+            GanttChartTimelineVm = new LCMethodTimelineViewModel { RenderMode = LCMethodRenderMode.Column };
+            ConversationChartTimelineVm = new LCMethodTimelineViewModel { RenderMode = LCMethodRenderMode.Conversation };
 
             ReporterPopoutVm = new PopoutViewModel(Reporter);
             GanttChartTimelinePopoutVm = new PopoutViewModel(GanttChartTimelineVm);

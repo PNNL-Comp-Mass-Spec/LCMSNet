@@ -36,17 +36,7 @@ namespace LcmsNet.Simulator.ViewModels
         private readonly FluidicsSimulator simInstance;
         private int simDelayMs = 500;
 
-        public static SimulatorControlsAndChartsViewModel GetInstance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new SimulatorControlsAndChartsViewModel(null);
-                }
-                return instance;
-            }
-        }
+        public static SimulatorControlsAndChartsViewModel GetInstance => instance ?? (instance = new SimulatorControlsAndChartsViewModel(null));
 
         public ModelCheckListViewModel CheckList { get; }
         public ChartViewModel ChartsVm { get; }

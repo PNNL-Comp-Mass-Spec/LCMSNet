@@ -17,7 +17,7 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ValveVICIViewModelBase()
+        protected ValveVICIViewModelBase()
         {
             IsInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
 
@@ -29,13 +29,13 @@ namespace LcmsNetPlugins.VICI.Valves
 
             ValveControlTabSelected = true; // Default selected tab
 
-            ClearValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClearValveId()));
-            RefreshValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveId()));
-            RefreshValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValvePosition()));
-            RefreshValveVersionInfoCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => RefreshValveVersion()));
-            OpenPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => OpenPort()));
-            ClosePortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => ClosePort()));
-            InitializeDeviceCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => InitializeDevice()));
+            ClearValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ClearValveId));
+            RefreshValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshValveId));
+            RefreshValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshValvePosition));
+            RefreshValveVersionInfoCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshValveVersion));
+            OpenPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(OpenPort));
+            ClosePortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ClosePort));
+            InitializeDeviceCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(InitializeDevice));
 
             this.PropertyChanged += OnPropertyChanged;
             this.WhenAnyValue(x => x.SelectedValveId).Subscribe(x =>

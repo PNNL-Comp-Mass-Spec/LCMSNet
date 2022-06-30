@@ -19,7 +19,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             //Populate the combobox
             PopulateComboBox();
-            SetValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => SetValvePosition()));
+            SetValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetValvePosition));
         }
 
         protected override void RegisterDevice(IDevice device)

@@ -306,9 +306,11 @@ namespace LcmsNet.Method.Drawing
                 graphics.DrawText(deviceNameText, bounds.Location);
 
                 // Render the name of the event
-                var nameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, EightPt, nameBrush, FluidicsModerator.Moderator.DrawingScaleFactor);
-                nameText.MaxTextWidth = bounds.Width;
-                nameText.MaxTextHeight = bounds.Height;
+                var nameText = new FormattedText(name, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, nameFont, EightPt, nameBrush, FluidicsModerator.Moderator.DrawingScaleFactor)
+                    {
+                        MaxTextWidth = bounds.Width,
+                        MaxTextHeight = bounds.Height
+                    };
                 graphics.DrawText(nameText, new Point(bounds.X, bounds.Y + (bounds.Height / 2.0F)));
 
                 // Render the params of the event
@@ -532,9 +534,7 @@ namespace LcmsNet.Method.Drawing
                     heightPer = CONST_MIN_HEIGHT;
 
                 // Find the start and end times of the samples
-                DateTime methodStart;
-                TimeSpan methodDuration;
-                FindTimeExtrema(methods, out methodStart, out methodDuration);
+                FindTimeExtrema(methods, out _, out var methodDuration);
 
                 // Then calculate the number of pixels per second to use.
                 var pixelsPerSecond = Convert.ToSingle(bounds.Width - bounds.X) /

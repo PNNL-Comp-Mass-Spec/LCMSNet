@@ -9,7 +9,7 @@ namespace LcmsNet.SampleQueue.ViewModels
     {
         public TrayVialSampleViewModel(SampleData sample, List<string> trayNames)
         {
-            this.sample = sample;
+            this.Sample = sample;
             this.trayNames = trayNames;
             Tray = trayNames.IndexOf(sample.PAL.PALTray) + 1;
             Vial = sample.PAL.Well;
@@ -18,12 +18,11 @@ namespace LcmsNet.SampleQueue.ViewModels
         }
 
         private readonly List<string> trayNames;
-        private readonly SampleData sample;
         private int tray;
         private int vial;
         private bool dataChanged;
 
-        public SampleData Sample => sample;
+        public SampleData Sample { get; }
 
         public int ColumnId => Sample.ColumnIndex + 1;
 

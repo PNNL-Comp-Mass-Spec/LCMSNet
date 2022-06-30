@@ -30,44 +30,27 @@ namespace LcmsNet.Simulator.ViewModels
 
             FluidicsSimulator.GetInstance.EventSimulated += EventSimulated_Handler;
 
-            var sinkCheck = new NoSinksModelCheck();
-            sinkCheck.IsEnabled = false;
+            var sinkCheck = new NoSinksModelCheck { IsEnabled = false };
 
-            var sourceCheck = new MultipleSourcesModelCheck();
-            sourceCheck.IsEnabled = false;
+            var sourceCheck = new MultipleSourcesModelCheck { IsEnabled = false };
 
-            var cycleCheck = new FluidicsCycleCheck();
-            cycleCheck.IsEnabled = false;
+            var cycleCheck = new FluidicsCycleCheck { IsEnabled = false };
 
-            var testCheck = new TestModelCheck();
-            testCheck.IsEnabled = false;
+            var testCheck = new TestModelCheck { IsEnabled = false };
 
             FluidicsSimulator.GetInstance.AddModelCheck(sinkCheck);
             FluidicsSimulator.GetInstance.AddModelCheck(sourceCheck);
             FluidicsSimulator.GetInstance.AddModelCheck(cycleCheck);
             FluidicsSimulator.GetInstance.AddModelCheck(testCheck);
-            //fluidicsControlVm = new FluidicsControlViewModel();
         }
 
-        //private FluidicsControlViewModel fluidicsControlVm;
         private static SimConfigurationViewModel instance;
         private readonly FluidicsModerator mod;
-        private readonly FluidicsControlViewModel fluidicsControlVm = new FluidicsControlViewModel();
         private string elapsed;
 
-        public FluidicsControlViewModel FluidicsControlVm => fluidicsControlVm;
+        public FluidicsControlViewModel FluidicsControlVm { get; } = new FluidicsControlViewModel();
 
-        public static SimConfigurationViewModel GetInstance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new SimConfigurationViewModel(null);
-                }
-                return instance;
-            }
-        }
+        public static SimConfigurationViewModel GetInstance => instance ?? (instance = new SimConfigurationViewModel(null));
 
         public string Elapsed
         {

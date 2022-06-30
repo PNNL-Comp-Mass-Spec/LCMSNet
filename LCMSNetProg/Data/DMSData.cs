@@ -75,14 +75,15 @@ namespace LcmsNet.Data
 
         public List<string[]> GetExportValuePairs()
         {
-            var exportData = new List<string[]>();
-
-            exportData.Add(new[] { "Request:", RequestName });
-            exportData.Add(new[] { "Request Id:", RequestID.ToString() });
-            exportData.Add(new[] { "Batch:", Batch.ToString() });
-            exportData.Add(new[] { "Block:", Block.ToString() });
-            exportData.Add(new[] { "Run Order:", RunOrder.ToString() });
-            exportData.Add(new[] { "Comment:", Comment });
+            var exportData = new List<string[]>
+            {
+                new[] { "Request:", RequestName },
+                new[] { "Request Id:", RequestID.ToString() },
+                new[] { "Batch:", Batch.ToString() },
+                new[] { "Block:", Block.ToString() },
+                new[] { "Run Order:", RunOrder.ToString() },
+                new[] { "Comment:", Comment }
+            };
 
             return exportData;
         }

@@ -24,15 +24,17 @@ namespace LcmsNet.Devices.ViewModels
             // Design-time data
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                var devices = new List<DevicePluginInformation>();
-                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Timer1", "Timers")));
-                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Timer2", "Timers")));
-                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Error1", "Errors")));
-                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Error2", "Errors")));
-                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Error3", "Errors")));
-                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Pump1", "Pumps")));
-                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Pump2", "Pumps")));
-                devices.Add(new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Pump3", "Pumps")));
+                var devices = new List<DevicePluginInformation>
+                {
+                    new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Timer1", "Timers")),
+                    new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Timer2", "Timers")),
+                    new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Error1", "Errors")),
+                    new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Error2", "Errors")),
+                    new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Error3", "Errors")),
+                    new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Pump1", "Pumps")),
+                    new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Pump2", "Pumps")),
+                    new DevicePluginInformation(typeof(TimerDevice), new DeviceControlAttribute(null, "Pump3", "Pumps"))
+                };
                 AddPluginInformation(devices);
                 SelectedPlugin = devices[3];
                 addedPlugins.Add(devices[2]);

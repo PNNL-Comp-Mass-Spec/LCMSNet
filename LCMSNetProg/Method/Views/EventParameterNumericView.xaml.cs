@@ -20,10 +20,12 @@ namespace LcmsNet.Method.Views
             if (this.DataContext is EventParameterNumericViewModel epnvm)
             {
                 var conversionVM = new ConvertToolViewModel(Convert.ToInt32(epnvm.NumberValue), epnvm.DecimalPlaces);
-                var conversion = new ConvertToolWindow();
-                conversion.DataContext = conversionVM;
+                var conversion = new ConvertToolWindow
+                {
+                    DataContext = conversionVM,
+                    WindowStartupLocation = WindowStartupLocation.Manual
+                };
 
-                conversion.WindowStartupLocation = WindowStartupLocation.Manual;
                 var pos = PointToScreen(ConversionButton.TranslatePoint(new Point(0, 0), this));
                 conversion.Left = pos.X;
                 conversion.Top = pos.Y;

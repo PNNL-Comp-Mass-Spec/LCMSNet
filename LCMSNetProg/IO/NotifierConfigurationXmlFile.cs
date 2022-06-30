@@ -104,20 +104,24 @@ namespace LcmsNet.IO
 
                     // Create the setting.
                     NotificationSetting setting = null;
-                    if (type.ToLower() == "number")
+                    if (string.Equals(type, "number", StringComparison.OrdinalIgnoreCase))
                     {
-                        var number = new NotificationNumberSetting();
-                        number.Minimum = Convert.ToDouble(conditionNode.Attributes.GetNamedItem("minimum").Value);
-                        number.Maximum = Convert.ToDouble(conditionNode.Attributes.GetNamedItem("maximum").Value);
+                        var number = new NotificationNumberSetting
+                        {
+                            Minimum = Convert.ToDouble(conditionNode.Attributes.GetNamedItem("minimum").Value),
+                            Maximum = Convert.ToDouble(conditionNode.Attributes.GetNamedItem("maximum").Value)
+                        };
                         setting = number;
                     }
-                    else if (type.ToLower() == "text")
+                    else if (string.Equals(type, "text", StringComparison.OrdinalIgnoreCase))
                     {
-                        var text = new NotificationTextSetting();
-                        text.Text = conditionNode.Attributes[0].Value;
+                        var text = new NotificationTextSetting
+                        {
+                            Text = conditionNode.Attributes[0].Value
+                        };
                         setting = text;
                     }
-                    else if (type.ToLower() == "always")
+                    else if (string.Equals(type, "always", StringComparison.OrdinalIgnoreCase))
                     {
                         var always = new NotificationAlwaysSetting();
                         setting = always;

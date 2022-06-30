@@ -23,18 +23,17 @@ namespace LcmsNetCommonControls.ViewModels
         /// <param name="child">The child view model</param>
         public PopoutViewModel(ReactiveObject child)
         {
-            this.child = child;
+            Child = child;
             TackUnTackCommand = ReactiveCommand.Create(() => Tacked = !Tacked);
             //this.WhenAnyValue(x => x.Tacked).Subscribe(x => Tack?.Invoke(this, new TackEventArgs(x)));
         }
 
-        private readonly ReactiveObject child;
         private bool tacked = true;
 
         /// <summary>
         /// The child view model
         /// </summary>
-        public ReactiveObject Child => child;
+        public ReactiveObject Child { get; }
 
         /// <summary>
         /// Command to tack or untack this control's view

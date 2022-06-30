@@ -54,8 +54,7 @@ namespace FluidicsSDK.ModelCheckers
 
             foreach(var source in sources)
             {
-                List<Connection> pathTaken;
-                var otherSourceFound = FindOtherSources(source, out pathTaken);
+                var otherSourceFound = FindOtherSources(source, out var pathTaken);
                 if (otherSourceFound)
                 {
                     // Multiple sources found on a path, color path red.

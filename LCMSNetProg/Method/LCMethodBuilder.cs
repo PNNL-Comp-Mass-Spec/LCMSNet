@@ -18,8 +18,7 @@ namespace LcmsNet.Method
 
             // Construct the method and set the start time.
             //     The duration is auto-calculated by the method.
-            var method = new LCMethod();
-            method.Events = events;
+            var method = new LCMethod { Events = events };
             method.SetStartTime(firstEvent.Start);
 
             return method;

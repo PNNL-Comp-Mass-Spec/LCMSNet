@@ -120,12 +120,10 @@ namespace LcmsNetSDK
                 var valueText = m_Settings[itemKey];
                 if (valueText != null)
                 {
-                    bool value;
-                    if (bool.TryParse(valueText, out value))
+                    if (bool.TryParse(valueText, out var value))
                         return value;
 
-                    int valueInt;
-                    if (int.TryParse(valueText, out valueInt))
+                    if (int.TryParse(valueText, out var valueInt))
                     {
                         return valueInt != 0;
                     }
@@ -149,8 +147,7 @@ namespace LcmsNetSDK
             if (m_Settings.ContainsKey(itemKey))
             {
                 var valueText = m_Settings[itemKey];
-                int value;
-                if (valueText != null && int.TryParse(valueText, out value))
+                if (valueText != null && int.TryParse(valueText, out var value))
                 {
                     return value;
                 }
@@ -173,8 +170,7 @@ namespace LcmsNetSDK
             if (m_Settings.ContainsKey(itemKey))
             {
                 var valueText = m_Settings[itemKey];
-                double value;
-                if (valueText != null && double.TryParse(valueText, out value))
+                if (valueText != null && double.TryParse(valueText, out var value))
                 {
                     return value;
                 }

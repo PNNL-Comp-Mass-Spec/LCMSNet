@@ -75,8 +75,8 @@ namespace LcmsNet
 
             Initialize();
 
-            ShowAboutCommand = ReactiveCommand.Create(() => this.ShowAboutWindow());
-            ReportErrorCommand = ReactiveCommand.Create<ContentControl[]>(param => this.ReportError(param));
+            ShowAboutCommand = ReactiveCommand.Create(ShowAboutWindow);
+            ReportErrorCommand = ReactiveCommand.Create<ContentControl[]>(ReportError);
             OpenQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
             SaveQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
             SaveQueueAsCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueueAs(), this.WhenAnyValue(x => x.QueueTabSelected));

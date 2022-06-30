@@ -210,11 +210,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
 
             // Create a new fill down form.
-            var fillDownViewModel = new SampleMethodFillDownViewModel();
-            fillDownViewModel.Samples = samples;
+            var fillDownViewModel = new SampleMethodFillDownViewModel { Samples = samples };
             fillDownViewModel.EnsureItemsAreSelected();
-            var dialog = new SampleMethodFillDownWindow();
-            dialog.DataContext = fillDownViewModel;
+            var dialog = new SampleMethodFillDownWindow { DataContext = fillDownViewModel };
 
             using (var batchDisp = SampleDataManager.StartBatchChange())
             {
@@ -593,20 +591,20 @@ namespace LcmsNet.SampleQueue.ViewModels
         {
             // Protected to allow inheriting class to override some of these commands, as needed
 
-            AddBlankCommand = ReactiveCommand.Create(() => this.AddNewSample(false));
-            AddBlankToUnusedCommand = ReactiveCommand.Create(() => this.AddNewSample(true));
-            AddDMSCommand = ReactiveCommand.Create(() => this.ShowDMSView());
-            RemoveSelectedCommand = ReactiveCommand.Create(() => this.RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
-            FillDownCommand = ReactiveCommand.Create(() => this.FillDown(), this.WhenAnyValue(x => x.ItemsSelected));
-            TrayVialCommand = ReactiveCommand.Create(() => this.EditTrayAndVial(), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
-            DeleteUnusedCommand = ReactiveCommand.Create(() => this.RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
-            CartColumnDateCommand = ReactiveCommand.Create(() => this.AddDateCartnameColumnIDToDatasetName(), this.WhenAnyValue(x => x.ItemsSelected));
-            UndoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
-            RedoCommand = ReactiveCommand.Create(() => this.SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
-            PreviewThroughputCommand = ReactiveCommand.Create(() => this.PreviewSelectedThroughput(), this.WhenAnyValue(x => x.ItemsSelected));
-            ClearAllSamplesCommand = ReactiveCommand.Create(() => this.ClearSamplesConfirm());
+            AddBlankCommand = ReactiveCommand.Create(() => AddNewSample(false));
+            AddBlankToUnusedCommand = ReactiveCommand.Create(() => AddNewSample(true));
+            AddDMSCommand = ReactiveCommand.Create(ShowDMSView);
+            RemoveSelectedCommand = ReactiveCommand.Create(() => RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
+            FillDownCommand = ReactiveCommand.Create(FillDown, this.WhenAnyValue(x => x.ItemsSelected));
+            TrayVialCommand = ReactiveCommand.Create(EditTrayAndVial, this.WhenAnyValue(x => x.ItemsSelected));
+            MoveDownCommand = ReactiveCommand.Create(() => MoveSelectedSamples(1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveUpCommand = ReactiveCommand.Create(() => MoveSelectedSamples(-1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
+            DeleteUnusedCommand = ReactiveCommand.Create(() => RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
+            CartColumnDateCommand = ReactiveCommand.Create(AddDateCartnameColumnIDToDatasetName, this.WhenAnyValue(x => x.ItemsSelected));
+            UndoCommand = ReactiveCommand.Create(() => SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
+            RedoCommand = ReactiveCommand.Create(() => SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
+            PreviewThroughputCommand = ReactiveCommand.Create(PreviewSelectedThroughput, this.WhenAnyValue(x => x.ItemsSelected));
+            ClearAllSamplesCommand = ReactiveCommand.Create(ClearSamplesConfirm);
             ClipboardPasteCommand = ReactiveCommand.CreateFromTask(ImportQueueFromClipboard);
         }
 

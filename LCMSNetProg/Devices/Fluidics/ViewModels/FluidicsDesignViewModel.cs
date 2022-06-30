@@ -182,8 +182,10 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         public BitmapSource GetImage()
         {
             var bounds = fluidicsMod.GetBoundingBox(false);
-            var drawVisual = new DrawingVisual();
-            drawVisual.Offset = new Vector(-bounds.X, -bounds.Y); // Shift the drawing to minimize the blank space, or to show cropped drawings in their entirety
+            var drawVisual = new DrawingVisual
+            {
+                Offset = new Vector(-bounds.X, -bounds.Y) // Shift the drawing to minimize the blank space, or to show cropped drawings in their entirety
+            };
             using (var drawContext = drawVisual.RenderOpen())
             {
                 drawContext.DrawRectangle(Brushes.White, new Pen(Brushes.Black, 2), bounds);
@@ -376,9 +378,11 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 }
             }
 
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = CONST_HARDWARE_CONFIG_FILTER;
-            openFileDialog.FilterIndex = 0;
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = CONST_HARDWARE_CONFIG_FILTER,
+                FilterIndex = 0
+            };
             var openResult = openFileDialog.ShowDialog();
             if (openResult.HasValue && openResult.Value)
             {
@@ -400,9 +404,11 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// </summary>
         private void SaveHardwareAs()
         {
-            var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = CONST_HARDWARE_CONFIG_FILTER;
-            saveFileDialog.FilterIndex = 0;
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = CONST_HARDWARE_CONFIG_FILTER,
+                FilterIndex = 0
+            };
             var saveResult = saveFileDialog.ShowDialog();
             if (saveResult.HasValue && saveResult.Value)
             {

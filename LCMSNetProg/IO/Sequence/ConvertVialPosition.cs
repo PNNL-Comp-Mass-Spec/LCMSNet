@@ -116,8 +116,7 @@ namespace LcmsNet.IO.Sequence
             }
 
             var positionInColumnText = vialPosition.Substring(intPos);
-            int positionInColumn;
-            if (!int.TryParse(positionInColumnText, out positionInColumn))
+            if (!int.TryParse(positionInColumnText, out var positionInColumn))
             {
                 // Number portion is not numeric
                 return 9999;

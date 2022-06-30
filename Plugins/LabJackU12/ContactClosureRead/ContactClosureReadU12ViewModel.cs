@@ -40,10 +40,10 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             get => contactClosureRead.Port;
             set
             {
-                if (ReactiveObjectExtensions.RaiseAndSetIfChangedRetBool(this, ref selectedInputPort, value) && loading == false)
+                if (this.RaiseAndSetIfChangedRetBool(ref selectedInputPort, value) && loading == false)
                 {
                     contactClosureRead.Port = value;
-                    IsAnalog = value.ToString().ToUpper().StartsWith("A");
+                    IsAnalog = value.ToString().StartsWith("A", StringComparison.OrdinalIgnoreCase);
                 }
             }
         }
