@@ -11,7 +11,7 @@ namespace LcmsNet.Simulator.ViewModels
             ControlsVm = SimulatorControlsAndChartsViewModel.GetInstance;
             ConfigVm = SimConfigurationViewModel.GetInstance;
             ConfigPopoutVm = new PopoutViewModel(ConfigVm);
-            ControlsPopoutVm = new PopoutViewModel(ConfigVm);
+            ControlsPopoutVm = new PopoutViewModel(ControlsVm);
 
             this.WhenAnyValue(x => x.ConfigPopoutVm.Child, x => x.ConfigPopoutVm.Tacked).Subscribe(x => TackChangeRules(x.Item1, x.Item2));
             this.WhenAnyValue(x => x.ControlsPopoutVm.Child, x => x.ControlsPopoutVm.Tacked).Subscribe(x => TackChangeRules(x.Item1, x.Item2));

@@ -111,7 +111,7 @@ namespace LcmsNet.Notification.ViewModels
             EnableCommand = ReactiveCommand.Create(Enable, this.WhenAnyValue(x => x.SettingsDisabled).Select(x => x));
             DisableCommand = ReactiveCommand.Create(Disable, this.WhenAnyValue(x => x.SettingsDisabled).Select(x => !x));
             IgnoreSettingCommand = ReactiveCommand.Create(() => SelectedAction = DeviceNotificationAction.Ignore, this.WhenAnyValue(x => x.SelectedAction).Select(x => x != DeviceNotificationAction.Ignore));
-            IgnoreAllCommand = ReactiveCommand.Create(IgnoreAll, this.WhenAnyValue(x => x.assignedEventsList.Count).Select(x => x > 0));
+            IgnoreAllCommand = ReactiveCommand.Create(IgnoreAll, assignedEventsList.CountChanged.Select(x => x > 0));
         }
 
         ~NotificationSystemViewModel()

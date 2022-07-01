@@ -444,7 +444,7 @@ namespace LcmsNet.Method.ViewModels
             // Clear out the combo-box
             try
             {
-                foreach (var vm in EventParameterList)
+                foreach (var vm in eventParameterList.Items)
                 {
                     vm.EventChanged -= param_EventChanged;
                 }

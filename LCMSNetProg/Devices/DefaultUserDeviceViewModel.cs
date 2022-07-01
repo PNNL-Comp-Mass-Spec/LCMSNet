@@ -1,18 +1,39 @@
 ﻿using System;
 using System.Windows.Controls;
 using LcmsNetSDK.Devices;
+using ReactiveUI;
 
 namespace LcmsNet.Devices
 {
-    public class DefaultUserDeviceViewModel : IDeviceControl
+    public class DefaultUserDeviceViewModel : ReactiveObject, IDeviceControl
     {
         public DefaultUserDeviceViewModel()
         {
         }
 
-        public IDevice Device { get; set; }
-        public string Name { get; set; }
-        public string DeviceStatus { get; } = string.Empty;
+        private IDevice device;
+        private string name = string.Empty;
+        private string deviceStatus = string.Empty;
+        private bool running = false;
+
+        public IDevice Device
+        {
+            get => device;
+            set => this.RaiseAndSetIfChanged(ref device, value);
+        }
+
+        public string Name
+        {
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
+        }
+
+        public string DeviceStatus
+        {
+            get => deviceStatus;
+            set => this.RaiseAndSetIfChanged(ref deviceStatus, value);
+        }
+
 
         public UserControl GetDefaultView()
         {
@@ -31,8 +52,8 @@ namespace LcmsNet.Devices
 
         public bool Running
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            get => running;
+            set => this.RaiseAndSetIfChanged(ref running, value);
         }
 
         /// <summary>

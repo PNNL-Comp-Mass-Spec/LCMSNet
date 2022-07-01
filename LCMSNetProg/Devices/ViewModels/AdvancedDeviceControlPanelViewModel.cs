@@ -2,6 +2,7 @@
 using System.Reactive.Concurrency;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Linq;
 using DynamicData;
 using LcmsNetSDK.Devices;
@@ -23,8 +24,10 @@ namespace LcmsNet.Devices.ViewModels
             DeviceGroups = deviceGroupsBound;
 
             // Once a group is added to the device controls, automatically make the first one the "Selected group" if one hasn't been previously set.
-            this.WhenAnyValue(x => x.DeviceGroups, x => x.SelectedGroup, x => x.deviceGroups.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
-                .Subscribe(x => SelectedGroup = x.Item1[0]);
+            this.WhenAnyValue(x => x.SelectedGroup).Where(x => deviceGroups.Count > 0 && x == null)
+                .Subscribe(x => SelectedGroup = deviceGroups.Items.FirstOrDefault());
+            deviceGroups.CountChanged.Where(x => x > 0 && SelectedGroup == null)
+                .Subscribe(x => SelectedGroup = deviceGroups.Items.FirstOrDefault());
 
             this.WhenAnyValue(x => x.SelectedGroup).Subscribe(x =>
             {

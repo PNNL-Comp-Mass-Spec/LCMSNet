@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -36,8 +37,10 @@ namespace LcmsNet.Devices.ViewModels
             DeviceViewModels = deviceViewModelsBound;
 
             // Once an item is added to the device controls, automatically make the first one the "Selected device" if one hasn't been previously set.
-            this.WhenAnyValue(x => x.DeviceViewModels, x => x.SelectedDevice, x => x.deviceViewModels.Count).Where(x => x.Item1.Count > 0 && x.Item2 == null)
-                .Subscribe(x => SelectedDevice = x.Item1[0]);
+            this.WhenAnyValue(x => x.SelectedDevice).Where(x => deviceViewModels.Count > 0 && x == null)
+                .Subscribe(x => SelectedDevice = deviceViewModels.Items.FirstOrDefault());
+            deviceViewModels.CountChanged.Where(x => x > 0 && SelectedDevice == null)
+                .Subscribe(x => SelectedDevice = deviceViewModels.Items.FirstOrDefault());
 
             this.WhenAnyValue(x => x.SelectedDevice, x => x.GroupIsSelected).Where(x => x.Item2).Subscribe(x =>
             {

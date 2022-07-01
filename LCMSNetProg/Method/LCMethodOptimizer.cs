@@ -313,7 +313,7 @@ namespace LcmsNet.Method
                     }
 
                     // Add
-                    span.Add(lcEvent.Duration);
+                    span = span.Add(lcEvent.Duration); // TODO: Does fixing this break things?
                     span = span.Add(new TimeSpan(0, 0, 0, CONST_REQUIRED_LC_EVENT_SPACING_SECONDS));
 
                     events.Add(lcEvent);

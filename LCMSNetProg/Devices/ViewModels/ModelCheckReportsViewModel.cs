@@ -23,7 +23,7 @@ namespace LcmsNet.Devices.ViewModels
         public ModelCheckReportsViewModel(IModelCheckController cntrlr)
         {
             cntrlr.ModelStatusChangeEvent += StatusChangeHandler;
-            ClearCommand = ReactiveCommand.Create(() => reports.Clear(), this.WhenAnyValue(x => x.reports.Count).Select(x => x > 0));
+            ClearCommand = ReactiveCommand.Create(() => reports.Clear(), reports.CountChanged.Select(x => x > 0));
             reports.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var reportsBound).Subscribe();
             Reports = reportsBound;
         }
