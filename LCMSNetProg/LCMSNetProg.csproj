@@ -76,7 +76,10 @@
     <Compile Include="Configuration\Views\SystemConfigurationView.xaml.cs">
       <DependentUpon>SystemConfigurationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\ColumnData.cs" />
+    <Compile Include="Data\ColumnStatus.cs" />
     <Compile Include="Data\DMSData.cs" />
+    <Compile Include="Data\PalData.cs" />
     <Compile Include="Data\SampleData.cs" />
     <Compile Include="Data\SampleRunningStatus.cs" />
     <Compile Include="Devices\BlockDevice.cs" />

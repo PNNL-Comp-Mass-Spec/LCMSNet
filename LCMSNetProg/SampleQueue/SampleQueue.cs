@@ -10,7 +10,6 @@ using LcmsNet.Data;
 using LcmsNet.IO.Sequence;
 using LcmsNet.Method;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
 

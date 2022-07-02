@@ -47,12 +47,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\ColumnData.cs" />
-    <Compile Include="Data\ColumnStatus.cs" />
+    <Compile Include="Data\DummyPalData.cs" />
     <Compile Include="Data\DummySampleInfo.cs" />
+    <Compile Include="Data\IColumn.cs" />
+    <Compile Include="Data\IPalData.cs" />
     <Compile Include="Data\ISampleInfo.cs" />
     <Compile Include="Data\MobilePhase.cs" />
-    <Compile Include="Data\PalData.cs" />
     <Compile Include="Devices\BaseDeviceControlViewModel.cs" />
     <Compile Include="Devices\DeviceConfiguration.cs" />
     <Compile Include="Devices\DeviceControlAttribute.cs" />

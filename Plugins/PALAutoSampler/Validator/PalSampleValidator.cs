@@ -58,13 +58,13 @@ namespace LcmsNetPlugins.PALAutoSampler.Validator
             if (AutoSamplers.ConnectedAutoSamplers.Count == 0 || !AutoSamplers.ConnectedAutoSamplers[0].TrayNamesAndMaxVials.TryGetValue(sample.PAL.PALTray, out var maxVial))
             {
                 LogOnce("NoPAL", "Could not access the PAL for sample validation!");
-                if (sample.PAL.Well <= PalData.CONST_DEFAULT_VIAL_NUMBER || sample.PAL.Well > 1536)
+                if (sample.PAL.Well <= CartLimits.CONST_DEFAULT_VIAL_NUMBER || sample.PAL.Well > 1536)
                     errors.Add(new SampleValidationError("The PAL Well/Vial is not set.", SampleValidationErrorType.PalVialNotSpecified));
             }
             else
             {
                 LogOnce("UsingPAL", $"Using PAL data for sample validation, tray {sample.PAL.PALTray}, vial/well {sample.PAL.Well}");
-                if (sample.PAL.Well <= PalData.CONST_DEFAULT_VIAL_NUMBER)
+                if (sample.PAL.Well <= CartLimits.CONST_DEFAULT_VIAL_NUMBER)
                 {
                     errors.Add(new SampleValidationError("The PAL Well/Vial is not set.", SampleValidationErrorType.PalVialNotSpecified));
                 }

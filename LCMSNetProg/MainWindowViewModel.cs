@@ -26,7 +26,6 @@ using LcmsNet.SampleQueue.ViewModels;
 using LcmsNet.Simulator.ViewModels;
 using LcmsNetCommonControls.ViewModels;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;

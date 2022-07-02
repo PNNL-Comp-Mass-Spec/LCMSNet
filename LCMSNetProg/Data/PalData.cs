@@ -1,13 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
+using LcmsNetSDK.System;
 
-namespace LcmsNetSDK.Data
+namespace LcmsNet.Data
 {
     /// <summary>
     /// Encapsulates data for an autosampler
     /// </summary>
     [Serializable]
-    public class PalData : INotifyPropertyChangedExt
+    public class PalData : IPalData, INotifyPropertyChangedExt
     {
         /// <summary>
         /// Default constructor.
@@ -16,7 +19,7 @@ namespace LcmsNetSDK.Data
         {
             Method = CONST_METHOD_NAME;
             palTray = "";
-            well = CONST_DEFAULT_VIAL_NUMBER;
+            well = CartLimits.CONST_DEFAULT_VIAL_NUMBER;
             WellPlate = "";
         }
 
@@ -40,11 +43,6 @@ namespace LcmsNetSDK.Data
         private const string CONST_METHOD_NAME = "std_01";
 
         /// <summary>
-        /// Default sample vial number.  This should be invalid and force the user to update the sample information before running.
-        /// </summary>
-        public const int CONST_DEFAULT_VIAL_NUMBER = 0;
-
-        /// <summary>
         /// Minimum wellplate number.
         /// </summary>
         public const int CONST_MIN_WELLPLATE = 1;
@@ -65,7 +63,7 @@ namespace LcmsNetSDK.Data
         private int well;
 
         /// <summary>
-        /// Gets or sets the vial number to pull sample from.
+        /// Vial number to pull sample from.
         /// </summary>
         public int Well
         {

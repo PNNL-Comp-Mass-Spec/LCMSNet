@@ -315,9 +315,11 @@ namespace LcmsNet.Data
         public DMSData DmsData { get; }
 
         /// <summary>
-        /// Gets or sets the pal data associated with this sample.
+        /// Pal data associated with this sample.
         /// </summary>
         public PalData PAL { get; }
+
+        IPalData ISampleInfo.PAL => PAL;
 
         /// <summary>
         /// Gets the experiment object data.

@@ -2,14 +2,16 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Windows.Media;
+using LcmsNetSDK;
+using LcmsNetSDK.Data;
 
-namespace LcmsNetSDK.Data
+namespace LcmsNet.Data
 {
     /// <summary>
     /// Class that manages all of the information about a given column
     /// </summary>
     [Serializable]
-    public class ColumnData : INotifyPropertyChangedExt, IEquatable<ColumnData>, ICloneable
+    public class ColumnData : IColumn, INotifyPropertyChangedExt, IEquatable<ColumnData>, ICloneable
     {
         /// <summary>
         /// Default constructor.
@@ -160,6 +162,8 @@ namespace LcmsNetSDK.Data
                 }
             }
         }
+
+        public string StatusString => Status.ToString();
 
         /// <summary>
         /// Gets or sets the column index.

@@ -4,7 +4,6 @@ using System.Reactive.Linq;
 using System.Windows.Media;
 using LcmsNet.Configuration;
 using LcmsNet.Data;
-using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels

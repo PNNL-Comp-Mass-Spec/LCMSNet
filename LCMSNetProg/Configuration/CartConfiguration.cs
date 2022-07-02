@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Media;
+using LcmsNet.Data;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using ReactiveUI;
 
 namespace LcmsNet.Configuration

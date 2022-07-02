@@ -7,7 +7,6 @@ using LcmsNet.Configuration;
 using LcmsNet.Data;
 using LcmsNet.Method.Drawing;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.System;
 using ReactiveUI;

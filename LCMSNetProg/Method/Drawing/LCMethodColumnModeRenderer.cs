@@ -6,8 +6,8 @@ using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK;
 using LcmsNet.Configuration;
+using LcmsNet.Data;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
 
 namespace LcmsNet.Method.Drawing

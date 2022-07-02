@@ -8,7 +8,7 @@ namespace LcmsNetSDK.Data
         string Name { get; }
         int ColumnIndex { get; }
         string ColumnName { get; }
-        PalData PAL { get; }
+        IPalData PAL { get; }
         double Volume { get; }
         string InstrumentMethod { get; }
         string LCMethodName { get; }

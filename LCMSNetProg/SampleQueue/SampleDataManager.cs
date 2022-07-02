@@ -14,10 +14,10 @@ using LcmsNet.Data;
 using LcmsNet.Method;
 using LcmsNet.SampleQueue.ViewModels;
 using LcmsNetSDK;
-using LcmsNetSDK.Data;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.SampleValidation;
+using LcmsNetSDK.System;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue
@@ -886,7 +886,7 @@ namespace LcmsNet.SampleQueue
                 PAL =
                 {
                     Method = sampleToCopy.PAL.Method,
-                    Well = PalData.CONST_DEFAULT_VIAL_NUMBER,
+                    Well = CartLimits.CONST_DEFAULT_VIAL_NUMBER,
                     PALTray = "",
                     WellPlate = sampleToCopy.PAL.WellPlate
                 }

@@ -9,7 +9,7 @@ namespace LcmsNetSDK.Data
         {
             Name = "DummySample";
             ColumnName = "";
-            PAL = new PalData();
+            PAL = new DummyPalData();
             ActualLCMethod = new LCMethodDummy();
             InstrumentMethod = "";
             LCMethodName = "";
@@ -18,7 +18,8 @@ namespace LcmsNetSDK.Data
         public string Name { get; set; }
         public int ColumnIndex { get; set; }
         public string ColumnName { get; set; }
-        public PalData PAL { get; }
+        public DummyPalData PAL { get; }
+        IPalData ISampleInfo.PAL => PAL;
         public double Volume { get; set; }
         public string InstrumentMethod { get; set; }
         public string LCMethodName { get; }
