@@ -11,34 +11,17 @@ namespace LcmsNet.Data
     /// Class that manages all of the information about a given column
     /// </summary>
     [Serializable]
-    public class ColumnData : IColumn, INotifyPropertyChangedExt, IEquatable<ColumnData>, ICloneable
+    public class ColumnData : IColumn, INotifyPropertyChangedExt, IEquatable<ColumnData>
     {
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ColumnData()
+        public ColumnData(int id, string name = "", ColumnStatus status = ColumnStatus.Idle, Color color = default(Color))
         {
-            m_name = "";
-            m_columnIndex = 0;
-            m_status = ColumnStatus.Idle;
-        }
-
-        /// <summary>
-        /// Clone - get a deep copy
-        /// </summary>
-        /// <returns></returns>
-        public object Clone()
-        {
-            var newColumnData = new ColumnData
-            {
-                Status = Status,
-                ID = ID,
-                Name = Name,
-                Color = Color
-            };
-
-
-            return newColumnData;
+            Name = name;
+            ID = id;
+            Status = status;
+            Color = color;
         }
 
         public override string ToString()
@@ -46,51 +29,21 @@ namespace LcmsNet.Data
             return $"ID = {ID} Name = {Name}";
         }
 
-        public delegate void DelegateStatusChanged(
-            object sender, ColumnStatus previousStatus, ColumnStatus newStatus);
-
-        public delegate void DelegateColorChanged(object sender, Color previousColor, Color newColor);
-
-        public delegate void DelegateNameChanged(object sender, string name, string oldName);
-
-        /// <summary>
-        /// Index of the column.
-        /// </summary>
-        private int m_columnIndex;
-
         /// <summary>
         /// Name of the column
         /// </summary>
-        private string m_name;
+        private string name;
 
         /// <summary>
         /// Status of the column
         /// </summary>
-        private ColumnStatus m_status;
-
-        /// <summary>
-        /// Fired when the status of a column changes.
-        /// </summary>
-        [field: NonSerialized]
-        public event DelegateStatusChanged StatusChanged;
-
-        /// <summary>
-        /// Fired when the color of the column changes.
-        /// </summary>
-        [field: NonSerialized]
-        public event DelegateColorChanged ColorChanged;
-
-        /// <summary>
-        /// An event that indicates the name of the column has changed.
-        /// </summary>
-        [field: NonSerialized]
-        public event DelegateNameChanged NameChanged;
+        private ColumnStatus status;
 
         /// <summary>
         /// Color of the column.
         /// </summary>
         [field: NonSerialized]
-        private Color m_columnColor;
+        private Color color;
 
         /// <summary>
         /// Handles serialization of the column color.
@@ -100,17 +53,17 @@ namespace LcmsNet.Data
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            m_columnColor = Colors.Transparent;
+            color = Colors.Transparent;
             if (ColorConverter.ConvertFromString(colorString) is Color c)
             {
-                m_columnColor = c;
+                color = c;
             }
         }
 
         [OnSerializing]
         private void OnSerialize(StreamingContext context)
         {
-            colorString = TypeDescriptor.GetConverter(typeof(Color)).ConvertToString(m_columnColor);
+            colorString = TypeDescriptor.GetConverter(typeof(Color)).ConvertToString(color);
         }
 
         /// <summary>
@@ -118,14 +71,14 @@ namespace LcmsNet.Data
         /// </summary>
         public ColumnStatus Status
         {
-            get => m_status;
+            get => status;
             set
             {
-                // If the status has changed, let someone know.
-                var previousStatus = m_status;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_status, value, nameof(Status)))
+                var previousStatus = status;
+                if (this.RaiseAndSetIfChangedRetBool(ref status, value, nameof(Status)) && value != ColumnStatus.Running && previousStatus != ColumnStatus.Running)
                 {
-                    StatusChanged?.Invoke(this, previousStatus, m_status);
+                    // Update the program setting if changed
+                    LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLED + ID, (status == ColumnStatus.Disabled).ToString());
                 }
             }
         }
@@ -135,11 +88,7 @@ namespace LcmsNet.Data
         /// <summary>
         /// Gets or sets the column index.
         /// </summary>
-        public int ID
-        {
-            get => m_columnIndex;
-            set => this.RaiseAndSetIfChanged(ref m_columnIndex, value, nameof(ID));
-        }
+        public int ID { get; }
 
         /// <summary>
         /// Gets or sets the name of the column.
@@ -148,17 +97,17 @@ namespace LcmsNet.Data
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(m_name))
-                    return m_name;
+                if (!string.IsNullOrWhiteSpace(name))
+                    return name;
 
                 return (ID + 1).ToString();
             }
             set
             {
-                var oldName = m_name;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_name, value, nameof(Name)))
+                if (this.RaiseAndSetIfChangedRetBool(ref name, value, nameof(Name)))
                 {
-                    NameChanged?.Invoke(this, m_name, oldName);
+                    // Update the program setting if changed
+                    LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNNAME + ID, Name);
                 }
             }
         }
@@ -168,15 +117,8 @@ namespace LcmsNet.Data
         /// </summary>
         public Color Color
         {
-            get => m_columnColor;
-            set
-            {
-                var oldColor = m_columnColor;
-                if (this.RaiseAndSetIfChangedRetBool(ref m_columnColor, value, nameof(Color)))
-                {
-                    ColorChanged?.Invoke(this, oldColor, m_columnColor);
-                }
-            }
+            get => color;
+            set => this.RaiseAndSetIfChanged(ref color, value, nameof(Color));
         }
 
         [field: NonSerialized]
@@ -191,7 +133,7 @@ namespace LcmsNet.Data
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return m_columnIndex == other.m_columnIndex && string.Equals(m_name, other.m_name) && m_columnColor.Equals(other.m_columnColor);
+            return ID == other.ID && string.Equals(name, other.name) && color.Equals(other.color);
         }
 
         public override bool Equals(object obj)
@@ -206,9 +148,9 @@ namespace LcmsNet.Data
         {
             unchecked
             {
-                var hashCode = m_columnIndex;
-                hashCode = (hashCode * 397) ^ (m_name != null ? m_name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ m_columnColor.GetHashCode();
+                var hashCode = ID;
+                hashCode = (hashCode * 397) ^ (name != null ? name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ color.GetHashCode();
                 return hashCode;
             }
         }

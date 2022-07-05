@@ -26,10 +26,10 @@ namespace LcmsNet.Configuration.ViewModels
             // Avoid exceptions caused from not being able to access program settings, when being run to provide design-time data context for the designer
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                Column1ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 1, Color = Colors.Red });
-                Column2ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 2, Color = Colors.Yellow });
-                Column3ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 3, Color = Colors.Green });
-                Column4ViewModel = new ColumnConfigViewModel(new ColumnData { ID = 4, Color = Colors.Orange });
+                Column1ViewModel = new ColumnConfigViewModel(new ColumnData(0, color: Colors.Red));
+                Column2ViewModel = new ColumnConfigViewModel(new ColumnData(1, color: Colors.Yellow));
+                Column3ViewModel = new ColumnConfigViewModel(new ColumnData(2, color: Colors.Green));
+                Column4ViewModel = new ColumnConfigViewModel(new ColumnData(3, color: Colors.Orange));
                 return;
             }
 #endif
@@ -41,11 +41,6 @@ namespace LcmsNet.Configuration.ViewModels
             Column2ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[1]);
             Column3ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[2]);
             Column4ViewModel = new ColumnConfigViewModel(CartConfiguration.Columns[3]);
-
-            RegisterColumn(Column1ViewModel);
-            RegisterColumn(Column2ViewModel);
-            RegisterColumn(Column3ViewModel);
-            RegisterColumn(Column4ViewModel);
 
             SpecialColumnEnabled = !LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, true);
 
@@ -66,8 +61,6 @@ namespace LcmsNet.Configuration.ViewModels
 
             BrowsePdfPathCommand = ReactiveCommand.Create(BrowsePdfPath);
         }
-
-        public event EventHandler ColumnNameChanged;
 
         private double minVolume = 1;
         private string triggerLocation = "";
@@ -158,16 +151,6 @@ namespace LcmsNet.Configuration.ViewModels
                 PdfPath = dialog.FileName;
                 LCMSSettings.SetParameter(LCMSSettings.PARAM_PDFPATH, PdfPath);
             }
-        }
-
-        void RegisterColumn(ColumnConfigViewModel column)
-        {
-            column.ColumnNameChanged += ColumnNameChangedHandler;
-        }
-
-        void ColumnNameChangedHandler()
-        {
-            ColumnNameChanged?.Invoke(this, null);
         }
 
         /// <summary>

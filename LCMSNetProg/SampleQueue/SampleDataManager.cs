@@ -6,7 +6,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Media;
 using DynamicData;
 using DynamicData.Binding;
 using LcmsNet.Configuration;
@@ -29,31 +28,6 @@ namespace LcmsNet.SampleQueue
     {
         public ReadOnlyObservableCollection<SampleViewModel> Samples { get; }
         public IObservableList<SampleData> SamplesSource { get; }
-
-        /// <summary>
-        /// Handles when a property about a column changes and rebuilds the column ordering list.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="previousStatus"></param>
-        /// <param name="newStatus"></param>
-        private void column_StatusChanged(object sender, ColumnStatus previousStatus, ColumnStatus newStatus)
-        {
-            // Make sure we have at least one column that is enabled
-            var enabled = false;
-            foreach (var column in CartConfiguration.Columns)
-            {
-                if (column.Status != ColumnStatus.Disabled)
-                {
-                    enabled = true;
-                    break;
-                }
-            }
-
-            // If at least one column is not enabled, then we disable the sample queue
-            HasValidColumns = enabled;
-
-            SampleQueue.UpdateAllSamples();
-        }
 
         private bool hasValidColumns = true;
         private bool hasData = true;
@@ -114,11 +88,6 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         public SampleDataManager(SampleQueue sampleQueue)
         {
-            foreach (var column in CartConfiguration.Columns)
-            {
-                column.StatusChanged += column_StatusChanged;
-            }
-
             DMSAvailable = true;
             if (string.IsNullOrWhiteSpace(LCMSSettings.GetParameter(LCMSSettings.PARAM_DMSTOOL)))
             {
@@ -175,13 +144,7 @@ namespace LcmsNet.SampleQueue
         [Obsolete("For WPF Design time use only.", true)]
         public SampleDataManager()
         {
-            if (CartConfiguration.Columns != null)
-            {
-                foreach (var column in CartConfiguration.Columns)
-                {
-                    column.StatusChanged += column_StatusChanged;
-                }
-            }
+            CartConfiguration.Initialize();
 
             DMSAvailable = true;
             if (string.IsNullOrWhiteSpace(LCMSSettings.GetParameter(LCMSSettings.PARAM_DMSTOOL)))
@@ -315,11 +278,28 @@ namespace LcmsNet.SampleQueue
             });
         }
 
+        /// <summary>
+        /// Handles some UI updates based on setting values
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LCMSSettings_SettingChanged(object sender, SettingChangedEventArgs e)
         {
             if (e.SettingName.Equals(LCMSSettings.PARAM_DMSTOOL) && e.SettingValue != string.Empty)
             {
                 DMSAvailable = true;
+            }
+            else if (e.SettingName.StartsWith(LCMSSettings.PARAM_COLUMNDISABLED))
+            {
+                // Make sure we have at least one column that is enabled
+                var columnsValid = CartConfiguration.Columns.Any(x => x.Status != ColumnStatus.Disabled);
+                // If at least one column is not enabled, then we disable the sample queue
+                if (columnsValid != HasValidColumns)
+                {
+                    HasValidColumns = columnsValid;
+
+                    SampleQueue.UpdateAllSamples();
+                }
             }
         }
 
@@ -338,12 +318,6 @@ namespace LcmsNet.SampleQueue
                     }
                     ColumnHandling = handling;
                 });
-
-            foreach (var column in CartConfiguration.Columns)
-            {
-                column.NameChanged += column_NameChanged;
-                column.ColorChanged += column_ColorChanged;
-            }
 
             // Lists that hold information to be used by the sample queue combo boxes.
             autoSamplerMethods = new List<string>();
@@ -815,42 +789,6 @@ namespace LcmsNet.SampleQueue
             }
 
             SampleQueue.UpdateSamples(samples);
-        }
-
-        /// <summary>
-        /// Handles when a column color has changed.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="previousColor"></param>
-        /// <param name="newColor"></param>
-        private void column_ColorChanged(object sender, Color previousColor, Color newColor)
-        {
-            SampleQueue.UpdateAllSamples();
-
-            // The following is necessary due to how samples are stored and read from a database
-            // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
-            foreach (var s in SamplesSource.Items)
-            {
-                s.ColumnIndex = CartConfiguration.Columns[s.ColumnIndex].ID;
-            }
-        }
-
-        /// <summary>
-        /// Handles when a column name has been changed to update the sample queue accordingly.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="name"></param>
-        /// <param name="oldName"></param>
-        private void column_NameChanged(object sender, string name, string oldName)
-        {
-            SampleQueue.UpdateWaitingSamples();
-
-            // The following is necessary due to how samples are stored and read from a database
-            // May be removed if code is updated to re-set LCMethod and ColumnData after data is loaded from a database or imported.
-            foreach (var s in SamplesSource.Items)
-            {
-                s.ColumnIndex = CartConfiguration.Columns[s.ColumnIndex].ID;
-            }
         }
 
         /// <summary>

@@ -108,22 +108,6 @@ namespace LcmsNet
             about.ShowDialog();
         }
 
-        void Column_NameChanged(object sender, string name, string oldName)
-        {
-            if (sender is ColumnData column)
-            {
-                LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNNAME + column.ID, column.Name);
-            }
-        }
-
-        void Column_StatusChanged(object sender, ColumnStatus status, ColumnStatus oldStatus)
-        {
-            if (sender is ColumnData column && status != ColumnStatus.Running && oldStatus != ColumnStatus.Running)
-            {
-                LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLED + column.ID, (column.Status == ColumnStatus.Disabled).ToString());
-            }
-        }
-
         /// <summary>
         /// Calls all objects to shutdown and finish doing what they are doing before disposal.
         /// </summary>
@@ -303,14 +287,6 @@ namespace LcmsNet
         /// </summary>
         private void Initialize()
         {
-            foreach (var column in CartConfiguration.Columns)
-            {
-                column.NameChanged += Column_NameChanged;
-                column.StatusChanged += Column_StatusChanged;
-            }
-
-            SystemConfiguration.ColumnNameChanged += SystemConfiguration_ColumnNameChanged;
-
             // Notification System
             NotificationSystemVm.ActionRequired += m_notifications_ActionRequired;
 
@@ -409,11 +385,6 @@ namespace LcmsNet
                 failedMethods.ShowDialog();
                 userMethodErrors = null;
             }
-        }
-
-        private void SystemConfiguration_ColumnNameChanged(object sender, EventArgs e)
-        {
-            sampleQueue.UpdateAllSamples();
         }
 
         /// <summary>

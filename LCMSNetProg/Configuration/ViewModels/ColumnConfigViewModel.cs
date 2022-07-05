@@ -14,7 +14,7 @@ namespace LcmsNet.Configuration.ViewModels
         /// Calling this constructor is only for the IDE designer.
         /// </summary>
         [Obsolete("For WPF Design time use only.", true)]
-        public ColumnConfigViewModel() : this(new ColumnData { ID = 0, Color = Colors.Red })
+        public ColumnConfigViewModel() : this(new ColumnData(0, color: Colors.Red))
         { }
 
         public ColumnConfigViewModel(ColumnData column)
@@ -28,7 +28,6 @@ namespace LcmsNet.Configuration.ViewModels
                 this.ColumnEnabled = x != ColumnStatus.Disabled;
                 LogColumnStatusChange();
             });
-            this.WhenAnyValue(x => x.ColumnData.Name).Subscribe(x => this.ColumnNameChanged?.Invoke());
 
             // Local/instance variables should now be initialized according to the target object, so set the monitors going the other way.
             this.WhenAnyValue(x => x.ColumnEnabled).Subscribe(x =>
@@ -53,10 +52,6 @@ namespace LcmsNet.Configuration.ViewModels
         private ColumnData columnData;
 
         private readonly ObservableAsPropertyHelper<int> columnId;
-
-        public delegate void delegateColumnNamesChanged();
-
-        public event delegateColumnNamesChanged ColumnNameChanged;
 
         public bool ColumnEnabled
         {

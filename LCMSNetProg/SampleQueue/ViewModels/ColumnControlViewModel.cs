@@ -55,7 +55,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 .Select(x => $"Column: (# {x.Item1.ID + 1}) {x.Item1.Name}")
                 .ToProperty(this, x => x.ColumnHeader, "Column: NOT SET");
 
-            Column = new ColumnData() {ID = -2, Name = "DevColumn"};
+            Column = new ColumnData(-2, "DevColumn");
             CommandsVisible = commandsAreVisible;
         }
 
@@ -84,10 +84,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             PalVialColumnVisible = false;
             VolumeColumnVisible = false;
 
-            m_columnData = new ColumnData
-            {
-                ID = -1
-            };
+            Column = new ColumnData(-1);
 
             SetupCommands();
 
@@ -143,18 +140,9 @@ namespace LcmsNet.SampleQueue.ViewModels
         public override int NumFrozenColumns => 0;
 
         /// <summary>
-        /// Data object reference to synchronize column data with.
+        /// Column object for this control.
         /// </summary>
-        private ColumnData m_columnData;
-
-        /// <summary>
-        /// Gets or sets the column number id for this control.
-        /// </summary>
-        public ColumnData Column
-        {
-            get => m_columnData;
-            private set => this.RaiseAndSetIfChanged(ref m_columnData, value);
-        }
+        public ColumnData Column { get; }
 
         public ReactiveCommand<Unit, SampleData> AddBlankAppendCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> MoveToColumnCommand { get; protected set; }
@@ -177,7 +165,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         private void SetColumnStatus()
         {
             // Status updates
-            if (m_columnData.Status == ColumnStatus.Disabled)
+            if (Column.Status == ColumnStatus.Disabled)
             {
                 IsViewEnabled = false;
                 BackColor = Brushes.DarkGray;
@@ -224,7 +212,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // We don't add to our list first so the manager can verify the sample and
             // make sure we don't have duplicates.
             foreach (var sample in samples)
-                sample.ColumnIndex = m_columnData.ID;
+                sample.ColumnIndex = Column.ID;
 
             base.AddSamplesToManager(samples, insertIntoUnused);
         }
@@ -249,7 +237,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         protected override void RemoveUnusedSamples(enumColumnDataHandling resortColumns)
         {
-            SampleDataManager.RemoveUnusedSamples(m_columnData, resortColumns);
+            SampleDataManager.RemoveUnusedSamples(Column, resortColumns);
         }
 
         /// <summary>

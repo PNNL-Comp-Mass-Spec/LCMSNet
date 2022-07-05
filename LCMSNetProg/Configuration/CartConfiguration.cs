@@ -56,47 +56,20 @@ namespace LcmsNet.Configuration
             }
 
             // Create system data with columns.
-            columnOne = new ColumnData
-            {
-                ID = 0,
-                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME0),
-                Status = columnStatus1,
-                Color = Colors.Tomato
-            };
+            column1 = new ColumnData(0, LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME0), columnStatus1, Colors.Tomato);
+            column2 = new ColumnData(1, LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME1), columnStatus2, Colors.Lime);
+            column3 = new ColumnData(2, LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME2), columnStatus3, Colors.LightSteelBlue);
+            column4 = new ColumnData(3, LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME3), columnStatus4, Colors.LightSalmon);
 
-            columnTwo = new ColumnData
-            {
-                ID = 1,
-                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME1),
-                Status = columnStatus2,
-                Color = Colors.Lime
-            };
-
-            columnThree = new ColumnData
-            {
-                ID = 2,
-                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME2),
-                Status = columnStatus3,
-                Color = Colors.LightSteelBlue
-            };
-
-            columnFour = new ColumnData
-            {
-                ID = 3,
-                Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME3),
-                Status = columnStatus4,
-                Color = Colors.LightSalmon
-            };
-
-            columns.Add(columnOne);
-            columns.Add(columnTwo);
-            columns.Add(columnThree);
-            columns.Add(columnFour);
+            columns.Add(column1);
+            columns.Add(column2);
+            columns.Add(column3);
+            columns.Add(column4);
 
             columnList = columns;
 
-            numberOfColumnsEnabled = this.WhenAnyValue(x => x.columnOne.Status, x => x.columnTwo.Status,
-                x => x.columnThree.Status, x => x.columnFour.Status).Select(
+            numberOfColumnsEnabled = this.WhenAnyValue(x => x.column1.Status, x => x.column2.Status,
+                x => x.column3.Status, x => x.column4.Status).Select(
                 x =>
                 {
                     var count = 0;
@@ -121,10 +94,10 @@ namespace LcmsNet.Configuration
             }
         }
 
-        private readonly ColumnData columnOne;
-        private readonly ColumnData columnTwo;
-        private readonly ColumnData columnThree;
-        private readonly ColumnData columnFour;
+        private readonly ColumnData column1;
+        private readonly ColumnData column2;
+        private readonly ColumnData column3;
+        private readonly ColumnData column4;
         private readonly ObservableAsPropertyHelper<int> numberOfColumnsEnabled;
         private readonly IReadOnlyList<ColumnData> columnList;
 
