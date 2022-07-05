@@ -61,8 +61,7 @@ namespace LcmsNet.Configuration
                 ID = 0,
                 Name = LCMSSettings.GetParameter(LCMSSettings.PARAM_COLUMNNAME0),
                 Status = columnStatus1,
-                Color = Colors.Tomato,
-                First = true
+                Color = Colors.Tomato
             };
 
             columnTwo = new ColumnData
@@ -155,29 +154,7 @@ namespace LcmsNet.Configuration
                 return Columns.ToList();
 
             // For every column add it to the build list, if it is not disabled to run
-            var enabled = Columns.Where(x => x.Status != ColumnStatus.Disabled).ToList();
-            if (!enabled.Any(x => x.First))
-            {
-                return enabled;
-            }
-
-            var temp = new List<ColumnData>();
-            var firstIndex = 0;
-            for (var i = 0; i < enabled.Count; i++)
-            {
-                if (enabled[i].First)
-                {
-                    firstIndex = i;
-                    break;
-                }
-            }
-
-            for (var i = firstIndex; temp.Count < enabled.Count; i++)
-            {
-                temp.Add(enabled[i % enabled.Count]);
-            }
-
-            return temp;
+            return Columns.Where(x => x.Status != ColumnStatus.Disabled).OrderBy(x => x.ID).ToList();
         }
     }
 }

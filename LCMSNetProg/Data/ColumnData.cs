@@ -21,7 +21,6 @@ namespace LcmsNet.Data
             m_name = "";
             m_columnIndex = 0;
             m_status = ColumnStatus.Idle;
-            m_first = false;
         }
 
         /// <summary>
@@ -32,7 +31,6 @@ namespace LcmsNet.Data
         {
             var newColumnData = new ColumnData
             {
-                First = First,
                 Status = Status,
                 ID = ID,
                 Name = Name,
@@ -50,13 +48,6 @@ namespace LcmsNet.Data
 
         public delegate void DelegateStatusChanged(
             object sender, ColumnStatus previousStatus, ColumnStatus newStatus);
-
-        /// <summary>
-        /// Delegate definition called if the column first value is changed.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="first"></param>
-        public delegate void DelegateFirstChanged(object sender, bool first);
 
         public delegate void DelegateColorChanged(object sender, Color previousColor, Color newColor);
 
@@ -90,12 +81,6 @@ namespace LcmsNet.Data
         public event DelegateColorChanged ColorChanged;
 
         /// <summary>
-        /// Fired if the first value of this column is changed.
-        /// </summary>
-        [field: NonSerialized]
-        public event DelegateFirstChanged FirstChanged;
-
-        /// <summary>
         /// An event that indicates the name of the column has changed.
         /// </summary>
         [field: NonSerialized]
@@ -112,11 +97,6 @@ namespace LcmsNet.Data
         /// </summary>
         private string colorString;
 
-        /// <summary>
-        /// Flag indicating if this is the first column to run.
-        /// </summary>
-        private bool m_first;
-
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
@@ -131,19 +111,6 @@ namespace LcmsNet.Data
         private void OnSerialize(StreamingContext context)
         {
             colorString = TypeDescriptor.GetConverter(typeof(Color)).ConvertToString(m_columnColor);
-        }
-
-        /// <summary>
-        /// Gets or sets if the column is the first column designated to run.
-        /// </summary>
-        public bool First
-        {
-            get => m_first;
-            set
-            {
-                m_first = value;
-                FirstChanged?.Invoke(this, value);
-            }
         }
 
         /// <summary>

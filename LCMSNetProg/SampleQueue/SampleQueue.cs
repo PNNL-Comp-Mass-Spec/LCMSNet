@@ -134,33 +134,13 @@ namespace LcmsNet.SampleQueue
             AutoColumnData = true;
             m_sampleIndex = 1;
             m_sampleWaitingEvent = new AutoResetEvent(false);
-            m_columnOrders = new List<ColumnData>();
+            m_columnOrders = CartConfiguration.BuildColumnList(true);
 
             // Pointer to the next available sample that is queued for running.
             m_nextAvailableSample = 0;
 
             // Tracks what is the current sequence number that has been run previously.
             m_sequenceIndex = 1;
-
-            UpdateColumnList();
-            foreach (var column in CartConfiguration.Columns)
-            {
-                column.FirstChanged += column_FirstChanged;
-            }
-        }
-
-        void column_FirstChanged(object sender, bool first)
-        {
-            if (first)
-            {
-                UpdateColumnList();
-            }
-        }
-
-        private void UpdateColumnList()
-        {
-            m_columnOrders.Clear();
-            m_columnOrders = CartConfiguration.BuildColumnList(true);
         }
 
         public IObservableList<SampleData> SampleQueueSource => sampleQueue;
