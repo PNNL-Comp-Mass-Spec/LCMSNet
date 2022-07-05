@@ -72,8 +72,8 @@
     <Compile Include="SerialDevice.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Extended.Wpf.Toolkit">
-      <Version>3.7.0</Version>
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit">
+      <Version>5.0.103</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
       <Version>12.1.5</Version>
@@ -87,22 +87,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
-rem powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
-
-xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
+    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
 rem xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
 rem xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
 rem xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"
-rem xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
+rem xcopy /y /F /D "$(TargetDir)DotNetProjects.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

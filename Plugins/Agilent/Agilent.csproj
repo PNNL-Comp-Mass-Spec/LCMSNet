@@ -94,14 +94,14 @@
     <Content Include="Resources\Agilent.Licop.dll" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DynamicData">
-      <Version>7.7.1</Version>
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit">
+      <Version>5.0.103</Version>
     </PackageReference>
-    <PackageReference Include="Extended.Wpf.Toolkit">
-      <Version>3.8.2</Version>
+    <PackageReference Include="DynamicData">
+      <Version>7.9.4</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>18.0.10</Version>
+      <Version>18.2.5</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -119,26 +119,17 @@
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
   <PropertyGroup>
-    <PostBuildEvent>rem Remove the Extended WPF Toolkit AvalonDock dlls and folders - using powershell for flexibility
-powershell.exe -NonInteractive -Command "&amp; { cd \"$(TargetDir)\\" ; ForEach ($file in (Get-ChildItem *.AvalonDock.* -Recurse)) { $dirName = $file.DirectoryName ; Remove-Item $file.FullName ; If ((Measure-Object -InputObject (Get-ChildItem $dirName\*)).Count -eq 0) { Remove-Item $dirName -Recurse }}}"
-
-xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
+    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
 rem xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
 rem xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
-rem xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"
-rem xcopy /y /F /D "$(TargetDir)OxyPlot.*" "$(SolutionDir)pluginDLLs\"
 rem xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)DotNetProjects.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"
+rem xcopy /y /F /D "$(TargetDir)OxyPlot.*" "$(SolutionDir)pluginDLLs\"
 
-xcopy /y /f /d "$(ProjectDir)Resources\Agilent.*.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
+xcopy /y /f /d "$(ProjectDir)Resources\Agilent.*.dll" "$(SolutionDir)pluginDLLs\"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -111,11 +111,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Extended.Wpf.Toolkit">
-      <Version>3.8.2</Version>
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit">
+      <Version>5.0.103</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>18.0.10</Version>
+      <Version>18.2.5</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
