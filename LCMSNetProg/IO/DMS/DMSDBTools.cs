@@ -544,10 +544,10 @@ namespace LcmsNet.IO.DMS
                             SelectedToRun = false
                         };
 
-                        var wellNumber = reader["Well Number"].CastDBValTo<string>();
+                        var wellNumber = reader["Well"].CastDBValTo<string>();
                         tmpDMSData.PalWell = ConvertWellStringToInt(wellNumber);
 
-                        tmpDMSData.PalWellPlate = reader["Wellplate Number"].CastDBValTo<string>();
+                        tmpDMSData.PalWellPlate = reader["Wellplate"].CastDBValTo<string>();
 
                         if (string.IsNullOrWhiteSpace(tmpDMSData.PalWellPlate) || tmpDMSData.PalWellPlate == "na")
                             tmpDMSData.PalWellPlate = "";
