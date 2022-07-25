@@ -109,7 +109,7 @@ namespace LcmsNet.IO.DMS
         }
 
         /// <summary>
-        /// Tests for existence of spcified key in dictionary
+        /// Tests for existence of specified key in dictionary
         /// </summary>
         /// <param name="dictKey">Key name</param>
         /// <returns>Key value if found, otherwise empty string</returns>
@@ -125,7 +125,7 @@ namespace LcmsNet.IO.DMS
         /// <summary>
         /// Build the query string for retrieving data from V_Requested_Run_Active_Export
         /// </summary>
-        /// <returns></returns>
+        /// <returns>SQL string, including defined filters</returns>
         public string BuildSqlString()
         {
             const string cmdBase = "SELECT Request, Name, Cart, Comment, Usage_Type, EUS_Users, Block, Run_Order, Batch, Well, Wellplate FROM V_Requested_Run_Active_Export";
