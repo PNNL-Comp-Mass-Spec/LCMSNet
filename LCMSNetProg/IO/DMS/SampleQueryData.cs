@@ -9,6 +9,8 @@ namespace LcmsNet.IO.DMS
     /// </summary>
     public class SampleQueryData
     {
+        // Ignore Spelling: Wellplate
+
         /// <summary>
         /// Dictionary of filters to apply when finding requested runs
         /// </summary>
@@ -75,6 +77,7 @@ namespace LcmsNet.IO.DMS
             set => m_QueryParams["Wellplate"] = value;
         }
 
+        // ReSharper disable once UnusedMember.Global
         [Obsolete("This property is unused")]
         public bool UnassignedOnly { get; set; }
 

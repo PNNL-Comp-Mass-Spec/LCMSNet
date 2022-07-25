@@ -27,6 +27,12 @@ namespace LcmsNet
     /// </summary>
     public partial class App : Application
     {
+        // ReSharper disable CommentTypo
+
+        // Ignore Spelling: ppdata, Bryson, mutex, paldriv, serprofile
+
+        // ReSharper restore CommentTypo
+
         /// <summary>
         /// Event handler that is triggered on application start up.
         /// </summary>
@@ -119,8 +125,10 @@ namespace LcmsNet
             {
                 window = splashScreen;
             }
-            window.ShowMessage("Shutting down due to unhandled error: " + message + " \nFor additional information, see the log files at " +
-                               Path.Combine(PersistDataPaths.LocalDataPath, "Log") + "\\");
+
+            window.ShowMessage(
+                "Shutting down due to unhandled error: " + message + " \n" +
+                "For additional information, see the log files at " + Path.Combine(PersistDataPaths.LocalDataPath, "Log") + "\\");
 
             ShutDownLogging();
 
@@ -162,8 +170,8 @@ namespace LcmsNet
             FileLogger.Instance.Dispose();
         }
 
-        private bool unhandledError = false;
-        private bool cleanedUp = false;
+        private bool unhandledError;
+        private bool cleanedUp;
         private readonly object unhandledErrorLock = new object();
         private readonly object cleanedUpLock = new object();
 
@@ -195,9 +203,14 @@ namespace LcmsNet
         /// <returns>A list of errors that occurred while loading settings.</returns>
         private List<Tuple<string, Exception>> LoadSettings()
         {
+            // ReSharper disable CommentTypo
+
             // Note that settings are persisted in file user.config in a randomly named folder below %userprofile%\appdata\local
+
             // For example:
             // C:\Users\LCMSOperator\AppData\Local\Battelle_PNNL\LcmsNet.exe_Url_v4mgwguq03wniutgfta3xp2qm0ieudrl\4.2.0.0\user.config
+
+            // ReSharper restore CommentTypo
 
             // Possibly upgrade the settings from a previous version
             if (Settings.Default.UpgradeSettings)
@@ -209,6 +222,8 @@ namespace LcmsNet
                 Settings.Default.UpgradeSettings = false;
                 Settings.Default.Save();
             }
+
+            // ReSharper disable once CommentTypo
 
             // Settings: There are the default LcmsNet.exe.config application config and [user\appdata\local\...\user.config] user config files,
             // but some settings apply to the whole system (application config, LcmsNet.exe.config), yet shouldn't be replaced when we install
@@ -341,10 +356,13 @@ namespace LcmsNet
 
             // Use a mutex to ensure a single copy of program is running. If we can create a new mutex then
             //      no instance of the application is running. Otherwise, we exit.
+
+            // ReSharper disable once CommentTypo
             // Code adapted from K. Scott Allen's OdeToCode.com at
             //      http://odetocode.com/Blogs/scott/archive/2004/08/20/401.aspx
             singleInstanceMutex = new Mutex(false, mutexName);
             var abandonedMutex = false;
+
             try
             {
                 if (!singleInstanceMutex.WaitOne(0, false))
@@ -551,8 +569,9 @@ namespace LcmsNet
                 areDevicesLoaded = false;
                 ApplicationLogger.LogError(0, "Could not load external device plug-ins.");
             }
+
             //TODO: Whoops! not all of the device plug-in loading should kill this effort.  If one set loaded,
-            // that may be ok.
+            // that may be OK.
             if (!areDevicesLoaded)
             {
                 ApplicationLogger.LogError(-1, "Failed to load some of the device plug-ins.");

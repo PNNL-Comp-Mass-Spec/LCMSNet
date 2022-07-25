@@ -20,7 +20,7 @@ namespace LcmsNet.IO.DMS
     /// </summary>
     public class DMSDBTools : IDisposable
     {
-        // Ignore Spelling: typeof, DMSPwd, SqlConnection, ini, yyyy-MM-dd, Wellplate, usernames, utf, xmlns, xs, T_Secondary_Sep, unallowable, subaccount
+        // Ignore Spelling: DMSPwd, ini, na, SqlConnection, username, utf, Wellplate, xmlns, xs
 
         public static string ApplicationName { get; set; } = "-LcmsNetDmsTools- -version-";
 
