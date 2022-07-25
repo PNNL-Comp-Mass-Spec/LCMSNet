@@ -93,19 +93,19 @@ namespace LcmsNet.IO.DMS
         /// <summary>
         /// If a specified filter is defined, append the appropriate SQL to the query builder
         /// </summary>
-        /// <param name="queryBldr"></param>
+        /// <param name="queryBuilder"></param>
         /// <param name="sqlFilter"></param>
         /// <param name="filterName"></param>
-        private void AddQueryFilter(StringBuilder queryBldr, string sqlFilter, string filterName)
+        private void AddQueryFilter(StringBuilder queryBuilder, string sqlFilter, string filterName)
         {
             var filterValue = GetValueIfFound(filterName);
             if (string.IsNullOrWhiteSpace(filterValue))
                 return;
 
-            if (queryBldr.Length > 0)
-                queryBldr.Append(" AND ");
+            if (queryBuilder.Length > 0)
+                queryBuilder.Append(" AND ");
 
-            queryBldr.Append(string.Format(sqlFilter, filterValue));
+            queryBuilder.Append(string.Format(sqlFilter, filterValue));
         }
 
         /// <summary>
@@ -129,33 +129,32 @@ namespace LcmsNet.IO.DMS
         public string BuildSqlString()
         {
             const string cmdBase = "SELECT * FROM V_Requested_Run_Active_Export";
-            var queryBldr = new StringBuilder();
+            var queryBuilder = new StringBuilder();
 
             // Note that minimum request ID is auto-defined as 0 in the constructor
             // Add it now only if the calling class changed it from 0
             if (MinRequestNum != "0")
-                AddQueryFilter(queryBldr, "Request >= {0}", "MinRequestNum");
+                AddQueryFilter(queryBuilder, "Request >= {0}", "MinRequestNum");
 
             // Add additional filters if they are defined
-            AddQueryFilter(queryBldr, "Request <= {0}", "MaxRequestNum");
+            AddQueryFilter(queryBuilder, "Request <= {0}", "MaxRequestNum");
 
-            AddQueryFilter(queryBldr, "Name LIKE '%{0}%'", "RequestName");
-            AddQueryFilter(queryBldr, "Cart LIKE '%{0}%'", "Cart");
+            AddQueryFilter(queryBuilder, "Name LIKE '%{0}%'", "RequestName");
+            AddQueryFilter(queryBuilder, "Cart LIKE '%{0}%'", "Cart");
 
-            AddQueryFilter(queryBldr, "Batch = {0}", "BatchID");
-            AddQueryFilter(queryBldr, "Block = {0}", "Block");
+            AddQueryFilter(queryBuilder, "Batch = {0}", "BatchID");
+            AddQueryFilter(queryBuilder, "Block = {0}", "Block");
 
-            AddQueryFilter(queryBldr, "Wellplate LIKE '%{0}%'", "Wellplate");
+            AddQueryFilter(queryBuilder, "Wellplate LIKE '%{0}%'", "Wellplate");
 
-            if (queryBldr.Length == 0)
+            if (queryBuilder.Length == 0)
             {
                 // No filters, just order the results
                 return cmdBase + " ORDER BY Name";
             }
 
             // Filters are defined
-            return cmdBase + " WHERE " + queryBldr + " ORDER BY Name";
-
+            return cmdBase + " WHERE " + queryBuilder + " ORDER BY Name";
         }
 
         //public bool OneParamHasValue()
