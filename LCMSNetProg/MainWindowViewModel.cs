@@ -84,6 +84,7 @@ namespace LcmsNet
             ExportQueueToXmlCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXML(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToCsvCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToCsv(), this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToXcaliburCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXcalibur(), this.WhenAnyValue(x => x.QueueTabSelected));
+            ClipboardPasteCommand = ReactiveCommand.CreateCombined(new [] { SampleManagerVm.SampleControlViewModel.ClipboardPasteCommand }, this.WhenAnyValue(x => x.QueueTabSelected));
 
             this.WhenAnyValue(x => x.SampleManagerVm.TitleBarTextAddition).Subscribe(x => this.RaisePropertyChanged(nameof(WindowTitle)));
         }
@@ -91,6 +92,7 @@ namespace LcmsNet
         public ReactiveCommand<Unit, Unit> ShowAboutCommand { get; }
         public ReactiveCommand<ContentControl[], Unit> ReportErrorCommand { get; }
         public ReactiveCommand<Unit, Unit> OpenQueueCommand { get; }
+        public CombinedReactiveCommand<Unit, Unit> ClipboardPasteCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveQueueCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveQueueAsCommand { get; }
         public ReactiveCommand<Unit, Unit> ImportQueueFromClipboardCommand { get; }

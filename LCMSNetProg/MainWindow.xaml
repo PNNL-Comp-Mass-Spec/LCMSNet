@@ -25,6 +25,9 @@
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="TaskBarInfo" />
     </Window.TaskbarItemInfo>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="V" Command="{Binding ClipboardPasteCommand}" />
+    </Window.InputBindings>
     <Grid>
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key ="BoolToVis" />

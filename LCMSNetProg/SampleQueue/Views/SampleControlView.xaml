@@ -12,7 +12,7 @@
     <Grid DataContext="{Binding SampleControlViewModel}" Background="{Binding BackColor, Mode=OneWay}" IsEnabled="{Binding IsViewEnabled, Mode=OneWay}">
         <Grid.ContextMenu>
             <ContextMenu>
-                <MenuItem Header="Paste" Command="{Binding ClipboardPasteCommand}" />
+                <MenuItem Header="Paste" Command="{Binding ClipboardPasteCommand}" InputGestureText="Ctrl+V" />
                 <Separator />
                 <MenuItem Header="Undo" Command="{Binding UndoCommand}">
                     <MenuItem.Icon>

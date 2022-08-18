@@ -140,6 +140,7 @@
         </DataGrid.CellStyle>
         <DataGrid.InputBindings>
             <KeyBinding Key="Delete" Command="{Binding Data.RemoveSelectedCommand, Source={StaticResource BaseDC}}" />
+            <KeyBinding Modifiers="Control" Key="V" Command="{Binding Data.ClipboardPasteCommand, Source={StaticResource BaseDC}}" />
         </DataGrid.InputBindings>
         <DataGrid.Columns>
             <DataGridTemplateColumn Header="X" MinWidth="25" MaxWidth="30" Visibility="{Binding Data.CheckboxColumnVisible, Converter={StaticResource BoolToVis}, Source={StaticResource BaseDC}}">
