@@ -821,7 +821,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterClean">
     <ItemGroup>
-      <FilesToDelete Include="$(TargetDir)Plugins\*.*;$(TargetDir)Plugins\x86\*.*;$(TargetDir)Plugins\x64\*.*" />
+      <FilesToDelete Include="$(TargetDir)Plugins\*.*;$(TargetDir)Plugins\x86\*.*;$(TargetDir)Plugins\x64\*.*;$(SolutionDir)\lib\*.*;$(SolutionDir)\pluginDLLs\*.*;$(SolutionDir)\pluginDLLs\x86\*.*;$(SolutionDir)\pluginDLLs\x64\*.*" />
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
     <RemoveDir Directories="$(TargetDir)\Plugins\x86;$(TargetDir)\Plugins\x64" />
