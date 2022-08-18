@@ -21,10 +21,10 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             staticDevicesLocked = false;
             dragAndDrop = false;
 
-            this.WhenAnyValue(x => x.ZoomPercent).Throttle(TimeSpan.FromMilliseconds(250))
+            this.WhenAnyValue(x => x.ZoomPercent).Throttle(TimeSpan.FromMilliseconds(50))
                 .Subscribe(x => fluidicsModerator.ScaleWorldView(x / SCALE_CONVERSION));
             this.WhenAnyValue(x => x.ZoomPercent, x => x.ConnectionTransparency, x => x.PortTransparency, x => x.DeviceTransparency)
-                .Throttle(TimeSpan.FromMilliseconds(250)).Subscribe(x => Refresh());
+                .Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(x => Refresh());
         }
 
         //consts for determining if multiple selection is allowed.

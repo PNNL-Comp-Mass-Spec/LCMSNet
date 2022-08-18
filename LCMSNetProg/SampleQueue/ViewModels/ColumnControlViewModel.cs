@@ -64,7 +64,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// </summary>
         public ColumnControlViewModel(DMSDownloadViewModel dmsView, SampleDataManager sampleDataManager, ColumnData columnData, bool commandsAreVisible = true) : base(dmsView, sampleDataManager)
         {
-            var resortTrigger = SampleDataManager.SamplesSource.Connect().ObserveOn(RxApp.TaskpoolScheduler).WhenValueChanged(x => x.SequenceID).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
+            var resortTrigger = SampleDataManager.SamplesSource.Connect().ObserveOn(RxApp.TaskpoolScheduler).WhenValueChanged(x => x.SequenceID).Select(_ => Unit.Default);
             var filter = this.WhenValueChanged(x => x.Column).Select(x => new Func<SampleData, bool>(y => x == null || x.ID == y.ColumnIndex));
             SampleDataManager.SamplesSource.Connect().ObserveOn(RxApp.TaskpoolScheduler).AutoRefreshOnObservable(x => x.WhenAnyValue(y => y.ColumnIndex), TimeSpan.FromMilliseconds(200)).Filter(filter).Sort(SortExpressionComparer<SampleData>.Ascending(x => x.SequenceID), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Transform(x => new SampleViewModel(x)).Bind(out var filteredSamples).Subscribe();
             FilteredSamples = filteredSamples;

@@ -58,8 +58,8 @@ namespace LcmsNet.Method.ViewModels
 
             savedMethodsComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var savedMethodsComboBoxOptionsBound).Subscribe();
             columnComboBoxOptions.Connect().ObserveOn(RxApp.MainThreadScheduler).Bind(out var columnComboBoxOptionsBound).Subscribe();
-            var resortTrigger = lcMethodEvents.Connect().WhenValueChanged(x => x.EventNumber).Throttle(TimeSpan.FromMilliseconds(200)).Select(_ => Unit.Default);
-            lcMethodEvents.Connect().Throttle(TimeSpan.FromMilliseconds(200)).Sort(SortExpressionComparer<LCMethodEventViewModel>.Ascending(x => x.EventNumber), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcMethodEventsBound).Subscribe();
+            var resortTrigger = lcMethodEvents.Connect().WhenValueChanged(x => x.EventNumber).Select(_ => Unit.Default);
+            lcMethodEvents.Connect().Sort(SortExpressionComparer<LCMethodEventViewModel>.Ascending(x => x.EventNumber), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var lcMethodEventsBound).Subscribe();
             SavedMethodsComboBoxOptions = savedMethodsComboBoxOptionsBound;
             ColumnComboBoxOptions = columnComboBoxOptionsBound;
             LCMethodEvents = lcMethodEventsBound;

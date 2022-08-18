@@ -117,7 +117,7 @@ namespace LcmsNet.SampleQueue
                     HasData = false;
                 }
 
-                var resortTrigger = SamplesSource.Connect().ObserveOn(RxApp.TaskpoolScheduler).WhenValueChanged(x => x.SequenceID).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
+                var resortTrigger = SamplesSource.Connect().ObserveOn(RxApp.TaskpoolScheduler).WhenValueChanged(x => x.SequenceID).Select(_ => Unit.Default);
                 SamplesSource.Connect().ObserveOn(RxApp.TaskpoolScheduler).Sort(SortExpressionComparer<SampleData>.Ascending(x => x.SequenceID), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Transform(x => new SampleViewModel(x)).Bind(out var samplesListBound).Subscribe();
                 Samples = samplesListBound;
 
@@ -339,13 +339,13 @@ namespace LcmsNet.SampleQueue
             ShowLCSeparationMethods();
 
             SamplesSource.Connect().WhenPropertyChanged(x => x.IsChecked).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => HandleSampleValidationAndQueuing(x.Sender));
-            SamplesSource.Connect().WhenPropertyChanged(x => x.Name).Throttle(TimeSpan.FromSeconds(0.25)).Subscribe(x => SampleQueue.CheckForDuplicateNames());
+            SamplesSource.Connect().WhenPropertyChanged(x => x.Name).Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(x => SampleQueue.CheckForDuplicateNames());
             // TODO: Check for side effects
             // TODO: The idea of this is that it would detect the minor changes to the queue, where a value was changed using the databinding. There needs to be a lockout for actions not taken via the databinding, since those already handle this process...
             SamplesSource.Connect().WhenAnyPropertyChanged(nameof(SampleData.Name), nameof(SampleData.PAL), nameof(SampleData.InstrumentMethod),
                     nameof(SampleData.ColumnIndex), nameof(SampleData.InstrumentMethod), nameof(SampleData.LCMethodName), nameof(SampleData.SequenceID),
                     nameof(SampleData.Volume), nameof(SampleData.PAL.PALTray), nameof(SampleData.PAL.Well))
-                .Throttle(TimeSpan.FromSeconds(.25))
+                .Throttle(TimeSpan.FromMilliseconds(50))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(x =>
                 {

@@ -74,7 +74,7 @@ namespace LcmsNet.Method.ViewModels
             }
 
             DevicesList.Connect().WhereReasonsAre(ListChangeReason.Add, ListChangeReason.AddRange).Subscribe(_ => this.DeviceAdded());
-            var resortTrigger = DevicesList.Connect().WhenValueChanged(x => x.Name).Throttle(TimeSpan.FromMilliseconds(250)).Select(_ => Unit.Default);
+            var resortTrigger = DevicesList.Connect().WhenValueChanged(x => x.Name).Select(_ => Unit.Default);
             DevicesList.Connect().Sort(SortExpressionComparer<IDevice>.Ascending(x => x.Name), resort: resortTrigger).ObserveOn(RxApp.MainThreadScheduler).Bind(out var devicesBound).Subscribe();
             DevicesComboBoxOptions = devicesBound;
 

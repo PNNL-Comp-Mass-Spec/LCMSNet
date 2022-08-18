@@ -227,7 +227,7 @@ namespace LcmsNetCommonControls.Views
         {
             if (this.DataContext is PopoutViewModel pvm)
             {
-                pvm.WhenAnyValue(x => x.Tacked).Where(x => !x).Throttle(TimeSpan.FromMilliseconds(250)).Subscribe(x => PopoutToWindow());
+                pvm.WhenAnyValue(x => x.Tacked).Where(x => !x).Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(x => PopoutToWindow());
             }
         }
 
