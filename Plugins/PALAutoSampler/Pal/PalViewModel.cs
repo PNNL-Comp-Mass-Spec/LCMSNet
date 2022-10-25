@@ -74,6 +74,13 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
                 RxApp.MainThreadScheduler.Schedule(() =>
                 {
+                    if (Pal.TrayNames.Count == 0)
+                    {
+                        Pal.ListTrays();
+                        Pal.ListMethods();
+                        Pal.SetMaxVialsForTrays();
+                    }
+
                     ProcessTrays(Pal.TrayNames);
                     ProcessMethods(Pal.MethodNames);
                     ProcessTraysAndMaxVials(Pal.TrayNamesAndMaxVials);

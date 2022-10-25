@@ -63,6 +63,28 @@ namespace LcmsNet.Method.ViewModels
         /// <param name="data"></param>
         public void FillData(object sender, IReadOnlyList<object> data)
         {
+            if (comboBoxOptions.Count == 0 && data.Count == 0)
+                return; // Nothing to do.
+
+            // Prevent resetting the comboBoxOptions when not needed, because it causes UI issues.
+            if (comboBoxOptions.Count == data.Count)
+            {
+                var mismatchFound = false;
+                foreach (var entry in comboBoxOptions.Items)
+                {
+                    if (!data.Contains(entry))
+                    {
+                        mismatchFound = true;
+                        break;
+                    }
+                }
+
+                if (!mismatchFound)
+                {
+                    return;
+                }
+            }
+
             comboBoxOptions.Edit(list =>
             {
                 list.Clear();

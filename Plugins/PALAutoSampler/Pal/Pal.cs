@@ -1123,7 +1123,24 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             {
                 case "METHODNAMES":
                     Methods += remoteMethod;
-                    ListMethods();
+                    if (MethodNames.Count == 0)
+                    {
+                        // Only call ListMethods when there are no methods loaded.
+                        ListMethods();
+                    }
+                    else
+                    {
+                        // Just supply the existing list. TODO: Should probably have a timestamp to trigger occasional reloading of the methods...
+                        // For method editor.  Needs to be refactored to use event args like above.
+                        var objects = new List<object>();
+                        foreach (var m in MethodNames)
+                        {
+                            objects.Add(m);
+                        }
+
+                        remoteMethod(this, objects);
+                    }
+
                     break;
             }
         }
