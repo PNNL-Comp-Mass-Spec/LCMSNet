@@ -94,5 +94,6 @@ rem xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)pluginDLLs\"
 rem xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)pluginDLLs\"
 rem xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)pluginDLLs\"
 rem xcopy /y /F /D "$(TargetDir)DotNetProjects.Wpf.*.dll" "$(SolutionDir)pluginDLLs\"
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
