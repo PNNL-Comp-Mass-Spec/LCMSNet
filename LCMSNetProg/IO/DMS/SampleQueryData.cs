@@ -128,33 +128,33 @@ namespace LcmsNet.IO.DMS
         /// <returns>SQL string, including defined filters</returns>
         public string BuildSqlString()
         {
-            const string cmdBase = "SELECT Request, Name, Cart, Comment, Usage_Type, EUS_Users, Block, Run_Order, Batch, Well, Wellplate FROM V_Requested_Run_Active_Export";
+            const string cmdBase = "SELECT request, name, cart, comment, usage_type, eus_users, block, run_order, batch, well, wellplate FROM v_requested_run_active_export";
             var queryBuilder = new StringBuilder();
 
             // Note that minimum request ID is auto-defined as 0 in the constructor
             // Add it now only if the calling class changed it from 0
             if (MinRequestNum != "0")
-                AddQueryFilter(queryBuilder, "Request >= {0}", "MinRequestNum");
+                AddQueryFilter(queryBuilder, "request >= {0}", "MinRequestNum");
 
             // Add additional filters if they are defined
-            AddQueryFilter(queryBuilder, "Request <= {0}", "MaxRequestNum");
+            AddQueryFilter(queryBuilder, "request <= {0}", "MaxRequestNum");
 
-            AddQueryFilter(queryBuilder, "Name LIKE '%{0}%'", "RequestName");
-            AddQueryFilter(queryBuilder, "Cart LIKE '%{0}%'", "Cart");
+            AddQueryFilter(queryBuilder, "name LIKE '%{0}%'", "RequestName");
+            AddQueryFilter(queryBuilder, "cart LIKE '%{0}%'", "Cart");
 
-            AddQueryFilter(queryBuilder, "Batch = {0}", "BatchID");
-            AddQueryFilter(queryBuilder, "Block = {0}", "Block");
+            AddQueryFilter(queryBuilder, "batch = {0}", "BatchID");
+            AddQueryFilter(queryBuilder, "block = {0}", "Block");
 
-            AddQueryFilter(queryBuilder, "Wellplate LIKE '%{0}%'", "Wellplate");
+            AddQueryFilter(queryBuilder, "wellplate LIKE '%{0}%'", "Wellplate");
 
             if (queryBuilder.Length == 0)
             {
                 // No filters, just order the results
-                return cmdBase + " ORDER BY Name";
+                return cmdBase + " ORDER BY name";
             }
 
             // Filters are defined
-            return cmdBase + " WHERE " + queryBuilder + " ORDER BY Name";
+            return cmdBase + " WHERE " + queryBuilder + " ORDER BY name";
         }
 
         //public bool OneParamHasValue()

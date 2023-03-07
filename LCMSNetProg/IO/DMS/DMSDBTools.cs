@@ -490,8 +490,8 @@ namespace LcmsNet.IO.DMS
             var connStr = GetConnectionString();
 
             // Get a List containing all the carts
-            const string sqlCmd = "SELECT DISTINCT [Cart_Name] FROM V_LC_Cart_Active_Export " +
-                                  "ORDER BY [Cart_Name]";
+            const string sqlCmd = "SELECT DISTINCT cart_name FROM v_lc_cart_active_export " +
+                                  "ORDER BY cart_name";
             try
             {
                 return GetSingleColumnTableFromDMS(sqlCmd, connStr).ToList();
@@ -532,22 +532,22 @@ namespace LcmsNet.IO.DMS
                     {
                         var tmpDMSData = new DmsDownloadData()
                         {
-                            RequestID = reader["Request"].CastDBValTo<int>(),
-                            RequestName = reader["Name"].CastDBValTo<string>(),
-                            CartName = reader["Cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                            Comment = reader["Comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                            EMSLUsageType = reader["Usage_Type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                            EMSLProposalUser = reader["EUS_Users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
-                            Block = reader["Block"].CastDBValTo<int>(),
-                            RunOrder = reader["Run_Order"].CastDBValTo<int>(),
-                            Batch = reader["Batch"].CastDBValTo<int>(),
+                            RequestID = reader["request"].CastDBValTo<int>(),
+                            RequestName = reader["name"].CastDBValTo<string>(),
+                            CartName = reader["cart"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                            Comment = reader["comment"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                            EMSLUsageType = reader["usage_type"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                            EMSLProposalUser = reader["eus_users"].CastDBValTo<string>().LimitStringDuplication(deDupDictionary),
+                            Block = reader["block"].CastDBValTo<int>(),
+                            RunOrder = reader["run_order"].CastDBValTo<int>(),
+                            Batch = reader["batch"].CastDBValTo<int>(),
                             SelectedToRun = false
                         };
 
-                        var wellNumber = reader["Well"].CastDBValTo<string>();
+                        var wellNumber = reader["well"].CastDBValTo<string>();
                         tmpDMSData.PalWell = ConvertWellStringToInt(wellNumber);
 
-                        tmpDMSData.PalWellPlate = reader["Wellplate"].CastDBValTo<string>();
+                        tmpDMSData.PalWellPlate = reader["wellplate"].CastDBValTo<string>();
 
                         if (string.IsNullOrWhiteSpace(tmpDMSData.PalWellPlate) || tmpDMSData.PalWellPlate == "na")
                             tmpDMSData.PalWellPlate = string.Empty;
@@ -602,15 +602,16 @@ namespace LcmsNet.IO.DMS
                 // Test getting 1 row from every table we query?...
                 using (var cmd = conn.CreateCommand())
                 {
-                    var tableNames = new List<string>()
+                    // Keys in this dictionary are view names, values are the column to use when ranking rows using Row_number()
+                    var viewInfo = new Dictionary<string, string>
                     {
-                        "V_LC_Cart_Active_Export",
-                        "T_Requested_Run"
+                        { "v_lc_cart_active_export", "id" },
+                        { "v_requested_run_active_export", "request" }
                     };
 
-                    foreach (var tableName in tableNames)
+                    foreach (var item in viewInfo)
                     {
-                        cmd.CommandText = $"SELECT TOP(1) * FROM {tableName}";
+                        cmd.CommandText = $"SELECT RowNum FROM (SELECT Row_number() Over (ORDER BY {item.Value}) AS RowNum FROM {item.Key}) RankQ WHERE RowNum = 1;";
                         cmd.ExecuteScalar(); // TODO: Test the returned value? (for what?)
                     }
                 }
