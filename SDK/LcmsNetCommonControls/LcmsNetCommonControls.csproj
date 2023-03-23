@@ -133,13 +133,13 @@
       <Version>5.0.103</Version>
     </PackageReference>
     <PackageReference Include="DynamicData">
-      <Version>7.9.4</Version>
+      <Version>7.13.1</Version>
     </PackageReference>
     <PackageReference Include="OxyPlot.Wpf">
-      <Version>2.1.0</Version>
+      <Version>2.1.2</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>18.2.5</Version>
+      <Version>18.4.26</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
