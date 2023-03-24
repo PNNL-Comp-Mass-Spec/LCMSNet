@@ -415,7 +415,7 @@ namespace LcmsNet
             }
 
             var assembly = Assembly.GetExecutingAssembly().GetName();
-            DMSDBTools.ApplicationName = $"LCMSNet {assembly.Version}";
+            DMSDBConnection.ApplicationName = $"LCMSNet {assembly.Version}";
 
             ApplicationLogger.StartUpLogging();
 
@@ -596,7 +596,7 @@ namespace LcmsNet
             try
             {
                 var dmsTools = DMSConnectionManager.DBTools;
-                LCMSSettings.SetParameter(LCMSSettings.PARAM_DMSTOOL, dmsTools.DMSVersion);
+                LCMSSettings.SetParameter(LCMSSettings.PARAM_DMSTOOL, dmsTools.DMSDatabase);
             }
             catch (Exception ex)
             {

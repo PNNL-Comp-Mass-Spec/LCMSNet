@@ -169,7 +169,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             string dbInUse;
             try
             {
-                if (DMSConnectionManager.DBTools.DMSVersion.Contains("_T3"))
+                if (DMSConnectionManager.DBTools.DMSDatabase.Contains("_T3"))
                 {
                     dbInUse = " (Using Development Database)";
                 }

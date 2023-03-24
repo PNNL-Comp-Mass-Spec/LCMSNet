@@ -126,9 +126,9 @@ namespace LcmsNet.IO.DMS
         /// Build the query string for retrieving data from V_Requested_Run_Active_Export
         /// </summary>
         /// <returns>SQL string, including defined filters</returns>
-        public string BuildSqlString()
+        public string BuildSqlString(string schemaPrefix = "")
         {
-            const string cmdBase = "SELECT request, name, cart, comment, usage_type, eus_users, block, run_order, batch, well, wellplate FROM v_requested_run_active_export";
+            var cmdBase = $"SELECT request, name, cart, comment, usage_type, eus_users, block, run_order, batch, well, wellplate FROM {schemaPrefix}v_requested_run_active_export";
             var queryBuilder = new StringBuilder();
 
             // Note that minimum request ID is auto-defined as 0 in the constructor

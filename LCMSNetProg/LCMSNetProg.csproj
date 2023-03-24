@@ -135,7 +135,10 @@
     <Compile Include="IO\DMS\BlockValidator.cs" />
     <Compile Include="IO\DMS\DatabaseConnectionStringException.cs" />
     <Compile Include="IO\DMS\DatabaseDataException.cs" />
+    <Compile Include="IO\DMS\DMSConfig.cs" />
     <Compile Include="IO\DMS\DMSConnectionManager.cs" />
+    <Compile Include="IO\DMS\DMSDBConnection.cs" />
+    <Compile Include="IO\DMS\DMSDBReader.cs" />
     <Compile Include="IO\DMS\DMSDBTools.cs" />
     <Compile Include="IO\DMS\DmsDownloadData.cs" />
     <Compile Include="IO\DMS\ExtensionMethods.cs" />
@@ -387,8 +390,8 @@
     <None Include="LcmsNet_PersistentSettings.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="PrismDMS.config">
-      <SubType>Designer</SubType>
+    <None Include="PrismDMS.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -813,6 +816,12 @@
     </PackageReference>
     <PackageReference Include="OxyPlot.Wpf">
       <Version>2.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="PRISM-DatabaseUtils">
+      <Version>1.3.23</Version>
+    </PackageReference>
+    <PackageReference Include="PRISM-Library">
+      <Version>2.8.7</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
       <Version>18.4.26</Version>

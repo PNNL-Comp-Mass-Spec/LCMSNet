@@ -792,7 +792,6 @@ namespace LcmsNet
             SampleProgressVm.Dispose();
             NotificationSystemVm.Dispose();
             FluidicsDesignVm.Dispose();
-            DMSConnectionManager.DBTools.CloseConnection();
             TaskBarManipulation.Instance.Dispose();
         }
     }
