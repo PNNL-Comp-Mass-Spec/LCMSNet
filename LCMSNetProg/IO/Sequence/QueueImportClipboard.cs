@@ -27,6 +27,13 @@ namespace LcmsNet.IO.Sequence
             if (Clipboard.ContainsData(DataFormats.Text))
             {
                 var data = Clipboard.GetText(TextDataFormat.Text);
+                if (data.Contains("\t"))
+                {
+                    // Assume tab-separated values; replaces tabs with commas, use CSV parsing
+                    var csv = data.Replace('\t', ',');
+                    return QueueCsvFile.ReadCsvString(csv);
+                }
+
                 foreach (var line in data.Split(new char[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries))
                 {
                     var start = line.Trim().Split(' ')[0];
