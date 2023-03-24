@@ -10,6 +10,9 @@
              d:DataContext="{d:DesignInstance {x:Type viewModels:SampleManagerViewModel}, IsDesignTimeCreatable=True}"
              d:DesignHeight="640" d:DesignWidth="800">
     <Grid DataContext="{Binding SampleControlViewModel}" Background="{Binding BackColor, Mode=OneWay}" IsEnabled="{Binding IsViewEnabled, Mode=OneWay}">
+        <Grid.InputBindings>
+            <KeyBinding Modifiers="Control" Key="V" Command="{Binding ClipboardPasteCommand}"></KeyBinding>
+        </Grid.InputBindings>
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Paste" Command="{Binding ClipboardPasteCommand}" InputGestureText="Ctrl+V" />
