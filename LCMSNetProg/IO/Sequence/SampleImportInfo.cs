@@ -5,13 +5,24 @@ namespace LcmsNet.IO.Sequence
 {
     public class SampleImportInfo
     {
+        public SampleImportInfo()
+        {
+            DatasetName = "";
+            PalTray = "";
+            PalVial = "";
+            Volume = 0;
+            LcMethod = "";
+            SequenceId = 0;
+            RequestId = 0;
+        }
+
         public string DatasetName { get; set; }
-        public int RequestId { get; set; } = -1;
-        public string PalTray { get; set; } = "";
-        public string PalVial { get; set; } = "";
-        public double Volume { get; set; } = 0;
-        public string LcMethod { get; set; } = "";
-        public int SequenceId { get; set; } = 0;
+        public int RequestId { get; set; }
+        public string PalTray { get; set; }
+        public string PalVial { get; set; }
+        public double Volume { get; set; }
+        public string LcMethod { get; set; }
+        public int SequenceId { get; set; }
 
         public SampleData GetSampleData()
         {
@@ -53,20 +64,21 @@ namespace LcmsNet.IO.Sequence
 
             return sampleData;
         }
-    }
 
-    public sealed class SampleImportMap : ClassMap<SampleImportInfo>
-    {
-        public SampleImportMap()
+        public sealed class SampleImportMap : ClassMap<SampleImportInfo>
         {
-            Map(x => x.DatasetName).Name("Request Name", "Sample Name", "Dataset Name", "Sample", "Dataset", "Name").Index(0);
-            Map(x => x.PalVial).Name("PAL Vial", "Vial", "Well", "PALWell").Index(1).Default("");
-            Map(x => x.PalTray).Name("PAL Tray", "Tray", "PALTray").Index(2).Default("");
-            Map(x => x.Volume).Name("Volume").Index(3).Default(0);
-            Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(4).Default("");
-            Map(x => x.SequenceId).Name("ID", "SequenceID").Index(5).Default(0);
-            Map(x => x.RequestId).Name("Request ID").Index(6).Default(0);
-            // TODO: Add block and run order?
+            public SampleImportMap()
+            {
+                var index = 0;
+                Map(x => x.DatasetName).Name("Request Name", "Sample Name", "Dataset Name", "Sample", "Dataset", "Name").Index(index++);
+                Map(x => x.PalVial).Name("PAL Vial", "Vial", "Well", "PALWell").Index(index++).Default("");
+                Map(x => x.PalTray).Name("PAL Tray", "Tray", "PALTray").Index(index++).Default("");
+                Map(x => x.Volume).Name("Volume").Index(index++).Default(0.0);
+                Map(x => x.LcMethod).Name("LC Method", "Method", "LCMethod").Index(index++).Default("");
+                Map(x => x.SequenceId).Name("ID", "SequenceID").Index(index++).Default(0);
+                Map(x => x.RequestId).Name("Request ID", "RequestID").Index(index++).Default(0);
+                // TODO: Add block and run order?
+            }
         }
     }
 }

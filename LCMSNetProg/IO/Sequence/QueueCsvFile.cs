@@ -67,6 +67,7 @@ namespace LcmsNet.IO.Sequence
                     hasHeaders = CheckHeaderLine(headerLine);
 
                     importStream.Seek(0, SeekOrigin.Begin);
+                    sr.DiscardBufferedData();
                 }
 
                 data = ReadCsvText(sr, hasHeaders);
@@ -109,16 +110,16 @@ namespace LcmsNet.IO.Sequence
         {
             using (var csv = new CsvReader(importReader, CultureInfo.InvariantCulture))
             {
-                csv.Configuration.RegisterClassMap(new SampleImportMap());
+                csv.Configuration.RegisterClassMap(new SampleImportInfo.SampleImportMap());
                 csv.Configuration.Delimiter = ","; // Could change to "\t" to support TSV
                 csv.Configuration.PrepareHeaderForMatch = (header, index) => header?.Trim().ToLower();
                 csv.Configuration.HasHeaderRecord = hasHeaders; // Set to false to allow reading a file without headers
                 csv.Configuration.HeaderValidated = null; // Allows missing headers
                 csv.Configuration.MissingFieldFound = null; // Allow empty fields
 
-                var records = csv.GetRecords<SampleImportInfo>();
+                var records = csv.GetRecords<SampleImportInfo>().ToList();
 
-                return records.ToList();
+                return records;
             }
         }
     }
