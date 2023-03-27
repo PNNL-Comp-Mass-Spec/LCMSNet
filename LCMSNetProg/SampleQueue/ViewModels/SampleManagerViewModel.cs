@@ -320,7 +320,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
                 try
                 {
-                    sampleQueue.LoadQueue(fileDialog.FileName, reader);
+                    sampleQueue.LoadQueue(fileDialog.FileName, reader, true);
                     ApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
                 }
                 catch (Exception ex)
@@ -358,7 +358,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 try
                 {
                     var reader = new QueueCsvFile();
-                    sampleQueue.LoadQueue(fileDialog.FileName, reader);
+                    sampleQueue.LoadQueue(fileDialog.FileName, reader, false);
                     ApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
                 }
                 catch (Exception ex)

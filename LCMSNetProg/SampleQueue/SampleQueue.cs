@@ -1643,7 +1643,8 @@ namespace LcmsNet.SampleQueue
         /// </summary>
         /// <param name="path"></param>
         /// <param name="reader"></param>
-        public void LoadQueue(string path, ISampleQueueReader reader)
+        /// <param name="removeExistingSamples"></param>
+        public void LoadQueue(string path, ISampleQueueReader reader, bool removeExistingSamples = false)
         {
             var waitingSamples = reader.ReadSamples(path);
 
@@ -1656,7 +1657,15 @@ namespace LcmsNet.SampleQueue
                 }
             }
 
+            var existing = GetAllSamples();
+
             QueueSamples(waitingSamples, enumColumnDataHandling.LeaveAlone);
+
+            if (removeExistingSamples)
+            {
+                // Remove all existing samples...
+                RemoveSample(existing.Select(x => x.UniqueID).ToList(), enumColumnDataHandling.LeaveAlone);
+            }
         }
 
         /// <summary>
