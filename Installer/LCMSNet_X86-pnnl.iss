@@ -92,7 +92,7 @@ Source: "{#MyPlugins}\x64\*.dll";                                               
 Source: "Plugins\PALAutoSampler\paldriv.exe";                                          DestDir: "{sys}";          Flags: ignoreversion
 
 ;SQLite Database Log Viewer program
-Source: "ExternalApplications\LogViewer\bin\Release\*.exe";                            DestDir: "{app}";          Flags: ignoreversion
+;Source: "ExternalApplications\LogViewer\bin\Release\*.exe";                            DestDir: "{app}";          Flags: ignoreversion
 
 ; PERSISTED SETTINGS FILE-------------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Only copy it once, never overwrite the existing file, and don't remove it during an uninstall
