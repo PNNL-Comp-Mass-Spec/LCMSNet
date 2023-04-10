@@ -91,6 +91,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         private readonly Timer statusReadTimer = null;
         private readonly object pumpCommLock = new object();
         private bool isMonitoringDisabled = false;
+        private int statusReadErrorRepeatCount = 0;
 
         /// <summary>
         /// Status of the device.
@@ -1689,10 +1690,15 @@ namespace LcmsNetPlugins.Agilent.Pumps
                 // ACT:SRDY? gets the start not ready status code, corresponding to bit flags
                 SendCommand("ACT:SRDY?", out reply);
                 PumpStatus.StartNotReadyReasons = (AgilentPumpStartNotReadyStates)int.Parse(reply.Split(' ').Last());
+                statusReadErrorRepeatCount = 0;
             }
             catch (Exception e)
             {
-                ApplicationLogger.LogError(0, "Error getting Agilent Pump Status", e);
+                if (statusReadErrorRepeatCount < 10)
+                {
+                    ApplicationLogger.LogError(0, "Error getting Agilent Pump Status", e);
+                    statusReadErrorRepeatCount++;
+                }
             }
         }
 
