@@ -274,9 +274,10 @@ namespace LcmsNet.IO
                 {
                     Directory.CreateDirectory(remoteFolder);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    //TODO: Chris/Brian Fix this!  Or Log that the directory is not available!
+                    ApplicationLogger.LogError(0, "Could not create the remote folder: " + remoteFolder, ex);
+                    return;
                 }
             }
 
