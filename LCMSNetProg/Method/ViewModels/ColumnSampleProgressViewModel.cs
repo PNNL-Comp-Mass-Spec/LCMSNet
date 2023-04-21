@@ -183,6 +183,7 @@ namespace LcmsNet.Method.ViewModels
         }
 
         public event EventHandler<SampleProgressPreviewArgs> PreviewAvailable;
+        private int errorRepeatCount = 0;
 
         private void UpdateDrawings(object sender)
         {
@@ -202,10 +203,16 @@ namespace LcmsNet.Method.ViewModels
                     rtb.Freeze();
 
                     PreviewAvailable(this, new SampleProgressPreviewArgs(rtb));
+                    errorRepeatCount = 0;
                 }
-                catch
+                catch (Exception e)
                 {
-                    ApplicationLogger.LogError(0, "Error attempting to update column sample progress.");
+                    if (errorRepeatCount < 10)
+                    {
+                        ApplicationLogger.LogError(0, "Error attempting to update column sample progress.", e);
+                    }
+
+                    errorRepeatCount++;
                 }
             }
         }
