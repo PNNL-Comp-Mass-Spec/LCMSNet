@@ -12,6 +12,11 @@ namespace LcmsNet.Logging.ViewModels
 {
     public class MessagesViewModel : ReactiveObject
     {
+        // The maximum number of message entries in the messages or error messages lists
+        private const int MaxMessagesEntryCount = 2000;
+        // How many entries to remove when we hit the maximum
+        private const int MaxMessagesRemoveCount = 30;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -59,7 +64,16 @@ namespace LcmsNet.Logging.ViewModels
             if (level <= messageLevel && message != null)
             {
                 var formatted = FormatMessage(message.Message);
-                messageList.Insert(0, formatted);
+                messageList.Edit(list =>
+                {
+                    list.Insert(0, formatted);
+
+                    if (list.Count > MaxMessagesEntryCount)
+                    {
+                        var removeStart = MaxMessagesEntryCount - MaxMessagesRemoveCount;
+                        list.RemoveRange(removeStart, list.Count - removeStart);
+                    }
+                });
             }
         }
 
@@ -98,6 +112,12 @@ namespace LcmsNet.Logging.ViewModels
                 }
 
                 sourceList.Insert(0, FormatMessage(error.Message));
+
+                if (sourceList.Count > MaxMessagesEntryCount)
+                {
+                    var removeStart = MaxMessagesEntryCount - MaxMessagesRemoveCount;
+                    sourceList.RemoveRange(removeStart, sourceList.Count - removeStart);
+                }
             });
         }
 
