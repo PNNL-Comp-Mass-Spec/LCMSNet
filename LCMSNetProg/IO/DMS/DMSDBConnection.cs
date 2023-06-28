@@ -46,7 +46,13 @@ namespace LcmsNet.IO.DMS
 
         private void ConnectionErrorEvent(string message, Exception ex)
         {
-            ErrMsg = $"{message}; {ex.Message}";
+            ErrMsg = message;
+
+            if (ex != null)
+            {
+                ErrMsg += $"; {ex.Message}";
+            }
+
             ApplicationLogger.LogError(0, ErrMsg);
         }
 
