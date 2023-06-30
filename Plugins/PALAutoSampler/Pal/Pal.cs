@@ -700,7 +700,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <returns></returns>
         public string SelectVials(string vialTypes, string tray, string selectedVials)
         {
-            if (inEmulationMode)
+            if (inEmulationMode || !isConnected)
             {
                 return "Emulated";
             }
@@ -728,7 +728,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         public bool ValidateVial(string tray, int vial, out int lastVial)
         {
             lastVial = 0;
-            if (inEmulationMode)
+            if (inEmulationMode || !isConnected)
             {
                 return false;
             }
@@ -747,7 +747,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <returns>A string containing the status</returns>
         public string GetStatus()
         {
-            if (inEmulationMode)
+            if (inEmulationMode || !isConnected)
             {
                 return "Emulated";
             }
