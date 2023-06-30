@@ -572,7 +572,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             var methods = "";
             // Find the methods from the device (or emulated one)
-            if (inEmulationMode == false)
+            if (!inEmulationMode && isConnected)
             {
                 var error = palDriver.GetMethodNames(ref methods);
                 //TODO: Handle error.
@@ -626,7 +626,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             var trays = "";
             var tries = 0;
             var MAX_TRIES = 50;
-            if (inEmulationMode == false)
+            if (!inEmulationMode && isConnected)
             {
                 var error = 0; //assume success
                 while (string.IsNullOrEmpty(trays) && tries <= MAX_TRIES)
