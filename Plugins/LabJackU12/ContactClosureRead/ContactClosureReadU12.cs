@@ -23,6 +23,10 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             Closed = 0x2,
         }
 
+        private const string ConfigurationError = "Configuration error";
+        private const string DeviceReadError = "Voltage read error";
+        private const string DeviceReadStateError = "Read State Not Matched";
+
         /// <summary>
         /// The labjack used for reading the ready signal
         /// </summary>
@@ -241,8 +245,15 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             {
                 state = labjackDevice.Read(port);
             }
-            catch (LabjackU12Exception)
+            catch (LabjackU12Exception ex)
             {
+                // NOTE: Don't kill things if an exception occurs here, this is only used by the user interface right now.
+                //Error?.Invoke(this, new DeviceErrorEventArgs("Could not read contact closure state.",
+                //    ex,
+                //    DeviceErrorStatus.ErrorAffectsAllColumns,
+                //    this,
+                //    DeviceReadError));
+                //throw new Exception("Could not read contact closure state.  " + ex.Message, ex);
             }
 
             return state;
@@ -382,14 +393,14 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             catch (LabjackU12Exception ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not read the port.",
-                              ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, "Read Failure"));
+                              ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, DeviceReadError));
                 throw new Exception("Could not read the contact closure state.  " + ex.Message, ex);
             }
 
             if (!target.HasFlag(closureState))
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Contact closure was not in the required state of \"" + target + "\"",
-                    null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "Read State Not Matched", DeviceEventLoggingType.Error));
+                    null, DeviceErrorStatus.ErrorAffectsAllColumns, this, DeviceReadStateError, DeviceEventLoggingType.Error));
             }
 
             return closureState;
@@ -446,14 +457,14 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
             catch (LabjackU12Exception ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not read the port.",
-                              ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, "Read Failure"));
+                              ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, DeviceReadError));
                 throw new Exception("Could not read the contact closure state.  " + ex.Message, ex);
             }
 
             if (!target.HasFlag(closureState))
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Contact closure was not in the required state of \"" + target + "\"",
-                    null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "Read State Not Matched", DeviceEventLoggingType.Error));
+                    null, DeviceErrorStatus.ErrorAffectsAllColumns, this, DeviceReadStateError, DeviceEventLoggingType.Error));
             }
 
             return closureState;
@@ -499,7 +510,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosureRead
 
         public List<string> GetErrorNotificationList()
         {
-            return new List<string>() { "Read State Not Matched", "Read Failure" };
+            return new List<string>() { DeviceReadError, DeviceReadStateError };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

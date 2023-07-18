@@ -26,6 +26,10 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
                                  "Contact Closures")]
     public class ContactClosureU12 : IDevice, IContactClosure
     {
+        private const string ConfigurationError = "Configuration error";
+        private const string DeviceWriteError = "Voltage set error";
+        private const string DeviceReadError = "Voltage read error";
+
         /// <summary>
         /// The labjack used for signalling the pulse
         /// </summary>
@@ -346,7 +350,8 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not set the normal voltage.",
                     ex,
                     DeviceErrorStatus.ErrorAffectsAllColumns,
-                    this));
+                    this,
+                    ConfigurationError));
                 throw new Exception("Could not set the normal voltage on write.  " + ex.Message, ex);
             }
         }
@@ -406,7 +411,8 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not start the trigger.",
                                      ex,
                                      DeviceErrorStatus.ErrorAffectsAllColumns,
-                                     this));
+                                     this,
+                                     DeviceWriteError));
                 throw new Exception("Could not trigger the contact closure on write.  " + ex.Message, ex);
             }
 
@@ -427,7 +433,8 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
                     new DeviceErrorEventArgs("Could not stop the trigger.",
                                              ex,
                                              DeviceErrorStatus.ErrorAffectsAllColumns,
-                                             this));
+                                             this,
+                                             DeviceWriteError));
                 error = 1;
                 throw;
             }
@@ -478,7 +485,12 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
             }
             catch (LabjackU12Exception ex)
             {
-                throw ex;
+                Error?.Invoke(this, new DeviceErrorEventArgs("Could not start the trigger.",
+                    ex,
+                    DeviceErrorStatus.ErrorAffectsAllColumns,
+                    this,
+                    DeviceWriteError));
+                throw new Exception("Could not trigger the contact closure on write.  " + ex.Message, ex);
             }
 
             var timer = new TimerDevice();
@@ -490,7 +502,14 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
             }
             catch (LabjackU12Exception ex)
             {
-                throw ex;
+                Error?.Invoke(this,
+                    new DeviceErrorEventArgs("Could not stop the trigger.",
+                        ex,
+                        DeviceErrorStatus.ErrorAffectsAllColumns,
+                        this,
+                        DeviceWriteError));
+                error = 1;
+                throw;
             }
 
             return error;
@@ -519,7 +538,12 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
             }
             catch (LabjackU12Exception ex)
             {
-                throw ex;
+                Error?.Invoke(this, new DeviceErrorEventArgs("Could not start the trigger.",
+                    ex,
+                    DeviceErrorStatus.ErrorAffectsAllColumns,
+                    this,
+                    DeviceWriteError));
+                throw new Exception("Could not trigger the contact closure on write.  " + ex.Message, ex);
             }
 
             var timer = new TimerDevice();
@@ -532,7 +556,14 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
             }
             catch (LabjackU12Exception ex)
             {
-                throw ex;
+                Error?.Invoke(this,
+                    new DeviceErrorEventArgs("Could not stop the trigger.",
+                        ex,
+                        DeviceErrorStatus.ErrorAffectsAllColumns,
+                        this,
+                        DeviceWriteError));
+                error = 1;
+                throw;
             }
 
             return error;
@@ -578,7 +609,7 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
 
         public List<string> GetErrorNotificationList()
         {
-            return new List<string>();
+            return new List<string>() { ConfigurationError, DeviceWriteError };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
