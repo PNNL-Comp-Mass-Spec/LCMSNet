@@ -22,6 +22,12 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                                  "Auto-Samplers")]
     public class Pal : IDevice, IAutoSampler, IFluidicsSampler
     {
+        private const string VialNumberError = "Vial number error";
+        private const string ConnectionError = "Connection error";
+        private const string PalObjectError = "PAL Object error";
+        private const string PalMethodError = "PAL Method error";
+        private const string PalAspirationError = "PAL Aspiration error";
+
         /// <summary>
         /// An object which can use the PAL dll functions.
         /// </summary>
@@ -305,7 +311,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 }
                 else
                 {
-                    HandleError("Vial number out of range");
+                    HandleError("Vial number out of range", VialNumberError);
                 }
                 OnDeviceSaveRequired();
             }
@@ -370,9 +376,9 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Internal error handler that propagates the error message to listening objects.
         /// </summary>
-        private void HandleError(string message, Exception ex = null)
+        private void HandleError(string message, string type, Exception ex = null)
         {
-            Error?.Invoke(this, new DeviceErrorEventArgs(message, ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, message));
+            Error?.Invoke(this, new DeviceErrorEventArgs(message, ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, type));
         }
 
         /// <summary>
@@ -412,12 +418,12 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 switch (error)
                 {
                     case CONST_PALERR_PORTUNAVAILABLE:
-                        HandleError("COM Port not available");
+                        HandleError("COM Port not available", ConnectionError);
                         errorMessage = "COM Port not available";
                         OnFree();
                         break;
                     case CONST_PALERR_PORTINUSE:
-                        HandleError("COM Port in use");
+                        HandleError("COM Port in use", ConnectionError);
                         errorMessage = "COM Port in use";
                         OnFree();
                         break;
@@ -427,8 +433,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 {
                     var tempStatus = "";
                     palDriver.GetStatus(ref tempStatus);
-                    HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
-                    errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
+                    errorMessage = "Unable to connect to PAL (step 1). Return value " + error + ". Error status " + tempStatus;
+                    HandleError(errorMessage, ConnectionError);
                     OnFree();
                     return false;
                 }
@@ -449,8 +455,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 {
                     var tempStatus = "";
                     palDriver.GetStatus(ref tempStatus);
-                    HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
-                    errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
+                    errorMessage = "Unable to connect to PAL (step 2). Return value " + error + ". Error status " + tempStatus;
+                    HandleError(errorMessage, ConnectionError);
                     OnFree();
                     return false;
                 }
@@ -464,8 +470,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 {
                     var tempStatus = "";
                     palDriver.GetStatus(ref tempStatus);
-                    HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
-                    errorMessage = "Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus;
+                    errorMessage = "Unable to connect to PAL (step 3). Return value " + error + ". Error status " + tempStatus;
+                    HandleError(errorMessage, ConnectionError);
                     OnFree();
                     return false;
                 }
@@ -531,7 +537,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             {
                 var tempStatus = "";
                 palDriver.GetStatus(ref tempStatus);
-                HandleError("Unable to connect to PAL. Return value " + error + ". Error status " + tempStatus);
+                HandleError("Unable to connect to PAL (methods). Return value " + error + ". Error status " + tempStatus, ConnectionError);
                 OnFree();
                 return;
             }
@@ -637,7 +643,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 }
                 if (error != 0)
                 {
-                    HandleError("PAL List Trays error: " + error.ToString());
+                    HandleError("PAL List Trays error: " + error.ToString(), PalObjectError);
                 }
             }
             else
@@ -659,7 +665,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 }
                 else
                 {
-                    HandleError("No traylist listeners.");
+                    ApplicationLogger.LogError(0, "PAL: No traylist listeners.");
                 }
             }
             else
@@ -840,7 +846,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             }
             else
             {
-                HandleError("Vial number out of range");
+                HandleError("Vial number out of range", VialNumberError);
                 return false;
             }
             currentInjectionVolume = volume;
@@ -867,11 +873,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             {
                 if (errorMessage.Contains("syringe") || errorMessage.IndexOf("ul is not in pal", StringComparison.OrdinalIgnoreCase) >= 0 || errorMessage.IndexOf("ml is not in pal", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    HandleError("The syringe in the PAL Method does not match the physical syringe loaded in the PAL Loader Arm. " + errorMessage);
+                    HandleError("The syringe in the PAL Method does not match the physical syringe loaded in the PAL Loader Arm. " + errorMessage, PalMethodError);
                 }
                 else
                 {
-                    HandleError(errorMessage);
+                    HandleError(errorMessage, PalMethodError);
                 }
                 return false;
             }
@@ -914,11 +920,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 {
                     if (status.ToLower().Contains("aspirating"))
                     {
-                        HandleError("AspirationError");
+                        HandleError("AspirationError", PalAspirationError);
                     }
                     else
                     {
-                        HandleError(status);
+                        HandleError(status, PalMethodError);
                     }
                     return false;
                 }
@@ -1109,7 +1115,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
 
         public List<string> GetErrorNotificationList()
         {
-            return new List<string>() { "AspirationError" };
+            return new List<string>() { VialNumberError, ConnectionError, PalObjectError, PalMethodError, PalAspirationError };
         }
 
         /// <summary>
