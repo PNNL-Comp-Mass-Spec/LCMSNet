@@ -113,44 +113,6 @@ namespace FluidicsSDK.Base
         protected abstract void ClearDevice(IDevice device);
 
         /// <summary>
-        /// generates a single 'state' of connections, by connecting pairs of ports, starting
-        /// with the ports at startingPortIndex and startingPortIndex+1, then startingPortIndex+2 and startingPortIndex+3,
-        /// etc.
-        /// </summary>
-        /// <param name="startingPortIndex">an index into m_ports</param>
-        /// <param name="endingPortIndex">an index into m_ports</param>
-        /// <returns>a list of int,int tuples</returns>
-        protected virtual List<Tuple<int, int>> GenerateState(int startingPortIndex, int endingPortIndex)
-        {
-            var connectionState = new List<Tuple<int, int>>();
-            if (startingPortIndex != -1)
-            {
-                //make sure that this isn't a connectionless state
-                if (m_portList.Count - 1 <= endingPortIndex)
-                {
-                    for (var i = startingPortIndex; i < endingPortIndex; i += 2)
-                    {
-                        Tuple<int, int> connectionTuple;
-                        //this if handles the case where you want to connect the last port with the first port(example: connect port 3 and port 0
-                        //in a four port valve)
-                        if (i == endingPortIndex - 1 && startingPortIndex != 0)
-                        {
-                            connectionTuple = new Tuple<int, int>(i, 0);
-                        }
-                        else
-                        {
-                            connectionTuple = new Tuple<int, int>(i, i + 1);
-                        }
-                        connectionState.Add(connectionTuple);
-                    }
-                }
-            }
-            //will return an empty list if startingPortIndex is -1, represents a "no connections" state.
-            return connectionState;
-        }
-
-
-        /// <summary>
         /// Activates the state number "state" in the devices list of states
         /// </summary>
         /// <param name="state">an integer determining which state to switch to.</param>

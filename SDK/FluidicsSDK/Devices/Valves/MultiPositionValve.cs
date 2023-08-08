@@ -197,7 +197,7 @@ namespace FluidicsSDK.Devices.Valves
             _valve = null;
         }
 
-        protected override List<Tuple<int, int>> GenerateState(int startingPortIndex, int endingPortIndex)
+        protected virtual List<Tuple<int, int>> GenerateState(int startingPortIndex, int endingPortIndex)
         {
             //the eleven port valve connects the center port to one of the outer ports, so it's states are unique
             //so we override the generation.
