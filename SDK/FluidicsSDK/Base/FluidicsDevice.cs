@@ -356,9 +356,10 @@ namespace FluidicsSDK.Base
         /// Add a port to the device
         /// </summary>
         /// <param name="location">Point representing location of the port within the device</param>
-        protected virtual void AddPort(Point location)
+        /// <param name="portNumber">a port number to display inside the port circle drawing</param>
+        protected virtual void AddPort(Point location, int portNumber = -1)
         {
-            var newPort = new Port(location, this);
+            var newPort = new Port(location, this, portNumber);
             m_portList.Add(newPort);
         }
 

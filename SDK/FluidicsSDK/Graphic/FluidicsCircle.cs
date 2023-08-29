@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 
@@ -6,10 +7,11 @@ namespace FluidicsSDK.Graphic
 {
     public class FluidicsCircle : GraphicsPrimitive
     {
-        Rect m_rect;
+        private Rect m_rect;
         // Used for default constructor
-        const int DEFAULT_RADIUS = 10;
-        readonly int m_myRadius;
+        private const int DEFAULT_RADIUS = 10;
+        private readonly int m_myRadius;
+        private readonly string m_fillText = string.Empty;
 
         /// <summary>
         /// default constructor
@@ -28,13 +30,15 @@ namespace FluidicsSDK.Graphic
         /// <param name="fillBrush">a Color to represent the color to fill the circle with</param>
         /// <param name="radius">an integer representing the radius of the circle, defaults to 5</param>
         /// <param name="fill">a bool determining if the circle should be filled with the fillColor</param>
-        public FluidicsCircle(Point loc, Color color, Brush fillBrush, int radius = DEFAULT_RADIUS, bool fill = true)
+        /// <param name="fillText">Text (like a number) to output in the fill area</param>
+        public FluidicsCircle(Point loc, Color color, Brush fillBrush, int radius = DEFAULT_RADIUS, bool fill = true, string fillText = "")
         {
             m_myRadius = radius;
             m_rect = new Rect(loc.X, loc.Y, m_myRadius * 2, m_myRadius * 2);
             Color = color;
             FillBrush = fillBrush;
             Fill = fill;
+            m_fillText = fillText;
         }
 
         /// <summary>
@@ -73,6 +77,16 @@ namespace FluidicsSDK.Graphic
 
             var center = new Point(scaledRect.X + (scaledRect.Width / 2.0), scaledRect.Y + (scaledRect.Height / 2.0));
             g.DrawEllipse(brush, drawingPen, center, scaledRect.Width / 2.0, scaledRect.Height / 2.0);
+
+            if (!string.IsNullOrWhiteSpace(m_fillText))
+            {
+                // Draw the text inside the ellipse...
+                var stringScale = (int)Math.Round(scale < 1 ? -(1 / scale) : scale, 0, MidpointRounding.AwayFromZero);
+                var font = new Typeface(new FontFamily("Calibri"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+                var text = new FormattedText(m_fillText, CultureInfo.InvariantCulture, FlowDirection.LeftToRight,
+                    font, 14.667 * stringScale, Brushes.Black, FluidicsModerator.Moderator.DrawingScaleFactor);
+                g.DrawText(text, new Point(scaledRect.X + (scaledRect.Width / 2) - (text.Width / 2), scaledRect.Y + (scaledRect.Height / 2) - (text.Height / 2)));
+            }
         }
 
         public override bool Contains(Point point, int max_variance)

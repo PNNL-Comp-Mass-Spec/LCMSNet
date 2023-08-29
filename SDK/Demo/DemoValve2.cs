@@ -79,6 +79,8 @@ namespace DemoPluginLibrary
             return Position;
         }
 
+        public bool PortNumberingIsClockwise => true;
+
         public void SetPosition(int s)
         {
             if (1 <= s && s <= 8)

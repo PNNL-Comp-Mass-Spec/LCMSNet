@@ -114,6 +114,8 @@ namespace LcmsNetPlugins.VICI.Valves
             set => this.RaiseAndSetIfChanged(ref numberOfPositions, value);
         }
 
+        public bool PortNumberingIsClockwise { get; } = true;
+
         /// <summary>
         /// Number of positions reported by the hardware
         /// </summary>

@@ -93,7 +93,7 @@ namespace FluidicsSDK.Devices
 
                     if (fluidicsDeviceType == typeof(MultiPositionValve) && device is IMultiPositionValve mpv)
                     {
-                        fluidicsDevice = new MultiPositionValve(mpv.NumberOfPositions);
+                        fluidicsDevice = new MultiPositionValve(mpv.NumberOfPositions, portNumberingClockwise: mpv.PortNumberingIsClockwise);
                     }
                     else if (fluidicsDeviceType != null)
                     {

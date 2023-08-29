@@ -24,7 +24,8 @@ namespace FluidicsSDK.Devices.Valves
         /// constructor
         /// </summary>
         /// <param name="numberOfPositions">the number of positions the valve will have</param>
-        public MultiPositionValve(int numberOfPositions) : this(numberOfPositions, 2, 2)
+        /// <param name="portNumberingClockwise"></param>
+        public MultiPositionValve(int numberOfPositions, bool portNumberingClockwise = true) : this(numberOfPositions, 2, 2, portNumberingClockwise)
         {
         }
 
@@ -34,7 +35,8 @@ namespace FluidicsSDK.Devices.Valves
         /// <param name="numberOfPositions">the number of positions the valve will have</param>
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
-        protected MultiPositionValve(int numberOfPositions, int xOffset = 2, int yOffset = 2) :
+        /// <param name="portNumberingClockwise"></param>
+        protected MultiPositionValve(int numberOfPositions, int xOffset = 2, int yOffset = 2, bool portNumberingClockwise = true) :
             base()
         {
             NumberOfPositions = numberOfPositions;
@@ -44,9 +46,11 @@ namespace FluidicsSDK.Devices.Valves
             AddCircle(Offset, _radius, Colors.Black, Brushes.White, fill: true);
             m_info_controls_box = new Rect(Loc.X, Loc.Y + (int)Size.Height + 5, m_primitives[PRIMARY_PRIMITIVE].Size.Width, 50);
             var portLocs = GeneratePortLocs();
-            foreach (var p in portLocs)
+            AddPort(portLocs[0], 0);
+            for (var i = 1; i < portLocs.Length; i++)
             {
-                AddPort(p);
+                var number = portNumberingClockwise ? i : (portLocs.Length - i) % (portLocs.Length - 1) + 1;
+                AddPort(portLocs[i], number);
             }
             MaxVariance = 5;
             Source = false;

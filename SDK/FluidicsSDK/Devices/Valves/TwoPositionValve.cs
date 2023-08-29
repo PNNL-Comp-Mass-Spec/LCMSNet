@@ -30,7 +30,8 @@ namespace FluidicsSDK.Devices.Valves
         /// <param name="numberOfPorts">the number of ports the valve will have</param>
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
-        protected TwoPositionValve(int numberOfPorts, int xOffset = 2, int yOffset = 2) :
+        /// <param name="portNumberingClockwise"></param>
+        protected TwoPositionValve(int numberOfPorts, int xOffset = 2, int yOffset = 2, bool portNumberingClockwise = false) :
             base()
         {
             Offset = new Point(xOffset, yOffset);
@@ -38,9 +39,10 @@ namespace FluidicsSDK.Devices.Valves
             m_info_controls_box = new Rect(Loc.X, Loc.Y + (int) Size.Height + 5, m_primitives[PRIMARY_PRIMITIVE].Size.Width, 50);
             m_numberOfPorts = numberOfPorts;
             var portLocs = GeneratePortLocs();
-            foreach (var p in portLocs)
+            for (var i = 0; i < portLocs.Length; i++)
             {
-                AddPort(p);
+                var number = portNumberingClockwise ? i + 1 : (portLocs.Length - i) % portLocs.Length + 1;
+                AddPort(portLocs[i], number);
             }
             MaxVariance = 5;
             Sink = false;
@@ -64,14 +66,13 @@ namespace FluidicsSDK.Devices.Valves
             // of (angle * 4). So 4 ports would be placed at 0, pi/2, pi, and 3pi/2.
             var angle = (2 * Math.PI) / m_numberOfPorts;
             var points = new Point[m_numberOfPorts];
-            var shiftX = Center.X;
             for (var i = 0; i < m_numberOfPorts; i++)
             {
                 // Position the first port above the center point, shift all other ports to correct locations after.
-                var currentAngle = (Math.PI / 2) + (angle * i);
+                var currentAngle = (Math.PI / 2) + (angle * i) + Math.PI;
                 // place them on a circle at a radius of m_radius* 3/4 from the center
                 // of the valve.
-                var x = (int) ((m_radius * M_DISTFROMCENTER) * Math.Cos(currentAngle) + shiftX);
+                var x = (int) ((m_radius * M_DISTFROMCENTER) * Math.Cos(currentAngle) + Center.X);
                 var y = (int) ((m_radius * M_DISTFROMCENTER) * Math.Sin(currentAngle) + Center.Y);
 
                 points[i] = new Point(x, y);

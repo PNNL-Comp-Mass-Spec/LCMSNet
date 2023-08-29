@@ -13,10 +13,10 @@ namespace FluidicsSDK.Base
         private List<Fluid> m_fluids;
         //graphics primitive representing the port
         private FluidicsCircle m_primitive;
-        private int m_radius;
         private const int MAX_PIXEL_VARIANCE = 7;
         private Dictionary<long, Connection> m_connections;
         public const int PORT_DEFAULT_RADIUS = 10;
+        private readonly int m_portNumber = -1;
 
         /// <summary>
         /// default constructor
@@ -32,8 +32,10 @@ namespace FluidicsSDK.Base
         /// </summary>
         /// <param name="loc">a System.Windows.Point representing the location of the port on screen</param>
         /// <param name="parent">a classFluidicsDevice representing what device the port belongs to</param>
-        public Port(Point loc, FluidicsDevice parent)
+        /// <param name="portNumber">a port number to display inside the port circle drawing</param>
+        public Port(Point loc, FluidicsDevice parent, int portNumber = -1)
         {
+            m_portNumber = portNumber;
             DefinePort(loc, parent);
         }
 
@@ -46,7 +48,8 @@ namespace FluidicsSDK.Base
             var trueLoc = new Point(loc.X - Radius, loc.Y - Radius);
             ParentDevice = parent;
             m_fluids = new List<Fluid>();
-            m_primitive = new FluidicsCircle(trueLoc, Colors.Black, Brushes.White, Radius)
+            var portNumText = m_portNumber >= 0 ? m_portNumber.ToString() : string.Empty;
+            m_primitive = new FluidicsCircle(trueLoc, Colors.Black, Brushes.White, Radius, fillText: portNumText)
             {
                 Fill = true
             };
@@ -128,14 +131,14 @@ namespace FluidicsSDK.Base
         {
             //standard pythagorean to determine if point is in/on the circle
             var dist = (int)Math.Sqrt(Math.Pow((Center.X - location.X), 2) + Math.Pow((Center.Y - location.Y), 2));
-            return (dist <= (m_radius + MAX_PIXEL_VARIANCE));
+            return (dist <= (Radius + MAX_PIXEL_VARIANCE));
         }
 
 
         public void MoveBy(Point amtToMove)
         {
             //we are moving the center point of the circle, but locations are based on the upper left corner, so adjust for the radius
-            var newLoc = new Point(Loc.X + amtToMove.X + m_radius, Loc.Y + amtToMove.Y + m_radius);
+            var newLoc = new Point(Loc.X + amtToMove.X + Radius, Loc.Y + amtToMove.Y + Radius);
             Loc = newLoc;
         }
 
@@ -169,7 +172,7 @@ namespace FluidicsSDK.Base
             {
                 var oldLoc = this.Center;
                 // make the new location the center point of the port, not the top left corner.
-                m_primitive.Loc = new Point(value.X - m_radius, value.Y - m_radius);
+                m_primitive.Loc = new Point(value.X - Radius, value.Y - Radius);
                 //tell connections about the move.
                 foreach (var connection in m_connections.Values)
                 {
@@ -202,11 +205,7 @@ namespace FluidicsSDK.Base
             }
         }
 
-        public int Radius
-        {
-            get => m_radius;
-            private set => m_radius = value;
-        }
+        public int Radius { get; private set; }
 
         public string ID { get; set; }
     }
