@@ -10,13 +10,17 @@
              d:DesignHeight="428" d:DesignWidth="700"
              d:DataContext="{d:DesignInstance {x:Type viewModels:FluidicsControlViewModel}, IsDesignTimeCreatable=True}"
              DataContextChanged="FluidicsControlView_OnDataContextChanged">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Back" Command="{Binding RemoveDeviceCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+        <KeyBinding Key="Delete" Command="{Binding RemoveDeviceCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+    </UserControl.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="0" x:Name="ScrollViewer" SizeChanged="DrawingContainer_OnSizeChanged" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <views:DrawingVisualHost x:Name="DrawingContainer" VerticalAlignment="Top" HorizontalAlignment="Left" MouseLeftButtonDown="DrawingContainer_OnMouseDown" MouseLeftButtonUp="DrawingContainer_OnMouseUp" MouseMove="DrawingContainer_OnMouseMove" KeyDown="DrawingContainer_OnKeyDown" KeyUp="DrawingContainer_OnKeyUp" />
+            <views:DrawingVisualHost x:Name="DrawingContainer" VerticalAlignment="Top" HorizontalAlignment="Left" MouseLeftButtonDown="DrawingContainer_OnMouseDown" MouseLeftButtonUp="DrawingContainer_OnMouseUp" MouseMove="DrawingContainer_OnMouseMove" />
         </ScrollViewer>
         <DockPanel Grid.Row="1" LastChildFill="False">
             <GroupBox Header="Zoom" DockPanel.Dock="Left" MinWidth="175">

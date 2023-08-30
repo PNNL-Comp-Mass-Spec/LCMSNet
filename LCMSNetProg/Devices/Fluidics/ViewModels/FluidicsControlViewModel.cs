@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using FluidicsSDK;
+using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using ReactiveUI;
 
@@ -25,6 +27,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 .Subscribe(x => fluidicsModerator.ScaleWorldView(x / SCALE_CONVERSION));
             this.WhenAnyValue(x => x.ZoomPercent, x => x.ConnectionTransparency, x => x.PortTransparency, x => x.DeviceTransparency)
                 .Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(x => Refresh());
+            RemoveDeviceCommand = ReactiveCommand.Create<Window>(RemoveDevice);
         }
 
         //consts for determining if multiple selection is allowed.
@@ -54,7 +57,8 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         private int portTransparency;
         private int deviceTransparency;
         private Size designPanelSize;
-        private bool inSelectionMode = false;
+
+        public ReactiveCommand<Window, Unit> RemoveDeviceCommand { get; }
 
         public bool DevicesLocked
         {
@@ -98,12 +102,6 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         {
             get => designPanelSize;
             set => this.RaiseAndSetIfChanged(ref designPanelSize, value);
-        }
-
-        public bool InSelectionMode
-        {
-            get => inSelectionMode;
-            set => this.RaiseAndSetIfChanged(ref inSelectionMode, value);
         }
 
         public event EventHandler RefreshView;
@@ -174,7 +172,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// event handler for the mouseup event
         /// </summary>
         /// <param name="mouseLoc"></param>
-        public void MouseUpUpdates(Point mouseLoc)
+        public void MouseUpUpdates(Point mouseLoc, Window owner)
         {
             try
             {
@@ -184,7 +182,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                     mouseMoving = false;
                     if (selectionMade && fluidicsModerator.GetSelectedPortCount() == 2)
                     {
-                        var result = MessageBox.Show("Do you want to connect the selected ports?", "Connect", MessageBoxButton.YesNo);
+                        var result = MessageBox.Show(owner, "Do you want to connect the selected ports?", "Connect", MessageBoxButton.YesNo);
                         if (result == MessageBoxResult.Yes)
                         {
                             fluidicsModerator.CreateConnection();
@@ -196,6 +194,37 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                     //this.Refresh();
                 }
             }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+            }
+        }
+
+        /// <summary>
+        /// when delete is clicked, attempt to remove selected connections
+        /// </summary>
+        public void RemoveDevice(Window owner)
+        {
+            if (!fluidicsModerator.IsDeviceOrConnectionSelected() || DevicesLocked)
+            {
+                return;
+            }
+
+            try
+            {
+                var areYouSure = MessageBox.Show(owner, "Are you sure you want to delete this device or connection?", "Delete Device", MessageBoxButton.YesNo);
+
+                if (areYouSure == MessageBoxResult.Yes)
+                {
+                    var devicesToRemoveFromDeviceManager = fluidicsModerator.RemoveSelectedDevices();
+                    foreach (var device in devicesToRemoveFromDeviceManager)
+                    {
+                        DeviceManager.Manager.RemoveDevice(device);
+                    }
+                    fluidicsModerator.RemoveSelectedConnections();
+                }
+            }
+            //shouldn't ever get this
             catch (Exception ex)
             {
                 ShowError(ex);

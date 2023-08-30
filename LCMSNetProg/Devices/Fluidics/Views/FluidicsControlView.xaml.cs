@@ -15,7 +15,11 @@ namespace LcmsNet.Devices.Fluidics.Views
         public FluidicsControlView()
         {
             InitializeComponent();
+
+            Loaded += (sender, args) => thisWindow = Window.GetWindow(this);
         }
+
+        private Window thisWindow;
 
         private void FluidicsControlView_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -101,7 +105,7 @@ namespace LcmsNet.Devices.Fluidics.Views
             if (e.ChangedButton == MouseButton.Left)
             {
                 leftMouseDown = false;
-                fluidicsControlDataContext.MouseUpUpdates(e.GetPosition(DrawingContainer));
+                fluidicsControlDataContext.MouseUpUpdates(e.GetPosition(DrawingContainer), thisWindow);
             }
         }
 
@@ -111,22 +115,6 @@ namespace LcmsNet.Devices.Fluidics.Views
             if (leftMouseDown)
             {
                 fluidicsControlDataContext.MouseMovedUpdates(e.GetPosition(DrawingContainer));
-            }
-        }
-
-        private void DrawingContainer_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
-            {
-                fluidicsControlDataContext.InSelectionMode = true;
-            }
-        }
-
-        private void DrawingContainer_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
-            {
-                fluidicsControlDataContext.InSelectionMode = false;
             }
         }
     }

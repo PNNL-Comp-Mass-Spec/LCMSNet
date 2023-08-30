@@ -540,6 +540,11 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// </summary>
         private void RemoveDevice()
         {
+            if (!fluidicsMod.IsDeviceOrConnectionSelected() || DevicesLocked)
+            {
+                return;
+            }
+
             try
             {
                 var areYouSure = MessageBox.Show("Are you sure you want to delete this device or connection?", "Delete Device", MessageBoxButton.YesNo);

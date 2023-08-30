@@ -474,6 +474,15 @@ namespace FluidicsSDK
         }
 
         /// <summary>
+        /// Check if a device or connection is selected (excludes ports because ports are tied to a device)
+        /// </summary>
+        /// <returns></returns>
+        public bool IsDeviceOrConnectionSelected()
+        {
+            return m_selectedConnections.Count > 0 || m_selectedDevices.Count > 0;
+        }
+
+        /// <summary>
         /// remove a device from the fluidics system based on its IDevice
         /// </summary>
         /// <param name="device">an IDevice representing the device to remove</param>
