@@ -31,7 +31,7 @@ namespace FluidicsSDK.Devices.Valves
             //add right control
             AddPrimitive(new FluidicsTriangle(stateControlRectangle2, Orient.Right), RightButtonAction);
             // add loop
-            AddPrimitive(new FluidicsLine(m_portList[2].Center, m_portList[5].Center));
+            AddPrimitive(new FluidicsLine(m_portList[1].Center, m_portList[4].Center));
             AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50, 30), Colors.Black, Brushes.White, fill: true, atScale: 1));
         }
 
@@ -96,8 +96,8 @@ namespace FluidicsSDK.Devices.Valves
             ActivateStateWork(state);
 
             // add SPE loop connection.
-            ConnectionManager.GetConnectionManager.Connect(m_portList[2], m_portList[5], this);
-            var injectionLoopConnection = ConnectionManager.GetConnectionManager.FindConnection(m_portList[2], m_portList[5]);
+            ConnectionManager.GetConnectionManager.Connect(m_portList[1], m_portList[4], this);
+            var injectionLoopConnection = ConnectionManager.GetConnectionManager.FindConnection(m_portList[1], m_portList[4]);
             injectionLoopConnection.Transparent = true;
 
             FluidicsModerator.Moderator.EndModelSuspension(true);

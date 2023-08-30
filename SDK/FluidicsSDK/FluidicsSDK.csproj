@@ -64,6 +64,7 @@
     <Compile Include="Devices\Valves\SolidPhaseExtractor.cs" />
     <Compile Include="Devices\Valves\TenPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\TwoPositionValve.cs" />
+    <Compile Include="Devices\Valves\ValveBase.cs" />
     <Compile Include="Devices\Valves\ValvePositionEventArgs.cs" />
     <Compile Include="Devices\ContactClosure.cs" />
     <Compile Include="Devices\FluidicsDetector.cs" />

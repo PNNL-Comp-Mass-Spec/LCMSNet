@@ -145,7 +145,6 @@ namespace FluidicsSDK.Base
             //remove internal connections
             foreach (var p in Ports)
             {
-
                 foreach (var c in p.Connections)
                 {
                     if (c.InternalConnectionOf == this)

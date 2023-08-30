@@ -34,7 +34,7 @@ namespace FluidicsSDK.Devices.Valves
             AddPrimitive(new FluidicsRectangle(new Point(Loc.X + Offset.X + (int)Size.Width / 4, Loc.Y + Offset.Y - 30), new Size((int)Size.Width / 2, 10), Colors.Black, Brushes.White));
             AddPrimitive(new FluidicsRectangle(new Point(Loc.X + Offset.X + (((int)Size.Width / 2) - 5), Loc.Y + Offset.Y - 20), new Size(10, 20), Colors.Black, Brushes.White));
             // add injection loop
-            AddPrimitive(new FluidicsLine(m_portList[2].Center, m_portList[5].Center));
+            AddPrimitive(new FluidicsLine(m_portList[1].Center, m_portList[4].Center));
             AddPrimitive(new FluidicsRectangle(new Point(Center.X - 25, Center.Y - 15), new Size(50, 30), Colors.Black, Brushes.White, true, 1));
         }
 
@@ -109,8 +109,8 @@ namespace FluidicsSDK.Devices.Valves
             ActivateStateWork(state);
 
             // add injection loop connection.
-            ConnectionManager.GetConnectionManager.Connect(m_portList[2], m_portList[5], this);
-            var injectionLoopConnection = ConnectionManager.GetConnectionManager.FindConnection(m_portList[2], m_portList[5]);
+            ConnectionManager.GetConnectionManager.Connect(m_portList[1], m_portList[4], this);
+            var injectionLoopConnection = ConnectionManager.GetConnectionManager.FindConnection(m_portList[1], m_portList[4]);
             injectionLoopConnection.Transparent = true;
 
             FluidicsModerator.Moderator.EndModelSuspension(true);

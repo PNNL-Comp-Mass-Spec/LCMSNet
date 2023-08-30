@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Media;
-using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
 using LcmsNetSDK.Devices;
 
@@ -13,10 +11,8 @@ namespace FluidicsSDK.Devices.Valves
     /// </summary>
     // can technically have 1-16 ports, more than that and the ports start overlapping and become unclickable.
     // used as a base class for other valve glyphs
-    public class MultiPositionValve : FluidicsDevice
+    public class MultiPositionValve : ValveBase
     {
-        // radius of the valve's circle primitive in pixels, arbitrarily chosen
-        private const int _radius = 75;
         protected Dictionary<int, List<Tuple<int, int>>> _states;
         private IMultiPositionValve _valve;
 
@@ -37,24 +33,20 @@ namespace FluidicsSDK.Devices.Valves
         /// <param name="yOffset"></param>
         /// <param name="portNumberingClockwise"></param>
         protected MultiPositionValve(int numberOfPositions, int xOffset = 2, int yOffset = 2, bool portNumberingClockwise = true) :
-            base()
+            base(numberOfPositions, xOffset, yOffset)
         {
             NumberOfPositions = numberOfPositions;
             _states = SetupStates();
             CurrentState = 1;
-            Offset = new Point(xOffset, yOffset);
-            AddCircle(Offset, _radius, Colors.Black, Brushes.White, fill: true);
-            m_info_controls_box = new Rect(Loc.X, Loc.Y + (int)Size.Height + 5, m_primitives[PRIMARY_PRIMITIVE].Size.Width, 50);
-            var portLocs = GeneratePortLocs();
-            AddPort(portLocs[0], 0);
-            for (var i = 1; i < portLocs.Length; i++)
+
+            // Add the center/primary port
+            AddPort(new Point(Center.X, Center.Y), 0);
+
+            // Add the rest of the ports
+            foreach (var point in GeneratePerimeterPortLocations(portNumberingClockwise))
             {
-                var number = portNumberingClockwise ? i : (portLocs.Length - i) % (portLocs.Length - 1) + 1;
-                AddPort(portLocs[i], number);
+                AddPort(point.Point, point.Number);
             }
-            MaxVariance = 5;
-            Source = false;
-            Sink = false;
 
             ActivateState(_states[CurrentState]);
 
@@ -73,39 +65,6 @@ namespace FluidicsSDK.Devices.Valves
         /// Number of positions the valve has
         /// </summary>
         public int NumberOfPositions { get; }
-
-        /// <summary>
-        /// The x,y offset of the main drawing to compensate for line width, ports, etc.
-        /// </summary>
-        protected readonly Point Offset;
-
-        /// <summary>
-        /// generate the locations of the ports on screen relative to the valve itself
-        /// </summary>
-        /// <returns>an array of Point types</returns>
-        private Point[] GeneratePortLocs()
-        {
-            // angle is required to equally space ports around the center of the valve..
-            // simply assign each one to an point that is on a vector corresponding to
-            // an angle which is a multiple of this one. e.g. port 4 is on the vector
-            // of (angle * 4). So 4 ports would be placed at pi/2, pi, 3pi/2, and 2pi.
-            var currentAngle = (3 * Math.PI) / 2;
-            var angle = (2 * Math.PI) / (NumberOfPositions);
-
-            var points = new Point[NumberOfPositions + 1];
-            points[0] = new Point(Center.X, Center.Y);
-            for (var i = 1; i <= NumberOfPositions; i++)
-            {
-                // place them on a circle at a radius of m_radius/2 from the center
-                // of the valve.
-                var x = (int)((_radius * .75) * Math.Cos(currentAngle)) + Center.X;
-                var y = (int)((_radius * .75) * Math.Sin(currentAngle)) + Center.Y;
-                points[i] = new Point(x, y);
-
-                currentAngle -= angle;
-            }
-            return points;
-        }
 
         public override void ActivateState(int requestedState)
         {
@@ -211,11 +170,6 @@ namespace FluidicsSDK.Devices.Valves
             stateConnection.Add(new Tuple<int, int>(startingPortIndex, endingPortIndex));
             return stateConnection;
         }
-
-        /// <summary>
-        /// gets the center point of the valve on screen.
-        /// </summary>
-        public Point Center => ((Graphic.FluidicsCircle)m_primitives[PRIMARY_PRIMITIVE]).Center;
 
         public override int CurrentState { get; set; }
     }
