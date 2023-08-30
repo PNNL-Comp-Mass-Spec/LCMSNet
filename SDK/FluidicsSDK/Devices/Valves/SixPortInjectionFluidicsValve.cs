@@ -103,28 +103,16 @@ namespace FluidicsSDK.Devices.Valves
         /// <param name="state">a list of tuples, each tuple represents a single internal connection</param>
         public override void ActivateState(List<Tuple<int, int>> state)
         {
+            // Overridden to maintain the injection loop connection
             FluidicsModerator.Moderator.BeginModelSuspension();
-            //remove internal connections
-            foreach (var p in Ports)
-            {
-                foreach (var c in p.Connections)
-                {
-                    if (c.InternalConnectionOf == this)
-                    {
-                        ConnectionManager.GetConnectionManager.Remove(c, this);
-                    }
-                }
-            }
+            // Run the standard required changes, which also removes all internal connections
+            ActivateStateWork(state);
 
-            //create new internal connections
-            foreach (var t in state)
-            {
-                ConnectionManager.GetConnectionManager.Connect(m_portList[t.Item1], m_portList[t.Item2], this);
-            }
             // add injection loop connection.
             ConnectionManager.GetConnectionManager.Connect(m_portList[2], m_portList[5], this);
             var injectionLoopConnection = ConnectionManager.GetConnectionManager.FindConnection(m_portList[2], m_portList[5]);
             injectionLoopConnection.Transparent = true;
+
             FluidicsModerator.Moderator.EndModelSuspension(true);
         }
 

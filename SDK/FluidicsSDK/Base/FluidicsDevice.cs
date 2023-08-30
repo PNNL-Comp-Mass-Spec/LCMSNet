@@ -127,6 +127,21 @@ namespace FluidicsSDK.Base
         {
             FluidicsModerator.Moderator.BeginModelSuspension();
             //TODO: change device state here
+            ActivateStateWork(state);
+            FluidicsModerator.Moderator.EndModelSuspension(true);
+        }
+
+        /// <summary>
+        /// Take a list of tuples and use it to create the internal connections.
+        /// of the device.
+        /// </summary>
+        /// <param name="state">a list of tuples, each tuple represents a single internal connection</param>
+        /// <remarks>
+        /// This code is separate from <see cref="ActivateState(int)"/> to allow overriding
+        /// <see cref="ActivateState(int)"/> without needing to duplicate this code.
+        /// </remarks>
+        protected void ActivateStateWork(List<Tuple<int, int>> state)
+        {
             //remove internal connections
             foreach (var p in Ports)
             {
@@ -145,7 +160,6 @@ namespace FluidicsSDK.Base
             {
                 ConnectionManager.GetConnectionManager.Connect(m_portList[t.Item1], m_portList[t.Item2], this);
             }
-            FluidicsModerator.Moderator.EndModelSuspension(true);
         }
 
         /// <summary>

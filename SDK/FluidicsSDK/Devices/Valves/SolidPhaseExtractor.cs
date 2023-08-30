@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using FluidicsSDK.Base;
 using FluidicsSDK.Graphic;
+using FluidicsSDK.Managers;
 using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Devices.Valves
@@ -80,6 +81,26 @@ namespace FluidicsSDK.Devices.Valves
         void m_valve_PositionChanged(object sender, ValvePositionEventArgs<TwoPositionState> e)
         {
             ActivateState((int)e.Position);
+        }
+
+        /// <summary>
+        /// Take a list of tuples and use it to create the internal connections
+        /// of the device.
+        /// </summary>
+        /// <param name="state">a list of tuples, each tuple represents a single internal connection</param>
+        public override void ActivateState(List<Tuple<int, int>> state)
+        {
+            // Overridden to maintain the SPE loop connection
+            FluidicsModerator.Moderator.BeginModelSuspension();
+            // Run the standard required changes, which also removes all internal connections
+            ActivateStateWork(state);
+
+            // add SPE loop connection.
+            ConnectionManager.GetConnectionManager.Connect(m_portList[2], m_portList[5], this);
+            var injectionLoopConnection = ConnectionManager.GetConnectionManager.FindConnection(m_portList[2], m_portList[5]);
+            injectionLoopConnection.Transparent = true;
+
+            FluidicsModerator.Moderator.EndModelSuspension(true);
         }
 
         protected override void ClearDevice(IDevice device)
