@@ -252,6 +252,7 @@ namespace LcmsNetCommonControls.Views
                 popoutWindow.VerticalButtonAlignment = this.VerticalButtonAlignment;
                 popoutWindow.OverlayButton = this.OverlayButton;
                 popoutWindow.PreferVerticalBorder = this.PreferVerticalBorder;
+                popoutWindow.Owner = Window.GetWindow(this);
                 popoutWindow.Show();
                 // When the window closes, move the content back
                 popoutWindow.Closed += (o, args) =>

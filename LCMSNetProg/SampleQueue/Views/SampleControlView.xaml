@@ -8,7 +8,8 @@
              x:Class="LcmsNet.SampleQueue.Views.SampleControlView"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance {x:Type viewModels:SampleManagerViewModel}, IsDesignTimeCreatable=True}"
-             d:DesignHeight="640" d:DesignWidth="800">
+             d:DesignHeight="640" d:DesignWidth="800"
+             x:Name="ThisView">
     <Grid DataContext="{Binding SampleControlViewModel}" Background="{Binding BackColor, Mode=OneWay}" IsEnabled="{Binding IsViewEnabled, Mode=OneWay}">
         <Grid.InputBindings>
             <KeyBinding Modifiers="Control" Key="V" Command="{Binding ClipboardPasteCommand}"></KeyBinding>
@@ -34,7 +35,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Insert Blank Into Unused" Command="{Binding AddBlankToUnusedCommand}" />
-                <MenuItem Header="Import from DMS" Command="{Binding AddDMSCommand}" />
+                <MenuItem Header="Import from DMS" Command="{Binding AddDMSCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" />
                 <Separator />
                 <MenuItem Header="Add Date, Cart Name, Column ID" Command="{Binding CartColumnDateCommand}" />
                 <Separator />
@@ -44,7 +45,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Delete Unused" Command="{Binding DeleteUnusedCommand}" />
-                <MenuItem Header="Clear" Command="{Binding ClearAllSamplesCommand}" />
+                <MenuItem Header="Clear" Command="{Binding ClearAllSamplesCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" />
                 <Separator />
                 <MenuItem Header="Show Columns...">
                     <MenuItem.ItemsSource>
@@ -60,7 +61,7 @@
                         </CompositeCollection>
                     </MenuItem.ItemsSource>
                 </MenuItem>
-                <MenuItem Header="Preview Throughput" Command="{Binding PreviewThroughputCommand}" />
+                <MenuItem Header="Preview Throughput" Command="{Binding PreviewThroughputCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" />
             </ContextMenu>
         </Grid.ContextMenu>
         <Grid.RowDefinitions>
@@ -92,7 +93,7 @@
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Blank" />
                 </Grid>
             </Button>
-            <Button Grid.Column="1" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding SampleDataManager.DMSAvailable}" Command="{Binding AddDMSCommand}" TabIndex="32" >
+            <Button Grid.Column="1" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding SampleDataManager.DMSAvailable}" Command="{Binding AddDMSCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" TabIndex="32" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
@@ -125,7 +126,7 @@
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Selected" />
                 </Grid>
             </Button>
-            <Button Grid.Column="4" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding FillDownCommand}" TabIndex="36" >
+            <Button Grid.Column="4" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding FillDownCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" TabIndex="36" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
@@ -135,7 +136,7 @@
                     <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow" Text="Fill Down" />
                 </Grid>
             </Button>
-            <Button Grid.Column="5" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding TrayVialCommand}" TabIndex="37" >
+            <Button Grid.Column="5" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding TrayVialCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" TabIndex="37" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />

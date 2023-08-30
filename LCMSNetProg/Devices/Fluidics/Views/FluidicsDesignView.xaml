@@ -48,7 +48,7 @@
             </TabItem>-->
         </TabControl>
         <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="False">
-            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAsCommand}">
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveAsCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource SaveImage}" MaxHeight="20" />
                     <TextBlock Text="Export" Margin="3,0" VerticalAlignment="Center" />
@@ -60,7 +60,7 @@
                     <TextBlock Text="Save" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
-            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding LoadCommand}">
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding LoadCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource OpenImage}" MaxHeight="18" />
                     <TextBlock Text="Load" Margin="3,0" VerticalAlignment="Center" />
@@ -86,19 +86,19 @@
                     <TextBlock Grid.Column="1" Text="Unlock" Visibility="{Binding DevicesLocked, Converter={StaticResource BoolToVis}}" />
                 </Grid>
             </Button>
-            <Button Height="70" Margin="3" Command="{Binding InitializeCommand}">
+            <Button Height="70" Margin="3" Command="{Binding InitializeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource CycleYellowImage16}" MaxHeight="16" />
                     <TextBlock Text="Initialize" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
-            <Button Height="70" Margin="3" Command="{Binding AddCommand}">
+            <Button Height="70" Margin="3" Command="{Binding AddCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource AddImage}" MaxHeight="16" />
                     <TextBlock Text="Add" Margin="3,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
-            <Button Height="70" Margin="3" Command="{Binding RemoveCommand}">
+            <Button Height="70" Margin="3" Command="{Binding RemoveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                 <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
                     <Image Source="{StaticResource ButtonDeleteImage16}" MaxHeight="16" />
                     <TextBlock Text="Remove" Margin="3,0" VerticalAlignment="Center" />

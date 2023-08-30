@@ -74,39 +74,39 @@ namespace LcmsNet
 
             Initialize();
 
-            ShowAboutCommand = ReactiveCommand.Create(ShowAboutWindow);
+            ShowAboutCommand = ReactiveCommand.Create<Window>(ShowAboutWindow);
             ReportErrorCommand = ReactiveCommand.Create<ContentControl[]>(ReportError);
-            OpenQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
-            SaveQueueCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueue(), this.WhenAnyValue(x => x.QueueTabSelected));
-            SaveQueueAsCommand = ReactiveCommand.Create(() => SampleManagerVm.SaveQueueAs(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ImportQueueFromClipboardCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueueFromClipboard(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ImportQueueFromCsvCommand = ReactiveCommand.Create(() => SampleManagerVm.ImportQueueFromCsv(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ExportQueueToXmlCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXML(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ExportQueueToCsvCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToCsv(), this.WhenAnyValue(x => x.QueueTabSelected));
-            ExportQueueToXcaliburCommand = ReactiveCommand.Create(() => SampleManagerVm.ExportQueueToXcalibur(), this.WhenAnyValue(x => x.QueueTabSelected));
+            OpenQueueCommand = ReactiveCommand.Create<Window>(SampleManagerVm.ImportQueue, this.WhenAnyValue(x => x.QueueTabSelected));
+            SaveQueueCommand = ReactiveCommand.Create(SampleManagerVm.SaveQueue, this.WhenAnyValue(x => x.QueueTabSelected));
+            SaveQueueAsCommand = ReactiveCommand.Create<Window>(SampleManagerVm.SaveQueueAs, this.WhenAnyValue(x => x.QueueTabSelected));
+            ImportQueueFromClipboardCommand = ReactiveCommand.Create(SampleManagerVm.ImportQueueFromClipboard, this.WhenAnyValue(x => x.QueueTabSelected));
+            ImportQueueFromCsvCommand = ReactiveCommand.Create<Window>(SampleManagerVm.ImportQueueFromCsv, this.WhenAnyValue(x => x.QueueTabSelected));
+            ExportQueueToXmlCommand = ReactiveCommand.Create<Window>(SampleManagerVm.ExportQueueToXML, this.WhenAnyValue(x => x.QueueTabSelected));
+            ExportQueueToCsvCommand = ReactiveCommand.Create<Window>(SampleManagerVm.ExportQueueToCsv, this.WhenAnyValue(x => x.QueueTabSelected));
+            ExportQueueToXcaliburCommand = ReactiveCommand.Create<Window>(SampleManagerVm.ExportQueueToXcalibur, this.WhenAnyValue(x => x.QueueTabSelected));
             ClipboardPasteCommand = ReactiveCommand.CreateCombined(new [] { SampleManagerVm.SampleControlViewModel.ClipboardPasteCommand }, this.WhenAnyValue(x => x.QueueTabSelected));
 
             this.WhenAnyValue(x => x.SampleManagerVm.TitleBarTextAddition).Subscribe(x => this.RaisePropertyChanged(nameof(WindowTitle)));
         }
 
-        public ReactiveCommand<Unit, Unit> ShowAboutCommand { get; }
+        public ReactiveCommand<Window, Unit> ShowAboutCommand { get; }
         public ReactiveCommand<ContentControl[], Unit> ReportErrorCommand { get; }
-        public ReactiveCommand<Unit, Unit> OpenQueueCommand { get; }
+        public ReactiveCommand<Window, Unit> OpenQueueCommand { get; }
         public CombinedReactiveCommand<Unit, Unit> ClipboardPasteCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveQueueCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveQueueAsCommand { get; }
+        public ReactiveCommand<Window, Unit> SaveQueueAsCommand { get; }
         public ReactiveCommand<Unit, Unit> ImportQueueFromClipboardCommand { get; }
-        public ReactiveCommand<Unit, Unit> ImportQueueFromCsvCommand { get; }
-        public ReactiveCommand<Unit, Unit> ExportQueueToXmlCommand { get; }
-        public ReactiveCommand<Unit, Unit> ExportQueueToCsvCommand { get; }
-        public ReactiveCommand<Unit, Unit> ExportQueueToXcaliburCommand { get; }
+        public ReactiveCommand<Window, Unit> ImportQueueFromCsvCommand { get; }
+        public ReactiveCommand<Window, Unit> ExportQueueToXmlCommand { get; }
+        public ReactiveCommand<Window, Unit> ExportQueueToCsvCommand { get; }
+        public ReactiveCommand<Window, Unit> ExportQueueToXcaliburCommand { get; }
 
         /// <summary>
         /// Show the About box
         /// </summary>
-        private void ShowAboutWindow()
+        private void ShowAboutWindow(Window owner)
         {
-            var about = new AboutWindow();
+            var about = new AboutWindow() { Owner = owner };
             about.ShowDialog();
         }
 
@@ -128,6 +128,7 @@ namespace LcmsNet
 
                 if (sampleQueue.IsDirty || !LCMSSettings.GetParameter(LCMSSettings.PARAM_EnableUndoRedo, true))
                 {
+                    // Cannot tie to an owner window - the main window has already been closed
                     var result =
                         MessageBox.Show(string.Format("Do you want to save changes to your queue: {0}",
                             LCMSSettings.GetParameter(LCMSSettings.PARAM_CACHEFILENAME)
@@ -140,6 +141,7 @@ namespace LcmsNet
             }
             catch (Exception e)
             {
+                // Cannot tie to an owner window - the main window has already been closed
                 MessageBox.Show("Warning: Exception occurred saving data to cache. Exception Message: \"" + e.Message + "\". See log for more details.");
                 ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "Error occurred when saving queue to cache!", e);
             }
@@ -774,14 +776,14 @@ namespace LcmsNet
             var logPath = FileLogger.LogPath;
 
             var controlList = new List<ContentControl>();
-            var about = new AboutWindow();
+            var about = new AboutWindow() { Owner = Application.Current.MainWindow };
             // Open it to make it render, then close it when done.
             about.Show();
             controlList.Add(about);
             controlList.AddRange(controls);
 
             var reportVm = new CreateErrorReportViewModel(manager, logPath, controlList);
-            var reportWindow = new CreateErrorReportWindow() {DataContext = reportVm};
+            var reportWindow = new CreateErrorReportWindow() { DataContext = reportVm, Owner = Application.Current.MainWindow };
 
             reportWindow.ShowDialog();
             about.Close();

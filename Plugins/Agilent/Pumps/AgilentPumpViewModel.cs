@@ -8,6 +8,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using DynamicData;
 using LcmsNetCommonControls.Controls;
@@ -55,13 +56,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
             PumpOnCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOn()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.On));
             PumpOffCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpOff()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.Off));
             PumpStandbyCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.PumpStandby()), this.WhenAnyValue(x => x.PumpState).Select(x => x != PumpState.Standby));
-            PurgePumpCommand = ReactiveCommand.Create(PurgePump);
+            PurgePumpCommand = ReactiveCommand.Create<Window>(PurgePump);
             StartPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(StartPump), this.WhenAnyValue(x => x.PumpState, x => x.PumpStatus.NotReadyState).Select(x => x.Item1 != PumpState.Off && x.Item1 != PumpState.Standby && x.Item2 == AgilentPumpStateNotReady.READY));
             StopPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StopMethod()));
             SetComPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetComPortName));
             ReadMethodFromPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => MethodText = Pump.RetrieveMethod()));
             LoadMethodsCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(LoadMethods));
-            SaveMethodCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SaveMethod));
+            SaveMethodCommand = ReactiveCommand.CreateFromTask<Window>(SaveMethod);
             SetModuleDateCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleDateTime()));
             SetModuleNameCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.SetModuleName(NewModuleName)), this.WhenAnyValue(x => x.PumpInfo.ModuleName, x => x.NewModuleName).Select(x => !string.Equals(x.Item1, x.Item2) && x.Item2.Length <= 30));
             RefreshInfoCommand = ReactiveCommand.Create(() => Pump.GetPumpInformation());
@@ -294,13 +295,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
         public ReactiveCommand<Unit, Unit> PumpOnCommand { get; }
         public ReactiveCommand<Unit, Unit> PumpOffCommand { get; }
         public ReactiveCommand<Unit, Unit> PumpStandbyCommand { get; }
-        public ReactiveCommand<Unit, Unit> PurgePumpCommand { get; }
+        public ReactiveCommand<Window, Unit> PurgePumpCommand { get; }
         public ReactiveCommand<Unit, Unit> StartPumpCommand { get; }
         public ReactiveCommand<Unit, Unit> StopPumpCommand { get; }
         public ReactiveCommand<Unit, Unit> SetComPortCommand { get; }
         public ReactiveCommand<Unit, string> ReadMethodFromPumpCommand { get; }
         public ReactiveCommand<Unit, Unit> LoadMethodsCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveMethodCommand { get; }
+        public ReactiveCommand<Window, Unit> SaveMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> SetModuleDateCommand { get; }
         public ReactiveCommand<Unit, Unit> SetModuleNameCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshInfoCommand { get; }
@@ -431,7 +432,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <summary>
         /// Saves the Pump method to file.
         /// </summary>
-        private void SaveMethod()
+        private async Task SaveMethod(Window owner)
         {
             if (string.IsNullOrEmpty(MethodText))
                 return;
@@ -440,9 +441,9 @@ namespace LcmsNetPlugins.Agilent.Pumps
             {
                 InitialDirectory = PersistDataPaths.GetDirectorySavePath(CONST_PUMP_METHOD_PATH),
                 FileName = "pumpMethod",
-                DefaultExt = ".txt"
+                DefaultExt = ".txt",
             };
-            var result = dialog.ShowDialog();
+            var result = dialog.ShowDialog(owner);
 
             if (!result.HasValue || !result.Value)
                 return;
@@ -480,13 +481,13 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
         }
 
-        private void PurgePump()
+        private void PurgePump(Window owner)
         {
             Pump.LoadPurgeData();
             if (purgeWindow == null)
             {
                 var vm = new AgilentPumpPurgeViewModel(Pump);
-                purgeWindow = new AgilentPumpPurgeWindow() {DataContext = vm};
+                purgeWindow = new AgilentPumpPurgeWindow() { DataContext = vm, Owner = owner };
                 purgeWindow.Closed += PurgeWindowClosed;
                 purgeWindow.Show();
             }

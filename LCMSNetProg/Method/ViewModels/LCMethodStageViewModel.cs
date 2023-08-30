@@ -64,7 +64,7 @@ namespace LcmsNet.Method.ViewModels
             ColumnComboBoxOptions = columnComboBoxOptionsBound;
             LCMethodEvents = lcMethodEventsBound;
             LoadMethodCommand = ReactiveCommand.Create(LoadMethods);
-            SaveMethodCommand = ReactiveCommand.Create(SaveSelectedMethod, this.WhenAnyValue(x => x.CanSave));
+            SaveMethodCommand = ReactiveCommand.Create<Window>(SaveSelectedMethod, this.WhenAnyValue(x => x.CanSave));
             SaveAllMethodsCommand = ReactiveCommand.Create(SaveMethods, this.WhenAnyValue(x => x.CanSave));
             BuildMethodCommand = ReactiveCommand.Create(BuildSelectedMethod, this.WhenAnyValue(x => x.CanBuild));
             UpdateMethodCommand = ReactiveCommand.Create(UpdateSelectedMethod, this.WhenAnyValue(x => x.CanUpdate));
@@ -185,7 +185,7 @@ namespace LcmsNet.Method.ViewModels
         public string MethodFolderPath { get; set; }
 
         public ReactiveCommand<Unit, Unit> LoadMethodCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveMethodCommand { get; }
+        public ReactiveCommand<Window, Unit> SaveMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveAllMethodsCommand { get; }
         public ReactiveCommand<Unit, Unit> BuildMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> UpdateMethodCommand { get; }
@@ -463,11 +463,11 @@ namespace LcmsNet.Method.ViewModels
             ApplicationLogger.LogMessage(0, "Method built.");
         }
 
-        private void SaveSelectedMethod()
+        private void SaveSelectedMethod(Window owner)
         {
             try
             {
-                SaveMethod();
+                SaveMethod(owner);
             }
             catch (Exception ex)
             {
@@ -812,7 +812,7 @@ namespace LcmsNet.Method.ViewModels
         /// <summary>
         /// Saves the current method selected in the method combo box.
         /// </summary>
-        public void SaveMethod()
+        public void SaveMethod(Window owner)
         {
             if (!string.IsNullOrWhiteSpace(SelectedSavedMethod))
             {
@@ -823,7 +823,7 @@ namespace LcmsNet.Method.ViewModels
 
                 SaveMethod(method);
 
-                MessageBox.Show("Saved method " + method.Name);
+                MessageBox.Show(owner, "Saved method " + method.Name);
             }
         }
 

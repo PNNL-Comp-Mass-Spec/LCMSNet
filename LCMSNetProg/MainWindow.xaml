@@ -21,6 +21,7 @@
         Width="1086" Height="723"
         Closed="MainWindow_OnClosed"
         Closing="MainWindow_OnClosing"
+        x:Name="This"
         Icon="{StaticResource LcmsNetIcon2}">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="TaskBarInfo" />
@@ -39,19 +40,19 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="_File">
-                <MenuItem Header="Open" Command="{Binding OpenQueueCommand}" />
+                <MenuItem Header="Open" Command="{Binding OpenQueueCommand}" CommandParameter="{x:Reference This}" />
                 <Separator />
                 <MenuItem Header="Save" Command="{Binding SaveQueueCommand}" />
-                <MenuItem Header="Save As" Command="{Binding SaveQueueAsCommand}" />
+                <MenuItem Header="Save As" Command="{Binding SaveQueueAsCommand}" CommandParameter="{x:Reference This}" />
                 <Separator />
                 <MenuItem Header="Import" IsEnabled="{Binding QueueTabSelected}">
                     <MenuItem Header="from Clipboard" Command="{Binding ImportQueueFromClipboardCommand}" />
-                    <MenuItem Header="from CSV" Command="{Binding ImportQueueFromCsvCommand}" />
+                    <MenuItem Header="from CSV" Command="{Binding ImportQueueFromCsvCommand}" CommandParameter="{x:Reference This}" />
                 </MenuItem>
                 <MenuItem Header="Export" IsEnabled="{Binding QueueTabSelected}">
-                    <MenuItem Header="to LCMS VB6 (XML)" Command="{Binding ExportQueueToXmlCommand}" />
-                    <MenuItem Header="to CSV" Command="{Binding ExportQueueToCsvCommand}" />
-                    <MenuItem Header="to XCalibur" Command="{Binding ExportQueueToXcaliburCommand}" />
+                    <MenuItem Header="to LCMS VB6 (XML)" Command="{Binding ExportQueueToXmlCommand}" CommandParameter="{x:Reference This}" />
+                    <MenuItem Header="to CSV" Command="{Binding ExportQueueToCsvCommand}" CommandParameter="{x:Reference This}" />
+                    <MenuItem Header="to XCalibur" Command="{Binding ExportQueueToXcaliburCommand}" CommandParameter="{x:Reference This}" />
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="E_xit" Click="MenuItemExit_OnClick" />
@@ -62,7 +63,7 @@
                         <Image Source="{StaticResource AppendImage}" MaxHeight="22" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_About" Command="{Binding ShowAboutCommand}" >
+                <MenuItem Header="_About" Command="{Binding ShowAboutCommand}" CommandParameter="{x:Reference This}" >
                     <MenuItem.Icon>
                         <Image Source="{StaticResource AboutImage}" MaxHeight="22" />
                     </MenuItem.Icon>

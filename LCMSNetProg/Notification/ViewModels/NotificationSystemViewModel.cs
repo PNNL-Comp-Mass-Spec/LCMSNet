@@ -111,7 +111,7 @@ namespace LcmsNet.Notification.ViewModels
             EnableCommand = ReactiveCommand.Create(Enable, this.WhenAnyValue(x => x.SettingsDisabled).Select(x => x));
             DisableCommand = ReactiveCommand.Create(Disable, this.WhenAnyValue(x => x.SettingsDisabled).Select(x => !x));
             IgnoreSettingCommand = ReactiveCommand.Create(() => SelectedAction = DeviceNotificationAction.Ignore, this.WhenAnyValue(x => x.SelectedAction).Select(x => x != DeviceNotificationAction.Ignore));
-            IgnoreAllCommand = ReactiveCommand.Create(IgnoreAll, assignedEventsList.CountChanged.Select(x => x > 0));
+            IgnoreAllCommand = ReactiveCommand.Create<Window>(IgnoreAll, assignedEventsList.CountChanged.Select(x => x > 0));
         }
 
         ~NotificationSystemViewModel()
@@ -348,7 +348,7 @@ namespace LcmsNet.Notification.ViewModels
         public ReactiveCommand<Unit, Unit> EnableCommand { get; }
         public ReactiveCommand<Unit, Unit> DisableCommand { get; }
         public ReactiveCommand<Unit, DeviceNotificationAction> IgnoreSettingCommand { get; }
-        public ReactiveCommand<Unit, Unit> IgnoreAllCommand { get; }
+        public ReactiveCommand<Window, Unit> IgnoreAllCommand { get; }
 
         /// <summary>
         /// Loads the notification file from path.
@@ -966,9 +966,9 @@ namespace LcmsNet.Notification.ViewModels
         /// <summary>
         /// Clears the actions for all notification settings.
         /// </summary>
-        private void IgnoreAll()
+        private void IgnoreAll(Window owner)
         {
-            var result = MessageBox.Show("Are you sure you want to clear all assigned notifications?", "Confirm", MessageBoxButton.YesNo);
+            var result = MessageBox.Show(owner, "Are you sure you want to clear all assigned notifications?", "Confirm", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 var removals = new List<string>();

@@ -62,7 +62,7 @@
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="Write PDF to:" VerticalAlignment="Center" Margin="0,0,3,0" />
                     <TextBox Width="428" Text="{Binding PdfPath}" IsReadOnly="True" />
-                    <Button Margin="5,0" Content="Browse" Command="{Binding BrowsePdfPathCommand}" />
+                    <Button Margin="5,0" Content="Browse" Command="{Binding BrowsePdfPathCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
                 </StackPanel>
             </StackPanel>
         </TabItem>

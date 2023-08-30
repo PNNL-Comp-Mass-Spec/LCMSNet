@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using LcmsNet.Data;
@@ -93,7 +94,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             UndoCommand = ReactiveCommand.Create(() => sampleQueue.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
             RedoCommand = ReactiveCommand.Create(() => sampleQueue.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
-            RunQueueCommand = ReactiveCommand.Create(RunQueue, this.WhenAnyValue(x => x.IsRunButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
+            RunQueueCommand = ReactiveCommand.Create<Window>(RunQueue, this.WhenAnyValue(x => x.IsRunButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
             StopQueueCommand = ReactiveCommand.Create(StopQueue, this.WhenAnyValue(x => x.IsStopButtonEnabled).ObserveOn(RxApp.MainThreadScheduler));
         }
 
@@ -180,7 +181,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public ReactiveCommand<Unit, Unit> UndoCommand { get; }
         public ReactiveCommand<Unit, Unit> RedoCommand { get; }
-        public ReactiveCommand<Unit, Unit> RunQueueCommand { get; }
+        public ReactiveCommand<Window, Unit> RunQueueCommand { get; }
         public ReactiveCommand<Unit, Unit> StopQueueCommand { get; }
 
         /// <summary>
@@ -284,7 +285,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Imports the queue into LCMS.
         /// </summary>
-        public void ImportQueue()
+        public void ImportQueue(Window owner)
         {
             var fileDialog = new OpenFileDialog
             {
@@ -292,7 +293,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 Filter = "LCMSNet Queue (*.lcms.csv)|*.lcms.csv|CSV file|*.csv|LCMS VB6 XML File (*.xml)|*.xml"
             };
 
-            var result = fileDialog.ShowDialog();
+            var result = fileDialog.ShowDialog(owner);
             if (result.HasValue && result.Value)
             {
                 ISampleQueueReader reader = null;
@@ -344,7 +345,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        public void ImportQueueFromCsv()
+        public void ImportQueueFromCsv(Window owner)
         {
             var fileDialog = new OpenFileDialog
             {
@@ -352,7 +353,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 Filter = "CSV (*.csv)|*.csv|CSV text (*.txt)|*.txt"
             };
 
-            var result = fileDialog.ShowDialog();
+            var result = fileDialog.ShowDialog(owner);
             if (result.HasValue && result.Value)
             {
                 try
@@ -387,7 +388,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Example of running a sequence for testing.
         /// </summary>
-        private void RunQueue()
+        private void RunQueue(Window owner)
         {
             if (sampleQueue.IsRunning)
             {
@@ -427,7 +428,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 if (errors.Count > 0)
                 {
                     var displayVm = new SampleValidatorErrorDisplayViewModel(errors);
-                    var display = new SampleValidatorErrorDisplayWindow() { DataContext = displayVm };
+                    var display = new SampleValidatorErrorDisplayWindow() { DataContext = displayVm, Owner = owner};
                     display.ShowDialog();
                     return;
                 }
@@ -439,7 +440,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             {
                 //TODO: Add a notification.
                 var displayVm = new SampleBadBlockDisplayViewModel(badBlocks);
-                var display = new SampleBadBlockDisplayWindow() { DataContext = displayVm };
+                var display = new SampleBadBlockDisplayWindow() { DataContext = displayVm, Owner = owner};
                 var result = display.ShowDialog();
                 if (!result.HasValue || !result.Value)
                 {
@@ -473,7 +474,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Saves the sample queue to another file.
         /// </summary>
-        public void SaveQueueAs()
+        public void SaveQueueAs(Window owner)
         {
             var saveDialog = new SaveFileDialog
             {
@@ -482,7 +483,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 Filter = "LCMSNet Queue (*.lcms.csv)|*.lcms.csv"
             };
 
-            var result = saveDialog.ShowDialog();
+            var result = saveDialog.ShowDialog(owner);
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
@@ -498,7 +499,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Exports the queue to LCMS Version XML
         /// </summary>
-        public void ExportQueueToXML()
+        public void ExportQueueToXML(Window owner)
         {
             var saveDialog = new SaveFileDialog
             {
@@ -507,7 +508,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 Filter = "LCMS VB6 XML (*.xml)|*.xml"
             };
 
-            var result = saveDialog.ShowDialog();
+            var result = saveDialog.ShowDialog(owner);
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
@@ -519,7 +520,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Exports queue to CSV.
         /// </summary>
-        public void ExportQueueToCsv()
+        public void ExportQueueToCsv(Window owner)
         {
             var saveDialog = new SaveFileDialog
             {
@@ -528,7 +529,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 Filter = "Comma Separated (*.csv)|*.csv"
             };
 
-            var result = saveDialog.ShowDialog();
+            var result = saveDialog.ShowDialog(owner);
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;
@@ -540,7 +541,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Exports the sample queue to Xcalibur
         /// </summary>
-        public void ExportQueueToXcalibur()
+        public void ExportQueueToXcalibur(Window owner)
         {
             var saveDialog = new SaveFileDialog
             {
@@ -549,7 +550,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 Filter = "Comma Separated (*.csv)|*.csv"
             };
 
-            var result = saveDialog.ShowDialog();
+            var result = saveDialog.ShowDialog(owner);
             if (result.HasValue && result.Value)
             {
                 lastSavedFileName = saveDialog.FileName;

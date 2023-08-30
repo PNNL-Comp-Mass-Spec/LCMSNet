@@ -50,7 +50,7 @@
                         <TextBlock Grid.Row="2" Margin="3,10,3,0" Text="Events With Actions" />
                         <!-- Using code-behind with GotFocus to run the desired control of the displayed data vs. the currently selected item -->
                         <ListBox Grid.Row="3" Margin="3,0" ItemsSource="{Binding AssignedEventsList}" SelectedItem="{Binding SelectedEvent}" IsEnabled="{Binding EventsListEnabled}" GotFocus="EventsListBox_GotFocus" />
-                        <Button Grid.Row="4" Margin="3" Command="{Binding IgnoreAllCommand}">
+                        <Button Grid.Row="4" Margin="3" Command="{Binding IgnoreAllCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                             <TextBlock Margin="15,3" Text="Ignore All" />
                         </Button>
                     </Grid>

@@ -59,7 +59,7 @@ namespace LcmsNet.Configuration.ViewModels
             this.WhenAnyValue(x => x.SpecialColumnEnabled).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLEDSPECIAL, (!x).ToString()));
             this.WhenAnyValue(x => x.EnableUndoRedo).Subscribe(x => LCMSSettings.SetParameter(LCMSSettings.PARAM_EnableUndoRedo, x.ToString()));
 
-            BrowsePdfPathCommand = ReactiveCommand.Create(BrowsePdfPath);
+            BrowsePdfPathCommand = ReactiveCommand.Create<Window>(BrowsePdfPath);
         }
 
         private double minVolume = 1;
@@ -132,9 +132,9 @@ namespace LcmsNet.Configuration.ViewModels
         }
 
         public ReadOnlyCollection<string> TimeZoneComboBoxOptions { get; }
-        public ReactiveCommand<Unit, Unit> BrowsePdfPathCommand { get; }
+        public ReactiveCommand<Window, Unit> BrowsePdfPathCommand { get; }
 
-        private void BrowsePdfPath()
+        private void BrowsePdfPath(Window owner)
         {
             var dialog = new CommonOpenFileDialog()
             {
@@ -144,7 +144,7 @@ namespace LcmsNet.Configuration.ViewModels
                 EnsurePathExists = true,
             };
 
-            var result = dialog.ShowDialog();
+            var result = dialog.ShowDialog(owner);
 
             if (result == CommonFileDialogResult.Ok)
             {

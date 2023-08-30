@@ -16,7 +16,23 @@ namespace LcmsNet.SampleQueue.Views
             {
                 GridButtonRow.Height = new GridLength(0);
             }
+
+            // Can't get the containing window until the control is loaded.
+            Loaded += (sender, args) => InWindow = Window.GetWindow(this);
         }
+
+        /// <summary>
+        /// Reference to the window that contains this view for context menu commands
+        /// </summary>
+        public Window InWindow
+        {
+            get => (Window)GetValue(InWindowProperty);
+            set => SetValue(InWindowProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for InWindow.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty InWindowProperty =
+            DependencyProperty.Register("InWindow", typeof(Window), typeof(SampleControlView), new PropertyMetadata(null));
 
         private void UIElement_OnIsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
         {

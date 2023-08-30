@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Media;
 using DynamicData;
 using DynamicData.Binding;
@@ -145,7 +146,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public ColumnData Column { get; }
 
         public ReactiveCommand<Unit, SampleData> AddBlankAppendCommand { get; protected set; }
-        public ReactiveCommand<Unit, Unit> MoveToColumnCommand { get; protected set; }
+        public ReactiveCommand<Window, Unit> MoveToColumnCommand { get; protected set; }
 
         protected override void SetupCommands()
         {
@@ -156,7 +157,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             DeleteUnusedCommand = ReactiveCommand.Create(() => this.SampleDataManager.RemoveUnusedSamples(Column, enumColumnDataHandling.CreateUnused));
             MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, MoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
             MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Column), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveToColumnCommand = ReactiveCommand.Create(() => this.MoveSamplesToColumn(enumColumnDataHandling.CreateUnused), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveToColumnCommand = ReactiveCommand.Create<Window>(w => this.MoveSamplesToColumn(enumColumnDataHandling.CreateUnused, w), this.WhenAnyValue(x => x.ItemsSelected));
         }
 
         /// <summary>
@@ -252,10 +253,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Moves the selected samples to another column selected through a dialog window.
         /// </summary>
-        protected void MoveSamplesToColumn(enumColumnDataHandling handling)
+        protected void MoveSamplesToColumn(enumColumnDataHandling handling, Window owner)
         {
             var selector = new MoveToColumnSelectorViewModel();
-            var selectorWindow = new MoveToColumnSelectorWindow() { DataContext = selector };
+            var selectorWindow = new MoveToColumnSelectorWindow() { DataContext = selector, Owner = owner };
 
             var result = selectorWindow.ShowDialog();
 

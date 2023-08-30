@@ -52,13 +52,13 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             AssignSelectedToVialCommand = ReactiveCommand.Create(() => AssignSelectedToVial(this.AssignVial), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
             AutoAssignVialsCommand = ReactiveCommand.Create(AutoAssignVials, this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray1Command = ReactiveCommand.Create(() => UpdateTrayAssignment(1), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray2Command = ReactiveCommand.Create(() => UpdateTrayAssignment(2), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray3Command = ReactiveCommand.Create(() => UpdateTrayAssignment(3), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray4Command = ReactiveCommand.Create(() => UpdateTrayAssignment(4), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray5Command = ReactiveCommand.Create(() => UpdateTrayAssignment(5), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToTray6Command = ReactiveCommand.Create(() => UpdateTrayAssignment(6), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
-            MoveToUnassignedCommand = ReactiveCommand.Create(() => UpdateTrayAssignment(0), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray1Command = ReactiveCommand.Create<Window>(w => UpdateTrayAssignment(1, w), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray2Command = ReactiveCommand.Create<Window>(w => UpdateTrayAssignment(2, w), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray3Command = ReactiveCommand.Create<Window>(w => UpdateTrayAssignment(3, w), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray4Command = ReactiveCommand.Create<Window>(w => UpdateTrayAssignment(4, w), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray5Command = ReactiveCommand.Create<Window>(w => UpdateTrayAssignment(5, w), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToTray6Command = ReactiveCommand.Create<Window>(w => UpdateTrayAssignment(6, w), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
+            MoveToUnassignedCommand = ReactiveCommand.Create<Window>(w => UpdateTrayAssignment(0, w), this.WhenAnyValue(x => x.SelectedSamples.Count).Select(x => x > 0));
         }
 
         private bool showUnassigned = true;
@@ -92,19 +92,19 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public ReactiveCommand<Unit, Unit> AssignSelectedToVialCommand { get; }
         public ReactiveCommand<Unit, Unit> AutoAssignVialsCommand { get; }
-        public ReactiveCommand<Unit, Unit> MoveToTray1Command { get; }
-        public ReactiveCommand<Unit, Unit> MoveToTray2Command { get; }
-        public ReactiveCommand<Unit, Unit> MoveToTray3Command { get; }
-        public ReactiveCommand<Unit, Unit> MoveToTray4Command { get; }
-        public ReactiveCommand<Unit, Unit> MoveToTray5Command { get; }
-        public ReactiveCommand<Unit, Unit> MoveToTray6Command { get; }
-        public ReactiveCommand<Unit, Unit> MoveToUnassignedCommand { get; }
+        public ReactiveCommand<Window, Unit> MoveToTray1Command { get; }
+        public ReactiveCommand<Window, Unit> MoveToTray2Command { get; }
+        public ReactiveCommand<Window, Unit> MoveToTray3Command { get; }
+        public ReactiveCommand<Window, Unit> MoveToTray4Command { get; }
+        public ReactiveCommand<Window, Unit> MoveToTray5Command { get; }
+        public ReactiveCommand<Window, Unit> MoveToTray6Command { get; }
+        public ReactiveCommand<Window, Unit> MoveToUnassignedCommand { get; }
 
         /// <summary>
         /// Updates tray assignments for selected samples
         /// </summary>
         /// <param name="newTrayNum">New tray number</param>
-        private void UpdateTrayAssignment(int newTrayNum)
+        private void UpdateTrayAssignment(int newTrayNum, Window window)
         {
             if (FilteredSamples.Count == 0)
             {
@@ -113,7 +113,7 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             if (SelectedSamples.Count == 0)
             {
-                MessageBox.Show("At least one sample must be selected");
+                MessageBox.Show(window, "At least one sample must be selected");
                 return;
             }
 

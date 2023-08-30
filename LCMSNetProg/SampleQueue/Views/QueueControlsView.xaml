@@ -44,7 +44,7 @@
                 <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" Text="Blank" />
             </Grid>
         </Button>
-        <Button Grid.Column="2" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding SampleDataManager.DMSAvailable}" Command="{Binding AddDMSCommand}" TabIndex="33" >
+        <Button Grid.Column="2" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding SampleDataManager.DMSAvailable}" Command="{Binding AddDMSCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" TabIndex="33" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
@@ -80,7 +80,7 @@
         <Button Grid.Column="6" Margin="4" Command="{Binding MoveDownCommand}" TabIndex="30" >
             <Image Source="{StaticResource ButtonDownImage16}" Stretch="None" VerticalAlignment="Top" />
         </Button>
-        <Button Grid.Column="7" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding FillDownCommand}" TabIndex="36" >
+        <Button Grid.Column="7" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding FillDownCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" TabIndex="36" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
@@ -90,7 +90,7 @@
                 <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow" Text="Fill Down" />
             </Grid>
         </Button>
-        <Button Grid.Column="8" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding TrayVialCommand}" TabIndex="37" >
+        <Button Grid.Column="8" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding TrayVialCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" TabIndex="37" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
@@ -100,7 +100,7 @@
                 <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="WrapWithOverflow" Text="Tray Vial" />
             </Grid>
         </Button>
-        <Button Grid.Column="9" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding MoveToColumnCommand}" TabIndex="37" >
+        <Button Grid.Column="9" Margin="4" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Command="{Binding MoveToColumnCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" TabIndex="37" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />

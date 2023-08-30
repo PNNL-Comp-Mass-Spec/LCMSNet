@@ -36,7 +36,7 @@
                     <TextBlock Text="Save All" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
-            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveMethodCommand}">
+            <Button DockPanel.Dock="Right" Margin="3" Command="{Binding SaveMethodCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{StaticResource SaveWithIndicatorImage}" MaxHeight="24" />
                     <TextBlock Text="Save" VerticalAlignment="Center" />

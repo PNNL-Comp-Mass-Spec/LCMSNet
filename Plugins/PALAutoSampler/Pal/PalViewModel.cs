@@ -39,7 +39,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             this.PropertyChanged += PalViewModel_PropertyChanged;
 
             RefreshMethodListCommand = ReactiveCommand.CreateFromTask(RefreshMethods);
-            RunMethodCommand = ReactiveCommand.CreateFromTask(RunMethod);
+            RunMethodCommand = ReactiveCommand.CreateFromTask<Window>(RunMethod);
             StopMethodCommand = ReactiveCommand.CreateFromTask(StopMethod);
             RefreshStatusCommand = ReactiveCommand.CreateFromTask(RefreshStatus);
             ApplyPortNameCommand = ReactiveCommand.Create(ApplyPortName);
@@ -269,7 +269,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         }
 
         public ReactiveCommand<Unit, Unit> RefreshMethodListCommand { get; }
-        public ReactiveCommand<Unit, Unit> RunMethodCommand { get; }
+        public ReactiveCommand<Window, Unit> RunMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> StopMethodCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshStatusCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyPortNameCommand { get; }
@@ -384,7 +384,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             ProcessTraysAndMaxVials(Pal.TrayNamesAndMaxVials);
         }
 
-        private async Task RunMethod()
+        private async Task RunMethod(Window window)
         {
             var taskType = "";
             var elapsedSecs = 0.0;
@@ -395,13 +395,13 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 {
                     if (string.IsNullOrWhiteSpace(SelectedTray))
                     {
-                        MessageBox.Show("No tray selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(window, "No tray selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
 
                     if (string.IsNullOrWhiteSpace(SelectedMethod))
                     {
-                        MessageBox.Show("No method selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(window, "No method selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
 

@@ -28,7 +28,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Command for FIND button to load available request list from DMS
         /// </summary>
-        public ReactiveCommand<Unit, Unit> FindCommand { get; }
+        public ReactiveCommand<Window, Unit> FindCommand { get; }
 
         /// <summary>
         /// Command for MoveDown button to move requests from Available Requests to Requests To Run list
@@ -38,7 +38,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Command for MoveUp button to move requests from Requests To Run to Available Requests list
         /// </summary>
-        public ReactiveCommand<Unit, Unit> MoveUpCommand { get; }
+        public ReactiveCommand<Window, Unit> MoveUpCommand { get; }
 
         /// <summary>
         /// Command to sort available requests by batch, block, and run order
@@ -189,9 +189,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Load the LC cart lists
             RefreshCartList();
 
-            FindCommand = ReactiveCommand.CreateFromTask(FindDmsRequests);
+            FindCommand = ReactiveCommand.CreateFromTask<Window>(FindDmsRequests);
             MoveDownCommand = ReactiveCommand.Create(MoveRequestsToRunList);
-            MoveUpCommand = ReactiveCommand.Create(RemoveRequestsFromRunList);
+            MoveUpCommand = ReactiveCommand.Create<Window>(RemoveRequestsFromRunList);
             SortByBatchBlockRunOrderCommand = ReactiveCommand.Create(SortByBatchBlockRunOrder, this.WhenAnyValue(x => x.BlockingEnabled));
         }
 
@@ -245,7 +245,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Loads listViewAvailableRequests with all requests in DMS matching specified criteria
         /// </summary>
-        private async Task FindDmsRequests()
+        private async Task FindDmsRequests(Window owner)
         {
             // Fill an object with the data from the UI, then pass to DMSTools class to run the query
             var queryData = new SampleQueryData {
@@ -293,7 +293,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Clear the available datasets listview
             AvailableRequestData.ClearSamples();
 
-            var tempRequestList = await Task.Run(() => GetDMSData(queryData));
+            var tempRequestList = await Task.Run(() => GetDMSData(queryData, owner));
 
             if (tempRequestList == null)
             {
@@ -304,7 +304,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             LoadingData = false;
             if (!tempRequestList.Any())
             {
-                MessageBox.Show("No requests found in DMS");
+                MessageBox.Show(owner, "No requests found in DMS");
                 RequestsFoundString = "0 requests found";
                 return;
             }
@@ -350,11 +350,11 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var msg =
                     "You have downloaded samples that have blocking enabled. Please be sure you have downloaded the " +
                     "entire block of samples needed";
-                MessageBox.Show(msg, "Blocked Samples Downloaded", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(owner, msg, "Blocked Samples Downloaded", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private List<DmsDownloadData> GetDMSData(SampleQueryData queryData)
+        private List<DmsDownloadData> GetDMSData(SampleQueryData queryData, Window owner)
         {
             var tempRequestList = new List<DmsDownloadData>();
 
@@ -369,7 +369,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 // The DMS connection string wasn't found
                 var errMsg = ex.Message + " while getting request listing\r\n";
                 errMsg = errMsg + "Please close LcmsNet program and correct the configuration file";
-                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
+                MessageBox.Show(owner, errMsg, "LcmsNet", MessageBoxButton.OK);
                 return null;
             }
             catch (DatabaseDataException ex)
@@ -378,7 +378,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 if (ex.InnerException != null)
                     errMsg += ": " + ex.InnerException.Message;
 
-                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
+                MessageBox.Show(owner, errMsg, "LcmsNet", MessageBoxButton.OK);
                 return null;
             }
             finally
@@ -437,7 +437,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Removes requests from the "Requests to run" list
         /// </summary>
-        private void RemoveRequestsFromRunList()
+        private void RemoveRequestsFromRunList(Window owner)
         {
             var data = SelectedRequestData.SelectedData.ToList();
             AvailableRequestData.AddSamples(data);
@@ -448,7 +448,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                 if (!dmsRequestList.Remove(tempItem))
                 {
                     var tempStr = "Request " + tempItem.RequestName + " not found in requested run collection";
-                    MessageBox.Show(tempStr);
+                    MessageBox.Show(owner, tempStr);
                     return;
                 }
             }

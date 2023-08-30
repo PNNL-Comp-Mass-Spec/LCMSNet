@@ -46,7 +46,7 @@
                         <TextBlock Grid.Row="3" Grid.Column="2" Margin="10,3,3,3" Text="Volume" />
                         <xctk:IntegerUpDown Grid.Row="3" Grid.Column="3" Margin="3" Minimum="1" Maximum="1000" Value="{Binding Volume}" />
                         <TextBlock Grid.Row="3" Grid.Column="4" Margin="3" Text="uL" />
-                        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" Content="Run/Continue Method" Command="{Binding RunMethodCommand}" />
+                        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" Content="Run/Continue Method" Command="{Binding RunMethodCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
                         <Button Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="3" Content="STOP!" Command="{Binding StopMethodCommand}" />
                         <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" Content="Home PAL" Command="{Binding ResetPalCommand}" />
                         <Button Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Margin="3" Content="Reset PAL" Command="{Binding FullResetPalCommand}" />

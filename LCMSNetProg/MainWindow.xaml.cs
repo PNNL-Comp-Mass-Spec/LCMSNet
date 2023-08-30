@@ -61,7 +61,7 @@ namespace LcmsNet
             var msg = "Application shutdown requested. If samples are running, data may be lost" +
                       Environment.NewLine +
                       Environment.NewLine + "Are you sure you want to shut down?";
-            var result = MessageBox.Show(msg, "Closing Application", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            var result = MessageBox.Show(Application.Current.MainWindow, msg, "Closing Application", MessageBoxButton.OKCancel, MessageBoxImage.Question);
             if (result != MessageBoxResult.OK)
             {
                 e.Cancel = true;

@@ -23,7 +23,8 @@ namespace LcmsNet.Method.Views
                 var conversion = new ConvertToolWindow
                 {
                     DataContext = conversionVM,
-                    WindowStartupLocation = WindowStartupLocation.Manual
+                    WindowStartupLocation = WindowStartupLocation.Manual,
+                    Owner = Window.GetWindow(this)
                 };
 
                 var pos = PointToScreen(ConversionButton.TranslatePoint(new Point(0, 0), this));

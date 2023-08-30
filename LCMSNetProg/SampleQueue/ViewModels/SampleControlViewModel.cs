@@ -159,7 +159,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             SelectedSample = Samples.First(x => x.Sample.Equals(samples.First()));
         }
 
-        private void EditTrayAndVial()
+        private void EditTrayAndVial(Window owner)
         {
             var samples = GetSelectedSamples();
             // Remove any samples that have already been run, waiting to run, or had an error (== has run).
@@ -177,7 +177,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
 
             var trayVial = new TrayVialAssignmentViewModel(SampleDataManager.AutoSamplerTrays, samples);
-            var trayVialWindow = new TrayVialAssignmentWindow() { DataContext = trayVial };
+            var trayVialWindow = new TrayVialAssignmentWindow() { DataContext = trayVial, Owner = owner };
 
             using (var batchDisp = SampleDataManager.StartBatchChange())
             {
@@ -196,7 +196,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Performs fill down methods for sample data.
         /// </summary>
-        private void FillDown()
+        private void FillDown(Window owner)
         {
             // Get the list of selected samples
             var samples = GetSelectedSamples();
@@ -212,7 +212,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             // Create a new fill down form.
             var fillDownViewModel = new SampleMethodFillDownViewModel { Samples = samples };
             fillDownViewModel.EnsureItemsAreSelected();
-            var dialog = new SampleMethodFillDownWindow { DataContext = fillDownViewModel };
+            var dialog = new SampleMethodFillDownWindow { DataContext = fillDownViewModel, Owner = owner };
 
             using (var batchDisp = SampleDataManager.StartBatchChange())
             {
@@ -235,12 +235,12 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Displays the DMS View Dialog Window.
         /// </summary>
-        private void ShowDMSView()
+        private void ShowDMSView(Window owner)
         {
             if (DMSView == null)
                 return;
 
-            var dmsWindow = new DMSDownloadWindow() { DataContext = DMSView };
+            var dmsWindow = new DMSDownloadWindow() { DataContext = DMSView, Owner = owner };
             var result = dmsWindow.ShowDialog();
 
             // If the user clicks ok , then add the samples from the
@@ -259,7 +259,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     if (HasUnusedSamples())
                     {
                         // Ask the user what to do with these samples?
-                        var dialog = new InsertOntoUnusedWindow();
+                        var dialog = new InsertOntoUnusedWindow() { Owner = owner };
                         var insertResult = dialog.ShowDialog();
 
                         insertToUnused = insertResult.HasValue && insertResult.Value;
@@ -301,14 +301,14 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Preview the selected samples on the data grid.
         /// </summary>
-        public void PreviewSelectedThroughput()
+        public void PreviewSelectedThroughput(Window owner)
         {
             var samples = GetSelectedSamples();
             samples.RemoveAll(data => data.Name.Contains(SampleDataManager.UnusedSampleName));
             if (samples.Count > 0)
             {
                 // Validate the samples, and make sure we want to run these.
-                var previewView = new ThroughputPreviewWindow();
+                var previewView = new ThroughputPreviewWindow() { Owner = owner };
                 var previewVm = new ThroughputPreviewViewModel();
                 previewView.DataContext = previewVm;
 
@@ -548,9 +548,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
         }
 
-        private void ClearSamplesConfirm()
+        private void ClearSamplesConfirm(Window owner)
         {
-            var result = System.Windows.MessageBox.Show(
+            var result = MessageBox.Show(owner,
                 @"You are about to clear your queued samples.  Select Ok to clear, or Cancel to have no change.", @"Clear Queue Confirmation",
                 MessageBoxButton.OKCancel);
 
@@ -573,18 +573,18 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public ReactiveCommand<Unit, SampleData> AddBlankCommand { get; protected set; }
         public ReactiveCommand<Unit, SampleData> AddBlankToUnusedCommand { get; protected set; }
-        public ReactiveCommand<Unit, Unit> AddDMSCommand { get; protected set; }
+        public ReactiveCommand<Window, Unit> AddDMSCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> RemoveSelectedCommand { get; protected set; }
-        public ReactiveCommand<Unit, Unit> FillDownCommand { get; protected set; }
-        public ReactiveCommand<Unit, Unit> TrayVialCommand { get; protected set; }
+        public ReactiveCommand<Window, Unit> FillDownCommand { get; protected set; }
+        public ReactiveCommand<Window, Unit> TrayVialCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> MoveDownCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> MoveUpCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> DeleteUnusedCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> CartColumnDateCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> UndoCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> RedoCommand { get; protected set; }
-        public ReactiveCommand<Unit, Unit> PreviewThroughputCommand { get; protected set; }
-        public ReactiveCommand<Unit, Unit> ClearAllSamplesCommand { get; protected set; }
+        public ReactiveCommand<Window, Unit> PreviewThroughputCommand { get; protected set; }
+        public ReactiveCommand<Window, Unit> ClearAllSamplesCommand { get; protected set; }
         public ReactiveCommand<Unit, Unit> ClipboardPasteCommand { get; protected set; }
 
         protected virtual void SetupCommands()
@@ -593,18 +593,18 @@ namespace LcmsNet.SampleQueue.ViewModels
 
             AddBlankCommand = ReactiveCommand.Create(() => AddNewSample(false));
             AddBlankToUnusedCommand = ReactiveCommand.Create(() => AddNewSample(true));
-            AddDMSCommand = ReactiveCommand.Create(ShowDMSView);
+            AddDMSCommand = ReactiveCommand.Create<Window>(ShowDMSView);
             RemoveSelectedCommand = ReactiveCommand.Create(() => RemoveSelectedSamples(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
-            FillDownCommand = ReactiveCommand.Create(FillDown, this.WhenAnyValue(x => x.ItemsSelected));
-            TrayVialCommand = ReactiveCommand.Create(EditTrayAndVial, this.WhenAnyValue(x => x.ItemsSelected));
+            FillDownCommand = ReactiveCommand.Create<Window>(FillDown, this.WhenAnyValue(x => x.ItemsSelected));
+            TrayVialCommand = ReactiveCommand.Create<Window>(EditTrayAndVial, this.WhenAnyValue(x => x.ItemsSelected));
             MoveDownCommand = ReactiveCommand.Create(() => MoveSelectedSamples(1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             MoveUpCommand = ReactiveCommand.Create(() => MoveSelectedSamples(-1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             DeleteUnusedCommand = ReactiveCommand.Create(() => RemoveUnusedSamples(enumColumnDataHandling.LeaveAlone));
             CartColumnDateCommand = ReactiveCommand.Create(AddDateCartnameColumnIDToDatasetName, this.WhenAnyValue(x => x.ItemsSelected));
             UndoCommand = ReactiveCommand.Create(() => SampleDataManager.Undo(), this.WhenAnyValue(x => x.SampleDataManager.CanUndo).ObserveOn(RxApp.MainThreadScheduler));
             RedoCommand = ReactiveCommand.Create(() => SampleDataManager.Redo(), this.WhenAnyValue(x => x.SampleDataManager.CanRedo).ObserveOn(RxApp.MainThreadScheduler));
-            PreviewThroughputCommand = ReactiveCommand.Create(PreviewSelectedThroughput, this.WhenAnyValue(x => x.ItemsSelected));
-            ClearAllSamplesCommand = ReactiveCommand.Create(ClearSamplesConfirm);
+            PreviewThroughputCommand = ReactiveCommand.Create<Window>(PreviewSelectedThroughput, this.WhenAnyValue(x => x.ItemsSelected));
+            ClearAllSamplesCommand = ReactiveCommand.Create<Window>(ClearSamplesConfirm);
             ClipboardPasteCommand = ReactiveCommand.CreateFromTask(ImportQueueFromClipboard);
         }
 

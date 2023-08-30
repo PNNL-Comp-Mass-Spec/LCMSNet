@@ -7,7 +7,8 @@
              xmlns:views="clr-namespace:LcmsNet.SampleQueue.Views"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance {x:Type viewModels:ColumnControlViewModel}, IsDesignTimeCreatable=True}"
-             d:DesignHeight="500" d:DesignWidth="800">
+             d:DesignHeight="500" d:DesignWidth="800"
+             x:Name="ThisView">
     <Grid Background="{Binding BackColor, Mode=OneWay}" IsEnabled="{Binding IsViewEnabled, Mode=OneWay}" IsKeyboardFocusWithinChanged="UIElement_OnIsKeyboardFocusWithinChanged">
         <Grid.ContextMenu>
             <ContextMenu>
@@ -28,7 +29,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Insert Blank Into Unused" Command="{Binding AddBlankToUnusedCommand}" />
-                <MenuItem Header="Import from DMS" Command="{Binding AddDMSCommand}" />
+                <MenuItem Header="Import from DMS" Command="{Binding AddDMSCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" />
                 <Separator />
                 <MenuItem Header="Add Date, Cart Name, Column ID" Command="{Binding CartColumnDateCommand}" />
                 <Separator />
@@ -38,7 +39,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Delete Unused" Command="{Binding DeleteUnusedCommand}" />
-                <MenuItem Header="Clear" Command="{Binding ClearAllSamplesCommand}" />
+                <MenuItem Header="Clear" Command="{Binding ClearAllSamplesCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" />
                 <Separator />
                 <MenuItem Header="Show Columns...">
                     <MenuItem.ItemsSource>
@@ -57,7 +58,7 @@
                         </CompositeCollection>
                     </MenuItem.ItemsSource>
                 </MenuItem>
-                <MenuItem Header="Preview Throughput" Command="{Binding PreviewThroughputCommand}" />
+                <MenuItem Header="Preview Throughput" Command="{Binding PreviewThroughputCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" />
             </ContextMenu>
         </Grid.ContextMenu>
         <Grid.Resources>

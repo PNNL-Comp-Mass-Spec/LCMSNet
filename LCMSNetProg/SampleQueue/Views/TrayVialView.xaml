@@ -39,13 +39,13 @@
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="3" BorderThickness="1" BorderBrush="Black">
             <StackPanel Margin="5,5">
                 <TextBlock Text="Move To:" Margin="3,0" />
-                <Button Margin="3" Height="30" Width="70" Content="Tray 1" Command="{Binding MoveToTray1Command}" />
-                <Button Margin="3" Height="30" Width="70" Content="Tray 2" Command="{Binding MoveToTray2Command}" />
-                <Button Margin="3" Height="30" Width="70" Content="Tray 3" Command="{Binding MoveToTray3Command}" />
-                <Button Margin="3" Height="30" Width="70" Content="Tray 4" Command="{Binding MoveToTray4Command}" />
-                <Button Margin="3" Height="30" Width="70" Content="Tray 5" Command="{Binding MoveToTray5Command}" />
-                <Button Margin="3" Height="30" Width="70" Content="Tray 6" Command="{Binding MoveToTray6Command}" />
-                <Button Margin="3" Height="30" Width="70" Content="No Assign" Command="{Binding MoveToUnassignedCommand}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 1" Command="{Binding MoveToTray1Command}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 2" Command="{Binding MoveToTray2Command}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 3" Command="{Binding MoveToTray3Command}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 4" Command="{Binding MoveToTray4Command}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 5" Command="{Binding MoveToTray5Command}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                <Button Margin="3" Height="30" Width="70" Content="Tray 6" Command="{Binding MoveToTray6Command}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                <Button Margin="3" Height="30" Width="70" Content="No Assign" Command="{Binding MoveToUnassignedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
             </StackPanel>
         </Border>
     </Grid>

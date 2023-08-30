@@ -38,13 +38,13 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
             this.WhenAnyValue(x => x.DesignTabSelected).Where(x => x).Subscribe(x => FluidicsControlVm.Refresh());
 
-            LoadCommand = ReactiveCommand.Create(LoadHardware, this.WhenAnyValue(x => x.DevicesUnlocked));
+            LoadCommand = ReactiveCommand.Create<Window>(LoadHardware, this.WhenAnyValue(x => x.DevicesUnlocked));
             SaveCommand = ReactiveCommand.Create(() => SaveConfiguration(), this.WhenAnyValue(x => x.DevicesUnlocked));
-            SaveAsCommand = ReactiveCommand.Create(SaveHardwareAs, this.WhenAnyValue(x => x.DevicesUnlocked));
+            SaveAsCommand = ReactiveCommand.Create<Window>(SaveHardwareAs, this.WhenAnyValue(x => x.DevicesUnlocked));
             LockUnlockCommand = ReactiveCommand.Create(() => DevicesLocked = !DevicesLocked);
-            InitializeCommand = ReactiveCommand.Create(InitializeDevices, this.WhenAnyValue(x => x.DevicesUnlocked));
-            AddCommand = ReactiveCommand.Create(AddDeviceToDeviceManager, this.WhenAnyValue(x => x.DevicesUnlocked));
-            RemoveCommand = ReactiveCommand.Create(RemoveDevice, this.WhenAnyValue(x => x.DevicesUnlocked));
+            InitializeCommand = ReactiveCommand.Create<Window>(InitializeDevices, this.WhenAnyValue(x => x.DevicesUnlocked));
+            AddCommand = ReactiveCommand.Create<Window>(AddDeviceToDeviceManager, this.WhenAnyValue(x => x.DevicesUnlocked));
+            RemoveCommand = ReactiveCommand.Create<Window>(RemoveDevice, this.WhenAnyValue(x => x.DevicesUnlocked));
             ConnectCommand = ReactiveCommand.Create(ConnectDevices, this.WhenAnyValue(x => x.DevicesUnlocked));
             RefreshCommand = ReactiveCommand.Create(Refresh);
         }
@@ -133,13 +133,13 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             private set => this.RaiseAndSetIfChanged(ref advancedDeviceControlPanel, value);
         }
 
-        public ReactiveCommand<Unit, Unit> LoadCommand { get; }
+        public ReactiveCommand<Window, Unit> LoadCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveAsCommand { get; }
+        public ReactiveCommand<Window, Unit> SaveAsCommand { get; }
         public ReactiveCommand<Unit, bool> LockUnlockCommand { get; }
-        public ReactiveCommand<Unit, Unit> InitializeCommand { get; }
-        public ReactiveCommand<Unit, Unit> AddCommand { get; }
-        public ReactiveCommand<Unit, Unit> RemoveCommand { get; }
+        public ReactiveCommand<Window, Unit> InitializeCommand { get; }
+        public ReactiveCommand<Window, Unit> AddCommand { get; }
+        public ReactiveCommand<Window, Unit> RemoveCommand { get; }
         public ReactiveCommand<Unit, Unit> ConnectCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
 
@@ -330,7 +330,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// <summary>
         /// Adds the currently selected device to the dashboard.
         /// </summary>
-        private void AddDeviceToDeviceManager()
+        private void AddDeviceToDeviceManager(Window owner)
         {
             var controller = new DeviceAddController();
             var addWindowVm = new DeviceAddViewModel();
@@ -338,6 +338,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             var addWindow = new DeviceAddWindow()
             {
                 DataContext = addWindowVm,
+                Owner = owner
             };
 
             var result = addWindow.ShowDialog();
@@ -358,6 +359,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             {
                 DataContext = displayVm,
                 ShowActivated = true,
+                Owner = owner
             };
 
             display.ShowDialog();
@@ -366,12 +368,12 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// <summary>
         /// Loads the hardware configuration.
         /// </summary>
-        private void LoadHardware()
+        private void LoadHardware(Window owner)
         {
             var deviceCount = DeviceManager.Manager.DeviceCount;
             if (deviceCount > 0)
             {
-                var result = MessageBox.Show("Do you want to clear the existing device configuration?", "Clear Configuration", MessageBoxButton.YesNo);
+                var result = MessageBox.Show(owner, "Do you want to clear the existing device configuration?", "Clear Configuration", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.No)
                 {
                     return;
@@ -383,7 +385,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 Filter = CONST_HARDWARE_CONFIG_FILTER,
                 FilterIndex = 0
             };
-            var openResult = openFileDialog.ShowDialog();
+            var openResult = openFileDialog.ShowDialog(owner);
             if (openResult.HasValue && openResult.Value)
             {
                 // The device manager sends us an event when it removes the devices.
@@ -402,14 +404,14 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// <summary>
         /// Saves the hardware configuration to a new path.
         /// </summary>
-        private void SaveHardwareAs()
+        private void SaveHardwareAs(Window owner)
         {
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = CONST_HARDWARE_CONFIG_FILTER,
                 FilterIndex = 0
             };
-            var saveResult = saveFileDialog.ShowDialog();
+            var saveResult = saveFileDialog.ShowDialog(owner);
             if (saveResult.HasValue && saveResult.Value)
             {
                 SaveConfiguration(saveFileDialog.FileName);
@@ -419,7 +421,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// <summary>
         /// Initialize devices.
         /// </summary>
-        private void InitializeDevices()
+        private void InitializeDevices(Window owner)
         {
             var initializedCount = DeviceManager.Manager.InitializedDeviceCount;
 
@@ -427,7 +429,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             if (initializedCount > 0)
             {
                 var result =
-                    MessageBox.Show("Some devices are initialized already.  Do you want to re-initialize those?",
+                    MessageBox.Show(owner, "Some devices are initialized already.  Do you want to re-initialize those?",
                         "Initialization", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Cancel)
                 {
@@ -447,6 +449,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
                 {
                     DataContext = displayVm,
                     ShowActivated = true,
+                    Owner = owner
                 };
 
                 display.ShowDialog();
@@ -538,7 +541,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         /// <summary>
         /// when btnRemove is clicked, attempt to remove selected connections
         /// </summary>
-        private void RemoveDevice()
+        private void RemoveDevice(Window owner)
         {
             if (!fluidicsMod.IsDeviceOrConnectionSelected() || DevicesLocked)
             {
@@ -547,7 +550,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
             try
             {
-                var areYouSure = MessageBox.Show("Are you sure you want to delete this device or connection?", "Delete Device", MessageBoxButton.YesNo);
+                var areYouSure = MessageBox.Show(owner, "Are you sure you want to delete this device or connection?", "Delete Device", MessageBoxButton.YesNo);
 
                 if (areYouSure == MessageBoxResult.Yes)
                 {

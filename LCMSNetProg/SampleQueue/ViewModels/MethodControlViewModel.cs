@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Media;
 using DynamicData;
 using DynamicData.Binding;
@@ -144,7 +145,7 @@ namespace LcmsNet.SampleQueue.ViewModels
         public override int NumFrozenColumns => 0;
 
         public ReactiveCommand<Unit, SampleData> AddBlankAppendCommand { get; protected set; }
-        public ReactiveCommand<Unit, Unit> MoveToColumnCommand { get; protected set; }
+        public ReactiveCommand<Window, Unit> MoveToColumnCommand { get; protected set; }
 
         protected override void SetupCommands()
         {
@@ -155,7 +156,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             //DeleteUnusedCommand = ReactiveCommand.Create(() => this.SampleDataManager.RemoveUnusedSamples(Column, enumColumnDataHandling.LeaveAlone));
             MoveDownCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
             MoveUpCommand = ReactiveCommand.Create(() => this.MoveSelectedSamples(-1, MoveSampleType.Sequence), this.WhenAnyValue(x => x.ItemsSelected));
-            MoveToColumnCommand = ReactiveCommand.Create(() => this.MoveSamplesToMethod(enumColumnDataHandling.LeaveAlone), this.WhenAnyValue(x => x.ItemsSelected));
+            MoveToColumnCommand = ReactiveCommand.Create<Window>(w => this.MoveSamplesToMethod(enumColumnDataHandling.LeaveAlone, w), this.WhenAnyValue(x => x.ItemsSelected));
         }
 
         /// <summary>
@@ -221,10 +222,10 @@ namespace LcmsNet.SampleQueue.ViewModels
         /// <summary>
         /// Moves the selected samples to another column selected through a dialog window.
         /// </summary>
-        protected void MoveSamplesToMethod(enumColumnDataHandling handling)
+        protected void MoveSamplesToMethod(enumColumnDataHandling handling, Window owner)
         {
             var selector = new MoveToMethodSelectorViewModel();
-            var selectorWindow = new MoveToMethodSelectorWindow() { DataContext = selector };
+            var selectorWindow = new MoveToMethodSelectorWindow() { DataContext = selector, Owner = owner };
 
             var result = selectorWindow.ShowDialog();
 
