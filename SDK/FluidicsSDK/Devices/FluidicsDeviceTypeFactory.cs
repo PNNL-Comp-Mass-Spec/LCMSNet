@@ -26,6 +26,7 @@ namespace FluidicsSDK.Devices
                 {typeof(IFourPortValve), typeof(FourPortFluidicsValve)},
                 {typeof(IFluidicsPump), typeof(FluidicsPump)},
                 {typeof(ISixPortValve), typeof(SixPortFluidicsValve)},
+                {typeof(IEightPortValve), typeof(EightPortFluidicsValve)},
                 {typeof(ITenPortValve), typeof(TenPortFluidicsValve)},
                 {typeof(IFluidicsSampler), typeof(FluidicsSampler)},
                 {typeof(ISixPortInjectionValve), typeof(SixPortInjectionFluidicsValve)},

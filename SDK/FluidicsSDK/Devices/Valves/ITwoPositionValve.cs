@@ -19,6 +19,9 @@ namespace FluidicsSDK.Devices.Valves
     public interface ISixPortValve : ITwoPositionValve
     { }
 
+    public interface IEightPortValve : ITwoPositionValve
+    { }
+
     public interface ITenPortValve : ITwoPositionValve
     { }
 

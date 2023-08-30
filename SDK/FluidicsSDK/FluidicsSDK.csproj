@@ -54,6 +54,7 @@
     <Compile Include="Base\Port.cs" />
     <Compile Include="Base\ValveErrors.cs" />
     <Compile Include="Base\ValveStates.cs" />
+    <Compile Include="Devices\Valves\EightPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\FourPortFluidicsValve.cs" />
     <Compile Include="Devices\Valves\IMultiPositionValve.cs" />
     <Compile Include="Devices\Valves\ISixPortInjectionValve.cs" />
