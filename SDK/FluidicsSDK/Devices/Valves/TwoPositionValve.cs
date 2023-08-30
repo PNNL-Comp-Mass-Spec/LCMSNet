@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using FluidicsSDK.Base;
+using FluidicsSDK.Graphic;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace FluidicsSDK.Devices.Valves
 {
@@ -14,6 +17,7 @@ namespace FluidicsSDK.Devices.Valves
     {
         protected Dictionary<TwoPositionState, List<Tuple<int, int>>> m_states;
         protected TwoPositionState m_currentState;
+        private ITwoPositionValve m_valve;
 
         /// <summary>
         /// constructor
@@ -29,6 +33,86 @@ namespace FluidicsSDK.Devices.Valves
             {
                 AddPort(point.Point, point.Number);
             }
+        }
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="numberOfPorts">the number of ports the valve will have</param>
+        /// <param name="positionAis1To2">True if position A connects ports 1 and 2; false if position A connects ports N and 1</param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        /// <param name="portNumberingClockwise"></param>
+        protected TwoPositionValve(int numberOfPorts, bool positionAis1To2, int xOffset = 2, int yOffset = 2, bool portNumberingClockwise = false) : this(numberOfPorts, xOffset, yOffset, portNumberingClockwise)
+        {
+            m_states = SetupStates(positionAis1To2);
+            m_currentState = TwoPositionState.PositionA;
+            ActivateState(m_states[m_currentState]);
+            var stateControlSize = new Size(15, 15);
+            var stateControl1Loc = new Point(Center.X - (stateControlSize.Width * 2), Center.Y - (stateControlSize.Height / 2));
+            var stateControl2Loc = new Point(Center.X + stateControlSize.Width, Center.Y - (stateControlSize.Height / 2));
+            var stateControlRectangle = new Rect(stateControl1Loc, stateControlSize);
+            var stateControlRectangle2 = new Rect(stateControl2Loc, stateControlSize);
+            //add left control
+            AddPrimitive(new FluidicsTriangle(stateControlRectangle, Orient.Left), LeftButtonAction);
+            //add right control
+            AddPrimitive(new FluidicsTriangle(stateControlRectangle2, Orient.Right), RightButtonAction);
+        }
+
+        private protected void SetBaseDevice(ITwoPositionValve valve)
+        {
+            m_valve = valve;
+            try
+            {
+                //m_valve.SetPosition(10);
+                if (m_valve != null)
+                    m_valve.PositionChanged += ValvePositionChanged;
+            }
+            catch (Exception)
+            {
+                // MessageBox.Show("Null valve: " + ex.Message);
+            }
+        }
+
+        private protected ITwoPositionValve GetBaseDevice()
+        {
+            return m_valve;
+        }
+
+        void ValvePositionChanged(object sender, ValvePositionEventArgs<TwoPositionState> e)
+        {
+            ActivateState((int)e.Position);
+        }
+
+        protected override void ClearDevice(IDevice device)
+        {
+            m_valve = null;
+        }
+
+        /// <summary>
+        /// Setup the devices states
+        /// </summary>
+        /// <param name="positionAis1To2">True if position A connects ports 1 and 2; false if position A connects ports N and 1</param>
+        /// <returns>a dictionary of with TwoPositionState enums as the keys and lists of tuples of int, int type as the values </returns>
+        private Dictionary<TwoPositionState, List<Tuple<int, int>>> SetupStates(bool positionAis1To2)
+        {
+            // https://www.vici.com/support/app/2p_japp.php has usage examples that also show positions
+            if (positionAis1To2)
+            {
+                // Valco non-Cheminert 2-position valves (some; port numbers are clockwise)
+                return new Dictionary<TwoPositionState, List<Tuple<int, int>>>
+                {
+                    { TwoPositionState.PositionA, GenerateState(0, Ports.Count - 1) },
+                    { TwoPositionState.PositionB, GenerateState(1, Ports.Count) }
+                };
+            }
+
+            // Valco Cheminert valves (port numbers are counterclockwise, position A is n-1)
+            return new Dictionary<TwoPositionState, List<Tuple<int, int>>>
+            {
+                {TwoPositionState.PositionB, GenerateState(0, Ports.Count - 1)},
+                {TwoPositionState.PositionA, GenerateState(1, Ports.Count)}
+            };
         }
 
         public override string StateString()
@@ -87,6 +171,52 @@ namespace FluidicsSDK.Devices.Valves
         {
             get => (int) m_currentState;
             set => m_currentState = (TwoPositionState) value;
+        }
+
+        private void ChangePosition(bool left)
+        {
+            var pos = (int)m_currentState;
+            if (m_currentState != TwoPositionState.Unknown)
+            {
+                if (left)
+                {
+                    pos--;
+                    if (pos < (int)TwoPositionState.PositionA)
+                    {
+                        pos = (int)TwoPositionState.PositionB;
+                    }
+                }
+                else
+                {
+                    pos++;
+                    if (pos > (int)TwoPositionState.PositionB)
+                    {
+                        pos = (int)TwoPositionState.PositionA;
+                    }
+                }
+            }
+            else
+            {
+                pos = (int)TwoPositionState.PositionA;
+            }
+
+            m_valve.SetPosition((TwoPositionState)pos);
+        }
+
+        /// <summary>
+        /// action to take when left state primitive is clicked
+        /// </summary>
+        private void LeftButtonAction()
+        {
+            ChangePosition(true);
+        }
+
+        /// <summary>
+        /// action to take when right state primitive is clicked
+        /// </summary>
+        private void RightButtonAction()
+        {
+            ChangePosition(false);
         }
     }
 }
