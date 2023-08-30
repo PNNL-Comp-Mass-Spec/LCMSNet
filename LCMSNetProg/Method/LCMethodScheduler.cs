@@ -528,6 +528,11 @@ namespace LcmsNet.Method
                                 {
                                     var overdueSpan = now.Subtract(sampleEndTime[columnID]);
                                     var timeElapsedOverdue = overdueSpan.TotalSeconds;
+                                    if (Math.Abs(timeElapsedOverdue) > 604800d) // 7 days
+                                    {
+                                        // This check is to avoid an exception that has happened where timeElapsedOverdue was too big (positive/negative) for an int
+                                        timeElapsedOverdue = 604800d;
+                                    }
 
                                     if (Convert.ToInt32(Math.Floor(timeElapsedOverdue)) >= CONST_OVER_EVENT_TIME_LIMIT_SECONDS)
                                     {
@@ -779,7 +784,6 @@ namespace LcmsNet.Method
                 //Separation completed.
                 lock (m_threadLocks[columnID]) //We want to block, so as to make sure this is done.
                 {
-
                     String datasetName;
                     if (samples[columnID] != null)
                         datasetName = samples[columnID].Name;
