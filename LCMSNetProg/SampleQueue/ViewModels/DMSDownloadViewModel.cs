@@ -10,6 +10,7 @@ using System.Windows;
 using DynamicData;
 using LcmsNet.Data;
 using LcmsNet.IO.DMS;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 
 namespace LcmsNet.SampleQueue.ViewModels
@@ -212,7 +213,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                 // The SQLite connection string wasn't found
                 var errMsg = ex.Message + " while getting LC cart listing.\r\n" +
                     "Please close LcmsNet program and correct the configuration file";
-                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
+                ApplicationLogger.LogError(LogLevel.Warning, errMsg, ex);
+                //MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
             catch (DatabaseDataException ex)
@@ -224,7 +226,8 @@ namespace LcmsNet.SampleQueue.ViewModels
                 var errMsg = "Exception getting LC cart list from DMS: " + innerException + "\r\n" +
                     "As a workaround, you may manually type the cart name when needed.\r\n" +
                     "You may retry retrieving the cart list later, if desired.";
-                MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
+                ApplicationLogger.LogError(LogLevel.Warning, errMsg, ex);
+                //MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
 

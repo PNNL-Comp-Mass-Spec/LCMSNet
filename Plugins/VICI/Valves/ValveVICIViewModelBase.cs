@@ -139,19 +139,11 @@ namespace LcmsNetPlugins.VICI.Valves
         /// Displays an error message
         /// </summary>
         /// <param name="message">The message to display</param>
-        protected void ShowError(string message)
-        {
-            ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message);
-        }
-
-        /// <summary>
-        /// Displays an error message
-        /// </summary>
-        /// <param name="message">The message to display</param>
         /// <param name="ex">The exception to describe</param>
-        protected void ShowError(string message, Exception ex)
+        protected void ShowError(string message, Exception ex = null)
         {
-            MessageBox.Show(message + "\r\n" + ex.Message, Device.Name);
+            ApplicationLogger.LogError(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, message, ex);
+            // MessageBox.Show(message + "\r\n" + ex.Message, Device.Name);
         }
 
         private void ValveControlSelected()

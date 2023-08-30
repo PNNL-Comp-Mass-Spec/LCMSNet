@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows;
+using LcmsNetSDK.Logging;
 using ReactiveUI;
 
 namespace LcmsNetPlugins.Teledyne.Pumps
@@ -337,7 +338,10 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                 SetpointChanged?.Invoke(this, pumpIndex, input);
             }
             else
-                MessageBox.Show("Input value not in valid range");
+            {
+                ApplicationLogger.LogError(LogLevel.Error, "Input value not in valid range");
+                //MessageBox.Show("Input value not in valid range");
+            }
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using LcmsNet.Configuration;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
 using ReactiveUI;
 
@@ -164,7 +165,8 @@ namespace LcmsNet.Method.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                ApplicationLogger.LogError(LogLevel.Error, ex.Message, ex);
+                //MessageBox.Show(ex.Message);
             }
         }
 

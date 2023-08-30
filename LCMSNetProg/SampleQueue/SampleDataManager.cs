@@ -479,8 +479,8 @@ namespace LcmsNet.SampleQueue
             catch (Exception ex)
             {
                 ApplicationLogger.LogError(0, "Error in HandleSampleValidationAndQueuing, task " + currentTask, ex);
-                MessageBox.Show(@"Error in HandleSampleValidationAndQueuing, task " + currentTask + @": " + ex.Message, @"Error",
-                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                //MessageBox.Show(@"Error in HandleSampleValidationAndQueuing, task " + currentTask + @": " + ex.Message, @"Error",
+                //    MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
 
             lock (this)
