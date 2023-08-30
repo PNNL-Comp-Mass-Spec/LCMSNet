@@ -91,6 +91,11 @@ Source: "{#MyPlugins}\x86\*.dll";                                               
 Source: "{#MyPlugins}\x64\*.dll";                                                      DestDir: "{app}\Plugins\x64\"; Flags: ignoreversion
 Source: "Plugins\PALAutoSampler\paldriv.exe";                                          DestDir: "{sys}";          Flags: ignoreversion
 
+; Include pdb files to see line numbers in exception stack traces
+Source: LCMSNetProg\bin\x86\Release\LcmsNet.pdb;                                       DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyLib}\*.pdb";                                                              DestDir: "{app}";          Flags: ignoreversion
+Source: "{#MyPlugins}\*.pdb";                                                          DestDir: "{app}\Plugins\"; Flags: ignoreversion
+
 ;SQLite Database Log Viewer program
 ;Source: "ExternalApplications\LogViewer\bin\Release\*.exe";                            DestDir: "{app}";          Flags: ignoreversion
 
