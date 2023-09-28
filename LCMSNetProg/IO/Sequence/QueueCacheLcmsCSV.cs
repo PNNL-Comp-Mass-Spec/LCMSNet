@@ -17,6 +17,11 @@ namespace LcmsNet.IO.Sequence
 
         public List<SampleData> ReadCsvCache(string filePath)
         {
+            if (!File.Exists(filePath))
+            {
+                return new List<SampleData>();
+            }
+
             using (var importStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var sr = new StreamReader(importStream))
             {

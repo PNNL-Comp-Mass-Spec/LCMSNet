@@ -801,7 +801,7 @@ namespace LcmsNet.Method.ViewModels
                 return false;
 
             // Construct the path
-            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), LCMethodXmlFile.CONST_LC_METHOD_FOLDER);
+            var path = LCMethodXmlFile.LCMethodFolderPath;
             path = Path.Combine(path, method.Name + LCMethodXmlFile.CONST_LC_METHOD_EXTENSION);
 
             // Write the method out!

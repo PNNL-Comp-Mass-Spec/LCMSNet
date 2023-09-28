@@ -327,7 +327,7 @@ namespace LcmsNet
 
             // Load the methods from the LC-Methods folder.
             ApplicationLogger.LogMessage(0, "Reading User Methods.");
-            userMethodErrors = LCMethodXmlFile.LoadMethods(Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), LCMethodXmlFile.CONST_LC_METHOD_FOLDER));
+            userMethodErrors = LCMethodXmlFile.LoadMethods(LCMethodXmlFile.LCMethodFolderPath);
 
             ApplicationLogger.LogMessage(0, "Loading Sample Queue...");
             // Tell the sample queue to load samples from cache after everything is loaded.

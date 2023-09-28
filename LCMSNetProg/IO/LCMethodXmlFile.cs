@@ -8,6 +8,7 @@ using System.Xml;
 using LcmsNet.Data;
 using LcmsNet.Devices;
 using LcmsNet.Method;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
@@ -47,7 +48,7 @@ namespace LcmsNet.IO
         /// <summary>
         /// LC Methods folder name.
         /// </summary>
-        public const string CONST_LC_METHOD_FOLDER = @"C:\LCMSNet\LCMethods";
+        public const string CONST_LC_METHOD_FOLDER = @"LCMethods";
 
         /// <summary>
         /// Deterministic or non-deterministic events.
@@ -145,6 +146,8 @@ namespace LcmsNet.IO
         public const string CONST_XPATH_VALUE = "value";
 
         private const string CONST_METHOD_EXTENSION = "*.xml";
+
+        public static string LCMethodFolderPath => Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), CONST_LC_METHOD_FOLDER);
 
         private static readonly Dictionary<string, string> InterfaceToImplementationMapper =
             new Dictionary<string, string>
