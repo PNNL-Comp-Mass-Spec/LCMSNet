@@ -264,7 +264,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             }
         }
 
-        void mwatcher_methods_Changed(object sender, FileSystemEventArgs e)
+        private void mwatcher_methods_Changed(object sender, FileSystemEventArgs e)
         {
             var methodLoaded = false;
             do
@@ -282,7 +282,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
             } while (!methodLoaded);
         }
 
-        void mwatcher_methods_Created(object sender, FileSystemEventArgs e)
+        private void mwatcher_methods_Created(object sender, FileSystemEventArgs e)
         {
             //AddMethod(Path.GetFileNameWithoutExtension(e.FullPath), File.ReadAllText(e.FullPath));
             //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " created.");
@@ -1802,8 +1802,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public List<string> GetStatusNotificationList()
         {
-            var notifications = new List<string>() { "Status"
-                                                            };
+            var notifications = new List<string>() { "Status" };
 
             notifications.AddRange(notificationStrings);
 
@@ -1816,18 +1815,19 @@ namespace LcmsNetPlugins.Agilent.Pumps
 
         public List<string> GetErrorNotificationList()
         {
-            var notifications = new List<string>() {
-                                        CONST_COMPOSITION_B_SET,
-                                        CONST_INITIALIZE_ERROR,
-                                        CONST_PRESSURE_SET,
-                                        CONST_FLOW_SET,
-                                        CONST_VOLUME_SET,
-                                        CONST_ERROR_ABOVE_PRESSURE,
-                                        CONST_ERROR_BELOW_PRESSURE,
-                                        CONST_ERROR_FLOW_EXCEEDS,
-                                        CONST_ERROR_FLOW_UNSTABLE,
-                                        CONST_PUMP_ERROR,
-                                        "Pump Event", // Seeing this, it doesn't make much sense, but I need to at least silence the "unpublished error" warnings
+            var notifications = new List<string>()
+            {
+                CONST_COMPOSITION_B_SET,
+                CONST_INITIALIZE_ERROR,
+                CONST_PRESSURE_SET,
+                CONST_FLOW_SET,
+                CONST_VOLUME_SET,
+                CONST_ERROR_ABOVE_PRESSURE,
+                CONST_ERROR_BELOW_PRESSURE,
+                CONST_ERROR_FLOW_EXCEEDS,
+                CONST_ERROR_FLOW_UNSTABLE,
+                CONST_PUMP_ERROR,
+                "Pump Event", // Seeing this, it doesn't make much sense, but I need to at least silence the "unpublished error" warnings
             };
 
             foreach (var value in errorCodes.Values)
