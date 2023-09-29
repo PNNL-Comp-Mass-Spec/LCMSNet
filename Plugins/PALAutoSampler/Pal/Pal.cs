@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
@@ -765,8 +766,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Loads the method
         /// </summary>
-        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false, EventDescription = "Start the specified PAL method. Doesn't return until reaching an error/ready/sync state.\nIgnores early 'waiting for DS' (first 20 seconds).\nDeterministic, next step will not be started until timeout is reached")]
-        [LCMethodEvent("Start Method NonDeterm", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false, IgnoreLeftoverTime = true, EventDescription = "Start the specified PAL method. Doesn't return until reaching an error/ready/sync state.\nIgnores early 'waiting for DS' (first 20 seconds).\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, true, EventDescription = "Start the specified PAL method. Doesn't return until reaching an error/ready/sync state.\nIgnores early 'waiting for DS' (first 20 seconds).\nDeterministic, next step will not be started until timeout is reached")]
+        [LCMethodEvent("Start Method NonDeterm", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, true, IgnoreLeftoverTime = true, EventDescription = "Start the specified PAL method. Doesn't return until reaching an error/ready/sync state.\nIgnores early 'waiting for DS' (first 20 seconds).\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public bool LoadMethod(double timeout, ISampleInfo sample, string methodName)
         {
             if (inEmulationMode)
@@ -1152,14 +1153,33 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// Writes any performance data for the last method used.
         /// </summary>
         /// <param name="directoryPath"></param>
-        /// <param name="name"></param>
+        /// <param name="methodName"></param>
         /// <param name="parameters"></param>
-        public void WritePerformanceData(string directoryPath, string name, object[] parameters)
+        public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
+            var data = GetPerformanceData(name, parameters);
         }
 
         public string GetPerformanceData(string methodName, object[] parameters)
         {
+            switch (methodName)
+            {
+                case "Start Method":
+                case "Start Method NonDeterm":
+                    if (parameters != null && parameters.Length > 2)
+                    {
+                        var palMethodName = (string)parameters[2];
+                        var methodMatched = MethodNames.Any(x => x.Equals(palMethodName));
+                        var path = Path.Combine(MethodsFolder, palMethodName + ".PME");
+                        if (methodMatched && File.Exists(path))
+                        {
+                            return File.ReadAllText(path);
+                        }
+                    }
+
+                    break;
+            }
+
             return "";
         }
 

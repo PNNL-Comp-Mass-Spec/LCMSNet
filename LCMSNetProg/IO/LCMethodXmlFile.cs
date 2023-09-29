@@ -111,6 +111,11 @@ namespace LcmsNet.IO
         public const string CONST_XPATH_COMMENT = "Comment";
 
         /// <summary>
+        /// X-Path string for lc-event performance data node.
+        /// </summary>
+        public const string CONST_XPATH_PERFORMANCE_DATA = "PerformanceData";
+
+        /// <summary>
         /// X-Path string for lc-method name node.
         /// </summary>
         public const string CONST_XPATH_METHOD_INFO = "MethodInfo";
@@ -853,15 +858,16 @@ namespace LcmsNet.IO
         /// <param name="eventRoot"></param>
         /// <param name="lcEvent"></param>
         /// <param name="isSampleReport">Supply true to write extra information that isn't needed for method loading</param>
+        /// <param name="reportRunData">Supply true to write extra information from the sample run, like performance data and actual start time</param>
         /// <param name="previousEventTimeTotal">Supply true to write the specific start time (when a sample ran) rather than just a cumulative start time</param>
-        private static void WriteEventNode(XmlDocument document, XmlElement eventRoot, LCEvent lcEvent, bool isSampleReport, bool reportStartTime, TimeSpan previousEventTimeTotal)
+        private static void WriteEventNode(XmlDocument document, XmlElement eventRoot, LCEvent lcEvent, bool isSampleReport, bool reportRunData, TimeSpan previousEventTimeTotal)
         {
             // Set all of the event attributes
             eventRoot.SetAttribute(CONST_XPATH_NAME, lcEvent.Name);
 
             // write timespan for stored methods, write DateTime for actual/complete/incomplete methods
             var startTime = lcEvent.Start.ToString(CultureInfo.InvariantCulture);
-            if (!reportStartTime)
+            if (!reportRunData)
             {
                 startTime = previousEventTimeTotal.ToString();
             }
@@ -953,6 +959,30 @@ namespace LcmsNet.IO
             eventRoot.AppendChild(methodInfo);
             eventRoot.AppendChild(parameters);
 
+            if (!reportRunData || !lcEvent.MethodAttribute.HasPerformanceData)
+            {
+                return;
+            }
+
+            var perfDataElement = document.CreateElement(CONST_XPATH_PERFORMANCE_DATA);
+
+            var perfData = "";
+            if (lcEvent.Device is IHasPerformanceData perf)
+            {
+                perfData = perf.GetPerformanceData(lcEvent.MethodAttribute.Name, lcEvent.Parameters);
+            }
+            else
+            {
+                ApplicationLogger.LogError(LogLevel.Error, $"LC Event {lcEvent.Name} has performance data, but device {lcEvent.Device.GetType()} does not implement {nameof(IHasPerformanceData)}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(perfData))
+            {
+                // Add newlines to the CDATA section to have the data clearly distinct from the tag start/end
+                var cdata = document.CreateCDataSection($"\n{perfData}\n");
+                perfDataElement.AppendChild(cdata);
+                eventRoot.AppendChild(perfDataElement);
+            }
         }
 
         /// <summary>

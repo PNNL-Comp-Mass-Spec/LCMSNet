@@ -1764,19 +1764,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         }
 
         /// <summary>
-        /// Writes the pump method time-table to the directory provided.
-        /// </summary>
-        /// <param name="directoryPath"></param>
-        /// <param name="methodName"></param>
-        private void WriteMethod(string directoryPath, string methodName)
-        {
-            if (availableMethods.ContainsKey(methodName))
-            {
-                var methodData = availableMethods[methodName];
-            }
-        }
-
-        /// <summary>
         /// Writes the required data to the directory path provided.
         /// </summary>
         /// <param name="directoryPath">Path of directory to create files in.</param>
@@ -1784,15 +1771,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// <param name="parameters">Parameters used to create the performance data.</param>
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-            switch (methodName)
-            {
-                case "Start Method":
-                    if (parameters != null && parameters.Length > 1)
-                    {
-                        WriteMethod(directoryPath, parameters[1].ToString());
-                    }
-                    break;
-            }
+            var data = GetPerformanceData(methodName, parameters);
         }
 
         public string GetPerformanceData(string methodName, object[] parameters)
