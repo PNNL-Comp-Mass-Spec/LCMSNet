@@ -24,14 +24,6 @@ namespace LcmsNetSDK.Devices
         bool Shutdown();
 
         /// <summary>
-        /// Write the performance data and other required information associated with this device after a run.
-        /// </summary>
-        /// <param name="directoryPath">Path to write data to.</param>
-        /// <param name="methodName">Name of method to gather performance data about.</param>
-        /// <param name="parameters">Parameter data to use when writing output.</param>
-        void WritePerformanceData(string directoryPath, string methodName, object[] parameters);
-
-        /// <summary>
         /// Gets or sets the status of the device.
         /// </summary>
         DeviceStatus Status { get; set; }

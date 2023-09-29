@@ -2316,10 +2316,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             }
         }
 
-        public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
-        {
-        }
-
         public List<string> GetStatusNotificationList()
         {
             return IscoStatusNotifications.GetNotificationListStrings();

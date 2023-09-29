@@ -116,10 +116,6 @@ namespace LcmsNet.Devices
             return true;
         }
 
-        public void WritePerformanceData(string directoryPath, string name, object[] parameters)
-        {
-        }
-
         public List<string> GetStatusNotificationList()
         {
             return new List<string>();

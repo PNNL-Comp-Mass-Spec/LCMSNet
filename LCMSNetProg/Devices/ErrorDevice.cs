@@ -43,10 +43,6 @@ namespace LcmsNet.Devices
             remove { }
         }
 
-        public void WritePerformanceData(string directoryPath, string name, object[] parameters)
-        {
-        }
-
         /// <summary>
         /// Returns the name of this device.
         /// </summary>

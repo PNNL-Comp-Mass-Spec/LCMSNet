@@ -13,7 +13,7 @@ namespace DemoPluginLibrary
     [DeviceControl(null,
                                  "Demo Pump",
                                  "Demo")]
-    public class DemoPump : IDevice, IPump, IFluidicsPump, IHasDataProvider
+    public class DemoPump : IDevice, IPump, IFluidicsPump, IHasDataProvider, IHasPerformanceData
     {
         double m_flowrate;
         double m_pressure;
@@ -84,6 +84,11 @@ namespace DemoPluginLibrary
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
 
+        }
+
+        public string GetPerformanceData(string methodName, object[] parameters)
+        {
+            return "";
         }
 
         public List<string> GetStatusNotificationList()

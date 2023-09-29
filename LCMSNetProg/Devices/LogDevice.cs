@@ -14,7 +14,7 @@ namespace LcmsNet.Devices
     /// A debug logging device for testing.
     /// </summary>
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    public class LogDevice : IDevice
+    public class LogDevice : IDevice, IHasPerformanceData
     {
         /// <summary>
         /// Constructor
@@ -150,6 +150,11 @@ namespace LcmsNet.Devices
             {
                 writer.WriteLine(data);
             }
+        }
+
+        public string GetPerformanceData(string methodName, object[] parameters)
+        {
+            return "";
         }
 
         public List<string> GetStatusNotificationList()

@@ -14,7 +14,7 @@ namespace DemoPluginLibrary
                                  "Demo PAL",
                                  "Demo")
     ]
-    public class DemoPAL: IDevice, IFluidicsSampler, IHasDataProvider
+    public class DemoPAL: IDevice, IFluidicsSampler, IHasDataProvider, IHasPerformanceData
     {
 
         /// <summary>
@@ -89,6 +89,11 @@ namespace DemoPluginLibrary
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
 
+        }
+
+        public string GetPerformanceData(string methodName, object[] parameters)
+        {
+            return "";
         }
 
         [LCMethodEvent("Run Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false)]

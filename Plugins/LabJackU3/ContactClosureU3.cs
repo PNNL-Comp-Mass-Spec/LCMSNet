@@ -293,16 +293,6 @@ namespace LcmsNetPlugins.LabJackU3
         }
 
         /// <summary>
-        /// Writes any performance data cached to directory path provided.
-        /// </summary>
-        /// <param name="directoryPath"></param>
-        /// <param name="name"></param>
-        /// <param name="parameters"></param>
-        public void WritePerformanceData(string directoryPath, string name, object[] parameters)
-        {
-        }
-
-        /// <summary>
         /// Gets or sets the error type of last error.
         /// </summary>
         public DeviceErrorStatus ErrorType { get; set; }

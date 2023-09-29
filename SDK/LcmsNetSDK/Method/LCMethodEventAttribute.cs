@@ -41,7 +41,7 @@ namespace LcmsNetSDK.Method
         /// <param name="operationTime">The total operation time required by method to execute in milliseconds.  Methods must be guaranteed to execute within this range.</param>
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created. If not empty string, method's class must implement <see cref="IHasDataProvider"/></param>
         /// <param name="dataProviderIndex"></param>
-        /// <param name="hasPerformanceData"></param>
+        /// <param name="hasPerformanceData">If true, method's class must implement <see cref="IHasPerformanceData"/></param>
         public LCMethodEventAttribute(string methodName, double operationTime, string dataProvider,
             int dataProviderIndex, bool hasPerformanceData = false) : this(methodName, operationTime)
         {
@@ -72,7 +72,7 @@ namespace LcmsNetSDK.Method
         /// <param name="timeout">Use when the timeout should be specified by the user in the first parameter</param>
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created. If not empty string, method's class must implement <see cref="IHasDataProvider"/></param>
         /// <param name="dataProviderIndex"></param>
-        /// <param name="hasPerformanceData"></param>
+        /// <param name="hasPerformanceData">If true, method's class must implement <see cref="IHasPerformanceData"/></param>
         public LCMethodEventAttribute(string methodName, MethodOperationTimeoutType timeout,
             string dataProvider, int dataProviderIndex, bool hasPerformanceData) : this(methodName, timeout)
         {
@@ -112,7 +112,7 @@ namespace LcmsNetSDK.Method
         /// <param name="operationTime">The total operation time required by method to execute in milliseconds.  Methods must be guaranteed to execute within this range.</param>
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created. If not empty string, method's class must implement <see cref="IHasDataProvider"/></param>
         /// <param name="dataProviderIndex"></param>
-        /// <param name="hasPerformanceData"></param>
+        /// <param name="hasPerformanceData">If true, method's class must implement <see cref="IHasPerformanceData"/></param>
         public LCMethodEventAttribute(string methodName, bool isSampleSpecific, int sampleParameterIndex,
             double operationTime, string dataProvider = "", int dataProviderIndex = -1, bool hasPerformanceData = false)
             : this(methodName, operationTime, dataProvider, dataProviderIndex, hasPerformanceData)
@@ -133,7 +133,7 @@ namespace LcmsNetSDK.Method
         /// <param name="sampleParameterIndex"></param>
         /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created. If not empty string, method's class must implement <see cref="IHasDataProvider"/></param>
         /// <param name="dataProviderIndex"></param>
-        /// <param name="hasPerformanceData"></param>
+        /// <param name="hasPerformanceData">If true, method's class must implement <see cref="IHasPerformanceData"/></param>
         public LCMethodEventAttribute(string methodName, MethodOperationTimeoutType timeoutType,
             bool isSampleSpecific, int sampleParameterIndex, string dataProvider = "", int dataProviderIndex = -1,
             bool hasPerformanceData = false)
@@ -147,7 +147,7 @@ namespace LcmsNetSDK.Method
         }
 
         /// <summary>
-        /// Gets whether the method has performance data that should be associated with it or not.
+        /// Gets whether the method has performance data that should be associated with it or not. If true, method's class must implement <see cref="IHasPerformanceData"/>
         /// </summary>
         public bool HasPerformanceData { get; }
 

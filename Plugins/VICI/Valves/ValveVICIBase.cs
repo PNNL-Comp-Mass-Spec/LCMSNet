@@ -786,10 +786,6 @@ namespace LcmsNetPlugins.VICI.Valves
             return new List<string>() { "Valve Position" };
         }
 
-        public void WritePerformanceData(string directoryPath, string name, object[] parameters)
-        {
-        }
-
         public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.Component;

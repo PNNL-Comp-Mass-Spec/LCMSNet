@@ -20,7 +20,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
     [DeviceControl(typeof(PalViewModel),
                                  "PAL Autosampler",
                                  "Auto-Samplers")]
-    public class Pal : IDevice, IAutoSampler, IFluidicsSampler, IHasDataProvider
+    public class Pal : IDevice, IAutoSampler, IFluidicsSampler, IHasDataProvider, IHasPerformanceData
     {
         private const string VialNumberError = "Vial number error";
         private const string ConnectionError = "Connection error";
@@ -1156,6 +1156,11 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <param name="parameters"></param>
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
+        }
+
+        public string GetPerformanceData(string methodName, object[] parameters)
+        {
+            return "";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

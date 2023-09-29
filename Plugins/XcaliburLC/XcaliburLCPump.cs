@@ -16,7 +16,7 @@ namespace LcmsNetPlugins.XcaliburLC
     [DeviceControl(typeof(XcaliburLCViewModel),
         "Xcalibur LC",
         "Pumps")]
-    public class XcaliburLCPump : IDevice, IHasDataProvider, IDisposable // TODO: maybe implement IPump?
+    public class XcaliburLCPump : IDevice, IHasDataProvider, IHasPerformanceData, IDisposable // TODO: maybe implement IPump?
     {
         public const string DefaultLcMethodPath = @"C:\Xcalibur\methods";
 
@@ -216,7 +216,7 @@ namespace LcmsNetPlugins.XcaliburLC
         /// <param name="timeout"></param>
         /// <param name="sample"></param>
         /// <param name="method">Method to run stored on the pumps.</param>
-        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false, EventDescription = "")]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, true, EventDescription = "")]
         public bool StartMethod(double timeout, ISampleInfo sample, string method)
         {
             var start = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
@@ -702,12 +702,28 @@ namespace LcmsNetPlugins.XcaliburLC
             switch (methodName)
             {
                 case "Start Method":
-                    if (parameters != null && parameters.Length > 1)
+                    if (parameters != null && parameters.Length > 2)
                     {
-                        WriteMethod(directoryPath, parameters[1].ToString());
+                        WriteMethod(directoryPath, parameters[2].ToString());
                     }
                     break;
             }
+        }
+
+        public string GetPerformanceData(string methodName, object[] parameters)
+        {
+            switch (methodName)
+            {
+                case "Start Method":
+                    if (parameters != null && parameters.Length > 2 && availableMethods.TryGetValue((string)parameters[2], out var methodPath))
+                    {
+                        return XcaliburMethodReader.GetMethodText(methodPath);
+                    }
+
+                    break;
+            }
+
+            return "";
         }
 
         public List<string> GetStatusNotificationList()

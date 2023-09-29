@@ -29,11 +29,6 @@ namespace FluidicsPack
             return true;
         }
 
-        public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
-        {
-
-        }
-
         public List<string> GetStatusNotificationList()
         {
             return new List<string>();

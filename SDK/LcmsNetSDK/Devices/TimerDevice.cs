@@ -51,11 +51,6 @@ namespace LcmsNetSDK.Devices
         /// </summary>
         public ManualResetEvent AbortEvent { get; set; }
 
-
-        public void WritePerformanceData(string directoryPath, string name, object[] parameters)
-        {
-        }
-
         /// <summary>
         /// Returns the name of the device.
         /// </summary>

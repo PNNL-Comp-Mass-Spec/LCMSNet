@@ -23,7 +23,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
     [DeviceControl(typeof(AgilentPumpViewModel),
                                  "Agilent 1200 Nano Series",
                                  "Pumps")]
-    public class AgilentPump : IDevice, IPump, IFluidicsPump, IHasDataProvider, IDisposable
+    public class AgilentPump : IDevice, IPump, IFluidicsPump, IHasDataProvider, IHasPerformanceData, IDisposable
     {
         /// <summary>
         /// An 'instrument' object for the Agilent pump drivers
@@ -1793,6 +1793,22 @@ namespace LcmsNetPlugins.Agilent.Pumps
                     }
                     break;
             }
+        }
+
+        public string GetPerformanceData(string methodName, object[] parameters)
+        {
+            switch (methodName)
+            {
+                case "Start Method":
+                    if (parameters != null && parameters.Length > 1 && availableMethods.TryGetValue((string)parameters[1], out var methodText))
+                    {
+                        return methodText;
+                    }
+
+                    break;
+            }
+
+            return "";
         }
 
         public List<string> GetStatusNotificationList()

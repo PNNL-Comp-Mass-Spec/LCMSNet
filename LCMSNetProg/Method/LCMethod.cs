@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method
@@ -218,7 +220,14 @@ namespace LcmsNet.Method
                 // cart misbehaves.
                 if (lcEvent.MethodAttribute.HasPerformanceData)
                 {
-                    lcEvent.Device.WritePerformanceData(directoryPath, lcEvent.MethodAttribute.Name, lcEvent.Parameters);
+                    if (lcEvent.Device is IHasPerformanceData perf)
+                    {
+                        perf.WritePerformanceData(directoryPath, lcEvent.MethodAttribute.Name, lcEvent.Parameters);
+                    }
+                    else
+                    {
+                        ApplicationLogger.LogError(LogLevel.Error, $"LC Event {lcEvent.Name} has performance data, but device {lcEvent.Device.GetType()} does not implement {nameof(IHasPerformanceData)}");
+                    }
                 }
             }
         }
