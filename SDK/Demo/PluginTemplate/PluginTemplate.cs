@@ -78,10 +78,6 @@ public class RenameThisTemplate:IDevice // If using a pre-existing FluidicsSDK g
     event EventHandler DeviceSaveRequired;
 
     /// <summary>
-    /// Gets or sets the version name of the hardware if applicable.
-    /// </summary>
-    string Version { get; set; }
-    /// <summary>
     /// Gets or sets the status of the device.
     /// </summary>
     DeviceStatus Status { get; set; }

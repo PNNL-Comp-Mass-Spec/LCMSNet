@@ -100,8 +100,6 @@ namespace DemoPluginLibrary
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        public string Version { get; set; }
-
         public DeviceStatus Status { get; set; }
 
         public System.Threading.ManualResetEvent AbortEvent { get; set; }

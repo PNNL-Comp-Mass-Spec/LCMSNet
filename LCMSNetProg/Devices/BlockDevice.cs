@@ -19,7 +19,6 @@ namespace LcmsNet.Devices
         public BlockDevice()
         {
             Name = "Blocker";
-            Version = "Version 1.0";
             m_status = DeviceStatus.NotInitialized;
         }
 
@@ -91,11 +90,6 @@ namespace LcmsNet.Devices
             get => name;
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
-
-        /// <summary>
-        /// Version of this device.
-        /// </summary>
-        public string Version { get; set; }
 
         /// <summary>
         /// Gets or sets the status of this device.

@@ -168,11 +168,6 @@ namespace LcmsNetPlugins.XcaliburLC
         }
 
         /// <summary>
-        /// Gets or sets the device's version
-        /// </summary>
-        public string Version { get; set; }
-
-        /// <summary>
         /// Gets or sets the error type of the last error reported.
         /// </summary>
         public DeviceErrorStatus ErrorType { get; set; }

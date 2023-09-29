@@ -46,11 +46,6 @@ namespace LcmsNetSDK.Devices
         void WritePerformanceData(string directoryPath, string methodName, object[] parameters);
 
         /// <summary>
-        /// Gets the version name of the hardware if applicable.
-        /// </summary>
-        string Version { get; }
-
-        /// <summary>
         /// Gets or sets the status of the device.
         /// </summary>
         DeviceStatus Status { get; set; }

@@ -12,7 +12,6 @@ namespace FluidicsPack
         public WasteComponent()
         {
             Name = "Waste";
-            Version = "infinity.";
             Position = 1;
             AbortEvent = new System.Threading.ManualResetEvent(false);
         }

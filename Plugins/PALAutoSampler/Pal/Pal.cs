@@ -74,11 +74,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         private string name;
 
         /// <summary>
-        /// The PAL's version information.
-        /// </summary>
-        private string palVersion;
-
-        /// <summary>
         /// The current status of the PAL.
         /// </summary>
         private DeviceStatus deviceStatus;
@@ -182,19 +177,6 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
             {
                 StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(value, "Status", this));
                 deviceStatus = value;
-            }
-        }
-
-        /// <summary>
-        /// The PAL's version information.
-        /// </summary>
-        public string Version
-        {
-            get => palVersion;
-            set
-            {
-                palVersion = value;
-                OnDeviceSaveRequired();
             }
         }
 

@@ -36,7 +36,6 @@ namespace LcmsNetPlugins.FailureInjector.Drivers
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        public string Version { get; set; }
         private DeviceStatus m_status;
         public DeviceStatus Status
         {

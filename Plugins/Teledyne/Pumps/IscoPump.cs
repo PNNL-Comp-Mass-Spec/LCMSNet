@@ -27,9 +27,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
         // Device name
         string m_Name;
 
-        // Device version
-        string m_Version;
-
         // Device status
         DeviceStatus m_Status;
 
@@ -2192,15 +2189,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
                     DeviceSaveRequired?.Invoke(this, null);
                 }
             }
-        }
-
-        /// <summary>
-        /// Device version
-        /// </summary>
-        public string Version
-        {
-            get => m_Version;
-            set => m_Version = value;
         }
 
         /// <summary>

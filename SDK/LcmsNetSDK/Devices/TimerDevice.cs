@@ -4,8 +4,6 @@ using System.ComponentModel;
 using System.Threading;
 using LcmsNetSDK.Method;
 
-//using LcmsNet.Devices;
-
 namespace LcmsNetSDK.Devices
 {
     /// <summary>
@@ -120,18 +118,6 @@ namespace LcmsNetSDK.Devices
         {
             get => m_name;
             set => this.RaiseAndSetIfChanged(ref m_name, value, nameof(Name));
-        }
-
-        /// <summary>
-        /// Version of the timer.
-        /// </summary>
-        public string Version
-        {
-            get => string.Empty;
-            set
-            {
-                // Pass
-            }
         }
 
         /// <summary>

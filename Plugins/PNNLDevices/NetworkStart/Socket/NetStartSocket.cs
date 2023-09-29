@@ -98,7 +98,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         {
             m_address = "localhost";
             m_name = "network start"; // classDeviceManager.Manager.CreateUniqueDeviceName("networkStart");
-            Version = "May-2010";
             m_port       = CONST_SERVER_PORT;
             m_status    = DeviceStatus.NotInitialized;
 
@@ -456,11 +455,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                 }
             }
         }
-
-        /// <summary>
-        /// The device's verion.
-        /// </summary>
-        public string Version { get; set; }
 
         /// <summary>
         /// Gets or sets the Emulation state.

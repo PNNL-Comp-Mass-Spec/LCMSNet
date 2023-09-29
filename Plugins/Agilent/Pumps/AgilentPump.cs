@@ -334,11 +334,6 @@ namespace LcmsNetPlugins.Agilent.Pumps
         }
 
         /// <summary>
-        /// Gets or sets the device's version
-        /// </summary>
-        public string Version { get; set; }
-
-        /// <summary>
         /// Gets or sets the port name to use to communicate with the pumps.
         /// </summary>
         [DeviceSavedSetting("PortName")]

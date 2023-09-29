@@ -11,7 +11,6 @@ namespace FluidicsPack
         public SprayNeedle()
         {
             Name = "Spray Needle";
-            Version = "infinity.";
             Position = 1;
             AbortEvent = new System.Threading.ManualResetEvent(false);
         }

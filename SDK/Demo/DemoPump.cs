@@ -23,7 +23,6 @@ namespace DemoPluginLibrary
         public DemoPump()
         {
             Name = "DemoPump";
-            Version = "infinity.";
             Flowrate = 1;
             Pressure = 1;
             PercentB = 1;
@@ -149,8 +148,6 @@ namespace DemoPluginLibrary
             get => name;
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
-
-        public string Version { get; set; }
 
         public DeviceStatus Status { get; set; }
 

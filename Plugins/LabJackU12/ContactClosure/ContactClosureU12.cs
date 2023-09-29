@@ -55,10 +55,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
         /// </summary>
         private string deviceName;
         /// <summary>
-        /// The version.
-        /// </summary>
-        private string deviceVersion;
-        /// <summary>
         /// The current status of the Labjack.
         /// </summary>
         private DeviceStatus deviceStatus;
@@ -176,19 +172,6 @@ namespace LcmsNetPlugins.LabJackU12.ContactClosure
                 {
                     OnDeviceSaveRequired();
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the version of the Labjack/dll
-        /// </summary>
-        public string Version
-        {
-            get => deviceVersion;
-            set
-            {
-                deviceVersion = value;
-                OnDeviceSaveRequired();
             }
         }
 

@@ -36,7 +36,6 @@ namespace DemoPluginLibrary
         public DemoPAL()
         {
             Name = "DemoPAL";
-            Version = "infinity.";
             AbortEvent = new System.Threading.ManualResetEvent(false);
         }
 
@@ -136,8 +135,6 @@ namespace DemoPluginLibrary
             get => name;
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
-
-        public string Version { get; set; }
 
         public DeviceStatus Status { get; set; }
 

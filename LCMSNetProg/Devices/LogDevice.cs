@@ -113,18 +113,6 @@ namespace LcmsNet.Devices
         }
 
         /// <summary>
-        /// Version of the timer.
-        /// </summary>
-        public string Version
-        {
-            get => string.Empty;
-            set
-            {
-                // Pass
-            }
-        }
-
-        /// <summary>
         /// Initializes the device.
         /// </summary>
         /// <returns></returns>
