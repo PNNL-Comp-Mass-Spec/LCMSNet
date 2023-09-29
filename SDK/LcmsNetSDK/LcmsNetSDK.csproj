@@ -71,6 +71,7 @@
     <Compile Include="Devices\IDevice.cs" />
     <Compile Include="Devices\IDeviceControl.cs" />
     <Compile Include="Devices\IDeviceManager.cs" />
+    <Compile Include="Devices\IHasDataProvider.cs" />
     <Compile Include="Devices\INetworkStart.cs" />
     <Compile Include="Devices\IPump.cs" />
     <Compile Include="Devices\PumpDataEventArgs.cs" />

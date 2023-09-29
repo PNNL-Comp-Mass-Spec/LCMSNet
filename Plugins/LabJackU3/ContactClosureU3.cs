@@ -292,14 +292,6 @@ namespace LcmsNetPlugins.LabJackU3
             return m_name;
         }
 
-        public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
-        public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
         /// <summary>
         /// Writes any performance data cached to directory path provided.
         /// </summary>

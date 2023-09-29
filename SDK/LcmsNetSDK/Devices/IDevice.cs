@@ -24,20 +24,6 @@ namespace LcmsNetSDK.Devices
         bool Shutdown();
 
         /// <summary>
-        /// Register controls that are being disposed for a given data provider.
-        /// </summary>
-        /// <param name="key">Data provider name</param>
-        /// <param name="remoteMethod">Delegate method to call from the device to synch events to.</param>
-        void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod);
-
-        /// <summary>
-        /// De-register controls that are being disposed for a given data provider.
-        /// </summary>
-        /// <param name="key">Data provider name</param>
-        /// <param name="remoteMethod">Delegate method to call from the device to synch events to.</param>
-        void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod);
-
-        /// <summary>
         /// Write the performance data and other required information associated with this device after a run.
         /// </summary>
         /// <param name="directoryPath">Path to write data to.</param>

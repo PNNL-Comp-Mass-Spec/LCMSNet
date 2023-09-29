@@ -85,14 +85,6 @@ namespace LcmsNet.Devices
         {
         }
 
-        public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
-        public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
         /// <summary>
         /// Gets or sets the abort event for scheduling.
         /// </summary>

@@ -21,7 +21,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
                                  "Network Start",
                                  "Detectors")
     ]
-    public class NetStartSocket: IDevice, IFluidicsClosure
+    public class NetStartSocket: IDevice, IFluidicsClosure, IHasDataProvider
     {
         /// <summary>
         /// Minimum timeout for receiving data in seconds.
@@ -523,17 +523,6 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         {
             //TODO: Shutdown for network start socket.
             return true;
-        }
-
-        /// <summary>
-        /// Writes performance data to the directory provided.
-        /// </summary>
-        /// <param name="directoryPath"></param>
-        /// <param name="methodName"></param>
-        /// <param name="parameters"></param>
-        public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
-        {
-            //pass
         }
 
         public List<string> GetStatusNotificationList()

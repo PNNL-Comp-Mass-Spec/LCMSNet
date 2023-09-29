@@ -1,4 +1,5 @@
 ﻿using System;
+using LcmsNetSDK.Devices;
 
 namespace LcmsNetSDK.Method
 {
@@ -38,7 +39,7 @@ namespace LcmsNetSDK.Method
         /// </summary>
         /// <param name="methodName">Name of the method to display in the event list table of the method creator.</param>
         /// <param name="operationTime">The total operation time required by method to execute in milliseconds.  Methods must be guaranteed to execute within this range.</param>
-        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
+        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created. If not empty string, method's class must implement <see cref="IHasDataProvider"/></param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
         public LCMethodEventAttribute(string methodName, double operationTime, string dataProvider,
@@ -69,7 +70,7 @@ namespace LcmsNetSDK.Method
         /// </summary>
         /// <param name="methodName">Name of the method to display in the event list table of the method creator.</param>
         /// <param name="timeout">Use when the timeout should be specified by the user in the first parameter</param>
-        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
+        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created. If not empty string, method's class must implement <see cref="IHasDataProvider"/></param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
         public LCMethodEventAttribute(string methodName, MethodOperationTimeoutType timeout,
@@ -109,7 +110,7 @@ namespace LcmsNetSDK.Method
         /// <param name="isSampleSpecific">Flag indicating that the sample contains information about how to run the method.</param>
         /// <param name="sampleParameterIndex"></param>
         /// <param name="operationTime">The total operation time required by method to execute in milliseconds.  Methods must be guaranteed to execute within this range.</param>
-        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
+        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created. If not empty string, method's class must implement <see cref="IHasDataProvider"/></param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
         public LCMethodEventAttribute(string methodName, bool isSampleSpecific, int sampleParameterIndex,
@@ -130,7 +131,7 @@ namespace LcmsNetSDK.Method
         /// <param name="timeoutType"></param>
         /// <param name="isSampleSpecific">Flag indicating that the sample contains information about how to run the method.</param>
         /// <param name="sampleParameterIndex"></param>
-        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created.</param>
+        /// <param name="dataProvider">Name of object provided by device that will provide data to a user control dynamically created. If not empty string, method's class must implement <see cref="IHasDataProvider"/></param>
         /// <param name="dataProviderIndex"></param>
         /// <param name="hasPerformanceData"></param>
         public LCMethodEventAttribute(string methodName, MethodOperationTimeoutType timeoutType,
@@ -151,7 +152,7 @@ namespace LcmsNetSDK.Method
         public bool HasPerformanceData { get; }
 
         /// <summary>
-        /// Gets the name of the data provider that provides data for a given control.
+        /// Gets the name of the data provider that provides data for a given control. If not empty string, method's class must implement <see cref="IHasDataProvider"/>
         /// </summary>
         public string DataProvider { get; }
 

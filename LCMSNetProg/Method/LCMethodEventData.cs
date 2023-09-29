@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNet.Method
@@ -94,7 +95,14 @@ namespace LcmsNet.Method
                 var vm = parameter.ViewModel?.CreateDuplicate();
                 if (vm is ILCEventParameterWithDataProvider dpvm)
                 {
-                    Device.RegisterDataProvider(MethodEventAttribute.DataProvider, dpvm.FillData);
+                    if (Device is IHasDataProvider dataProvider)
+                    {
+                        dataProvider.RegisterDataProvider(MethodEventAttribute.DataProvider, dpvm.FillData);
+                    }
+                    else
+                    {
+                        ApplicationLogger.LogError(LogLevel.Error, $"LC Event {MethodEventAttribute.Name} has a data provider, but device {Device.GetType()} does not implement {nameof(IHasDataProvider)}");
+                    }
                 }
 
                 parameters.Add(new LCMethodEventParameter(parameter.Name, parameter.Value, vm, parameter.DataProviderName));

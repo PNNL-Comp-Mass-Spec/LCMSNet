@@ -8,6 +8,7 @@ using System.Windows.Media;
 using DynamicData;
 using DynamicData.Binding;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using ReactiveUI;
 
@@ -643,7 +644,15 @@ namespace LcmsNet.Method.ViewModels
                                     var combo = new EventParameterEnumViewModel();
 
                                     // Register the event to automatically get new data when the data provider has new stuff.
-                                    device.RegisterDataProvider(attr.DataProvider, combo.FillData);
+                                    if (device is IHasDataProvider dataProvider)
+                                    {
+                                        dataProvider.RegisterDataProvider(attr.DataProvider, combo.FillData);
+                                    }
+                                    else
+                                    {
+                                        ApplicationLogger.LogError(LogLevel.Error, $"LC Event {attr.Name} has a data provider, but device {device.GetType()} does not implement {nameof(IHasDataProvider)}");
+                                    }
+
                                     vm = combo;
                                     // Set the data if we have it, otherwise, cross your fingers batman!
                                     if (combo.ComboBoxOptions.Count > 0)

@@ -166,14 +166,6 @@ namespace LcmsNet.Devices
             return true;
         }
 
-        public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
-        public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
         public DeviceErrorStatus ErrorType { get; set; }
 
         public DeviceType DeviceType => DeviceType.BuiltIn;

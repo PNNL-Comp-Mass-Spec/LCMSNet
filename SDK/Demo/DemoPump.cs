@@ -13,7 +13,7 @@ namespace DemoPluginLibrary
     [DeviceControl(null,
                                  "Demo Pump",
                                  "Demo")]
-    public class DemoPump : IDevice, IPump, IFluidicsPump
+    public class DemoPump : IDevice, IPump, IFluidicsPump, IHasDataProvider
     {
         double m_flowrate;
         double m_pressure;

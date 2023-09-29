@@ -16,7 +16,7 @@ namespace LcmsNetPlugins.XcaliburLC
     [DeviceControl(typeof(XcaliburLCViewModel),
         "Xcalibur LC",
         "Pumps")]
-    public class XcaliburLCPump : IDevice, IDisposable // TODO: maybe implement IPump?
+    public class XcaliburLCPump : IDevice, IHasDataProvider, IDisposable // TODO: maybe implement IPump?
     {
         public const string DefaultLcMethodPath = @"C:\Xcalibur\methods";
 

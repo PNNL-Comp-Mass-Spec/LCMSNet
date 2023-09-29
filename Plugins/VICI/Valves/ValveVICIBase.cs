@@ -786,14 +786,6 @@ namespace LcmsNetPlugins.VICI.Valves
             return new List<string>() { "Valve Position" };
         }
 
-        public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
-        public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
         }

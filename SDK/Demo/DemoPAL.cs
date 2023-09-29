@@ -14,7 +14,7 @@ namespace DemoPluginLibrary
                                  "Demo PAL",
                                  "Demo")
     ]
-    public class DemoPAL: IDevice, IFluidicsSampler
+    public class DemoPAL: IDevice, IFluidicsSampler, IHasDataProvider
     {
 
         /// <summary>

@@ -12,6 +12,7 @@ using LcmsNet.Configuration;
 using LcmsNet.Data;
 using LcmsNet.IO;
 using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
@@ -554,7 +555,15 @@ namespace LcmsNet.Method.ViewModels
                         var combo = new EventParameterEnumViewModel();
 
                         // Register the event to automatically get new data when the data provider has new stuff.
-                        lcEvent.Device.RegisterDataProvider(lcEvent.MethodAttribute.DataProvider, combo.FillData);
+                        if (lcEvent.Device is IHasDataProvider dataProvider)
+                        {
+                            dataProvider.RegisterDataProvider(lcEvent.MethodAttribute.DataProvider, combo.FillData);
+                        }
+                        else
+                        {
+                            ApplicationLogger.LogError(LogLevel.Error, $"LC Event {lcEvent.Name} has a data provider, but device {lcEvent.Device.GetType()} does not implement {nameof(IHasDataProvider)}");
+                        }
+
                         vm = combo;
                     }
                     else
@@ -659,13 +668,20 @@ namespace LcmsNet.Method.ViewModels
                     if (key == null)
                         continue;
 
-                    try
+                    if (device is IHasDataProvider dataProvider)
                     {
-                        device.UnRegisterDataProvider(key, combo.FillData);
+                        try
+                        {
+                            dataProvider.UnRegisterDataProvider(key, combo.FillData);
+                        }
+                        catch (Exception ex)
+                        {
+                            ApplicationLogger.LogError(0, "There was an error when removing the device event. " + ex.Message, ex);
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        ApplicationLogger.LogError(0, "There was an error when removing the device event. " + ex.Message, ex);
+                        ApplicationLogger.LogError(LogLevel.Error, $"LC Event {data.MethodEventAttribute.Name} has a data provider, but device {device.GetType()} does not implement {nameof(IHasDataProvider)}");
                     }
                 }
 

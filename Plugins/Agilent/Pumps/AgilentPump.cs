@@ -23,7 +23,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
     [DeviceControl(typeof(AgilentPumpViewModel),
                                  "Agilent 1200 Nano Series",
                                  "Pumps")]
-    public class AgilentPump : IDevice, IPump, IFluidicsPump, IDisposable
+    public class AgilentPump : IDevice, IPump, IFluidicsPump, IHasDataProvider, IDisposable
     {
         /// <summary>
         /// An 'instrument' object for the Agilent pump drivers

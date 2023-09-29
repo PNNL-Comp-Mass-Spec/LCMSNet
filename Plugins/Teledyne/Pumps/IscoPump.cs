@@ -2316,14 +2316,6 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             }
         }
 
-        public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
-        public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
         }

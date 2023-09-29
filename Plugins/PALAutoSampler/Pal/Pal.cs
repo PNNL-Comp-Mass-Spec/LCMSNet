@@ -20,7 +20,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
     [DeviceControl(typeof(PalViewModel),
                                  "PAL Autosampler",
                                  "Auto-Samplers")]
-    public class Pal : IDevice, IAutoSampler, IFluidicsSampler
+    public class Pal : IDevice, IAutoSampler, IFluidicsSampler, IHasDataProvider
     {
         private const string VialNumberError = "Vial number error";
         private const string ConnectionError = "Connection error";
