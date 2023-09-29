@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using DynamicData;
 using LcmsNetCommonControls.Devices;
+using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
@@ -79,6 +81,7 @@ namespace LcmsNetPlugins.XcaliburLC
             });
             StartPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(StartPump));
             StopPumpCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => Pump.StopMethod()));
+            ExportMethodTextCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(() => WriteMethodToFile()));
         }
 
         ~XcaliburLCViewModel()
@@ -168,6 +171,7 @@ namespace LcmsNetPlugins.XcaliburLC
         public ReactiveCommand<Unit, Unit> GetDeviceInfoCommand { get; }
         public ReactiveCommand<Unit, Unit> StartPumpCommand { get; }
         public ReactiveCommand<Unit, Unit> StopPumpCommand { get; }
+        public ReactiveCommand<Unit, Unit> ExportMethodTextCommand { get; }
 
         private void RegisterDevice(IDevice device)
         {
@@ -248,6 +252,20 @@ namespace LcmsNetPlugins.XcaliburLC
             {
                 ApplicationLogger.LogError(0, ex.Message, ex);
             }
+        }
+
+        private void WriteMethodToFile()
+        {
+            if (string.IsNullOrWhiteSpace(SelectedMethod))
+            {
+                return;
+            }
+
+            var methodText = Pump.GetMethodText(SelectedMethod);
+            var path = Path.Combine(LCMSSettings.GetParameter(LCMSSettings.PARAM_APPLICATIONDATAPATH), DeviceManager.CONST_PUMP_METHOD_PATH, $"{SelectedMethod}_export.txt");
+
+            File.WriteAllText(path, methodText);
+            ApplicationLogger.LogMessage(LogLevel.Info, $"Wrote text for method {SelectedMethod} to file '{path}'");
         }
     }
 }

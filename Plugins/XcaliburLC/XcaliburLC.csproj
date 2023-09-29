@@ -62,6 +62,18 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="ThermoFisher.CommonCore.BackgroundSubtraction">
+      <HintPath>Resources\ThermoFisher.CommonCore.BackgroundSubtraction.dll</HintPath>
+    </Reference>
+    <Reference Include="ThermoFisher.CommonCore.Data">
+      <HintPath>Resources\ThermoFisher.CommonCore.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="ThermoFisher.CommonCore.MassPrecisionEstimator">
+      <HintPath>Resources\ThermoFisher.CommonCore.MassPrecisionEstimator.dll</HintPath>
+    </Reference>
+    <Reference Include="ThermoFisher.CommonCore.RawFileReader">
+      <HintPath>Resources\ThermoFisher.CommonCore.RawFileReader.dll</HintPath>
+    </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WpfExtras">
@@ -84,6 +96,7 @@
       <DependentUpon>XcaliburLCView.xaml</DependentUpon>
     </Compile>
     <Compile Include="XcaliburLCViewModel.cs" />
+    <Compile Include="XcaliburMethodReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\ACQUISITIONLib.dll" />

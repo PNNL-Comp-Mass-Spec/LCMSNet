@@ -672,6 +672,16 @@ namespace LcmsNetPlugins.XcaliburLC
             }
         }
 
+        public string GetMethodText(string methodName)
+        {
+            if (!availableMethods.TryGetValue(methodName, out var methodPath))
+            {
+                return "";
+            }
+
+            return XcaliburMethodReader.GetMethodText(methodPath);
+        }
+
         /// <summary>
         /// Writes the pump method time-table to the directory provided.
         /// </summary>
@@ -681,7 +691,8 @@ namespace LcmsNetPlugins.XcaliburLC
         {
             if (availableMethods.ContainsKey(methodName))
             {
-                var methodData = availableMethods[methodName];
+                var methodPath = availableMethods[methodName];
+                var methodData = XcaliburMethodReader.GetMethodText(methodPath);
             }
         }
 

@@ -46,6 +46,7 @@
                 <ComboBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" ItemsSource="{Binding MethodComboBoxOptions}" SelectedItem="{Binding SelectedMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                 <Button Grid.Row="1" Grid.Column="0" Margin="3" Height="38" Background="Green" Foreground="White" FontWeight="Bold" FontSize="16" Content="Start" Command="{Binding StartPumpCommand}" />
                 <Button Grid.Row="1" Grid.Column="2" Margin="3" Height="38" Background="DarkRed" Foreground="White" FontWeight="Bold" FontSize="16" Content="Stop" Command="{Binding StopPumpCommand}" />
+                <Button Grid.Row="1" Grid.Column="1" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Export Method Text" Command="{Binding ExportMethodTextCommand}" />
             </Grid>
         </GroupBox>
         <Button Grid.Row="5" Grid.Column="0" Margin="3" Content="Get Device Status" Command="{Binding GetDeviceStatusCommand}" />
