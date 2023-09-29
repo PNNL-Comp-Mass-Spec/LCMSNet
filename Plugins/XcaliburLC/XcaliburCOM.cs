@@ -1,0 +1,709 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using AxACQUISITIONLib;
+using LcmsNetSDK;
+using LcmsNetSDK.Logging;
+using XCALIBURFILESLib;
+
+namespace LcmsNetPlugins.XcaliburLC
+{
+    internal class XcaliburCOM : INotifyPropertyChangedExt, IDisposable
+    {
+        private readonly AxAcquisition acquisitionLib;
+        private string templateSldPath = @"C:\Xcalibur\data\Template.sld";
+        private string dataFileDirectoryPath = @"C:\Xcalibur\data";
+        private string outputSldPath = @"C:\Xcalibur\data\LCMSNet.sld";
+
+        private readonly Action<EventClass, EventName, string> eventReporter;
+
+        public string TemplateSldPath { get => templateSldPath; set => this.RaiseAndSetIfChanged(ref templateSldPath, value); }
+        public string DataFileDirectoryPath { get => dataFileDirectoryPath; set => this.RaiseAndSetIfChanged(ref dataFileDirectoryPath, value); }
+        public string OutputSldPath { get => outputSldPath; set => this.RaiseAndSetIfChanged(ref outputSldPath, value); }
+
+        public XcaliburCOM(Action<EventClass, EventName, string> eventReporterMethod)
+        {
+            acquisitionLib = new AxAcquisition();
+            acquisitionLib.CreateControl();
+
+            // events with arguments/data
+            acquisitionLib.InformationalMessage += AcquisitionInformationalMessage;
+            acquisitionLib.WarningMessage += AcquisitionWarningMessage;
+            acquisitionLib.ErrorMessage += AcquisitionErrorMessage;
+            acquisitionLib.ProgramError += AcquisitionProgramError;
+
+            // events with no data
+            acquisitionLib.Acquiring += AcquisitionAcquiring;
+            acquisitionLib.DataFileCompleted += AcquisitionDataFileCompleted;
+            acquisitionLib.DevicesAreReady += AcquisitionDevicesAreReady;
+            acquisitionLib.DiskSpaceWarning += AcquisitionDiskSpaceWarning;
+            acquisitionLib.DownloadAbandoned += AcquisitionDownloadAbandoned;
+            acquisitionLib.DownloadCompleted += AcquisitionDownloadCompleted;
+            acquisitionLib.DownLoadInitiated += AcquisitionDownLoadInitiated;
+            acquisitionLib.MethodCheckFail += AcquisitionMethodCheckFail;
+            acquisitionLib.MethodCheckOK += AcquisitionMethodCheckOK;
+            acquisitionLib.NewData += AcquisitionNewData;
+            acquisitionLib.Pause += AcquisitionPause;
+            acquisitionLib.QueuedNewSequence += AcquisitionQueuedNewSequence;
+            acquisitionLib.Resume += AcquisitionResume;
+            acquisitionLib.RunEnded += AcquisitionRunEnded;
+            acquisitionLib.SequenceChange += AcquisitionSequenceChange;
+            acquisitionLib.SequenceClosed += AcquisitionSequenceClosed;
+            acquisitionLib.SequenceOpened += AcquisitionSequenceOpened;
+            acquisitionLib.StartCmdSent += AcquisitionStartCmdSent;
+            acquisitionLib.StartedProcessing += AcquisitionStartedProcessing;
+            acquisitionLib.StateChange += AcquisitionStateChange;
+            acquisitionLib.VDStateChange += AcquisitionVDStateChange;
+            acquisitionLib.WarningMessage += AcquisitionWarningMessage;
+
+            eventReporter = eventReporterMethod;
+        }
+
+        public void Dispose()
+        {
+            acquisitionLib.Dispose();
+        }
+
+        /* Not implemented acquisitionLib calls:
+        //ChangeDevicesOperatingMode: parameter is (int mode: '1' (On), '2' (Off), '3' (Standby))
+        //ChangeOperatingModeByName: parameters are (int mode: '1' (On), '2' (Off), '3' (Standby), short deviceType)
+        //ChangeOperatingModeByType: parameters are (int mode: '1' (On), '2' (Off), '3' (Standby), string deviceName)
+        //CheckDiskSpace: parameters are: (string sequencePath, ref long space, int startRowInSequence), returns error code; all paths in sequence file must be valid to not get an error code
+        //DeleteSequenceFromQueue: parameters are: (string sequencePath), returns error code
+        //DeleteWholeQueue: no parameters, returns error code
+        //GetDevicesByType: parameters are: (short typeCode, ref object[] (variant) deviceNames), returns short numDevices, might return '2005', which is a code for an OLE exception in the Acquisition Server
+        //GetThisDeviceInfo: parameters are: (ref object[] (variant) deviceInfo, string deviceShortName), returns error code maybe?
+        //ShowHomePage: parameters are (bool visibility), no return, not sure on actual functionality.
+         */
+
+        //SubmitSequence - returns an error code: 0 for success, != 0 for error
+        //SubmitSequence2 - returns a status code: >= 0 for success (submission ID), < 0 for failure
+        public bool StartSample(string sampleName, string xcaliburLCMethodPath, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+            CreateSequenceForSample(sampleName, xcaliburLCMethodPath);
+
+            var sequenceName = OutputSldPath;
+
+            var deviceNames = "";
+            acquisitionLib.GetDeviceNames(ref deviceNames); // Gets a comma-separated list of device names
+            // TODO: This device list must not be empty!!!
+
+            if (string.IsNullOrWhiteSpace(deviceNames.Trim()))
+            {
+                return false;
+            }
+
+            // SubmitSequence2 appears to be friendlier
+            var returnCode = acquisitionLib.SubmitSequence2(
+                Environment.UserName, // May be limited to 10 characters?
+                ref sequenceName,
+                1, // First row number to run (0-based)
+                1, // Last row number to run (0-based)
+                false, // If true, starts this sequence immediately after current sequence; if false, adds to the end of the current queue
+                true, // Automatically start the sample when the instrument is ready (this does not bypass contact closures)
+                "", // Path of method to run before first sample
+                "", // Path of method to run after last sample
+                "", // pre-acquisition Program, an .exe or .bat to run
+                "", // post-acquisition Program, an .exe or .bat to run
+                true, // Specifically refers to running the pre-acquisition Program synchronous or asynchronous
+                false, // Specifically refers to running the post-acquisition Program synchronous or asynchronous
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                deviceNames,
+                -1, // 0-based, '-1' for 'no start' (Xcalibur handles this automatically for 'external autosampler' systems, but if this is '0', it causes an error/sequence pause.
+                1 // 1: ON, 2: OFF, 3: Standby
+            );
+
+            if (returnCode >= 0)
+            {
+                // Return code: >= 0, success (returns a submission ID)
+                errorMessage = $"Return code: {returnCode}";
+            }
+            else
+            {
+                // Return code: >= 0, error
+                string error = "";
+                switch (returnCode)
+                {
+                    case -1:
+                        error = "Sequence file error";
+                        break;
+                    case -2:
+                        error = "No rows specified";
+                        break;
+                    case -3:
+                        error = "Sequence file validation error";
+                        break;
+                    case -4:
+                        error = "Error";
+                        break;
+                    default:
+                        error = $"Illegal error: {returnCode}";
+                        break;
+                }
+
+                errorMessage = error;
+
+                return false;
+            }
+
+            return true;
+        }
+
+        public void CreateSequenceForSample(string sampleName, string xcaliburLCMethodPath)
+        {
+            IXSequence sequence = new XSequenceClass();
+            if (!string.IsNullOrWhiteSpace(TemplateSldPath) && File.Exists(TemplateSldPath))
+            {
+                sequence.Open(TemplateSldPath, 0);
+            }
+            else
+            {
+                sequence.New();
+            }
+
+            var samplesObj = sequence.Samples;
+            var samples = (IXSamples)samplesObj;
+
+            for (var i = samples.Count; i > 0; i--)
+            {
+                samples.Remove(i);
+            }
+
+            var sample = (IXSample)samples.Add(-1);
+            sample.FileName = sampleName;
+            sample.Path = DataFileDirectoryPath;
+            sample.InstMeth = Path.ChangeExtension(xcaliburLCMethodPath, null); // do not include .meth
+
+            sequence.SaveAs(OutputSldPath, "LCMSOperator", "", 1);
+            sequence.Close();
+        }
+
+        //GetDeviceNames
+        public IReadOnlyList<string> GetDevices()
+        {
+            var deviceNames = "";
+            var errorCode = acquisitionLib.GetDeviceNames(ref deviceNames); // Gets a comma-separated list of device names
+
+            if (errorCode != 0 || string.IsNullOrWhiteSpace(deviceNames))
+            {
+                return Array.Empty<string>();
+            }
+
+            return deviceNames.Split(',');
+        }
+
+        //SendAnalysisCommand - parameter is '1' (start), '2' (stop), '3' (pause/resume)
+        //SendAnalysisCommand2 - parameter is '1' (start), '2' (stop), '3' (pause), '4' (resume)
+        public void StartQueueDefault()
+        {
+            acquisitionLib.SendAnalysisCommand2(1);
+        }
+
+        public void StopQueue()
+        {
+            acquisitionLib.SendAnalysisCommand2(2);
+        }
+
+        public void PauseQueue()
+        {
+            acquisitionLib.SendAnalysisCommand2(3);
+        }
+
+        public void ResumeQueue()
+        {
+            acquisitionLib.SendAnalysisCommand2(4);
+        }
+
+        //GetRunManagerStatus
+        public string GetRunStatus()
+        {
+            return acquisitionLib.GetRunManagerStatus();
+        }
+
+        //GetSeqQueuePaused: no parameters, returns bool: true (paused), false (not paused)
+        public bool IsQueuePaused()
+        {
+            return acquisitionLib.GetSeqQueuePaused();
+        }
+
+        public string GetDeviceStatus()
+        {
+            //return $"GetDeviceStatuses: {GetDeviceStatuses()}";
+            return $"GetDeviceStatuses: {GetDeviceStatusesString()}\nGetDeviceStatuses2: {GetDeviceStatuses2String()}";
+        }
+
+        public string GetDeviceStatusesString()
+        {
+            var statuses = GetDeviceStatuses();
+            if (statuses == null)
+            {
+                return "Read Error";
+            }
+
+            return string.Join("; ", statuses);
+        }
+
+        public string GetDeviceStatuses2String()
+        {
+            var statuses = GetDeviceStatuses2();
+            if (statuses == null)
+            {
+                return "Read Error";
+            }
+
+            return string.Join("; ", statuses);
+        }
+
+        //GetDeviceStatuses
+        public IReadOnlyList<XcaliburDeviceStatus> GetDeviceStatuses()
+        {
+            object wrapper = new System.Runtime.InteropServices.VariantWrapper(new object());
+            // GetDeviceStatuses(ref object): object returned is an array of iterators, maybe? Each iterator has 2 values, ElementName and ElementStatus (a status code)
+            // GetDeviceStatuses2(ref object): object returned is an array of iterators, maybe? Each iterator has 3 values, ElementName, ElementStatusString, and ElementStatus (a status code)
+            var errorCode = acquisitionLib.GetDeviceStatuses(ref wrapper);
+
+            if (errorCode != 0)
+            {
+                return null;
+            }
+
+            var deviceStatuses = (object[,]) wrapper;
+
+            var statuses = new List<XcaliburDeviceStatus>();
+            for (var i = 0; i < deviceStatuses.GetLength(1); i++)
+            {
+                var deviceName = "";
+                try
+                {
+                    deviceName = deviceStatuses[0, i].ToString();
+                    var status = Convert.ToInt32(deviceStatuses[1, i]);
+                    var statusString = ConvertDeviceStatusCodeToString(status);
+
+                    statuses.Add(new XcaliburDeviceStatus(deviceName, status, statusString));
+                }
+                catch (Exception ex)
+                {
+                    statuses.Add(new XcaliburDeviceStatus(deviceName, "parse failure", -1, ex.Message));
+                }
+            }
+
+            return statuses;
+        }
+
+        //GetDeviceStatuses2
+        public IReadOnlyList<XcaliburDeviceStatus> GetDeviceStatuses2()
+        {
+            object wrapper = new System.Runtime.InteropServices.VariantWrapper(new object());
+            // GetDeviceStatuses(ref object): object returned is an array of iterators, maybe? Each iterator has 2 values, ElementName and ElementStatus (a status code)
+            // GetDeviceStatuses2(ref object): object returned is an array of iterators, maybe? Each iterator has 3 values, ElementName, ElementStatusString, and ElementStatus (a status code)
+            var errorCode = acquisitionLib.GetDeviceStatuses2(ref wrapper);
+
+            if (errorCode != 0)
+            {
+                return null;
+            }
+
+            var deviceStatuses = (object[,]) wrapper;
+
+            var statuses = new List<XcaliburDeviceStatus>();
+            for (var i = 0; i < deviceStatuses.GetLength(1); i++)
+            {
+                var deviceName = "";
+                try
+                {
+                    deviceName = deviceStatuses[0, i].ToString();
+                    var str = deviceStatuses[1, i].ToString();
+                    var status = Convert.ToInt32(deviceStatuses[2, i]);
+                    var statusString = ConvertDeviceStatusCodeToString(status);
+
+                    statuses.Add(new XcaliburDeviceStatus(deviceName, str, status, statusString));
+                }
+                catch (Exception ex)
+                {
+                    statuses.Add(new XcaliburDeviceStatus(deviceName, "parse failure", -1, ex.Message));
+                }
+            }
+
+            return statuses;
+        }
+
+        public string GetDeviceInfoString()
+        {
+            var statuses = GetDeviceInfo();
+            if (statuses == null)
+            {
+                return "No devices or error";
+            }
+
+            return string.Join("; ", statuses);
+        }
+
+        //GetDeviceInfoArray
+        public IReadOnlyList<XcaliburDeviceInfo> GetDeviceInfo()
+        {
+            // short (numDevices) GetDeviceInfoArray(ref object): object returned is an array of iterators, maybe? Each iterator has 15 string values:
+            // UI, CFGUI, StatusOCX, VirDev, Description, ShortName, RequiredDevice, HelpFileName, HelpFileLabel,
+            // TuneHelpFileName, TuneHelpFileLabel, DirectControlOCX, Version, XcalVersion, Type (device type code)
+            // Might return '2005', which is a code for an OLE exception in the Acquisition Server
+            object wrapper = new System.Runtime.InteropServices.VariantWrapper(new object());
+            var numDevices = acquisitionLib.GetDeviceInfoArray(ref wrapper);
+
+            if (numDevices <= 0)
+            {
+                return null;
+            }
+
+            if (numDevices == 2005)
+            {
+                return null;
+            }
+
+            var deviceInfos = (object[,]) wrapper;
+            var infos = new List<XcaliburDeviceInfo>();
+            for (var i = 0; i < deviceInfos.GetLength(0); i++)
+            {
+                try
+                {
+                    infos.Add(new XcaliburDeviceInfo(deviceInfos, i));
+                }
+                catch (Exception ex)
+                {
+                    infos.Add(new XcaliburDeviceInfo("Error", "", "", "", "", "", "", "", "", "", "", "", "", "", -1, ex.Message));
+                }
+            }
+
+            return infos;
+        }
+
+        internal static string ConvertDeviceStatusCodeToString(int statusCode)
+        {
+            switch (statusCode)
+            {
+                case 0: return "Initialising";
+                case 1: return "Ready To Download";
+                case 2: return "Downloading";
+                case 3: return "Preparing For Run";
+                case 4: return "Ready For Run";
+                case 5: return "Waiting For Contact Closure";
+                case 6: return "Running";
+                case 7: return "Post Run";
+                case 8: return "Error";
+                case 9: return "Busy";
+                case 10: return "Not Connected";
+                case 11: return "Standby";
+                case 12: return "Off";
+                case 13: return "Server Failed";
+                case 14: return "Lamp Warmup";
+                case 15: return "Not Ready";
+                case 16: return "Direct Control";
+                default: return "Illegal device status value";
+            }
+        }
+
+        internal static string ConvertDeviceTypeToString(int deviceType)
+        {
+            switch (deviceType)
+            {
+                case 0: return "MS device";
+                case 1: return "LC device";
+                case 2: return "GC device";
+                case 3: return "AS device";
+                case 4: return "Detector device";
+                case 5: return "Other device";
+                case 6: return "All devices";
+                default: return "Illegal device";
+            }
+        }
+
+        /*
+         * Useful commands:
+         * Get Queue state (paused, not paused, ...): bool GetSeqQueuePaused
+         * Get run manager status: (ready to download, acquiring, etc.): string GetRunManagerStatus()
+         */
+
+        /* Sequence submission event sequence:
+         * (submitted)
+         * MethodCheckOK
+         * QueuedNewSequence
+         * SequenceOpened
+         * SequenceChange
+         * StateChange
+         * DownloadInitiated
+         * StateChange
+         * DownloadCompleted
+         * StateChange
+         * VDStateChange
+         * VDStateChange
+         * DevicesAreReady
+         * StateChange
+         * StartCmdSent
+         * StateChange
+         * VDStateChange
+         * (contact closure)
+         * VDStateChange
+         * Acquiring
+         * StateChange
+         * NewData
+         * NewData
+         * NewData
+         * ...
+         * (triggered error)
+         * VDStateChange
+         * NewData
+         * Pause
+         * DataFileCompleted
+         * RunEnded
+         * StartedProcessing
+         * StateChange
+         *
+         * (clicking buttons in Xcalibur)
+         * Resume
+         * Pause
+         * SequenceClosed
+         * SequenceChange
+         */
+
+        private void AcquisitionAcquiring(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.Acquiring, "Acquiring");
+            ApplicationLogger.LogMessage(LogLevel.Info, "Acquiring");
+        }
+
+        private void AcquisitionDataFileCompleted(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.DataFileCompleted, "DataFileCompleted");
+            ApplicationLogger.LogMessage(LogLevel.Info, "DataFileCompleted");
+        }
+
+        private void AcquisitionDevicesAreReady(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.StateChange, EventName.DevicesAreReady, "Devices are ready");
+            ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC devices are ready");
+        }
+
+        private void AcquisitionDiskSpaceWarning(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.DiskSpaceWarning, "DiskSpaceWarning");
+            ApplicationLogger.LogMessage(LogLevel.Info, "DiskSpaceWarning");
+        }
+
+        private void AcquisitionDownloadAbandoned(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.DownloadAbandoned, "DownloadAbandoned");
+            ApplicationLogger.LogMessage(LogLevel.Info, "DownloadAbandoned");
+        }
+
+        private void AcquisitionDownloadCompleted(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.DownloadCompleted, "DownloadCompleted");
+            ApplicationLogger.LogMessage(LogLevel.Info, "DownloadCompleted");
+        }
+
+        private void AcquisitionDownLoadInitiated(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.DownLoadInitiated, "DownLoadInitiated");
+            ApplicationLogger.LogMessage(LogLevel.Info, "DownLoadInitiated");
+        }
+
+        private void AcquisitionMethodCheckOK(object sender, EventArgs e)
+        {
+            eventReporter(EventClass.Status, EventName.MethodCheckOK, "Method check OK");
+            ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC method check OK");
+        }
+
+        private void AcquisitionMethodCheckFail(object sender, EventArgs e)
+        {
+            eventReporter(EventClass.Error, EventName.MethodCheckFail, "Method check failed");
+            ApplicationLogger.LogError(LogLevel.Error, "Xcalibur LC method check failed");
+        }
+
+        private void AcquisitionNewData(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.NewData, "NewData");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "NewData");
+        }
+
+        private void AcquisitionPause(object sender, EventArgs e)
+        {
+            eventReporter(EventClass.StateChange, EventName.Pause, "Acquisition paused");
+            ApplicationLogger.LogMessage(LogLevel.Warning, "Xcalibur LC acquisition paused");
+        }
+
+        private void AcquisitionQueuedNewSequence(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.QueuedNewSequence, "QueuedNewSequence");
+            ApplicationLogger.LogMessage(LogLevel.Info, "Queued New Sequence");
+        }
+
+        private void AcquisitionResume(object sender, EventArgs e)
+        {
+            eventReporter(EventClass.StateChange, EventName.Resume, "Acquisition resumed");
+            ApplicationLogger.LogMessage(LogLevel.Warning, "Xcalibur LC acquisition resumed");
+        }
+
+        private void AcquisitionRunEnded(object sender, EventArgs e)
+        {
+            eventReporter(EventClass.Status, EventName.RunEnded, "Acquisition run completed");
+            ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC acquisition run completed");
+        }
+
+        private void AcquisitionSequenceChange(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.SequenceChange, "SequenceChange");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "SequenceChange");
+        }
+
+        private void AcquisitionSequenceClosed(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.SequenceClosed, "SequenceClosed");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "SequenceClosed");
+        }
+
+        private void AcquisitionSequenceOpened(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.SequenceOpened, "SequenceOpened");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "SequenceOpened");
+        }
+
+        private void AcquisitionStartCmdSent(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.StartCmdSent, "StartCmdSent");
+            ApplicationLogger.LogMessage(LogLevel.Info, "StartCmdSent");
+        }
+
+        private void AcquisitionStartedProcessing(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.StartedProcessing, "StartedProcessing");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "StartedProcessing");
+        }
+
+        private void AcquisitionStateChange(object sender, EventArgs e)
+        {
+            // TODO: Read run manager status
+            var status = acquisitionLib.GetRunManagerStatus();
+            eventReporter(EventClass.ManagerStateChange, EventName.StateChange, status);
+            ApplicationLogger.LogMessage(LogLevel.Info, $"Xcalibur LC acquisition state change: {status}");
+        }
+
+        private void AcquisitionVDStateChange(object sender, EventArgs e)
+        {
+            //eventReporter(EventClass.Status, EventName.VDStateChange, "VDStateChange");
+            ApplicationLogger.LogMessage(LogLevel.Info, "VDStateChange");
+        }
+
+        private void AcquisitionInformationalMessage(object sender, _DAcquisitionEvents_InformationalMessageEvent e)
+        {
+            var instError = e.instrumentError ? " (Instrument error)" : "";
+            //eventReporter(EventClass.Info, EventName.InformationalMessage, $"{e.title}{instError}: {e.message}");
+            ApplicationLogger.LogMessage(LogLevel.Info, $"Xcalibur LC info: {e.title}{instError}: {e.message}");
+        }
+
+        private void AcquisitionWarningMessage(object sender, _DAcquisitionEvents_WarningMessageEvent e)
+        {
+            var instError = e.instrumentError ? " (Instrument error)" : "";
+            eventReporter(EventClass.Warning, EventName.WarningMessage, $"{e.title}{instError}: {e.message}");
+            ApplicationLogger.LogMessage(LogLevel.Warning, $"Xcalibur LC warning: {e.title}{instError}: {e.message}");
+        }
+
+        private void AcquisitionErrorMessage(object sender, _DAcquisitionEvents_ErrorMessageEvent e)
+        {
+            var instError = e.instrumentError ? " (Instrument error)" : "";
+            eventReporter(EventClass.Error, EventName.ErrorMessage, $"{e.title}{instError}: {e.message}");
+            ApplicationLogger.LogError(LogLevel.Error, $"Xcalibur LC error: {e.title}{instError}: {e.message}");
+        }
+
+        private void AcquisitionProgramError(object sender, _DAcquisitionEvents_ProgramErrorEvent e)
+        {
+            var instError = e.instrumentError ? " (Instrument error)" : "";
+            eventReporter(EventClass.Error, EventName.ProgramError, $"{e.title}{instError}: {e.message}");
+            ApplicationLogger.LogError(LogLevel.Error, $"Xcalibur LC program error: {e.title}{instError}: {e.message}");
+        }
+
+        /*
+        public void Test()
+        {
+            ACQUISITIONLib.Acquisition x = new ACQUISITIONLib.AcquisitionClass();
+            var sequenceName = "test";
+
+            var deviceNames = "";
+            x.GetDeviceNames(ref deviceNames); // Gets a comma-separated list of device names
+
+            x.SubmitSequence(
+                Environment.UserName, // May be limited to 10 characters?
+                ref sequenceName,
+                1, // First row number to run (0-based)
+                1, // Last row number to run (0-based)
+                false, // If true, starts this sequence immediately after current sequence; if false, adds to the end of the current queue
+                true, // Automatically start the sample when the instrument is ready
+                "", // Path of method to run before first sample
+                "", // Path of method to run after last sample
+                "", // preacquisitionProgram, an .exe or .bat to run
+                "", // postacquisitionProgram, an .exe or .bat to run
+                true, // Specifically refers to running the preAcquisitionProgram synchronous or asynchronous
+                false, // Specifically refers to running the postAcquisitionProgram synchronous or asynchronous
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                false, // Post-acquisition actions: Run ...
+                deviceNames,
+                0, // 0-based
+                1 // 1: ON, 2: OFF, 3: Standby
+            );
+
+            //x.GetDeviceStatuses();
+        }
+
+        public void CreateTestSequence()
+        {
+            IXSequence x = new XSequenceClass();
+            //x.New();
+            x.Open(@"C:\Xcalibur\data\Template.sld", 0);
+
+            var samplesObj = x.Samples;
+            var samples = (IXSamples)samplesObj;
+
+            for (var i = samples.Count; i > 0; i--)
+            {
+                samples.Remove(i);
+            }
+
+            var sample = (IXSample)samples.Add(-1);
+            sample.FileName = "test0";
+            sample.Path = @"C:\Xcalibur\Data";
+            sample.InstMeth = "instMethod";
+            //sample.RowNumber = 1;
+
+            sample = (IXSample)samples.Add(-1);
+            sample.FileName = "test1";
+            sample.Path = @"C:\Xcalibur\Data";
+            sample.InstMeth = "instMethod";
+            //sample.RowNumber = 2;
+
+            sample = (IXSample)samples.Add(-1);
+            sample.FileName = "test2";
+            sample.Path = @"C:\Xcalibur\Data";
+            sample.InstMeth = "instMethod";
+            //sample.RowNumber = 3;
+
+            x.SaveAs(@"C:\Xcalibur\data\LCMSNet.sld", "LCMSOperator", "", 1);
+        }
+        */
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}
