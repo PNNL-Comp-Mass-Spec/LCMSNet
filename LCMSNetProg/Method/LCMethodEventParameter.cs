@@ -9,7 +9,7 @@
         /// <param name="viewModel">Edit ViewModel to use.</param>
         /// <param name="name"></param>
         /// <param name="dataProviderName">Name of the data provider to use.</param>
-        public LCMethodEventParameter(string name, object value, ILCEventParameter viewModel, string dataProviderName)
+        public LCMethodEventParameter(string name, object value, ILCEventParameter viewModel, string dataProviderName = "")
         {
             Name = name;
             Value = value;

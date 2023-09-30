@@ -216,24 +216,11 @@ namespace LcmsNetPlugins.XcaliburLC
         /// <param name="timeout"></param>
         /// <param name="sample"></param>
         /// <param name="method">Method to run stored on the pumps.</param>
-        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, true, EventDescription = "")]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, 1, "MethodNames", 2, HasPerformanceData = true, EventDescription = "Sends the sample name and method to Xcalibur to start a run")]
+        [LCMethodEvent("Start Method NonDeterm", MethodOperationTimeoutType.Parameter, 1, "MethodNames", 2, HasPerformanceData = true, IgnoreLeftoverTime = true, EventDescription = "Sends the sample name and method to Xcalibur to start a run\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public bool StartMethod(double timeout, ISampleInfo sample, string method)
         {
-            var start = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
-
-            var result = StartMethod(method, sample.Name);
-            if (!result)
-            {
-                return false;
-            }
-
-            // We see if we ran over or not...if so then return failure, otherwise let it continue.
-            var span = TimeKeeper.Instance.Now.Subtract(start);
-
-            var timer = new TimerDevice();
-            timer.WaitSeconds(timeout - span.TotalSeconds);
-
-            return true;
+            return StartMethod(method, sample.Name);
         }
 
         /// <summary>
@@ -265,7 +252,7 @@ namespace LcmsNetPlugins.XcaliburLC
         /// <summary>
         /// Stops the currently running method.
         /// </summary>
-        [LCMethodEvent("Stop Method", 1)]
+        [LCMethodEvent("Stop Method", 1000)]
         public void StopMethod()
         {
             xcaliburCom.StopQueue();

@@ -316,7 +316,7 @@ namespace LcmsNetPlugins.PNNLDevices.NetworkStart.Socket
         /// <param name="timeout"></param>
         /// <param name="sample">Name of sample to run.</param>
         /// <returns>True if start successful.  False if start failed for any reason.</returns>
-        [LCMethodEvent("Start Acquisition", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false)]
+        [LCMethodEvent("Start Acquisition", MethodOperationTimeoutType.Parameter, 1, "MethodNames", 2)]
         public bool StartAcquisition(double timeout, ISampleInfo sample)
         {
             if (Emulation)

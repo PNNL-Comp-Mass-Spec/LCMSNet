@@ -536,6 +536,7 @@ namespace LcmsNet.Method.ViewModels
             if (method == null)
             {
                 lcMethodEvents.Clear();
+                return;
             }
 
             var eventNumber = 1;
@@ -549,7 +550,8 @@ namespace LcmsNet.Method.ViewModels
                     var name = lcEvent.ParameterNames[i];
                     ILCEventParameter vm = null;
 
-                    if (lcEvent.MethodAttribute.DataProviderIndex == i)
+                    var dataProviderKey = "";
+                    if (lcEvent.MethodAttribute.DataProvider.IsSet)
                     {
                         // Figure out what index to adjust the data provider for.
                         var combo = new EventParameterEnumViewModel();
@@ -557,11 +559,13 @@ namespace LcmsNet.Method.ViewModels
                         // Register the event to automatically get new data when the data provider has new stuff.
                         if (lcEvent.Device is IHasDataProvider dataProvider)
                         {
-                            dataProvider.RegisterDataProvider(lcEvent.MethodAttribute.DataProvider, combo.FillData);
+                            dataProviderKey = lcEvent.MethodAttribute.DataProvider.Key;
+                            dataProvider.RegisterDataProvider(lcEvent.MethodAttribute.DataProvider.Key, combo.FillData);
                         }
                         else
                         {
                             ApplicationLogger.LogError(LogLevel.Error, $"LC Event {lcEvent.Name} has a data provider, but device {lcEvent.Device.GetType()} does not implement {nameof(IHasDataProvider)}");
+                            continue;
                         }
 
                         vm = combo;
@@ -574,7 +578,7 @@ namespace LcmsNet.Method.ViewModels
                         }
                     }
 
-                    parameters.Add(new LCMethodEventParameter(name, parameter, vm, lcEvent.MethodAttribute.DataProvider));
+                    parameters.Add(new LCMethodEventParameter(name, parameter, vm, dataProviderKey));
                 }
 
                 var data = new LCMethodEventData(lcEvent.Device, lcEvent.Method, lcEvent.MethodAttribute, parameters)

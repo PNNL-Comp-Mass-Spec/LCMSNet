@@ -96,7 +96,7 @@ namespace DemoPluginLibrary
             return "";
         }
 
-        [LCMethodEvent("Run Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, false)]
+        [LCMethodEvent("Run Method", MethodOperationTimeoutType.Parameter, 1, "MethodNames", 2)]
         public void RunMethod(double timeout, ISampleInfo sample, string method)
         {
             // Interact with hardware here.

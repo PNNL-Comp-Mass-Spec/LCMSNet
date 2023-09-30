@@ -1093,7 +1093,7 @@ namespace LcmsNetPlugins.Agilent.Pumps
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="method">Method to run stored on the pumps.</param>
-        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 1, true)]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 1, HasPerformanceData = true)]
         public void StartMethod(double timeout, string method)
         {
             var start = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));

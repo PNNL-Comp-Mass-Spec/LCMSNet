@@ -88,6 +88,7 @@
     <Compile Include="Logging\LogWriterBase.cs" />
     <Compile Include="Logging\MessageLoggerArgs.cs" />
     <Compile Include="Logging\ThreadedLogger.cs" />
+    <Compile Include="Method\DataProviderSpec.cs" />
     <Compile Include="Method\ILCEvent.cs" />
     <Compile Include="Method\ILCMethod.cs" />
     <Compile Include="Method\ILCMethodEvent.cs" />

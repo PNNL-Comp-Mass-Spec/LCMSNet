@@ -103,7 +103,7 @@ namespace DemoPluginLibrary
 
         public event DelegateDeviceHasData MethodNames;
 
-        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 2, false)]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 2)]
         public bool StartMethod(double timeout, double channel, string methodName)
         {
             return true;

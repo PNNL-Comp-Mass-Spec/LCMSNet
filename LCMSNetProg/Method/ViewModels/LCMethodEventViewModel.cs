@@ -608,87 +608,88 @@ namespace LcmsNet.Method.ViewModels
             // We are trying to enumerate all the methods for this device building their method-parameter pairs.
             foreach (var method in type.GetMethods())
             {
-                var customAttributes = method.GetCustomAttributes(typeof(LCMethodEventAttribute), true);
-                foreach (var objAttribute in customAttributes)
+                var customAttributes = method.GetCustomAttributes(typeof(LCMethodEventAttribute), true).Cast<LCMethodEventAttribute>();
+                // If the method has a custom LC Method Attribute, then we want to look at the parameters used
+                foreach (var attr in customAttributes)
                 {
-                    // If the method has a custom LC Method Attribute, then we want to look at the parameters used
-                    if (objAttribute is LCMethodEventAttribute attr)
+                    // Grab the parameters used for this method
+                    var info = method.GetParameters();
+                    var parameters = new List<LCMethodEventParameter>();
+
+                    // Here we are looking to see if the method has a parameter
+                    // that requires a data provider.
+                    if (info.Length > 0)
                     {
-                        // Grab the parameters used for this method
-                        var info = method.GetParameters();
-                        var parameters = new List<LCMethodEventParameter>();
-
-                        // Here we are looking to see if the method has a parameter
-                        // that requires a data provider.
-                        if (info.Length > 0)
+                        // Make sure that we have parameter data, and also make sure that
+                        // the parameter we are going to use is a sample data object.
+                        // Then for each parameter, see if we can add it to a control to display.
+                        var i = 0;
+                        foreach (var paramInfo in info)
                         {
-                            // Make sure that we have parameter data, and also make sure that
-                            // the parameter we are going to use is a sample data object.
-                            // Then for each parameter, see if we can add it to a control to display.
-                            var i = 0;
-                            foreach (var paramInfo in info)
+                            ILCEventParameter vm = null;
+                            object value = null;
+
+                            // If the method editor has to use sample data then
+                            // we skip adding a control...but allow for
+                            // other data to be loaded.
+                            if (attr.RequiresSampleInput && i == attr.SampleParameterIndex)
                             {
-                                ILCEventParameter vm = null;
-                                object value = null;
+                                parameters.Add(new LCMethodEventParameter(paramInfo.Name, null, null));
+                            }
+                            else if (attr.DataProvider.IsSet && i == attr.DataProvider.ParamIndex)
+                            {
+                                // Figure out what index to adjust the data provider for.
+                                var combo = new EventParameterEnumViewModel();
 
-                                // If the method editor has to use sample data then
-                                // we skip adding a control...but allow for
-                                // other data to be loaded.
-                                if (attr.RequiresSampleInput && i == attr.SampleParameterIndex)
+                                // Register the event to automatically get new data when the data provider has new stuff.
+                                if (device is IHasDataProvider dataProvider)
                                 {
-                                    parameters.Add(new LCMethodEventParameter(paramInfo.Name, null, null, attr.DataProvider));
-                                }
-                                else if (string.IsNullOrEmpty(attr.DataProvider) == false && i == attr.DataProviderIndex)
-                                {
-                                    // Figure out what index to adjust the data provider for.
-                                    var combo = new EventParameterEnumViewModel();
-
-                                    // Register the event to automatically get new data when the data provider has new stuff.
-                                    if (device is IHasDataProvider dataProvider)
-                                    {
-                                        dataProvider.RegisterDataProvider(attr.DataProvider, combo.FillData);
-                                    }
-                                    else
-                                    {
-                                        ApplicationLogger.LogError(LogLevel.Error, $"LC Event {attr.Name} has a data provider, but device {device.GetType()} does not implement {nameof(IHasDataProvider)}");
-                                    }
-
-                                    vm = combo;
-                                    // Set the data if we have it, otherwise, cross your fingers batman!
-                                    if (combo.ComboBoxOptions.Count > 0)
-                                        value = combo.ComboBoxOptions[0];
-                                    parameters.Add(new LCMethodEventParameter(paramInfo.Name, value, vm, attr.DataProvider));
+                                    dataProvider.RegisterDataProvider(attr.DataProvider.Key, combo.FillData);
                                 }
                                 else
                                 {
-                                    // Get a control to display
-                                    vm = GetEventParametersFromType(paramInfo.ParameterType);
-
-                                    // We need to get a default value, so just ask the
-                                    // type for it.
-                                    if (paramInfo.ParameterType.IsEnum)
-                                    {
-                                        value = Enum.GetValues(paramInfo.ParameterType).GetValue(0);
-                                    }
-
-                                    // If the control is not null, then we can add it to display.
-                                    // If it is null, then it is of a type we know nothing about.
-                                    // And well you're SOL.
-                                    if (vm != null)
-                                    {
-                                        parameters.Add(new LCMethodEventParameter(paramInfo.Name, value, vm, attr.DataProvider));
-                                    }
+                                    ApplicationLogger.LogError(LogLevel.Error, $"LC Event {attr.Name} has a data provider, but device {device.GetType()} does not implement {nameof(IHasDataProvider)}");
+                                    continue;
                                 }
-                                i++;
-                            }
-                        }
 
-                        // Construct the new method from what we found
-                        // during the reflection phase and add it to the list of
-                        // possible methods to call for this device.
-                        var newMethod = new LCMethodEventData(device, method, attr, parameters);
-                        methodPairs.Add(newMethod);
+                                vm = combo;
+                                // Set the data if we have it, otherwise, cross your fingers batman!
+                                if (combo.ComboBoxOptions.Count > 0)
+                                {
+                                    value = combo.ComboBoxOptions[0];
+                                }
+
+                                parameters.Add(new LCMethodEventParameter(paramInfo.Name, value, vm, attr.DataProvider.Key));
+                            }
+                            else
+                            {
+                                // Get a control to display
+                                vm = GetEventParametersFromType(paramInfo.ParameterType);
+
+                                // We need to get a default value, so just ask the
+                                // type for it.
+                                if (paramInfo.ParameterType.IsEnum)
+                                {
+                                    value = Enum.GetValues(paramInfo.ParameterType).GetValue(0);
+                                }
+
+                                // If the control is not null, then we can add it to display.
+                                // If it is null, then it is of a type we know nothing about.
+                                // And well you're SOL.
+                                if (vm != null)
+                                {
+                                    parameters.Add(new LCMethodEventParameter(paramInfo.Name, value, vm));
+                                }
+                            }
+                            i++;
+                        }
                     }
+
+                    // Construct the new method from what we found
+                    // during the reflection phase and add it to the list of
+                    // possible methods to call for this device.
+                    var newMethod = new LCMethodEventData(device, method, attr, parameters);
+                    methodPairs.Add(newMethod);
                 }
             }
             return methodPairs;

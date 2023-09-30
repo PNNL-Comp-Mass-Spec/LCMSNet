@@ -766,8 +766,8 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         /// <summary>
         /// Loads the method
         /// </summary>
-        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, true, EventDescription = "Start the specified PAL method. Doesn't return until reaching an error/ready/sync state.\nIgnores early 'waiting for DS' (first 20 seconds).\nDeterministic, next step will not be started until timeout is reached")]
-        [LCMethodEvent("Start Method NonDeterm", MethodOperationTimeoutType.Parameter, true, 1, "MethodNames", 2, true, IgnoreLeftoverTime = true, EventDescription = "Start the specified PAL method. Doesn't return until reaching an error/ready/sync state.\nIgnores early 'waiting for DS' (first 20 seconds).\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, 1, "MethodNames", 2, HasPerformanceData = true, EventDescription = "Start the specified PAL method. Doesn't return until reaching an error/ready/sync state.\nIgnores early 'waiting for DS' (first 20 seconds).\nDeterministic, next step will not be started until timeout is reached")]
+        [LCMethodEvent("Start Method NonDeterm", MethodOperationTimeoutType.Parameter, 1, "MethodNames", 2, HasPerformanceData = true, IgnoreLeftoverTime = true, EventDescription = "Start the specified PAL method. Doesn't return until reaching an error/ready/sync state.\nIgnores early 'waiting for DS' (first 20 seconds).\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
         public bool LoadMethod(double timeout, ISampleInfo sample, string methodName)
         {
             if (inEmulationMode)

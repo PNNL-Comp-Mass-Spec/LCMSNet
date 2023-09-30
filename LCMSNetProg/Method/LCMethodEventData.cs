@@ -93,15 +93,17 @@ namespace LcmsNet.Method
             foreach (var parameter in Parameters)
             {
                 var vm = parameter.ViewModel?.CreateDuplicate();
-                if (vm is ILCEventParameterWithDataProvider dpvm)
+                if (vm is ILCEventParameterWithDataProvider dpvm && MethodEventAttribute.DataProvider.IsSet)
                 {
+                    // This is a must for data provider updates if using a data provider, but ILCEventParameterWithDataProvider is also used for enum types and populated with enum values.
                     if (Device is IHasDataProvider dataProvider)
                     {
-                        dataProvider.RegisterDataProvider(MethodEventAttribute.DataProvider, dpvm.FillData);
+                        dataProvider.RegisterDataProvider(MethodEventAttribute.DataProvider.Key, dpvm.FillData);
                     }
                     else
                     {
                         ApplicationLogger.LogError(LogLevel.Error, $"LC Event {MethodEventAttribute.Name} has a data provider, but device {Device.GetType()} does not implement {nameof(IHasDataProvider)}");
+                        continue;
                     }
                 }
 
