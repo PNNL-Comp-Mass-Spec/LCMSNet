@@ -355,6 +355,12 @@ namespace LcmsNet.Data
                     return;
                 }
 
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    this.RaisePropertyChanged();
+                    return;
+                }
+
                 if (this.RaiseAndSetIfChangedRetBool(ref methodName, value, nameof(LCMethodName)))
                 {
                     var method = LCMethodManager.Manager.GetLCMethodByName(value);

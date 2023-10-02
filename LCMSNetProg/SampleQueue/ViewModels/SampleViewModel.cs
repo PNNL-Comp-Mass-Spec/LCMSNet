@@ -126,7 +126,7 @@ namespace LcmsNet.SampleQueue.ViewModels
                     return x.Item3?.Name ?? x.Item2;
                 }
 
-                return "Select";
+                return !string.IsNullOrWhiteSpace(x.Item2) ? x.Item2 : "Select";
             }).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.LcMethodCueBannerText);
         }
 
