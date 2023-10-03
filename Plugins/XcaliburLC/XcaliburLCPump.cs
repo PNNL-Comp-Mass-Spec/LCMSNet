@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
@@ -107,6 +108,7 @@ namespace LcmsNetPlugins.XcaliburLC
 
         private bool runCompleted = false;
         private bool readyToDownload = false;
+        private bool waitingForContactClosure = false;
 
         /// <summary>
         /// Status of the device.
@@ -265,7 +267,7 @@ namespace LcmsNetPlugins.XcaliburLC
         /// <returns>Integer error code.</returns>
         [LCMethodEvent("Wait Until Ready", MethodOperationTimeoutType.Parameter, EventDescription = "Wait until Xcalibur is reporting state \"Ready To Download\".\nDeterministic, next step will not be started until timeout is reached")]
         [LCMethodEvent("Wait Until Ready NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Wait until the Xcalibur is reporting state \"Ready To Download\".\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
-        public bool WaitUntilReady(double timeout)
+        public bool WaitUntilReadyToDownload(double timeout)
         {
             var start = TimeKeeper.Instance.Now;
             var end = start;
@@ -295,9 +297,37 @@ namespace LcmsNetPlugins.XcaliburLC
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
+        [LCMethodEvent("Wait for 'Waiting for Contact Closure'", MethodOperationTimeoutType.Parameter, EventDescription = "Wait for the Xcalibur device to report 'Waiting for Contact Closure'.\nDeterministic, next step will not be started until timeout is reached")]
+        [LCMethodEvent("Wait for 'Waiting for Contact Closure' NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Wait for the Xcalibur device to report 'Waiting for Contact Closure'.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        public bool WaitUntilWaitingForContactClosure(double timeout)
+        {
+            var start = TimeKeeper.Instance.Now;
+            var end = start;
+
+            var delayTime = 500;
+            while (end.Subtract(start).TotalSeconds < timeout)
+            {
+                if (waitingForContactClosure)
+                {
+                    return true;
+                }
+
+                System.Threading.Thread.Sleep(delayTime);
+                end = TimeKeeper.Instance.Now;
+            }
+
+            // Timed out
+            return false;
+        }
+
+        /// <summary>
+        /// Wait until error, synchronization point, or ready
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
         [LCMethodEvent("Wait for Run Complete", MethodOperationTimeoutType.Parameter, EventDescription = "Wait for the Xcalibur run to complete.\nDeterministic, next step will not be started until timeout is reached")]
         [LCMethodEvent("Wait for Run Complete NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Wait for the Xcalibur run to complete.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
-        public bool WaitUntilStopPoint(double timeout)
+        public bool WaitUntilRunComplete(double timeout)
         {
             var start = TimeKeeper.Instance.Now;
             var end = start;
@@ -564,11 +594,42 @@ namespace LcmsNetPlugins.XcaliburLC
                     StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, notification, this, $"Manager state changed: {message}"));
                     // TODO: Process the message or event name and handle some state changes differently
                     break;
+                case EventClass.DeviceStateChange:
+                    var split = message.Split(':');
+                    if (int.TryParse(split[0], out var deviceStatusCode))
+                    {
+                        if ((deviceStatusCode < 0 || deviceStatusCode > 16) && split.Length >= 3)
+                        {
+                            // Report the value on the log file for potential update?
+                            ApplicationLogger.LogMessage(LogLevel.Warning, $"Xcalibur LC Device status code unknown: device '{split[1]}', code {deviceStatusCode}, reported meaning '{split[2]}'");
+                        }
+                        else if (processedDeviceStatusCodes.Contains(deviceStatusCode))
+                        {
+                            var statusString = XcaliburCOM.ConvertDeviceStatusCodeToString(deviceStatusCode);
+                            notification = errorCodes.TryGetValue("DS " + deviceStatusCode, out var dState) ? dState : "";
+                            if (string.IsNullOrWhiteSpace(notification))
+                            {
+                                ApplicationLogger.LogMessage(LogLevel.Warning, $"Xcalibur LC plugin code error: Configured to process device status code {deviceStatusCode}, but no corresponding entry in reported plugin status codes");
+                            }
+                            else
+                            {
+                                Error?.Invoke(this, new DeviceErrorEventArgs($"Device state changed: {message}", null, DeviceErrorStatus.ErrorAffectsAllColumns, this, notification));
+                                //StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, notification, this, $"Device state changed: {message}"));
+                                // TODO: Process the message or event name and handle some state changes differently
+                            }
+                        }
+
+                        waitingForContactClosure = deviceStatusCode == 5;
+                    }
+
+                    break;
                 default:
                     StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, eventName.ToString(), this, $"Unknown event class \"{eventClass.ToString()}\"; message: {message}"));
                     break;
             }
         }
+
+        private readonly IReadOnlyList<int> processedDeviceStatusCodes = new int[] { 8, 10, 11, 12, 13, 15 };
 
         private void CreateErrorCodes()
         {
@@ -583,6 +644,13 @@ namespace LcmsNetPlugins.XcaliburLC
                     {EventName.ErrorMessage.ToString(), "Xcalibur Error"},
                     {EventName.ProgramError.ToString(), "Xcalibur Program Error"},
                     {EventName.MethodCheckFail.ToString(), "Xcalibur Method Check Failed"},
+                    {"DS 8", "Device Status: Error"},
+                    {"DS 9", "Device Status: Busy"},
+                    {"DS 10", "Device Status: Not Connected"},
+                    {"DS 11", "Device Status: Standby"},
+                    {"DS 12", "Device Status: Off"},
+                    {"DS 13", "Device Status: Server Failed"},
+                    {"DS 15", "Device Status: Not Ready"},
                 };
 
                 errorCodes = map;

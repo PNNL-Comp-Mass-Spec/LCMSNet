@@ -8,5 +8,6 @@
         Status,
         StateChange,
         ManagerStateChange,
+        DeviceStateChange,
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using AxACQUISITIONLib;
 using LcmsNetSDK;
 using LcmsNetSDK.Logging;
@@ -473,50 +474,58 @@ namespace LcmsNetPlugins.XcaliburLC
 
         private void AcquisitionAcquiring(object sender, EventArgs e)
         {
+            // TODO: This is useful, though we also may want to do something more with this.
             //eventReporter(EventClass.Status, EventName.Acquiring, "Acquiring");
-            ApplicationLogger.LogMessage(LogLevel.Info, "Acquiring");
+            ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC Acquiring");
         }
 
         private void AcquisitionDataFileCompleted(object sender, EventArgs e)
         {
+            // TODO: Only really useful if we need this value for something else; RunEnded is fired after this event.
             //eventReporter(EventClass.Status, EventName.DataFileCompleted, "DataFileCompleted");
-            ApplicationLogger.LogMessage(LogLevel.Info, "DataFileCompleted");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC DataFileCompleted");
         }
 
         private void AcquisitionDevicesAreReady(object sender, EventArgs e)
         {
+            // TODO: May not be that useful
             //eventReporter(EventClass.StateChange, EventName.DevicesAreReady, "Devices are ready");
-            ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC devices are ready");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC devices are ready");
         }
 
         private void AcquisitionDiskSpaceWarning(object sender, EventArgs e)
         {
+            // TODO: not generally of concern, because of small raw files.
             //eventReporter(EventClass.Status, EventName.DiskSpaceWarning, "DiskSpaceWarning");
-            ApplicationLogger.LogMessage(LogLevel.Info, "DiskSpaceWarning");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC DiskSpaceWarning");
         }
 
         private void AcquisitionDownloadAbandoned(object sender, EventArgs e)
         {
+            // TODO: Probably should enable the event reporter for this one
             //eventReporter(EventClass.Status, EventName.DownloadAbandoned, "DownloadAbandoned");
-            ApplicationLogger.LogMessage(LogLevel.Info, "DownloadAbandoned");
+            ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC DownloadAbandoned");
         }
 
         private void AcquisitionDownloadCompleted(object sender, EventArgs e)
         {
+            // TODO: May be worth using to report a state?
             //eventReporter(EventClass.Status, EventName.DownloadCompleted, "DownloadCompleted");
-            ApplicationLogger.LogMessage(LogLevel.Info, "DownloadCompleted");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC DownloadCompleted");
         }
 
         private void AcquisitionDownLoadInitiated(object sender, EventArgs e)
         {
+            // TODO: Not that useful.
             //eventReporter(EventClass.Status, EventName.DownLoadInitiated, "DownLoadInitiated");
-            ApplicationLogger.LogMessage(LogLevel.Info, "DownLoadInitiated");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC DownLoadInitiated");
         }
 
         private void AcquisitionMethodCheckOK(object sender, EventArgs e)
         {
+            // Not an error, and not that helpful of a message.
             eventReporter(EventClass.Status, EventName.MethodCheckOK, "Method check OK");
-            ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC method check OK");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC method check OK");
         }
 
         private void AcquisitionMethodCheckFail(object sender, EventArgs e)
@@ -528,7 +537,7 @@ namespace LcmsNetPlugins.XcaliburLC
         private void AcquisitionNewData(object sender, EventArgs e)
         {
             //eventReporter(EventClass.Status, EventName.NewData, "NewData");
-            //ApplicationLogger.LogMessage(LogLevel.Info, "NewData");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC NewData");
         }
 
         private void AcquisitionPause(object sender, EventArgs e)
@@ -540,7 +549,7 @@ namespace LcmsNetPlugins.XcaliburLC
         private void AcquisitionQueuedNewSequence(object sender, EventArgs e)
         {
             //eventReporter(EventClass.Status, EventName.QueuedNewSequence, "QueuedNewSequence");
-            ApplicationLogger.LogMessage(LogLevel.Info, "Queued New Sequence");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC Queued New Sequence");
         }
 
         private void AcquisitionResume(object sender, EventArgs e)
@@ -558,45 +567,58 @@ namespace LcmsNetPlugins.XcaliburLC
         private void AcquisitionSequenceChange(object sender, EventArgs e)
         {
             //eventReporter(EventClass.Status, EventName.SequenceChange, "SequenceChange");
-            //ApplicationLogger.LogMessage(LogLevel.Info, "SequenceChange");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC SequenceChange");
         }
 
         private void AcquisitionSequenceClosed(object sender, EventArgs e)
         {
             //eventReporter(EventClass.Status, EventName.SequenceClosed, "SequenceClosed");
-            //ApplicationLogger.LogMessage(LogLevel.Info, "SequenceClosed");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC SequenceClosed");
         }
 
         private void AcquisitionSequenceOpened(object sender, EventArgs e)
         {
             //eventReporter(EventClass.Status, EventName.SequenceOpened, "SequenceOpened");
-            //ApplicationLogger.LogMessage(LogLevel.Info, "SequenceOpened");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC SequenceOpened");
         }
 
         private void AcquisitionStartCmdSent(object sender, EventArgs e)
         {
+            // TODO: may be worth reporting as a status - this appears to be fired a ~10 ms before "Waiting for contact closure" is reported by the device
             //eventReporter(EventClass.Status, EventName.StartCmdSent, "StartCmdSent");
-            ApplicationLogger.LogMessage(LogLevel.Info, "StartCmdSent");
+            ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC StartCmdSent");
         }
 
         private void AcquisitionStartedProcessing(object sender, EventArgs e)
         {
+            // Not reporting anything, because we don't do any processing anyway
             //eventReporter(EventClass.Status, EventName.StartedProcessing, "StartedProcessing");
-            //ApplicationLogger.LogMessage(LogLevel.Info, "StartedProcessing");
+            //ApplicationLogger.LogMessage(LogLevel.Info, "Xcalibur LC StartedProcessing");
         }
 
         private void AcquisitionStateChange(object sender, EventArgs e)
         {
-            // TODO: Read run manager status
             var status = acquisitionLib.GetRunManagerStatus();
             eventReporter(EventClass.ManagerStateChange, EventName.StateChange, status);
             ApplicationLogger.LogMessage(LogLevel.Info, $"Xcalibur LC acquisition state change: {status}");
         }
 
+        private readonly IReadOnlyList<int> notLoggedDeviceStatusCodes = new[] { 0, 2, 3, 4, 7, 14, 16 };
+
         private void AcquisitionVDStateChange(object sender, EventArgs e)
         {
-            //eventReporter(EventClass.Status, EventName.VDStateChange, "VDStateChange");
-            ApplicationLogger.LogMessage(LogLevel.Info, "VDStateChange");
+            var statuses = GetDeviceStatuses2();
+            if (statuses.Count > 0)
+            {
+                // TODO: Maybe add support for multiple devices? I currently see no reason we would have a configuration with multiple devices in Xcalibur and be controlling it from LCMSNet...
+                // There is the theoretical idea of "have a Thermo LC Pump and Instrument running under Xcalibur with a PAL autosampler", but we don't run that way...
+                eventReporter(EventClass.DeviceStateChange, EventName.VDStateChange, $"{statuses[0].StatusCode}:{statuses[0].Name}:{statuses[0].StatusString}");
+                if (statuses.Any(x => !notLoggedDeviceStatusCodes.Contains(x.StatusCode)))
+                {
+                    // Only log certain report messages, mostly the critical state change ones and errors.
+                    ApplicationLogger.LogMessage(LogLevel.Info, $"Xcalibur LC device state change: {string.Join(";", statuses.Select(x => $"{x.Name}: {x.StatusString} ({x.StatusCode})"))}");
+                }
+            }
         }
 
         private void AcquisitionInformationalMessage(object sender, _DAcquisitionEvents_InformationalMessageEvent e)
