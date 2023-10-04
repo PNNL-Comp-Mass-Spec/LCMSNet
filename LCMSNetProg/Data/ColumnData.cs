@@ -75,7 +75,7 @@ namespace LcmsNet.Data
             set
             {
                 var previousStatus = status;
-                if (this.RaiseAndSetIfChangedRetBool(ref status, value, nameof(Status)) && value != ColumnStatus.Running && previousStatus != ColumnStatus.Running)
+                if (this.RaiseAndSetIfChangedRetBool(ref status, value) && value != ColumnStatus.Running && previousStatus != ColumnStatus.Running)
                 {
                     // Update the program setting if changed
                     LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNDISABLED + ID, (status == ColumnStatus.Disabled).ToString());

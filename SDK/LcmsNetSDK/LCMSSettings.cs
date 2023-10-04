@@ -84,10 +84,8 @@ namespace LcmsNetSDK
         {
             SettingChanged?.Invoke(null, new SettingChangedEventArgs(ItemKey, ItemValue));
 
-            if (m_Settings.ContainsKey(ItemKey))
-                m_Settings[ItemKey] = ItemValue;
-            else
-                m_Settings.Add(ItemKey, ItemValue);
+            // dictionary 'assignment' adds or updates as needed
+            m_Settings[ItemKey] = ItemValue;
         }
 
         /// <summary>
@@ -97,8 +95,8 @@ namespace LcmsNetSDK
         /// <returns>The value for the setting, or an empty string if the itemKey is not defined</returns>
         public static string GetParameter(string itemKey)
         {
-            if (m_Settings.ContainsKey(itemKey))
-                return m_Settings[itemKey];
+            if (m_Settings.TryGetValue(itemKey, out var setting))
+                return setting;
 
             return string.Empty;
         }
@@ -115,15 +113,14 @@ namespace LcmsNetSDK
         /// <remarks>If the value is an integer, will return false if 0 or true if non-zero</remarks>
         public static bool GetParameter(string itemKey, bool defaultValue)
         {
-            if (m_Settings.ContainsKey(itemKey))
+            if (m_Settings.TryGetValue(itemKey, out var setting))
             {
-                var valueText = m_Settings[itemKey];
-                if (valueText != null)
+                if (setting != null)
                 {
-                    if (bool.TryParse(valueText, out var value))
+                    if (bool.TryParse(setting, out var value))
                         return value;
 
-                    if (int.TryParse(valueText, out var valueInt))
+                    if (int.TryParse(setting, out var valueInt))
                     {
                         return valueInt != 0;
                     }
@@ -144,10 +141,9 @@ namespace LcmsNetSDK
         /// </returns>
         public static int GetParameter(string itemKey, int defaultValue)
         {
-            if (m_Settings.ContainsKey(itemKey))
+            if (m_Settings.TryGetValue(itemKey, out var setting))
             {
-                var valueText = m_Settings[itemKey];
-                if (valueText != null && int.TryParse(valueText, out var value))
+                if (setting != null && int.TryParse(setting, out var value))
                 {
                     return value;
                 }
@@ -167,10 +163,9 @@ namespace LcmsNetSDK
         /// </returns>
         public static double GetParameter(string itemKey, double defaultValue)
         {
-            if (m_Settings.ContainsKey(itemKey))
+            if (m_Settings.TryGetValue(itemKey, out var setting))
             {
-                var valueText = m_Settings[itemKey];
-                if (valueText != null && double.TryParse(valueText, out var value))
+                if (setting != null && double.TryParse(setting, out var value))
                 {
                     return value;
                 }

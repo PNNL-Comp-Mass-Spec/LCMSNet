@@ -20,12 +20,13 @@ namespace LcmsNet.Configuration.ViewModels
         public ColumnConfigViewModel(ColumnData column)
         {
             columnData = column;
+            columnEnabled = column.Status != ColumnStatus.Disabled;
 
             // Set all monitors for the column before we set any local monitors, since they get run on initialization
             columnId = this.WhenAnyValue(x => x.ColumnData.ID).ToProperty(this, x => x.ColumnId);
             this.WhenAnyValue(x => x.ColumnData.Status).Subscribe(x =>
             {
-                this.ColumnEnabled = x != ColumnStatus.Disabled;
+                ColumnEnabled = x != ColumnStatus.Disabled;
                 LogColumnStatusChange();
             });
 
@@ -43,7 +44,7 @@ namespace LcmsNet.Configuration.ViewModels
         }
 
         private CartConfiguration CartConfig => CartConfiguration.Instance;
-        private bool columnEnabled = true;
+        private bool columnEnabled;
         private readonly ObservableAsPropertyHelper<bool> allowDisableColumn;
 
         /// <summary>
@@ -90,8 +91,7 @@ namespace LcmsNet.Configuration.ViewModels
         private void LogColumnStatusChange()
         {
             var statusMessage = string.Format("Status: {0}", ColumnData.Status);
-            //TODO: change this magic number into a constant.
-            ApplicationLogger.LogMessage(1, statusMessage);
+            ApplicationLogger.LogMessage(LogLevel.Info, statusMessage);
         }
     }
 }
