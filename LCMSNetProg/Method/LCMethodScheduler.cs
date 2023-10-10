@@ -396,6 +396,7 @@ namespace LcmsNet.Method
             {
                 // Can we start this guy? make sure he starts after some time.
                 //TimeSpan startSpan = LcmsNetSDK.TimeKeeper.Instance.Now.Subtract(data.LCMethod.Start);
+                // TODO: Also need to add in a check that supports multiple columns with pre/post overlap, but only for events that can not be included in the pre/post overlap.
                 if (!data.ActualLCMethod.AllowPreOverlap && !data.ActualLCMethod.AllowPostOverlap && !m_columnWorkers.Any(x => x.IsBusy))
                 {
                     // No method overlap is allowed, so if we are "early" on time, it's because we had some early-continue events in the previously ran method.

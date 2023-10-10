@@ -231,6 +231,8 @@ namespace LcmsNet.Method
                         //     * Only have one column (method pre/post overlap not possible)
                         //     OR:
                         //     * Current method does not allow pre/post overlap
+                        // TODO: Also need to add in a check that supports multiple columns with pre/post overlap, but only for events that can not be included in the pre/post overlap.
+                        // TODO: Thought: add no-time event placeholders to allow the user to mark the critical section of the method...
                         var skipRemainingTime = lcEvent.MethodAttribute.IgnoreLeftoverTime && (CartConfiguration.NumberOfEnabledColumns == 1 || (!method.AllowPostOverlap && !method.AllowPreOverlap));
 
                         if (!skipRemainingTime)
