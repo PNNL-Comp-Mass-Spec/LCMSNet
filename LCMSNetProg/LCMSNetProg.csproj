@@ -798,7 +798,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper">
-      <Version>18.0.0</Version>
+      <Version>30.0.1</Version>
     </PackageReference>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit">
       <Version>5.0.103</Version>

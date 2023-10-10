@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
+using CsvHelper.Configuration;
 using LcmsNet.Data;
 using LcmsNet.SampleQueue;
 using LcmsNetSDK.Logging;
@@ -37,12 +38,16 @@ namespace LcmsNet.IO.Sequence
 
         private static void WriteCsvText(string filePath, IEnumerable<SampleCacheData> samples)
         {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = ","
+            };
+
             using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
             using (var sw = new StreamWriter(fs))
-            using (var csv = new CsvWriter(sw, CultureInfo.InvariantCulture))
+            using (var csv = new CsvWriter(sw, config))
             {
-                csv.Configuration.RegisterClassMap(new SampleCacheData.SampleCacheMap());
-                csv.Configuration.Delimiter = ",";
+                csv.Context.RegisterClassMap(new SampleCacheData.SampleCacheMap());
 
                 csv.WriteRecords(samples);
             }
@@ -108,14 +113,18 @@ namespace LcmsNet.IO.Sequence
 
         private static List<SampleImportInfo> ReadCsvText(TextReader importReader, bool hasHeaders)
         {
-            using (var csv = new CsvReader(importReader, CultureInfo.InvariantCulture))
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                csv.Configuration.RegisterClassMap(new SampleImportInfo.SampleImportMap());
-                csv.Configuration.Delimiter = ","; // Could change to "\t" to support TSV
-                csv.Configuration.PrepareHeaderForMatch = (header, index) => header?.Trim().ToLower();
-                csv.Configuration.HasHeaderRecord = hasHeaders; // Set to false to allow reading a file without headers
-                csv.Configuration.HeaderValidated = null; // Allows missing headers
-                csv.Configuration.MissingFieldFound = null; // Allow empty fields
+                Delimiter = ",", // Could change to "\t" to support TSV
+                PrepareHeaderForMatch = args => args.Header?.Trim().ToLower(),
+                HasHeaderRecord = hasHeaders, // Set to false to allow reading a file without headers
+                HeaderValidated = null, // Allows missing headers
+                MissingFieldFound = null, // Allow empty fields
+            };
+
+            using (var csv = new CsvReader(importReader, config))
+            {
+                csv.Context.RegisterClassMap(new SampleImportInfo.SampleImportMap());
 
                 var records = csv.GetRecords<SampleImportInfo>().ToList();
 
