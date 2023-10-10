@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Windows;
 using DynamicData;
 using DynamicData.Binding;
@@ -24,7 +25,7 @@ namespace LcmsNet.SampleQueue
     /// <summary>
     /// Class to manage sample data and limit the number of copied data and operations that occur
     /// </summary>
-    public class SampleDataManager : ReactiveObject
+    public class SampleDataManager : ReactiveObject, IDisposable
     {
         public ReadOnlyObservableCollection<SampleViewModel> Samples { get; }
         public IObservableList<SampleData> SamplesSource { get; }
@@ -66,6 +67,7 @@ namespace LcmsNet.SampleQueue
 
         private bool dmsAvailable = false;
         private bool cycleColumns = false;
+        private readonly Timer sampleRefreshTimer = null;
 
         public bool DMSAvailable
         {
@@ -131,6 +133,13 @@ namespace LcmsNet.SampleQueue
 
             canUndo = this.WhenAnyValue(x => x.SampleQueue.CanUndo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanUndo);
             canRedo = this.WhenAnyValue(x => x.SampleQueue.CanRedo).ObserveOn(RxApp.MainThreadScheduler).ToProperty(this, x => x.CanRedo);
+
+            sampleRefreshTimer = new Timer(RefreshSampleUIProperties, this, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+        }
+
+        public void Dispose()
+        {
+            sampleRefreshTimer?.Dispose();
         }
 
         [Obsolete("For WPF Design time use only.", true)]
@@ -275,6 +284,22 @@ namespace LcmsNet.SampleQueue
                 IsDuplicateName = false,
                 RunningStatus = SampleRunningStatus.Queued,
                 SampleErrors = "",
+            });
+        }
+
+        private void RefreshSampleUIProperties(object sender)
+        {
+            // Attempt to fix an issue where a sample appears to be still running when it has finished running.
+            var toRefresh = Samples.Where(x =>
+                (x.Sample.RunFinish < DateTime.Now && DateTime.Now.Subtract(TimeSpan.FromMinutes(5)) < x.Sample.RunFinish)
+                || (x.Sample.RunStart < DateTime.Now && DateTime.Now.Subtract(TimeSpan.FromMinutes(5)) < x.Sample.RunStart)).ToList();
+
+            RxApp.MainThreadScheduler.Schedule(() =>
+            {
+                foreach (var sample in toRefresh)
+                {
+                    sample.ForceRefreshForUI();
+                }
             });
         }
 

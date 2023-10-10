@@ -471,6 +471,15 @@ namespace LcmsNet.Data
             this.RaiseAndSetIfChanged(ref methodName, newMethodName, nameof(LCMethodName));
         }
 
+        public void ForceRefreshForUI()
+        {
+            this.RaisePropertyChanged(nameof(RunningStatus));
+            this.RaisePropertyChanged(nameof(IsSetToRunOrHasRun));
+            this.RaisePropertyChanged(nameof(HasNotRun));
+            this.RaisePropertyChanged(nameof(RunStart));
+            this.RaisePropertyChanged(nameof(RunFinish));
+        }
+
         public bool NameCharactersValid()
         {
             if (string.IsNullOrWhiteSpace(Name))

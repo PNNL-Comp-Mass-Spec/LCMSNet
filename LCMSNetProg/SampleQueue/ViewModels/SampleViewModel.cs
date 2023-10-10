@@ -189,6 +189,11 @@ namespace LcmsNet.SampleQueue.ViewModels
 
         public string LcMethodCueBannerText => lcMethodCueBannerText.Value;
 
+        public void ForceRefreshForUI()
+        {
+            Sample.ForceRefreshForUI();
+        }
+
         public bool Equals(SampleViewModel other)
         {
             if (ReferenceEquals(null, other)) return false;
