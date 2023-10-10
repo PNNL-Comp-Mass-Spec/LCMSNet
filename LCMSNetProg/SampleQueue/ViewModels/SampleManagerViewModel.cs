@@ -322,26 +322,12 @@ namespace LcmsNet.SampleQueue.ViewModels
                 try
                 {
                     sampleQueue.LoadQueue(fileDialog.FileName, reader, true);
-                    ApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
+                    ApplicationLogger.LogMessage(0, $"The queue was successfully imported from {fileDialog.FileName}.");
                 }
                 catch (Exception ex)
                 {
-                    ApplicationLogger.LogError(0, string.Format("Could not load the queue {0}", fileDialog.FileName), ex);
+                    ApplicationLogger.LogError(0, $"Could not load the queue {fileDialog.FileName}", ex);
                 }
-            }
-        }
-
-        public void ImportQueueFromClipboard()
-        {
-            try
-            {
-                var samples = QueueImportClipboard.ReadSamples();
-                sampleQueue.LoadQueue(samples);
-                ApplicationLogger.LogMessage(0, "The queue was successfully imported from clipboard.");
-            }
-            catch (Exception ex)
-            {
-                ApplicationLogger.LogError(0, "Could not load the queue from clipboard", ex);
             }
         }
 
@@ -360,11 +346,11 @@ namespace LcmsNet.SampleQueue.ViewModels
                 {
                     var reader = new QueueCsvFile();
                     sampleQueue.LoadQueue(fileDialog.FileName, reader, false);
-                    ApplicationLogger.LogMessage(0, string.Format("The queue was successfully imported from {0}.", fileDialog.FileName));
+                    ApplicationLogger.LogMessage(0, $"The queue was successfully imported from {fileDialog.FileName}.");
                 }
                 catch (Exception ex)
                 {
-                    ApplicationLogger.LogError(0, string.Format("Could not load the queue {0}", fileDialog.FileName), ex);
+                    ApplicationLogger.LogError(0, $"Could not load the queue {fileDialog.FileName}", ex);
                 }
             }
         }

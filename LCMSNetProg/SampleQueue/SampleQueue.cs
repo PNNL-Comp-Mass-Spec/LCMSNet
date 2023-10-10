@@ -64,11 +64,6 @@ namespace LcmsNet.SampleQueue
         private int m_nextAvailableSample;
 
         /// <summary>
-        /// Index count of samples
-        /// </summary>
-        private int m_sampleIndex;
-
-        /// <summary>
         /// SourceList of all samples - not sorted, items are not moved in this list.
         /// </summary>
         private readonly SourceList<SampleData> sampleQueue = new SourceList<SampleData>();
@@ -132,8 +127,8 @@ namespace LcmsNet.SampleQueue
         {
             DefaultSampleName = CONST_DEFAULT_SAMPLENAME;
             AutoColumnData = true;
-            m_sampleIndex = 1;
-            m_sampleWaitingEvent = new AutoResetEvent(false);
+            RunningSampleIndex = 1;
+            SampleQueuedEvent = new AutoResetEvent(false);
             m_columnOrders = CartConfiguration.BuildColumnList(true);
 
             // Pointer to the next available sample that is queued for running.
@@ -185,19 +180,14 @@ namespace LcmsNet.SampleQueue
         public string DefaultSampleName { get; set; }
 
         /// <summary>
-        /// Gets or sets the running sample index of samples that have been
-        /// added to the queue.
+        /// The running sample index of samples that have been added to the queue.
         /// </summary>
-        public int RunningSampleIndex
-        {
-            get => m_sampleIndex;
-            set => m_sampleIndex = value;
-        }
+        public int RunningSampleIndex { get; set; }
 
         /// <summary>
         /// Gets the threading event when a sample is queued.
         /// </summary>
-        public AutoResetEvent SampleQueuedEvent => m_sampleWaitingEvent;
+        public AutoResetEvent SampleQueuedEvent { get; }
 
         /// <summary>
         /// If there are queues in the undo queue
@@ -277,11 +267,6 @@ namespace LcmsNet.SampleQueue
         /// Fired when a sample has been told to run, and is waiting for a free column thread.
         /// </summary>
         public event DelegateSamplesModifiedHandler SamplesWaitingToRun;
-
-        /// <summary>
-        /// Event to tell listeners that the sample is waiting to be run.
-        /// </summary>
-        public AutoResetEvent m_sampleWaitingEvent;
 
         /// <summary>
         /// Creates a new unique ID number not used and stores it.  This always generates the largest unique ID.
@@ -1300,7 +1285,7 @@ namespace LcmsNet.SampleQueue
 
             // Set the listening event so that time sensitive items will know that
             // a sample is waiting on the running queue.
-            m_sampleWaitingEvent.Set();
+            SampleQueuedEvent.Set();
             m_startedSamples = true;
         }
 
@@ -1600,8 +1585,8 @@ namespace LcmsNet.SampleQueue
                     sample.ColumnIndex = column.ID;
                 }
 
-                if (sample.UniqueID >= m_sampleIndex)
-                    m_sampleIndex = Convert.ToInt32(sample.UniqueID);
+                if (sample.UniqueID >= RunningSampleIndex)
+                    RunningSampleIndex = Convert.ToInt32(sample.UniqueID);
 
                 if (sample.SequenceID >= m_sequenceIndex)
                     m_sequenceIndex = Convert.ToInt32(sample.SequenceID + 1);
@@ -1651,9 +1636,9 @@ namespace LcmsNet.SampleQueue
             // Make sure the method references are created
             foreach (var sample in waitingSamples)
             {
-                if (sample.UniqueID >= m_sampleIndex)
+                if (sample.UniqueID >= RunningSampleIndex)
                 {
-                    m_sampleIndex = Convert.ToInt32(sample.UniqueID);
+                    RunningSampleIndex = Convert.ToInt32(sample.UniqueID);
                 }
             }
 
@@ -1679,9 +1664,9 @@ namespace LcmsNet.SampleQueue
             // Make sure the method references are created
             foreach (var sample in waitingSamples)
             {
-                if (sample.UniqueID >= m_sampleIndex)
+                if (sample.UniqueID >= RunningSampleIndex)
                 {
-                    m_sampleIndex = Convert.ToInt32(sample.UniqueID);
+                    RunningSampleIndex = Convert.ToInt32(sample.UniqueID);
                 }
             }
 

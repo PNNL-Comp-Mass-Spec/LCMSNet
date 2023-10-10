@@ -79,7 +79,7 @@ namespace LcmsNet
             OpenQueueCommand = ReactiveCommand.Create<Window>(SampleManagerVm.ImportQueue, this.WhenAnyValue(x => x.QueueTabSelected));
             SaveQueueCommand = ReactiveCommand.Create(SampleManagerVm.SaveQueue, this.WhenAnyValue(x => x.QueueTabSelected));
             SaveQueueAsCommand = ReactiveCommand.Create<Window>(SampleManagerVm.SaveQueueAs, this.WhenAnyValue(x => x.QueueTabSelected));
-            ImportQueueFromClipboardCommand = ReactiveCommand.Create(SampleManagerVm.ImportQueueFromClipboard, this.WhenAnyValue(x => x.QueueTabSelected));
+            ImportQueueFromClipboardCommand = ReactiveCommand.CreateFromTask(SampleManagerVm.SampleControlViewModel.ImportQueueFromClipboard, this.WhenAnyValue(x => x.QueueTabSelected));
             ImportQueueFromCsvCommand = ReactiveCommand.Create<Window>(SampleManagerVm.ImportQueueFromCsv, this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToXmlCommand = ReactiveCommand.Create<Window>(SampleManagerVm.ExportQueueToXML, this.WhenAnyValue(x => x.QueueTabSelected));
             ExportQueueToCsvCommand = ReactiveCommand.Create<Window>(SampleManagerVm.ExportQueueToCsv, this.WhenAnyValue(x => x.QueueTabSelected));
