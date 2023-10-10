@@ -231,7 +231,7 @@ namespace LcmsNet.Data
                 {
                     value = null; // For UI purposes, we want this to be null if it is blank (because it then prevents appearance of the tooltip).
                 }
-                this.RaiseAndSetIfChanged(ref sampleErrors, value, nameof(SampleErrors));
+                this.RaiseAndSetIfChanged(ref sampleErrors, value);
             }
         }
 
@@ -251,13 +251,13 @@ namespace LcmsNet.Data
             {
                 if (runningStatus == SampleRunningStatus.Complete)
                 {
-                    OnPropertyChanged(nameof(RunningStatus));
+                    OnPropertyChanged();
                     return;
                 }
                 // Set it if it changed, and only raise the other propertyChanged notifications if it changed
                 var oldHasNotRun = HasNotRun;
                 var oldIsSetToRun = IsSetToRunOrHasRun;
-                if (this.RaiseAndSetIfChangedRetBool(ref runningStatus, value, nameof(RunningStatus)))
+                if (this.RaiseAndSetIfChangedRetBool(ref runningStatus, value))
                 {
                     if (oldHasNotRun != HasNotRun)
                     {
@@ -281,7 +281,7 @@ namespace LcmsNet.Data
         public bool IsDuplicateName
         {
             get => isDuplicateName;
-            set => this.RaiseAndSetIfChanged(ref isDuplicateName, value, nameof(IsDuplicateName));
+            set => this.RaiseAndSetIfChanged(ref isDuplicateName, value);
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace LcmsNet.Data
         public string InstrumentMethod
         {
             get => instrumentMethod;
-            set => this.RaiseAndSetIfChanged(ref instrumentMethod, value, nameof(InstrumentMethod));
+            set => this.RaiseAndSetIfChanged(ref instrumentMethod, value);
         }
 
         public int DmsRequestId
@@ -335,7 +335,7 @@ namespace LcmsNet.Data
                     return;
                 }
 
-                this.RaiseAndSetIfChanged(ref actualMethod, value, nameof(ActualLCMethod));
+                this.RaiseAndSetIfChanged(ref actualMethod, value);
             }
         }
 
@@ -361,7 +361,7 @@ namespace LcmsNet.Data
                     return;
                 }
 
-                if (this.RaiseAndSetIfChangedRetBool(ref methodName, value, nameof(LCMethodName)))
+                if (this.RaiseAndSetIfChangedRetBool(ref methodName, value))
                 {
                     var method = LCMethodManager.Manager.GetLCMethodByName(value);
 
@@ -379,7 +379,7 @@ namespace LcmsNet.Data
         public int SequenceID
         {
             get => sequenceNumber;
-            set => this.RaiseAndSetIfChanged(ref sequenceNumber, value, nameof(SequenceID));
+            set => this.RaiseAndSetIfChanged(ref sequenceNumber, value);
         }
 
         /// <summary>
@@ -393,10 +393,10 @@ namespace LcmsNet.Data
                 if (value < CartLimits.MinimumVolume)
                 {
                     // Report property changed to force UI refresh
-                    this.RaisePropertyChanged(nameof(Volume));
+                    this.RaisePropertyChanged();
                     return;
                 }
-                this.RaiseAndSetIfChanged(ref volume, value, nameof(Volume));
+                this.RaiseAndSetIfChanged(ref volume, value);
             }
         }
 
@@ -426,10 +426,14 @@ namespace LcmsNet.Data
             set => this.RaiseAndSetIfChanged(ref isChecked, value);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// The time the sample did or should start running
+        /// </summary>
         public virtual DateTime RunStart => ActualLCMethod?.ActualStart ?? DateTime.MinValue;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// The time the sample did or should finish running
+        /// </summary>
         public virtual DateTime RunFinish => ActualLCMethod?.ActualEnd ?? DateTime.MinValue;
 
         /// <inheritdoc />
@@ -539,7 +543,7 @@ namespace LcmsNet.Data
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual void OnPropertyChanged(string propertyName)
+        public virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

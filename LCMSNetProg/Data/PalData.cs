@@ -73,10 +73,10 @@ namespace LcmsNet.Data
                 if (value < CONST_MIN_WELLPLATE || CONST_MAX_WELLPLATE < value)
                 {
                     // Say it changed, to force UI to refresh to the unchanged value
-                    this.RaisePropertyChanged(nameof(Well));
+                    this.RaisePropertyChanged();
                     return;
                 }
-                this.RaiseAndSetIfChanged(ref well, value, nameof(Well));
+                this.RaiseAndSetIfChanged(ref well, value);
             }
         }
 
@@ -86,7 +86,7 @@ namespace LcmsNet.Data
         public string PALTray
         {
             get => palTray;
-            set => this.RaiseAndSetIfChanged(ref palTray, value, nameof(PALTray));
+            set => this.RaiseAndSetIfChanged(ref palTray, value);
         }
 
         /// <summary>

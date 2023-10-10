@@ -20,13 +20,13 @@ namespace LcmsNetSDK.Data
         public string Name
         {
             get => name;
-            set => this.RaiseAndSetIfChanged(ref name, value, nameof(Name));
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         public string Comment
         {
             get => comment;
-            set => this.RaiseAndSetIfChanged(ref comment, value, nameof(Comment));
+            set => this.RaiseAndSetIfChanged(ref comment, value);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

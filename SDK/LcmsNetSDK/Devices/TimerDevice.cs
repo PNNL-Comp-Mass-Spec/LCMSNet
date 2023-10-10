@@ -112,7 +112,7 @@ namespace LcmsNetSDK.Devices
         public string Name
         {
             get => m_name;
-            set => this.RaiseAndSetIfChanged(ref m_name, value, nameof(Name));
+            set => this.RaiseAndSetIfChanged(ref m_name, value);
         }
 
         /// <summary>

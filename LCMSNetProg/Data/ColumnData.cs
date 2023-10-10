@@ -104,7 +104,7 @@ namespace LcmsNet.Data
             }
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref name, value, nameof(Name)))
+                if (this.RaiseAndSetIfChangedRetBool(ref name, value))
                 {
                     // Update the program setting if changed
                     LCMSSettings.SetParameter(LCMSSettings.PARAM_COLUMNNAME + ID, Name);
@@ -118,7 +118,7 @@ namespace LcmsNet.Data
         public Color Color
         {
             get => color;
-            set => this.RaiseAndSetIfChanged(ref color, value, nameof(Color));
+            set => this.RaiseAndSetIfChanged(ref color, value);
         }
 
         [field: NonSerialized]

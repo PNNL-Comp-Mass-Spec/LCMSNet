@@ -105,7 +105,7 @@ namespace LcmsNet.Method
         public DateTime ActualStart
         {
             get => actualStart;
-            set => this.RaiseAndSetIfChanged(ref actualStart, value, nameof(ActualStart));
+            set => this.RaiseAndSetIfChanged(ref actualStart, value);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace LcmsNet.Method
         public DateTime ActualEnd
         {
             get => actualEnd;
-            set => this.RaiseAndSetIfChanged(ref actualEnd, value, nameof(ActualEnd));
+            set => this.RaiseAndSetIfChanged(ref actualEnd, value);
         }
 
         /// <summary>
