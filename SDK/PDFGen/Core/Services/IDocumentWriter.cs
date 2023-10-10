@@ -1,8 +1,7 @@
 ﻿
-using EMSL.DocumentGenerator.Core.Model;
+using PDFGenerator.Core.Model;
 
-
-namespace EMSL.DocumentGenerator.Core.Services
+namespace PDFGenerator.Core.Services
 {
     public interface IDocumentWriter
     {

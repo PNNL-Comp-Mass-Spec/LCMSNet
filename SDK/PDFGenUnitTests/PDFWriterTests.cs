@@ -1,13 +1,15 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
+using PDFGenerator.Core.Model;
+using PDFGenerator.PDFSharp;
 
-namespace DocumentGeneratorTests
+namespace PDFGenUnitTests
 {
     [TestFixture]
     class PDFWriterTests
     {
-        EMSL.DocumentGenerator.Core.Document doc;
+        Document doc;
         string basePath;
         string path;
         string picturePath;
@@ -15,10 +17,10 @@ namespace DocumentGeneratorTests
         [SetUp]
         public void Init()
         {
-            doc = new EMSL.DocumentGenerator.Core.Document();
+            doc = new Document();
             doc.Date = DateTime.Now;
             doc.Version = "Not Versioned";
-            doc.DocumentWriter = new EMSL.DocumentGenerator.PDFSharp.PDFWriter();
+            doc.DocumentWriter = new PDFWriter();
             basePath = PathUtils.TestOutputPath;
             path = string.Empty;
             picturePath = Path.Combine(PathUtils.TestFilesPath, "testbitmap.bmp");
@@ -29,7 +31,7 @@ namespace DocumentGeneratorTests
         {
             path = basePath + "\\headertest.pdf";
             doc.Title = "headertest";
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "A Header");
+            doc.AddHeader(HeaderLevel.H1, "A Header");
             doc.WriteDocument(path);
             Assert.AreEqual(true, File.Exists(path));
             //File.Delete(path);
@@ -50,7 +52,7 @@ namespace DocumentGeneratorTests
         public void TestDrawImageWithoutCaption()
         {
             doc.Title = "drawtestwithoutcaption";
-            EMSL.DocumentGenerator.Core.Model.ImageContent image = new EMSL.DocumentGenerator.Core.Model.ImageContent(picturePath);
+            var image = new ImageContent(picturePath);
             doc.AddImage(image);
             path = basePath + "\\drawtest1.pdf";
             doc.WriteDocument(path);
@@ -62,7 +64,7 @@ namespace DocumentGeneratorTests
         public void TestDrawImageWithCaption()
         {
             doc.Title = "drawtestwithcaption";
-            EMSL.DocumentGenerator.Core.Model.ImageContent image = new EMSL.DocumentGenerator.Core.Model.ImageContent(picturePath);
+            var image = new ImageContent(picturePath);
             image.CaptionText = "Figure 1: Random Test Image.";
             doc.AddImage(image);
             path = basePath + "\\drawtest2.pdf";
@@ -81,7 +83,7 @@ namespace DocumentGeneratorTests
         private void DrawImageNullImage()
         {
             doc.Title = "drawtestInvalidImage";
-            EMSL.DocumentGenerator.Core.Model.ImageContent image = new EMSL.DocumentGenerator.Core.Model.ImageContent();
+            var image = new ImageContent();
             image.CaptionText = "Figure 1: Random Test Image.";
             doc.AddImage(image);
             path = basePath + "\\drawtest3.pdf";
@@ -108,8 +110,8 @@ namespace DocumentGeneratorTests
             doc.Title = "wholedoctest";
             doc.Date = DateTime.Now;
             doc.DateFormatString = "MMMM dd, yyyy";
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Doc Header");
-            EMSL.DocumentGenerator.Core.Model.ImageContent image = new EMSL.DocumentGenerator.Core.Model.ImageContent(picturePath);
+            doc.AddHeader(HeaderLevel.H1, "Doc Header");
+            var image = new ImageContent(picturePath);
             doc.AddParagraph("This is a test document. We'll be back after the break!");
             image.CaptionText = "Figure 1: Random Test Image.";
             doc.AddImage(image);

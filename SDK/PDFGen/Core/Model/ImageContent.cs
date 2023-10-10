@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media.Imaging;
 
-namespace EMSL.DocumentGenerator.Core.Model
+namespace PDFGenerator.Core.Model
 {
 
     public class ImageContent

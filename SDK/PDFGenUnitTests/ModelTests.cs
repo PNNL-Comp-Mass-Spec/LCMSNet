@@ -2,8 +2,9 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 using NUnit.Framework;
+using PDFGenerator.Core.Model;
 
-namespace DocumentGeneratorTests
+namespace PDFGenUnitTests
 {
     [TestFixture]
     class ModelTests
@@ -19,13 +20,13 @@ namespace DocumentGeneratorTests
         public void TestFromImage()
         {
             var test = new BitmapImage(new Uri(picturePath));
-            EMSL.DocumentGenerator.Core.Model.ImageContent testContent = new EMSL.DocumentGenerator.Core.Model.ImageContent(test);
+            ImageContent testContent = new ImageContent(test);
         }
 
         [Test]
         public void TestLoadFromFile()
         {
-            EMSL.DocumentGenerator.Core.Model.ImageContent testContent = new EMSL.DocumentGenerator.Core.Model.ImageContent(picturePath);
+            ImageContent testContent = new ImageContent(picturePath);
         }
     }
 }

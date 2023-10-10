@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using PDFGenerator.Core.Services;
 
-using EMSL.DocumentGenerator.Core.Model;
-using EMSL.DocumentGenerator.Core.Services;
-
-
-namespace EMSL.DocumentGenerator.Core
+namespace PDFGenerator.Core.Model
 {
     public class Document
     {

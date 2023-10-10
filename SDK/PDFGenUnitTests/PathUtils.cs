@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
 
-namespace DocumentGeneratorTests
+namespace PDFGenUnitTests
 {
     public static class PathUtils
     {

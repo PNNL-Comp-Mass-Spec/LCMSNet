@@ -6,6 +6,8 @@ using System.Windows.Media.Imaging;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
+using PDFGenerator.Core.Model;
+using PDFGenerator.Core.Services;
 
 namespace PDFGenerator
 {
@@ -28,8 +30,8 @@ namespace PDFGenerator
             IReadOnlyList<IDevice> devices, BitmapSource fluidicsImage)
         {
             // instantiate PDFSharp writer library, EMSL document model, and setup options.
-            EMSL.DocumentGenerator.Core.Services.IDocumentWriter writer = new EMSL.DocumentGenerator.PDFSharp.PDFWriter();
-            var doc = new EMSL.DocumentGenerator.Core.Document
+            IDocumentWriter writer = new PDFSharp.PDFWriter();
+            var doc = new Document
             {
                 DocumentWriter = writer,
                 FontSize = 11,
@@ -37,9 +39,9 @@ namespace PDFGenerator
                 Title = title
             };
             //enter document into model
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Dataset - " + sample.Name);
+            doc.AddHeader(HeaderLevel.H1, "Dataset - " + sample.Name);
             doc.AddParagraph(CreateDatasetParagraph(sample));
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "LC Configuration");
+            doc.AddHeader(HeaderLevel.H1, "LC Configuration");
             int[] FieldWidths = {-20, -20};
             string[] cartData = { "Cart-Name:", LCMSSettings.GetParameter(LCMSSettings.PARAM_CARTNAME) };
             var cartConfigString = FormatString(FieldWidths, cartData);
@@ -48,11 +50,11 @@ namespace PDFGenerator
             cartConfigString += FormatString(FieldWidths, configData);
             doc.AddParagraph(cartConfigString);
 
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Columns");
+            doc.AddHeader(HeaderLevel.H2, "Columns");
             var columnDataString = CreateColumnString(columnData);
             doc.AddParagraph(columnDataString);
                 //solvent data currently unavailable. TODO: implement if/when solvent information is available
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Mobile Phases");
+            doc.AddHeader(HeaderLevel.H2, "Mobile Phases");
                 ////TODO: get solvent info from lcmsnet
             var pumps = new List<IPump>();
             foreach(var device in devices)
@@ -82,31 +84,31 @@ namespace PDFGenerator
             }
             doc.AddParagraph(mobilePhases.ToString());
 
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Mass Spectrometer Configuration");
+            doc.AddHeader(HeaderLevel.H1, "Mass Spectrometer Configuration");
             //TODO: Get mass spectrometer name from lcmsnet
             doc.AddPageBreak();
             //fluidics design section
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "LC Method");
+            doc.AddHeader(HeaderLevel.H1, "LC Method");
             doc.AddParagraph("Method Name: " + sample.ActualLCMethod.Name);
             doc.AddParagraph(""); // adds an empty line
             doc.AddParagraph(CreateLCMethodString(sample));
             //TODO pump method info
-            //doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Pump Method");
+            //doc.AddHeader(HeaderLevel.H1, "Pump Method");
             //doc.AddParagraph("Pump Method Info");
             doc.AddPageBreak();
 
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Fluidics Configuration");
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Table of Devices");
+            doc.AddHeader(HeaderLevel.H1, "Fluidics Configuration");
+            doc.AddHeader(HeaderLevel.H2, "Table of Devices");
 
             var fluidicsDevString = CreateDeviceString(devices);
             doc.AddParagraph(fluidicsDevString);
-            doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H2, "Configuration");
+            doc.AddHeader(HeaderLevel.H2, "Configuration");
             var rfluidicsImage = ScaleImage(fluidicsImage);
-            var imageC = new EMSL.DocumentGenerator.Core.Model.ImageContent(rfluidicsImage);
+            var imageC = new ImageContent(rfluidicsImage);
             doc.AddImage(imageC);
 
             //error section
-            //doc.AddHeader(EMSL.DocumentGenerator.Core.Model.HeaderLevel.H1, "Errors");
+            //doc.AddHeader(HeaderLevel.H1, "Errors");
             //doc.AddParagraph("Error Info");
 
             //write the document to file

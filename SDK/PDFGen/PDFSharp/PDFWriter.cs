@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using EMSL.DocumentGenerator.Core;
-using EMSL.DocumentGenerator.Core.Model;
-using EMSL.DocumentGenerator.Core.Services;
-
-using PdfSharp;
+using PDFGenerator.Core.Model;
+using PDFGenerator.Core.Services;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
-using PdfSharp.Pdf.IO;
-using System.Collections.Specialized;
-using System.Windows;
 
-
-
-namespace EMSL.DocumentGenerator.PDFSharp
+namespace PDFGenerator.PDFSharp
 {
     public class PDFWriter
         : IDocumentWriter
@@ -171,7 +160,7 @@ namespace EMSL.DocumentGenerator.PDFSharp
 
                 default:
                     // getting to this point should be impossible. Except perhaps via memory corruption
-                    throw new Core.Model.InvalidDocumentContent("Invalid Document Content.");
+                    throw new InvalidDocumentContent("Invalid Document Content.");
                 }
             }
         }
@@ -253,7 +242,8 @@ namespace EMSL.DocumentGenerator.PDFSharp
         /// </summary>
         /// <param name="header">header content to write</param>
         /// <param name="pSharpDoc">pdfsharp library document to write to</param>
-        /// <param name="headerFonts">fonts to write with</param>
+        /// <param name="font">font to write with</param>
+        /// <param name="headerFonts">fonts to write headers with</param>
         /// <param name="currentPage">current pdfsharp library page to write to</param>
         /// <param name="currentHeight">defines currently used area of the page</param>
         /// <param name="gfx">pdfsharp library graphics object</param>

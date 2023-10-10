@@ -22,6 +22,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <DocumentationFile>bin\Debug\PDFGen.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -31,19 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
     <DocumentationFile>bin\Release\PDFGen.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EMSL.DocumentGenerator.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\EMSL.DocumentGenerator.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="EMSL.DocumentGenerator.PDFSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\EMSL.DocumentGenerator.PDFSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="PdfSharp-WPF">
-      <HintPath>.\PdfSharp-WPF.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,13 +42,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Model\Document.cs" />
+    <Compile Include="Core\Model\DocumentContent.cs" />
+    <Compile Include="Core\Model\Enums.cs" />
+    <Compile Include="Core\Model\HeaderContent.cs" />
+    <Compile Include="Core\Model\ImageContent.cs" />
+    <Compile Include="Core\Model\InvalidDocumentContent.cs" />
+    <Compile Include="Core\Model\InvalidImageException.cs" />
+    <Compile Include="Core\Model\PageBreak.cs" />
+    <Compile Include="Core\Model\ParagraphContent.cs" />
+    <Compile Include="Core\Services\IDocumentWriter.cs" />
+    <Compile Include="Granot\PDFWriter.cs" />
     <Compile Include="PDFGen.cs" />
+    <Compile Include="PDFSharp\PDFWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="EMSL.DocumentGenerator.Core.dll" />
-    <Content Include="EMSL.DocumentGenerator.PDFSharp.dll" />
-    <Content Include="PdfSharp-WPF.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
@@ -65,13 +63,18 @@
       <Name>LcmsNetSDK</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="PDFsharp-wpf">
+      <Version>1.50.5147</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
-xcopy /y /f /d "$(TargetDir)EMSL.*.dll" "$(SolutionDir)lib\"
-xcopy /y /f /d "$(TargetDir)PdfSharp*.dll" "$(SolutionDir)lib\"</PostBuildEvent>
+xcopy /y /f /d "$(TargetDir)PdfSharp-wpf.dll" "$(SolutionDir)lib\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

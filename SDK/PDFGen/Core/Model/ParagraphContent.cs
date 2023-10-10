@@ -1,5 +1,5 @@
 ﻿
-namespace EMSL.DocumentGenerator.Core.Model
+namespace PDFGenerator.Core.Model
 {
     public class ParagraphContent
         : DocumentContent

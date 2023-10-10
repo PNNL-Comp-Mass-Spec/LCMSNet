@@ -1,5 +1,5 @@
 ﻿
-namespace EMSL.DocumentGenerator.Core.Model
+namespace PDFGenerator.Core.Model
 {
     /// <summary>
     /// This enum contains the different levels that a
