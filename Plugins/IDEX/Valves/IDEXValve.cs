@@ -12,7 +12,7 @@ namespace LcmsNetPlugins.IDEX.Valves
                                  "IDEX Valve",
                                  "Valves")
     ]*/
-    public class IDEXValve :  IDevice
+    public class IDEXValve :  IDevice, INotifyPropertyChangedExt
     {
 #pragma warning disable CS0067
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
@@ -66,19 +66,10 @@ namespace LcmsNetPlugins.IDEX.Valves
         {
             return true;
         }
-        public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-        public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-        public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
-        {
-        }
-        public MonitoringComponent GetHealthData()
-        {
-            return null;
-        }
+        //public MonitoringComponent GetHealthData()
+        //{
+        //    return null;
+        //}
         public List<string> GetStatusNotificationList()
         {
             return new List<string>() { "Inject Status", "Method Status" };
@@ -93,12 +84,12 @@ namespace LcmsNetPlugins.IDEX.Valves
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [LCMethodEvent("Change Position", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Change Position", MethodOperationTimeoutType.Parameter)]
         public bool ChangePosition(double timeout, int position)
         {
             return true;
         }
-        [LCMethodEvent("Home Valve", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Home Valve", MethodOperationTimeoutType.Parameter)]
         public bool HomeValve(double timeout, int position)
         {
             return true;

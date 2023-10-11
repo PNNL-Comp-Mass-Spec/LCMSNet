@@ -55,7 +55,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Timeout")]
         [Category("Serial")]
         [DisplayName("Timeout")]
-        [PersistenceData("Timeout")]
+        [DeviceSavedSetting("Timeout")]
         public double Timeout
         {
             get => timeout;
@@ -65,7 +65,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Port Name")]
         [Category("Serial")]
         [DisplayName("Port Name")]
-        [PersistenceData("PortName")]
+        [DeviceSavedSetting("PortName")]
         public string PortName
         {
             get => mPort.PortName;
@@ -97,7 +97,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Handshake")]
         [Category("Serial")]
         [DisplayName("Handshake")]
-        [PersistenceData("Handshake")]
+        [DeviceSavedSetting("Handshake")]
         public Handshake Handshake
         {
             get => mPort.Handshake;
@@ -111,7 +111,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("DTR Enabled")]
         [Category("Serial")]
         [DisplayName("DTR Enabled")]
-        [PersistenceData("DTREnable")]
+        [DeviceSavedSetting("DTREnable")]
         public bool DtrEnable
         {
             get => mPort.DtrEnable;
@@ -125,7 +125,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("RTS Enabled")]
         [Category("Serial")]
         [DisplayName("RTS Enabled")]
-        [PersistenceData("RTSEnable")]
+        [DeviceSavedSetting("RTSEnable")]
         public bool RtsEnable
         {
             get => mPort.RtsEnable;
@@ -139,7 +139,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Baud Rate")]
         [Category("Serial")]
         [DisplayName("Baud Rate")]
-        [PersistenceData("BaudRate")]
+        [DeviceSavedSetting("BaudRate")]
         public int BaudRate
         {
             get => mPort.BaudRate;
@@ -155,7 +155,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Data Bits")]
         [Category("Serial")]
         [DisplayName("Data Bits")]
-        [PersistenceData("DataBits")]
+        [DeviceSavedSetting("DataBits")]
         public int DataBits
         {
             get => mPort.DataBits;
@@ -171,7 +171,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Stop Bits")]
         [Category("Serial")]
         [DisplayName("Stop Bits")]
-        [PersistenceData("StopBits")]
+        [DeviceSavedSetting("StopBits")]
         public StopBits StopBits
         {
             get => mPort.StopBits;
@@ -187,7 +187,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Parity")]
         [Category("Serial")]
         [DisplayName("Parity")]
-        [PersistenceData("Parity")]
+        [DeviceSavedSetting("Parity")]
         public Parity Parity
         {
             get => mPort.Parity;

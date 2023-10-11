@@ -1664,7 +1664,7 @@ namespace LcmsNetPlugins.Teledyne.Pumps
             /// <param name="msg"></param>
             public void LogMessage(string msg)
             {
-                System.IO.FileInfo fi = new System.IO.FileInfo(System.Windows.Forms.Application.ExecutablePath);
+                System.IO.FileInfo fi = new System.IO.FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location);
                 string outFile = System.IO.Path.Combine(fi.DirectoryName, "Log.txt");
 
                 string logTxt = DateTime.UtcNow.Subtract(new TimeSpan(8, 0 , 0)).ToString("MM/dd/yyyy HH:mm:ss.ff") + ", " + msg;

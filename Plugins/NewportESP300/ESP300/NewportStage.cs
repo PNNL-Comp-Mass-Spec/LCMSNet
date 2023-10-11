@@ -16,7 +16,7 @@ namespace LcmsNetPlugins.Newport.ESP300
                                  typeof(FluidicsStage),
                                  "Newport Stage",
                                  "Stages")]
-    public class NewportStage:IDisposable, IDevice
+    public class NewportStage:IDisposable, IDevice, IHasDataProvider, INotifyPropertyChangedExt
     {
         #region Members
         private SerialPort m_port;
@@ -162,7 +162,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="positionName">the position to go to</param>
-        [LCMethodEvent("Go To Predefined Position", MethodOperationTimeoutType.Parameter, "POSNAMES", 1,false)]
+        [LCMethodEvent("Go To Predefined Position", MethodOperationTimeoutType.Parameter, "POSNAMES", 1)]
         public void GoToPosition(double timeout, string positionName) // bool block = true)
         {
             if(Emulation)
@@ -576,7 +576,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// <summary>
         /// Attempt to open the serial port
         /// </summary>
-        [LCMethodEvent("Open Port", 1, true, "", -1, false)]
+        [LCMethodEvent("Open Port", 1)]
         public void OpenPort()
         {
             if(Emulation)
@@ -670,7 +670,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// <summary>
         /// Gets or Sets the number of Axes available on this ESP300.
         /// </summary>
-        [PersistenceData("NumAxes")]
+        [DeviceSavedSetting("NumAxes")]
         public int NumAxes
         {
             get => m_numAxes;
@@ -680,7 +680,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// <summary>
         /// used to persist serial config to ini file and reload serial config from ini file.
         /// </summary>
-        [PersistenceData("Port")]
+        [DeviceSavedSetting("Port")]
         public string PortStr
         {
             get
@@ -780,7 +780,7 @@ namespace LcmsNetPlugins.Newport.ESP300
         /// <summary>
         /// used to persist the positions to ini config file and reload positions from ini file.
         /// </summary>
-        [PersistenceData("Positions")]
+        [DeviceSavedSetting("Positions")]
         public string PositionsStr
         {
             get
@@ -837,10 +837,11 @@ namespace LcmsNetPlugins.Newport.ESP300
             get => m_positions;
             set => m_positions = value;
         }
+
         /// <summary>
         /// Get or Sets the current position of the stage
         /// </summary>
-        [PersistenceData("currentPosition")]
+        [DeviceSavedSetting("currentPosition")]
         public string CurrentPos
         {
             get => m_position;
@@ -886,10 +887,6 @@ namespace LcmsNetPlugins.Newport.ESP300
                         PosNames -= remoteMethod;
                     break;
             }
-        }
-
-        public void WritePerformanceData(string directoryPath, string name, object[] parameters)
-        {
         }
 
         public bool Shutdown()

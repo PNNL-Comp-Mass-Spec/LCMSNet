@@ -5,6 +5,7 @@ using System.IO;
 using System.Timers;
 using FluidicsSDK.Devices;
 using LcmsNetData;
+using LcmsNetData.Data;
 using LcmsNetData.Logging;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
@@ -18,7 +19,7 @@ namespace LcmsNetPlugins.Bruker
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
     [DeviceControl(typeof(BrukerStartViewModel), "Bruker", "Detectors")]
-    public class BrukerStart : IDevice, IFluidicsClosure, IDisposable
+    public class BrukerStart : IDevice, IFluidicsClosure, IDisposable, INotifyPropertyChangedExt
     {
         #region "Constants"
 
@@ -153,7 +154,7 @@ namespace LcmsNetPlugins.Bruker
         /// <summary>
         /// Gets or sets the Port number to connect to on the Bruker System.
         /// </summary>
-        [PersistenceData("Port")]
+        [DeviceSavedSetting("Port")]
         public int Port
         {
             get => mobject_MsgTools.Port;
@@ -163,7 +164,7 @@ namespace LcmsNetPlugins.Bruker
         /// <summary>
         /// Gets or sets the IP address of the Bruker System.
         /// </summary>
-        [PersistenceData("IPAddress")]
+        [DeviceSavedSetting("IPAddress")]
         public string IPAddress
         {
             get => mobject_MsgTools.IPAddress;
@@ -262,8 +263,8 @@ namespace LcmsNetPlugins.Bruker
         /// </summary>
         /// <param name="timeout"></param>
         /// <param name="sample">Data object for sample to be run</param>
-        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, true, 1, "", -1, false)]
-        public bool StartAcquisition(double timeout, SampleData sample)
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, 1)]
+        public bool StartAcquisition(double timeout, ISampleInfo sample)
         {
             if (m_Emulation)
                 return true;
@@ -273,7 +274,7 @@ namespace LcmsNetPlugins.Bruker
 
             m_DeviceError = false;
             string msg;
-            var sampleName = sample.DmsData.DatasetName + ".d";
+            var sampleName = sample.Name + ".d";
             var methodName = sample.InstrumentMethod;
 
             // Check for acquistion already in progress
@@ -450,7 +451,7 @@ namespace LcmsNetPlugins.Bruker
         /// <summary>
         /// Stops data acquisition
         /// </summary>
-        [LCMethodEvent("Stop Acquisition", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Stop Acquisition", MethodOperationTimeoutType.Parameter)]
         public bool StopAcquisition(double timeout)
         {
             if (m_Emulation)
@@ -776,10 +777,6 @@ namespace LcmsNetPlugins.Bruker
         public override string ToString()
         {
             return m_Name;
-        }
-
-        public void WritePerformanceData(string directoryPath, string name, object[] parameters)
-        {
         }
 
         #endregion

@@ -2,12 +2,13 @@
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using LcmsNetCommonControls.Devices;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace LcmsNetPlugins.IDEX.Valves
 {
-    public class IDEXValveControlViewModel : ReactiveObject, IDeviceControl
+    public class IDEXValveControlViewModel : BaseDeviceControlViewModelReactive, IDeviceControl
     {
         public IDEXValveControlViewModel()
         {
@@ -43,7 +44,7 @@ namespace LcmsNetPlugins.IDEX.Valves
 
         public bool Running { get; set; }
 
-        public IDevice Device
+        public override IDevice Device
         {
             get => m_valve;
             set => RegisterDevice(value);
@@ -55,7 +56,7 @@ namespace LcmsNetPlugins.IDEX.Valves
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new IDEXValveControlView();
         }

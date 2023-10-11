@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Logging;
+using System.Runtime.CompilerServices;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.Logging;
 
 namespace ASUTGen.Devices.Pumps
 {
-    [classDeviceControlAttribute(typeof(IDEXPumpControl),
+    [DeviceControl(typeof(IDEXPumpViewModel),
                                  "IDEX Pump",
                                  "Pumps")
     ]
     public class IDEXPump :  IDevice
     {
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceErrorEventArgs> Error;
         public event EventHandler DeviceSaveRequired;
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace ASUTGen.Devices.Pumps
             get;
             set;
         }
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;
@@ -50,7 +52,7 @@ namespace ASUTGen.Devices.Pumps
         /// <summary>
         /// Gets the error type.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -58,9 +60,9 @@ namespace ASUTGen.Devices.Pumps
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
-        public enumDeviceType DeviceType
+        public DeviceType DeviceType
         {
-            get { return enumDeviceType.Component; }
+            get { return DeviceType.Component; }
         }
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
@@ -80,20 +82,20 @@ namespace ASUTGen.Devices.Pumps
         }
         public void RegiserDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-            
+
         }
         public void UnRegiserDataProvider(string key, DelegateDeviceHasData remoteMethod)
         {
-         
+
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-            
+
         }
-        public classMonitoringComponent GetHealthData()
-        {
-            return null;
-        }
+        //public MonitoringComponent GetHealthData()
+        //{
+        //    return null;
+        //}
         public List<string> GetStatusNotificationList()
         {
             return new List<string>() { "Inject Status", "Method Status" };
@@ -101,17 +103,16 @@ namespace ASUTGen.Devices.Pumps
         public List<string> GetErrorNotificationList()
         {
             return new List<string>() { "Inject Failure", "Method Failure" };
-        }        
+        }
         #endregion
 
         /// <summary>
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [classLCMethodAttribute("Set Flow Rate", enumMethodOperationTime.Parameter, "", -1, false)]
+        [LCMethodEventAttribute("Set Flow Rate", MethodOperationTimeoutType.Parameter)]
         public bool SetFlowRate(double timeout, double flowRate)
         {
-            
             return true;
         }
         /// <summary>
@@ -125,11 +126,17 @@ namespace ASUTGen.Devices.Pumps
 
         #region IFinchComponent Members
 
-        public Finch.Data.FinchComponentData GetData()
-        {
-            return null;
-        }
+        //public Finch.Data.FinchComponentData GetData()
+        //{
+        //    return null;
+        //}
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -1,11 +1,29 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using AmpsBoxSdk.Devices;
+using ReactiveUI;
 
 namespace AmpsBox
 {
-    public partial class RFControl : UserControl
+    public class RF : ReactiveObject
     {
+        public RF()
+        {
+            DriveLevel = new SingleElement() { DisplayName = "Drive Level" };
+            OutputVoltage = new SingleElement() { DisplayName = "Output Voltage" };
+            RfFrequency = new SingleElement() { DisplayName = "RF Frequency" };
+
+            RfFrequency.SetDataCommand += new EventHandler<AmpsBoxCommandEventArgs>(m_rfControl_SetDataCommand);
+            OutputVoltage.SetDataCommand += new EventHandler<AmpsBoxCommandEventArgs>(m_outputVoltageControl_SetDataCommand);
+            DriveLevel.SetDataCommand += new EventHandler<AmpsBoxCommandEventArgs>(m_driveLevelControl_SetDataCommand);
+            RfFrequency.GetDataCommand += new EventHandler<AmpsBoxCommandEventArgs>(m_rfControl_GetDataCommand);
+            OutputVoltage.GetDataCommand += new EventHandler<AmpsBoxCommandEventArgs>(m_outputVoltageControl_GetDataCommand);
+            DriveLevel.GetDataCommand += new EventHandler<AmpsBoxCommandEventArgs>(m_driveLevelControl_GetDataCommand);
+        }
+
         private AmpsBoxRfData m_rfData;
         public event EventHandler<AmpsBoxCommandEventArgs> SetRfFrequency;
         public event EventHandler<AmpsBoxCommandEventArgs> SetDriveLevel;
@@ -14,19 +32,9 @@ namespace AmpsBox
         public event EventHandler<AmpsBoxCommandEventArgs> GetDriveLevel;
         public event EventHandler<AmpsBoxCommandEventArgs> GetOutputVoltage;
 
-        public RFControl()
-        {
-            InitializeComponent();
-
-            m_rfData = new AmpsBoxRfData();
-
-            m_rfControl.SetDataCommand              += new EventHandler<AmpsBoxCommandEventArgs>(m_rfControl_SetDataCommand);
-            m_outputVoltageControl.SetDataCommand   += new EventHandler<AmpsBoxCommandEventArgs>(m_outputVoltageControl_SetDataCommand);
-            m_driveLevelControl.SetDataCommand      += new EventHandler<AmpsBoxCommandEventArgs>(m_driveLevelControl_SetDataCommand);
-            m_rfControl.GetDataCommand              += new EventHandler<AmpsBoxCommandEventArgs>(m_rfControl_GetDataCommand);
-            m_outputVoltageControl.GetDataCommand   += new EventHandler<AmpsBoxCommandEventArgs>(m_outputVoltageControl_GetDataCommand);
-            m_driveLevelControl.GetDataCommand      += new EventHandler<AmpsBoxCommandEventArgs>(m_driveLevelControl_GetDataCommand);
-        }
+        public SingleElement DriveLevel { get; }
+        public SingleElement OutputVoltage { get; }
+        public SingleElement RfFrequency { get; }
 
         #region Command Event Handlers
         void m_driveLevelControl_GetDataCommand(object sender, AmpsBoxCommandEventArgs e)
@@ -67,13 +75,10 @@ namespace AmpsBox
         /// <param name="rfData"></param>
         public void SetData(AmpsBoxRfData rfData)
         {
-            m_rfData                    = rfData;
-            m_rfControl.Data            = rfData.RfFrequency;
-            m_outputVoltageControl.Data = rfData.OutputVoltage;
-            m_driveLevelControl.Data    = rfData.DriveLevel;
-
-            
+            m_rfData = rfData;
+            RfFrequency.Data = rfData.RfFrequency;
+            OutputVoltage.Data = rfData.OutputVoltage;
+            DriveLevel.Data = rfData.DriveLevel;
         }
     }
-
 }

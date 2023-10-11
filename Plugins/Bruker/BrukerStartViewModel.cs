@@ -128,9 +128,9 @@ namespace LcmsNetPlugins.Bruker
             }
             var methodName = SelectedMethod;
 
-            var sample = new SampleData
+            var sample = new DummySampleInfo()
             {
-                DmsData = { DatasetName = SampleName },
+                Name = SampleName,
                 InstrumentMethod = methodName
             };
 

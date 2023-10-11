@@ -14,7 +14,7 @@ namespace LcmsNetPlugins.ASIpump
     [DeviceControl(typeof(AsiUIViewModel),
                                  "ASi Pump",
                                  "Syringe Pumps")]
-    public class AsiPump : SerialDevice, IDevice, IPump, IFluidicsPump
+    public class AsiPump : SerialDevice, IDevice, IPump, IFluidicsPump, IHasDataProvider, IHasPerformanceData
     {
         /// <summary>
         /// Dictionary that holds a method name, key, and the method time table, value.
@@ -39,7 +39,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Total flow in uL/minute")]
         [Category("Program Parameters")]
         [DisplayName("Total Flow")]
-        [PersistenceData("TotalFlow")]
+        [DeviceSavedSetting("TotalFlow")]
         public double TotalFlow
         {
             get => totalFlow;
@@ -55,7 +55,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Start %, 0-100")]
         [Category("Program Parameters")]
         [DisplayName("Start % A")]
-        [PersistenceData("StartPercentA")]
+        [DeviceSavedSetting("StartPercentA")]
         public double StartPercentA
         {
             get => startPercentA;
@@ -71,7 +71,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Start %, 0-100")]
         [Category("Program Parameters")]
         [DisplayName("Start % B")]
-        [PersistenceData("StartPercentB")]
+        [DeviceSavedSetting("StartPercentB")]
         public double StartPercentB
         {
             get => startPercentB;
@@ -87,7 +87,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Gradient Time (seconds)")]
         [Category("Program Parameters")]
         [DisplayName("Gradient Time")]
-        [PersistenceData("GradientTime")]
+        [DeviceSavedSetting("GradientTime")]
         public double GradientTime
         {
             get => gradientTime;
@@ -103,7 +103,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Initial Iso time")]
         [Category("Program Parameters")]
         [DisplayName("Initial Iso Time")]
-        [PersistenceData("InitialIsoTime")]
+        [DeviceSavedSetting("InitialIsoTime")]
         public double InitialIsoTime
         {
             get => initialIsoTime;
@@ -119,7 +119,7 @@ namespace LcmsNetPlugins.ASIpump
         [Description("Final Iso time")]
         [Category("Program Parameters")]
         [DisplayName("Final Iso Time")]
-        [PersistenceData("FinalIsoTime")]
+        [DeviceSavedSetting("FinalIsoTime")]
         public double FinalIsoTime
         {
             get => finalIsoTime;
@@ -273,10 +273,10 @@ namespace LcmsNetPlugins.ASIpump
 
         #region Properties
 
-        [PersistenceData("TotalMonitoringMinutes")]
+        [DeviceSavedSetting("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep { get; set; }
 
-        [PersistenceData("TotalMonitoringSecondsElapsed")]
+        [DeviceSavedSetting("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondElapsed { get; set; }
 
         /// <summary>
@@ -312,7 +312,7 @@ namespace LcmsNetPlugins.ASIpump
         /// <summary>
         /// Gets or sets the port name to use to communicate with the pumps.
         /// </summary>
-        [PersistenceData("PortName")]
+        [DeviceSavedSetting("PortName")]
         public new string PortName
         {
             get => base.PortName;
@@ -543,6 +543,12 @@ namespace LcmsNetPlugins.ASIpump
         public void WritePerformanceData(string directoryPath, string name, object[] parameters)
         {
         }
+
+        public string GetPerformanceData(string methodName, object[] parameters)
+        {
+            return "";
+        }
+
         public List<string> GetStatusNotificationList()
         {
             var notifications = new List<string>() { "Status"
@@ -573,7 +579,7 @@ namespace LcmsNetPlugins.ASIpump
         /// <param name="timeout"></param>
         /// <param name="flowrate"></param>
         /// <param name="methodName">Method to run stored on the pumps.</param>
-        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 2, true)]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 2, HasPerformanceData = true)]
         public void StartMethod(double timeout, double flowrate, string methodName)
         {
             var start = TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
@@ -581,7 +587,7 @@ namespace LcmsNetPlugins.ASIpump
             //Some method starting private function StartMethod(methodName);
         }
 
-        [LCMethodEvent("Turn On", 1, false, "", -1, false)]
+        [LCMethodEvent("Turn On", 1)]
         public void TurnOn()
         {
         }

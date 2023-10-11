@@ -12,7 +12,7 @@ namespace LcmsNetPlugins.IDEX.Pumps
                                  "IDEX Pump",
                                  "Pumps")
     ]*/
-    public class IDEXPump :  IDevice
+    public class IDEXPump :  IDevice, INotifyPropertyChangedExt
     {
 #pragma warning disable CS0067
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
@@ -66,19 +66,10 @@ namespace LcmsNetPlugins.IDEX.Pumps
         {
             return true;
         }
-        public void RegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-        public void UnRegisterDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-        }
-        public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
-        {
-        }
-        public MonitoringComponent GetHealthData()
-        {
-            return null;
-        }
+        //public MonitoringComponent GetHealthData()
+        //{
+        //    return null;
+        //}
         public List<string> GetStatusNotificationList()
         {
             return new List<string>() { "Inject Status", "Method Status" };
@@ -93,7 +84,7 @@ namespace LcmsNetPlugins.IDEX.Pumps
         /// Injects a failure into the system.
         /// </summary>
         /// <returns></returns>
-        [LCMethodEvent("Set Flow Rate", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Set Flow Rate", MethodOperationTimeoutType.Parameter)]
         public bool SetFlowRate(double timeout, double flowRate)
         {
             return true;

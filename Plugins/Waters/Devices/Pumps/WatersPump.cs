@@ -1,17 +1,17 @@
 ﻿using System;
-using LcmsNetDataClasses.Configuration;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using LcmsNetDataClasses.Devices;
-using LcmsNetDataClasses.Method;
-using LcmsNetDataClasses.Logging;
-using LcmsNetDataClasses.Devices.Pumps;
-using Waters.ACQUITY;
 using System.Xml;
 using System.Xml.Linq;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using LcmsNetSDK.Devices;
+using LcmsNetSDK.Method;
+using LcmsNetSDK.Logging;
+using Waters.ACQUITY;
 
 namespace Waters.Devices.Pumps
 {
@@ -58,8 +58,8 @@ namespace Waters.Devices.Pumps
     /// <summary>
     /// Class that handles communicating with the Waters Nano BSM pumps.
     /// </summary>
-    
-    public class WatersPump :  IDevice, IPump, IDisposable
+
+    public class WatersPump :  IDevice, IPump, IHasDataProvider, IHasPerformanceData, IDisposable
     {
 
         private string[] m_notificationStrings;
@@ -92,8 +92,8 @@ namespace Waters.Devices.Pumps
         private const int CONST_MONITORING_SECONDS_ELAPSED = 1000;
         public event EventHandler<WatersEventArgs> InstrumentsFound;
         public event EventHandler<WatersEventArgs> MethodsFound;
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceErrorEventArgs> Error;
         public event EventHandler DeviceSaveRequired;
         private Dictionary<string, string> m_methodNameMap;
         Waters.ACQUITY.InstrumentSystemClient m_instrumentSystem = new Waters.ACQUITY.InstrumentSystemClient();
@@ -119,7 +119,7 @@ namespace Waters.Devices.Pumps
         /// Default constructor.
         /// </summary>
         public WatersPump()
-        {            
+        {
             m_syncObject            = new object();
             m_syncEvent             = new ManualResetEvent(false);
             StopPumpOnShutdown      = false;
@@ -132,13 +132,10 @@ namespace Waters.Devices.Pumps
             Instruments             = new List<string>();
             Methods                 = new List<string>();
             m_methodNameMap         = new Dictionary<string, string>();
-            Status                  = enumDeviceStatus.NotInitialized;
-            m_times                 = new List<DateTime>();
-            m_pressures             = new List<double>();
-            m_flows                 = new List<double>();
-            m_compositions          = new List<double>();
+            Status                  = DeviceStatus.NotInitialized;
+            m_pumpData              = new List<PumpDataPoint>();
             m_flowRate              = 0;
-            
+
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
             TotalMonitoringSecondElapsed     = CONST_MONITORING_SECONDS_ELAPSED;
 
@@ -179,7 +176,7 @@ namespace Waters.Devices.Pumps
                     lock (m_syncObject)
                     {
                         try
-                        {                            
+                        {
                             statusXML = m_instrumentSystem.StatusDetail;
                         }
                         catch (Exception)
@@ -193,16 +190,13 @@ namespace Waters.Devices.Pumps
             }
         }
 
-        private List<DateTime> m_times;
-        private List<double> m_pressures;
-        private List<double> m_flows;
-        private List<double> m_compositions;
+        private List<PumpDataPoint> m_pumpData;
         private double m_flowRate;
 
         private void ParseAndProcessStatus(string xmlData)
         {
-            DateTime time = LcmsNetSDK.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
-            
+            DateTime time = LcmsNetSDK.System.TimeKeeper.Instance.Now; // DateTime.UtcNow.Subtract(new TimeSpan(8, 0, 0));
+
             PumpStatusDetailParser parser = new PumpStatusDetailParser();
             PumpStatusInfo info = parser.ParseData(xmlData);
             double pressure     = info.Pressure;
@@ -219,32 +213,26 @@ namespace Waters.Devices.Pumps
 
             UpdateNotificationStatus(pressure.ToString(), CONST_PRESSURE_VALUE);
 
-            // Update log collections.
-            m_times.Add(time);
-            m_pressures.Add(pressure);
-            m_flows.Add(flowrate);
-            m_compositions.Add(compositionB);
+            // Update log collection
+            m_pumpData.Add(new PumpDataPoint(time, pressure, flowrate, compositionB));
 
-            /// 
+            ///
             /// Find old data to remove -- needs to be updated (or could be) using LINQ
-            /// 
-            int count = m_times.Count;
+            ///
+            int count = m_pumpData.Count;
             int total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
             {
                 int i = 0;
-                while (time.Subtract(m_times[i]).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < m_times.Count)
+                while (time.Subtract(m_pumpData[i].Time).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < m_pumpData.Count)
                 {
                     i++;
                 }
 
                 if (i > 0)
                 {
-                    i = Math.Min(i, m_times.Count - 1);
-                    m_times.RemoveRange(0, i);
-                    m_flows.RemoveRange(0, i);
-                    m_pressures.RemoveRange(0, i);
-                    m_compositions.RemoveRange(0, i);
+                    i = Math.Min(i, m_pumpData.Count - 1);
+                    m_pumpData.RemoveRange(0, i);
                 }
             }
 
@@ -253,12 +241,7 @@ namespace Waters.Devices.Pumps
             {
                 if (MonitoringDataReceived != null)
                 {
-                    MonitoringDataReceived(this,
-                            new PumpDataEventArgs(this,
-                                                    m_times,
-                                                    m_pressures,
-                                                    m_flows,
-                                                    m_compositions));
+                    MonitoringDataReceived(this, new PumpDataEventArgs(this, m_pumpData));
                 }
             }
             catch
@@ -282,18 +265,18 @@ namespace Waters.Devices.Pumps
         {
             if (StatusUpdate != null)
             {
-                classDeviceStatusEventArgs args = new classDeviceStatusEventArgs(Status, type, message, this);
+                DeviceStatusEventArgs args = new DeviceStatusEventArgs(Status, type, this, message);
                 StatusUpdate(this, args);
             }
         }
 
-        [classPersistenceAttribute("TotalMonitoringMinutes")]
+        [DeviceSavedSetting("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep
         {
             get;
             set;
         }
-        [classPersistenceAttribute("TotalMonitoringSecondsElapsed")]
+        [DeviceSavedSetting("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondElapsed
         {
             get;
@@ -306,7 +289,7 @@ namespace Waters.Devices.Pumps
         private void StartMonitorThread()
         {
             AbortMonitorThread();
-            
+
             m_shouldMonitor     = true;
             ThreadStart start   = new ThreadStart(MonitorThread);
             m_monitoringThread  = new Thread(start);
@@ -340,15 +323,15 @@ namespace Waters.Devices.Pumps
                 }
             }
         }
-                        
+
         #region Waters Members
-        [classPersistence("MachineName")]
+        [DeviceSavedSetting("MachineName")]
         public string MachineName
         {
             get;
             set;
         }
-        [classPersistence("SystemName")]
+        [DeviceSavedSetting("SystemName")]
         public string SystemName
         {
             get;
@@ -375,7 +358,7 @@ namespace Waters.Devices.Pumps
             get;
             set;
         }
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;
@@ -388,7 +371,7 @@ namespace Waters.Devices.Pumps
         /// <summary>
         /// Gets the error type.
         /// </summary>
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
@@ -396,9 +379,9 @@ namespace Waters.Devices.Pumps
         /// <summary>
         /// Gets what type of device it is.
         /// </summary>
-        public enumDeviceType DeviceType
+        public DeviceType DeviceType
         {
-            get { return enumDeviceType.Component; }
+            get { return DeviceType.Component; }
         }
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
@@ -436,22 +419,22 @@ namespace Waters.Devices.Pumps
 
                     lock (m_syncObject)
                     {
-                        m_instrumentSystem.Initialize(options);
+                        //m_instrumentSystem.Initialize(options);
                     }
 
-                    Status = enumDeviceStatus.Initialized;
+                    Status = DeviceStatus.Initialized;
                     return true;
                 }
                 else
                 {
-                    Status = enumDeviceStatus.NotInitialized;
+                    Status = DeviceStatus.NotInitialized;
                     errorMessage = "The instrument name does not match any instruments on the pump network.  Did you change pumps?";
                     return false;
                 }
             }
             else
             {
-                Status       = enumDeviceStatus.NotInitialized;
+                Status       = DeviceStatus.NotInitialized;
                 errorMessage = "The instrument has not been previously configured.";
                 return false;
             }
@@ -465,19 +448,19 @@ namespace Waters.Devices.Pumps
             get;
             private set;
         }
-        [classPersistence("Instrument")]
+        [DeviceSavedSetting("Instrument")]
         public string Instrument
         {
             get;
             set;
         }
 
-        [classPersistenceAttribute("MethodsFolderPath")]
+        [DeviceSavedSetting("MethodsFolderPath")]
         public string MethodsFolderPath { get; set; }
         /// <summary>
         /// Gets or sets whether the system should be shutdown on startup
-        /// </summary>        
-        [classPersistenceAttribute("StopPumpOnShutdown")]
+        /// </summary>
+        [DeviceSavedSetting("StopPumpOnShutdown")]
         public bool StopPumpOnShutdown
         {
             get;
@@ -535,12 +518,18 @@ namespace Waters.Devices.Pumps
         }
         public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
         {
-            
+
         }
-        public classMonitoringComponent GetHealthData()
+
+        public string GetPerformanceData(string methodName, object[] parameters)
         {
-            return null;
+            return "";
         }
+
+        //public MonitoringComponent GetHealthData()
+        //{
+        //    return null;
+        //}
         public List<string> GetStatusNotificationList()
         {
             List<string> notifications = new List<string>() { "Status"
@@ -552,9 +541,9 @@ namespace Waters.Devices.Pumps
         public List<string> GetErrorNotificationList()
         {
             return new List<string>();
-        }        
+        }
         #endregion
-        
+
         #region Utility Methods
         /// <summary>
         /// Gets a list of instruments from the local area network.
@@ -585,7 +574,7 @@ namespace Waters.Devices.Pumps
         public List<string> GetMethodList()
         {
             string[] methods = Directory.GetFiles(MethodsFolderPath, "*.method");
-            
+
             m_methodNameMap.Clear();
             Methods.Clear();
 
@@ -612,7 +601,7 @@ namespace Waters.Devices.Pumps
         public List<string> ScanForInstruments()
         {
             WDHCPServerSvcLib.EthernetScanClass scan = new WDHCPServerSvcLib.EthernetScanClass();
-            
+
             string instruments  = scan.GetInstrumentList();
             XmlDocument doc     = new XmlDocument();
             doc.LoadXml(instruments);
@@ -651,7 +640,7 @@ namespace Waters.Devices.Pumps
         /// <param name="timeout"></param>
         /// <param name="method"></param>
         /// <param name="runTime"></param>
-        [classLCMethodAttribute("Start Method", enumMethodOperationTime.Parameter, "MethodNames", 1, true)]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 1, HasPerformanceData = true)]
         public void StartMethod(double timeout, string method)
         {
             try
@@ -696,15 +685,15 @@ namespace Waters.Devices.Pumps
                         {
                             //TODO: Log the exception!
                         }
-
+                    
                     }
                 }
             }
             catch (Exception ex)
             {
-                classApplicationLogger.LogError(0, "Could not start Waters pump method.", ex);
+                ApplicationLogger.LogError(0, "Could not start Waters pump method.", ex);
             }
-        }       
+        }
 
         #region IPump Members
         public event EventHandler<PumpDataEventArgs> MonitoringDataReceived;
@@ -763,5 +752,11 @@ namespace Waters.Devices.Pumps
         }
 
         #endregion
-    }    
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
 }

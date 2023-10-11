@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="AmpsBox.RFView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AmpsBox"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type local:RF}, IsDesignTimeCreatable=True}"
+             d:DesignHeight="354" d:DesignWidth="242">
+    <StackPanel Orientation="Vertical">
+        <local:SingleElementView DataContext="{Binding DriveLevel}" />
+        <local:SingleElementView DataContext="{Binding OutputVoltage}" />
+        <local:SingleElementView DataContext="{Binding RfFrequency}" />
+    </StackPanel>
+</UserControl>

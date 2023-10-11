@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="AmpsBox.SingleElementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AmpsBox"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type local:SingleElement}, IsDesignTimeCreatable=True}"
+             d:DesignHeight="117" d:DesignWidth="234">
+    <GroupBox Header="{Binding DisplayName}" FontSize="15">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <xctk:IntegerUpDown Grid.Row="0" Grid.Column="0" Margin="3" Minimum="0" Maximum="{Binding SetpointMaximum}" Value="{Binding Setpoint}" FontSize="13" />
+            <Label Grid.Row="1" Grid.Column="0" Margin="3" HorizontalAlignment="Center" Content="{Binding CurrentValue, Mode=OneWay}" FontSize="24" BorderThickness="1" />
+            <Button Grid.Row="0" Grid.Column="1" Margin="3" Content="Set" Command="{Binding SetSetpointCommand}" FontSize="13" />
+            <Button Grid.Row="1" Grid.Column="1" Margin="3" Content="Read" Command="{Binding ReadValueCommand}" FontSize="13" />
+        </Grid>
+    </GroupBox>
+</UserControl>

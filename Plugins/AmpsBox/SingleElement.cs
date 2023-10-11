@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Reactive;
 using AmpsBoxSdk.Devices;
-using AmpsBoxSdk;
+using ReactiveUI;
 
 namespace AmpsBox
 {
     /// <summary>
     /// Single control for each device item.
     /// </summary>
-    public partial class SingleElementControl : UserControl
+    public class SingleElement : ReactiveObject
     {
         /// <summary>
         /// Fired when the user sends data to the device.
@@ -23,12 +23,20 @@ namespace AmpsBox
         /// </summary>
         private AmpsBoxChannelData m_data;
 
+        private string displayName = "RF Frequency";
+        private int setpoint = 0;
+        private int setpointMaximum = 2000;
+        private int currentValue = 0;
+
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SingleElementControl()
+        public SingleElement()
         {
-            InitializeComponent();
+            this.WhenAnyValue(x => x.Setpoint).Subscribe(x => m_data.Setpoint = x);
+
+            ReadValueCommand = ReactiveCommand.Create(ReadCurrent);
+            SetSetpointCommand = ReactiveCommand.Create(SetSetpoint);
         }
 
         /// <summary>
@@ -36,49 +44,59 @@ namespace AmpsBox
         /// </summary>
         public string DisplayName
         {
-            get
-            {
-                return mgroupbox_name.Text;
-            }
+            get => displayName;
             set
             {
                 if (value == null)
                     return;
 
-                mgroupbox_name.Text = value;
-                mgroupbox_name.Refresh();
-            }                    
+                this.RaiseAndSetIfChanged(ref displayName, value);
+            }
         }
 
         /// <summary>
         /// Gets or sets the command type.
-        /// </summary>        
+        /// </summary>
         public AmpsBoxChannelData Data
         {
-            get
-            {
-                return m_data;
-            }
-            set
-            {
-                m_data = value;
-            }
+            get => m_data;
+            set => m_data = value;
         }
+
+        public int Setpoint
+        {
+            get => setpoint;
+            set => this.RaiseAndSetIfChanged(ref setpoint, value);
+        }
+
+        public int SetpointMaximum
+        {
+            get => setpointMaximum;
+            private set => this.RaiseAndSetIfChanged(ref setpointMaximum, value);
+        }
+
+        public int CurrentValue
+        {
+            get => currentValue;
+            private set => this.RaiseAndSetIfChanged(ref currentValue, value);
+        }
+
+        public ReactiveCommand<Unit, Unit> SetSetpointCommand { get; }
+        public ReactiveCommand<Unit, Unit> ReadValueCommand { get; }
+
         /// <summary>
         /// Updates the display with the data provided.
         /// </summary>
         private void UpdateDisplayData()
         {
-            mlabel_value.Text = m_data.Actual.ToString();
-            mnum_setpointValue.Value = Convert.ToDecimal(m_data.Setpoint);
+            CurrentValue = m_data.Actual;
+            Setpoint = m_data.Setpoint;
         }
 
         /// <summary>
         /// Tells the box to read
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void mbutton_read_Click(object sender, EventArgs e)
+        private void ReadCurrent()
         {
             if (GetDataCommand != null)
             {
@@ -90,11 +108,9 @@ namespace AmpsBox
         /// <summary>
         /// Sets the data to the box.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void mbutton_set_Click(object sender, EventArgs e)
+        private void SetSetpoint()
         {
-            int value = Convert.ToInt32(mnum_setpointValue.Value);
+            int value = Setpoint;
             if (SetDataCommand != null)
             {
                 Data.Setpoint = value;
@@ -108,19 +124,14 @@ namespace AmpsBox
         public void SetData(AmpsBoxChannelData ampsBoxChannelData)
         {
             m_data = ampsBoxChannelData;
-            mnum_setpointValue.Maximum = Convert.ToDecimal(m_data.Maximum);
+            SetpointMaximum = m_data.Maximum;
         }
-
-        private void mnum_setpointValue_ValueChanged(object sender, EventArgs e)
-        {
-            m_data.Setpoint = Convert.ToInt32(mnum_setpointValue.Value);
-        }
-
     }
+
     /// <summary>
     /// Class that holds data for event arguments.
     /// </summary>
-    public class AmpsBoxCommandEventArgs: EventArgs
+    public class AmpsBoxCommandEventArgs : EventArgs
     {
         /// <summary>
         /// Constructor

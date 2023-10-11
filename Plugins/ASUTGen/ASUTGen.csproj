@@ -29,82 +29,77 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Finch">
-      <HintPath>..\..\..\..\lib\Plugins\Finch.dll</HintPath>
+    <Reference Include="LcmsNetCommonControls">
+      <HintPath>..\..\lib\LcmsNetCommonControls.dll</HintPath>
     </Reference>
     <Reference Include="LcmsNetSdk, Version=3.4.17.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Plugins\LcmsNetSdk.dll</HintPath>
+      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices\Detectors\UVDetector.cs" />
-    <Compile Include="Devices\Detectors\UVDetectorControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Devices\Detectors\UVDetectorView.xaml.cs">
+      <DependentUpon>UVDetectorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Detectors\UVDetectorControl.Designer.cs">
-      <DependentUpon>UVDetectorControl.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Devices\Detectors\UVDetectorViewModel.cs" />
     <Compile Include="Devices\ExternalMessageBuilder.cs" />
     <Compile Include="Devices\Filtration\FilterChanger.cs" />
-    <Compile Include="Devices\Filtration\FilterChangerControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Devices\Filtration\FilterChangerView.xaml.cs">
+      <DependentUpon>FilterChangerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Filtration\FilterChangerControl.Designer.cs">
-      <DependentUpon>FilterChangerControl.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Devices\Filtration\FilterChangerViewModel.cs" />
     <Compile Include="Devices\Modules\IDEXValvePumpModule.cs" />
-    <Compile Include="Devices\Modules\IDEXValvePumpModuleControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Devices\Modules\IDEXValvePumpModuleView.xaml.cs">
+      <DependentUpon>IDEXValvePumpModuleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Modules\IDEXValvePumpModuleControl.Designer.cs">
-      <DependentUpon>IDEXValvePumpModuleControl.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Devices\Modules\IDEXValvePumpModuleViewModel.cs" />
     <Compile Include="Devices\Pumps\IDEXPump.cs" />
-    <Compile Include="Devices\Pumps\IDEXPumpControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Devices\Pumps\IDEXPumpView.xaml.cs">
+      <DependentUpon>IDEXPumpView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Devices\Pumps\IDEXPumpControl.Designer.cs">
-      <DependentUpon>IDEXPumpControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Devices\Valves\IDEXValveControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Devices\Valves\IDEXValveControl.Designer.cs">
-      <DependentUpon>IDEXValveControl.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Devices\Pumps\IDEXPumpViewModel.cs" />
     <Compile Include="Devices\Valves\IDEXValve.cs" />
+    <Compile Include="Devices\Valves\IDEXValveView.xaml.cs">
+      <DependentUpon>IDEXValveView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Valves\IDEXValveViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Devices\Detectors\UVDetectorControl.resx">
-      <DependentUpon>UVDetectorControl.cs</DependentUpon>
+    <Page Include="Devices\Detectors\UVDetectorView.xaml">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Filtration\FilterChangerControl.resx">
-      <DependentUpon>FilterChangerControl.cs</DependentUpon>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Filtration\FilterChangerView.xaml">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Modules\IDEXValvePumpModuleControl.resx">
-      <DependentUpon>IDEXValvePumpModuleControl.cs</DependentUpon>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Modules\IDEXValvePumpModuleView.xaml">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Pumps\IDEXPumpControl.resx">
-      <DependentUpon>IDEXPumpControl.cs</DependentUpon>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Pumps\IDEXPumpView.xaml">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Devices\Valves\IDEXValveControl.resx">
-      <DependentUpon>IDEXValveControl.cs</DependentUpon>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Devices\Valves\IDEXValveView.xaml">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI.WPF">
+      <Version>19.5.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,7 +6,7 @@ using System.Text;
 namespace ASUTGen.Devices
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class ExternalMessageBuilder
     {
@@ -16,17 +16,17 @@ namespace ASUTGen.Devices
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
         private string BuildChecksum(string data)
         {
             return "";
- 
+
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="address"></param>
         /// <param name="command"></param>
@@ -38,7 +38,7 @@ namespace ASUTGen.Devices
             return command + "\r";
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="address"></param>
         /// <param name="numberOfBytes"></param>

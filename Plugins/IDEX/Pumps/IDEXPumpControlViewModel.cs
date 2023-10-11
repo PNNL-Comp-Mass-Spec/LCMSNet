@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Controls;
+using LcmsNetCommonControls.Devices;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
 namespace LcmsNetPlugins.IDEX.Pumps
 {
-    public class IDEXPumpControlViewModel : ReactiveObject, IDeviceControl
+    public class IDEXPumpControlViewModel : BaseDeviceControlViewModelReactive, IDeviceControl
     {
         public IDEXPumpControlViewModel()
         {
@@ -31,7 +32,7 @@ namespace LcmsNetPlugins.IDEX.Pumps
 
         public bool Running { get; set; }
 
-        public IDevice Device
+        public override IDevice Device
         {
             get => m_valve;
             set => RegisterDevice(value);
@@ -43,7 +44,7 @@ namespace LcmsNetPlugins.IDEX.Pumps
             set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
-        public UserControl GetDefaultView()
+        public override UserControl GetDefaultView()
         {
             return new IDEXPumpControlView();
         }

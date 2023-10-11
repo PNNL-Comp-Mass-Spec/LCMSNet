@@ -1,31 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using LcmsNetDataClasses.Devices;
+using System.Runtime.CompilerServices;
+using System.Windows.Controls;
+using FluidicsSDK.Base;
+using LcmsNetSDK;
+using LcmsNetSDK.Devices;
 
 namespace AmpsBox
 {
-    public partial class AmpsBoxGlyph : UserControl, IDeviceGlyph
+    public partial class AmpsBoxGlyph : FluidicsDevice, INotifyPropertyChangedExt //: IDeviceGlyph
     {
-        private AmpsBoxDevicePlugin m_box;
-
         public AmpsBoxGlyph()
         {
-            InitializeComponent();
         }
 
+        private AmpsBoxDevicePlugin m_box;
+
+        private string name = "Amps Box";
+
+        public string Name
+        {
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
+        }
 
         #region IDeviceGlyph Members
 
         public void RegisterDevice(IDevice device)
         {
-            m_box               = device as AmpsBoxDevicePlugin;
-            mlabel_name.Text    = device.Name;
+            m_box = device as AmpsBoxDevicePlugin;
+            Name = device.Name;
 
             device.DeviceSaveRequired += new EventHandler(device_DeviceSaveRequired);
         }
@@ -34,7 +38,7 @@ namespace AmpsBox
         {
             if (m_box != null)
             {
-                mlabel_name.Text = m_box.Name;
+                Name = m_box.Name;
             }
         }
 
@@ -47,9 +51,9 @@ namespace AmpsBox
             }
         }
 
-        public new UserControl UserControl
+        public UserControl UserControl
         {
-            get { return this; }
+            get { return new AmpsBoxGlyphView(); }
         }
 
         public int ZOrder
@@ -58,16 +62,44 @@ namespace AmpsBox
             set;
         }
 
-        public controlDeviceStatusDisplay StatusBar
-        {
-            get;
-            set;
-        }
+        //public controlDeviceStatusDisplay StatusBar
+        //{
+        //    get;
+        //    set;
+        //}
         #endregion
 
         private void AmpsBoxGlyph_Load(object sender, EventArgs e)
         {
 
+        }
+
+        protected override void SetDevice(IDevice device)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void ClearDevice(IDevice device)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ActivateState(int state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string StateString()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int CurrentState { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

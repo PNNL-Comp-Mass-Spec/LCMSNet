@@ -24,7 +24,7 @@ namespace Waters.Devices.Pumps
 
                 XmlNode statusRoot   = document.SelectSingleNode("Status");
                 XmlNode root         = statusRoot.SelectSingleNode("nAcquityBSMStatusDetail");
-                
+
                 XmlNode ledState     = root.SelectSingleNode("LedState");
                 XmlNode pressure     = root.SelectSingleNode("Pressure");
                 XmlNode compositionB = root.SelectSingleNode("CompositionB");
@@ -38,7 +38,7 @@ namespace Waters.Devices.Pumps
                 info.Pressure       = Convert.ToDouble(pressure.InnerText);
             }
             catch
-            { 
+            {
             }
             return info;
         }

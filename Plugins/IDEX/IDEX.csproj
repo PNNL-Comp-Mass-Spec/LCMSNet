@@ -34,6 +34,9 @@
     <DocumentationFile>bin\Release\IDEX.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LcmsNetCommonControls">
+      <HintPath>..\..\lib\LcmsNetCommonControls.dll</HintPath>
+    </Reference>
     <Reference Include="LcmsNetData">
       <HintPath>..\..\lib\LcmsNetData.dll</HintPath>
     </Reference>
@@ -65,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>12.1.5</Version>
+      <Version>19.5.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

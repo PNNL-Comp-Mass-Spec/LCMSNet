@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO.Ports;
+using System.Runtime.CompilerServices;
 using AmpsBoxSdk.Devices;
-using Finch.Data;
-using LcmsNetDataClasses.Devices;
+using LcmsNetSDK.Devices;
 
 namespace AmpsBox
 {
 
-    [classDeviceControlAttribute(typeof(AmpsBoxControl),
-                                 typeof(AmpsBoxGlyph),
+    [DeviceControl(typeof(AmpsBoxViewModel),
+                                 typeof(AmpsBoxGlyphView),
                                  "Amps Box",
                                  "Voltage Controllers")]
     public class AmpsBoxDevicePlugin: IDevice
@@ -28,8 +29,8 @@ namespace AmpsBox
         {
             Name        = "Amps Box";
             Version     = "version 1";
-            Status      = enumDeviceStatus.NotInitialized;
-            ErrorType   = enumDeviceErrorStatus.NoError;
+            Status      = DeviceStatus.NotInitialized;
+            ErrorType   = DeviceErrorStatus.NoError;
             Emulation   = false;
 
             m_device = new AmpsBoxSdk.Devices.AmpsBox();
@@ -46,7 +47,7 @@ namespace AmpsBox
         /// <summary>
         /// Gets or sets the serial baud rate.
         /// </summary>
-        [classPersistenceAttribute("BaudRate")]
+        [DeviceSavedSetting("BaudRate")]
         public int BaudRate
         {
             get
@@ -61,7 +62,7 @@ namespace AmpsBox
         /// <summary>
         /// Gets or sets the COM port ID.
         /// </summary>
-        [classPersistenceAttribute("PortName")]
+        [DeviceSavedSetting("PortName")]
         public string PortName
         {
             get
@@ -71,7 +72,7 @@ namespace AmpsBox
             set
             {
                 m_device.Port.PortName = value;
-            }        
+            }
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace AmpsBox
         {
             get
             {
-                return m_device.Port;
+                return m_device.Port.Port;
             }
         }
 
@@ -99,7 +100,7 @@ namespace AmpsBox
             set;
         }
 
-        public enumDeviceStatus Status
+        public DeviceStatus Status
         {
             get;
             set;
@@ -128,12 +129,12 @@ namespace AmpsBox
             {
                 if (Error != null)
                 {
-                    this.Error(this, new classDeviceErrorEventArgs("The device could not be initialized.",
+                    this.Error(this, new DeviceErrorEventArgs("The device could not be initialized.",
                                                                     ex,
-                                                                    enumDeviceErrorStatus.ErrorAffectsAllColumns,
+                                                                    DeviceErrorStatus.ErrorAffectsAllColumns,
                                                                     this));
                 }
-                this.Status = enumDeviceStatus.NotInitialized;
+                this.Status = DeviceStatus.NotInitialized;
                 return false;
             }
 
@@ -164,21 +165,6 @@ namespace AmpsBox
             return true;
         }
 
-        public void RegiserDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-            
-        }
-
-        public void UnRegiserDataProvider(string key, DelegateDeviceHasData remoteMethod)
-        {
-            
-        }
-
-        public void WritePerformanceData(string directoryPath, string methodName, object[] parameters)
-        {
-           
-        }
-
         public List<string> GetStatusNotificationList()
         {
             return new List<string>();
@@ -189,19 +175,19 @@ namespace AmpsBox
             return new List<string>();
         }
 
-        public event EventHandler<classDeviceStatusEventArgs> StatusUpdate;
-        public event EventHandler<classDeviceErrorEventArgs> Error;
+        public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
+        public event EventHandler<DeviceErrorEventArgs> Error;
         public event EventHandler DeviceSaveRequired;
 
-        public enumDeviceErrorStatus ErrorType
+        public DeviceErrorStatus ErrorType
         {
             get;
             set;
         }
 
-        public enumDeviceType DeviceType
+        public DeviceType DeviceType
         {
-            get { return enumDeviceType.Component; }
+            get { return DeviceType.Component; }
         }
 
         public bool Emulation
@@ -222,42 +208,42 @@ namespace AmpsBox
 
         public void Start()
         {
-            
+
         }
 
         #region IFinchComponent Members
-        /// <summary>
-        /// Gets data for Finch
-        /// </summary>
-        /// <returns></returns>
-        public Finch.Data.FinchComponentData GetData()
-        {
-            FinchComponentData component    = new FinchComponentData();
-            component.Status                = Status.ToString();
-            component.Name                  = Name;
-            component.Type                  = "AMPS";
-            component.LastUpdate            = DateTime.Now;
-             
-            FinchScalarSignal port          = new FinchScalarSignal();
-            port.Name                       = "Port";
-            port.Type                       = FinchDataType.String;
-            port.Units                      = "";
-            port.Value                      = this.PortName.ToString();
-
-            FinchScalarSignal baud          = new FinchScalarSignal();
-            baud.Name                       = "BaudRate";
-            baud.Type                       = FinchDataType.String;
-            baud.Units                      = "";
-            baud.Value                      = this.BaudRate.ToString();
-
-            component.Signals.Add(port);
-            component.Signals.Add(baud);
-            return component;
-        }
+        ///// <summary>
+        ///// Gets data for Finch
+        ///// </summary>
+        ///// <returns></returns>
+        //public Finch.Data.FinchComponentData GetData()
+        //{
+        //    FinchComponentData component    = new FinchComponentData();
+        //    component.Status                = Status.ToString();
+        //    component.Name                  = Name;
+        //    component.Type                  = "AMPS";
+        //    component.LastUpdate            = DateTime.Now;
+        //
+        //    FinchScalarSignal port          = new FinchScalarSignal();
+        //    port.Name                       = "Port";
+        //    port.Type                       = FinchDataType.String;
+        //    port.Units                      = "";
+        //    port.Value                      = this.PortName.ToString();
+        //
+        //    FinchScalarSignal baud          = new FinchScalarSignal();
+        //    baud.Name                       = "BaudRate";
+        //    baud.Type                       = FinchDataType.String;
+        //    baud.Units                      = "";
+        //    baud.Value                      = this.BaudRate.ToString();
+        //
+        //    component.Signals.Add(port);
+        //    component.Signals.Add(baud);
+        //    return component;
+        //}
         #endregion
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public string GetVersion()
@@ -307,6 +293,12 @@ namespace AmpsBox
         public void SetRfOutputVoltage(int channel, int voltage)
         {
             m_device.SetRfOutputVoltage(channel, voltage);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

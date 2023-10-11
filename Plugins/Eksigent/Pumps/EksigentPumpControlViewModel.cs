@@ -13,7 +13,7 @@ using LcmsNetSDK.Devices;
 
 namespace LcmsNetPlugins.Eksigent.Pumps
 {
-    public class EksigentPumpControlViewModel : BaseDeviceControlViewModel, IDeviceControl
+    public class EksigentPumpControlViewModel : BaseDeviceControlViewModel, IDeviceControl, INotifyPropertyChangedExt
     {
         public EksigentPumpControlViewModel()
         {

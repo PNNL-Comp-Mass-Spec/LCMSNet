@@ -23,7 +23,7 @@ namespace LcmsNetPlugins.Eksigent.Pumps
                                  "Eksigent Pump",
                                  "Pumps")
     ]
-    public class EksigentPump : IDevice, IDisposable, IPump, IFluidicsPump
+    public class EksigentPump : IDevice, IDisposable, IPump, IFluidicsPump, INotifyPropertyChangedExt, IHasDataProvider
     {
         #region Events
         public delegate void DelegateChannelNumbers(int totalChannels);
@@ -72,21 +72,9 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         /// </summary>
         private const string CONST_INITIALIZED = "Initialized";
         /// <summary>
-        /// List of times monitoring data was received.
+        /// List of pump data read throughout the run.
         /// </summary>
-        public List<DateTime> m_times;
-        /// <summary>
-        /// List of pressures used throughout the run.
-        /// </summary>
-        public List<double> m_pressures;
-        /// <summary>
-        /// List of flowrates used throughout the run.
-        /// </summary>
-        public List<double> m_flowrates;
-        /// <summary>
-        /// List of %B compositions throughout the run.
-        /// </summary>
-        public List<double> m_percentB;
+        public List<PumpDataPoint> m_pumpData;
         private const int CONST_MONITORING_MINUTES = 10;
         private const int CONST_MONITORING_SECONDS_ELAPSED = 10;
         private const string MethodFolder1 = @"C:\Program Files (x86)\Eksigent NanoLC\settings\method";
@@ -134,10 +122,7 @@ namespace LcmsNetPlugins.Eksigent.Pumps
                 "Waiting for flow stabilization",
             };
 
-            m_flowrates = new List<double>();
-            m_percentB = new List<double>();
-            m_pressures = new List<double>();
-            m_times = new List<DateTime>();
+            m_pumpData = new List<PumpDataPoint>();
 
             TotalMonitoringMinutesDataToKeep = CONST_MONITORING_MINUTES;
             TotalMonitoringSecondElapsed = CONST_MONITORING_SECONDS_ELAPSED;
@@ -145,22 +130,22 @@ namespace LcmsNetPlugins.Eksigent.Pumps
 
         #region Properties
 
-        [PersistenceData("TotalMonitoringMinutes")]
+        [DeviceSavedSetting("TotalMonitoringMinutes")]
         public int TotalMonitoringMinutesDataToKeep { get; set; }
 
-        [PersistenceData("TotalMonitoringSecondsElapsed")]
+        [DeviceSavedSetting("TotalMonitoringSecondsElapsed")]
         public int TotalMonitoringSecondElapsed { get; set; }
 
         /// <summary>
         /// Gets or sets the value to wait for the instrument to go into a valid state before starting a run.
         /// </summary>
-        [PersistenceData("PrepareTimeout")]
+        [DeviceSavedSetting("PrepareTimeout")]
         public int PrepareTimeout { get; set; }
 
         /// <summary>
         /// Path to the methods folder.
         /// </summary>
-        [PersistenceData("MethodsFolder")]
+        [DeviceSavedSetting("MethodsFolder")]
         public string MethodsFolder { get; set; }
 
         /// <summary>
@@ -621,42 +606,31 @@ namespace LcmsNetPlugins.Eksigent.Pumps
             //UpdateNotificationStatus(pressure.ToString(), CONST_PRESSURE_VALUE);
 
             // Update log collections.
-            m_times.Add(time);
-            //  m_pressures.Add(pressure);
-            // m_flowrates.Add(flowrate);
-            //  m_percentB.Add(compositionB);
+            m_pumpData.Add(new PumpDataPoint(time, 0, 0, 0));
 
             // Find old data to remove -- needs to be updated (or could be) using LINQ
             //
-            var count = m_times.Count;
+            var count = m_pumpData.Count;
             var total = (TotalMonitoringMinutesDataToKeep * 60) / TotalMonitoringSecondElapsed;
             if (count >= total)
             {
                 var i = 0;
-                while (time.Subtract(m_times[i]).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < m_times.Count)
+                while (time.Subtract(m_pumpData[i].Time).TotalMinutes > TotalMonitoringMinutesDataToKeep && i < m_pumpData.Count)
                 {
                     i++;
                 }
 
                 if (i > 0)
                 {
-                    i = Math.Min(i, m_times.Count - 1);
-                    m_times.RemoveRange(0, i);
-                    m_flowrates.RemoveRange(0, i);
-                    m_pressures.RemoveRange(0, i);
-                    m_percentB.RemoveRange(0, i);
+                    i = Math.Min(i, m_pumpData.Count - 1);
+                    m_pumpData.RemoveRange(0, i);
                 }
             }
 
             // Alert the user data is ready
             try
             {
-                MonitoringDataReceived?.Invoke(this,
-        new PumpDataEventArgs(this,
-                                m_times,
-                                m_pressures,
-                                m_flowrates,
-                                m_percentB));
+                MonitoringDataReceived?.Invoke(this, new PumpDataEventArgs(this, m_pumpData));
             }
             catch
             {
@@ -682,7 +656,7 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         /// <param name="channel"></param>
         /// <param name="methodName"></param>
         /// <returns></returns>
-        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 2, false)]
+        [LCMethodEvent("Start Method", MethodOperationTimeoutType.Parameter, "MethodNames", 2)]
         public bool StartMethod(double timeout, double channel, string methodName)
         {
             if (Emulation)
@@ -746,7 +720,7 @@ namespace LcmsNetPlugins.Eksigent.Pumps
         /// <param name="timeout"></param>
         /// <param name="channel"></param>
         /// <returns></returns>
-        [LCMethodEvent("Stop Method", MethodOperationTimeoutType.Parameter, "", -1, false)]
+        [LCMethodEvent("Stop Method", MethodOperationTimeoutType.Parameter)]
         public bool StopMethod(double timeout, double channel)
         {
             if (Emulation)
