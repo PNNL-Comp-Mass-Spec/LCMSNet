@@ -153,11 +153,12 @@
     <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
-rem xcopy /y /F /D "$(TargetDir)ReactiveUI.*" "$(SolutionDir)lib\"
-rem xcopy /y /F /D "$(TargetDir)System.Reactive.*.dll" "$(SolutionDir)lib\"
-rem xcopy /y /F /D "$(TargetDir)Xceed.Wpf.*.dll" "$(SolutionDir)lib\"
-rem xcopy /y /F /D "$(TargetDir)OxyPlot.*" "$(SolutionDir)lib\"
-rem xcopy /y /F /D "$(TargetDir)Splat.*" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)DotNetProjects.Wpf.*.dll" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)DynamicData.dll" "$(SolutionDir)lib\"
+xcopy /y /F /D "$(TargetDir)OxyPlot*.dll" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)ReactiveUI*.dll" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)System.*.dll" "$(SolutionDir)lib\"
+rem xcopy /y /F /D "$(TargetDir)Splat.dll" "$(SolutionDir)lib\"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
