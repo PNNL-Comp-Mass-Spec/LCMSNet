@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using FluidicsSDK.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
 using LcmsNetSDK.Devices;
@@ -17,7 +18,7 @@ namespace LcmsNetPlugins.XcaliburLC
     [DeviceControl(typeof(XcaliburLCViewModel),
         "Xcalibur LC",
         "Pumps")]
-    public class XcaliburLCPump : IDevice, IHasDataProvider, IHasPerformanceData, IDisposable // TODO: maybe implement IPump?
+    public class XcaliburLCPump : IDevice, IFluidicsPump, IHasDataProvider, IHasPerformanceData, IDisposable // TODO: maybe implement IPump?
     {
         public const string DefaultLcMethodPath = @"C:\Xcalibur\methods";
 
@@ -801,6 +802,26 @@ namespace LcmsNetPlugins.XcaliburLC
         public void OnPropertyChanged(string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public double GetPressure()
+        {
+            return -1;
+        }
+
+        public double GetFlowRate()
+        {
+            return -1;
+        }
+
+        public double GetPercentB()
+        {
+            return -1;
+        }
+
+        public double GetActualFlow()
+        {
+            return -1;
         }
     }
 }
