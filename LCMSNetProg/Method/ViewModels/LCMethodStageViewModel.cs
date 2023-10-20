@@ -551,7 +551,7 @@ namespace LcmsNet.Method.ViewModels
                     ILCEventParameter vm = null;
 
                     var dataProviderKey = "";
-                    if (lcEvent.MethodAttribute.DataProvider.IsSet)
+                    if (lcEvent.MethodAttribute.DataProvider.IsSet && i == lcEvent.MethodAttribute.DataProvider.ParamIndex)
                     {
                         // Figure out what index to adjust the data provider for.
                         var combo = new EventParameterEnumViewModel();
