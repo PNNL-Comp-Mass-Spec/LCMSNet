@@ -1,13 +1,14 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using LcmsNet.SampleQueue.ViewModels;
+using LcmsNet.UIHelpers;
 
 namespace LcmsNet.SampleQueue.Views
 {
     /// <summary>
     /// Interaction logic for ColumnControlView.xaml
     /// </summary>
-    public partial class ColumnControlView : UserControl
+    public partial class ColumnControlView : UserControl, IProvidesWindowReference
     {
         public ColumnControlView()
         {

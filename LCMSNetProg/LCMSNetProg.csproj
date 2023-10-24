@@ -380,6 +380,8 @@
     <Compile Include="Simulator\Views\SimulatorControlsAndChartsView.xaml.cs">
       <DependentUpon>SimulatorControlsAndChartsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIHelpers\IProvidesWindowReference.cs" />
+    <Compile Include="UIHelpers\WindowReferenceBindingProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

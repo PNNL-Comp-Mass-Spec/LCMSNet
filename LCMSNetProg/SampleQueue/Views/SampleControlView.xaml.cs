@@ -1,12 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using LcmsNet.UIHelpers;
 
 namespace LcmsNet.SampleQueue.Views
 {
     /// <summary>
     /// Interaction logic for SampleControlView.xaml
     /// </summary>
-    public partial class SampleControlView : UserControl
+    public partial class SampleControlView : UserControl, IProvidesWindowReference
     {
         public SampleControlView()
         {

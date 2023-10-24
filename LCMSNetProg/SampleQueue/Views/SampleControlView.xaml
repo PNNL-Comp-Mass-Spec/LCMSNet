@@ -5,14 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:LcmsNet.SampleQueue.Views"
              xmlns:viewModels="clr-namespace:LcmsNet.SampleQueue.ViewModels"
+             xmlns:uiHelpers="clr-namespace:LcmsNet.UIHelpers"
              x:Class="LcmsNet.SampleQueue.Views.SampleControlView"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance {x:Type viewModels:SampleManagerViewModel}, IsDesignTimeCreatable=True}"
              d:DesignHeight="640" d:DesignWidth="800"
              x:Name="ThisView">
     <Grid DataContext="{Binding SampleControlViewModel}" Background="{Binding BackColor, Mode=OneWay}" IsEnabled="{Binding IsViewEnabled, Mode=OneWay}">
+        <Grid.Resources>
+            <uiHelpers:WindowReferenceBindingProxy x:Key="ViewProxy" Data="{Binding RelativeSource={RelativeSource Self}}" />
+        </Grid.Resources>
         <Grid.InputBindings>
-            <KeyBinding Modifiers="Control" Key="V" Command="{Binding ClipboardPasteCommand}"></KeyBinding>
+            <KeyBinding Modifiers="Control" Key="V" Command="{Binding ClipboardPasteCommand}" />
         </Grid.InputBindings>
         <Grid.ContextMenu>
             <ContextMenu>
@@ -35,7 +39,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Insert Blank Into Unused" Command="{Binding AddBlankToUnusedCommand}" />
-                <MenuItem Header="Import from DMS" Command="{Binding AddDMSCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" />
+                <MenuItem Header="Import from DMS" Command="{Binding AddDMSCommand}" CommandParameter="{Binding Data.InWindow, Source={StaticResource ViewProxy}}" />
                 <Separator />
                 <MenuItem Header="Add Date, Cart Name, Column ID" Command="{Binding CartColumnDateCommand}" />
                 <Separator />
@@ -45,7 +49,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Delete Unused" Command="{Binding DeleteUnusedCommand}" />
-                <MenuItem Header="Clear" Command="{Binding ClearAllSamplesCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" />
+                <MenuItem Header="Clear" Command="{Binding ClearAllSamplesCommand}" CommandParameter="{Binding Data.InWindow, Source={StaticResource ViewProxy}}" />
                 <Separator />
                 <MenuItem Header="Show Columns...">
                     <MenuItem.ItemsSource>
@@ -61,7 +65,7 @@
                         </CompositeCollection>
                     </MenuItem.ItemsSource>
                 </MenuItem>
-                <MenuItem Header="Preview Throughput" Command="{Binding PreviewThroughputCommand}" CommandParameter="{Binding InWindow, ElementName=ThisView}" />
+                <MenuItem Header="Preview Throughput" Command="{Binding PreviewThroughputCommand}" CommandParameter="{Binding Data.InWindow, Source={StaticResource ViewProxy}}" />
             </ContextMenu>
         </Grid.ContextMenu>
         <Grid.RowDefinitions>

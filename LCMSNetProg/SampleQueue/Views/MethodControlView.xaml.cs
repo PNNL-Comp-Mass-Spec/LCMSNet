@@ -1,13 +1,14 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using LcmsNet.SampleQueue.ViewModels;
+using LcmsNet.UIHelpers;
 
 namespace LcmsNet.SampleQueue.Views
 {
     /// <summary>
     /// Interaction logic for MethodControlView.xaml
     /// </summary>
-    public partial class MethodControlView : UserControl
+    public partial class MethodControlView : UserControl, IProvidesWindowReference
     {
         public MethodControlView()
         {
