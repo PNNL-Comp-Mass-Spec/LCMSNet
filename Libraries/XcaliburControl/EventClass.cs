@@ -1,6 +1,6 @@
-﻿namespace LcmsNetPlugins.XcaliburLC
+﻿namespace XcaliburControl
 {
-    internal enum EventClass
+    public enum EventClass
     {
         Info,
         Warning,

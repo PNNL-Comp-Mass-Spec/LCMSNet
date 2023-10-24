@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LcmsNetPlugins.XcaliburLC
+namespace XcaliburControl
 {
-    internal readonly struct XcaliburDeviceInfo
+    public readonly struct DeviceInfo
     {
         public string UI { get; }
         public string CFGUI { get; }
@@ -26,7 +21,7 @@ namespace LcmsNetPlugins.XcaliburLC
         public int Type { get; }
         public string TypeString { get; }
 
-        public XcaliburDeviceInfo(string ui, string cfgUI, string statusOCX, string virDev, string description,
+        public DeviceInfo(string ui, string cfgUI, string statusOCX, string virDev, string description,
             string shortName, string requiredDevice, string helpFileName, string helpFileLabel, string tuneHelpFileName,
             string tuneHelpFileLabel, string directControlOCX, string version, string xcalVersion, int type,
             string typeString)
@@ -49,7 +44,7 @@ namespace LcmsNetPlugins.XcaliburLC
             TypeString = typeString;
         }
 
-        public XcaliburDeviceInfo(object[,] data, int i)
+        public DeviceInfo(object[,] data, int i)
         {
             var j = 0;
             UI = data[i, j++].ToString();

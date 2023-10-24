@@ -126,6 +126,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZaberStage", "Plugins\Zaber
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFGenUnitTests", "SDK\PDFGenUnitTests\PDFGenUnitTests.csproj", "{483B8F1B-1A43-4A8A-8EA1-0ED4F8532AA0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{0EA3405E-04D2-47A3-9DCB-FC8A7F6FDD5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XcaliburControl", "Libraries\XcaliburControl\XcaliburControl.csproj", "{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -213,6 +217,10 @@ Global
 		{483B8F1B-1A43-4A8A-8EA1-0ED4F8532AA0}.Debug|x86.Build.0 = Debug|Any CPU
 		{483B8F1B-1A43-4A8A-8EA1-0ED4F8532AA0}.Release|x86.ActiveCfg = Release|Any CPU
 		{483B8F1B-1A43-4A8A-8EA1-0ED4F8532AA0}.Release|x86.Build.0 = Release|Any CPU
+		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20}.Debug|x86.ActiveCfg = Debug|x86
+		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20}.Debug|x86.Build.0 = Debug|x86
+		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20}.Release|x86.ActiveCfg = Release|x86
+		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,6 +247,7 @@ Global
 		{BFF6C136-5FB1-4EA1-986E-1FC592D4A60F} = {910C58F0-264B-417C-8192-6E857AAA85DE}
 		{EEAEE762-66DF-4A0F-9A32-704BA2D8C803} = {910C58F0-264B-417C-8192-6E857AAA85DE}
 		{483B8F1B-1A43-4A8A-8EA1-0ED4F8532AA0} = {B05505B1-7DF9-4CE5-82E0-E3A21DB55DE9}
+		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20} = {0EA3405E-04D2-47A3-9DCB-FC8A7F6FDD5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {882AF6ED-9FAB-4869-B2A0-899602387B59}

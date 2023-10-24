@@ -8,9 +8,9 @@ using LcmsNetSDK;
 using LcmsNetSDK.Logging;
 using XCALIBURFILESLib;
 
-namespace LcmsNetPlugins.XcaliburLC
+namespace XcaliburControl
 {
-    internal class XcaliburCOM : INotifyPropertyChangedExt, IDisposable
+    public class XcaliburCOM : INotifyPropertyChangedExt, IDisposable
     {
         private readonly AxAcquisition acquisitionLib;
         private string templateSldPath = @"C:\Xcalibur\data\Template.sld";
@@ -264,7 +264,7 @@ namespace LcmsNetPlugins.XcaliburLC
         }
 
         //GetDeviceStatuses
-        public IReadOnlyList<XcaliburDeviceStatus> GetDeviceStatuses()
+        public IReadOnlyList<DeviceStatus> GetDeviceStatuses()
         {
             object wrapper = new System.Runtime.InteropServices.VariantWrapper(new object());
             // GetDeviceStatuses(ref object): object returned is an array of iterators, maybe? Each iterator has 2 values, ElementName and ElementStatus (a status code)
@@ -276,9 +276,9 @@ namespace LcmsNetPlugins.XcaliburLC
                 return null;
             }
 
-            var deviceStatuses = (object[,]) wrapper;
+            var deviceStatuses = (object[,])wrapper;
 
-            var statuses = new List<XcaliburDeviceStatus>();
+            var statuses = new List<DeviceStatus>();
             for (var i = 0; i < deviceStatuses.GetLength(1); i++)
             {
                 var deviceName = "";
@@ -288,11 +288,11 @@ namespace LcmsNetPlugins.XcaliburLC
                     var status = Convert.ToInt32(deviceStatuses[1, i]);
                     var statusString = ConvertDeviceStatusCodeToString(status);
 
-                    statuses.Add(new XcaliburDeviceStatus(deviceName, status, statusString));
+                    statuses.Add(new DeviceStatus(deviceName, status, statusString));
                 }
                 catch (Exception ex)
                 {
-                    statuses.Add(new XcaliburDeviceStatus(deviceName, "parse failure", -1, ex.Message));
+                    statuses.Add(new DeviceStatus(deviceName, "parse failure", -1, ex.Message));
                 }
             }
 
@@ -300,7 +300,7 @@ namespace LcmsNetPlugins.XcaliburLC
         }
 
         //GetDeviceStatuses2
-        public IReadOnlyList<XcaliburDeviceStatus> GetDeviceStatuses2()
+        public IReadOnlyList<DeviceStatus> GetDeviceStatuses2()
         {
             object wrapper = new System.Runtime.InteropServices.VariantWrapper(new object());
             // GetDeviceStatuses(ref object): object returned is an array of iterators, maybe? Each iterator has 2 values, ElementName and ElementStatus (a status code)
@@ -312,9 +312,9 @@ namespace LcmsNetPlugins.XcaliburLC
                 return null;
             }
 
-            var deviceStatuses = (object[,]) wrapper;
+            var deviceStatuses = (object[,])wrapper;
 
-            var statuses = new List<XcaliburDeviceStatus>();
+            var statuses = new List<DeviceStatus>();
             for (var i = 0; i < deviceStatuses.GetLength(1); i++)
             {
                 var deviceName = "";
@@ -325,11 +325,11 @@ namespace LcmsNetPlugins.XcaliburLC
                     var status = Convert.ToInt32(deviceStatuses[2, i]);
                     var statusString = ConvertDeviceStatusCodeToString(status);
 
-                    statuses.Add(new XcaliburDeviceStatus(deviceName, str, status, statusString));
+                    statuses.Add(new DeviceStatus(deviceName, str, status, statusString));
                 }
                 catch (Exception ex)
                 {
-                    statuses.Add(new XcaliburDeviceStatus(deviceName, "parse failure", -1, ex.Message));
+                    statuses.Add(new DeviceStatus(deviceName, "parse failure", -1, ex.Message));
                 }
             }
 
@@ -348,7 +348,7 @@ namespace LcmsNetPlugins.XcaliburLC
         }
 
         //GetDeviceInfoArray
-        public IReadOnlyList<XcaliburDeviceInfo> GetDeviceInfo()
+        public IReadOnlyList<DeviceInfo> GetDeviceInfo()
         {
             // short (numDevices) GetDeviceInfoArray(ref object): object returned is an array of iterators, maybe? Each iterator has 15 string values:
             // UI, CFGUI, StatusOCX, VirDev, Description, ShortName, RequiredDevice, HelpFileName, HelpFileLabel,
@@ -367,24 +367,24 @@ namespace LcmsNetPlugins.XcaliburLC
                 return null;
             }
 
-            var deviceInfos = (object[,]) wrapper;
-            var infos = new List<XcaliburDeviceInfo>();
+            var deviceInfos = (object[,])wrapper;
+            var infos = new List<DeviceInfo>();
             for (var i = 0; i < deviceInfos.GetLength(0); i++)
             {
                 try
                 {
-                    infos.Add(new XcaliburDeviceInfo(deviceInfos, i));
+                    infos.Add(new DeviceInfo(deviceInfos, i));
                 }
                 catch (Exception ex)
                 {
-                    infos.Add(new XcaliburDeviceInfo("Error", "", "", "", "", "", "", "", "", "", "", "", "", "", -1, ex.Message));
+                    infos.Add(new DeviceInfo("Error", "", "", "", "", "", "", "", "", "", "", "", "", "", -1, ex.Message));
                 }
             }
 
             return infos;
         }
 
-        internal static string ConvertDeviceStatusCodeToString(int statusCode)
+        public static string ConvertDeviceStatusCodeToString(int statusCode)
         {
             switch (statusCode)
             {
@@ -423,12 +423,6 @@ namespace LcmsNetPlugins.XcaliburLC
                 default: return "Illegal device";
             }
         }
-
-        /*
-         * Useful commands:
-         * Get Queue state (paused, not paused, ...): bool GetSeqQueuePaused
-         * Get run manager status: (ready to download, acquiring, etc.): string GetRunManagerStatus()
-         */
 
         /* Sequence submission event sequence:
          * (submitted)

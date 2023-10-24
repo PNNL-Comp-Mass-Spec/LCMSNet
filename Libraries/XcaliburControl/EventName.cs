@@ -1,6 +1,6 @@
-﻿namespace LcmsNetPlugins.XcaliburLC
+﻿namespace XcaliburControl
 {
-    internal enum EventName
+    public enum EventName
     {
         Acquiring,
         DataFileCompleted,

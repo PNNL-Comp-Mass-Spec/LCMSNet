@@ -11,6 +11,8 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
+using XcaliburControl;
+using DeviceStatus = LcmsNetSDK.Devices.DeviceStatus;
 
 namespace LcmsNetPlugins.XcaliburLC
 {

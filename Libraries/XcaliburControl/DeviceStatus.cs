@@ -1,13 +1,13 @@
-﻿namespace LcmsNetPlugins.XcaliburLC
+﻿namespace XcaliburControl
 {
-    internal readonly struct XcaliburDeviceStatus
+    public readonly struct DeviceStatus
     {
         public string Name { get; }
         public string StatusString { get; }
         public int StatusCode { get; }
         public string StatusCodeString { get; }
 
-        public XcaliburDeviceStatus(string name, string statusString, int statusCode, string statusCodeString)
+        public DeviceStatus(string name, string statusString, int statusCode, string statusCodeString)
         {
             Name = name;
             StatusString = statusString;
@@ -15,7 +15,7 @@
             StatusCodeString = statusCodeString;
         }
 
-        public XcaliburDeviceStatus(string name, int statusCode, string statusCodeString)
+        public DeviceStatus(string name, int statusCode, string statusCodeString)
         {
             Name = name;
             StatusString = "";

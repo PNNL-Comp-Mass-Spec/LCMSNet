@@ -37,15 +37,6 @@
     <DocumentationFile>bin\Release\XcaliburLC.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ACQUISITIONLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\..\ExtLib\Thermo\ACQUISITIONLib.dll</HintPath>
-    </Reference>
-    <Reference Include="AxACQUISITIONLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ExtLib\Thermo\AxACQUISITIONLib.dll</HintPath>
-    </Reference>
     <Reference Include="FluidicsSDK">
       <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
     </Reference>
@@ -79,18 +70,9 @@
     <Reference Include="WpfExtras">
       <HintPath>..\..\ExtLib\WpfExtras.dll</HintPath>
     </Reference>
-    <Reference Include="XCALIBURFILESLib">
-      <HintPath>..\..\ExtLib\Thermo\XCALIBURFILESLib.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventClass.cs" />
-    <Compile Include="EventName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XcaliburCOM.cs" />
-    <Compile Include="XcaliburDeviceInfo.cs" />
-    <Compile Include="XcaliburDeviceStatus.cs" />
     <Compile Include="XcaliburLCPump.cs" />
     <Compile Include="XcaliburLCView.xaml.cs">
       <DependentUpon>XcaliburLCView.xaml</DependentUpon>
@@ -115,12 +97,19 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\XcaliburControl\XcaliburControl.csproj">
+      <Project>{a4ee6917-0eda-4677-bd65-8dc5ce40fa20}</Project>
+      <Name>XcaliburControl</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(ProjectDir)Resources\*.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(SolutionDir)ExtLib\Thermo\*.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)XcaliburControl.dll" "$(SolutionDir)pluginDLLs\"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
