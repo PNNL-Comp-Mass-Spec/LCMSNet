@@ -40,11 +40,11 @@
     <Reference Include="ACQUISITIONLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>Resources\ACQUISITIONLib.dll</HintPath>
+      <HintPath>..\..\ExtLib\Thermo\ACQUISITIONLib.dll</HintPath>
     </Reference>
     <Reference Include="AxACQUISITIONLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\AxACQUISITIONLib.dll</HintPath>
+      <HintPath>..\..\ExtLib\Thermo\AxACQUISITIONLib.dll</HintPath>
     </Reference>
     <Reference Include="FluidicsSDK">
       <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
@@ -63,16 +63,16 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="ThermoFisher.CommonCore.BackgroundSubtraction">
-      <HintPath>Resources\ThermoFisher.CommonCore.BackgroundSubtraction.dll</HintPath>
+      <HintPath>..\..\ExtLib\Thermo\ThermoFisher.CommonCore.BackgroundSubtraction.dll</HintPath>
     </Reference>
     <Reference Include="ThermoFisher.CommonCore.Data">
-      <HintPath>Resources\ThermoFisher.CommonCore.Data.dll</HintPath>
+      <HintPath>..\..\ExtLib\Thermo\ThermoFisher.CommonCore.Data.dll</HintPath>
     </Reference>
     <Reference Include="ThermoFisher.CommonCore.MassPrecisionEstimator">
-      <HintPath>Resources\ThermoFisher.CommonCore.MassPrecisionEstimator.dll</HintPath>
+      <HintPath>..\..\ExtLib\Thermo\ThermoFisher.CommonCore.MassPrecisionEstimator.dll</HintPath>
     </Reference>
     <Reference Include="ThermoFisher.CommonCore.RawFileReader">
-      <HintPath>Resources\ThermoFisher.CommonCore.RawFileReader.dll</HintPath>
+      <HintPath>..\..\ExtLib\Thermo\ThermoFisher.CommonCore.RawFileReader.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
@@ -80,7 +80,7 @@
       <HintPath>..\..\ExtLib\WpfExtras.dll</HintPath>
     </Reference>
     <Reference Include="XCALIBURFILESLib">
-      <HintPath>Resources\XCALIBURFILESLib.dll</HintPath>
+      <HintPath>..\..\ExtLib\Thermo\XCALIBURFILESLib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
@@ -97,12 +97,6 @@
     </Compile>
     <Compile Include="XcaliburLCViewModel.cs" />
     <Compile Include="XcaliburMethodReader.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\ACQUISITIONLib.dll" />
-    <Content Include="Resources\AxACQUISITIONLib.dll" />
-    <Content Include="Resources\Readme.txt" />
-    <Content Include="Resources\XCALIBURFILESLib.dll" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit">
