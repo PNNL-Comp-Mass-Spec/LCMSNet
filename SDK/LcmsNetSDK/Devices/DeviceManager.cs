@@ -847,18 +847,17 @@ namespace LcmsNetSDK.Devices
                     }
                     catch (BadImageFormatException)
                     {
-                        ApplicationLogger.LogMessage(0,
-                            string.Format("The dll {0} is not a .net assembly.  Skipping.", file));
+                        ApplicationLogger.LogMessage(LogLevel.Debug, $"The dll {file} is not a .net assembly.  Skipping satellite assembly load.");
                     }
                     catch (Exception ex)
                     {
-                        ApplicationLogger.LogError(0, "Could not load satellite assemblies", ex);
+                        ApplicationLogger.LogError(LogLevel.Error, "Could not load satellite assemblies", ex);
                     }
                 }
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogError(0, "Could not load satellite assemblies", ex);
+                ApplicationLogger.LogError(LogLevel.Error, "Could not load satellite assemblies", ex);
             }
         }
 
@@ -999,9 +998,13 @@ namespace LcmsNetSDK.Devices
                 var subTypes = RetrieveSupportedDevicePluginTypes(fileAssembly);
                 supportedTypes.AddRange(subTypes);
             }
+            catch (BadImageFormatException)
+            {
+                ApplicationLogger.LogMessage(LogLevel.Debug, $"Could not load the dll to check for plugins (BadImageFormatException): " + assemblyPath);
+            }
             catch (Exception ex)
             {
-                ApplicationLogger.LogError(0, "Could not load the plugin from dll: " + assemblyPath, ex);
+                ApplicationLogger.LogError(LogLevel.Error, "Could not load the plugin from dll: " + assemblyPath, ex);
                 //TODO: throw exception ! let people know this failed.
             }
 
