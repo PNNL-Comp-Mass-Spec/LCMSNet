@@ -388,23 +388,24 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
         {
             var taskType = "";
             var elapsedSecs = 0.0;
+
+            if (string.IsNullOrWhiteSpace(SelectedTray))
+            {
+                MessageBox.Show(window, "No tray selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(SelectedMethod))
+            {
+                MessageBox.Show(window, "No method selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             await Task.Run(() =>
             {
                 var sw = System.Diagnostics.Stopwatch.StartNew();
                 if (Pal.GetStatus().Contains("READY"))
                 {
-                    if (string.IsNullOrWhiteSpace(SelectedTray))
-                    {
-                        MessageBox.Show(window, "No tray selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    if (string.IsNullOrWhiteSpace(SelectedMethod))
-                    {
-                        MessageBox.Show(window, "No method selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
                     taskType = "Run Method";
                     Pal.LoadMethod(SelectedMethod, SelectedTray, VialNumber, Convert.ToString(Volume, CultureInfo.InvariantCulture));
                     Pal.StartMethod(1000);
