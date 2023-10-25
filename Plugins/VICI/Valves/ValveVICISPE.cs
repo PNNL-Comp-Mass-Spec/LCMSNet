@@ -11,7 +11,7 @@ namespace LcmsNetPlugins.VICI.Valves
                                  "Six-port SPE",
                                  "Valves Two-Position")
     ]
-    class ValveVICISPE:ValveVICI2Pos, ISolidPhaseExtractor
+    public class ValveVICISPE : ValveVICI2Pos, ISolidPhaseExtractor
     {
         public ValveVICISPE()
             : base()
