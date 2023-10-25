@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using AxACQUISITIONLib;
 using LcmsNetSDK;
 using LcmsNetSDK.Logging;
@@ -717,7 +718,8 @@ namespace XcaliburControl
         */
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName = "")
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

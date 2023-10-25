@@ -57,6 +57,7 @@
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="EventClass.cs" />
     <Compile Include="EventName.cs" />
+    <Compile Include="InstrumentMethodFiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XcaliburCOM.cs" />
   </ItemGroup>

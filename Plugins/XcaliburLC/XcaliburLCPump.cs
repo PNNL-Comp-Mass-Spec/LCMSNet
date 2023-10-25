@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using FluidicsSDK.Devices;
 using LcmsNetSDK;
 using LcmsNetSDK.Data;
@@ -40,21 +38,10 @@ namespace LcmsNetPlugins.XcaliburLC
             CreateErrorCodes();
             CreateStatusCodes();
 
-            if (availableMethods == null)
-            {
-                availableMethods = new Dictionary<string, string>();
-            }
-
-            if (methodFileWatcher == null)
-            {
-                var path = DefaultLcMethodPath;
-                //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
-                methodFileWatcher = new FileSystemWatcher(path, "*.meth");
-                methodFileWatcher.Created += MethodWatcherFileCreated;
-                methodFileWatcher.Changed += MethodWatcherFileChanged;
-                methodFileWatcher.Deleted += MethodWatcherFileDeleted;
-                methodFileWatcher.EnableRaisingEvents = true;
-            }
+            var path = DefaultLcMethodPath;
+            //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
+            methodFiles = new InstrumentMethodFiles(DefaultLcMethodPath);
+            methodFiles.MethodsUpdated += (sender, args) => ListMethods();
 
             ReadMethodDirectory();
 
@@ -77,6 +64,7 @@ namespace LcmsNetPlugins.XcaliburLC
         public void Dispose()
         {
             xcaliburCom.Dispose();
+            methodFiles.Dispose();
         }
 
         private readonly XcaliburCOM xcaliburCom;
@@ -90,21 +78,14 @@ namespace LcmsNetPlugins.XcaliburLC
         private string deviceName;
 
         /// <summary>
-        /// Filesystem watcher for real-time updating of pump methods.
+        /// Filesystem watcher for real-time updating of instrument methods.
         /// </summary>
-        private static FileSystemWatcher methodFileWatcher;
-
-        /// <summary>
-        /// Dictionary that holds a method name, key, and the method time table, value.
-        /// </summary>
-        private static Dictionary<string, string> availableMethods;
+        private InstrumentMethodFiles methodFiles;
 
         /// <summary>
         /// Status strings from the pumps.
         /// </summary>
         private static string[] notificationStrings;
-
-        private static readonly Regex methodNameExclusionRegex = new Regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static Dictionary<string, string> errorCodes;
         private static Dictionary<string, string> statusCodes;
@@ -112,6 +93,8 @@ namespace LcmsNetPlugins.XcaliburLC
         private bool runCompleted = false;
         private bool readyToDownload = false;
         private bool waitingForContactClosure = false;
+
+        private IReadOnlyDictionary<string, string> AvailableMethods => methodFiles.MethodFiles;
 
         /// <summary>
         /// Status of the device.
@@ -236,11 +219,11 @@ namespace LcmsNetPlugins.XcaliburLC
         public bool StartMethod(string method, string sampleName = "testLcmsNetRun")
         {
             // Make sure we have record of the method
-            if (availableMethods.ContainsKey(method) == false) // TODO: Preferable to not throw an exception here.
+            if (AvailableMethods.ContainsKey(method) == false) // TODO: Preferable to not throw an exception here.
                 throw new Exception($"The method {method} does not exist.");
 
             // Then send commands to start the method
-            var methodPath = availableMethods[method];
+            var methodPath = AvailableMethods[method];
 
             var result = xcaliburCom.StartSample(sampleName, methodPath, out var errorMessage);
 
@@ -351,151 +334,12 @@ namespace LcmsNetPlugins.XcaliburLC
             return false;
         }
 
-        private void MethodWatcherFileChanged(object sender, FileSystemEventArgs e)
-        {
-            // Filter out method names with GUIDs (these are temporary sample-run-time methods)
-            var name = Path.GetFileNameWithoutExtension(e.FullPath);
-            if (methodNameExclusionRegex.IsMatch(name))
-            {
-                return;
-            }
-
-            var methodLoaded = false;
-            do
-            {
-                try
-                {
-                    // TODO: use e.ChangeType to conditionalize behavior
-                    AddMethod(name, e.FullPath);
-                    ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + $" {e.ChangeType.ToString().ToLowerInvariant()}.");
-                    methodLoaded = true;
-                }
-                catch (IOException)
-                {
-                    //probably caught the file being opened for writing.
-                }
-            } while (!methodLoaded);
-        }
-
-        private void MethodWatcherFileDeleted(object sender, FileSystemEventArgs e)
-        {
-            var methodLoaded = false;
-            do
-            {
-                try
-                {
-                    var name = Path.GetFileNameWithoutExtension(e.FullPath);
-                    if (string.IsNullOrWhiteSpace(name) || methodNameExclusionRegex.IsMatch(name))
-                    {
-                        return;
-                    }
-
-                    RemoveMethod(name);
-                    ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " removed.");
-                    methodLoaded = true;
-                }
-                catch (IOException)
-                {
-                    //probably caught the file being opened for writing.
-                }
-            } while (!methodLoaded);
-        }
-
-        private void MethodWatcherFileCreated(object sender, FileSystemEventArgs e)
-        {
-            //AddMethod(Path.GetFileNameWithoutExtension(e.FullPath), File.ReadAllText(e.FullPath));
-            //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, e.FullPath + " created.");
-        }
-
         /// <summary>
         /// Reads the pump method directory and alerts the pumps of new methods to run.
         /// </summary>
         public void ReadMethodDirectory()
         {
-            try
-            {
-                var path = DefaultLcMethodPath;
-                if (!Directory.Exists(path))
-                {
-                    throw new DirectoryNotFoundException("The directory " + path + " does not exist.");
-                }
-
-                var filenames = Directory.GetFiles(path, "*.meth");
-
-                var methods = new Dictionary<string, string>();
-                foreach (var filename in filenames)
-                {
-                    // Filter out method names with GUIDs (these are temporary sample-run-time methods)
-                    var name = Path.GetFileNameWithoutExtension(filename);
-                    if (methodNameExclusionRegex.IsMatch(name))
-                    {
-                        continue;
-                    }
-
-                    methods[name] = filename;
-                }
-
-                // Clear any existing pump methods
-                if (methods.Count > 0)
-                {
-                    ClearMethods();
-                    AddMethods(methods);
-                }
-            }
-            catch (DirectoryNotFoundException ex)
-            {
-                ApplicationLogger.LogError(0, ex.Message, ex);
-            }
-        }
-
-        /// <summary>
-        /// Clears all of the listed pump methods.
-        /// </summary>
-        public void ClearMethods()
-        {
-            availableMethods.Clear();
-        }
-
-        /// <summary>
-        /// Removes a given method.
-        /// </summary>
-        /// <param name="methodName">Name of method to remove</param>
-        public void RemoveMethod(string methodName)
-        {
-            if (availableMethods.ContainsKey(methodName))
-            {
-                availableMethods.Remove(methodName);
-
-                // Fire ListMethods since we removed one.
-                ListMethods();
-            }
-        }
-
-        public void AddMethods(Dictionary<string, string> methods)
-        {
-            availableMethods = methods;
-            ListMethods();
-        }
-
-        /// <summary>
-        /// Adds a given method.
-        /// </summary>
-        /// <param name="methodName">Name of method to track.</param>
-        /// <param name="methodPath">Method data to store.</param>
-        public void AddMethod(string methodName, string methodPath)
-        {
-            if (availableMethods.ContainsKey(methodName))
-            {
-                availableMethods[methodName] = methodPath;
-
-                // Don't need to fire ListMethods() - the name didn't change.
-            }
-            else
-            {
-                availableMethods.Add(methodName, methodPath);
-
-                ListMethods();
-            }
+            methodFiles.ReadMethodDirectory();
         }
 
         /// <summary>
@@ -505,11 +349,7 @@ namespace LcmsNetPlugins.XcaliburLC
         {
             if (MethodNames != null)
             {
-                var keys = new string[availableMethods.Keys.Count];
-                availableMethods.Keys.CopyTo(keys, 0);
-
-                var data = new List<object>();
-                data.AddRange(keys);
+                var data = AvailableMethods.Keys.Cast<object>().ToList();
 
                 MethodNames(this, data);
             }
@@ -517,7 +357,7 @@ namespace LcmsNetPlugins.XcaliburLC
 
         public IEnumerable<string> GetMethodNames()
         {
-            return availableMethods.Keys;
+            return AvailableMethods.Keys;
         }
 
         /// <summary>
@@ -727,7 +567,7 @@ namespace LcmsNetPlugins.XcaliburLC
 
         public string GetMethodText(string methodName)
         {
-            if (!availableMethods.TryGetValue(methodName, out var methodPath))
+            if (!AvailableMethods.TryGetValue(methodName, out var methodPath))
             {
                 return "";
             }
@@ -751,7 +591,7 @@ namespace LcmsNetPlugins.XcaliburLC
             switch (methodName)
             {
                 case "Start Method":
-                    if (parameters != null && parameters.Length > 2 && availableMethods.TryGetValue((string)parameters[2], out var methodPath))
+                    if (parameters != null && parameters.Length > 2 && AvailableMethods.TryGetValue((string)parameters[2], out var methodPath))
                     {
                         return XcaliburMethodReader.GetMethodText(methodPath);
                     }
