@@ -553,13 +553,14 @@ namespace LcmsNet.IO
             attribute = value.Attributes.GetNamedItem(CONST_XPATH_TYPE);
             var deviceTypeName = attribute.Value;
 
-            var devicetype = FindType(deviceTypeName);
-            var device = DeviceManager.Manager.FindDevice(deviceName, devicetype);
+            var deviceType = FindType(deviceTypeName);
+            var device = DeviceManager.Manager.FindDevice(deviceName, deviceType);
             if (device == null)
             {
                 throw new DeviceNotFoundException("Could not find the device " + deviceName + ".", deviceName);
             }
             lcEvent.Device = device;
+            deviceType = device.GetType(); // Replace with the specific device type, since the stored value could be of a parent class
 
             // Method Info for invoking the device's method.
             value = node.SelectSingleNode(CONST_XPATH_METHOD_INFO);
@@ -568,7 +569,7 @@ namespace LcmsNet.IO
             try
             {
                 // Load list of methods with matching names, then check each matching method for attribute match and parameter match (but with the attribute match, allow mismatched parameter upgrades)
-                var methods = devicetype.GetMethods();
+                var methods = deviceType.GetMethods();
                 var matchedMethods = methods.Where(x => x.Name == methodName).ToList();
 
                 // Load all matching (by name) method attributes, and give them priority, also store all non-matching method attributes with the associated method, for backup behavior
@@ -583,24 +584,21 @@ namespace LcmsNet.IO
                     var matched = false;
                     try
                     {
-                        var methodAttributes = info.GetCustomAttributes(false);
+                        var methodAttributes = info.GetCustomAttributes<LCMethodEventAttribute>(false);
                         foreach (var attr in methodAttributes)
                         {
-                            if (attr is LCMethodEventAttribute meth)
+                            // Check all for a match
+                            if (attr.Name.Equals(lcEvent.Name, StringComparison.OrdinalIgnoreCase))
                             {
-                                // Check all for a match
-                                if (meth.Name.Equals(lcEvent.Name, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    methodAttribute = meth;
-                                    matched = true;
-                                    break;
-                                }
+                                methodAttribute = attr;
+                                matched = true;
+                                break;
+                            }
 
-                                // Default (if no name match) is the first LCMethodEventAttribute
-                                if (methodAttribute == null)
-                                {
-                                    methodAttribute = meth;
-                                }
+                            // Default (if no name match) is the first LCMethodEventAttribute
+                            if (methodAttribute == null)
+                            {
+                                methodAttribute = attr;
                             }
                         }
                     }
@@ -888,7 +886,11 @@ namespace LcmsNet.IO
             device.SetAttribute(CONST_XPATH_NAME, lcEvent.Device.Name);
 
             // Alternatively use .AssemblyQualifiedName;
-            device.SetAttribute(CONST_XPATH_TYPE, lcEvent.Device.GetType().FullName);
+            //device.SetAttribute(CONST_XPATH_TYPE, lcEvent.Device.GetType().FullName);
+            // Change to store the type that implements the method.
+            // This allows updating e.g. valve type, when the specific implementation is graphical only; all used logic is implemented in a parent class
+            var methodType = lcEvent.Method.DeclaringType ?? lcEvent.Device.GetType();
+            device.SetAttribute(CONST_XPATH_TYPE, methodType.FullName);
 
             // Store the method name
             var methodInfo = document.CreateElement(CONST_XPATH_METHOD_INFO);

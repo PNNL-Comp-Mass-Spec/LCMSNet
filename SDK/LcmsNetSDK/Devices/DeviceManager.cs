@@ -535,7 +535,8 @@ namespace LcmsNetSDK.Devices
             foreach (var dev in m_devices)
             {
                 var devType = dev.GetType();
-                if (dev.Name.Equals(deviceName, StringComparison.OrdinalIgnoreCase) && devType == deviceType)
+                // Device name must match, and device type must either match or be a subclass of the specified type
+                if (dev.Name.Equals(deviceName, StringComparison.OrdinalIgnoreCase) && (devType == deviceType || devType.IsSubclassOf(deviceType)))
                 {
                     device = dev;
                     break;
