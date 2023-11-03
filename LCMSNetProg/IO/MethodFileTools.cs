@@ -313,8 +313,8 @@ namespace LcmsNet.IO
             var now = DateTime.Now;
             var month = now.Month;
             var year = now.Year;
-            var quarter = (month / 4) + 1;
-            path = Path.Combine(path, string.Format("{0}_{1}", year, quarter));
+            var quarter = (int)Math.Ceiling(month / 3.0); // 3 months to a quarter, without Math.Ceiling it's either '(month + 2) / 3' or ((month - 1) / 3) + 1)
+            path = Path.Combine(path, $"{year}_{quarter}");
             return path;
         }
     }
