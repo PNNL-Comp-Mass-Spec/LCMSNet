@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="LcmsNetPlugins.VICI.Valves.ValveConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:LcmsNetPlugins.VICI.Valves"
+             xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
+             mc:Ignorable="d"
+             d:DesignHeight="405" d:DesignWidth="274"
+             d:DataContext="{d:DesignInstance {x:Type local:ValveVICI2PosViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="300" MinWidth="250">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="3">
+            Current Port: <Run Text="{Binding ComPort, Mode=OneWay}" />
+        </TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="New Port Name" VerticalAlignment="Center" />
+        <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{Binding PortNamesComboBoxOptions}" SelectedValue="{Binding NewComPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="PortName" DisplayMemberPath="DisplayString" ToolTip="{Binding NewComPort}" cueBannerOverlay:CueBannerService.CueBanner="Select">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                    <Style.Resources>
+                        <Style TargetType="{x:Type ContentPresenter}">
+                            <Setter Property="Width" Value="{Binding ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </Style.Resources>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+        <Button Grid.Row="1" Grid.Column="2" Margin="3" Width="75" Content="Apply" Command="{Binding UpdatePortNameCommand}" />
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+            <Button Margin="3" Width="63" HorizontalAlignment="Left" Content="Open Port" Command="{Binding OpenPortCommand}" />
+            <Button Margin="3" Width="63" HorizontalAlignment="Center" Content="Close Port" Command="{Binding ClosePortCommand}" />
+            <Button Margin="3" Width="63" HorizontalAlignment="Right" Content="Initialize" Command="{Binding InitializeDeviceCommand}" />
+        </Grid>
+        <GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Header="Valve ID">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0" Text="Set ID" />
+                <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding ValveIdComboBoxOptions}" SelectedItem="{Binding SelectedValveId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                <Button Grid.Row="1" Grid.Column="1" Margin="5" Content="Set ID" Command="{Binding SetValveIdCommand}" />
+                <Button Grid.Row="1" Grid.Column="2" Margin="5" Content="Clear ID" Command="{Binding ClearValveIdCommand}" />
+                <TextBlock Grid.Row="2" Grid.Column="0" Margin="5,10,5,0" Text="Get ID" />
+                <TextBox Grid.Row="3" Grid.Column="0" MinWidth="56" Margin="5" Text="{Binding CurrentValveId, Mode=OneWay}" IsEnabled="False" />
+                <Button Grid.Row="3" Grid.Column="1" Margin="5" Content="Refresh" Command="{Binding RefreshValveIdCommand}" />
+                <TextBlock Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="3" VerticalAlignment="Center" Text="Blank is 'no ID set'" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

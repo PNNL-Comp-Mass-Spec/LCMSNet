@@ -68,10 +68,10 @@ namespace LcmsNetPlugins.VICI.Valves
         public ValveVICIMultiPos(int numPositions) : base(CONST_DEFAULT_TIMEOUT, CONST_DEFAULT_TIMEOUT, "MPValve" + numPositions)
         {
             //Set positions to unknown
-            LastMeasuredPosition   = -1;
-            LastSentPosition       = -1;
+            LastMeasuredPosition = -1;
+            LastSentPosition = -1;
 
-            NumberOfPositions      = numPositions;
+            NumberOfPositions = numPositions;
             HardwarePositions = numPositions;
         }
 

@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows;
+using LcmsNetCommonControls.Controls;
 using LcmsNetCommonControls.Devices;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
@@ -29,6 +30,8 @@ namespace LcmsNetPlugins.VICI.Valves
 
             ValveControlTabSelected = true; // Default selected tab
 
+            UpdatePortNameCommand = ReactiveCommand.Create(UpdatePortName);
+            SetValveIdCommand = ReactiveCommand.Create(SetValveId);
             ClearValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ClearValveId));
             RefreshValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshValveId));
             RefreshValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshValvePosition));
@@ -54,7 +57,8 @@ namespace LcmsNetPlugins.VICI.Valves
 
             valve.DeviceSaveRequired += Valve_DeviceSaveRequired;
 
-            ComPort = valve.Port;
+            ComPort = valve.PortName;
+            NewComPort = ComPort;
         }
 
         //public ValveEventListener ValveEventListener;
@@ -66,8 +70,11 @@ namespace LcmsNetPlugins.VICI.Valves
         private string currentValvePosition = "";
         private string valveVersionInfo = "";
         private bool valveControlTabSelected = false;
-        private SerialPort comPort;
+        private string comPort;
+        private string newComPort;
         private ValveVICIBase valve = null;
+
+        public ReadOnlyObservableCollection<SerialPortData> PortNamesComboBoxOptions => SerialPortGenericData.SerialPorts;
 
         public ReadOnlyObservableCollection<char> ValveIdComboBoxOptions { get; }
 
@@ -104,12 +111,20 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <summary>
         /// The serial port used for communicating with the Valve
         /// </summary>
-        public SerialPort ComPort
+        public string ComPort
         {
             get => comPort;
             private set => this.RaiseAndSetIfChanged(ref comPort, value);
         }
 
+        public string NewComPort
+        {
+            get => newComPort;
+            set => this.RaiseAndSetIfChanged(ref newComPort, value);
+        }
+
+        public ReactiveCommand<Unit, Unit> UpdatePortNameCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetValveIdCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearValveIdCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshValveIdCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshValvePositionCommand { get; }
@@ -159,7 +174,8 @@ namespace LcmsNetPlugins.VICI.Valves
             if (IsInDesignMode)
                 return;
 
-            ComPort = valve.Port;
+            ComPort = valve.PortName;
+            NewComPort = ComPort;
 
             try
             {
@@ -185,6 +201,12 @@ namespace LcmsNetPlugins.VICI.Valves
             ValveVersionInfo = valve.Version;
             CurrentValvePosition = valve.LastMeasuredPositionDisplay;
             CurrentValveId = valve.SoftwareID;
+        }
+
+        private void UpdatePortName()
+        {
+            valve.PortName = NewComPort;
+            ComPort = valve.PortName;
         }
 
         private void RefreshValvePosition()
@@ -302,6 +324,28 @@ namespace LcmsNetPlugins.VICI.Valves
             catch (ValveExceptionUnauthorizedAccess ex)
             {
                 ShowError("Unauthorized access when attempting to get valve ID", ex);
+            }
+        }
+
+        private void SetValveId()
+        {
+            try
+            {
+                valve?.SetHardwareID(SelectedValveId);
+                CurrentValveId = valve?.SoftwareID ?? ' ';
+                OnSaveRequired();
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                ShowError("Timeout (read) when attempting to clear valve ID", ex);
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                ShowError("Timeout (write) when attempting to clear valve ID", ex);
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                ShowError("Unauthorized access when attempting to clear valve ID", ex);
             }
         }
 

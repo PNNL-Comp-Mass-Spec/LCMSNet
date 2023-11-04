@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace LcmsNetPlugins.VICI.Valves
 {
@@ -11,14 +10,6 @@ namespace LcmsNetPlugins.VICI.Valves
         public ValveVICIMultiPosView()
         {
             InitializeComponent();
-        }
-
-        private void PropertyGrid_OnPropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
-        {
-            if (this.DataContext is ValveVICIMultiPosViewModel v)
-            {
-                v.OnSaveRequired();
-            }
         }
     }
 }

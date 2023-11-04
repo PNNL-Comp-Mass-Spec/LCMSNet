@@ -4,9 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNetPlugins.VICI.Valves"
-             xmlns:controls="clr-namespace:LcmsNetCommonControls.Controls;assembly=LcmsNetCommonControls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="274"
              d:DataContext="{d:DesignInstance {x:Type local:SixPortInjectionValveViewModel}, IsDesignTimeCreatable=True}"
@@ -53,49 +51,11 @@
                         <Button Grid.Row="1" Margin="10,3" Content="Set" Command="{Binding SetInjectionVolumeCommand}" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Header="Version Info">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBox Grid.Row="0" Margin="3" Text="{Binding ValveVersionInfo, Mode=OneWay}" IsEnabled="False" />
-                        <Button Grid.Row="1" Margin="3" Width="113" Content="Refresh" Command="{Binding RefreshValveVersionInfoCommand}" />
-                    </Grid>
-                </GroupBox>
+                <local:ValveVersionInfo Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" />
             </Grid>
         </TabItem>
-        <TabItem Header="Serial Settings">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <controls:SerialPortPropertyGrid Grid.Row="0" Margin="3" DataContext="{Binding ComPort}" PropertyValueChanged="PropertyGrid_OnPropertyValueChanged" />
-                <Button Grid.Row="1" Margin="3" Width="63" HorizontalAlignment="Left" Content="Open Port" Command="{Binding OpenPortCommand}" />
-                <Button Grid.Row="1" Margin="3" Width="63" HorizontalAlignment="Center" Content="Close Port" Command="{Binding ClosePortCommand}" />
-                <Button Grid.Row="1" Margin="3" Width="63" HorizontalAlignment="Right" Content="Initialize" Command="{Binding InitializeDeviceCommand}" />
-            </Grid>
-        </TabItem>
-        <TabItem Header="Valve ID">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0" Text="Set ID" />
-                <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding ValveIdComboBoxOptions}" SelectedItem="{Binding SelectedValveId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                <Button Grid.Row="1" Grid.Column="1" Margin="5" Content="Clear ID" Command="{Binding ClearValveIdCommand}" />
-                <TextBlock Grid.Row="2" Grid.Column="0" Margin="5,10,5,0" Text="Get ID" />
-                <TextBox Grid.Row="3" Grid.Column="0" MinWidth="56" Margin="5" Text="{Binding CurrentValveId, Mode=OneWay}" IsEnabled="False" />
-                <Button Grid.Row="3" Grid.Column="1" Margin="5" Content="Refresh" Command="{Binding RefreshValveIdCommand}" />
-            </Grid>
+        <TabItem Header="Configuration">
+            <local:ValveConfig />
         </TabItem>
     </TabControl>
 </UserControl>

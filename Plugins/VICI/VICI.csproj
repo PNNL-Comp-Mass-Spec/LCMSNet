@@ -84,8 +84,14 @@
     <Compile Include="Valves\TwoPosition\ValveVICI2PosViewModel.cs" />
     <Compile Include="Valves\TwoPosition\ValveVICISixPortInjection.cs" />
     <Compile Include="Valves\TwoPosition\ValveVICISPE.cs" />
+    <Compile Include="Valves\ValveConfig.xaml.cs">
+      <DependentUpon>ValveConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Valves\ValveExceptions.cs" />
     <Compile Include="Valves\ValveEnums.cs" />
+    <Compile Include="Valves\ValveVersionInfo.xaml.cs">
+      <DependentUpon>ValveVersionInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Valves\ValveVICIBase.cs" />
     <Compile Include="Valves\ValveVICIViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,6 +106,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Valves\TwoPosition\ValveVICI2PosView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Valves\ValveConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Valves\ValveVersionInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
