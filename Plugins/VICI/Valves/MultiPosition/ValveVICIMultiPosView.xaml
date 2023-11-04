@@ -1,10 +1,11 @@
-﻿<UserControl x:Class="LcmsNetPlugins.VICI.Valves.ValveVICIMultiPosView"
+﻿<UserControl x:Class="LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICIMultiPosView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:LcmsNetPlugins.VICI.Valves"
+             xmlns:local="clr-namespace:LcmsNetPlugins.VICI.Valves.MultiPosition"
              xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
+             xmlns:valves="clr-namespace:LcmsNetPlugins.VICI.Valves"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="274"
              d:DataContext="{d:DesignInstance {x:Type local:ValveVICIMultiPosViewModel}, IsDesignTimeCreatable=True}"
@@ -40,11 +41,11 @@
                         <Button Grid.Row="1" Margin="3" Content="Refresh" Command="{Binding RefreshValvePositionCommand}" />
                     </Grid>
                 </GroupBox>
-                <local:ValveVersionInfo Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" />
+                <valves:ValveVersionInfo Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" />
             </Grid>
         </TabItem>
         <TabItem Header="Configuration">
-            <local:ValveConfig />
+            <valves:ValveConfig />
         </TabItem>
     </TabControl>
 </UserControl>

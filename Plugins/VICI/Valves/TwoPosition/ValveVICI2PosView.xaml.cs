@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace LcmsNetPlugins.VICI.Valves
+namespace LcmsNetPlugins.VICI.Valves.TwoPosition
 {
     /// <summary>
     /// Interaction logic for ValveVICI2PosView.xaml

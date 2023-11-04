@@ -11,7 +11,7 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using ReactiveUI;
 
-namespace LcmsNetPlugins.VICI.Valves
+namespace LcmsNetPlugins.VICI.Valves.MultiPosition
 {
     public class ValveVICIMultiPosViewModel : ValveVICIViewModelBase
     {

@@ -20,7 +20,7 @@ using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
-namespace LcmsNetPlugins.VICI.Valves
+namespace LcmsNetPlugins.VICI.Valves.TwoPosition
 {
     /// <summary>
     /// Class used for interacting with the VICI 2-position valve

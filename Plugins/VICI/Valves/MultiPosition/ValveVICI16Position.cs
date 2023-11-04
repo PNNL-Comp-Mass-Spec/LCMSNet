@@ -3,7 +3,7 @@ using System.IO.Ports;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
-namespace LcmsNetPlugins.VICI.Valves
+namespace LcmsNetPlugins.VICI.Valves.MultiPosition
 {
     [Serializable]
     //[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]

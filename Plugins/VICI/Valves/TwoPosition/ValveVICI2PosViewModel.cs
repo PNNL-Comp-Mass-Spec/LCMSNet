@@ -9,7 +9,7 @@ using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
 
-namespace LcmsNetPlugins.VICI.Valves
+namespace LcmsNetPlugins.VICI.Valves.TwoPosition
 {
     public class ValveVICI2PosViewModel : ValveVICIViewModelBase
     {

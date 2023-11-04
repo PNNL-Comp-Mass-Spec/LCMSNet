@@ -9,7 +9,7 @@ using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
-namespace LcmsNetPlugins.VICI.Valves
+namespace LcmsNetPlugins.VICI.Valves.MultiPosition
 {
     /// <summary>
     /// Class used for interacting with the VICI multiposition valves

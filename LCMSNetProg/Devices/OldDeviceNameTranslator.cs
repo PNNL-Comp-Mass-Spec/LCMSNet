@@ -67,23 +67,36 @@ namespace LcmsNet.Devices
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Pumps.classPumpIsco", "LcmsNetPlugins.Teledyne.Pumps.IscoPump");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Pumps.enumIscoOperationMode", "LcmsNetPlugins.Teledyne.Pumps.IscoOperationMode");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Pumps.enumISCOPumpChannels", "LcmsNetPlugins.Teledyne.Pumps.ISCOPumpChannels");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2Pos", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2pos4port", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos04port");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2Pos6Port", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos06Port");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2pos10port", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos10port");
+
+            // VICI Plugin: v4.0 to v5.2 refactor names
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICIBase", "LcmsNetPlugins.VICI.Valves.ValveVICIBase");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICIMultiPos", "LcmsNetPlugins.VICI.Valves.ValveVICIMultiPos");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICIMultipos9Port", "LcmsNetPlugins.VICI.Valves.ValveVICI08Position");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICIMultipos11Port", "LcmsNetPlugins.VICI.Valves.ValveVICI10Position");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICIMultipos16Port", "LcmsNetPlugins.VICI.Valves.ValveVICI15Position");
-            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI2Pos4port", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos04port");
-            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI2Pos6Port", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos06Port");
-            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI2Pos10port", "LcmsNetPlugins.VICI.Valves.ValveVICI2Pos10port");
-            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICIMultiPos9Port", "LcmsNetPlugins.VICI.Valves.ValveVICI08Position");
-            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICIMultiPos11Port", "LcmsNetPlugins.VICI.Valves.ValveVICI10Position");
-            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICIMultiPos16Port", "LcmsNetPlugins.VICI.Valves.ValveVICI15Position");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICISPE", "LcmsNetPlugins.VICI.Valves.ValveVICISPE");
-            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICISixPortInjection", "LcmsNetPlugins.VICI.Valves.ValveVICISixPortInjection");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2Pos", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2pos4port", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos04Port");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2Pos6Port", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos06Port");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICI2pos10port", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos10Port");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI2Pos4port", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos04Port");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI2Pos6Port", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos06Port");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI2Pos10port", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos10Port");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICISPE", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICISPE");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICISixPortInjection", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICISixPortInjection");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICIMultiPos", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICIMultiPos");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICIMultipos9Port", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICI08Position");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICIMultipos11Port", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICI10Position");
+            FullyQualifiedNameMapper.Add("LcmsNet.Devices.Valves.classValveVICIMultipos16Port", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICI15Position");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICIMultiPos9Port", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICI08Position");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICIMultiPos11Port", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICI10Position");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICIMultiPos16Port", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICI15Position");
+
+            // VICI plugin: v5.0 to v5.2 refactor
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI2Pos", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI2Pos04port", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos04Port");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI2Pos06Port", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICI2Pos06Port");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICISPE", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICISPE");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICISixPortInjection", "LcmsNetPlugins.VICI.Valves.TwoPosition.ValveVICISixPortInjection");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI08Position", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICI08Position");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI10Position", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICI10Position");
+            FullyQualifiedNameMapper.Add("LcmsNetPlugins.VICI.Valves.ValveVICI15Position", "LcmsNetPlugins.VICI.Valves.MultiPosition.ValveVICI15Position");
+
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.classApplicationDevice", "LcmsNet.Devices.ApplicationDevice");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.classBlockDevice", "LcmsNet.Devices.BlockDevice");
             FullyQualifiedNameMapper.Add("LcmsNet.Devices.classErrorDevice", "LcmsNet.Devices.ErrorDevice");
