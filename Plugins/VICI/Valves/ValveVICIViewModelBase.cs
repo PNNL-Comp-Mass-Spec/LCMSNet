@@ -253,10 +253,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             try
             {
-                if (!valve.Port.IsOpen)
-                {
-                    valve.Port.Open();
-                }
+                valve.Connection.OpenTest();
             }
             catch (NullReferenceException ex)
             {
@@ -272,7 +269,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             try
             {
-                valve.Port.Close();
+                valve.Connection.CloseTest();
             }
             catch (NullReferenceException ex)
             {

@@ -87,6 +87,9 @@
     <Compile Include="Valves\ValveConfig.xaml.cs">
       <DependentUpon>ValveConfig.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Valves\ValveConnection.cs" />
+    <Compile Include="Valves\ValveConnectionID.cs" />
+    <Compile Include="Valves\ValveConnectionManager.cs" />
     <Compile Include="Valves\ValveExceptions.cs" />
     <Compile Include="Valves\ValveEnums.cs" />
     <Compile Include="Valves\ValveVersionInfo.xaml.cs">

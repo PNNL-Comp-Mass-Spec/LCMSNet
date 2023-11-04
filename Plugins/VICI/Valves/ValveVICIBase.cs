@@ -16,6 +16,16 @@ namespace LcmsNetPlugins.VICI.Valves
         private char valveID;
 
         /// <summary>
+        /// The Serial Port Name
+        /// </summary>
+        private string portName = "COM1";
+
+        private int readTimeout = 100;
+        private int writeTimeout = 100;
+
+        private ValveConnectionID connectionID;
+
+        /// <summary>
         /// The valve's name
         /// </summary>
         private string deviceName;
@@ -53,27 +63,15 @@ namespace LcmsNetPlugins.VICI.Valves
         /// <param name="defaultName">default device name</param>
         protected ValveVICIBase(int readTimeout, int writeTimeout, string defaultName)
         {
-            //     Baud Rate   9600
-            //     Parity      None
-            //     Stop Bits   One
-            //     Data Bits   8
-            //     Handshake   None
-            Port = new SerialPort
-            {
-                PortName = "COM1",
-                BaudRate = 9600,
-                StopBits = StopBits.One,
-                DataBits = 8,
-                Handshake = Handshake.None,
-                Parity = Parity.None,
-                ReadTimeout = readTimeout,
-                WriteTimeout = writeTimeout,
-            };
-
             // Set ID to a space (i.e. nonexistent)
             // NOTE: Spaces are ignored by the controller in sent commands
             valveID = ' ';
             Version = "";
+
+            this.readTimeout = readTimeout;
+            this.writeTimeout = writeTimeout;
+
+            UpdateConnection();
 
             deviceName = defaultName;
         }
@@ -92,8 +90,18 @@ namespace LcmsNetPlugins.VICI.Valves
             valveID = ' ';
             Version = "";
 
-            Port = port;
-            //deviceName        = classDeviceManager.Manager.CreateUniqueDeviceName("valve");
+            if (port.IsOpen)
+            {
+                port.Close();
+            }
+
+            portName = port.PortName;
+            readTimeout = port.ReadTimeout;
+            writeTimeout = port.WriteTimeout;
+
+            UpdateConnection();
+
+            //deviceName        = DeviceManager.Manager.CreateUniqueDeviceName("valve");
             deviceName = defaultName;
         }
 
@@ -146,9 +154,9 @@ namespace LcmsNetPlugins.VICI.Valves
         }
 
         /// <summary>
-        /// Gets the serial port.
+        /// Serial connection (configured)
         /// </summary>
-        public SerialPort Port { get; }
+        internal IValveConnection Connection { get; private set; }
 
         /// <summary>
         /// Serial port name
@@ -156,10 +164,16 @@ namespace LcmsNetPlugins.VICI.Valves
         [DeviceSavedSetting("PortName")]
         public string PortName
         {
-            get => Port.PortName;
+            get => portName;
             set
             {
-                Port.PortName = value;
+                var oldValue = portName;
+                portName = value;
+
+                if (oldValue != value)
+                {
+                    UpdateConnection();
+                }
                 OnDeviceSaveRequired();
             }
         }
@@ -170,10 +184,17 @@ namespace LcmsNetPlugins.VICI.Valves
         [DeviceSavedSetting("ReadTimeout")]
         public int ReadTimeout
         {
-            get => Port.ReadTimeout;
+            get => readTimeout;
             set
             {
-                Port.ReadTimeout = value;
+                var oldValue = readTimeout;
+                readTimeout = value;
+
+                if (oldValue != value)
+                {
+                    Connection.ReadTimeout = Math.Max(Connection.ReadTimeout, readTimeout);
+                }
+
                 OnDeviceSaveRequired();
             }
         }
@@ -184,10 +205,17 @@ namespace LcmsNetPlugins.VICI.Valves
         [DeviceSavedSetting("WriteTimeout")]
         public int WriteTimeout
         {
-            get => Port.WriteTimeout;
+            get => writeTimeout;
             set
             {
-                Port.WriteTimeout = value;
+                var oldValue = writeTimeout;
+                writeTimeout = value;
+
+                if (oldValue != value)
+                {
+                    Connection.WriteTimeout = Math.Max(Connection.WriteTimeout, writeTimeout);
+                }
+
                 OnDeviceSaveRequired();
             }
         }
@@ -203,6 +231,7 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 if (this.RaiseAndSetIfChangedRetBool(ref valveID, value))
                 {
+                    UpdateConnection();
                     OnDeviceSaveRequired();
                 }
             }
@@ -235,6 +264,17 @@ namespace LcmsNetPlugins.VICI.Valves
             Error?.Invoke(this, args);
         }
 
+        private void UpdateConnection()
+        {
+            if (!string.IsNullOrWhiteSpace(connectionID.PortName))
+            {
+                ValveConnectionManager.Instance.ReleaseConnection(connectionID, !string.Equals(connectionID.PortName, PortName));
+            }
+
+            connectionID = new ValveConnectionID(PortName, SoftwareID);
+            Connection = ValveConnectionManager.Instance.GetConnection(connectionID, ReadTimeout, WriteTimeout);
+        }
+
         /// <summary>
         /// Disconnects from the valve.
         /// </summary>
@@ -247,7 +287,7 @@ namespace LcmsNetPlugins.VICI.Valves
             }
             try
             {
-                Port.Close();
+                ValveConnectionManager.Instance.ReleaseConnection(connectionID);
             }
             catch (UnauthorizedAccessException)
             {
@@ -274,20 +314,12 @@ namespace LcmsNetPlugins.VICI.Valves
             }
 
             //If the serial port is not open, open it
-            if (!Port.IsOpen)
+            var result = Connection.Open(out errorMessage);
+            if (result == ValveErrors.UnauthorizedAccess)
             {
-                try
-                {
-                    Port.Open();
-                }
-                catch (UnauthorizedAccessException ex)
-                {
-                    errorMessage = "Could not access the COM Port.  " + ex.Message;
-                    //throw new ValveExceptionUnauthorizedAccess();
-                    return false;
-                }
+                //throw new ValveExceptionUnauthorizedAccess();
+                return false;
             }
-            Port.NewLine = "\r";
 
             try
             {
@@ -619,46 +651,15 @@ namespace LcmsNetPlugins.VICI.Valves
         /// Send a write-only command via the serial port
         /// </summary>
         /// <param name="command">The command to send, excluding valveId</param>
-        /// <param name="noPrefix">If true, the SoftwareID is not pre-pended to the command</param>
         /// <returns></returns>
-        protected ValveErrors SendCommand(string command, bool noPrefix = false)
+        protected ValveErrors SendCommand(string command)
         {
             if (Emulation)
             {
                 return ValveErrors.Success;
             }
 
-            var id = noPrefix ? "" : SoftwareID.ToString();
-
-            //If the serial port is not open, open it
-            if (!Port.IsOpen)
-            {
-                try
-                {
-                    Port.Open();
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    return ValveErrors.UnauthorizedAccess;
-                }
-            }
-
-            try
-            {
-                Port.WriteLine(id + command);
-            }
-            catch (TimeoutException)
-            {
-                //ApplicationLogger.LogError(0, "Could not send command.  Write timeout.");
-                return ValveErrors.TimeoutDuringWrite;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                //ApplicationLogger.LogError(0, "Could not send command.  Could not access serial port.");
-                return ValveErrors.UnauthorizedAccess;
-            }
-
-            return ValveErrors.Success;
+            return Connection.SendCommand(command, SoftwareID);
         }
 
         /// <summary>
@@ -676,62 +677,7 @@ namespace LcmsNetPlugins.VICI.Valves
                 return ValveErrors.Success;
             }
 
-            //If the serial port is not open, open it
-            if (!Port.IsOpen)
-            {
-                try
-                {
-                    Port.Open();
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    return ValveErrors.UnauthorizedAccess;
-                }
-            }
-
-            try
-            {
-                Port.DiscardInBuffer();
-                Port.WriteLine(SoftwareID + command);
-                if (readDelayMs > 0)
-                {
-                    System.Threading.Thread.Sleep(readDelayMs);
-                }
-            }
-            catch (TimeoutException)
-            {
-                return ValveErrors.TimeoutDuringWrite;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return ValveErrors.UnauthorizedAccess;
-            }
-
-            try
-            {
-                //Read in whatever is waiting in the buffer
-                returnData = Port.ReadExisting();
-                if (!string.IsNullOrEmpty(returnData))
-                {
-                    // Valve may return string containing \r\n or \n\r; make all instances be \n
-                    returnData = returnData.Replace("\r", "\n").Replace("\n\n", "\n").Trim('\n');
-                }
-            }
-            catch (TimeoutException)
-            {
-                return ValveErrors.TimeoutDuringRead;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return ValveErrors.UnauthorizedAccess;
-            }
-
-            if (returnData.IndexOf("Bad command", StringComparison.OrdinalIgnoreCase) > -1)
-            {
-                return ValveErrors.BadCommand;
-            }
-
-            return ValveErrors.Success;
+            return Connection.ReadCommand(command, SoftwareID, out returnData, readDelayMs);
         }
 
         /// <summary>
