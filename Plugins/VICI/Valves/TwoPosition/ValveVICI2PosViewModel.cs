@@ -20,6 +20,7 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             SetPositionACommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetPositionA));
             SetPositionBCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetPositionB));
+            SetInjectionVolumeCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(SetInjectionVolume));
         }
 
         protected override void RegisterDevice(IDevice device)
@@ -34,12 +35,23 @@ namespace LcmsNetPlugins.VICI.Valves
             valve.PositionChanged += OnPosChanged;
 
             RegisterBaseDevice(valve);
+
+            if (Device is ISixPortInjectionValve injector)
+            {
+                InjectionVolume = injector.InjectionVolume;
+                injector.InjectionVolumeChanged += Injector_InjectionVolumeChanged;
+                IsInjectionValve = true;
+            }
+            else
+            {
+                IsInjectionValve = false;
+            }
         }
 
         /// <summary>
         /// The valve object
         /// </summary>
-        protected ValveVICI2Pos valve;
+        private ValveVICI2Pos valve;
 
         /// <summary>
         /// Gets or sets the associated device.
@@ -56,8 +68,24 @@ namespace LcmsNetPlugins.VICI.Valves
             }
         }
 
+        private bool isInjectionValve = false;
+        private double injectionVolume = 0;
+
+        public bool IsInjectionValve
+        {
+            get => isInjectionValve;
+            private set => this.RaiseAndSetIfChanged(ref isInjectionValve, value);
+        }
+
+        public double InjectionVolume
+        {
+            get => injectionVolume;
+            set => this.RaiseAndSetIfChanged(ref injectionVolume, value);
+        }
+
         public ReactiveCommand<Unit, Unit> SetPositionACommand { get; }
         public ReactiveCommand<Unit, Unit> SetPositionBCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetInjectionVolumeCommand { get; }
 
         public override UserControl GetDefaultView()
         {
@@ -140,6 +168,20 @@ namespace LcmsNetPlugins.VICI.Valves
             catch (ValveExceptionPositionMismatch ex)
             {
                 ShowError("Valve position mismatch", ex);
+            }
+        }
+
+        private void SetInjectionVolume()
+        {
+            if (Device is ISixPortInjectionValve injector)
+                injector.InjectionVolume = InjectionVolume;
+        }
+
+        private void Injector_InjectionVolumeChanged(object sender, System.EventArgs e)
+        {
+            if (Device is ISixPortInjectionValve injector)
+            {
+                InjectionVolume = injector.InjectionVolume;
             }
         }
     }

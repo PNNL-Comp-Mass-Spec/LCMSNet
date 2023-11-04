@@ -4,10 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNetPlugins.VICI.Valves"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="274"
              d:DataContext="{d:DesignInstance {x:Type local:ValveVICI2PosViewModel}, IsDesignTimeCreatable=True}"
              MinHeight="300" MinWidth="250">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
     <TabControl>
         <TabItem Header="Valve Control" IsSelected="{Binding ValveControlTabSelected}">
             <Grid>
@@ -38,6 +42,16 @@
                         </Grid.RowDefinitions>
                         <TextBox Grid.Row="0" Margin="3" Text="{Binding CurrentValvePosition, Mode=OneWay}" IsEnabled="False" />
                         <Button Grid.Row="1" Margin="3" Content="Refresh" Command="{Binding RefreshValvePositionCommand}" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="1" Grid.Column="1" Margin="5" Header="Injection Volume" Visibility="{Binding IsInjectionValve, Converter={StaticResource BoolToVis}}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <xctk:DoubleUpDown Grid.Row="0" Margin="3" Minimum="0" Maximum="1000000" Value="{Binding InjectionVolume}" Increment="1" FormatString="F3" />
+                        <Button Grid.Row="1" Margin="10,3" Content="Set" Command="{Binding SetInjectionVolumeCommand}" />
                     </Grid>
                 </GroupBox>
                 <local:ValveVersionInfo Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" />

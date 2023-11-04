@@ -69,10 +69,6 @@
       <DependentUpon>ValveVICIMultiPosView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Valves\MultiPosition\ValveVICIMultiPosViewModel.cs" />
-    <Compile Include="Valves\TwoPosition\SixPortInjectionValveView.xaml.cs">
-      <DependentUpon>SixPortInjectionValveView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Valves\TwoPosition\SixPortInjectionValveViewModel.cs" />
     <Compile Include="Valves\TwoPosition\ValveVICI2Pos.cs" />
     <Compile Include="Valves\TwoPosition\ValveVICI2Pos04port.cs" />
     <Compile Include="Valves\TwoPosition\ValveVICI2Pos06Port.cs" />
@@ -101,10 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Valves\MultiPosition\ValveVICIMultiPosView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Valves\TwoPosition\SixPortInjectionValveView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

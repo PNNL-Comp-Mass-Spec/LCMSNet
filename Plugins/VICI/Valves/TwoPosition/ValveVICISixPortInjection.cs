@@ -8,7 +8,7 @@ namespace LcmsNetPlugins.VICI.Valves
 {
     [Serializable]
     ////[classDeviceMonitoring(enumDeviceMonitoringType.Message, "")]
-    [DeviceControl(typeof(SixPortInjectionValveViewModel), "Six-port Injection", "Valves Two-Position")]
+    [DeviceControl(typeof(ValveVICI2PosViewModel), "Six-port Injection", "Valves Two-Position")]
     public class ValveVICISixPortInjection: ValveVICI2Pos, ISixPortInjectionValve
     {
         private double injectionVolume;
