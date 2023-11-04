@@ -59,48 +59,47 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Valves\ValveExceptions.cs" />
-    <Compile Include="Valves\ValveEnums.cs" />
-    <Compile Include="Valves\ValveVICI04Position.cs" />
-    <Compile Include="Valves\ValveVICI08Position.cs" />
-    <Compile Include="Valves\ValveVICI10Position.cs" />
-    <Compile Include="Valves\ValveVICI15Position.cs" />
-    <Compile Include="Valves\ValveVICI16Position.cs" />
-    <Compile Include="Valves\ValveVICI2Pos.cs" />
-    <Compile Include="Valves\ValveVICI2Pos04port.cs" />
-    <Compile Include="Valves\ValveVICI2Pos06Port.cs" />
-    <Compile Include="Valves\ValveVICI2Pos08Port.cs" />
-    <Compile Include="Valves\ValveVICI2Pos10Port.cs" />
-    <Compile Include="Valves\ValveVICIBase.cs" />
-    <Compile Include="Valves\ValveVICIMultiPos.cs" />
-    <Compile Include="Valves\ValveVICISixPortInjection.cs" />
-    <Compile Include="Valves\ValveVICISPE.cs" />
-    <Compile Include="Valves\SixPortInjectionValveView.xaml.cs">
-      <DependentUpon>SixPortInjectionValveView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Valves\SixPortInjectionValveViewModel.cs" />
-    <Compile Include="Valves\ValveVICI2PosView.xaml.cs">
-      <DependentUpon>ValveVICI2PosView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Valves\ValveVICI2PosViewModel.cs" />
-    <Compile Include="Valves\ValveVICIMultiPosView.xaml.cs">
+    <Compile Include="Valves\MultiPosition\ValveVICI04Position.cs" />
+    <Compile Include="Valves\MultiPosition\ValveVICI08Position.cs" />
+    <Compile Include="Valves\MultiPosition\ValveVICI10Position.cs" />
+    <Compile Include="Valves\MultiPosition\ValveVICI15Position.cs" />
+    <Compile Include="Valves\MultiPosition\ValveVICI16Position.cs" />
+    <Compile Include="Valves\MultiPosition\ValveVICIMultiPos.cs" />
+    <Compile Include="Valves\MultiPosition\ValveVICIMultiPosView.xaml.cs">
       <DependentUpon>ValveVICIMultiPosView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Valves\ValveVICIMultiPosViewModel.cs" />
+    <Compile Include="Valves\MultiPosition\ValveVICIMultiPosViewModel.cs" />
+    <Compile Include="Valves\TwoPosition\SixPortInjectionValveView.xaml.cs">
+      <DependentUpon>SixPortInjectionValveView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Valves\TwoPosition\SixPortInjectionValveViewModel.cs" />
+    <Compile Include="Valves\TwoPosition\ValveVICI2Pos.cs" />
+    <Compile Include="Valves\TwoPosition\ValveVICI2Pos04port.cs" />
+    <Compile Include="Valves\TwoPosition\ValveVICI2Pos06Port.cs" />
+    <Compile Include="Valves\TwoPosition\ValveVICI2Pos08Port.cs" />
+    <Compile Include="Valves\TwoPosition\ValveVICI2Pos10Port.cs" />
+    <Compile Include="Valves\TwoPosition\ValveVICI2PosView.xaml.cs">
+      <DependentUpon>ValveVICI2PosView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Valves\TwoPosition\ValveVICI2PosViewModel.cs" />
+    <Compile Include="Valves\TwoPosition\ValveVICISixPortInjection.cs" />
+    <Compile Include="Valves\TwoPosition\ValveVICISPE.cs" />
+    <Compile Include="Valves\ValveExceptions.cs" />
+    <Compile Include="Valves\ValveEnums.cs" />
+    <Compile Include="Valves\ValveVICIBase.cs" />
     <Compile Include="Valves\ValveVICIViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Page Include="Valves\SixPortInjectionValveView.xaml">
+    <Page Include="Valves\MultiPosition\ValveVICIMultiPosView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Valves\ValveVICI2PosView.xaml">
+    <Page Include="Valves\TwoPosition\SixPortInjectionValveView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Valves\ValveVICIMultiPosView.xaml">
+    <Page Include="Valves\TwoPosition\ValveVICI2PosView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
