@@ -179,6 +179,8 @@ namespace LcmsNetPlugins.VICI.Valves
             }
         }
 
+        // TODO: All commands need to be prefixed with '/' when connected with RS-485!!
+
         /// <summary>
         /// Send a write-only command via the serial port
         /// </summary>

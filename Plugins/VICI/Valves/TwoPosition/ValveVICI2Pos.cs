@@ -18,6 +18,7 @@ using FluidicsSDK.Base;
 using FluidicsSDK.Devices.Valves;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
 using LcmsNetSDK.Method;
 
 namespace LcmsNetPlugins.VICI.Valves.TwoPosition
@@ -89,20 +90,45 @@ namespace LcmsNetPlugins.VICI.Valves.TwoPosition
         }
 
         /// <summary>
-        /// Initialize the valve in the software.
+        /// Valve initialization calls that are specific to the valve mode - for example, checking the valve control mode for universal actuators
         /// </summary>
-        /// <returns>True on success.</returns>
-        public override bool Initialize(ref string errorMessage)
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        public override bool InitializeModeSpecific(out string errorMessage)
         {
-            var result = base.Initialize(ref errorMessage);
+            errorMessage = "";
 
             if (Emulation)
             {
                 //Fill in fake position
                 LastMeasuredPosition = TwoPositionState.PositionA;
+                return true;
             }
 
-            return result;
+            try
+            {
+                if (!CheckIsTwoPosition())
+                {
+                    ApplicationLogger.LogError(1, $"ERROR: Valve reports that it is a multi-position valve, software configured for 2 positions! {Name}, COM port {PortName}");
+                }
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                errorMessage = "Could not get the valve mode. " + ex.Message;
+                return false;
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                errorMessage = "Reading the valve mode timed out. " + ex.Message;
+                return false;
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                errorMessage = "Sending a command to get the valve mode timed out. " + ex.Message;
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

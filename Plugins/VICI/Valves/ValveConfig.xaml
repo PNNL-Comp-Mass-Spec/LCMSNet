@@ -50,21 +50,32 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0" Text="Set ID" />
-                <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding ValveIdComboBoxOptions}" SelectedItem="{Binding SelectedValveId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
-                <Button Grid.Row="1" Grid.Column="1" Margin="5" Content="Set ID" Command="{Binding SetValveIdCommand}" />
-                <Button Grid.Row="1" Grid.Column="2" Margin="5" Content="Clear ID" Command="{Binding ClearValveIdCommand}" />
-                <TextBlock Grid.Row="2" Grid.Column="0" Margin="5,10,5,0" Text="Get ID" />
-                <TextBox Grid.Row="3" Grid.Column="0" MinWidth="56" Margin="5" Text="{Binding CurrentValveId, Mode=OneWay}" IsEnabled="False" />
-                <Button Grid.Row="3" Grid.Column="1" Margin="5" Content="Refresh" Command="{Binding RefreshValveIdCommand}" />
-                <TextBlock Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="3" VerticalAlignment="Center" Text="Blank is 'no ID set'" />
+                <ComboBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="5" VerticalAlignment="Center" ItemsSource="{Binding ValveIdComboBoxOptions}" SelectedItem="{Binding SelectedValveId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="Software only:" ToolTip="Updates or clears the ID in software only. Does not change the hardware configuration." />
+                <Button Grid.Row="1" Grid.Column="2" Margin="5" Content="Set ID" Command="{Binding SetValveIdCommand}" />
+                <Button Grid.Row="1" Grid.Column="3" Margin="5" Content="Clear ID" Command="{Binding ClearValveIdCommand}" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="Hardware:" ToolTip="Updates or clears the ID in software and updates the hardware configuration." />
+                <Button Grid.Row="2" Grid.Column="2" Margin="5" Content="Set ID" Command="{Binding SetValveHardwareIdCommand}" />
+                <Button Grid.Row="2" Grid.Column="3" Margin="5" Content="Clear ID" Command="{Binding ClearValveHardwareIdCommand}" />
+                <TextBlock Grid.Row="3" Grid.Column="0" Margin="5,10,5,0" Text="Get ID" />
+                <TextBox Grid.Row="4" Grid.Column="0" MinWidth="56" Margin="5" Text="{Binding CurrentValveId, Mode=OneWay}" IsEnabled="False" />
+                <Button Grid.Row="4" Grid.Column="1" Margin="5" Content="Refresh" Command="{Binding RefreshValveIdCommand}" />
+                <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Margin="3" VerticalAlignment="Center" Text="Blank is 'no ID set'" />
+                <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="5" Margin="5" HorizontalAlignment="Center" Content="Get any attached ID" Command="{Binding GetValveIdBroadcastCommand}" ToolTip="Gets the valve ID for any attached valve; may be garbled for daisy-chained valves, since the command is sent to all valves on the configured serial port." />
+                <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="5" MinWidth="56" Margin="5" Text="{Binding ValveBroadcastId, Mode=OneWay}" IsEnabled="False" />
             </Grid>
         </GroupBox>
     </Grid>

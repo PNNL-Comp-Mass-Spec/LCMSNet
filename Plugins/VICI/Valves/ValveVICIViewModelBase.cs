@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO.Ports;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using LcmsNetCommonControls.Controls;
@@ -22,29 +21,51 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             IsInDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
 
-            ValveIdComboBoxOptions = new ReadOnlyObservableCollection<char>(new ObservableCollection<char>
+            valveIdComboBoxOptionsLegacy = new ReadOnlyObservableCollection<char>(new ObservableCollection<char>
             {
-                // TODO: Universal Actuators also support A-Z IDs.
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ',
             });
+            valveIdComboBoxOptionsUniversalActuator = new ReadOnlyObservableCollection<char>(new ObservableCollection<char>
+            {
+                // Universal Actuators also support A-Z IDs.
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ',
+                'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+            });
+
+            ValveIdComboBoxOptions = valveIdComboBoxOptionsLegacy;
 
             ValveControlTabSelected = true; // Default selected tab
 
             UpdatePortNameCommand = ReactiveCommand.Create(UpdatePortName);
             SetValveIdCommand = ReactiveCommand.Create(SetValveId);
-            ClearValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ClearValveId));
+            ClearValveIdCommand = ReactiveCommand.Create(ClearValveId);
+            SetValveHardwareIdCommand = ReactiveCommand.Create(SetValveHardwareId);
+            ClearValveHardwareIdCommand = ReactiveCommand.Create(ClearValveHardwareId);
             RefreshValveIdCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshValveId));
+            GetValveIdBroadcastCommand = ReactiveCommand.Create(GetValveIdBroadcast);
             RefreshValvePositionCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshValvePosition));
             RefreshValveVersionInfoCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(RefreshValveVersion));
             OpenPortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(OpenPort));
             ClosePortCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(ClosePort));
             InitializeDeviceCommand = ReactiveCommand.CreateFromTask(async () => await Task.Run(InitializeDevice));
 
-            this.PropertyChanged += OnPropertyChanged;
-            this.WhenAnyValue(x => x.SelectedValveId).Subscribe(x =>
+            //this.WhenAnyValue(x => x.valve.SoftwareID).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x => CurrentValveId = x);
+            //this.WhenAnyValue(x => x.valve.Version).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x =>
+            //{
+            //    ValveVersionInfo = x;
+            //    UpdateAvailableIDList();
+            //});
+
+            this.WhenAnyValue(x => x.ValveControlTabSelected).ObserveOn(RxApp.MainThreadScheduler).Subscribe(x =>
             {
-                valve?.SetHardwareID(x);
-                CurrentValveId = valve?.SoftwareID ?? ' ';
+                if (x)
+                {
+                    ValveControlSelected();
+                }
+                else
+                {
+                    UpdateAvailableIDList();
+                }
             });
         }
 
@@ -59,16 +80,24 @@ namespace LcmsNetPlugins.VICI.Valves
 
             ComPort = valve.PortName;
             NewComPort = ComPort;
+            ValveVersionInfo = valve.Version;
+            CurrentValvePosition = valve.LastMeasuredPositionDisplay;
+            CurrentValveId = valve.SoftwareID;
+            UpdateAvailableIDList();
         }
 
         //public ValveEventListener ValveEventListener;
 
         protected readonly bool IsInDesignMode = false;
 
+        private readonly ReadOnlyObservableCollection<char> valveIdComboBoxOptionsLegacy;
+        private readonly ReadOnlyObservableCollection<char> valveIdComboBoxOptionsUniversalActuator;
+        private ReadOnlyObservableCollection<char> valveIdComboBoxOptions;
         private char selectedValveId = ' ';
         private char currentValveId = ' ';
         private string currentValvePosition = "";
         private string valveVersionInfo = "";
+        private string valveBroadcastId = "";
         private bool valveControlTabSelected = false;
         private string comPort;
         private string newComPort;
@@ -76,7 +105,11 @@ namespace LcmsNetPlugins.VICI.Valves
 
         public ReadOnlyObservableCollection<SerialPortData> PortNamesComboBoxOptions => SerialPortGenericData.SerialPorts;
 
-        public ReadOnlyObservableCollection<char> ValveIdComboBoxOptions { get; }
+        public ReadOnlyObservableCollection<char> ValveIdComboBoxOptions
+        {
+            get => valveIdComboBoxOptions;
+            private set => this.RaiseAndSetIfChanged(ref valveIdComboBoxOptions, value);
+        }
 
         public char SelectedValveId
         {
@@ -100,6 +133,12 @@ namespace LcmsNetPlugins.VICI.Valves
         {
             get => valveVersionInfo;
             protected set => this.RaiseAndSetIfChanged(ref valveVersionInfo, value);
+        }
+
+        public string ValveBroadcastId
+        {
+            get => valveBroadcastId;
+            protected set => this.RaiseAndSetIfChanged(ref valveBroadcastId, value);
         }
 
         public bool ValveControlTabSelected
@@ -126,24 +165,15 @@ namespace LcmsNetPlugins.VICI.Valves
         public ReactiveCommand<Unit, Unit> UpdatePortNameCommand { get; }
         public ReactiveCommand<Unit, Unit> SetValveIdCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearValveIdCommand { get; }
+        public ReactiveCommand<Unit, Unit> SetValveHardwareIdCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClearValveHardwareIdCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshValveIdCommand { get; }
+        public ReactiveCommand<Unit, Unit> GetValveIdBroadcastCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshValvePositionCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshValveVersionInfoCommand { get; }
         public ReactiveCommand<Unit, Unit> OpenPortCommand { get; }
         public ReactiveCommand<Unit, Unit> ClosePortCommand { get; }
         public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; }
-
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            if (propertyChangedEventArgs.PropertyName.Equals(nameof(SelectedValveId)))
-            {
-                SelectedValveIdUpdated();
-            }
-            if (propertyChangedEventArgs.PropertyName.Equals(nameof(ValveControlTabSelected)) && ValveControlTabSelected)
-            {
-                ValveControlSelected();
-            }
-        }
 
         public virtual void Valve_DeviceSaveRequired(object sender, EventArgs e)
         {
@@ -163,7 +193,7 @@ namespace LcmsNetPlugins.VICI.Valves
 
         private void ValveControlSelected()
         {
-            CurrentValvePosition = valve.LastMeasuredPositionDisplay;
+            CurrentValvePosition = valve?.LastMeasuredPositionDisplay;
         }
 
         /// <summary>
@@ -201,12 +231,25 @@ namespace LcmsNetPlugins.VICI.Valves
             ValveVersionInfo = valve.Version;
             CurrentValvePosition = valve.LastMeasuredPositionDisplay;
             CurrentValveId = valve.SoftwareID;
+            UpdateAvailableIDList();
         }
 
         private void UpdatePortName()
         {
             valve.PortName = NewComPort;
             ComPort = valve.PortName;
+        }
+
+        private void UpdateAvailableIDList()
+        {
+            if (valve != null && (valve.IsUniversalActuator || string.IsNullOrWhiteSpace(valve.Version)))
+            {
+                ValveIdComboBoxOptions = valveIdComboBoxOptionsUniversalActuator;
+            }
+            else
+            {
+                ValveIdComboBoxOptions = valveIdComboBoxOptionsLegacy;
+            }
         }
 
         private void RefreshValvePosition()
@@ -324,7 +367,34 @@ namespace LcmsNetPlugins.VICI.Valves
             }
         }
 
+        private void GetValveIdBroadcast()
+        {
+            ValveBroadcastId = valve.GetHardwareIDFromAny();
+        }
+
         private void SetValveId()
+        {
+            if (valve != null)
+            {
+                valve.SoftwareID = SelectedValveId;
+            }
+
+            CurrentValveId = valve?.SoftwareID ?? ' ';
+            OnSaveRequired();
+        }
+
+        private void ClearValveId()
+        {
+            if (valve != null)
+            {
+                valve.SoftwareID = ' ';
+            }
+
+            SelectedValveId = ' ';
+            OnSaveRequired();
+        }
+
+        private void SetValveHardwareId()
         {
             try
             {
@@ -346,12 +416,12 @@ namespace LcmsNetPlugins.VICI.Valves
             }
         }
 
-        private void ClearValveId()
+        private void ClearValveHardwareId()
         {
             try
             {
-                valve.ClearHardwareID();
-                CurrentValveId = valve.GetHardwareID();
+                valve?.ClearHardwareID();
+                CurrentValveId = valve?.GetHardwareID() ?? ' ';
                 SelectedValveId = ' ';
                 OnSaveRequired();
             }

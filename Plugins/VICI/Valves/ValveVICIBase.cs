@@ -365,6 +365,14 @@ namespace LcmsNetPlugins.VICI.Valves
 
             System.Threading.Thread.Sleep(MinTimeBetweenCommandsMs);
 
+            // Run mode-specific initialization that needs valve data
+            if (!InitializeModeSpecific(out errorMessage))
+            {
+                return false;
+            }
+
+            System.Threading.Thread.Sleep(MinTimeBetweenCommandsMs);
+
             try
             {
                 var position = GetPosition();
@@ -394,6 +402,13 @@ namespace LcmsNetPlugins.VICI.Valves
         }
 
         /// <summary>
+        /// Valve initialization calls that are specific to the valve mode - for example, checking the valve control mode for universal actuators
+        /// </summary>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        public abstract bool InitializeModeSpecific(out string errorMessage);
+
+        /// <summary>
         /// Gets the version (date) of the valve.
         /// </summary>
         /// <returns>A string containing the version.</returns>
@@ -403,6 +418,8 @@ namespace LcmsNetPlugins.VICI.Valves
             {
                 return "3.1337";
             }
+
+            Version = "";
 
             var result = ReadCommand("VR", out var version, 100);
             if (result != ValveErrors.Success)
@@ -449,6 +466,7 @@ namespace LcmsNetPlugins.VICI.Valves
                 return '0';
             }
 
+            // NOTE: sending the command '*ID' will get a response from any attached valve
             var result = ReadCommand("ID", out var tempBuffer, 100);
             if (result != ValveErrors.Success)
             {
@@ -500,11 +518,41 @@ namespace LcmsNetPlugins.VICI.Valves
                     // Return the last character.
                     tempID = tempBuffer[3];
                 }
+
+                //Set the valveID (software ID) to the one we just found.
+                SoftwareID = tempID;
             }
 
-            //Set the valveID (software ID) to the one we just found.
-            SoftwareID = tempID;
             return tempID;
+        }
+
+        /// <summary>
+        /// Get the hardware ID of any valve connected to the serial port.
+        /// </summary>
+        /// <returns></returns>
+        public string GetHardwareIDFromAny()
+        {
+            if (Emulation)
+            {
+                return "0";
+            }
+
+            // Sending the command '*ID' will get a response from any attached valve
+            var result = ReadCommandBroadcast("ID", out var tempBuffer, 100);
+            if (result != ValveErrors.Success)
+            {
+                switch (result)
+                {
+                    case ValveErrors.UnauthorizedAccess:
+                        return "Unauthorized Access";
+                    case ValveErrors.TimeoutDuringWrite:
+                        return "Timeout during write";
+                    case ValveErrors.TimeoutDuringRead:
+                        return "Timeout during read";
+                }
+            }
+
+            return tempBuffer.Replace('\r', ' ');
         }
 
         /// <summary>
@@ -519,7 +567,7 @@ namespace LcmsNetPlugins.VICI.Valves
             }
 
             //Validate the new ID
-            if (newID - '0' <= 9 && newID - '0' >= 0)
+            if ('0' <= newID && newID <= '9' || (IsUniversalActuator && 'A' <= newID && newID <= 'Z'))
             {
                 var result = SendCommand("ID" + newID);
 
@@ -663,13 +711,28 @@ namespace LcmsNetPlugins.VICI.Valves
         }
 
         /// <summary>
+        /// Send a write-only command via the serial port to all valves attached to it
+        /// </summary>
+        /// <param name="command">The command to send, excluding valveId</param>
+        /// <returns></returns>
+        protected ValveErrors SendCommandBroadcast(string command)
+        {
+            if (Emulation)
+            {
+                return ValveErrors.Success;
+            }
+
+            return Connection.SendCommand(command, '*');
+        }
+
+        /// <summary>
         /// Send a read command via the serial port
         /// </summary>
         /// <param name="command">The read command to send, excluding valveId</param>
         /// <param name="returnData">The data returned by the command</param>
         /// <param name="readDelayMs">The delay between when the command is sent, and when returned data is read</param>
         /// <returns></returns>
-        protected ValveErrors ReadCommand(string command, out string returnData, int readDelayMs = 0)
+        protected ValveErrors ReadCommand(string command, out string returnData, int readDelayMs = 100)
         {
             returnData = "";
             if (Emulation)
@@ -678,6 +741,24 @@ namespace LcmsNetPlugins.VICI.Valves
             }
 
             return Connection.ReadCommand(command, SoftwareID, out returnData, readDelayMs);
+        }
+
+        /// <summary>
+        /// Send a read command via the serial port to all valves attached to it
+        /// </summary>
+        /// <param name="command">The read command to send, excluding valveId</param>
+        /// <param name="returnData">The data returned by the command</param>
+        /// <param name="readDelayMs">The delay between when the command is sent, and when returned data is read</param>
+        /// <returns></returns>
+        protected ValveErrors ReadCommandBroadcast(string command, out string returnData, int readDelayMs = 100)
+        {
+            returnData = "";
+            if (Emulation)
+            {
+                return ValveErrors.Success;
+            }
+
+            return Connection.ReadCommand(command, '*', out returnData, readDelayMs);
         }
 
         /// <summary>
@@ -691,6 +772,75 @@ namespace LcmsNetPlugins.VICI.Valves
         /// </summary>
         /// <returns>The position as a display string.</returns>
         public abstract string GetPositionDisplay();
+
+        public bool CheckIsMultiPosition()
+        {
+            var mode = GetHardwareMode();
+
+            return mode == 0 || mode == 3;
+        }
+
+        public bool CheckIsTwoPosition()
+        {
+            var mode = GetHardwareMode();
+
+            return mode != 3;
+        }
+
+        /// <summary>
+        /// Get hardware mode
+        /// </summary>
+        /// <returns>'0' for unknown/not supported, '1' = 2-position with stops, '2' = 2-position without stops, '3' = multiposition</returns>
+        /// <exception cref="ValveExceptionUnauthorizedAccess"></exception>
+        /// <exception cref="ValveExceptionWriteTimeout"></exception>
+        /// <exception cref="ValveExceptionReadTimeout"></exception>
+        public int GetHardwareMode()
+        {
+            if (Emulation)
+            {
+                return 0;
+            }
+
+            if (string.IsNullOrWhiteSpace(Version))
+            {
+                // Need to get the version to determine if it is a Universal Actuator valve
+                GetVersion();
+            }
+
+            if (string.IsNullOrWhiteSpace(Version) || !IsUniversalActuator)
+            {
+                return 0;
+            }
+
+            var readError = ReadCommand("AM", out var modeString, 100);
+            if (readError != ValveErrors.Success)
+            {
+                switch (readError)
+                {
+                    case ValveErrors.UnauthorizedAccess:
+                        throw new ValveExceptionUnauthorizedAccess();
+                    case ValveErrors.TimeoutDuringWrite:
+                        throw new ValveExceptionWriteTimeout();
+                    case ValveErrors.TimeoutDuringRead:
+                        throw new ValveExceptionReadTimeout();
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(modeString))
+            {
+                return 0;
+            }
+
+            // AM1 or AM2 are 2-position, AM3 is multiposition
+            // The output is the same with legacy mode on the universal actuator.
+            var pos = modeString.IndexOf("AM", StringComparison.OrdinalIgnoreCase);
+            if (pos >= 0 && int.TryParse(modeString.Substring(pos + 2, 1), out var mode))
+            {
+                return mode;
+            }
+
+            return 0;
+        }
 
         /// <summary>
         /// Returns the name of the device.

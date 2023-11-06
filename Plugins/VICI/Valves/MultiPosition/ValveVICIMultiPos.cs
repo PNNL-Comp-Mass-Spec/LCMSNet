@@ -132,44 +132,71 @@ namespace LcmsNetPlugins.VICI.Valves.MultiPosition
             LastMeasuredPosition > 0 ? LastMeasuredPosition.ToString() : "Unknown";
 
         /// <summary>
-        /// Initialize the valve in the software.
+        /// Valve initialization calls that are specific to the valve mode - for example, checking the valve control mode for universal actuators
         /// </summary>
-        /// <returns>True on success.</returns>
-        public override bool Initialize(ref string errorMessage)
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        public override bool InitializeModeSpecific(out string errorMessage)
         {
-            if (!Emulation)
+            errorMessage = "";
+
+            if (Emulation)
             {
-                // Check version first
-                try
-                {
-                    GetVersion();
+                //Fill in fake position
+                LastMeasuredPosition = 0;
+                return true;
+            }
 
-                    if (!CheckIsMultiPosition())
-                    {
-                        ApplicationLogger.LogError(1, $"ERROR: Valve reports that it is not a multi-position valve, software configured for {NumberOfPositions} positions! {Name}, COM port {PortName}");
-                    }
-                }
-                catch
+            try
+            {
+                if (!CheckIsMultiPosition())
                 {
-                    // Suppressing errors here
+                    ApplicationLogger.LogError(1, $"ERROR: Valve reports that it is not a multi-position valve, software configured for {NumberOfPositions} positions! {Name}, COM port {PortName}");
                 }
+            }
+            catch (ValveExceptionUnauthorizedAccess ex)
+            {
+                errorMessage = "Could not get the valve mode. " + ex.Message;
+                return false;
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                errorMessage = "Reading the valve mode timed out. " + ex.Message;
+                return false;
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                errorMessage = "Sending a command to get the valve mode timed out. " + ex.Message;
+                return false;
+            }
 
+            Thread.Sleep(MinTimeBetweenCommandsMs);
+
+            try
+            {
                 var numPositions = GetNumberOfPositions();
                 if (numPositions > 1 && numPositions != NumberOfPositions)
                 {
                     ApplicationLogger.LogError(1, $"ERROR: Valve reports {numPositions} positions, software configured for {NumberOfPositions} positions! {Name}, COM port {PortName}");
                 }
             }
-
-            var result = base.Initialize(ref errorMessage);
-
-            if (Emulation)
+            catch (ValveExceptionUnauthorizedAccess ex)
             {
-                //Fill in fake position
-                LastMeasuredPosition = 0;
+                errorMessage = "Could not get the valve version. " + ex.Message;
+                return false;
+            }
+            catch (ValveExceptionReadTimeout ex)
+            {
+                errorMessage = "Reading the valve version timed out. " + ex.Message;
+                return false;
+            }
+            catch (ValveExceptionWriteTimeout ex)
+            {
+                errorMessage = "Sending a command to get the valve version timed out. " + ex.Message;
+                return false;
             }
 
-            return result;
+            return true;
         }
 
         /// <summary>
@@ -593,46 +620,6 @@ namespace LcmsNetPlugins.VICI.Valves.MultiPosition
             }
 
             // TODO: Confirm mode change?
-        }
-
-        public bool CheckIsMultiPosition()
-        {
-            if (Emulation || !IsUniversalActuator)
-            {
-                return true;
-            }
-
-            var readError = ReadCommand("AM", out var modeString);
-            if (readError != ValveErrors.Success)
-            {
-                switch (readError)
-                {
-                    case ValveErrors.UnauthorizedAccess:
-                        throw new ValveExceptionUnauthorizedAccess();
-                    case ValveErrors.TimeoutDuringWrite:
-                        throw new ValveExceptionWriteTimeout();
-                    case ValveErrors.TimeoutDuringRead:
-                        throw new ValveExceptionReadTimeout();
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(modeString))
-            {
-                return true;
-            }
-
-            // AM3 is desired; AM1 or AM2 are 2-position
-            // The output is the same with legacy mode on the universal actuator.
-            var pos = modeString.IndexOf("AM", StringComparison.OrdinalIgnoreCase);
-            if (pos >= 0 && int.TryParse(modeString.Substring(pos + 2, 1), out var mode))
-            {
-                if (mode == 3)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }
