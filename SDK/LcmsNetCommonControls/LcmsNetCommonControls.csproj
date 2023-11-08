@@ -52,6 +52,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\SerialAdapterData\EdgePortSerialData.cs" />
+    <Compile Include="Controls\SerialAdapterData\KeySpanMultiPortSerialData.cs" />
+    <Compile Include="Controls\SerialAdapterData\WmiSerialData.cs" />
     <Compile Include="Controls\SerialPortData.cs" />
     <Compile Include="Controls\SerialPortGenericData.cs" />
     <Compile Include="Devices\BaseDeviceControlViewModelReactive.cs" />
