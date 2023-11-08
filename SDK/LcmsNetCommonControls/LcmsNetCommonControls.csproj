@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\SerialAdapterData\EdgePortSerialData.cs" />
+    <Compile Include="Controls\SerialAdapterData\FtdiMultiPortSerialData.cs" />
     <Compile Include="Controls\SerialAdapterData\KeySpanMultiPortSerialData.cs" />
     <Compile Include="Controls\SerialAdapterData\WmiSerialData.cs" />
     <Compile Include="Controls\SerialPortData.cs" />

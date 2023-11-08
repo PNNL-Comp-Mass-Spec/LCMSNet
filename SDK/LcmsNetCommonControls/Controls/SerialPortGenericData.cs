@@ -90,6 +90,9 @@ namespace LcmsNetCommonControls.Controls
             // Overwrite the Keyspan serial adapter information with data read from the registry, since it lets us associate port numbers with port names
             KeySpanMultiPortSerialData.UpdateKeySpanMultiPortSerialInfo(mapping, wmiPnpSerialPorts);
 
+            // Overwrite certain FTDI serial adapter information with data read from the registry, since it lets us associate (kind of) port numbers with port names
+            FtdiMultiPortSerialData.UpdateFtdiMultiPortSerialInfo(mapping, wmiPnpSerialPorts);
+
             var list = mapping.Values.ToList();
             list.Sort();
             return list;
