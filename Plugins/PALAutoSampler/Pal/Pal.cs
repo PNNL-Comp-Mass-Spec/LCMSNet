@@ -796,7 +796,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 // If the PAL is waiting for data station synchronization, DO NOT CONTINUE IN THE START METHOD!
                 // Exception: PAL default macros include a "Wait for DS" step in the 'Method Entry' macro. To support this, we add the 'time < 20 seconds', to allow passing it.
                 // This will only "continue" once, so it mainly targets the method entry 'Wait for DS'
-                if (!status.Contains("WAITING FOR DS") || span.TotalSeconds < 20)
+                if (status.Contains("WAITING FOR DS") && span.TotalSeconds < 20)
                 {
                     ContinueMethod(timeout - span.TotalSeconds, true);
                 }
@@ -981,6 +981,7 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 return true;
             }
 
+            var start = TimeKeeper.Instance.Now;
             var result = true;
             var prevStatus = "";
             palDriver.GetStatus(ref prevStatus);
@@ -989,10 +990,24 @@ namespace LcmsNetPlugins.PALAutoSampler.Pal
                 "continue method", this));
             palDriver.ContinueMethod();
 
+            System.Threading.Thread.Sleep(1000);
+
+            var status = prevStatus;
+            palDriver.GetStatus(ref status);
+
+            // Give up to 10 seconds for the PAL to change status; make sure the status changes
+            var maxWait = Math.Min(10.0, timeout - TimeKeeper.Instance.Now.Subtract(start).TotalSeconds - 1.5);
+            while (TimeKeeper.Instance.Now.Subtract(start).TotalSeconds <= maxWait && status.Contains("WAITING FOR DS"))
+            {
+                // Status has not changed; send 'continue method' again, in case it was missed
+                palDriver.ContinueMethod();
+                System.Threading.Thread.Sleep(1000);
+                palDriver.GetStatus(ref status);
+            }
+
             if (waitForComplete)
             {
                 // Make sure the status changes before we call WaitUntilStopPoint
-                var status = prevStatus;
                 while (status.Equals(prevStatus))
                 {
                     System.Threading.Thread.Sleep(StatusPollDelay * 500);
