@@ -77,6 +77,12 @@ namespace LcmsNetSDK.Devices
         public abstract UserControl GetDefaultView();
 
         /// <summary>
+        /// Used to disable conditional control without clearing selection states
+        /// </summary>
+        public virtual void OutOfView()
+        { }
+
+        /// <summary>
         /// Status of device, updated using UpdateStatusDisplay
         /// </summary>
         public string DeviceStatus
@@ -85,8 +91,18 @@ namespace LcmsNetSDK.Devices
             private set => this.RaiseAndSetIfChanged(ref deviceStatus, value);
         }
 
+        /// <summary>
+        /// Used for conditional control (like key bindings) when the device control is visible
+        /// </summary>
+        public bool DeviceTabSelected
+        {
+            get => deviceTabSelected;
+            set => this.RaiseAndSetIfChanged(ref deviceTabSelected, value);
+        }
+
         private string name = "";
         private string deviceStatus = "";
+        private bool deviceTabSelected = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName = "")

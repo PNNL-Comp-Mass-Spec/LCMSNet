@@ -82,7 +82,7 @@
                 </TabItem.HeaderTemplate>
                 <sampleQueueViews:SampleManagerView DataContext="{Binding SampleManagerVm}" x:Name="SampleManagerPage" />
             </TabItem>
-            <TabItem ToolTip="Cart / Instrument Setup" x:Name="FluidicsDevicesTab">
+            <TabItem ToolTip="Cart / Instrument Setup" x:Name="FluidicsDevicesTab" IsSelected="{Binding FluidicsDesignVm.DevicesTabSelected}">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Height="25">

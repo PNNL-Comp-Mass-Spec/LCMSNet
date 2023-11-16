@@ -35,6 +35,7 @@ namespace FluidicsPack
         private double innerDiameter;
         private double length;
         private string name = "";
+        private bool deviceTabSelected = false;
 
         public string PackingMaterial
         {
@@ -74,10 +75,25 @@ namespace FluidicsPack
 
         public string DeviceStatus { get; } = string.Empty;
 
+        /// <summary>
+        /// Used for conditional control (like key bindings) when the device control is visible
+        /// </summary>
+        public bool DeviceTabSelected
+        {
+            get => deviceTabSelected;
+            set => this.RaiseAndSetIfChanged(ref deviceTabSelected, value);
+        }
+
         public UserControl GetDefaultView()
         {
             return new FluidicsColumnControlView();
         }
+
+        /// <summary>
+        /// Used to disable conditional control without clearing selection states
+        /// </summary>
+        public virtual void OutOfView()
+        { }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

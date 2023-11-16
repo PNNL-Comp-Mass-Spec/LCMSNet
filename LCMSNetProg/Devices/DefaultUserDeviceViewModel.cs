@@ -15,6 +15,7 @@ namespace LcmsNet.Devices
         private string name = string.Empty;
         private string deviceStatus = string.Empty;
         private bool running = false;
+        private bool deviceTabSelected = false;
 
         public IDevice Device
         {
@@ -34,11 +35,26 @@ namespace LcmsNet.Devices
             set => this.RaiseAndSetIfChanged(ref deviceStatus, value);
         }
 
+        /// <summary>
+        /// Used for conditional control (like key bindings) when the device control is visible
+        /// </summary>
+        public bool DeviceTabSelected
+        {
+            get => deviceTabSelected;
+            set => this.RaiseAndSetIfChanged(ref deviceTabSelected, value);
+        }
+
 
         public UserControl GetDefaultView()
         {
             return new DefaultUserDeviceView();
         }
+
+        /// <summary>
+        /// Used to disable conditional control without clearing selection states
+        /// </summary>
+        public virtual void OutOfView()
+        { }
 
         /// <summary>
         /// An event that indicates the name of the column has changed.

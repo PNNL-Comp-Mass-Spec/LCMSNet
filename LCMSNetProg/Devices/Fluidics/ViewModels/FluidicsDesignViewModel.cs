@@ -47,6 +47,9 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
             RemoveCommand = ReactiveCommand.Create<Window>(RemoveDevice, this.WhenAnyValue(x => x.DevicesUnlocked));
             ConnectCommand = ReactiveCommand.Create(ConnectDevices, this.WhenAnyValue(x => x.DevicesUnlocked));
             RefreshCommand = ReactiveCommand.Create(Refresh);
+
+            this.WhenAnyValue(x => x.DevicesTabSelected).Where(x => !x)
+                .Subscribe(x => AdvancedDeviceControlPanel?.OutOfView());
         }
 
         public void Dispose()
@@ -76,6 +79,7 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
 
         private bool devicesLocked;
         private bool designTabSelected = false;
+        private bool devicesTabSelected = false;
         private FluidicsControlViewModel fluidicsControlVm;
         private ModelCheckReportsViewModel reporterVm;
         private AdvancedDeviceControlPanelViewModel advancedDeviceControlPanel;
@@ -108,6 +112,12 @@ namespace LcmsNet.Devices.Fluidics.ViewModels
         }
 
         public bool DevicesUnlocked => !devicesLocked;
+
+        public bool DevicesTabSelected
+        {
+            get => devicesTabSelected;
+            set => this.RaiseAndSetIfChanged(ref devicesTabSelected, value);
+        }
 
         public bool DesignTabSelected
         {

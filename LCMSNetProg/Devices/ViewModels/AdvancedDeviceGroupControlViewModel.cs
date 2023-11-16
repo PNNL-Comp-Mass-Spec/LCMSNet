@@ -49,6 +49,10 @@ namespace LcmsNet.Devices.ViewModels
             });
         }
 
+        [Obsolete("WPF Design-time use only.", true)]
+        public AdvancedDeviceGroupControlViewModel() : this("DevTest")
+        { }
+
         ~AdvancedDeviceGroupControlViewModel()
         {
             Dispose();
@@ -84,7 +88,22 @@ namespace LcmsNet.Devices.ViewModels
         public DeviceConfigurationViewModel SelectedDevice
         {
             get => selectedDevice;
-            set => this.RaiseAndSetIfChanged(ref selectedDevice, value);
+            set
+            {
+                var changed = selectedDevice != value;
+                if (selectedDevice != null && changed)
+                {
+                    SelectedDevice.DeviceSelected = false;
+                    SelectedDevice.OutOfView();
+                }
+
+                this.RaiseAndSetIfChanged(ref selectedDevice, value);
+
+                if (changed && selectedDevice != null)
+                {
+                    SelectedDevice.DeviceSelected = true;
+                }
+            }
         }
 
         /// <summary>
@@ -99,6 +118,11 @@ namespace LcmsNet.Devices.ViewModels
         public ReactiveCommand<Unit, Unit> RenameDeviceCommand { get; }
         public ReactiveCommand<Unit, Unit> InitializeDeviceCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearErrorCommand { get; }
+
+        public void OutOfView()
+        {
+            SelectedDevice?.OutOfView();
+        }
 
         private async Task InitializeSelectedDevice()
         {

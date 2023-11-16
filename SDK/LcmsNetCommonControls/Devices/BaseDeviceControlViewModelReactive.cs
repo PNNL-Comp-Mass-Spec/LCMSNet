@@ -50,10 +50,10 @@ namespace LcmsNetCommonControls.Devices
         /// <summary>
         /// Fires the NameChanged event
         /// </summary>
-        /// <param name="newname"></param>
-        public virtual void OnNameChanged(string newname)
+        /// <param name="newName"></param>
+        public virtual void OnNameChanged(string newName)
         {
-            NameChanged?.Invoke(this, newname);
+            NameChanged?.Invoke(this, newName);
         }
 
         /// <summary>
@@ -89,10 +89,25 @@ namespace LcmsNetCommonControls.Devices
         }
 
         /// <summary>
+        /// Used for conditional control (like key bindings) when the device control is visible
+        /// </summary>
+        public bool DeviceTabSelected
+        {
+            get => deviceTabSelected;
+            set => this.RaiseAndSetIfChanged(ref deviceTabSelected, value);
+        }
+
+        /// <summary>
         /// Gets an instance of the default view for this view model
         /// </summary>
         /// <returns></returns>
         public abstract UserControl GetDefaultView();
+
+        /// <summary>
+        /// Used to disable conditional control without clearing selection states
+        /// </summary>
+        public virtual void OutOfView()
+        { }
 
         /// <summary>
         /// Status of device, updated using UpdateStatusDisplay
@@ -105,5 +120,6 @@ namespace LcmsNetCommonControls.Devices
 
         private string name = "";
         private string deviceStatus = "";
+        private bool deviceTabSelected = false;
     }
 }

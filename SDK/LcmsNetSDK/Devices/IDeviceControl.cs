@@ -38,6 +38,16 @@ namespace LcmsNetSDK.Devices
         string DeviceStatus { get; }
 
         /// <summary>
+        /// Used for conditional control (like key bindings) when the device control is visible
+        /// </summary>
+        bool DeviceTabSelected { get; set; }
+
+        /// <summary>
+        /// Used to disable conditional control without clearing selection states
+        /// </summary>
+        void OutOfView();
+
+        /// <summary>
         /// Gets an instance of the default view for this view model
         /// </summary>
         /// <returns></returns>

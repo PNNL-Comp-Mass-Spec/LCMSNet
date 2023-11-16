@@ -22,7 +22,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Margin="0,10,3,0">
-            <TabItem Header="Configuration">
+            <TabItem Header="Configuration" IsSelected="{Binding AdvancedDeviceControlPanel.ControlPanelTabSelected}">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <TextBlock FontSize="16" Text="Configuration" />

@@ -41,6 +41,8 @@ namespace LcmsNet.Devices.ViewModels
                     SelectedGroup.GroupIsSelected = true;
                 }
             });
+
+            this.WhenAnyValue(x => x.ControlPanelTabSelected).Where(x => !x).Subscribe(x => SelectedGroup?.OutOfView());
         }
 
         ~AdvancedDeviceControlPanelViewModel()
@@ -59,6 +61,7 @@ namespace LcmsNet.Devices.ViewModels
 
         private readonly SourceList<AdvancedDeviceGroupControlViewModel> deviceGroups = new SourceList<AdvancedDeviceGroupControlViewModel>();
         private AdvancedDeviceGroupControlViewModel selectedGroup = null;
+        private bool controlPanelTabSelected = false;
 
         public ReadOnlyObservableCollection<AdvancedDeviceGroupControlViewModel> DeviceGroups { get; }
 
@@ -68,7 +71,24 @@ namespace LcmsNet.Devices.ViewModels
         public AdvancedDeviceGroupControlViewModel SelectedGroup
         {
             get => selectedGroup;
-            set => this.RaiseAndSetIfChanged(ref selectedGroup, value);
+            set
+            {
+                if (selectedGroup != null && selectedGroup != value)
+                {
+                    selectedGroup.OutOfView();
+                }
+
+                this.RaiseAndSetIfChanged(ref selectedGroup, value);
+            }
+        }
+
+        /// <summary>
+        /// Selected device
+        /// </summary>
+        public bool ControlPanelTabSelected
+        {
+            get => controlPanelTabSelected;
+            set => this.RaiseAndSetIfChanged(ref controlPanelTabSelected, value);
         }
 
         /// <summary>
@@ -80,6 +100,11 @@ namespace LcmsNet.Devices.ViewModels
         /// Maps a device group name to the advanced control panel.
         /// </summary>
         private readonly Dictionary<string, AdvancedDeviceGroupControlViewModel> nameToViewModelMap;
+
+        public void OutOfView()
+        {
+            SelectedGroup?.OutOfView();
+        }
 
         /// <summary>
         /// Handles when a device is removed from the system.

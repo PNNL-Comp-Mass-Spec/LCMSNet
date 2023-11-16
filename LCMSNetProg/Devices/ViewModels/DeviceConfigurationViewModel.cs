@@ -15,6 +15,8 @@ namespace LcmsNet.Devices.ViewModels
             Device.WhenAnyValue(x => x.Name).Subscribe(x => NameEdit = x);
 
             status = viewModel.WhenAnyValue(x => x.DeviceStatus).ToProperty(this, x => x.Status);
+            viewModel.WhenAnyValue(x => x.DeviceTabSelected)
+                .Subscribe(x => this.RaisePropertyChanged(nameof(DeviceSelected)));
         }
 
         private System.Windows.Controls.UserControl view = null;
@@ -46,6 +48,17 @@ namespace LcmsNet.Devices.ViewModels
         {
             get => nameEdit;
             set => this.RaiseAndSetIfChanged(ref nameEdit, value);
+        }
+
+        public bool DeviceSelected
+        {
+            get => ViewModel.DeviceTabSelected;
+            set => ViewModel.DeviceTabSelected = value;
+        }
+
+        public void OutOfView()
+        {
+            ViewModel.OutOfView();
         }
 
         ~DeviceConfigurationViewModel()
