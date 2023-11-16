@@ -24,5 +24,21 @@ namespace LcmsNetPlugins.ZaberStage.UI
         {
             InitializeComponent();
         }
+
+        private void Move_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is StageControlViewModel scvm)
+            {
+                scvm.StopAxis();
+            }
+        }
+
+        private void Move_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            if (DataContext is StageControlViewModel scvm)
+            {
+                scvm.StopAxis();
+            }
+        }
     }
 }

@@ -253,19 +253,41 @@ namespace LcmsNetPlugins.ZaberStage
 
             try
             {
-                foreach (var stage in StagesUsed.Where(x => x.DeviceRef != null))
+                var homeGroups = StagesUsed.Where(x => x.DeviceRef != null).GroupBy(x => x.InitOrder).OrderBy(x => x.Key);
+                foreach (var group in homeGroups)
                 {
-                    var device = stage.DeviceRef;
-                    for (var i = 1; i <= device.AxisCount; i++)
+                    var items = group.ToArray();
+                    var tasks = new List<Task>();
+                    foreach (var stage in items)
                     {
-                        var axis = device.GetAxis(i);
-
-                        if (!axis.IsHomed())
+                        var device = stage.DeviceRef;
+                        for (var i = 1; i <= device.AxisCount; i++)
                         {
-                            axis.Home();
+                            var axis = device.GetAxis(i);
+                            if (!axis.IsHomed())
+                            {
+                                tasks.Add(axis.HomeAsync());
+                            }
                         }
                     }
+
+                    if (tasks.Count > 0)
+                    {
+                        Task.WaitAll(tasks.ToArray());
+                    }
                 }
+                //foreach (var stage in StagesUsed.Where(x => x.DeviceRef != null).OrderBy(x => x.InitOrder))
+                //{
+                //    var device = stage.DeviceRef;
+                //    for (var i = 1; i <= device.AxisCount; i++)
+                //    {
+                //        var axis = device.GetAxis(i);
+                //        if (!axis.IsHomed())
+                //        {
+                //            axis.Home();
+                //        }
+                //    }
+                //}
             }
             catch (Exception ex)
             {

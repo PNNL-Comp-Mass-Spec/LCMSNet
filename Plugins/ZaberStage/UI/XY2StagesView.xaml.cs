@@ -24,5 +24,21 @@ namespace LcmsNetPlugins.ZaberStage.UI
         {
             InitializeComponent();
         }
+
+        private void StageControls_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (DataContext is XY2StagesViewModel xyz)
+            {
+                if (e.Key == Key.Left || e.Key == Key.Right)
+                {
+                    xyz.XStageVM.StopAxis();
+                }
+
+                if (e.Key == Key.Up || e.Key == Key.Down)
+                {
+                    xyz.YStageVM.StopAxis();
+                }
+            }
+        }
     }
 }

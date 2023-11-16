@@ -9,8 +9,25 @@
              d:DataContext="{d:DesignInstance {x:Type local:X1StageViewModel}, IsDesignTimeCreatable=True}"
              MinHeight="275" MinWidth="240">
     <TabControl>
-        <TabItem Header="{Binding XStageVM.StageDisplayName, Mode=OneWay}">
-            <local:StageControlView DataContext="{Binding XStageVM}" />
+        <TabItem Header="Control" KeyUp="StageControls_OnKeyUp">
+            <TabItem.InputBindings>
+                <KeyBinding Key="Left" Command="{Binding XStageVM.DecJogCommand}" />
+                <KeyBinding Key="Right" Command="{Binding XStageVM.IncJogCommand}" />
+            </TabItem.InputBindings>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <GroupBox Grid.Row="1" Grid.Column="0" Header="X">
+                    <local:StageControlView DataContext="{Binding XStageVM}" />
+                </GroupBox>
+            </Grid>
         </TabItem>
         <TabItem Header="Config">
             <local:StageConfigView DataContext="{Binding ConfigVm}" />

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using LcmsNetSDK;
 using LcmsNetSDK.Logging;
 using Zaber.Motion;
@@ -20,6 +23,8 @@ namespace LcmsNetPlugins.ZaberStage
         private string firmwareVersion;
         private bool stageConnectionError;
         private bool isInverted;
+        private int initOrder;
+        private readonly double[] jogSpeeds = new double[] { 0.2, 1, 3 };
         private Zaber.Motion.Ascii.Device deviceRef = null;
 
         // TODO: Stage display: have one tab that is details/configuration that is common for all stages; can be a ItemsControl or ListView
@@ -71,6 +76,10 @@ namespace LcmsNetPlugins.ZaberStage
         public string FirmwareVersion { get => firmwareVersion; set => this.RaiseAndSetIfChanged(ref firmwareVersion, value); }
         public bool StageConnectionError { get => stageConnectionError; set => this.RaiseAndSetIfChanged(ref stageConnectionError, value); }
         public bool IsInverted { get => isInverted; set => this.RaiseAndSetIfChanged(ref isInverted, value); }
+        public int InitOrder { get => initOrder; set => this.RaiseAndSetIfChanged(ref initOrder, value); }
+        public double JogSpeedLow { get => jogSpeeds[0]; set => this.RaiseAndSetIfChanged(ref jogSpeeds[0], value); }
+        public double JogSpeedMedium { get => jogSpeeds[1]; set => this.RaiseAndSetIfChanged(ref jogSpeeds[1], value); }
+        public double JogSpeedHigh { get => jogSpeeds[2]; set => this.RaiseAndSetIfChanged(ref jogSpeeds[2], value); }
         public Zaber.Motion.Ascii.Device DeviceRef
         {
             get => deviceRef;
@@ -109,7 +118,7 @@ namespace LcmsNetPlugins.ZaberStage
 
         public string GetAxisConfigString()
         {
-            return $"DN={StageDisplayName}&;SN={SerialNumber}&;Inv={IsInverted}";
+            return $"DN={StageDisplayName}&;SN={SerialNumber}&;Inv={IsInverted}&;Init#={InitOrder}&;JogSpeeds={string.Join(",", jogSpeeds.Select(x => x.ToString(CultureInfo.InvariantCulture)))}";
         }
 
         public void ParseAxisConfigString(string config)
@@ -135,6 +144,28 @@ namespace LcmsNetPlugins.ZaberStage
                     {
                         IsInverted = inverted;
                     }
+
+                    if (part.StartsWith("Init#=", StringComparison.OrdinalIgnoreCase) &&
+                        int.TryParse(part.Substring(6), out var priority))
+                    {
+                        InitOrder = priority;
+                    }
+
+                    if (part.StartsWith("JogSpeeds=", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var split = part.Substring(10).Split(',');
+                        for (var i = 0; i < jogSpeeds.Length && i < split.Length; i++)
+                        {
+                            if (!string.IsNullOrWhiteSpace(split[i]) && int.TryParse(split[i], out var speed))
+                            {
+                                jogSpeeds[i] = speed;
+                            }
+                        }
+
+                        OnPropertyChanged(nameof(JogSpeedLow));
+                        OnPropertyChanged(nameof(JogSpeedMedium));
+                        OnPropertyChanged(nameof(JogSpeedHigh));
+                    }
                 }
             }
             catch
@@ -142,12 +173,13 @@ namespace LcmsNetPlugins.ZaberStage
                 ApplicationLogger.LogError(LogLevel.Error, $"Failed to parse AxisConfig \"{config}\"");
             }
         }
+
         public double GetPositionMM()
         {
             return DeviceRef.GetAxis(1).GetPosition(Units.Length_Millimetres);
         }
 
-        public void MoveRelative(double distance, Units units, bool waitUntilIdle = true)
+        public bool MoveRelative(double distance, Units units, bool waitUntilIdle = true)
         {
             var dist = distance;
             if (IsInverted)
@@ -158,17 +190,96 @@ namespace LcmsNetPlugins.ZaberStage
             try
             {
                 DeviceRef.GetAxis(1).MoveRelative(dist, units, waitUntilIdle);
+                return true;
             }
-            catch { }
+            catch
+            {
+                return false;
+            }
         }
 
-        public void MoveAbsolute(double distance, Units units, bool waitUntilIdle = true)
+        public bool MoveRelative(MoveDirection direction, double distance, Units units, bool waitUntilIdle = true)
         {
             try
             {
-                DeviceRef.GetAxis(1).MoveRelative(distance, units, waitUntilIdle);
+                DeviceRef.GetAxis(1).MoveRelative(direction.Convert(distance, IsInverted), units, waitUntilIdle);
+                return true;
             }
-            catch { }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool StartMove(double velocity, Units units)
+        {
+            var vel = velocity;
+            if (IsInverted)
+            {
+                vel = -vel;
+            }
+
+            try
+            {
+                DeviceRef.GetAxis(1).MoveVelocity(vel, units);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool StartJog(MoveDirection direction, JogSpeed speed)
+        {
+            try
+            {
+                DeviceRef.GetAxis(1).MoveVelocity(direction.Convert(speed, jogSpeeds, IsInverted), Units.Velocity_MillimetresPerSecond);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool Stop(bool waitUntilIdle = true)
+        {
+            try
+            {
+                DeviceRef.GetAxis(1).Stop(waitUntilIdle);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool MoveAbsolute(double position, Units units, bool waitUntilIdle = true, double velocity = 0, Units velocityUnits = Units.Native)
+        {
+            try
+            {
+                DeviceRef.GetAxis(1).MoveAbsolute(position, units, waitUntilIdle, velocity, velocityUnits);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool WaitUntilIdle()
+        {
+            try
+            {
+                DeviceRef.GetAxis(1).WaitUntilIdle(true);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void Home()

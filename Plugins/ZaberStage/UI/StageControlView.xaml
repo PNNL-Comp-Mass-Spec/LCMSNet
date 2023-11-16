@@ -4,12 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNetPlugins.ZaberStage.UI"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
-             d:DesignHeight="367" d:DesignWidth="500"
+             d:DesignHeight="200" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance {x:Type local:StageControlViewModel}, IsDesignTimeCreatable=True}"
-             MinHeight="275" MinWidth="240">
+             MinHeight="170" MinWidth="180">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -21,27 +26,52 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" HorizontalAlignment="Center">
-            <Run Text="{Binding StageDisplayName, Mode=OneWay}" /> (stage SN <Run Text="{Binding Stage.SerialNumber, Mode=OneWay}" />)
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" HorizontalAlignment="Center" Text="{Binding StageDisplayName, Mode=OneWay}" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="3">
+            SN <Run Text="{Binding Stage.SerialNumber, Mode=OneWay}" /><Run>
+                <Run.Style>
+                    <Style TargetType="{x:Type Run}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Stage.IsInverted}" Value="True">
+                                <Setter Property="Text" Value="; inverted" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Run.Style>
+            </Run>
         </TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Position (mm)" />
-        <TextBlock Grid.Row="1" Grid.Column="1" Margin="3" Text="{Binding PositionMM, StringFormat={}{0:0.00000}}" />
-        <CheckBox Grid.Row="1" Grid.Column="3" Margin="15,3,3,3" Content="Inverted" IsEnabled="False" IsChecked="{Binding Stage.IsInverted, Mode=OneWay}" />
-        <Button Grid.Row="2" Grid.Column="0" Margin="3" Content="Move Home" Command="{Binding MoveHomeCommand}" />
-        <Button Grid.Row="2" Grid.Column="1" Margin="3" Content="Get Position" Command="{Binding GetPositionCommand}" />
-        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal">
-            <RepeatButton Margin="3" MinWidth="20" Content="&lt;&lt;&lt;&lt;" Command="{Binding Dec1mmCommand}" Delay="50" />
-            <RepeatButton Margin="3" MinWidth="20" Content="&lt;&lt;&lt;" Command="{Binding Dec100umCommand}" Delay="50" />
-            <RepeatButton Margin="3" MinWidth="20" Content="&lt;&lt;" Command="{Binding Dec1umCommand}" Delay="50" />
-            <RepeatButton Margin="3" MinWidth="20" Content="&lt;" Command="{Binding Dec1Command}" Delay="50" />
-            <RepeatButton Margin="3" MinWidth="20" Content="&gt;" Command="{Binding Inc1Command}" Delay="50" />
-            <RepeatButton Margin="3" MinWidth="20" Content="&gt;&gt;" Command="{Binding Inc1umCommand}" Delay="50" />
-            <RepeatButton Margin="3" MinWidth="20" Content="&gt;&gt;&gt;" Command="{Binding Inc100umCommand}" Delay="50" />
-            <RepeatButton Margin="3" MinWidth="20" Content="&gt;&gt;&gt;&gt;" Command="{Binding Inc1mmCommand}" Delay="50" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Position (mm)" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Margin="3" Text="{Binding PositionMM, StringFormat={}{0:0.00000}}" />
+        <Button Grid.Row="3" Grid.Column="0" Margin="3" Content="Move Home" Command="{Binding MoveHomeCommand}" />
+        <Button Grid.Row="3" Grid.Column="1" Margin="3" Content="Get Position" Command="{Binding GetPositionCommand}" />
+        <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Step" />
+            <RepeatButton Grid.Row="0" Grid.Column="1" Margin="3" MinWidth="20" Content="&lt;" Command="{Binding DecStepCommand}" Delay="500" />
+            <RepeatButton Grid.Row="0" Grid.Column="2" Margin="3" MinWidth="20" Content="&gt;" Command="{Binding IncStepCommand}" Delay="500" />
+            <TextBlock Grid.Row="0" Grid.Column="3" Margin="3" Text="by" />
+            <xctk:DoubleUpDown Grid.Row="0" Grid.Column="4" Margin="3" ShowButtonSpinner="False" MinWidth="50"  Minimum="0" FormatString="0.000######" Value="{Binding StepSizeMM}" />
+            <TextBlock Grid.Row="0" Grid.Column="5" Margin="3" Text="mm" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Jog" />
+            <Button Grid.Row="2" Grid.Column="1" Margin="3" MinWidth="20" Content="&lt;" Command="{Binding DecJogCommand}" PreviewMouseUp="Move_OnMouseUp" MouseLeave="Move_OnMouseLeave" ClickMode="Press" />
+            <Button Grid.Row="2" Grid.Column="2" Margin="3" MinWidth="20" Content="&gt;" Command="{Binding IncJogCommand}" PreviewMouseUp="Move_OnMouseUp" MouseLeave="Move_OnMouseLeave" ClickMode="Press" />
+        </Grid>
+        <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" Margin="15,0,0,0" Orientation="Horizontal">
+            <RadioButton Margin="3" GroupName="Speed" IsChecked="{Binding JogLowSpeedSelected}" Content="Low" />
+            <RadioButton Margin="3" GroupName="Speed" IsChecked="{Binding JogMediumSpeedSelected}" Content="Med" />
+            <RadioButton Margin="3" GroupName="Speed" IsChecked="{Binding JogHighSpeedSelected}" Content="High" />
         </StackPanel>
-        <!-- Items to include:
-        position display (in mm), get position button, set position?, min/max mm?
-        movement buttons: 1 native unit, 1 micrometer?, 0.1mm, 1mm, home (0)
-        -->
     </Grid>
 </UserControl>

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LcmsNetPlugins.ZaberStage.UI"
              xmlns:cueBannerOverlay="clr-namespace:WpfExtras.CueBannerOverlay;assembly=WpfExtras"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="367" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance {x:Type local:StageConfigViewModel}, IsDesignTimeCreatable=True}"
@@ -13,6 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -39,7 +41,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Margin="3" Text="Stage configuration:"></TextBlock>
+            <TextBlock Grid.Row="0" Margin="3" Text="Stage configuration:" />
             <DataGrid Grid.Row="1" ItemsSource="{Binding StageAxes}" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" CanUserResizeRows="False" AutoGenerateColumns="False">
                 <DataGrid.Resources>
                     <local:StageConfigBindingProxy x:Key="BaseDC" Data="{Binding}" />
@@ -54,11 +56,55 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Set SN" Binding="{Binding Settings.SerialNumber}" />
-                    <DataGridTextColumn Header="Model" Binding="{Binding Settings.DeviceModelName}" />
-                    <DataGridTextColumn Header="ID" Binding="{Binding Settings.DeviceModelID}" />
-                    <DataGridTextColumn Header="Firmware" Binding="{Binding Settings.FirmwareVersion}" />
+                    <DataGridTextColumn Header="Set SN" Binding="{Binding Settings.SerialNumber}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Model" Binding="{Binding Settings.DeviceModelName}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="ID" Binding="{Binding Settings.DeviceModelID}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Firmware" Binding="{Binding Settings.FirmwareVersion}" IsReadOnly="True" />
                     <DataGridCheckBoxColumn Header="Inverted" Binding="{Binding Settings.IsInverted}" />
+                    <DataGridTemplateColumn Header="Init#">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <xctk:IntegerUpDown Minimum="0" Value="{Binding Settings.InitOrder, UpdateSourceTrigger=PropertyChanged}" ToolTip="When stages need homing, lower numbered stages will be homed first." />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" IsSharedSizeScope="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Margin="3" Text="Stage movement speeds:" />
+            <DataGrid Grid.Row="1" ItemsSource="{Binding StageAxes}" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" CanUserResizeRows="False" AutoGenerateColumns="False">
+                <DataGrid.Resources>
+                    <local:StageConfigBindingProxy x:Key="BaseDC" Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Ref" IsReadOnly="True" Binding="{Binding Settings.DeviceStageName}" />
+                    <DataGridTextColumn Header="Name" IsReadOnly="True"  Binding="{Binding Settings.StageDisplayName}" />
+                    <DataGridTemplateColumn Header="Low (mm)">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <xctk:DoubleUpDown Minimum="0" Value="{Binding Settings.JogSpeedLow, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Medium (mm)">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <xctk:DoubleUpDown Minimum="0" Value="{Binding Settings.JogSpeedMedium, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="High (mm)">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <xctk:DoubleUpDown Minimum="0" Value="{Binding Settings.JogSpeedHigh, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
