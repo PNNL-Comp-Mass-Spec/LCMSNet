@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:LcmsNet.Devices.ViewModels"
         mc:Ignorable="d"
         Title="Device Initialization Failures" Height="529" Width="811"
-        WindowStartupLocation="CenterOwner" Topmost="True"
+        WindowStartupLocation="CenterOwner"
         d:DataContext="{d:DesignInstance {x:Type viewModels:FailedDevicesViewModel}, IsDesignTimeCreatable=True}">
     <Grid>
         <Grid.RowDefinitions>
