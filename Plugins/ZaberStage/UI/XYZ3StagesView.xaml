@@ -9,24 +9,10 @@
              d:DataContext="{d:DesignInstance {x:Type local:XYZ3StagesViewModel}, IsDesignTimeCreatable=True}"
              MinHeight="275" MinWidth="500">
     <TabControl>
-        <TabItem Header="Control" KeyUp="StageControls_OnKeyUp">
-            <TabItem.InputBindings>
-                <KeyBinding Key="Left" Command="{Binding XStageVM.DecJogCommand}" />
-                <KeyBinding Key="Right" Command="{Binding XStageVM.IncJogCommand}" />
-                <KeyBinding Key="Up" Command="{Binding YStageVM.IncJogCommand}" />
-                <KeyBinding Key="Down" Command="{Binding YStageVM.DecJogCommand}" />
-                <KeyBinding Key="Add" Command="{Binding ZStageVM.IncJogCommand}" />
-                <KeyBinding Key="Subtract" Command="{Binding ZStageVM.DecJogCommand}" />
-            </TabItem.InputBindings>
-            <!-- TODO: change key bindings
-            Example (probably preferred):
-            Add a 'key control' (or 'joystick control') checkbox; when checked, add the keydown/keyup event handlers, when un-checked, remove them
-            When the current tab loses focus in any way, remove the event handlers and un-check the box
-            Also, when box is checked, add a colored frame around the control?
-            Maybe also look at https://stackoverflow.com/questions/23316274/inputbindings-work-only-when-focused ?
-            -->
+        <TabItem Header="Control" IsSelected="{Binding ControlTabSelected}">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -35,13 +21,20 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <GroupBox Grid.Row="1" Grid.Column="0" Header="X">
+                <!-- Key Binding notes
+                Add a 'key control' (or 'joystick control') checkbox; when checked, add the keydown/keyup event handlers, when un-checked, remove them
+                When the current tab loses focus in any way, remove the event handlers and un-check the box
+                Also, when box is checked, add a colored frame around the control?
+                Maybe also look at https://stackoverflow.com/questions/23316274/inputbindings-work-only-when-focused ?
+                -->
+                <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="Enable key control" Checked="KeyControl_OnChecked" Unchecked="KeyControl_OnUnchecked" Name="KeyControlEnabled" />
+                <GroupBox Grid.Row="2" Grid.Column="0" Header="X">
                     <local:StageControlView DataContext="{Binding XStageVM}" />
                 </GroupBox>
-                <GroupBox Grid.Row="1" Grid.Column="1" Header="Y">
+                <GroupBox Grid.Row="2" Grid.Column="1" Header="Y">
                     <local:StageControlView DataContext="{Binding YStageVM}" />
                 </GroupBox>
-                <GroupBox Grid.Row="1" Grid.Column="2" Header="Z">
+                <GroupBox Grid.Row="2" Grid.Column="2" Header="Z">
                     <local:StageControlView DataContext="{Binding ZStageVM}" />
                 </GroupBox>
             </Grid>

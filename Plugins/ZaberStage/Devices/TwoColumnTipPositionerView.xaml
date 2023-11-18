@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="LcmsNetPlugins.ZaberStage.Devices.TwoColumnTipPositionerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:LcmsNetPlugins.ZaberStage.Devices"
+             xmlns:ui="clr-namespace:LcmsNetPlugins.ZaberStage.UI"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="367" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance {x:Type local:TwoColumnTipPositionerViewModel}, IsDesignTimeCreatable=True}"
+             MinHeight="275" MinWidth="240">
+    <TabControl>
+        <TabItem Header="Control" IsSelected="{Binding ControlTabSelected}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" Header="Positions">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Position 1:" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Margin="3" Text="{Binding Stage.Position1}" />
+                        <Button Grid.Row="0" Grid.Column="2" Margin="3" Content="Set" Command="{Binding SetPosition1Command}" />
+                        <Button Grid.Row="0" Grid.Column="3" Margin="3" Content="Go To" Command="{Binding GotoPosition1Command}" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Position 2:" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Margin="3" Text="{Binding Stage.Position2}" />
+                        <Button Grid.Row="1" Grid.Column="2" Margin="3" Content="Set" Command="{Binding SetPosition2Command}" />
+                        <Button Grid.Row="1" Grid.Column="3" Margin="3" Content="Go To" Command="{Binding GotoPosition2Command}" />
+                        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal">
+                            <TextBlock Margin="3" Text="Y Axis move offset (MM):" />
+                            <TextBlock Margin="3" Text="{Binding YAxisMoveOffsetMM}" />
+                            <xctk:DoubleUpDown Margin="15,3,3,3" MinWidth="100" ShowButtonSpinner="False" Value="{Binding NewYAxisMoveOffsetMM}" />
+                            <Button Margin="3" Content="Set" Command="{Binding SetYAxisMoveOffsetCommand}" />
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+                <!-- Key Binding notes
+                Add a 'key control' (or 'joystick control') checkbox; when checked, add the keydown/keyup event handlers, when un-checked, remove them
+                When the current tab loses focus in any way, remove the event handlers and un-check the box
+                Also, when box is checked, add a colored frame around the control?
+                Maybe also look at https://stackoverflow.com/questions/23316274/inputbindings-work-only-when-focused ?
+                -->
+                <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" Content="Enable key control" Checked="KeyControl_OnChecked" Unchecked="KeyControl_OnUnchecked" Name="KeyControlEnabled" />
+                <GroupBox Grid.Row="2" Grid.Column="0" Margin="3" Header="X">
+                    <ui:StageControlView DataContext="{Binding XStageVM}" />
+                </GroupBox>
+                <GroupBox Grid.Row="2" Grid.Column="1" Margin="3" Header="Y">
+                    <ui:StageControlView DataContext="{Binding YStageVM}" />
+                </GroupBox>
+                <GroupBox Grid.Row="2" Grid.Column="2" Margin="3" Header="Z">
+                    <ui:StageControlView DataContext="{Binding ZStageVM}" />
+                </GroupBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Stage Config">
+            <ui:StageConfigView DataContext="{Binding ConfigVm}" />
+        </TabItem>
+    </TabControl>
+</UserControl>

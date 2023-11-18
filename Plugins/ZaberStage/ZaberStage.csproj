@@ -56,6 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionStageID.cs" />
+    <Compile Include="Devices\TwoColumnTipPositioner.cs" />
+    <Compile Include="Devices\TwoColumnTipPositionerView.xaml.cs">
+      <DependentUpon>TwoColumnTipPositionerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\TwoColumnTipPositionerViewModel.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,6 +105,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Devices\TwoColumnTipPositionerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\StageConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -44,6 +44,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
 
         private readonly ObservableAsPropertyHelper<string> stageDisplayName;
         private double positionMMThreaded;
+        private bool joggingAxis = false;
         private readonly Timer movePositionReadTimer;
         private readonly ObservableAsPropertyHelper<double> positionMM;
         private readonly TimeSpan timerPeriod = TimeSpan.FromMilliseconds(100);
@@ -98,6 +99,12 @@ namespace LcmsNetPlugins.ZaberStage.UI
         public ReactiveCommand<Unit, Unit> IncJogCommand { get; }
         public ReactiveCommand<Unit, Unit> StopCommand { get; }
 
+        public double GetPositionMM()
+        {
+            ReadPosition();
+            return PositionMMThreaded;
+        }
+
         public void ReadPosition()
         {
             PositionMMThreaded = Stage.GetPositionMM();
@@ -112,6 +119,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
         public void MoveAxisVel(double velocity, Units units)
         {
             Stage.StartMove(velocity, units);
+            joggingAxis = true;
             movePositionReadTimer.Change(timerPeriod, timerPeriod);
         }
 
@@ -124,14 +132,19 @@ namespace LcmsNetPlugins.ZaberStage.UI
         public void JogAxis(MoveDirection direction)
         {
             Stage.StartJog(direction, SelectedJogSpeed);
+            joggingAxis = true;
             movePositionReadTimer.Change(timerPeriod, timerPeriod);
         }
 
         public void StopAxis()
         {
             Stage.Stop(false);
-            movePositionReadTimer.Change(Timeout.InfiniteTimeSpan, timerPeriod);
-            ReadPosition();
+            if (joggingAxis)
+            {
+                joggingAxis = false;
+                movePositionReadTimer.Change(Timeout.InfiniteTimeSpan, timerPeriod);
+                ReadPosition();
+            }
         }
 
         public void MoveAxisHome()

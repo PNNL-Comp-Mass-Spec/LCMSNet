@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LcmsNetPlugins.ZaberStage.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LcmsNetPlugins.ZaberStage.UI
+namespace LcmsNetPlugins.ZaberStage.Devices
 {
     /// <summary>
-    /// Interaction logic for XYZ3StagesView.xaml
+    /// Interaction logic for TwoColumnTipPositionerView.xaml
     /// </summary>
-    public partial class XYZ3StagesView : UserControl
+    public partial class TwoColumnTipPositionerView : UserControl
     {
-        public XYZ3StagesView()
+        public TwoColumnTipPositionerView()
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
@@ -28,12 +29,12 @@ namespace LcmsNetPlugins.ZaberStage.UI
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue is XYZ3StagesViewModel xyzOld)
+            if (e.OldValue is TwoColumnTipPositionerViewModel xyzOld)
             {
                 xyzOld.DeviceControlsOutOfView -= OnDeviceOutOfView;
             }
 
-            if (e.NewValue is XYZ3StagesViewModel xyz)
+            if (e.NewValue is TwoColumnTipPositionerViewModel xyz)
             {
                 xyz.DeviceControlsOutOfView += OnDeviceOutOfView;
             }
@@ -46,7 +47,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (DataContext is XYZ3StagesViewModel xyz && !e.IsRepeat)
+            if (DataContext is TwoColumnTipPositionerViewModel xyz && !e.IsRepeat)
             {
                 if (e.Key == Key.Left)
                 {
@@ -79,7 +80,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
 
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            if (DataContext is XYZ3StagesViewModel xyz)
+            if (DataContext is TwoColumnTipPositionerViewModel xyz)
             {
                 if (e.Key == Key.Left || e.Key == Key.Right)
                 {
