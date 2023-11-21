@@ -112,20 +112,20 @@ namespace LcmsNetPlugins.ZaberStage.UI
 
         public void MoveAxis(double distance, Units units)
         {
-            Stage.MoveRelative(distance, units);
+            Stage.MoveRelative2(distance, units);
             ReadPosition();
         }
 
         public void MoveAxisVel(double velocity, Units units)
         {
-            Stage.StartMove(velocity, units);
+            Stage.StartMove2(velocity, units);
             joggingAxis = true;
             movePositionReadTimer.Change(timerPeriod, timerPeriod);
         }
 
         public void StepAxis(MoveDirection direction)
         {
-            Stage.MoveRelative(direction, StepSizeMM, Units.Length_Millimetres);
+            Stage.MoveRelative(direction, StepSizeMM);
             ReadPosition();
         }
 

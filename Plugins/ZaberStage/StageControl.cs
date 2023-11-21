@@ -25,6 +25,7 @@ namespace LcmsNetPlugins.ZaberStage
         private bool isInverted;
         private int initOrder;
         private readonly double[] jogSpeeds = new double[] { 0.2, 1, 3 };
+        private double maxMoveSpeed = 1000000; // default is no movement speed limit, beyond the hardware limits!
         private Zaber.Motion.Ascii.Device deviceRef = null;
 
         // TODO: Stage display: have one tab that is details/configuration that is common for all stages; can be a ItemsControl or ListView
@@ -80,6 +81,12 @@ namespace LcmsNetPlugins.ZaberStage
         public double JogSpeedLow { get => jogSpeeds[0]; set => this.RaiseAndSetIfChanged(ref jogSpeeds[0], value); }
         public double JogSpeedMedium { get => jogSpeeds[1]; set => this.RaiseAndSetIfChanged(ref jogSpeeds[1], value); }
         public double JogSpeedHigh { get => jogSpeeds[2]; set => this.RaiseAndSetIfChanged(ref jogSpeeds[2], value); }
+
+        /// <summary>
+        /// Maximum movement speed (when provided to commands), in mm/s
+        /// </summary>
+        public double MaxMoveSpeed { get => maxMoveSpeed; set => this.RaiseAndSetIfChanged(ref maxMoveSpeed, value); }
+
         public Zaber.Motion.Ascii.Device DeviceRef
         {
             get => deviceRef;
@@ -118,7 +125,7 @@ namespace LcmsNetPlugins.ZaberStage
 
         public string GetAxisConfigString()
         {
-            return $"DN={StageDisplayName}&;SN={SerialNumber}&;Inv={IsInverted}&;Init#={InitOrder}&;JogSpeeds={string.Join(",", jogSpeeds.Select(x => x.ToString(CultureInfo.InvariantCulture)))}";
+            return $"DN={StageDisplayName}&;SN={SerialNumber}&;Inv={IsInverted}&;Init#={InitOrder}&;JogSpeeds={string.Join(",", jogSpeeds.Select(x => x.ToString(CultureInfo.InvariantCulture)))}&;MaxSpeed={MaxMoveSpeed}";
         }
 
         public void ParseAxisConfigString(string config)
@@ -166,6 +173,12 @@ namespace LcmsNetPlugins.ZaberStage
                         OnPropertyChanged(nameof(JogSpeedMedium));
                         OnPropertyChanged(nameof(JogSpeedHigh));
                     }
+
+                    if (part.StartsWith("MaxSpeed=", StringComparison.OrdinalIgnoreCase) &&
+                        double.TryParse(part.Substring(9), out var maxSpeed))
+                    {
+                        MaxMoveSpeed = maxSpeed;
+                    }
                 }
             }
             catch
@@ -179,7 +192,19 @@ namespace LcmsNetPlugins.ZaberStage
             return DeviceRef.GetAxis(1).GetPosition(Units.Length_Millimetres);
         }
 
-        public bool MoveRelative(double distance, Units units, bool waitUntilIdle = true)
+        /// <summary>
+        /// Move the stage axis relative to the current position
+        /// </summary>
+        /// <param name="distance">distance in mm</param>
+        /// <param name="waitUntilIdle"></param>
+        /// <param name="velocity">velocity in mm/s; '0' for device-programmed 'max speed'</param>
+        /// <returns></returns>
+        public bool MoveRelative(double distance, bool waitUntilIdle = true, double velocity = 0)
+        {
+            return MoveRelative2(distance, Units.Length_Millimetres, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), Units.Velocity_MillimetresPerSecond);
+        }
+
+        public bool MoveRelative2(double distance, Units units, bool waitUntilIdle = true, double velocity = 0, Units velocityUnits = Units.Native)
         {
             var dist = distance;
             if (IsInverted)
@@ -189,7 +214,7 @@ namespace LcmsNetPlugins.ZaberStage
 
             try
             {
-                DeviceRef.GetAxis(1).MoveRelative(dist, units, waitUntilIdle);
+                DeviceRef.GetAxis(1).MoveRelative(dist, units, waitUntilIdle, velocity, velocityUnits);
                 return true;
             }
             catch
@@ -198,11 +223,24 @@ namespace LcmsNetPlugins.ZaberStage
             }
         }
 
-        public bool MoveRelative(MoveDirection direction, double distance, Units units, bool waitUntilIdle = true)
+        /// <summary>
+        /// Move the stage axis relative to the current position
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <param name="distance">distance in mm</param>
+        /// <param name="waitUntilIdle"></param>
+        /// <param name="velocity">velocity in mm/s; '0' for device-programmed 'max speed'</param>
+        /// <returns></returns>
+        public bool MoveRelative(MoveDirection direction, double distance, bool waitUntilIdle = true, double velocity = 0)
+        {
+            return MoveRelative2(direction, distance, Units.Length_Millimetres, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), Units.Velocity_MillimetresPerSecond);
+        }
+
+        public bool MoveRelative2(MoveDirection direction, double distance, Units units, bool waitUntilIdle = true, double velocity = 0, Units velocityUnits = Units.Native)
         {
             try
             {
-                DeviceRef.GetAxis(1).MoveRelative(direction.Convert(distance, IsInverted), units, waitUntilIdle);
+                DeviceRef.GetAxis(1).MoveRelative(direction.Convert(distance, IsInverted), units, waitUntilIdle, velocity, velocityUnits);
                 return true;
             }
             catch
@@ -211,7 +249,17 @@ namespace LcmsNetPlugins.ZaberStage
             }
         }
 
-        public bool StartMove(double velocity, Units units)
+        /// <summary>
+        /// Start moving the axis (jogging)
+        /// </summary>
+        /// <param name="velocity">velocity in mm/s</param>
+        /// <returns></returns>
+        public bool StartMove(double velocity)
+        {
+            return StartMove2(velocity, Units.Length_Millimetres);
+        }
+
+        public bool StartMove2(double velocity, Units units)
         {
             var vel = velocity;
             if (IsInverted)
@@ -234,7 +282,7 @@ namespace LcmsNetPlugins.ZaberStage
         {
             try
             {
-                DeviceRef.GetAxis(1).MoveVelocity(direction.Convert(speed, jogSpeeds, IsInverted), Units.Velocity_MillimetresPerSecond);
+                DeviceRef.GetAxis(1).MoveVelocity(Math.Min(direction.Convert(speed, jogSpeeds, IsInverted), MaxMoveSpeed), Units.Velocity_MillimetresPerSecond);
                 return true;
             }
             catch
@@ -256,17 +304,46 @@ namespace LcmsNetPlugins.ZaberStage
             }
         }
 
-        public bool MoveAbsolute(double position, Units units, bool waitUntilIdle = true, double velocity = 0, Units velocityUnits = Units.Native)
+        /// <summary>
+        /// Move the stage axis to the specified position
+        /// </summary>
+        /// <param name="position">position in mm</param>
+        /// <param name="waitUntilIdle"></param>
+        /// <param name="velocity">velocity in mm/s; '0' for device-programmed 'max speed'</param>
+        /// <returns></returns>
+        public bool MoveAbsolute(double position, bool waitUntilIdle = true, double velocity = 0)
+        {
+            return MoveAbsolute2(position, Units.Length_Millimetres, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), Units.Velocity_MillimetresPerSecond);
+        }
+
+        public bool MoveAbsolute2(double position, Units units, bool waitUntilIdle = true, double velocity = 0, Units velocityUnits = Units.Native)
         {
             try
             {
-                DeviceRef.GetAxis(1).MoveAbsolute(position, units, waitUntilIdle, velocity, velocityUnits);
+                DeviceRef.GetAxis(1).MoveAbsolute(position, units, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), velocityUnits);
                 return true;
             }
             catch
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Move the stage axis to the specified position
+        /// </summary>
+        /// <param name="position">position in mm</param>
+        /// <param name="waitUntilIdle"></param>
+        /// <param name="velocity">velocity in mm/s; '0' for device-programmed 'max speed'</param>
+        /// <returns></returns>
+        public Task MoveAbsoluteAsync(double position, bool waitUntilIdle = true, double velocity = 0)
+        {
+            return MoveAbsoluteAsync2(position, Units.Length_Millimetres, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), Units.Velocity_MillimetresPerSecond);
+        }
+
+        public Task MoveAbsoluteAsync2(double position, Units units, bool waitUntilIdle = true, double velocity = 0, Units velocityUnits = Units.Native)
+        {
+            return DeviceRef.GetAxis(1).MoveAbsoluteAsync(position, units, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), velocityUnits);
         }
 
         public bool WaitUntilIdle()

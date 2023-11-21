@@ -67,6 +67,7 @@
     <Compile Include="StageBase.cs" />
     <Compile Include="StageConnectionManager.cs" />
     <Compile Include="StageControl.cs" />
+    <Compile Include="UI\Collections.cs" />
     <Compile Include="UI\StageConfigBindingProxy.cs" />
     <Compile Include="UI\StageConfigView.xaml.cs">
       <DependentUpon>StageConfigView.xaml</DependentUpon>

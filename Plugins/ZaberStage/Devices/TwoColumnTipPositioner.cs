@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
-using Zaber.Motion;
+using LcmsNetSDK.Method;
 
 namespace LcmsNetPlugins.ZaberStage.Devices
 {
@@ -82,20 +78,16 @@ namespace LcmsNetPlugins.ZaberStage.Devices
             set => this.RaiseAndSetIfChanged(ref position2, value);
         }
 
-        // operation notes:
-        // Option to set an axis for first/last retraction/position and retraction distance
-        // Have a hard-defined list of 2 positions
-        // set max movement speed
-
-        // TODO:
-        // Add methods to move to position 1 or 2
-
-        public bool MoveToPosition1()
+        [LCMethodEvent("Move to Position 1", MethodOperationTimeoutType.Parameter, EventDescription = "Move the stages to position 1")]
+        [LCMethodEvent("Move to Position 1 NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Move the stages to position 1\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        public bool MoveToPosition1(double timeout = 1)
         {
             return MoveToPosition(Position1);
         }
 
-        public bool MoveToPosition2()
+        [LCMethodEvent("Move to Position 2", MethodOperationTimeoutType.Parameter, EventDescription = "Move the stages to position 2")]
+        [LCMethodEvent("Move to Position 2 NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Move the stages to position 2\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
+        public bool MoveToPosition2(double timeout = 1)
         {
             return MoveToPosition(Position2);
         }
@@ -124,15 +116,15 @@ namespace LcmsNetPlugins.ZaberStage.Devices
             xVelocity = Math.Abs(pos.X - xCurrent);
             zVelocity = Math.Abs(pos.Z - zCurrent);
 
-            var result = YAxis.MoveAbsolute(yMovePosition, Units.Length_Millimetres);
+            var result = YAxis.MoveAbsolute(yMovePosition);
             if (!result) return false;
 
-            var t1 = XAxis.DeviceRef.GetAxis(1).MoveAbsoluteAsync(pos.X, Units.Length_Millimetres, velocity: xVelocity, velocityUnit: Units.Velocity_MillimetresPerSecond);
-            var t2 = ZAxis.DeviceRef.GetAxis(1).MoveAbsoluteAsync(pos.Z, Units.Length_Millimetres, velocity: zVelocity, velocityUnit: Units.Velocity_MillimetresPerSecond);
+            var t1 = XAxis.MoveAbsoluteAsync(pos.X, velocity: xVelocity);
+            var t2 = ZAxis.MoveAbsoluteAsync(pos.Z, velocity: zVelocity);
 
             Task.WaitAll(t1, t2);
 
-            return YAxis.MoveAbsolute(pos.Y, Units.Length_Millimetres);
+            return YAxis.MoveAbsolute(pos.Y);
         }
     }
 }
