@@ -79,24 +79,55 @@ namespace XcaliburControl
         //ShowHomePage: parameters are (bool visibility), no return, not sure on actual functionality.
          */
 
-        //SubmitSequence - returns an error code: 0 for success, != 0 for error
-        //SubmitSequence2 - returns a status code: >= 0 for success (submission ID), < 0 for failure
-        public bool StartSample(string sampleName, string xcaliburLCMethodPath, out string errorMessage)
+        /// <summary>
+        /// Start a sample in Xcalibur - creates a sequence and starts it
+        /// </summary>
+        /// <param name="sampleName"></param>
+        /// <param name="xcaliburMethodPath"></param>
+        /// <param name="errorMessage"></param>
+        /// <returns>false if an error occurred</returns>
+        public bool StartSample(string sampleName, string xcaliburMethodPath, out string errorMessage)
+        {
+            return StartSample(sampleName, xcaliburMethodPath, out errorMessage, "", -1);
+        }
+
+        /// <summary>
+        /// Start a sample in Xcalibur - creates a sequence and starts it
+        /// </summary>
+        /// <param name="sampleName"></param>
+        /// <param name="xcaliburMethodPath"></param>
+        /// <param name="errorMessage"></param>
+        /// <param name="position">Must be non-empty if using a Thermo autosampler</param>
+        /// <param name="injectionVolume">Must be greater than zero if using a Thermo autosampler</param>
+        /// <returns>false if an error occurred</returns>
+        public bool StartSample(string sampleName, string xcaliburMethodPath, out string errorMessage, string position, double injectionVolume)
         {
             errorMessage = string.Empty;
-            CreateSequenceForSample(sampleName, xcaliburLCMethodPath);
+            CreateSequenceForSample(sampleName, xcaliburMethodPath);
 
             var sequenceName = OutputSldPath;
 
             var deviceNames = "";
             acquisitionLib.GetDeviceNames(ref deviceNames); // Gets a comma-separated list of device names
-            // TODO: This device list must not be empty!!!
 
+            // The device list must not be empty!!!
             if (string.IsNullOrWhiteSpace(deviceNames.Trim()))
             {
                 return false;
             }
 
+            // 0-based, '-1' for 'no start' (Xcalibur handles this automatically for 'external autosampler' systems, but if this is '0', it causes an error/sequence pause.
+            short startDevice = -1;
+            // If position and injection volume are valid (ish), then assume we also need to start the device, rather than relying on a contact closure to start it.
+            if (!string.IsNullOrWhiteSpace(position) && injectionVolume > 0)
+            {
+                // assume the first device is the start device.
+                // I'm not sure on what situation there could be where we would have multiple devices configured and be using this software to control it...
+                startDevice = 0;
+            }
+
+            //SubmitSequence - returns an error code: 0 for success, != 0 for error
+            //SubmitSequence2 - returns a status code: >= 0 for success (submission ID), < 0 for failure
             // SubmitSequence2 appears to be friendlier
             var returnCode = acquisitionLib.SubmitSequence2(
                 Environment.UserName, // May be limited to 10 characters?
@@ -119,7 +150,7 @@ namespace XcaliburControl
                 false, // Post-acquisition actions: Run ...
                 false, // Post-acquisition actions: Run ...
                 deviceNames,
-                -1, // 0-based, '-1' for 'no start' (Xcalibur handles this automatically for 'external autosampler' systems, but if this is '0', it causes an error/sequence pause.
+                startDevice, // 0-based, '-1' for 'no start' (Xcalibur handles this automatically for 'external autosampler' systems, but if this is '0', it causes an error/sequence pause.)
                 1 // 1: ON, 2: OFF, 3: Standby
             );
 
@@ -159,7 +190,24 @@ namespace XcaliburControl
             return true;
         }
 
-        public void CreateSequenceForSample(string sampleName, string xcaliburLCMethodPath)
+        /// <summary>
+        /// Create a sequence file (<see cref="OutputSldPath"/>) for the provided sample information
+        /// </summary>
+        /// <param name="sampleName"></param>
+        /// <param name="xcaliburMethodPath"></param>
+        public void CreateSequenceForSample(string sampleName, string xcaliburMethodPath)
+        {
+            CreateSequenceForSample(sampleName, xcaliburMethodPath, "", -1);
+        }
+
+        /// <summary>
+        /// Create a sequence file (<see cref="OutputSldPath"/>) for the provided sample information; position and injection volume are needed if running a Thermo autosampler
+        /// </summary>
+        /// <param name="sampleName"></param>
+        /// <param name="xcaliburMethodPath"></param>
+        /// <param name="position">Must be non-empty if using a Thermo autosampler</param>
+        /// <param name="injectionVolume">Must be greater than zero if using a Thermo autosampler</param>
+        public void CreateSequenceForSample(string sampleName, string xcaliburMethodPath, string position, double injectionVolume)
         {
             IXSequence sequence = new XSequenceClass();
             if (!string.IsNullOrWhiteSpace(TemplateSldPath) && File.Exists(TemplateSldPath))
@@ -182,7 +230,13 @@ namespace XcaliburControl
             var sample = (IXSample)samples.Add(-1);
             sample.FileName = sampleName;
             sample.Path = DataFileDirectoryPath;
-            sample.InstMeth = Path.ChangeExtension(xcaliburLCMethodPath, null); // do not include .meth
+            sample.InstMeth = Path.ChangeExtension(xcaliburMethodPath, null); // do not include .meth
+
+            if (!string.IsNullOrWhiteSpace(position) && injectionVolume > 0)
+            {
+                sample.Position = position;
+                sample.InjVol = injectionVolume;
+            }
 
             sequence.SaveAs(OutputSldPath, "LCMSOperator", "", 1);
             sequence.Close();
