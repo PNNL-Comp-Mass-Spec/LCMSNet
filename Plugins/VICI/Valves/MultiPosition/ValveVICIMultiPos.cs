@@ -214,6 +214,9 @@ namespace LcmsNetPlugins.VICI.Valves.MultiPosition
         /// <param name="position">The new position.</param>
         public ValveErrors SetPosition(int position)
         {
+            // Short-circuit - don't move the valve if it's already in the correct position
+            // Safety first: read the position to make sure it hasn't been changed using the hardware buttons
+            GetPosition();
             if (position == LastMeasuredPosition)
             {
                 return ValveErrors.Success;

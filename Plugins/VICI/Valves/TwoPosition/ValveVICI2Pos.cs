@@ -193,11 +193,18 @@ namespace LcmsNetPlugins.VICI.Valves.TwoPosition
                 return ValveErrors.Success;
             }
 
+            /*
+            // NOTE: This short-circuit is potentially dangerous - it relies on the last-read hardware position
+            //       If someone has changed the valve position using the hardware buttons, the last-read hardware position is no longer valid
+            //       Instead, it's safe enough to send a command to switch to the same position, and it ensures consistency;
+            //          the valve firmware will not move the valve if it is told to move to the position it's already in. (for 2-position valves)
+            //       The other option is to re-read the hardware position before performing this check, but that adds 200ms (read delay) to this method
             // short circuit..if we're already in that position, why bother trying to move to it?
             if (newPosition == LastMeasuredPosition)
             {
                 return ValveErrors.Success;
             }
+            */
 
             if (newPosition == TwoPositionState.PositionA || newPosition == TwoPositionState.PositionB)
             {
