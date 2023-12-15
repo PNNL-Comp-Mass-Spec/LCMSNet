@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DynamicData">
-      <Version>8.0.2</Version>
+      <Version>8.3.27</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
       <Version>19.5.1</Version>

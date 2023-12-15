@@ -134,10 +134,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit">
-      <Version>5.0.103</Version>
+      <Version>5.0.106</Version>
     </PackageReference>
     <PackageReference Include="DynamicData">
-      <Version>8.0.2</Version>
+      <Version>8.3.27</Version>
     </PackageReference>
     <PackageReference Include="OxyPlot.Wpf">
       <Version>2.1.2</Version>

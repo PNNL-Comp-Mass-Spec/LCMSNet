@@ -83,10 +83,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit">
-      <Version>5.0.103</Version>
+      <Version>5.0.106</Version>
     </PackageReference>
     <PackageReference Include="DynamicData">
-      <Version>8.0.2</Version>
+      <Version>8.3.27</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
       <Version>19.5.1</Version>
