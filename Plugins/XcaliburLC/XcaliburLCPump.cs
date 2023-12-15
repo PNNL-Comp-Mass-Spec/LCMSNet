@@ -18,10 +18,8 @@ namespace LcmsNetPlugins.XcaliburLC
     [DeviceControl(typeof(XcaliburLCViewModel),
         "Xcalibur LC",
         "Pumps")]
-    public class XcaliburLCPump : IDevice, IFluidicsPump, IHasDataProvider, IHasPerformanceData, IDisposable // TODO: maybe implement IPump?
+    public class XcaliburLCPump : XcaliburController, IDevice, IFluidicsPump, IHasDataProvider, IHasPerformanceData, IDisposable // TODO: maybe implement IPump?
     {
-        public const string DefaultLcMethodPath = @"C:\Xcalibur\methods";
-
         /// <summary>
         /// The error message was not set.
         /// </summary>
@@ -33,18 +31,8 @@ namespace LcmsNetPlugins.XcaliburLC
         /// <summary>
         /// Default constructor - for use within LCMSNet
         /// </summary>
-        public XcaliburLCPump()
+        public XcaliburLCPump() : base()
         {
-            CreateErrorCodes();
-            CreateStatusCodes();
-
-            var path = DefaultLcMethodPath;
-            //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
-            methodFiles = new InstrumentMethodFiles(DefaultLcMethodPath);
-            methodFiles.MethodsUpdated += (sender, args) => ListMethods();
-
-            ReadMethodDirectory();
-
             deviceName = "xcalibur";
 
             deviceStatus = DeviceStatus.NotInitialized;
@@ -58,19 +46,10 @@ namespace LcmsNetPlugins.XcaliburLC
                 //};
             }
 
-            xcaliburCom = new XcaliburCOM(ProcessEvent);
+            StatusChange += OnStatusChanged;
+            ErrorReport += OnErrorReport;
+            MethodNamesUpdated += OnMethodNamesUpdated;
         }
-
-        public void Dispose()
-        {
-            xcaliburCom.Dispose();
-            methodFiles.Dispose();
-        }
-
-        private readonly XcaliburCOM xcaliburCom;
-#pragma warning disable RCS1085 // Use auto-implemented property.
-        internal XcaliburCOM XcaliburCom => xcaliburCom;
-#pragma warning restore RCS1085 // Use auto-implemented property.
 
         /// <summary>
         /// The device's name.
@@ -78,23 +57,9 @@ namespace LcmsNetPlugins.XcaliburLC
         private string deviceName;
 
         /// <summary>
-        /// Filesystem watcher for real-time updating of instrument methods.
-        /// </summary>
-        private InstrumentMethodFiles methodFiles;
-
-        /// <summary>
         /// Status strings from the pumps.
         /// </summary>
         private static string[] notificationStrings;
-
-        private static Dictionary<string, string> errorCodes;
-        private static Dictionary<string, string> statusCodes;
-
-        private bool runCompleted = false;
-        private bool readyToDownload = false;
-        private bool waitingForContactClosure = false;
-
-        private IReadOnlyDictionary<string, string> AvailableMethods => methodFiles.MethodFiles;
 
         /// <summary>
         /// Status of the device.
@@ -107,7 +72,7 @@ namespace LcmsNetPlugins.XcaliburLC
         public event EventHandler<DeviceStatusEventArgs> StatusUpdate;
 
         /// <summary>
-        /// Fired when the Agilent Pump finds out what method names are available.
+        /// Fired when the device finds out what method names are available.
         /// </summary>
         public event DelegateDeviceHasData MethodNames;
 
@@ -212,38 +177,12 @@ namespace LcmsNetPlugins.XcaliburLC
         }
 
         /// <summary>
-        /// Runs the method provided by a string.
-        /// </summary>
-        /// <param name="method">Method to run stored on the pumps.</param>
-        /// <param name="sampleName">Name to use for data file</param>
-        public bool StartMethod(string method, string sampleName = "testLcmsNetRun")
-        {
-            // Make sure we have record of the method
-            if (AvailableMethods.ContainsKey(method) == false) // TODO: Preferable to not throw an exception here.
-                throw new Exception($"The method {method} does not exist.");
-
-            // Then send commands to start the method
-            var methodPath = AvailableMethods[method];
-
-            var result = xcaliburCom.StartSample(sampleName, methodPath, out var errorMessage);
-
-            if (!result)
-            {
-                ApplicationLogger.LogError(LogLevel.Error, $"Xcalibur method start failed!: {errorMessage}");
-            }
-
-            runCompleted = false;
-
-            return result;
-        }
-
-        /// <summary>
         /// Stops the currently running method.
         /// </summary>
         [LCMethodEvent("Stop Method", 1000)]
         public void StopMethod()
         {
-            xcaliburCom.StopQueue();
+            StopQueue();
         }
 
         /// <summary>
@@ -253,29 +192,9 @@ namespace LcmsNetPlugins.XcaliburLC
         /// <returns>Integer error code.</returns>
         [LCMethodEvent("Wait Until Ready", MethodOperationTimeoutType.Parameter, EventDescription = "Wait until Xcalibur is reporting state \"Ready To Download\".\nDeterministic, next step will not be started until timeout is reached")]
         [LCMethodEvent("Wait Until Ready NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Wait until the Xcalibur is reporting state \"Ready To Download\".\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
-        public bool WaitUntilReadyToDownload(double timeout)
+        public new bool WaitUntilReadyToDownload(double timeout)
         {
-            var start = TimeKeeper.Instance.Now;
-            var end = start;
-
-            // Make sure we update this once, in case it has never been updated by the event firing
-            var currentState = XcaliburCom.GetRunStatus();
-            readyToDownload = currentState.Trim().Equals("Ready To Download", StringComparison.OrdinalIgnoreCase);
-
-            var delayTime = 500;
-            while (end.Subtract(start).TotalSeconds < timeout)
-            {
-                if (readyToDownload)
-                {
-                    return true;
-                }
-
-                System.Threading.Thread.Sleep(delayTime);
-                end = TimeKeeper.Instance.Now;
-            }
-
-            // Timed out
-            return false;
+            return base.WaitUntilReadyToDownload(timeout);
         }
 
         /// <summary>
@@ -285,25 +204,9 @@ namespace LcmsNetPlugins.XcaliburLC
         /// <returns></returns>
         [LCMethodEvent("Wait for 'Waiting for Contact Closure'", MethodOperationTimeoutType.Parameter, EventDescription = "Wait for the Xcalibur device to report 'Waiting for Contact Closure'.\nDeterministic, next step will not be started until timeout is reached")]
         [LCMethodEvent("Wait for 'Waiting for Contact Closure' NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Wait for the Xcalibur device to report 'Waiting for Contact Closure'.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
-        public bool WaitUntilWaitingForContactClosure(double timeout)
+        public new bool WaitUntilWaitingForContactClosure(double timeout)
         {
-            var start = TimeKeeper.Instance.Now;
-            var end = start;
-
-            var delayTime = 500;
-            while (end.Subtract(start).TotalSeconds < timeout)
-            {
-                if (waitingForContactClosure)
-                {
-                    return true;
-                }
-
-                System.Threading.Thread.Sleep(delayTime);
-                end = TimeKeeper.Instance.Now;
-            }
-
-            // Timed out
-            return false;
+            return base.WaitUntilWaitingForContactClosure(timeout);
         }
 
         /// <summary>
@@ -313,33 +216,9 @@ namespace LcmsNetPlugins.XcaliburLC
         /// <returns></returns>
         [LCMethodEvent("Wait for Run Complete", MethodOperationTimeoutType.Parameter, EventDescription = "Wait for the Xcalibur run to complete.\nDeterministic, next step will not be started until timeout is reached")]
         [LCMethodEvent("Wait for Run Complete NonDeterm", MethodOperationTimeoutType.Parameter, IgnoreLeftoverTime = true, EventDescription = "Wait for the Xcalibur run to complete.\nNon-deterministic, will not wait for the end of the timeout before starting the next step")]
-        public bool WaitUntilRunComplete(double timeout)
+        public new bool WaitUntilRunComplete(double timeout)
         {
-            var start = TimeKeeper.Instance.Now;
-            var end = start;
-
-            var delayTime = 500;
-            while (end.Subtract(start).TotalSeconds < timeout)
-            {
-                if (runCompleted)
-                {
-                    return true;
-                }
-
-                System.Threading.Thread.Sleep(delayTime);
-                end = TimeKeeper.Instance.Now;
-            }
-
-            // Timed out
-            return false;
-        }
-
-        /// <summary>
-        /// Reads the pump method directory and alerts the pumps of new methods to run.
-        /// </summary>
-        public void ReadMethodDirectory()
-        {
-            methodFiles.ReadMethodDirectory();
+            return base.WaitUntilRunComplete(timeout);
         }
 
         /// <summary>
@@ -353,11 +232,6 @@ namespace LcmsNetPlugins.XcaliburLC
 
                 MethodNames(this, data);
             }
-        }
-
-        public IEnumerable<string> GetMethodNames()
-        {
-            return AvailableMethods.Keys;
         }
 
         /// <summary>
@@ -382,147 +256,6 @@ namespace LcmsNetPlugins.XcaliburLC
             {
                 var args = new DeviceStatusEventArgs(Status, type, this, message);
                 StatusUpdate(this, args);
-            }
-        }
-
-        private void ProcessEvent(EventClass eventClass, EventName eventName, string message)
-        {
-            if (eventClass == EventClass.Status && eventName == EventName.RunEnded)
-            {
-                runCompleted = true;
-            }
-
-            var notification = "";
-            switch (eventClass)
-            {
-                case EventClass.Info:
-                    if (message.IndexOf("upper pressure limit exceeded", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
-                        Error?.Invoke(this, new DeviceErrorEventArgs(message, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, statusCodes[ "overpressure"]));
-                    }
-                    else if (message.IndexOf("lower pressure limit exceeded", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
-                        Error?.Invoke(this, new DeviceErrorEventArgs(message, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, statusCodes["underpressure"]));
-                    }
-                    else if (message.IndexOf("Module is not connected", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
-                        Error?.Invoke(this, new DeviceErrorEventArgs(message, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, statusCodes["notConnected"]));
-                    }
-                    // TODO: are there any other InformationMessages we will need to act on?
-                    //StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, statusCodes[eventName.ToString()], this, $"Info message: {message}"));
-                    break;
-                case EventClass.Warning:
-                    if (message.IndexOf("reported an error while acquiring", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
-                        Error?.Invoke(this, new DeviceErrorEventArgs(message, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, statusCodes["acqerror"]));
-                    }
-                    //StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, eventName.ToString(), this, $"Warning message: {message}"));
-                    // TODO: are there any other WarningMessages we will need to act on?
-                    break;
-                case EventClass.Error:
-                    Error?.Invoke(this, new DeviceErrorEventArgs(message, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, eventName.ToString()));
-                    break;
-                case EventClass.Status:
-                    notification = statusCodes.TryGetValue("Status " + eventName.ToString(), out var status) ? status : eventName.ToString();
-                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, notification, this, $"Status message: {message}"));
-                    break;
-                case EventClass.StateChange:
-                    notification = statusCodes.TryGetValue("SC " + eventName.ToString(), out var state) ? state : eventName.ToString();
-                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, notification, this, $"State changed: {message}"));
-                    // TODO: Process the message or event name and handle some state changes differently
-                    break;
-                case EventClass.ManagerStateChange:
-                    notification = statusCodes.TryGetValue("MS " + message, out var mState) ? mState : statusCodes["M Unknown"];
-                    readyToDownload = message.Trim().Equals("Ready To Download", StringComparison.OrdinalIgnoreCase);
-                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, notification, this, $"Manager state changed: {message}"));
-                    // TODO: Process the message or event name and handle some state changes differently
-                    break;
-                case EventClass.DeviceStateChange:
-                    var split = message.Split(':');
-                    if (int.TryParse(split[0], out var deviceStatusCode))
-                    {
-                        if ((deviceStatusCode < 0 || deviceStatusCode > 16) && split.Length >= 3)
-                        {
-                            // Report the value on the log file for potential update?
-                            ApplicationLogger.LogMessage(LogLevel.Warning, $"Xcalibur LC Device status code unknown: device '{split[1]}', code {deviceStatusCode}, reported meaning '{split[2]}'");
-                        }
-                        else if (processedDeviceStatusCodes.Contains(deviceStatusCode))
-                        {
-                            var statusString = XcaliburCOM.ConvertDeviceStatusCodeToString(deviceStatusCode);
-                            notification = errorCodes.TryGetValue("DS " + deviceStatusCode, out var dState) ? dState : "";
-                            if (string.IsNullOrWhiteSpace(notification))
-                            {
-                                ApplicationLogger.LogMessage(LogLevel.Warning, $"Xcalibur LC plugin code error: Configured to process device status code {deviceStatusCode}, but no corresponding entry in reported plugin status codes");
-                            }
-                            else
-                            {
-                                Error?.Invoke(this, new DeviceErrorEventArgs($"Device state changed: {message}", null, DeviceErrorStatus.ErrorAffectsAllColumns, this, notification));
-                                //StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, notification, this, $"Device state changed: {message}"));
-                                // TODO: Process the message or event name and handle some state changes differently
-                            }
-                        }
-
-                        waitingForContactClosure = deviceStatusCode == 5;
-                    }
-
-                    break;
-                default:
-                    StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, eventName.ToString(), this, $"Unknown event class \"{eventClass.ToString()}\"; message: {message}"));
-                    break;
-            }
-        }
-
-        private readonly IReadOnlyList<int> processedDeviceStatusCodes = new int[] { 8, 10, 11, 12, 13, 15 };
-
-        private void CreateErrorCodes()
-        {
-            if (errorCodes == null)
-            {
-                var map = new Dictionary<string, string>
-                {
-                    {"acqerror", "Xcalibur Acquisition Error"},
-                    {"overpressure", "Upper pressure limit exceeded"},
-                    {"underpressure", "Lower pressure limit exceeded"},
-                    {"notConnected", "Module is not connected"},
-                    {EventName.ErrorMessage.ToString(), "Xcalibur Error"},
-                    {EventName.ProgramError.ToString(), "Xcalibur Program Error"},
-                    {EventName.MethodCheckFail.ToString(), "Xcalibur Method Check Failed"},
-                    {"DS 8", "Device Status: Error"},
-                    {"DS 9", "Device Status: Busy"},
-                    {"DS 10", "Device Status: Not Connected"},
-                    {"DS 11", "Device Status: Standby"},
-                    {"DS 12", "Device Status: Off"},
-                    {"DS 13", "Device Status: Server Failed"},
-                    {"DS 15", "Device Status: Not Ready"},
-                };
-
-                errorCodes = map;
-            }
-        }
-
-        private void CreateStatusCodes()
-        {
-            if (statusCodes == null)
-            {
-                var map = new Dictionary<string, string>
-                {
-                    //{EventName.InformationalMessage.ToString(), "Xcalibur Informational Message"},
-                    {"MS Waiting For Devices", "Run Manager: Waiting For Devices"},
-                    {"MS Ready To Download", "Run Manager: Ready To Download"},
-                    {"MS Downloading", "Run Manager: Downloading"},
-                    {"MS Devices Are Getting Ready", "Run Manager: Devices Are Getting Ready"},
-                    {"MS Devices Are Ready", "Run Manager: Devices Are Ready"},
-                    {"MS Control Device Started", "Run Manager: Control Device Started"},
-                    {"MS Acquiring", "Run Manager: Acquiring"},
-                    {"MS Devices Stopping", "Run Manager: Devices Stopping"},
-                    {"MS Unknown", "Unknown Run Manager State"},
-                    {"Status " + EventName.MethodCheckOK, "Method Check OK"},
-                    {"Status " + EventName.RunEnded, "Acquisition Run Completed"},
-                    {"SC " + EventName.Resume, "Queue Resumed"},
-                    {"SC " + EventName.Pause, "Queue Paused"},
-                };
-
-                statusCodes = map;
             }
         }
 
@@ -565,7 +298,7 @@ namespace LcmsNetPlugins.XcaliburLC
             }
         }
 
-        public string GetMethodText(string methodName)
+        public override string GetMethodText(string methodName)
         {
             if (!AvailableMethods.TryGetValue(methodName, out var methodPath))
             {
@@ -608,7 +341,7 @@ namespace LcmsNetPlugins.XcaliburLC
 
             notifications.AddRange(notificationStrings);
 
-            foreach (var value in statusCodes.Values)
+            foreach (var value in StatusCodes.Values)
             {
                 notifications.Add(value);
             }
@@ -623,12 +356,27 @@ namespace LcmsNetPlugins.XcaliburLC
                                         "Pump Event", // Seeing this, it doesn't make much sense, but I need to at least silence the "unpublished error" warnings
             };
 
-            foreach (var value in errorCodes.Values)
+            foreach (var value in ErrorCodes.Values)
             {
                 notifications.Add(value);
             }
 
             return notifications;
+        }
+
+        private void OnStatusChanged(object sender, XcaliburStatusEventArgs args)
+        {
+            StatusUpdate?.Invoke(this, new DeviceStatusEventArgs(Status, args.MessageHeader, this, args.Message));
+        }
+
+        public void OnErrorReport(object sender, XcaliburErrorEventArgs args)
+        {
+            Error?.Invoke(this, new DeviceErrorEventArgs(args.Message, args.Exception, DeviceErrorStatus.ErrorAffectsAllColumns, this, args.MessageHeader));
+        }
+
+        private void OnMethodNamesUpdated(object sender, IEnumerable<string> methods)
+        {
+            MethodNames?.Invoke(this, methods.Cast<object>().ToList());
         }
 
         /// <summary>
@@ -638,12 +386,6 @@ namespace LcmsNetPlugins.XcaliburLC
         public override string ToString()
         {
             return Name;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public double GetPressure()

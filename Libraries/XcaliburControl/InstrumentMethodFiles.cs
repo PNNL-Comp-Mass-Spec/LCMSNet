@@ -15,9 +15,9 @@ namespace XcaliburControl
         {
             availableMethods = new Dictionary<string, string>();
 
-            XcaliburMethodsPath = methodsPath;
+            XcaliburMethodsDirectoryPath = methodsPath;
             //ApplicationLogger.LogMessage(ApplicationLogger.CONST_STATUS_LEVEL_CRITICAL, "PATH: " + path);
-            methodFileWatcher = new FileSystemWatcher(XcaliburMethodsPath, "*.meth");
+            methodFileWatcher = new FileSystemWatcher(XcaliburMethodsDirectoryPath, "*.meth");
             methodFileWatcher.Created += MethodWatcherFileCreated;
             methodFileWatcher.Changed += MethodWatcherFileChanged;
             methodFileWatcher.Deleted += MethodWatcherFileDeleted;
@@ -39,14 +39,14 @@ namespace XcaliburControl
 
         private readonly Dictionary<string, string> availableMethods;
         private readonly FileSystemWatcher methodFileWatcher;
-        private string xcaliburMethodsPath = DefaultMethodsPath;
+        private string xcaliburMethodsDirectoryPath = DefaultMethodsPath;
 
-        public string XcaliburMethodsPath
+        public string XcaliburMethodsDirectoryPath
         {
-            get => xcaliburMethodsPath;
+            get => xcaliburMethodsDirectoryPath;
             set
             {
-                if (this.RaiseAndSetIfChangedRetBool(ref xcaliburMethodsPath, value))
+                if (this.RaiseAndSetIfChangedRetBool(ref xcaliburMethodsDirectoryPath, value))
                 {
                     if (string.IsNullOrWhiteSpace(value))
                     {
@@ -135,7 +135,7 @@ namespace XcaliburControl
         {
             try
             {
-                var path = XcaliburMethodsPath;
+                var path = XcaliburMethodsDirectoryPath;
                 if (!Directory.Exists(path))
                 {
                     throw new DirectoryNotFoundException("The directory " + path + " does not exist.");

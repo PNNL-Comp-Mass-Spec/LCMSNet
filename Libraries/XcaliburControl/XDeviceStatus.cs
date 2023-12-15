@@ -1,13 +1,13 @@
 ﻿namespace XcaliburControl
 {
-    public readonly struct DeviceStatus
+    public readonly struct XDeviceStatus
     {
         public string Name { get; }
         public string StatusString { get; }
         public int StatusCode { get; }
         public string StatusCodeString { get; }
 
-        public DeviceStatus(string name, string statusString, int statusCode, string statusCodeString)
+        public XDeviceStatus(string name, string statusString, int statusCode, string statusCodeString)
         {
             Name = name;
             StatusString = statusString;
@@ -15,7 +15,7 @@
             StatusCodeString = statusCodeString;
         }
 
-        public DeviceStatus(string name, int statusCode, string statusCodeString)
+        public XDeviceStatus(string name, int statusCode, string statusCodeString)
         {
             Name = name;
             StatusString = "";

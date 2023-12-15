@@ -44,9 +44,18 @@
     <Reference Include="AxACQUISITIONLib">
       <HintPath>..\..\ExtLib\Thermo\AxACQUISITIONLib.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WpfExtras">
+      <HintPath>..\..\ExtLib\WpfExtras.dll</HintPath>
+    </Reference>
     <Reference Include="XCALIBURFILESLib">
       <HintPath>..\..\ExtLib\Thermo\XCALIBURFILESLib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -54,18 +63,40 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeviceInfo.cs" />
-    <Compile Include="DeviceStatus.cs" />
     <Compile Include="EventClass.cs" />
     <Compile Include="EventName.cs" />
     <Compile Include="InstrumentMethodFiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XcaliburCOM.cs" />
+    <Compile Include="XcaliburConfigDevViewModel.cs" />
+    <Compile Include="XcaliburConfigView.xaml.cs">
+      <DependentUpon>XcaliburConfigView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XcaliburConfigViewModelBase.cs" />
+    <Compile Include="XcaliburController.cs" />
+    <Compile Include="XcaliburErrorEventArgs.cs" />
+    <Compile Include="XcaliburStatusEventArgs.cs" />
+    <Compile Include="XDeviceStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SDK\LcmsNetSDK\LcmsNetSDK.csproj">
       <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
       <Name>LcmsNetSDK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="XcaliburConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DynamicData">
+      <Version>8.3.27</Version>
+    </PackageReference>
+    <PackageReference Include="ReactiveUI.WPF">
+      <Version>19.5.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

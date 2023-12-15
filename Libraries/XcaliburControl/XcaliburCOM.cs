@@ -319,7 +319,7 @@ namespace XcaliburControl
         }
 
         //GetDeviceStatuses
-        public IReadOnlyList<DeviceStatus> GetDeviceStatuses()
+        public IReadOnlyList<XDeviceStatus> GetDeviceStatuses()
         {
             object wrapper = new System.Runtime.InteropServices.VariantWrapper(new object());
             // GetDeviceStatuses(ref object): object returned is an array of iterators, maybe? Each iterator has 2 values, ElementName and ElementStatus (a status code)
@@ -332,8 +332,12 @@ namespace XcaliburControl
             }
 
             var deviceStatuses = (object[,])wrapper;
+            if (deviceStatuses == null)
+            {
+                return new List<XDeviceStatus>() { new XDeviceStatus("No devices found", "error", -1, "No devices" )};
+            }
 
-            var statuses = new List<DeviceStatus>();
+            var statuses = new List<XDeviceStatus>();
             for (var i = 0; i < deviceStatuses.GetLength(1); i++)
             {
                 var deviceName = "";
@@ -343,11 +347,11 @@ namespace XcaliburControl
                     var status = Convert.ToInt32(deviceStatuses[1, i]);
                     var statusString = ConvertDeviceStatusCodeToString(status);
 
-                    statuses.Add(new DeviceStatus(deviceName, status, statusString));
+                    statuses.Add(new XDeviceStatus(deviceName, status, statusString));
                 }
                 catch (Exception ex)
                 {
-                    statuses.Add(new DeviceStatus(deviceName, "parse failure", -1, ex.Message));
+                    statuses.Add(new XDeviceStatus(deviceName, "parse failure", -1, ex.Message));
                 }
             }
 
@@ -355,7 +359,7 @@ namespace XcaliburControl
         }
 
         //GetDeviceStatuses2
-        public IReadOnlyList<DeviceStatus> GetDeviceStatuses2()
+        public IReadOnlyList<XDeviceStatus> GetDeviceStatuses2()
         {
             object wrapper = new System.Runtime.InteropServices.VariantWrapper(new object());
             // GetDeviceStatuses(ref object): object returned is an array of iterators, maybe? Each iterator has 2 values, ElementName and ElementStatus (a status code)
@@ -369,7 +373,7 @@ namespace XcaliburControl
 
             var deviceStatuses = (object[,])wrapper;
 
-            var statuses = new List<DeviceStatus>();
+            var statuses = new List<XDeviceStatus>();
             for (var i = 0; i < deviceStatuses.GetLength(1); i++)
             {
                 var deviceName = "";
@@ -380,11 +384,11 @@ namespace XcaliburControl
                     var status = Convert.ToInt32(deviceStatuses[2, i]);
                     var statusString = ConvertDeviceStatusCodeToString(status);
 
-                    statuses.Add(new DeviceStatus(deviceName, str, status, statusString));
+                    statuses.Add(new XDeviceStatus(deviceName, str, status, statusString));
                 }
                 catch (Exception ex)
                 {
-                    statuses.Add(new DeviceStatus(deviceName, "parse failure", -1, ex.Message));
+                    statuses.Add(new XDeviceStatus(deviceName, "parse failure", -1, ex.Message));
                 }
             }
 

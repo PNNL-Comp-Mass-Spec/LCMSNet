@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XcaliburConfigViewModel.cs" />
     <Compile Include="XcaliburLCPump.cs" />
     <Compile Include="XcaliburLCView.xaml.cs">
       <DependentUpon>XcaliburLCView.xaml</DependentUpon>
