@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using LcmsNetSDK.Logging;
 
-namespace LcmsNetCommonControls.Controls.SerialAdapterData
+namespace SerialPortDevices.PortDetails.SerialAdapterData
 {
-    internal class WmiSerialData
+    internal class WmiSerialPortDetails
     {
         public string ComPort { get; set; }
         public string DeviceId { get; set; }
@@ -13,16 +12,16 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
         public string Description { get; set; }
         public string Service { get; set; }
 
-        public static Dictionary<string, WmiSerialData> AddSerialPortWmiInfo(Dictionary<string, SerialPortData> mapping)
+        public static Dictionary<string, WmiSerialPortDetails> AddSerialPortWmiInfo(Dictionary<string, SerialPortDetails> mapping, Action<string, Exception> warningAction)
         {
             // WMI PnP information: Will give the most complete information, but may not be accurate (i.e., the COM ports for EdgePort devices may all be wrong)
             // Don't let this data add new serial ports due to the possible inaccuracy
-            var wmiPnpSerialPorts = WmiSerialData.ReadSerialPortWmiPnPInfo();
+            var wmiPnpSerialPorts = WmiSerialPortDetails.ReadSerialPortWmiPnPInfo(warningAction);
             foreach (var port in wmiPnpSerialPorts.Values)
             {
                 var portID = 0;
 
-                var data = new SerialPortData(port.ComPort, port.Description, port.DeviceId);
+                var data = new SerialPortDetails(port.ComPort, port.Description, port.DeviceId);
 
                 if (mapping.ContainsKey(port.ComPort.ToUpper()))
                 {
@@ -35,10 +34,10 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             }
 
             // WMI Serial Port information: Will give very accurate information (details that WMI PnP does not provide), but may not have all serial ports (i.e., Prolific USB-To-Serial devices)
-            var wmiSerialPorts = WmiSerialData.ReadSerialPortWmiInfo();
+            var wmiSerialPorts = WmiSerialPortDetails.ReadSerialPortWmiInfo(warningAction);
             foreach (var port in wmiSerialPorts.Values)
             {
-                var data = new SerialPortData(port.ComPort, port.Description, port.DeviceId);
+                var data = new SerialPortDetails(port.ComPort, port.Description, port.DeviceId);
 
                 if (mapping.ContainsKey(port.ComPort.ToUpper()))
                 {
@@ -53,7 +52,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             return wmiPnpSerialPorts;
         }
 
-        private static Dictionary<string, WmiSerialData> ReadSerialPortWmiPnPInfo()
+        private static Dictionary<string, WmiSerialPortDetails> ReadSerialPortWmiPnPInfo(Action<string, Exception> warningAction)
         {
             // See WMI query "SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%(COM%'" for all com port friendly names/descriptions (but doesn't line up with EdgePort port numbers)
             // Also for WMI Win32_PnPEntity, if Service='Serial', it is a standard serial device, if Service='EdgeSer', it is an EdgePort device, if Service='Ser2ol', it is a prolific USB-to-Serial
@@ -62,7 +61,8 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
 
             // WMI gives us port descriptions, but the information for EdgePort devices is... somewhat randomized (port names are correct, but it can't give us the port number)
             // It can also give incorrect ports for devices (e.g., EdgePort), so don't use this function to add new ports.
-            var data = new Dictionary<string, WmiSerialData>();
+
+            var data = new Dictionary<string, WmiSerialPortDetails>();
 
             try
             {
@@ -71,7 +71,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
                 {
                     foreach (var match in objSearcher.Get())
                     {
-                        var wmiData = new WmiSerialData
+                        var wmiData = new WmiSerialPortDetails
                         {
                             DeviceId = match["DeviceID"].ToString(),
                             Caption = match["Caption"].ToString(),
@@ -87,20 +87,20 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogMessage(LogLevel.Warning, "Unable to read serial port information from WMI (Win32_PnPEntity). Extra detail about COM ports might not be available.", ex);
+                warningAction("Unable to read serial port information from WMI (Win32_PnPEntity). Extra detail about COM ports might not be available.", ex);
             }
 
             return data;
         }
 
-        private static Dictionary<string, WmiSerialData> ReadSerialPortWmiInfo()
+        private static Dictionary<string, WmiSerialPortDetails> ReadSerialPortWmiInfo(Action<string, Exception> warningAction)
         {
             // See WMI query "SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%(COM%'" for all com port friendly names/descriptions (but doesn't line up with EdgePort port numbers)
             // Also for WMI Win32_PnPEntity, if Service='Serial', it is a standard serial device, if Service='EdgeSer', it is an EdgePort device, if Service='Ser2ol', it is a prolific USB-to-Serial
             // Unfortunately, this listing can show incorrect COM ports for some devices (i.e., EdgePort USB-To-Serial devices)
             // A better method may be to use "SELECT * FROM Win32_SerialPort", and use 'DeviceID', since it is correct.
 
-            var data = new Dictionary<string, WmiSerialData>();
+            var data = new Dictionary<string, WmiSerialPortDetails>();
 
             try
             {
@@ -109,7 +109,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
                 {
                     foreach (var match in objSearcher.Get())
                     {
-                        var wmiData = new WmiSerialData
+                        var wmiData = new WmiSerialPortDetails
                         {
                             ComPort = match["DeviceID"].ToString(),
                             DeviceId = match["PNPDeviceID"].ToString(),
@@ -125,7 +125,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogMessage(LogLevel.Warning, "Unable to read serial port information from WMI (Win32_SerialPort). Extra detail about COM ports will not be displayed.", ex);
+                warningAction("Unable to read serial port information from WMI (Win32_SerialPort). Extra detail about COM ports will not be displayed.", ex);
             }
 
             return data;

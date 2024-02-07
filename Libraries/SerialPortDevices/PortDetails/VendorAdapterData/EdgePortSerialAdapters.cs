@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Permissions;
-using LcmsNetSDK.Logging;
 using Microsoft.Win32;
 
-namespace LcmsNetCommonControls.Controls.SerialAdapterData
+namespace SerialPortDevices.PortDetails.SerialAdapterData
 {
-    internal static class EdgePortSerialData
+    internal static class EdgePortSerialAdapters
     {
-        public static void UpdateEdgePortSerialInfo(Dictionary<string, SerialPortData> mapping)
+        public static void UpdateEdgePortSerialInfo(Dictionary<string, SerialPortDetails> mapping, Action<string, Exception> warningAction)
         {
             // Overwrite the EdgePort information with data read from the registry, since it lets us associate port numbers with port names
-            var regEdgePortSerial = ReadEdgeSerialPortDataFromRegistry();
+            var regEdgePortSerial = ReadEdgeSerialPortDataFromRegistry(warningAction);
             foreach (var serialNumGp in regEdgePortSerial.Values.GroupBy(x => x.SerialNumBase))
             {
                 var serialNumber = serialNumGp.Key;
@@ -34,7 +33,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
                         }
 
                         var name = $"COM{num}";
-                        var data = new SerialPortData(name, $"EdgePort {descriptionBase} Port {thisPortNum}", serialNumber, thisPortNum);
+                        var data = new SerialPortDetails(name, $"EdgePort {descriptionBase} Port {thisPortNum}", serialNumber, thisPortNum);
 
                         if (mapping.ContainsKey(name.ToUpper()))
                         {
@@ -57,7 +56,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             public string SerialNumBase { get; set; }
         }
 
-        private static Dictionary<string, EdgeSerialRegistryData> ReadEdgeSerialPortDataFromRegistry()
+        private static Dictionary<string, EdgeSerialRegistryData> ReadEdgeSerialPortDataFromRegistry(Action<string, Exception> warningAction)
         {
             // EdgePort configuration in registry: see HKLM\SYSTEM\CurrentControlSet\services\EdgeSer\Parameters for current configuration (but properly detecting quantity? I don't know yet.)
             // Example: 16 port edgeport unit:
@@ -125,7 +124,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogMessage(LogLevel.Warning, "Unable to read EdgePort configuration information from the registry. If no EdgePort USB-to-Serial adapter is connected, this warning can be ignored.", ex);
+                warningAction("Unable to read EdgePort configuration information from the registry. If no EdgePort USB-to-Serial adapter is connected, this warning can be ignored.", ex);
             }
             finally
             {

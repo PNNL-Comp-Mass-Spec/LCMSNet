@@ -1,24 +1,23 @@
-﻿using LcmsNetSDK.Logging;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Permissions;
+using Microsoft.Win32;
 
-namespace LcmsNetCommonControls.Controls.SerialAdapterData
+namespace SerialPortDevices.PortDetails.SerialAdapterData
 {
-    internal static class KeySpanMultiPortSerialData
+    internal static class KeySpanMultiPortSerialAdapters
     {
-        public static void UpdateKeySpanMultiPortSerialInfo(Dictionary<string, SerialPortData> mapping, Dictionary<string, WmiSerialData> wmiPnpSerialPorts)
+        public static void UpdateKeySpanMultiPortSerialInfo(Dictionary<string, SerialPortDetails> mapping, Dictionary<string, WmiSerialPortDetails> wmiPnpSerialPorts, Action<string, Exception> warningAction)
         {
             // Overwrite the Keyspan serial adapter information with data read from the registry, since it lets us associate port numbers with port names
-            var regKeyspanSerial = ReadKeyspanSerialPortDataFromRegistry();
+            var regKeyspanSerial = ReadKeyspanSerialPortDataFromRegistry(warningAction);
             foreach (var serPort in regKeyspanSerial.Values)
             {
                 if (wmiPnpSerialPorts.TryGetValue(serPort.DeviceId, out var pnpPort))
                 {
                     var name = pnpPort.ComPort.ToUpper();
 
-                    var data = new SerialPortData(name, $"Keyspan Port {serPort.PortNumber}", serPort.DeviceId, serPort.PortNumber);
+                    var data = new SerialPortDetails(name, $"Keyspan Port {serPort.PortNumber}", serPort.DeviceId, serPort.PortNumber);
 
                     if (mapping.ContainsKey(name.ToUpper()))
                     {
@@ -39,7 +38,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             public string DeviceId { get; set; }
         }
 
-        private static Dictionary<string, KeyspanSerialRegistryData> ReadKeyspanSerialPortDataFromRegistry()
+        private static Dictionary<string, KeyspanSerialRegistryData> ReadKeyspanSerialPortDataFromRegistry(Action<string, Exception> warningAction)
         {
             // EdgePort configuration in registry: see HKLM\SYSTEM\CurrentControlSet\Services\USA49WGP\Enum for current configuration (but properly detecting quantity? I don't know yet.)
             // Example: 4 port Keyspan unit:
@@ -79,7 +78,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogMessage(LogLevel.Warning, "Unable to read Keyspan multi-port configuration information from the registry. If no Keyspan USB-to-multi-Serial adapter is connected, this warning can be ignored.", ex);
+                warningAction("Unable to read Keyspan multi-port configuration information from the registry. If no Keyspan USB-to-multi-Serial adapter is connected, this warning can be ignored.", ex);
             }
             finally
             {

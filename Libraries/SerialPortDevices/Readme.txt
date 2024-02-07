@@ -1,0 +1,1 @@
+This project is for shared code for serial port connection configuration and for serial TTY communication (over RS232 or USB-to-RS232 adapters) with devices that do not have vendor/externally supplied communication libraries.

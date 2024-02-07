@@ -132,6 +132,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XcaliburControl", "Librarie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZaberStageControl", "Libraries\ZaberStageControl\ZaberStageControl.csproj", "{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialPortDevices", "Libraries\SerialPortDevices\SerialPortDevices.csproj", "{320A9F34-C22B-47E9-9B3F-FD47A2F1AB3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -227,6 +229,10 @@ Global
 		{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6}.Debug|x86.Build.0 = Debug|Any CPU
 		{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6}.Release|x86.ActiveCfg = Release|Any CPU
 		{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6}.Release|x86.Build.0 = Release|Any CPU
+		{320A9F34-C22B-47E9-9B3F-FD47A2F1AB3A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{320A9F34-C22B-47E9-9B3F-FD47A2F1AB3A}.Debug|x86.Build.0 = Debug|Any CPU
+		{320A9F34-C22B-47E9-9B3F-FD47A2F1AB3A}.Release|x86.ActiveCfg = Release|Any CPU
+		{320A9F34-C22B-47E9-9B3F-FD47A2F1AB3A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -255,6 +261,7 @@ Global
 		{483B8F1B-1A43-4A8A-8EA1-0ED4F8532AA0} = {B05505B1-7DF9-4CE5-82E0-E3A21DB55DE9}
 		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20} = {0EA3405E-04D2-47A3-9DCB-FC8A7F6FDD5D}
 		{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6} = {0EA3405E-04D2-47A3-9DCB-FC8A7F6FDD5D}
+		{320A9F34-C22B-47E9-9B3F-FD47A2F1AB3A} = {0EA3405E-04D2-47A3-9DCB-FC8A7F6FDD5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {882AF6ED-9FAB-4869-B2A0-899602387B59}

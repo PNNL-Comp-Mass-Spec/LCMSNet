@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Permissions;
-using LcmsNetSDK.Logging;
 using Microsoft.Win32;
 
-namespace LcmsNetCommonControls.Controls.SerialAdapterData
+namespace SerialPortDevices.PortDetails.SerialAdapterData
 {
-    internal static class FtdiMultiPortSerialData
+    internal static class FtdiMultiPortSerialAdapters
     {
-        public static void UpdateFtdiMultiPortSerialInfo(Dictionary<string, SerialPortData> mapping, Dictionary<string, WmiSerialData> wmiPnpSerialPorts)
+        public static void UpdateFtdiMultiPortSerialInfo(Dictionary<string, SerialPortDetails> mapping, Dictionary<string, WmiSerialPortDetails> wmiPnpSerialPorts, Action<string, Exception> warningAction)
         {
             // Overwrite certain FTDI serial adapter information with data read from the registry, since it lets us associate (kind of) port numbers with port names
-            var regFtdiMultiportSerial = ReadFtdiUsbMultiPortSerialInfoFromRegistry();
+            var regFtdiMultiportSerial = ReadFtdiUsbMultiPortSerialInfoFromRegistry(warningAction);
             foreach (var serPort in regFtdiMultiportSerial.Where(x => x.PortNumber >= 0))
             {
                 if (wmiPnpSerialPorts.TryGetValue(serPort.SerialDeviceId, out var pnpPort))
                 {
                     var name = pnpPort.ComPort.ToUpper();
 
-                    var data = new SerialPortData(name, $"StarTech (FTDI) Multi Port {serPort.PortNumber}", serPort.ParentIdPrefix, serPort.PortNumber);
+                    var data = new SerialPortDetails(name, $"StarTech (FTDI) Multi Port {serPort.PortNumber}", serPort.ParentIdPrefix, serPort.PortNumber);
 
                     if (mapping.ContainsKey(name.ToUpper()))
                     {
@@ -95,7 +94,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             }
         }
 
-        private static List<FtdiRegistryUsbEntry> ReadFtdiUsbMultiPortSerialInfoFromRegistry()
+        private static List<FtdiRegistryUsbEntry> ReadFtdiUsbMultiPortSerialInfoFromRegistry(Action<string, Exception> warningAction)
         {
             // NOTE: This was designed for StarTech multi-port adapters, ICUSB2322I/ICUSB2324I/ICUSB2328I
             // The internal design is USB input->USB 7-port Hub->FTDI USB Serial Adapters; the 8-port adapter has a nested USB 7-port hub with 2 additional USB Serial Adapters.
@@ -239,7 +238,7 @@ namespace LcmsNetCommonControls.Controls.SerialAdapterData
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogMessage(LogLevel.Warning, "Unable to read USB multi-port configuration information from the registry. If no USB-to-multi-Serial adapter is connected, this warning can be ignored.", ex);
+                warningAction("Unable to read USB multi-port configuration information from the registry. If no USB-to-multi-Serial adapter is connected, this warning can be ignored.", ex);
             }
             finally
             {

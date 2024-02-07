@@ -34,15 +34,11 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\LcmsNetCommonControls.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
@@ -52,10 +48,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\SerialAdapterData\EdgePortSerialData.cs" />
-    <Compile Include="Controls\SerialAdapterData\FtdiMultiPortSerialData.cs" />
-    <Compile Include="Controls\SerialAdapterData\KeySpanMultiPortSerialData.cs" />
-    <Compile Include="Controls\SerialAdapterData\WmiSerialData.cs" />
     <Compile Include="Controls\SerialPortData.cs" />
     <Compile Include="Controls\SerialPortGenericData.cs" />
     <Compile Include="Devices\BaseDeviceControlViewModelReactive.cs" />
@@ -147,6 +139,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\SerialPortDevices\SerialPortDevices.csproj">
+      <Project>{320a9f34-c22b-47e9-9b3f-fd47a2f1ab3a}</Project>
+      <Name>SerialPortDevices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LcmsNetSDK\LcmsNetSDK.csproj">
       <Project>{ddccb3f9-7b2b-43f2-b98f-40644bea2a85}</Project>
       <Name>LcmsNetSDK</Name>
@@ -157,6 +153,8 @@
     <PostBuildEvent>xcopy /y /F /D "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
+xcopy /y /F /D "$(TargetDir)SerialPortDevices.dll" "$(SolutionDir)lib\"
+xcopy /y /F /D "$(TargetDir)SerialPortDevices.pdb" "$(SolutionDir)lib\"
 rem xcopy /y /F /D "$(TargetDir)DotNetProjects.Wpf.*.dll" "$(SolutionDir)lib\"
 rem xcopy /y /F /D "$(TargetDir)DynamicData.dll" "$(SolutionDir)lib\"
 xcopy /y /F /D "$(TargetDir)OxyPlot*.dll" "$(SolutionDir)lib\"

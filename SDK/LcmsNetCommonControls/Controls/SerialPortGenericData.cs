@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO.Ports;
 using System.Linq;
 using System.Reactive.Concurrency;
 using DynamicData;
 using DynamicData.Binding;
-using LcmsNetCommonControls.Controls.SerialAdapterData;
 using LcmsNetSDK.Logging;
 using ReactiveUI;
+using SerialPortDevices.PortDetails;
 
 namespace LcmsNetCommonControls.Controls
 {
@@ -63,40 +62,11 @@ namespace LcmsNetCommonControls.Controls
             }
         }
 
-        private static List<SerialPortData> GetSerialPortInformation()
+        private static IEnumerable<SerialPortData> GetSerialPortInformation()
         {
-            var mapping = new Dictionary<string, SerialPortData>();
+            var ports = SerialPortDetails.GetAllSerialPorts((message, ex) => ApplicationLogger.LogError(LogLevel.Warning, message, ex));
 
-            try
-            {
-                // SerialPort.GetPortNames() is the least descriptive - it gives us only the names
-                foreach (var port in SerialPort.GetPortNames())
-                {
-                    mapping.Add(port.ToUpper(), new SerialPortData(port));
-                }
-            }
-            catch (Exception ex)
-            {
-                ApplicationLogger.LogError(LogLevel.Warning, "Unable to read serial port names from SerialPort.GetPortNames(). Serial Port listing may not be complete.", ex);
-            }
-
-            // WMI PnP information: Will give the most complete information, but may not be accurate (i.e., the COM ports for EdgePort devices may all be wrong)
-            // WMI Serial Port information: Will give very accurate information (details that WMI PnP does not provide), but may not have all serial ports (i.e., Prolific USB-To-Serial devices)
-            var wmiPnpSerialPorts = WmiSerialData.AddSerialPortWmiInfo(mapping);
-
-            // Overwrite the EdgePort information with data read from the registry, since it lets us associate port numbers with port names
-            EdgePortSerialData.UpdateEdgePortSerialInfo(mapping);
-
-            // Overwrite the Keyspan serial adapter information with data read from the registry, since it lets us associate port numbers with port names
-            KeySpanMultiPortSerialData.UpdateKeySpanMultiPortSerialInfo(mapping, wmiPnpSerialPorts);
-
-            // Overwrite certain FTDI serial adapter information with data read from the registry, since it lets us associate (kind of) port numbers with port names
-            FtdiMultiPortSerialData.UpdateFtdiMultiPortSerialInfo(mapping, wmiPnpSerialPorts);
-
-            var list = mapping.Values.ToList();
-            list.Sort();
-            return list;
+            return ports.Select(x => new SerialPortData(x.PortName, x.PortDescription, x.EdgePortSerialNum, x.EdgePortPortNumber));
         }
-
     }
 }
