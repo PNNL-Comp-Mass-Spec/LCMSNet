@@ -1,4 +1,4 @@
-﻿namespace LcmsNetPlugins.ZaberStage
+﻿namespace ZaberStageControl
 {
     /// <summary>
     /// Jog speeds; values are used for array indexing
@@ -19,7 +19,13 @@
         Increase = 1
     }
 
-    public static class EnumExtensions
+    public enum StatusReportType
+    {
+        PositionChanged,
+        MovementCompleted
+    }
+
+    public static class ZaberEnumExtensions
     {
         public static double Convert(this MoveDirection direction, JogSpeed speed, double[] jogSpeeds, bool inverted = false)
         {

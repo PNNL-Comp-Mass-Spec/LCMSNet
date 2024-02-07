@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetPlugins.ZaberStage
+namespace ZaberStageControl
 {
     public readonly struct ConnectionStageID : IEquatable<ConnectionStageID>
     {

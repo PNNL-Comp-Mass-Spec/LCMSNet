@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LcmsNetPlugins.ZaberStage.UI;
 using LcmsNetSDK.Devices;
+using LcmsNetSDK.Logging;
+using ZaberStageControl;
 
 namespace LcmsNetPlugins.ZaberStage
 {
@@ -12,19 +10,19 @@ namespace LcmsNetPlugins.ZaberStage
     [DeviceControl(typeof(X1StageViewModel),
         "X w/ 1 stage",
         "Stages")]
-    public class XAxis1Stage : StageBase
+    public class ZaberXAxis1Stage : ZaberStageBase<XAxis1Stage>
     {
-        public XAxis1Stage() : base(new string[] { "X" }, "X_Stage")
+        public ZaberXAxis1Stage() : base(new XAxis1Stage())
         {
         }
 
-        internal StageControl XAxis => StagesUsed[0];
+        internal StageControl XAxis => StageDevice.XAxis;
 
         [DeviceSavedSetting("XAxisConfig")]
         public string XAxisConfig
         {
             get => XAxis.GetAxisConfigString();
-            set => XAxis.ParseAxisConfigString(value);
+            set => XAxis.ParseAxisConfigString(value, (message, ex) => ApplicationLogger.LogError(LogLevel.Error, message, ex));
         }
     }
 }

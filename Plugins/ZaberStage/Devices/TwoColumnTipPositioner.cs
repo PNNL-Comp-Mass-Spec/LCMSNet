@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
+using ZaberStageControl;
 
 namespace LcmsNetPlugins.ZaberStage.Devices
 {
@@ -10,9 +11,9 @@ namespace LcmsNetPlugins.ZaberStage.Devices
     [DeviceControl(typeof(TwoColumnTipPositionerViewModel),
         "2 Column Tip Positioner",
         "Stages")]
-    public class TwoColumnTipPositioner : StageBase
+    public class TwoColumnTipPositioner : ZaberStageBase<XYZAxis3Stage>
     {
-        public TwoColumnTipPositioner() : base(new string[] { "X", "Y", "Z" }, "XYZ_Stage")
+        public TwoColumnTipPositioner() : base(new XYZAxis3Stage())
         {
         }
 
@@ -20,9 +21,9 @@ namespace LcmsNetPlugins.ZaberStage.Devices
         private Position position1;
         private Position position2;
 
-        internal StageControl XAxis => StagesUsed[0];
-        internal StageControl YAxis => StagesUsed[1];
-        internal StageControl ZAxis => StagesUsed[2];
+        internal StageControl XAxis => StageDevice.XAxis;
+        internal StageControl YAxis => StageDevice.YAxis;
+        internal StageControl ZAxis => StageDevice.ZAxis;
 
         [DeviceSavedSetting("XAxisConfig")]
         public string XAxisConfig

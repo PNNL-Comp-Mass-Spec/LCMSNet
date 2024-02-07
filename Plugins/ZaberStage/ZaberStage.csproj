@@ -55,18 +55,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionStageID.cs" />
     <Compile Include="Devices\TwoColumnTipPositioner.cs" />
     <Compile Include="Devices\TwoColumnTipPositionerView.xaml.cs">
       <DependentUpon>TwoColumnTipPositionerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Devices\TwoColumnTipPositionerViewModel.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="Position.cs" />
+    <Compile Include="IZaberStageGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StageBase.cs" />
-    <Compile Include="StageConnectionManager.cs" />
-    <Compile Include="StageControl.cs" />
+    <Compile Include="ZaberManager.cs" />
+    <Compile Include="ZaberStageBase.cs" />
     <Compile Include="UI\Collections.cs" />
     <Compile Include="UI\StageConfigBindingProxy.cs" />
     <Compile Include="UI\StageConfigView.xaml.cs">
@@ -90,9 +87,9 @@
       <DependentUpon>XYZ3StagesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\XYZ3StagesViewModel.cs" />
-    <Compile Include="XAxis1Stage.cs" />
-    <Compile Include="XYAxis2Stage.cs" />
-    <Compile Include="XYZAxis3Stage.cs" />
+    <Compile Include="ZaberXAxis1Stage.cs" />
+    <Compile Include="ZaberXYAxis2Stage.cs" />
+    <Compile Include="ZaberXYZAxis3Stage.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit">
@@ -131,11 +128,19 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\ZaberStageControl\ZaberStageControl.csproj">
+      <Project>{e2161e9c-fe91-4b4a-b6a9-4e4a2dab32f6}</Project>
+      <Name>ZaberStageControl</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
+xcopy /y /F /D "$(TargetDir)ZaberStageControl.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /F /D "$(TargetDir)ZaberStageControl.pdb" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)Google.Protobuf*.dll" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)System.Buffers*.dll" "$(SolutionDir)pluginDLLs\"
 xcopy /y /F /D "$(TargetDir)System.Numerics*.dll" "$(SolutionDir)pluginDLLs\"

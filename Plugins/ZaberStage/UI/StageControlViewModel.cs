@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using ReactiveUI;
 using Zaber.Motion;
+using ZaberStageControl;
 
 namespace LcmsNetPlugins.ZaberStage.UI
 {

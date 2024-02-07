@@ -15,7 +15,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
     public class X1StageViewModel : BaseDeviceControlViewModelReactive, IDeviceControl, IDisposable
     {
         private readonly bool isInDesignMode = false;
-        private XAxis1Stage stage;
+        private ZaberXAxis1Stage stage;
         private StageControlViewModel xStageVm;
 
         public override IDevice Device
@@ -23,7 +23,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
             get => stage;
             set
             {
-                stage = value as XAxis1Stage;
+                stage = value as ZaberXAxis1Stage;
                 if (stage != null && !isInDesignMode)
                 {
                     RegisterDevice(value);
@@ -55,7 +55,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
         /// <param name="device"></param>
         private void RegisterDevice(IDevice device)
         {
-            stage = device as XAxis1Stage;
+            stage = device as ZaberXAxis1Stage;
 
             if (stage != null)
             {

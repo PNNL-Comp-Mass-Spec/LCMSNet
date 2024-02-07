@@ -130,6 +130,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XcaliburControl", "Libraries\XcaliburControl\XcaliburControl.csproj", "{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZaberStageControl", "Libraries\ZaberStageControl\ZaberStageControl.csproj", "{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -221,6 +223,10 @@ Global
 		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20}.Debug|x86.Build.0 = Debug|x86
 		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20}.Release|x86.ActiveCfg = Release|x86
 		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20}.Release|x86.Build.0 = Release|x86
+		{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6}.Debug|x86.Build.0 = Debug|Any CPU
+		{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6}.Release|x86.ActiveCfg = Release|Any CPU
+		{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -248,6 +254,7 @@ Global
 		{EEAEE762-66DF-4A0F-9A32-704BA2D8C803} = {910C58F0-264B-417C-8192-6E857AAA85DE}
 		{483B8F1B-1A43-4A8A-8EA1-0ED4F8532AA0} = {B05505B1-7DF9-4CE5-82E0-E3A21DB55DE9}
 		{A4EE6917-0EDA-4677-BD65-8DC5CE40FA20} = {0EA3405E-04D2-47A3-9DCB-FC8A7F6FDD5D}
+		{E2161E9C-FE91-4B4A-B6A9-4E4A2DAB32F6} = {0EA3405E-04D2-47A3-9DCB-FC8A7F6FDD5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {882AF6ED-9FAB-4869-B2A0-899602387B59}

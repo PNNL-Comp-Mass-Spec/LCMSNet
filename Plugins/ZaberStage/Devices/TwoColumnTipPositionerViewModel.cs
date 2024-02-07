@@ -8,6 +8,7 @@ using LcmsNetCommonControls.Devices;
 using LcmsNetPlugins.ZaberStage.UI;
 using LcmsNetSDK.Devices;
 using ReactiveUI;
+using ZaberStageControl;
 
 namespace LcmsNetPlugins.ZaberStage.Devices
 {

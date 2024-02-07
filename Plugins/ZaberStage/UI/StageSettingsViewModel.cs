@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ReactiveUI;
+using ZaberStageControl;
 
 namespace LcmsNetPlugins.ZaberStage.UI
 {
@@ -19,7 +20,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
             {
                 if (SelectedDevice.SerialNumber != x)
                 {
-                    var devices = StageConnectionManager.Instance.ConnectionSerials.Items.ToList();
+                    var devices = ZaberManager.Instance.ConnectionSerials.Items.ToList();
                     foreach (var device in devices)
                     {
                         if (device.SerialNumber == x)

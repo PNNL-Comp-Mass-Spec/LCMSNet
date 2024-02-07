@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DynamicData;
-using LcmsNetSDK.Logging;
 using Zaber.Motion.Ascii;
 
-namespace LcmsNetPlugins.ZaberStage
+namespace ZaberStageControl
 {
     /// <summary>
     /// Class to allow multiple "devices" to connect via a single controller, but block multiple devices controlling the same stage
     /// </summary>
-    internal class StageConnectionManager : IDisposable
+    public class StageConnectionManager : IDisposable
     {
         public static StageConnectionManager Instance { get; private set; } = new StageConnectionManager();
 
@@ -30,8 +28,12 @@ namespace LcmsNetPlugins.ZaberStage
 
         private readonly List<long> activeStageSerialNumbers = new List<long>(10);
         private readonly object usedStagesLocker = new object();
+        private readonly List<ConnectionStageID> connectionSerials = new List<ConnectionStageID>(5);
+        private readonly object connectionSerialsLocker = new object();
 
-        public SourceList<ConnectionStageID> ConnectionSerials { get; } = new SourceList<ConnectionStageID>();
+        public event EventHandler AvailableDevicesUpdated;
+
+        public IReadOnlyList<ConnectionStageID> ConnectionSerials => connectionSerials;
 
         private readonly Dictionary<string, DateTime> lastReadTime = new Dictionary<string, DateTime>();
 
@@ -95,7 +97,7 @@ namespace LcmsNetPlugins.ZaberStage
             }
         }
 
-        public void ReadStagesForConnection(string portName)
+        public void ReadStagesForConnection(string portName, Action<string, Exception> errorAction = null)
         {
             if (lastReadTime.TryGetValue(portName, out var lastRead) && lastRead.AddSeconds(30) > DateTime.Now)
             {
@@ -104,7 +106,7 @@ namespace LcmsNetPlugins.ZaberStage
 
             if (connections.TryGetValue(portName.ToUpper(), out var connStage))
             {
-                ReadStagesForConnection(portName, connStage.Connection);
+                ReadStagesForConnection(portName, connStage.Connection, errorAction);
                 return;
             }
 
@@ -112,18 +114,18 @@ namespace LcmsNetPlugins.ZaberStage
             {
                 using (var conn = Connection.OpenSerialPort(portName))
                 {
-                    ReadStagesForConnection(portName, conn);
+                    ReadStagesForConnection(portName, conn, errorAction);
 
                     conn.Close();
                 }
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogError(LogLevel.Warning, $"Could not read Zaber devices for port '{portName}'", ex);
+                errorAction?.Invoke($"Could not read Zaber devices for port '{portName}'", ex);
             }
         }
 
-        public void ReadStagesForConnection(string portName, Connection connection)
+        public void ReadStagesForConnection(string portName, Connection connection, Action<string, Exception> errorAction = null)
         {
             try
             {
@@ -132,7 +134,7 @@ namespace LcmsNetPlugins.ZaberStage
             }
             catch (Exception ex)
             {
-                ApplicationLogger.LogError(LogLevel.Warning, $"Could not read Zaber devices for port '{portName}'", ex);
+                errorAction?.Invoke($"Could not read Zaber devices for port '{portName}'", ex);
             }
         }
 
@@ -144,15 +146,20 @@ namespace LcmsNetPlugins.ZaberStage
 
         public void UpdateConnectionStageIDs(string portName, IEnumerable<ConnectionStageID> newIds)
         {
-            ConnectionSerials.Edit(list =>
+            lock (connectionSerialsLocker)
             {
-                var existing = list.Where(x => x.PortName == portName).ToList();
+                var existing = connectionSerials.Where(x => x.PortName == portName).ToList();
                 var toRemove = existing.Where(x => newIds.All(y => x.SerialNumber != y.SerialNumber));
                 var toAdd = newIds.Where(x => existing.All(y => x.SerialNumber != y.SerialNumber));
 
-                list.RemoveMany(toRemove);
-                list.AddRange(toAdd);
-            });
+                foreach (var item in toRemove)
+                {
+                    connectionSerials.Remove(item);
+                }
+                connectionSerials.AddRange(toAdd);
+            }
+
+            AvailableDevicesUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         public bool IsStageUsed(long serialNumber)

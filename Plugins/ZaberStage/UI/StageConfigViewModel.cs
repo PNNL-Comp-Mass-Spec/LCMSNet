@@ -8,16 +8,17 @@ using DynamicData;
 using DynamicData.Binding;
 using LcmsNetCommonControls.Controls;
 using ReactiveUI;
+using ZaberStageControl;
 
 namespace LcmsNetPlugins.ZaberStage.UI
 {
     public class StageConfigViewModel : ReactiveObject
     {
-        private StageBase stage;
+        private IZaberStageGroup stage;
         private string selectedPortName = "";
         private IReadOnlyList<StageSettingsViewModel> stageAxes;
 
-        public StageBase Stage
+        public IZaberStageGroup Stage
         {
             get => stage;
             set
@@ -28,13 +29,13 @@ namespace LcmsNetPlugins.ZaberStage.UI
                 {
                     try
                     {
-                        if (!string.IsNullOrWhiteSpace(stage.PortName))
+                        if (!string.IsNullOrWhiteSpace(stage.PortName) && !stage.Emulation)
                         {
-                            StageConnectionManager.Instance.ReadStagesForConnection(stage.PortName);
+                            ZaberManager.Instance.ReadStagesForConnection(stage.PortName);
                         }
 
                         SelectedPortName = stage.PortName;
-                        StageAxes = stage.StagesUsed.Select(x => new StageSettingsViewModel(x)).ToList();
+                        StageAxes = stage.StageBase.StagesUsed.Select(x => new StageSettingsViewModel(x)).ToList();
                     }
                     catch
                     {
@@ -62,7 +63,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
         public StageConfigViewModel()
         {
             var filter = this.WhenValueChanged(x => x.SelectedPortName).Select(x => new Func<ConnectionStageID, bool>(y => !string.IsNullOrWhiteSpace(x) && x.Equals(y.PortName)));
-            StageConnectionManager.Instance.ConnectionSerials.Connect().Filter(filter).ObserveOn(RxApp.MainThreadScheduler).Bind(out var portDevices).Subscribe();
+            ZaberManager.Instance.ConnectionSerials.Connect().Filter(filter).ObserveOn(RxApp.MainThreadScheduler).Bind(out var portDevices).Subscribe();
             PortDevices = portDevices;
 
             ApplyPortNameCommand = ReactiveCommand.Create(ApplyPortName);
@@ -72,9 +73,9 @@ namespace LcmsNetPlugins.ZaberStage.UI
         {
             Stage.PortName = SelectedPortName;
 
-            if (!string.IsNullOrWhiteSpace(SelectedPortName))
+            if (!string.IsNullOrWhiteSpace(SelectedPortName) && !Stage.Emulation)
             {
-                StageConnectionManager.Instance.ReadStagesForConnection(SelectedPortName);
+                ZaberManager.Instance.ReadStagesForConnection(SelectedPortName);
             }
 
             //StatusText = "Port name changed to " + pal.PortName;

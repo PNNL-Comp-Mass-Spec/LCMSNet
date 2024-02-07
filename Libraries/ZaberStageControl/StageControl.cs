@@ -3,13 +3,11 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using LcmsNetSDK;
-using LcmsNetSDK.Logging;
 using Zaber.Motion;
 
-namespace LcmsNetPlugins.ZaberStage
+namespace ZaberStageControl
 {
-    public class StageControl : INotifyPropertyChangedExt
+    public class StageControl : INotifyPropertyChangedExtZaber
     {
         private string stageDisplayName;
         private long serialNumber;
@@ -128,7 +126,7 @@ namespace LcmsNetPlugins.ZaberStage
             return $"DN={StageDisplayName}&;SN={SerialNumber}&;Inv={IsInverted}&;Init#={InitOrder}&;JogSpeeds={string.Join(",", jogSpeeds.Select(x => x.ToString(CultureInfo.InvariantCulture)))}&;MaxSpeed={MaxMoveSpeed}";
         }
 
-        public void ParseAxisConfigString(string config)
+        public void ParseAxisConfigString(string config, Action<string, Exception> errorAction = null)
         {
             var parts = config.Trim().Split(new string[] { "&;" }, StringSplitOptions.None);
             try
@@ -181,9 +179,9 @@ namespace LcmsNetPlugins.ZaberStage
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                ApplicationLogger.LogError(LogLevel.Error, $"Failed to parse AxisConfig \"{config}\"");
+                errorAction.Invoke($"Failed to parse AxisConfig \"{config}\"", ex);
             }
         }
 

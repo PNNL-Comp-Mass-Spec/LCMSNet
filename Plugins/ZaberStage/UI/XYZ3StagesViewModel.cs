@@ -12,7 +12,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
     public class XYZ3StagesViewModel : BaseDeviceControlViewModelReactive, IDeviceControl, IDisposable
     {
         private readonly bool isInDesignMode = false;
-        private XYZAxis3Stage stage;
+        private ZaberXYZAxis3Stage stage;
         private StageControlViewModel xStageVm;
         private StageControlViewModel yStageVm;
         private StageControlViewModel zStageVm;
@@ -23,7 +23,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
             get => stage;
             set
             {
-                stage = value as XYZAxis3Stage;
+                stage = value as ZaberXYZAxis3Stage;
                 if (stage != null && !isInDesignMode)
                 {
                     RegisterDevice(value);
@@ -70,7 +70,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
         /// <param name="device"></param>
         private void RegisterDevice(IDevice device)
         {
-            stage = device as XYZAxis3Stage;
+            stage = device as ZaberXYZAxis3Stage;
 
             if (stage != null)
             {

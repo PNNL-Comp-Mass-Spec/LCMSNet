@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LcmsNetPlugins.ZaberStage
+namespace ZaberStageControl
 {
     /// <summary>
     /// Stores position values (in millimeters)
