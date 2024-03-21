@@ -64,7 +64,7 @@ namespace LcmsNetCommonControls.Controls
 
         private static IEnumerable<SerialPortData> GetSerialPortInformation()
         {
-            var ports = SerialPortDetails.GetAllSerialPorts((message, ex) => ApplicationLogger.LogError(LogLevel.Warning, message, ex));
+            var ports = SerialPortDetails.GetAllSerialPorts((message, ex) => ApplicationLogger.LogMessage(LogLevel.Warning, $"{message}; Exception '{ex.GetType()}': {ex}"));
 
             return ports.Select(x => new SerialPortData(x.PortName, x.PortDescription, x.EdgePortSerialNum, x.EdgePortPortNumber));
         }

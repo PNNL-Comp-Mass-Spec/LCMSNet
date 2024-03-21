@@ -125,7 +125,7 @@ namespace SerialPortDevices.PortDetails.SerialAdapterData
             }
             catch (Exception ex)
             {
-                warningAction("Unable to read serial port information from WMI (Win32_SerialPort). Extra detail about COM ports will not be displayed.", ex);
+                warningAction("Unable to read serial port information from WMI (Win32_SerialPort). Extra detail about COM ports might not be displayed.", ex);
             }
 
             return data;
