@@ -27,7 +27,7 @@ namespace LcmsNet.Method
         private SampleData m_sampleData;
 
         /// <summary>
-        /// synchronization event used for classDeviceTimer
+        /// synchronization event used for TimerDevice
         /// </summary>
         private readonly ManualResetEvent m_abortEvent;
 

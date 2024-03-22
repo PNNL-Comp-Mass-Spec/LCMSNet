@@ -105,19 +105,13 @@ namespace LcmsNet.Method.ViewModels
             // make sure here the device is not a timer, because if it is, then we must
             // find the device name string "Timer" from the combo box so we can
             // get the right reference.
-            if (!(methodData.Device is TimerDevice))
+            // TODO: Not sure if this is needed anymore, at least in this class...
+            if (methodData.Device is TimerDevice)
             {
-                SelectedDevice = methodData.Device;
-            }
-            else
-            {
-                foreach (var d in DevicesComboBoxOptions)
+                var tempDevice = DevicesComboBoxOptions.FirstOrDefault(x => x is TimerDevice);
+                if (tempDevice != null)
                 {
-                    if (d.Name.Equals("Timer"))
-                    {
-                        SelectedDevice = d;
-                        break;
-                    }
+                    SelectedDevice = tempDevice;
                 }
             }
 
@@ -400,18 +394,17 @@ namespace LcmsNet.Method.ViewModels
             // are not persisted throughout a method or across methods.  Thus we need to test to see
             // if this is true, if so, then we need to just find the device in the
             // device manager and get the device method mappings that way.
+            // TODO: Not sure if this is needed anymore, at least in this class...
             if (device is TimerDevice)
             {
                 // Find the timer device.
-                foreach (var tempDevice in DeviceMappings.Keys)
+                var tempDevice = DeviceMappings.Keys.FirstOrDefault(x => x is TimerDevice);
+                if (tempDevice != null)
                 {
-                    if (tempDevice is TimerDevice)
-                    {
-                        device = tempDevice;
-                        break;
-                    }
+                    device = tempDevice;
                 }
             }
+
             // Add the method information into the combo-box as deemed by the device.
             var methods = DeviceMappings[device];
             methodsComboBoxOptions.Edit(list =>

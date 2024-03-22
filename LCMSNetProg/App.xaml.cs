@@ -542,6 +542,8 @@ namespace LcmsNet
             //LogMessage(-1, "Creating the Device Manager");
             var deviceManager = DeviceManager.Manager;
             deviceManager.Emulate = LCMSSettings.GetParameter(LCMSSettings.PARAM_EMULATIONENABLED, false);
+
+            // Add default devices that are always available
             deviceManager.AddDevice(new TimerDevice());
             deviceManager.AddDevice(new BlockDevice());
             deviceManager.AddDevice(new LogDevice());
