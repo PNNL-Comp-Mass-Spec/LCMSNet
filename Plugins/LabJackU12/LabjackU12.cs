@@ -240,14 +240,16 @@ namespace LcmsNetPlugins.LabJackU12
             {
                 lock (GetLockObject())
                 {
-                    result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, voltage, 0.0f);
+                    // passing a <0 voltage value to this method means that the channel should just use the last set value
+                    result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, voltage, -1.0f);
                 }
             }
             else if (channel == 1)
             {
                 lock (GetLockObject())
                 {
-                    result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, 0.0f, voltage);
+                    // passing a <0 voltage value to this method means that the channel should just use the last set value
+                    result = LabJackU12Wrapper.EAnalogOut(ref localID, 0, -1.0f, voltage);
                 }
             }
             else
