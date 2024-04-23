@@ -38,6 +38,7 @@
     <Reference Include="System.Management" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NumatoUsbRelays\NumatoUsbRelayDevice.cs" />
     <Compile Include="PortDetails\SerialPortDetails.cs" />
     <Compile Include="PortDetails\VendorAdapterData\EdgePortSerialAdapters.cs" />
     <Compile Include="PortDetails\VendorAdapterData\FtdiMultiPortSerialAdapters.cs" />
