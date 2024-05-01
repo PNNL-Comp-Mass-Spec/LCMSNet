@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using FluidicsSDK.Devices;
+using LabJackTSeries;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 using LcmsNetSDK.System;
 
-namespace LcmsNetPlugins.LabJackT7.ContactClosureRead
+namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
 {
     [Serializable]
     [DeviceControl(typeof(ContactClosureReadT7ViewModel),
@@ -30,7 +31,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosureRead
         /// <summary>
         /// The LabJack used for reading the ready signal
         /// </summary>
-        private readonly LabJackT7 labJackDevice;
+        private readonly LabJackT labJackDevice;
         /// <summary>
         /// The port on the LabJack on which to read the voltage.
         /// </summary>
@@ -72,7 +73,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosureRead
         /// </summary>
         public ContactClosureReadT7()
         {
-            labJackDevice = new LabJackT7();
+            labJackDevice = new LabJackT();
             labJackPort = LabJackT7Inputs.AIN0;
             deviceName = "Contact Closure Reader";
         }
@@ -81,7 +82,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosureRead
         /// Constructor which assigns a LabJack
         /// </summary>
         /// <param name="lj">The LabJack</param>
-        public ContactClosureReadT7(LabJackT7 lj)
+        public ContactClosureReadT7(LabJackT lj)
         {
             labJackDevice = lj;
             labJackPort = LabJackT7Inputs.AIN0;
@@ -94,7 +95,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosureRead
         /// <param name="newPort">The port on the LabJack to use for reading the ready signal</param>
         public ContactClosureReadT7(LabJackT7Inputs newPort)
         {
-            labJackDevice = new LabJackT7();
+            labJackDevice = new LabJackT();
             labJackPort = newPort;
             deviceName = "Contact Closure Reader";
         }
@@ -104,7 +105,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosureRead
         /// </summary>
         /// <param name="lj">The LabJack</param>
         /// <param name="newPort">The port on the LabJack to use for reading the ready signal</param>
-        public ContactClosureReadT7(LabJackT7 lj, LabJackT7Inputs newPort)
+        public ContactClosureReadT7(LabJackT lj, LabJackT7Inputs newPort)
         {
             labJackDevice = lj;
             labJackPort = newPort;
@@ -373,7 +374,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosureRead
                     closureState = state.Equals(0) ? ContactClosureState.Open : ContactClosureState.Closed;
                 }
             }
-            catch (LabJackT7Exception ex)
+            catch (LabJackTException ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not read the port.",
                               ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, DeviceReadError));
@@ -437,7 +438,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosureRead
                     closureState = outVoltage < voltage ? ContactClosureState.Open : ContactClosureState.Closed;
                 }
             }
-            catch (LabJackT7Exception ex)
+            catch (LabJackTException ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not read the port.",
                               ex, DeviceErrorStatus.ErrorAffectsAllColumns, this, DeviceReadError));

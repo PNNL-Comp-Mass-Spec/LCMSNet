@@ -1,11 +1,12 @@
 ﻿using System;
+using LabJackTSeries;
 using LcmsNetCommonControls.Devices;
 using LcmsNetCommonControls.Devices.ContactClosure;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Logging;
 using ReactiveUI;
 
-namespace LcmsNetPlugins.LabJackT7.ContactClosure
+namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
 {
     /// <summary>
     /// Triggers a mass spectrometer or other device using a LabJack TTL pulse.

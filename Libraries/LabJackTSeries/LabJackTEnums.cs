@@ -1,4 +1,4 @@
-﻿namespace LcmsNetPlugins.LabJackT7
+﻿namespace LabJackTSeries
 {
     // Address information pulled from:
     // https://support.labjack.com/docs/3-1-2-printable-modbus-map

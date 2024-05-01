@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using LabJack;
 
-namespace LcmsNetPlugins.LabJackT7
+namespace LabJackTSeries
 {
     [Serializable]
-    public class LabJackT7 : IDisposable
+    // https://support.labjack.com/docs/is-ljm-thread-safe
+    // https://support.labjack.com/docs/sharing-a-particular-device-among-multiple-process
+    // In summary, the device can only be opened by one device at a time, but calls are synchronized by device handle, so those calls are thread-safe
+    // https://support.labjack.com/docs/can-i-write-an-ljm-program-without-a-device-presen - demo mode
+    // https://support.labjack.com/docs/what-ljm-files-are-installed-on-my-machine - installed files
+    public class LabJackT : IDisposable
     {
         /// <summary>
         /// The LabJack's ID. Defaults to 0.
@@ -23,7 +28,7 @@ namespace LcmsNetPlugins.LabJackT7
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public LabJackT7()
+        public LabJackT()
         {
             localID = 0;
             HardwareVersion = 0;
@@ -43,7 +48,7 @@ namespace LcmsNetPlugins.LabJackT7
         /// Constructor which specifies ID. Probably won't get used.
         /// </summary>
         /// <param name="labJackID">The LabJack's local ID</param>
-        public LabJackT7(int labJackID)
+        public LabJackT(int labJackID)
         {
             localID = labJackID;
             HardwareVersion = 0;
@@ -112,7 +117,7 @@ namespace LcmsNetPlugins.LabJackT7
             GC.SuppressFinalize(this);
         }
 
-        ~LabJackT7()
+        ~LabJackT()
         {
             ReleaseUnmanagedResources();
         }
@@ -333,7 +338,7 @@ namespace LcmsNetPlugins.LabJackT7
                 LJM.ErrorToString(errorCode, ref text);
             }
 
-            throw new LabJackT7Exception(msg + ":\r\n\r\n" + text);
+            throw new LabJackTException(msg + ":\r\n\r\n" + text);
         }
     }
 }

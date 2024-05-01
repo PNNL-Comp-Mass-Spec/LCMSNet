@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5F38383D-E14B-4D03-8942-6CDF702AE76A}</ProjectGuid>
+    <ProjectGuid>{3E66CD5B-6AFB-456E-A980-3AC3D8D309B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LcmsNetPlugins.LabJackT7</RootNamespace>
-    <AssemblyName>LabJackT7</AssemblyName>
+    <RootNamespace>LabJackTSeries</RootNamespace>
+    <AssemblyName>LabJackTSeries</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,7 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>1591</NoWarn>
-    <DocumentationFile>bin\Debug\LabJackT7.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\LabJackTSeries.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -31,50 +31,25 @@
     <DebugType>pdbonly</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Release\LabJackT7.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\LabJackTSeries.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluidicsSDK">
-      <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
-    </Reference>
     <Reference Include="LabJack.LJM, Version=1.19.1.0, Culture=neutral, PublicKeyToken=0316e29ba8d40ce0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\LabJack.LJM.dll</HintPath>
     </Reference>
-    <Reference Include="LcmsNetCommonControls">
-      <HintPath>..\..\lib\LcmsNetCommonControls.dll</HintPath>
-    </Reference>
-    <Reference Include="LcmsNetSdk">
-      <HintPath>..\..\lib\LcmsNetSdk.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContactClosureRead\ContactClosureReadT7.cs" />
-    <Compile Include="ContactClosureRead\ContactClosureReadT7ViewModel.cs" />
-    <Compile Include="ContactClosure\ContactClosureT7.cs" />
-    <Compile Include="ContactClosure\ContactClosureT7ViewModel.cs" />
-    <Compile Include="LabJackT7.cs" />
-    <Compile Include="LabJackT7Enums.cs" />
-    <Compile Include="LabJackT7Exception.cs" />
+    <Compile Include="LabJackT.cs" />
+    <Compile Include="LabJackTEnums.cs" />
+    <Compile Include="LabJackTException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LabJack.LJM.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ReactiveUI.WPF">
-      <Version>19.5.1</Version>
-    </PackageReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(ProjectDir)LabJack.LJM.dll" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
-  </PropertyGroup>
 </Project>

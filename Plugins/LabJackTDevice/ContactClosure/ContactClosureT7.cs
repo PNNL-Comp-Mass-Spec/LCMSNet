@@ -1,24 +1,13 @@
-﻿/*********************************************************************************************************
-// Written by John Ryan, Dave Clark, Brian LaMarche for the US Department of Energy
-// Pacific Northwest National Laboratory, Richland, WA
-// Copyright 2009, Battelle Memorial Institute
-// Created 08/17/2009
-//
-// Updates:
-// - 9/08/2009 (BLL) Added method editing attributes for the method editor to use for an event.
-//   - Method:  Trigger(int timeout)
-//
-//********************************************************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using FluidicsSDK.Devices;
+using LabJackTSeries;
 using LcmsNetSDK;
 using LcmsNetSDK.Devices;
 using LcmsNetSDK.Method;
 
-namespace LcmsNetPlugins.LabJackT7.ContactClosure
+namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
 {
     [Serializable]
     [DeviceControl(typeof(ContactClosureT7ViewModel),
@@ -33,7 +22,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
         /// <summary>
         /// The LabJack used for signalling the pulse
         /// </summary>
-        private readonly LabJackT7 labJackDevice;
+        private readonly LabJackT labJackDevice;
         /// <summary>
         /// The length of the pulse to send on the port. Defaults to 1 second.
         /// </summary>
@@ -89,7 +78,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
         /// </summary>
         public ContactClosureT7()
         {
-            labJackDevice = new LabJackT7();
+            labJackDevice = new LabJackT();
             labJackPort    = LabJackT7Outputs.FIO0;
             deviceName = "Contact Closure";
         }
@@ -98,7 +87,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
         /// Constructor which assigns a LabJack
         /// </summary>
         /// <param name="lj">The LabJack</param>
-        public ContactClosureT7(LabJackT7 lj)
+        public ContactClosureT7(LabJackT lj)
         {
             labJackDevice = lj;
             labJackPort    = LabJackT7Outputs.FIO0;
@@ -111,7 +100,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
         /// <param name="newPort">The port on the LabJack to use for the pulse</param>
         public ContactClosureT7(LabJackT7Outputs newPort)
         {
-            labJackDevice = new LabJackT7();
+            labJackDevice = new LabJackT();
             labJackPort    = newPort;
             deviceName = "Contact Closure";
         }
@@ -121,7 +110,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
         /// </summary>
         /// <param name="lj">The LabJack</param>
         /// <param name="newPort">The port on the LabJack to use for the pulse</param>
-        public ContactClosureT7(LabJackT7 lj, LabJackT7Outputs newPort)
+        public ContactClosureT7(LabJackT lj, LabJackT7Outputs newPort)
         {
             labJackDevice = lj;
             labJackPort    = newPort;
@@ -328,7 +317,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
             {
                 labJackDevice.Write(Port, normalVoltageValue);
             }
-            catch (LabJackT7Exception ex)
+            catch (LabJackTException ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not set the normal voltage.",
                     ex,
@@ -389,7 +378,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
                     labJackDevice.Write(port, CONST_DIGITALHIGH);
                 }
             }
-            catch (LabJackT7Exception ex)
+            catch (LabJackTException ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not start the trigger.",
                                      ex,
@@ -410,7 +399,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
             {
                 labJackDevice.Write(port, CONST_ANALOGLOW);
             }
-            catch (LabJackT7Exception ex)
+            catch (LabJackTException ex)
             {
                 Error?.Invoke(this,
                     new DeviceErrorEventArgs("Could not stop the trigger.",
@@ -466,7 +455,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
                     labJackDevice.Write(port, CONST_DIGITALHIGH);
                 }
             }
-            catch (LabJackT7Exception ex)
+            catch (LabJackTException ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not start the trigger.",
                     ex,
@@ -483,7 +472,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
             {
                 labJackDevice.Write(port, CONST_ANALOGLOW);
             }
-            catch (LabJackT7Exception ex)
+            catch (LabJackTException ex)
             {
                 Error?.Invoke(this,
                     new DeviceErrorEventArgs("Could not stop the trigger.",
@@ -519,7 +508,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
                 var useVoltage = GetVoltageToUse(tempPortName, voltage);
                 labJackDevice.Write(port, useVoltage);
             }
-            catch (LabJackT7Exception ex)
+            catch (LabJackTException ex)
             {
                 Error?.Invoke(this, new DeviceErrorEventArgs("Could not start the trigger.",
                     ex,
@@ -537,7 +526,7 @@ namespace LcmsNetPlugins.LabJackT7.ContactClosure
                 var useVoltage = GetVoltageToUse(tempPortName, NormalVoltage);
                 labJackDevice.Write(port, useVoltage);
             }
-            catch (LabJackT7Exception ex)
+            catch (LabJackTException ex)
             {
                 Error?.Invoke(this,
                     new DeviceErrorEventArgs("Could not stop the trigger.",
