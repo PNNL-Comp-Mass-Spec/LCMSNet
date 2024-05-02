@@ -29,8 +29,14 @@
         AIN11 = 22,
         AIN12 = 24,
         AIN13 = 26,
-        AIN14_ITemp = 28,
-        AIN15_GND = 30,
+        /// <summary>
+        /// Internal temperature sensor, analog value
+        /// </summary>
+        AIN14 = 28,
+        /// <summary>
+        /// Internal reference ground
+        /// </summary>
+        AIN15 = 30,
         DAC0 = 1000,
         DAC1 = 1002,
         FIO0 = 2000,
@@ -56,18 +62,21 @@
         MIO0 = 2020,
         MIO1 = 2021,
         MIO2 = 2022,
-        ProductID = 60000,         // FLOAT32, R
-        HardwareVersion = 60002,   // FLOAT32, R
-        FirmwareVersion = 60004,   // FLOAT32, R
-        BootloaderVersion = 60006, // FLOAT32, R
-        WifiVersion = 60008,       // FLOAT32, R
-        HardwareInstalled = 60010, // UINT32, R
-        EthernetMAC = 60020,       // UINT64, R
-        WifiMAC = 60024,           // UINT64, R
-        SerialNumber = 60028,      // UINT32, R
-        DeviceNameDefault = 60500, // STRING, R/W, up to 49 characters, no periods, requires reboot to update reported name
+        PRODUCT_ID = 60000,         // FLOAT32, R
+        HARDWARE_VERSION = 60002,   // FLOAT32, R
+        FIRMWARE_VERSION = 60004,   // FLOAT32, R
+        BOOTLOADER_VERSION = 60006, // FLOAT32, R
+        WIFI_VERSION = 60008,       // FLOAT32, R
+        HARDWARE_INSTALLED = 60010, // UINT32, R
+        ETHERNET_MAC = 60020,       // UINT64, R
+        WIFI_MAC = 60024,           // UINT64, R
+        SERIAL_NUMBER = 60028,      // UINT32, R
+        DEVICE_NAME_DEFAULT = 60500, // STRING, R/W, up to 49 characters, no periods, requires reboot to update reported name
         // ReSharper restore InconsistentNaming
     }
+
+    // TEMPERATURE_AIR_K 60050 FLOAT32
+    // TEMPERATURE_DEVICE_K 60052 FLOAT32
 
     /// <summary>
     /// Input names and addresses on the LabJack T7. Not a comprehensive list.
@@ -89,8 +98,14 @@
         AIN11 = 22,
         AIN12 = 24,
         AIN13 = 26,
-        AIN14_ITemp = 28,
-        AIN15_GND = 30,
+        /// <summary>
+        /// Internal temperature sensor, analog value
+        /// </summary>
+        AIN14 = 28,
+        /// <summary>
+        /// Internal reference ground
+        /// </summary>
+        AIN15 = 30,
         FIO0 = 2000,
         FIO1 = 2001,
         FIO2 = 2002,
@@ -154,19 +169,19 @@
     /// <summary>
     /// Auxiliary registers. Not a comprehensive list.
     /// </summary>
-    public enum LabJackT7GeneralRegisters
+    public enum LabJackTGeneralRegisters
     {
         // ReSharper disable InconsistentNaming
-        ProductID = 60000,         // FLOAT32, R
-        HardwareVersion = 60002,   // FLOAT32, R
-        FirmwareVersion = 60004,   // FLOAT32, R
-        BootloaderVersion = 60006, // FLOAT32, R
-        WifiVersion = 60008,       // FLOAT32, R
-        HardwareInstalled = 60010, // UINT32, R
-        EthernetMAC = 60020,       // UINT64, R
-        WifiMAC = 60024,           // UINT64, R
-        SerialNumber = 60028,      // UINT32, R
-        DeviceNameDefault = 60500, // STRING, R/W, up to 49 characters, no periods, requires reboot to update reported name
+        PRODUCT_ID = 60000,         // FLOAT32, R
+        HARDWARE_VERSION = 60002,   // FLOAT32, R
+        FIRMWARE_VERSION = 60004,   // FLOAT32, R
+        BOOTLOADER_VERSION = 60006, // FLOAT32, R
+        WIFI_VERSION = 60008,       // FLOAT32, R
+        HARDWARE_INSTALLED = 60010, // UINT32, R
+        ETHERNET_MAC = 60020,       // UINT64, R
+        WIFI_MAC = 60024,           // UINT64, R
+        SERIAL_NUMBER = 60028,      // UINT32, R
+        DEVICE_NAME_DEFAULT = 60500, // STRING, R/W, up to 49 characters, no periods, requires reboot to update reported name
         // ReSharper restore InconsistentNaming
     }
 }

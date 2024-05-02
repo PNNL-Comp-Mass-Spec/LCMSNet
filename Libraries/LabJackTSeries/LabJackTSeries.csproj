@@ -43,7 +43,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LabJackDeviceReference.cs" />
     <Compile Include="LabJackT.cs" />
+    <Compile Include="LabJackT7.cs" />
     <Compile Include="LabJackTEnums.cs" />
     <Compile Include="LabJackTException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

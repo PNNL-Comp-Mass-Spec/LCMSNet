@@ -31,7 +31,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// <summary>
         /// The LabJack used for reading the ready signal
         /// </summary>
-        private readonly LabJackT labJackDevice;
+        private readonly LabJackT7 labJackDevice;
         /// <summary>
         /// The port on the LabJack on which to read the voltage.
         /// </summary>
@@ -44,10 +44,6 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// The current status of the LabJack.
         /// </summary>
         private DeviceStatus deviceStatus;
-        /// <summary>
-        /// Flag indicating if the device is in emulation mode.
-        /// </summary>
-        private bool inEmulationMode;
         private const char CONST_ANALOGPREFIX = 'A';
         private const int CONST_ANALOGHIGH = 5;
         private const int CONST_DIGITALHIGH = 1;
@@ -73,7 +69,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// </summary>
         public ContactClosureReadT7()
         {
-            labJackDevice = new LabJackT();
+            labJackDevice = new LabJackT7();
             labJackPort = LabJackT7Inputs.AIN0;
             deviceName = "Contact Closure Reader";
         }
@@ -82,7 +78,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// Constructor which assigns a LabJack
         /// </summary>
         /// <param name="lj">The LabJack</param>
-        public ContactClosureReadT7(LabJackT lj)
+        public ContactClosureReadT7(LabJackT7 lj)
         {
             labJackDevice = lj;
             labJackPort = LabJackT7Inputs.AIN0;
@@ -95,7 +91,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// <param name="newPort">The port on the LabJack to use for reading the ready signal</param>
         public ContactClosureReadT7(LabJackT7Inputs newPort)
         {
-            labJackDevice = new LabJackT();
+            labJackDevice = new LabJackT7();
             labJackPort = newPort;
             deviceName = "Contact Closure Reader";
         }
@@ -105,7 +101,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// </summary>
         /// <param name="lj">The LabJack</param>
         /// <param name="newPort">The port on the LabJack to use for reading the ready signal</param>
-        public ContactClosureReadT7(LabJackT lj, LabJackT7Inputs newPort)
+        public ContactClosureReadT7(LabJackT7 lj, LabJackT7Inputs newPort)
         {
             labJackDevice = lj;
             labJackPort = newPort;
@@ -121,11 +117,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// Gets or sets the emulation state of the device.
         /// </summary>
         //[PersistenceDataAttribute("Emulated")]
-        public bool Emulation
-        {
-            get => inEmulationMode;
-            set => inEmulationMode = value;
-        }
+        public bool Emulation { get; set; }
 
         /// <summary>
         /// Gets or sets the current status of the device.
@@ -174,23 +166,29 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         }
 
         [DeviceSavedSetting("LabJack ID")]
-        public int LabJackID
+        public string LabJackID
         {
-            get => labJackDevice.LocalID;
-            set => labJackDevice.LocalID = value;
+            get => labJackDevice.LabJackIdentifier;
+            set => labJackDevice.LabJackIdentifier = value;
         }
 
-        //Initialize/Shutdown don't really apply
-        //Maybe confirm that we can communicate to the LabJack? I don't know.
         public bool Initialize(ref string errorMessage)
         {
+            if (Emulation)
+            {
+                return true;
+            }
+
+            labJackDevice.Initialize();
+
             //Get the version info
             labJackDevice.GetDriverVersion();
+            labJackDevice.GetHardwareVersion();
             labJackDevice.GetFirmwareVersion();
 
             //If either FirmwareVersion or DriverVersion is zero, it means we have a communication failure.
             if (labJackDevice.HardwareVersion > 0 && labJackDevice.FirmwareVersion > 0 &&
-                string.IsNullOrWhiteSpace(labJackDevice.DriverVersion))
+                !string.IsNullOrWhiteSpace(labJackDevice.DriverVersion))
             {
                 return true;
             }
@@ -205,6 +203,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// <returns>True on success</returns>
         public bool Shutdown()
         {
+            labJackDevice.Close();
             return true;
         }
 
@@ -352,7 +351,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// <returns>the state of the contact closure</returns>
         public ContactClosureState ReadStateDigital(double timeout, LabJackT7Inputs port, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            if (inEmulationMode)
+            if (Emulation)
             {
                 return 0;
             }
@@ -416,7 +415,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosureRead
         /// <returns>the state of the contact closure</returns>
         public ContactClosureState ReadStateAnalog(double timeout, LabJackT7Inputs port, double voltage, ContactClosureState target = ContactClosureState.Closed | ContactClosureState.Open)
         {
-            if (inEmulationMode)
+            if (Emulation)
             {
                 return 0;
             }

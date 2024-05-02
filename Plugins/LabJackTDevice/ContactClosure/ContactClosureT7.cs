@@ -22,7 +22,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// <summary>
         /// The LabJack used for signalling the pulse
         /// </summary>
-        private readonly LabJackT labJackDevice;
+        private readonly LabJackT7 labJackDevice;
         /// <summary>
         /// The length of the pulse to send on the port. Defaults to 1 second.
         /// </summary>
@@ -47,10 +47,6 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// The current status of the LabJack.
         /// </summary>
         private DeviceStatus deviceStatus;
-        /// <summary>
-        /// Flag indicating if the device is in emulation mode.
-        /// </summary>
-        private bool inEmulationMode;
 
         private bool isInitialized = false;
         private const char CONST_ANALOGPREFIX = 'A';
@@ -78,7 +74,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// </summary>
         public ContactClosureT7()
         {
-            labJackDevice = new LabJackT();
+            labJackDevice = new LabJackT7();
             labJackPort    = LabJackT7Outputs.FIO0;
             deviceName = "Contact Closure";
         }
@@ -87,7 +83,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// Constructor which assigns a LabJack
         /// </summary>
         /// <param name="lj">The LabJack</param>
-        public ContactClosureT7(LabJackT lj)
+        public ContactClosureT7(LabJackT7 lj)
         {
             labJackDevice = lj;
             labJackPort    = LabJackT7Outputs.FIO0;
@@ -100,7 +96,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// <param name="newPort">The port on the LabJack to use for the pulse</param>
         public ContactClosureT7(LabJackT7Outputs newPort)
         {
-            labJackDevice = new LabJackT();
+            labJackDevice = new LabJackT7();
             labJackPort    = newPort;
             deviceName = "Contact Closure";
         }
@@ -110,7 +106,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// </summary>
         /// <param name="lj">The LabJack</param>
         /// <param name="newPort">The port on the LabJack to use for the pulse</param>
-        public ContactClosureT7(LabJackT lj, LabJackT7Outputs newPort)
+        public ContactClosureT7(LabJackT7 lj, LabJackT7Outputs newPort)
         {
             labJackDevice = lj;
             labJackPort    = newPort;
@@ -126,11 +122,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// Gets or sets the emulation state of the device.
         /// </summary>
         //[PersistenceDataAttribute("Emulated")]
-        public bool Emulation
-        {
-            get => inEmulationMode;
-            set => inEmulationMode = value;
-        }
+        public bool Emulation { get; set; }
 
         /// <summary>
         /// Gets or sets the current status of the device.
@@ -223,14 +215,12 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         }
 
         [DeviceSavedSetting("LabJack ID")]
-        public int LabJackID
+        public string LabJackID
         {
-            get => labJackDevice.LocalID;
-            set => labJackDevice.LocalID = value;
+            get => labJackDevice.LabJackIdentifier;
+            set => labJackDevice.LabJackIdentifier = value;
         }
 
-        //Initialize/Shutdown don't really apply
-        //Maybe confirm that we can communicate to the LabJack? I don't know.
         public bool Initialize(ref string errorMessage)
         {
             if (Emulation)
@@ -238,13 +228,16 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
                 return true;
             }
 
+            labJackDevice.Initialize();
+
             //Get the version info
             labJackDevice.GetDriverVersion();
+            labJackDevice.GetHardwareVersion();
             labJackDevice.GetFirmwareVersion();
 
             //If either FirmwareVersion or DriverVersion is zero, it means we have a communication failure.
             if (labJackDevice.HardwareVersion > 0 && labJackDevice.FirmwareVersion > 0 &&
-                string.IsNullOrWhiteSpace(labJackDevice.DriverVersion))
+                !string.IsNullOrWhiteSpace(labJackDevice.DriverVersion))
             {
                 isInitialized = true;
                 SetPortNormalVoltage();
@@ -261,6 +254,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// <returns>True on success</returns>
         public bool Shutdown()
         {
+            labJackDevice.Close();
             return true;
         }
 
@@ -306,7 +300,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// <exception cref="Exception"></exception>
         private void SetPortNormalVoltage()
         {
-            if (!isInitialized || inEmulationMode)
+            if (!isInitialized || Emulation)
             {
                 return;
             }
@@ -358,7 +352,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         [LCMethodEvent("Trigger Port", MethodOperationTimeoutType.Parameter, EventDescription = "Send a high-pulse trigger to the provided port, for the provided time")]
         public int Trigger(double timeout, LabJackT7Outputs port, double pulseLengthSeconds)
         {
-            if (inEmulationMode)
+            if (Emulation)
             {
                 return 0;
             }
@@ -437,7 +431,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         [LCMethodEvent("Trigger With Voltage Port", MethodOperationTimeoutType.Parameter, EventDescription = "Send a non-zero-pulse trigger to the provided port, for the provided time\nFor analog ports, the set voltage is used, for digital ports digital 'high' is sent")]
         public int Trigger(int pulseLengthSeconds, LabJackT7Outputs port, double voltage)
         {
-            if (inEmulationMode)
+            if (Emulation)
             {
                 return 0;
             }
@@ -496,7 +490,7 @@ namespace LcmsNetPlugins.LabJackTDevice.ContactClosure
         /// <param name="voltage">The voltage to set</param>
         private int TriggerFlexible(int pulseLengthSeconds, LabJackT7Outputs port, double voltage)
         {
-            if (inEmulationMode)
+            if (Emulation)
             {
                 return 0;
             }

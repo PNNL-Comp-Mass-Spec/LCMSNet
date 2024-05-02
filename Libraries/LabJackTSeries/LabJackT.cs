@@ -1,78 +1,60 @@
 ﻿using System;
-using System.Collections.Generic;
 using LabJack;
 
 namespace LabJackTSeries
 {
+    /// <summary>
+    /// LabJack T Series base class
+    /// </summary>
     [Serializable]
-    // https://support.labjack.com/docs/is-ljm-thread-safe
-    // https://support.labjack.com/docs/sharing-a-particular-device-among-multiple-process
-    // In summary, the device can only be opened by one device at a time, but calls are synchronized by device handle, so those calls are thread-safe
-    // https://support.labjack.com/docs/can-i-write-an-ljm-program-without-a-device-presen - demo mode
-    // https://support.labjack.com/docs/what-ljm-files-are-installed-on-my-machine - installed files
-    public class LabJackT : IDisposable
+    public abstract class LabJackT : IDisposable
     {
-        /// <summary>
-        /// The LabJack's ID. Defaults to 0.
-        /// </summary>
-        /// <remarks>
         /// Example code at https://github.com/labjack/DotNet_LJM_Examples
-        /// </remarks>
-        private int localID;
+        // https://support.labjack.com/docs/is-ljm-thread-safe
+        // https://support.labjack.com/docs/sharing-a-particular-device-among-multiple-process
+        // In summary, the device can only be opened by one device at a time, but calls are synchronized by device handle, so those calls are thread-safe
+        // https://support.labjack.com/docs/can-i-write-an-ljm-program-without-a-device-presen - demo mode
+        // https://support.labjack.com/docs/what-ljm-files-are-installed-on-my-machine - installed files
 
-        private static readonly Dictionary<int, object> lockObjects = new Dictionary<int, object>(1);
-        private static readonly object dictionaryLock = new object();
         private bool initialized = false;
-        private int labJackDeviceHandle;
+        private LabJackDeviceReference labJackDeviceRef;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public LabJackT()
+        /// <param name="deviceType">LabJack device type. Must match one of the values from the constants LJM.CONSTANTS.dtXXXX.</param>
+        protected LabJackT(int deviceType)
         {
-            localID = 0;
+            DeviceType = deviceType;
+            LabJackIdentifier = "";
             HardwareVersion = 0;
             FirmwareVersion = 0;
             DriverVersion = "";
-
-            lock (dictionaryLock)
-            {
-                if (!lockObjects.ContainsKey(localID))
-                {
-                    lockObjects.Add(localID, new object());
-                }
-            }
         }
 
         /// <summary>
         /// Constructor which specifies ID. Probably won't get used.
         /// </summary>
-        /// <param name="labJackID">The LabJack's local ID</param>
-        public LabJackT(int labJackID)
+        /// <param name="deviceType">LabJack device type. Must match one of the values from the constants LJM.CONSTANTS.dtXXXX.</param>
+        /// <param name="identifier">The LabJack's local ID</param>
+        protected LabJackT(int deviceType, string identifier)
         {
-            localID = labJackID;
+            LabJackIdentifier = identifier;
             HardwareVersion = 0;
             FirmwareVersion = 0;
             DriverVersion = "";
-
-            lock (dictionaryLock)
-            {
-                if (!lockObjects.ContainsKey(localID))
-                {
-                    lockObjects.Add(localID, new object());
-                }
-            }
         }
+
+        /// <summary>
+        /// LabJack device type. Must match one of the values from the constants LJM.CONSTANTS.dtXXXX.
+        /// </summary>
+        protected int DeviceType { get; } = LJM.CONSTANTS.dtTSERIES;
 
         /// <summary>
         /// Gets or sets the LabJack's local ID, which is probably 0.
         /// This doesn't change the hardware ID of the LabJack itself, just the ID the software uses to communicate.
         /// </summary>
-        public int LocalID
-        {
-            get => localID;
-            set => localID = value;
-        }
+        public string LabJackIdentifier { get; set; }
 
         /// <summary>
         /// Gets the hardware version, as set by the GetHardwareVersion() function
@@ -89,16 +71,36 @@ namespace LabJackTSeries
         /// </summary>
         public string DriverVersion { get; private set; }
 
-        public void Initialize()
+        /// <summary>
+        /// Opens a handle to the LabJack device, or gets an already-open handle
+        /// </summary>
+        public bool Initialize()
         {
-            // Per example code
-            // If an ID other than 0 is wanted for the U3 object being initialized
-            // it must be changed before calling initialize, or initialze must be called again afterwards.
-            var err = LJM.Open(LJM.CONSTANTS.dtT7, LJM.CONSTANTS.ctUSB, "ANY", ref labJackDeviceHandle);
+            labJackDeviceRef = LabJackDeviceReference.GetHandle(DeviceType, LabJackIdentifier);
 
-            if (err == LJM.LJMERROR.NOERROR)
+            if (labJackDeviceRef != null)
             {
+                // TODO: Throw some exception?
                 initialized = true;
+            }
+
+            return initialized;
+        }
+
+        /// <summary>
+        /// Closes the handle to the LabJack device, if not in use by other instances.
+        /// </summary>
+        /// <remarks>
+        /// Differs from <see cref="Dispose"/> by the implied meaning of the method.
+        /// 'Dispose' means 'don't use this object again.
+        /// 'Close' implies the object could be re-opened.</remarks>
+        public void Close()
+        {
+            if (initialized)
+            {
+                labJackDeviceRef.DisposeReference();
+                labJackDeviceRef = null;
+                initialized = false;
             }
         }
 
@@ -106,7 +108,7 @@ namespace LabJackTSeries
         {
             if (initialized)
             {
-                LJM.Close(labJackDeviceHandle);
+                labJackDeviceRef.DisposeReference();
                 initialized = false;
             }
         }
@@ -122,38 +124,20 @@ namespace LabJackTSeries
             ReleaseUnmanagedResources();
         }
 
-        private object GetLockObject()
-        {
-            if (lockObjects.TryGetValue(localID, out var lockObj))
-            {
-                return lockObj;
-            }
-
-            lock (dictionaryLock)
-            {
-                if (!lockObjects.ContainsKey(localID))
-                {
-                    lockObjects.Add(localID, new object());
-                }
-            }
-
-            return lockObjects[localID];
-        }
-
         /// <summary>
         /// General method for reading from a port
         /// </summary>
         /// <param name="channel">Enumerated port to read from</param>
         /// <returns>The measured value, or -1 if a problem</returns>
-        public double Read(LabJackT7Inputs channel)
+        public double Read(LabJackTGeneralRegisters channel)
         {
-            var portName = Enum.GetName(typeof(LabJackT7Inputs), channel);
+            var portName = Enum.GetName(typeof(LabJackTGeneralRegisters), channel);
             if (portName == null)
             {
                 return -1;
             }
 
-            return ReadRegisterByName((LabJackT7IONames) (int) channel);
+            return ReadRegisterByName((LabJackTGeneralRegisters)(int)channel);
         }
 
         /// <summary>
@@ -161,21 +145,27 @@ namespace LabJackTSeries
         /// </summary>
         /// <param name="register">The register to read from</param>
         /// <returns>The state (digital, 0/1) or voltage (analog) of the channel</returns>
-        private double ReadRegisterByName(LabJackT7IONames register)
+        protected double ReadRegisterByName(LabJackTGeneralRegisters register)
         {
-            var registerName = Enum.GetName(typeof(LabJackT7IONames), register);
+            var registerName = Enum.GetName(typeof(LabJackTGeneralRegisters), register);
             if (registerName == null)
             {
                 return -1;
             }
 
-            var value = 0.0;
-            LJM.LJMERROR result;
+            return ReadRegisterByName(registerName);
+        }
 
-            lock (GetLockObject())
-            {
-                result = LJM.eReadName(labJackDeviceHandle, registerName, ref value);
-            }
+        /// <summary>
+        /// Reads the current state/voltage of one of the inputs
+        /// </summary>
+        /// <param name="registerName">register to read from</param>
+        /// <returns>The state (digital, 0/1) or voltage (analog) of the channel</returns>
+        protected double ReadRegisterByName(string registerName)
+        {
+            var value = 0.0;
+
+            var result = LJM.eReadName(labJackDeviceRef.Handle, registerName, ref value);
 
             if (result != LJM.LJMERROR.NOERROR)
             {
@@ -192,16 +182,11 @@ namespace LabJackTSeries
         /// </summary>
         /// <param name="register">The register to read from</param>
         /// <returns>The state (digital, 0/1) or voltage (analog) of the channel</returns>
-        private double ReadRegisterByAddress(int register)
+        protected double ReadRegisterByAddress(int register)
         {
             var value = 0.0;
-            LJM.LJMERROR result;
 
-            lock (GetLockObject())
-            {
-                var dblValue = 0.0;
-                result = LJM.eReadAddress(labJackDeviceHandle, register, register < 2000 ? LJM.CONSTANTS.FLOAT32 : LJM.CONSTANTS.UINT16, ref dblValue);
-            }
+            var result = LJM.eReadAddress(labJackDeviceRef.Handle, register, register < 2000 ? LJM.CONSTANTS.FLOAT32 : LJM.CONSTANTS.UINT16, ref value);
 
             if (result != LJM.LJMERROR.NOERROR)
             {
@@ -210,41 +195,17 @@ namespace LabJackTSeries
             }
 
             return value;
-        }
-
-        /// <summary>
-        /// General method for writing to a port
-        /// </summary>
-        /// <param name="name">Enumerated port to write to</param>
-        /// <param name="value">The value to write (0/1 for digital)</param>
-        public void Write(LabJackT7Outputs name, double value)
-        {
-            var portName = Enum.GetName(typeof(LabJackT7Outputs), name);
-            if (portName == null)
-                return;
-
-            WriteRegisterByName((LabJackT7IONames) (int) name, value);
         }
 
         /// <summary>
         /// Set the state/voltage of one of the outputs
         /// </summary>
-        /// <param name="register">The register to write to</param>
+        /// <param name="registerName">The register to write to</param>
         /// <param name="value">Digital state (0/1) or analog voltage</param>
         /// <returns>The error message, if applicable</returns>
-        private int WriteRegisterByName(LabJackT7IONames register, double value)
+        protected int WriteRegisterByName(string registerName, double value)
         {
-            var registerName = Enum.GetName(typeof(LabJackT7IONames), register);
-            if (registerName == null)
-            {
-                return -1;
-            }
-
-            LJM.LJMERROR result;
-            lock (GetLockObject())
-            {
-                result = LJM.eWriteName(labJackDeviceHandle, registerName, value);
-            }
+            var result = LJM.eWriteName(labJackDeviceRef.Handle, registerName, value);
 
             if (result != LJM.LJMERROR.NOERROR)
             {
@@ -256,18 +217,45 @@ namespace LabJackTSeries
         }
 
         /// <summary>
+        /// General method for writing to a port
+        /// </summary>
+        /// <param name="name">Enumerated port to write to</param>
+        /// <param name="value">The value to write (0/1 for digital)</param>
+        public void Write(LabJackTGeneralRegisters name, double value)
+        {
+            var portName = Enum.GetName(typeof(LabJackTGeneralRegisters), name);
+            if (portName == null)
+                return;
+
+            WriteRegisterByName((LabJackTGeneralRegisters)(int)name, value);
+        }
+
+        /// <summary>
         /// Set the state/voltage of one of the outputs
         /// </summary>
         /// <param name="register">The register to write to</param>
         /// <param name="value">Digital state (0/1) or analog voltage</param>
         /// <returns>The error message, if applicable</returns>
-        private int WriteRegisterByAddress(int register, double value)
+        protected int WriteRegisterByName(LabJackTGeneralRegisters register, double value)
         {
-            LJM.LJMERROR result;
-            lock (GetLockObject())
+            var registerName = Enum.GetName(typeof(LabJackTGeneralRegisters), register);
+            if (registerName == null)
             {
-                result = LJM.eWriteAddress(labJackDeviceHandle, register, register < 2000 ? LJM.CONSTANTS.FLOAT32 : LJM.CONSTANTS.UINT16, value);
+                return -1;
             }
+
+            return WriteRegisterByName(registerName, value);
+        }
+
+        /// <summary>
+        /// Set the state/voltage of one of the outputs
+        /// </summary>
+        /// <param name="register">The register to write to</param>
+        /// <param name="value">Digital state (0/1) or analog voltage</param>
+        /// <returns>The error message, if applicable</returns>
+        protected int WriteRegisterByAddress(int register, double value)
+        {
+            var result = LJM.eWriteAddress(labJackDeviceRef.Handle, register, register < 2000 ? LJM.CONSTANTS.FLOAT32 : LJM.CONSTANTS.UINT16, value);
 
             if (result != LJM.LJMERROR.NOERROR)
             {
@@ -284,7 +272,8 @@ namespace LabJackTSeries
         /// <returns>The driver version, as a float</returns>
         public string GetDriverVersion()
         {
-            return LJM.LABJACK_LJM_VERSION;
+            DriverVersion = LJM.LABJACK_LJM_VERSION;
+            return DriverVersion;
         }
 
         /// <summary>
@@ -296,10 +285,7 @@ namespace LabJackTSeries
         {
             var text = "";
 
-            lock (GetLockObject())
-            {
-                LJM.ErrorToString(errorCode, ref text);
-            }
+            LJM.ErrorToString(errorCode, ref text);
 
             return text;
         }
@@ -310,7 +296,12 @@ namespace LabJackTSeries
         /// <returns>The hardware version, as a double</returns>
         public double GetHardwareVersion()
         {
-            HardwareVersion = ReadRegisterByName(LabJackT7IONames.HardwareVersion);
+            if (!initialized)
+            {
+                return 0;
+            }
+
+            HardwareVersion = ReadRegisterByName(LabJackTGeneralRegisters.HARDWARE_VERSION);
             return HardwareVersion;
         }
 
@@ -320,7 +311,12 @@ namespace LabJackTSeries
         /// <returns>The firmware version, as a double</returns>
         public double GetFirmwareVersion()
         {
-            FirmwareVersion = ReadRegisterByName(LabJackT7IONames.FirmwareVersion);
+            if (!initialized)
+            {
+                return 0;
+            }
+
+            FirmwareVersion = ReadRegisterByName(LabJackTGeneralRegisters.FIRMWARE_VERSION);
             return FirmwareVersion;
         }
 
@@ -333,10 +329,7 @@ namespace LabJackTSeries
         {
             var text = "";
 
-            lock (GetLockObject())
-            {
-                LJM.ErrorToString(errorCode, ref text);
-            }
+            LJM.ErrorToString(errorCode, ref text);
 
             throw new LabJackTException(msg + ":\r\n\r\n" + text);
         }
