@@ -176,17 +176,25 @@ namespace ZaberStageControl
 
                 foreach (var device in devices)
                 {
-                    if (stage.SerialNumber == device.SerialNumber)
+                    for (var i = 1; i <= device.AxisCount; i++)
                     {
-                        if (!StageConnectionManager.Instance.IsStageUsed(device.SerialNumber))
+                        var axis = device.GetAxis(i);
+                        var serialNumber = device.IsIntegrated
+                            ? device.SerialNumber
+                            : axis.Identity.PeripheralSerialNumber;
+                        if (stage.SerialNumber == serialNumber)
                         {
-                            serialsFound.Add(device.SerialNumber);
-                            stage.DeviceRef = device;
-                            stage.StageConnectionError = false;
-                        }
-                        else
-                        {
-                            stage.StageConnectionError = true;
+                            if (!StageConnectionManager.Instance.IsStageUsed(serialNumber))
+                            {
+                                serialsFound.Add(serialNumber);
+                                stage.DeviceRef = device;
+                                stage.AxisNumber = i;
+                                stage.StageConnectionError = false;
+                            }
+                            else
+                            {
+                                stage.StageConnectionError = true;
+                            }
                         }
                     }
                 }
@@ -204,13 +212,10 @@ namespace ZaberStageControl
                     foreach (var stage in items)
                     {
                         var device = stage.DeviceRef;
-                        for (var i = 1; i <= device.AxisCount; i++)
+                        var axis = device.GetAxis(stage.AxisNumber);
+                        if (!axis.IsHomed())
                         {
-                            var axis = device.GetAxis(i);
-                            if (!axis.IsHomed())
-                            {
-                                tasks.Add(axis.HomeAsync());
-                            }
+                            tasks.Add(axis.HomeAsync());
                         }
                     }
 

@@ -49,14 +49,14 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Ref" IsReadOnly="True" Binding="{Binding Settings.DeviceStageName}" />
                     <DataGridTextColumn Header="Name" Binding="{Binding Settings.StageDisplayName}" />
-                    <DataGridTemplateColumn Header="SN">
+                    <DataGridTemplateColumn Header="Change SN">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox SelectedItem="{Binding SelectedDevice, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Data.PortDevices, Source={StaticResource BaseDC}}" cueBannerOverlay:CueBannerService.CueBanner="Select" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Set SN" Binding="{Binding Settings.SerialNumber}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="SN" Binding="{Binding Settings.SerialNumber}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Model" Binding="{Binding Settings.DeviceModelName}" IsReadOnly="True" />
                     <DataGridTextColumn Header="ID" Binding="{Binding Settings.DeviceModelID}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Firmware" Binding="{Binding Settings.FirmwareVersion}" IsReadOnly="True" />

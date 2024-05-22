@@ -141,10 +141,30 @@ namespace ZaberStageControl
         public void ReadStagesForConnection(string portName, Device[] devices)
         {
             lastReadTime[portName] = DateTime.Now;
-            UpdateConnectionStageIDs(portName, devices.Select(x => new ConnectionStageID(portName, x.SerialNumber, x.Name)));
+
+            var axes = new List<ConnectionStageID>(10);
+            foreach (var device in devices)
+            {
+                if (device.IsIntegrated)
+                {
+                    // integrated devices don't populate values for the individual axes, like axis.PeripheralSerialNumber
+                    // TODO: We don't support devices with integrated controllers with multiple axes; these would require modifications in other places too.
+                    axes.Add(new ConnectionStageID(portName, device.SerialNumber, device.Name));
+                }
+                else
+                {
+                    for (var i = 1; i <= device.AxisCount; i++)
+                    {
+                        var axis = device.GetAxis(i);
+                        axes.Add(new ConnectionStageID(portName, axis.PeripheralSerialNumber, axis.PeripheralName, i, device.SerialNumber, true));
+                    }
+                }
+            }
+
+            UpdateConnectionStageIDs(portName, axes);
         }
 
-        public void UpdateConnectionStageIDs(string portName, IEnumerable<ConnectionStageID> newIds)
+        public void UpdateConnectionStageIDs(string portName, IReadOnlyList<ConnectionStageID> newIds)
         {
             lock (connectionSerialsLocker)
             {

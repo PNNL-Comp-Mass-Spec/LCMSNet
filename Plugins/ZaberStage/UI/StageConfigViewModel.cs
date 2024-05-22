@@ -14,6 +14,15 @@ namespace LcmsNetPlugins.ZaberStage.UI
 {
     public class StageConfigViewModel : ReactiveObject
     {
+        public StageConfigViewModel()
+        {
+            var filter = this.WhenValueChanged(x => x.SelectedPortName).Select(x => new Func<ConnectionStageID, bool>(y => !string.IsNullOrWhiteSpace(x) && x.Equals(y.PortName)));
+            ZaberManager.Instance.ConnectionSerials.Connect().Filter(filter).ObserveOn(RxApp.MainThreadScheduler).Bind(out var portDevices).Subscribe();
+            PortDevices = portDevices;
+
+            ApplyPortNameCommand = ReactiveCommand.Create(ApplyPortName);
+        }
+
         private IZaberStageGroup stage;
         private string selectedPortName = "";
         private IReadOnlyList<StageSettingsViewModel> stageAxes;
@@ -59,15 +68,6 @@ namespace LcmsNetPlugins.ZaberStage.UI
             set => this.RaiseAndSetIfChanged(ref stageAxes, value);
         }
         public ReactiveCommand<Unit, Unit> ApplyPortNameCommand { get; }
-
-        public StageConfigViewModel()
-        {
-            var filter = this.WhenValueChanged(x => x.SelectedPortName).Select(x => new Func<ConnectionStageID, bool>(y => !string.IsNullOrWhiteSpace(x) && x.Equals(y.PortName)));
-            ZaberManager.Instance.ConnectionSerials.Connect().Filter(filter).ObserveOn(RxApp.MainThreadScheduler).Bind(out var portDevices).Subscribe();
-            PortDevices = portDevices;
-
-            ApplyPortNameCommand = ReactiveCommand.Create(ApplyPortName);
-        }
 
         private void ApplyPortName()
         {

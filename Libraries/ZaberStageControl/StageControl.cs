@@ -25,6 +25,7 @@ namespace ZaberStageControl
         private readonly double[] jogSpeeds = new double[] { 0.2, 1, 3 };
         private double maxMoveSpeed = 1000000; // default is no movement speed limit, beyond the hardware limits!
         private Zaber.Motion.Ascii.Device deviceRef = null;
+        private int axisNumber = 1;
 
         // TODO: Stage display: have one tab that is details/configuration that is common for all stages; can be a ItemsControl or ListView
 
@@ -95,14 +96,25 @@ namespace ZaberStageControl
                     // TODO: Set local values...
                     FirmwareVersion = $"{value.FirmwareVersion.Major}.{value.FirmwareVersion.Minor}";
                     DeviceAddress = value.DeviceAddress;
-                    DeviceModelID = value.DeviceId;
-                    DeviceModelName = value.Name;
-                    AttachedSerialNumber = value.SerialNumber;
+
+                    UpdateDeviceInfo();
                 }
 
                 if (value == null)
                 {
                     AttachedSerialNumber = -1;
+                }
+            }
+        }
+
+        public int AxisNumber
+        {
+            get => axisNumber;
+            set
+            {
+                if (this.RaiseAndSetIfChangedRetBool(ref axisNumber, value))
+                {
+                    UpdateDeviceInfo();
                 }
             }
         }
@@ -119,6 +131,28 @@ namespace ZaberStageControl
         public void OnPropertyChanged(string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void UpdateDeviceInfo()
+        {
+            if (DeviceRef == null)
+            {
+                return;
+            }
+
+            if (DeviceRef.IsIntegrated || AxisNumber < 0 || AxisNumber > DeviceRef.AxisCount)
+            {
+                DeviceModelID = DeviceRef.DeviceId;
+                DeviceModelName = DeviceRef.Name;
+                AttachedSerialNumber = DeviceRef.SerialNumber;
+            }
+            else
+            {
+                var axis = DeviceRef.GetAxis(AxisNumber);
+                DeviceModelID = axis.PeripheralId;
+                DeviceModelName = axis.PeripheralName;
+                AttachedSerialNumber = axis.PeripheralSerialNumber;
+            }
         }
 
         public string GetAxisConfigString()
@@ -187,7 +221,7 @@ namespace ZaberStageControl
 
         public double GetPositionMM()
         {
-            return DeviceRef.GetAxis(1).GetPosition(Units.Length_Millimetres);
+            return DeviceRef.GetAxis(AxisNumber).GetPosition(Units.Length_Millimetres);
         }
 
         /// <summary>
@@ -212,7 +246,7 @@ namespace ZaberStageControl
 
             try
             {
-                DeviceRef.GetAxis(1).MoveRelative(dist, units, waitUntilIdle, velocity, velocityUnits);
+                DeviceRef.GetAxis(AxisNumber).MoveRelative(dist, units, waitUntilIdle, velocity, velocityUnits);
                 return true;
             }
             catch
@@ -238,7 +272,7 @@ namespace ZaberStageControl
         {
             try
             {
-                DeviceRef.GetAxis(1).MoveRelative(direction.Convert(distance, IsInverted), units, waitUntilIdle, velocity, velocityUnits);
+                DeviceRef.GetAxis(AxisNumber).MoveRelative(direction.Convert(distance, IsInverted), units, waitUntilIdle, velocity, velocityUnits);
                 return true;
             }
             catch
@@ -267,7 +301,7 @@ namespace ZaberStageControl
 
             try
             {
-                DeviceRef.GetAxis(1).MoveVelocity(vel, units);
+                DeviceRef.GetAxis(AxisNumber).MoveVelocity(vel, units);
                 return true;
             }
             catch
@@ -280,7 +314,7 @@ namespace ZaberStageControl
         {
             try
             {
-                DeviceRef.GetAxis(1).MoveVelocity(Math.Min(direction.Convert(speed, jogSpeeds, IsInverted), MaxMoveSpeed), Units.Velocity_MillimetresPerSecond);
+                DeviceRef.GetAxis(AxisNumber).MoveVelocity(Math.Min(direction.Convert(speed, jogSpeeds, IsInverted), MaxMoveSpeed), Units.Velocity_MillimetresPerSecond);
                 return true;
             }
             catch
@@ -293,7 +327,7 @@ namespace ZaberStageControl
         {
             try
             {
-                DeviceRef.GetAxis(1).Stop(waitUntilIdle);
+                DeviceRef.GetAxis(AxisNumber).Stop(waitUntilIdle);
                 return true;
             }
             catch
@@ -318,7 +352,7 @@ namespace ZaberStageControl
         {
             try
             {
-                DeviceRef.GetAxis(1).MoveAbsolute(position, units, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), velocityUnits);
+                DeviceRef.GetAxis(AxisNumber).MoveAbsolute(position, units, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), velocityUnits);
                 return true;
             }
             catch
@@ -341,14 +375,14 @@ namespace ZaberStageControl
 
         public Task MoveAbsoluteAsync2(double position, Units units, bool waitUntilIdle = true, double velocity = 0, Units velocityUnits = Units.Native)
         {
-            return DeviceRef.GetAxis(1).MoveAbsoluteAsync(position, units, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), velocityUnits);
+            return DeviceRef.GetAxis(AxisNumber).MoveAbsoluteAsync(position, units, waitUntilIdle, Math.Min(velocity, MaxMoveSpeed), velocityUnits);
         }
 
         public bool WaitUntilIdle()
         {
             try
             {
-                DeviceRef.GetAxis(1).WaitUntilIdle(true);
+                DeviceRef.GetAxis(AxisNumber).WaitUntilIdle(true);
                 return true;
             }
             catch
@@ -359,7 +393,7 @@ namespace ZaberStageControl
 
         public void Home()
         {
-            DeviceRef.GetAxis(1).Home();
+            DeviceRef.GetAxis(AxisNumber).Home();
         }
     }
 
