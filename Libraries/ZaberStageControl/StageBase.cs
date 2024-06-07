@@ -14,7 +14,6 @@ namespace ZaberStageControl
         private string name;
 
         private string portName = "COM1";
-        private int statusPollDelay = 1;
 
         protected Zaber.Motion.Ascii.Connection Connection;
         private bool connected;
@@ -50,7 +49,6 @@ namespace ZaberStageControl
             StagesUsed = stageNames.Select(x => new StageControl(x)).ToArray();
 
             name = defaultName;
-            StatusPollDelay = 1;
 
             foreach (var stage in StagesUsed)
             {
@@ -76,7 +74,10 @@ namespace ZaberStageControl
         /// <summary>
         /// Gets or sets whether the device is in emulation mode or not.
         /// </summary>
-        public bool Emulation { get; set; }
+        //public bool Emulation { get; set; }
+        public bool Emulation { get => false;
+            set { }
+        }
 
         /// <summary>
         /// Gets or sets the device's name
@@ -94,15 +95,6 @@ namespace ZaberStageControl
         {
             get => portName;
             set => this.RaiseAndSetIfChanged(ref portName, value);
-        }
-
-        /// <summary>
-        /// The delay when polling for system status in seconds
-        /// </summary>
-        public int StatusPollDelay
-        {
-            get => statusPollDelay;
-            set => this.RaiseAndSetIfChanged(ref statusPollDelay, value);
         }
 
         /// <summary>
@@ -146,7 +138,7 @@ namespace ZaberStageControl
             }
 
             //If the serial port is not open, open it
-            if (!connected  || !Connection.IsConnected)
+            if (!connected)
             {
                 try
                 {

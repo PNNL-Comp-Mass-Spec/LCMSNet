@@ -56,10 +56,6 @@ namespace LcmsNetPlugins.ZaberStage
                     OnDeviceSaveRequired();
                     this.RaisePropertyChanged(nameof(PortName));
                     break;
-                case nameof(StageBase.StatusPollDelay):
-                    OnDeviceSaveRequired();
-                    this.RaisePropertyChanged(nameof(StatusPollDelay));
-                    break;
                 default:
                     break;
             }
@@ -123,16 +119,6 @@ namespace LcmsNetPlugins.ZaberStage
         {
             get => StageDevice.PortName;
             set => StageDevice.PortName = value;
-        }
-
-        /// <summary>
-        /// The delay when polling for system status in seconds
-        /// </summary>
-        [DeviceSavedSetting("StatusPollDelay")]
-        public int StatusPollDelay
-        {
-            get => StageDevice.StatusPollDelay;
-            set => StageDevice.StatusPollDelay = value;
         }
 
         /// <summary>
