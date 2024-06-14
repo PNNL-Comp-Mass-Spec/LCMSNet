@@ -66,10 +66,17 @@ namespace LcmsNet.IO.DMS
 
             if (dbTools != null && !updated && !connectionStringUpdated)
             {
-                if (dbTools.TestDatabaseConnection())
+                try
                 {
-                    ErrMsg = "";
-                    return dbTools;
+                    if (dbTools.TestDatabaseConnection())
+                    {
+                        ErrMsg = "";
+                        return dbTools;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ApplicationLogger.LogError(LogLevel.Warning, "Error connecting to DMS.", ex);
                 }
 
                 // Assuming temporary failure of the connection
@@ -86,14 +93,22 @@ namespace LcmsNet.IO.DMS
             db.ErrorEvent += ConnectionErrorEvent;
             lastConnectionAttempt = DateTime.UtcNow;
 
-            if (db.TestDatabaseConnection())
+            try
             {
-                dbTools = db;
-                connectionStringUpdated = false;
-                ErrMsg = "";
+                if (db.TestDatabaseConnection())
+                {
+                    dbTools = db;
+                    connectionStringUpdated = false;
+                    ErrMsg = "";
+                }
+                else
+                {
+                    dbTools = null;
+                }
             }
-            else
+            catch (Exception ex)
             {
+                ApplicationLogger.LogError(LogLevel.Warning, "Error connecting to DMS.", ex);
                 dbTools = null;
             }
 
