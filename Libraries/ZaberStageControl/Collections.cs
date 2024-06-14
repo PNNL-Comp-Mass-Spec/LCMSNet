@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Zaber.Motion;
 
-namespace LcmsNetPlugins.ZaberStage.UI
+namespace ZaberStageControl
 {
-    internal static class Collections
+    public static class Collections
     {
-        public static ReadOnlyObservableCollection<KeyValuePair<string,Units>> DistanceUnits { get; }
-        public static ReadOnlyObservableCollection<KeyValuePair<string,Units>> VelocityUnits { get; }
-        public static ReadOnlyObservableCollection<KeyValuePair<string,Units>> AccelerationUnits { get; }
+        public static ReadOnlyObservableCollection<KeyValuePair<string, Units>> DistanceUnits { get; }
+        public static ReadOnlyObservableCollection<KeyValuePair<string, Units>> VelocityUnits { get; }
+        public static ReadOnlyObservableCollection<KeyValuePair<string, Units>> AccelerationUnits { get; }
 
         static Collections()
         {
@@ -38,7 +38,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
             return labeled;
         }
 
-        private static readonly IReadOnlyList<KeyValuePair<string, string>> replacements = new List<KeyValuePair<string, string>>()
+        private static readonly IReadOnlyList<KeyValuePair<string, string>> Replacements = new List<KeyValuePair<string, string>>()
         {
             // In order of replacement priority - order does matter for some!
             // Length units
@@ -70,7 +70,7 @@ namespace LcmsNetPlugins.ZaberStage.UI
                 label = label.Substring(startTrim.Length).Trim('_');
             }
 
-            foreach (var replacement in replacements)
+            foreach (var replacement in Replacements)
             {
                 label = Regex.Replace(label, replacement.Key, replacement.Value, RegexOptions.IgnoreCase);
             }

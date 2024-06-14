@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections.cs" />
     <Compile Include="ConnectionStageID.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="EventArgs.cs" />
