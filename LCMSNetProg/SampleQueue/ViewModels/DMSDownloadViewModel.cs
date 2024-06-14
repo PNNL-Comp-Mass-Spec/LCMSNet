@@ -230,6 +230,15 @@ namespace LcmsNet.SampleQueue.ViewModels
                 //MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
+            catch (Exception ex)
+            {
+                // The SQLite connection string wasn't found
+                var errMsg = "Generic exception " + ex.Message + " while getting LC cart listing.\r\n" +
+                    "Maybe the network is down?";
+                ApplicationLogger.LogError(LogLevel.Warning, errMsg, ex);
+                //MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
+                return;
+            }
 
             if (cartList.Any())
             {
