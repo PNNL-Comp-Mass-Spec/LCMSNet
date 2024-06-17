@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.IO;
+using System.Linq;
 using LcmsNetSDK.Logging;
 using LcmsNetSDK.System;
 using PRISM;
@@ -68,7 +70,7 @@ namespace LcmsNet.IO.DMS
             {
                 try
                 {
-                    if (dbTools.TestDatabaseConnection())
+                    if (dbTools.TestDatabaseConnection(1))
                     {
                         ErrMsg = "";
                         return dbTools;
@@ -77,6 +79,7 @@ namespace LcmsNet.IO.DMS
                 catch (Exception ex)
                 {
                     ApplicationLogger.LogError(LogLevel.Warning, "Error connecting to DMS.", ex);
+                    // TODO: throw a DatabaseConnectionStringException ? - but only if it is actually the connection string, not a 'no connection' issue
                 }
 
                 // Assuming temporary failure of the connection
@@ -95,7 +98,7 @@ namespace LcmsNet.IO.DMS
 
             try
             {
-                if (db.TestDatabaseConnection())
+                if (db.TestDatabaseConnection(1))
                 {
                     dbTools = db;
                     connectionStringUpdated = false;
@@ -110,6 +113,7 @@ namespace LcmsNet.IO.DMS
             {
                 ApplicationLogger.LogError(LogLevel.Warning, "Error connecting to DMS.", ex);
                 dbTools = null;
+                // TODO: throw a DatabaseConnectionStringException ? - but only if it is actually the connection string, not a 'no connection' issue
             }
 
             return dbTools;
@@ -258,6 +262,32 @@ namespace LcmsNet.IO.DMS
         /// </summary>
         /// <param name="cmdStr">SQL command to execute</param>
         /// <returns>List containing the table's contents</returns>
+        public List<string> GetSingleColumnTableList(string cmdStr)
+        {
+            var db = GetConnection();
+            if (db == null)
+            {
+                throw new Exception(ErrMsg);
+            }
+
+            try
+            {
+                return db.GetQueryResultsEnumerable(cmdStr, reader => reader.GetString(0)).ToList();
+            }
+            catch (DbException ex)
+            {
+                // Error connecting to or retrieving data from the database
+                var errMsg = "SQL exception getting data via query " + cmdStr;
+                ApplicationLogger.LogError(0, errMsg, ex);
+                throw new DatabaseDataException(errMsg, ex);
+            }
+        }
+
+        /// <summary>
+        /// Generic method to retrieve data from a single-column table
+        /// </summary>
+        /// <param name="cmdStr">SQL command to execute</param>
+        /// <returns>List containing the table's contents</returns>
         public IEnumerable<string> GetSingleColumnTable(string cmdStr)
         {
             var db = GetConnection();
@@ -345,6 +375,8 @@ namespace LcmsNet.IO.DMS
             {
                 ApplicationLogger.LogError(0, "Failed to test read a needed table!", ex);
                 return false;
+
+                // TODO: throw a DatabaseConnectionStringException ?
             }
 
             return true;

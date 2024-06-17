@@ -219,7 +219,7 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             catch (DatabaseDataException ex)
             {
-                // There was a problem getting the list of LC carts from the cache db
+                // There was a problem getting the list of LC carts from the database
                 var innerException = string.Empty;
                 if (ex.InnerException != null)
                     innerException = ex.InnerException.Message;
@@ -232,11 +232,9 @@ namespace LcmsNet.SampleQueue.ViewModels
             }
             catch (Exception ex)
             {
-                // The SQLite connection string wasn't found
-                var errMsg = "Generic exception " + ex.Message + " while getting LC cart listing.\r\n" +
-                    "Maybe the network is down?";
+                // Generic error
+                var errMsg = "Generic exception " + ex.Message + " while getting LC cart listing.\r\n";
                 ApplicationLogger.LogError(LogLevel.Warning, errMsg, ex);
-                //MessageBox.Show(errMsg, "LcmsNet", MessageBoxButton.OK);
                 return;
             }
 

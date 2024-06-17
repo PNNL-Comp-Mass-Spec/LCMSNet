@@ -44,12 +44,12 @@ namespace LcmsNet.IO.DMS
         /// <summary>
         /// Gets a list of instrument carts
         /// </summary>
-        public IEnumerable<string> ReadCartList()
+        public List<string> ReadCartList()
         {
             // Get a List containing all the carts
             var sqlCmd = $"SELECT DISTINCT cart_name FROM {db.SchemaPrefix}v_lc_cart_active_export " +
                          "ORDER BY cart_name";
-            return db.GetSingleColumnTable(sqlCmd);
+            return db.GetSingleColumnTableList(sqlCmd);
         }
 
         public IEnumerable<DmsDownloadData> ReadRequestedRuns(SampleQueryData queryData)

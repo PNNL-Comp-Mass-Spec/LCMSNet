@@ -31,7 +31,7 @@ namespace LcmsNet.IO.DMS
         /// </summary>
         public List<string> GetCartListFromDMS()
         {
-            return dbReader.ReadCartList().ToList();
+            return dbReader.ReadCartList();
         }
 
         /// <summary>
