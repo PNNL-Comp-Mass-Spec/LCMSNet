@@ -126,16 +126,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit">
-      <Version>5.0.106</Version>
+      <Version>5.0.115</Version>
     </PackageReference>
     <PackageReference Include="DynamicData">
-      <Version>8.3.27</Version>
+      <Version>8.4.1</Version>
     </PackageReference>
     <PackageReference Include="OxyPlot.Wpf">
       <Version>2.1.2</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>19.5.1</Version>
+      <Version>20.1.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
