@@ -72,11 +72,67 @@
         WIFI_MAC = 60024,           // UINT64, R
         SERIAL_NUMBER = 60028,      // UINT32, R
         DEVICE_NAME_DEFAULT = 60500, // STRING, R/W, up to 49 characters, no periods, requires reboot to update reported name
+
+        AIN0_EF_READ_A = 7000,
+        AIN1_EF_READ_A = 7002,
+        AIN2_EF_READ_A = 7004,
+        AIN3_EF_READ_A = 7006,
+        AIN4_EF_READ_A = 7008,
+        AIN5_EF_READ_A = 7010,
+        AIN6_EF_READ_A = 7012,
+        AIN7_EF_READ_A = 7014,
+        AIN8_EF_READ_A = 7016,
+        AIN9_EF_READ_A = 7018,
+        AIN10_EF_READ_A = 7020,
+        AIN11_EF_READ_A = 7022,
+        AIN12_EF_READ_A = 7024,
+        AIN13_EF_READ_A = 7026,
+        AIN0_EF_READ_B = 7300,
+        AIN1_EF_READ_B = 7302,
+        AIN2_EF_READ_B = 7304,
+        AIN3_EF_READ_B = 7306,
+        AIN4_EF_READ_B = 7308,
+        AIN5_EF_READ_B = 7310,
+        AIN6_EF_READ_B = 7312,
+        AIN7_EF_READ_B = 7314,
+        AIN8_EF_READ_B = 7316,
+        AIN9_EF_READ_B = 7318,
+        AIN10_EF_READ_B = 7320,
+        AIN11_EF_READ_B = 7322,
+        AIN12_EF_READ_B = 7324,
+        AIN13_EF_READ_B = 7326,
+        AIN0_EF_READ_C = 7600,
+        AIN1_EF_READ_C = 7602,
+        AIN2_EF_READ_C = 7604,
+        AIN3_EF_READ_C = 7606,
+        AIN4_EF_READ_C = 7608,
+        AIN5_EF_READ_C = 7610,
+        AIN6_EF_READ_C = 7612,
+        AIN7_EF_READ_C = 7614,
+        AIN8_EF_READ_C = 7616,
+        AIN9_EF_READ_C = 7618,
+        AIN10_EF_READ_C = 7620,
+        AIN11_EF_READ_C = 7622,
+        AIN12_EF_READ_C = 7624,
+        AIN13_EF_READ_C = 7626,
+        AIN0_EF_READ_D = 7900,
+        AIN1_EF_READ_D = 7902,
+        AIN2_EF_READ_D = 7904,
+        AIN3_EF_READ_D = 7906,
+        AIN4_EF_READ_D = 7908,
+        AIN5_EF_READ_D = 7910,
+        AIN6_EF_READ_D = 7912,
+        AIN7_EF_READ_D = 7914,
+        AIN8_EF_READ_D = 7916,
+        AIN9_EF_READ_D = 7918,
+        AIN10_EF_READ_D = 7920,
+        AIN11_EF_READ_D = 7922,
+        AIN12_EF_READ_D = 7924,
+        AIN13_EF_READ_D = 7926,
+        TEMPERATURE_AIR_K = 60050,    // FLOAT32, R
+        TEMPERATURE_DEVICE_K = 60052, // FLOAT32, R
         // ReSharper restore InconsistentNaming
     }
-
-    // TEMPERATURE_AIR_K 60050 FLOAT32
-    // TEMPERATURE_DEVICE_K 60052 FLOAT32
 
     /// <summary>
     /// Input names and addresses on the LabJack T7. Not a comprehensive list.
@@ -129,6 +185,74 @@
         MIO0 = 2020,
         MIO1 = 2021,
         MIO2 = 2022
+        // ReSharper restore InconsistentNaming
+    }
+
+    /// <summary>
+    /// Input names and addresses on the LabJack T7. Not a comprehensive list.
+    /// </summary>
+    public enum LabJackT7ExtendFeatureInputs
+    {
+        // ReSharper disable InconsistentNaming
+
+        AIN0_EF_READ_A = 7000,
+        AIN1_EF_READ_A = 7002,
+        AIN2_EF_READ_A = 7004,
+        AIN3_EF_READ_A = 7006,
+        AIN4_EF_READ_A = 7008,
+        AIN5_EF_READ_A = 7010,
+        AIN6_EF_READ_A = 7012,
+        AIN7_EF_READ_A = 7014,
+        AIN8_EF_READ_A = 7016,
+        AIN9_EF_READ_A = 7018,
+        AIN10_EF_READ_A = 7020,
+        AIN11_EF_READ_A = 7022,
+        AIN12_EF_READ_A = 7024,
+        AIN13_EF_READ_A = 7026,
+        AIN0_EF_READ_B = 7300,
+        AIN1_EF_READ_B = 7302,
+        AIN2_EF_READ_B = 7304,
+        AIN3_EF_READ_B = 7306,
+        AIN4_EF_READ_B = 7308,
+        AIN5_EF_READ_B = 7310,
+        AIN6_EF_READ_B = 7312,
+        AIN7_EF_READ_B = 7314,
+        AIN8_EF_READ_B = 7316,
+        AIN9_EF_READ_B = 7318,
+        AIN10_EF_READ_B = 7320,
+        AIN11_EF_READ_B = 7322,
+        AIN12_EF_READ_B = 7324,
+        AIN13_EF_READ_B = 7326,
+        AIN0_EF_READ_C = 7600,
+        AIN1_EF_READ_C = 7602,
+        AIN2_EF_READ_C = 7604,
+        AIN3_EF_READ_C = 7606,
+        AIN4_EF_READ_C = 7608,
+        AIN5_EF_READ_C = 7610,
+        AIN6_EF_READ_C = 7612,
+        AIN7_EF_READ_C = 7614,
+        AIN8_EF_READ_C = 7616,
+        AIN9_EF_READ_C = 7618,
+        AIN10_EF_READ_C = 7620,
+        AIN11_EF_READ_C = 7622,
+        AIN12_EF_READ_C = 7624,
+        AIN13_EF_READ_C = 7626,
+        AIN0_EF_READ_D = 7900,
+        AIN1_EF_READ_D = 7902,
+        AIN2_EF_READ_D = 7904,
+        AIN3_EF_READ_D = 7906,
+        AIN4_EF_READ_D = 7908,
+        AIN5_EF_READ_D = 7910,
+        AIN6_EF_READ_D = 7912,
+        AIN7_EF_READ_D = 7914,
+        AIN8_EF_READ_D = 7916,
+        AIN9_EF_READ_D = 7918,
+        AIN10_EF_READ_D = 7920,
+        AIN11_EF_READ_D = 7922,
+        AIN12_EF_READ_D = 7924,
+        AIN13_EF_READ_D = 7926,
+        TEMPERATURE_AIR_K = 60050,    // FLOAT32, R
+        TEMPERATURE_DEVICE_K = 60052, // FLOAT32, R
         // ReSharper restore InconsistentNaming
     }
 

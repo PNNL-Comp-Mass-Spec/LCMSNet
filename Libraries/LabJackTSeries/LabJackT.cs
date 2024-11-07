@@ -266,6 +266,90 @@ namespace LabJackTSeries
             return (int)result;
         }
 
+        protected int ConfigureAINForThermocouple(int ainNumber, string cjcRegisterName = "TEMPERATURE_DEVICE_K", char thermocoupleType = 'K', bool differential = true)
+        {
+            if (!Enum.TryParse(char.ToUpper(thermocoupleType).ToString(), out ThermocoupleEFIndex thermocoupleEFIndex))
+            {
+                throw new Exception($"Unsupported thermocouple type: {thermocoupleType}");
+            }
+
+            var result = LJM.LJMERROR.NOERROR;
+            var registerName = $"AIN{ainNumber}";
+            // TODO: Set resolution for analog input(s) to max for device: https://support.labjack.com/docs/14-0-analog-inputs-t-series-datasheet
+            if (differential)
+            {
+                var ainNegativeChannelRegisterName = $"{registerName}_NEGATIVE_CHANNEL";
+                var negativeChannelNumber = ainNumber + 1;
+                if (ainNumber >= 16)
+                {
+                    negativeChannelNumber = ainNumber + 8;
+                }
+
+                result = LJM.eWriteName(labJackDeviceRef.Handle, ainNegativeChannelRegisterName, negativeChannelNumber);
+            }
+
+            if (result != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result);
+                ThrowErrorMessage("Error configuring input.  " + error, (int)result);
+            }
+
+            var cjcAddress = 0;
+            var cjcValueType = 0;
+            result = LJM.NameToAddress(cjcRegisterName, ref cjcAddress, ref cjcValueType);
+
+            if (result != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result);
+                ThrowErrorMessage("Error configuring input.  " + error, (int)result);
+            }
+
+            var result1 = LJM.eWriteName(labJackDeviceRef.Handle, $"{registerName}_EF_INDEX", (int)thermocoupleEFIndex); // feature index for thermocouple type
+            var result2 = LJM.eWriteName(labJackDeviceRef.Handle, $"{registerName}_EF_CONFIG_B", cjcAddress); // modbus address for CJC
+            var result3 = LJM.eWriteName(labJackDeviceRef.Handle, $"{registerName}_EF_CONFIG_D", 1.0); // Slope for CJC reading, default; for LM34 use 55.56
+            var result4 = LJM.eWriteName(labJackDeviceRef.Handle, $"{registerName}_EF_CONFIG_E", 0.0); // Offset for CJC reading, default; for LM34 use 255.37
+
+
+            if (result1 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result1);
+                ThrowErrorMessage("Error configuring input.  " + error, (int)result1);
+            }
+
+            if (result2 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result2);
+                ThrowErrorMessage("Error configuring input.  " + error, (int)result2);
+            }
+
+            if (result3 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result3);
+                ThrowErrorMessage("Error configuring input.  " + error, (int)result3);
+            }
+
+            if (result4 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result4);
+                ThrowErrorMessage("Error configuring input.  " + error, (int)result4);
+            }
+
+            return (int)result1;
+        }
+
+        private enum ThermocoupleEFIndex
+        {
+            E = 20,
+            J = 21,
+            K = 22,
+            R = 23,
+            T = 24,
+            S = 25,
+            N = 27,
+            B = 28,
+            C = 30,
+        }
+
         /// <summary>
         /// Gets the current LabJack driver version
         /// </summary>
