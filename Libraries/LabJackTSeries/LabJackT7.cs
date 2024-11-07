@@ -40,6 +40,22 @@ namespace LabJackTSeries
         }
 
         /// <summary>
+        /// General method for reading from a port, using the extended feature inputs
+        /// </summary>
+        /// <param name="channel">Enumerated port to read from</param>
+        /// <returns>The measured value, or -1 if a problem</returns>
+        public double Read(LabJackT7ExtendFeatureInputs channel)
+        {
+            var portName = Enum.GetName(typeof(LabJackT7ExtendFeatureInputs), channel);
+            if (portName == null)
+            {
+                return -1;
+            }
+
+            return ReadRegisterByName((LabJackT7IONames)(int)channel);
+        }
+
+        /// <summary>
         /// Reads the current state/voltage of one of the inputs
         /// </summary>
         /// <param name="register">The register to read from</param>
