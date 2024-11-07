@@ -61,7 +61,7 @@ namespace LcmsnetUnitTest
         public void TestI()
         {
             var samples = CsvCache.GetQueueFromCache().ToList();
-            Assert.AreEqual(1, samples[0].UniqueID);
+            Assert.That(samples[0].UniqueID, Is.EqualTo(1));
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace LcmsnetUnitTest
         public void TestK()
         {
             var samples = CsvCache.GetQueueFromCache().ToList();
-            Assert.AreEqual(2, samples[0].UniqueID);
+            Assert.That(samples[0].UniqueID, Is.EqualTo(2));
         }
     }
 }

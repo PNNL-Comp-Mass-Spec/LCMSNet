@@ -33,7 +33,7 @@ namespace PDFGenUnitTests
             doc.Title = "headertest";
             doc.AddHeader(HeaderLevel.H1, "A Header");
             doc.WriteDocument(path);
-            Assert.AreEqual(true, File.Exists(path));
+            Assert.That(File.Exists(path), Is.EqualTo(true));
             //File.Delete(path);
         }
 
@@ -44,7 +44,7 @@ namespace PDFGenUnitTests
             doc.Title = "writetest";
             doc.AddParagraph("This is a test file.");
             doc.WriteDocument(path);
-            Assert.AreEqual(true, File.Exists(path));
+            Assert.That(File.Exists(path), Is.EqualTo(true));
             //File.Delete(path);
         }
 
@@ -56,7 +56,7 @@ namespace PDFGenUnitTests
             doc.AddImage(image);
             path = basePath + "\\drawtest1.pdf";
             doc.WriteDocument(path);
-            Assert.AreEqual(true, File.Exists(path));
+            Assert.That(File.Exists(path), Is.EqualTo(true));
             //File.Delete(path);
         }
 
@@ -69,7 +69,7 @@ namespace PDFGenUnitTests
             doc.AddImage(image);
             path = basePath + "\\drawtest2.pdf";
             doc.WriteDocument(path);
-            Assert.AreEqual(true, File.Exists(path));
+            Assert.That(File.Exists(path), Is.EqualTo(true));
             //File.Delete(path);
         }
 
@@ -88,7 +88,7 @@ namespace PDFGenUnitTests
             doc.AddImage(image);
             path = basePath + "\\drawtest3.pdf";
             doc.WriteDocument(path);
-            Assert.AreEqual(true, File.Exists(path));
+            Assert.That(File.Exists(path), Is.EqualTo(true));
             //File.Delete(path);
         }
 
@@ -99,7 +99,7 @@ namespace PDFGenUnitTests
             path = basePath + "\\pgbrktest.pdf";
             doc.Title = "page break test";
             doc.WriteDocument(path);
-            Assert.AreEqual(true, File.Exists(path));
+            Assert.That(File.Exists(path), Is.EqualTo(true));
             //File.Delete(path);
         }
 

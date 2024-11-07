@@ -20,10 +20,10 @@ namespace FluidicsSDKUnitTests
         {
             //add
             var pt = new Port(new Point(0,0), null); // ports add themselves to the port manager...
-            Assert.AreEqual(1, PortManager.GetPortManager.Ports.Count);
+            Assert.That(PortManager.GetPortManager.Ports.Count, Is.EqualTo(1));
             //remove
             PortManager.GetPortManager.RemovePort(pt);
-            Assert.AreEqual(0, PortManager.GetPortManager.Ports.Count);
+            Assert.That(PortManager.GetPortManager.Ports.Count, Is.EqualTo(0));
         }
 
         /// <summary>
@@ -35,11 +35,11 @@ namespace FluidicsSDKUnitTests
             //add
             var p = new DemoPump();
             FluidicsDeviceManager.DeviceManager.Add(p);
-            Assert.AreEqual(1, FluidicsDeviceManager.DeviceManager.GetDevices().Count);
+            Assert.That(FluidicsDeviceManager.DeviceManager.GetDevices().Count, Is.EqualTo(1));
             //remove
             PortManager.GetPortManager.RemovePorts(FluidicsDeviceManager.DeviceManager.FindDevice(p));
             FluidicsDeviceManager.DeviceManager.Remove(p); // cleanup
-            Assert.AreEqual(0, FluidicsDeviceManager.DeviceManager.GetDevices().Count);
+            Assert.That(FluidicsDeviceManager.DeviceManager.GetDevices().Count, Is.EqualTo(0));
             p = null;
         }
 
@@ -53,10 +53,10 @@ namespace FluidicsSDKUnitTests
             var p1 = new Port(new Point(0,0), null);
             var p2 = new Port(new Point(0, 0), null);
             ConnectionManager.GetConnectionManager.Connect(p1, p2);
-            Assert.AreEqual(1, ConnectionManager.GetConnectionManager.GetConnections().ToList().Count);
+            Assert.That(ConnectionManager.GetConnectionManager.GetConnections().ToList().Count, Is.EqualTo(1));
             //remove
             ConnectionManager.GetConnectionManager.Remove(ConnectionManager.GetConnectionManager.FindConnection(p1,p2));
-            Assert.AreEqual(0, ConnectionManager.GetConnectionManager.GetConnections().ToList().Count);
+            Assert.That(ConnectionManager.GetConnectionManager.GetConnections().ToList().Count, Is.EqualTo(0));
             PortManager.GetPortManager.RemovePort(p1);
             PortManager.GetPortManager.RemovePort(p2);
             p1 = null;
@@ -116,7 +116,7 @@ namespace FluidicsSDKUnitTests
             FluidicsDeviceManager.DeviceManager.Add(p);
             var fp = FluidicsDeviceManager.DeviceManager.FindDevice(p);
             fp.MoveBy(new Point(10, 10));
-            Assert.IsTrue(fp.Loc.X == 10 && fp.Loc.Y == 10); // Device starts at point 0,0 So when moved 10x10 should be at point (10,10)
+            Assert.That(fp.Loc.X == 10 && fp.Loc.Y == 10, Is.True); // Device starts at point 0,0 So when moved 10x10 should be at point (10,10)
             PortManager.GetPortManager.RemovePorts(fp);
             FluidicsDeviceManager.DeviceManager.Remove(p);
             fp = null;

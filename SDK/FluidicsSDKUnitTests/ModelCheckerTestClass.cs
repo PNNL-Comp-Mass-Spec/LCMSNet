@@ -50,7 +50,7 @@ namespace FluidicsSDKUnitTests
         {
             var noSinkCheck = new NoSinksModelCheck();
             var status = noSinkCheck.CheckModel().ToList();
-            Assert.IsNotEmpty(status); // there will be either 0 or 1 entries(1 if working) at this point. If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
+            Assert.That(status, Is.Not.Empty); // there will be either 0 or 1 entries(1 if working) at this point. If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace FluidicsSDKUnitTests
             cm.Connect(needle.Ports[0], FluidicsDeviceManager.DeviceManager.GetDevices().Find(x => x.DeviceName == "Test Tee").Ports[1]);
             var noSinkCheck = new NoSinksModelCheck();
             var status = noSinkCheck.CheckModel().ToList();
-            Assert.IsEmpty(status);
+            Assert.That(status, Is.Empty);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace FluidicsSDKUnitTests
         {
             var multipleSourceCheck = new MultipleSourcesModelCheck();
             var status = multipleSourceCheck.CheckModel().ToList();
-            Assert.IsNotEmpty(status); // there will be either 0 or 1 entries(1 if working at this point). If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
+            Assert.That(status, Is.Not.Empty); // there will be either 0 or 1 entries(1 if working at this point). If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace FluidicsSDKUnitTests
             cm.RemoveConnections(pumps[1].Ports[0]);
             var multipleSourceCheck = new MultipleSourcesModelCheck();
             var status = multipleSourceCheck.CheckModel().ToList();
-            Assert.IsEmpty(status); // there will be either 0 or 1 entries(1 if working at this point). If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
+            Assert.That(status, Is.Empty); // there will be either 0 or 1 entries(1 if working at this point). If there is a cycle in the graph and the model check is not working properly, it would not get to this point because it would be stuck in an infinite loop.
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace FluidicsSDKUnitTests
         {
             var fluidicsCycleCheck = new FluidicsCycleCheck();
             var status = fluidicsCycleCheck.CheckModel().ToList();
-            Assert.AreEqual(2, status.Count); // It will find the loop from both sources, if working correctly.
+            Assert.That(status.Count, Is.EqualTo(2)); // It will find the loop from both sources, if working correctly.
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace FluidicsSDKUnitTests
             cm.RemoveConnections(t.Ports[2]);
             var fluidicsCycleCheck = new FluidicsCycleCheck();
             var status = fluidicsCycleCheck.CheckModel().ToList();
-            Assert.AreEqual(0, status.Count); // It will find no loop if working correctly.
+            Assert.That(status.Count, Is.EqualTo(0)); // It will find no loop if working correctly.
         }
     }
 }

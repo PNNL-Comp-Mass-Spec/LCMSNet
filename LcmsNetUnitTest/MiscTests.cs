@@ -35,7 +35,7 @@ namespace LcmsnetUnitTest
         public void TestConvertVialToInt(string position, int expectedResult, byte columnsPerRow = 12)
         {
             var intPosition = ConvertVialPosition.ConvertVialToInt(position, columnsPerRow);
-            Assert.AreEqual(expectedResult, intPosition);
+            Assert.That(intPosition, Is.EqualTo(expectedResult));
         }
     }
 }

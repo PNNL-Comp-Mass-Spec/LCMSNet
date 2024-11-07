@@ -123,7 +123,7 @@ namespace PDFGeneratorTests
                 File.Delete(file);
             }
             pg.WritePDF(file, "PDFGenTest", sample, "4", cd, devices, fimage);
-            Assert.IsTrue(File.Exists(file));
+            Assert.That(File.Exists(file), Is.True);
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace PDFGeneratorTests
             queue.GetNextSample();
             queue.StartSamples();
             Thread.Sleep(new TimeSpan(0, 0, 40));
-            Assert.IsTrue(File.Exists(file));
+            Assert.That(File.Exists(file), Is.True);
         }
 
 

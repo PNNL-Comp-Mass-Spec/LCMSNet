@@ -78,7 +78,7 @@ namespace LcmsnetUnitTest
 
             optimizer.AlignSamples(samples);
             q.QueueSamples(samples, enumColumnDataHandling.LeaveAlone);
-            Assert.IsTrue(q.GetWaitingQueue().Contains(sampleA) && q.GetWaitingQueue().Contains(sampleB));
+            Assert.That(q.GetWaitingQueue().Contains(sampleA) && q.GetWaitingQueue().Contains(sampleB), Is.True);
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace LcmsnetUnitTest
             q.StartSamples();
 
             //ensure that the query returns the sample that will actually be returned to run
-            Assert.AreSame(q.NextSampleQuery(), q.NextSampleStart());
+            Assert.That(q.NextSampleStart(), Is.SameAs(q.NextSampleQuery()));
             q.StopRunningQueue();
             var ids = new List<long>
             {
@@ -194,7 +194,7 @@ namespace LcmsnetUnitTest
             q.StartSamples();
 
             //Sample A should be run first.
-            Assert.AreSame(sampleA, q.NextSampleStart());
+            Assert.That(q.NextSampleStart(), Is.SameAs(sampleA));
             q.StopRunningQueue();
             var ids = new List<long>
             {

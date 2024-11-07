@@ -77,7 +77,7 @@ namespace LcmsnetUnitTest
         private void CheckDifferenceInStartTimes(double expectedDifference)
         {
             var difference = methods[1].Start.Subtract(methods[0].Start).TotalMilliseconds;
-            Assert.AreEqual(expectedDifference, difference);
+            Assert.That(difference, Is.EqualTo(expectedDifference));
         }
 
         /// <summary>

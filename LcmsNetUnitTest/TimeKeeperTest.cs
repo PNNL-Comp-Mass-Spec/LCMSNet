@@ -14,7 +14,7 @@ namespace LcmsnetUnitTest
             //These two dates do not span a daylight savings transition, as they are both after the fall transition and before the spring transition.
             var start = new DateTime(2014, 11, 9);
             var end = new DateTime(2014, 11, 10);
-            Assert.IsFalse(TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(start, end));
+            Assert.That(TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(start, end), Is.False);
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace LcmsnetUnitTest
             //These two dates span a daylight savings transition as they are one second before, and one second after the switch.
             var start = new DateTime(2014, 11, 2, 1, 59, 59);
             var end = new DateTime(2014, 11, 2, 2, 0, 1);
-            Assert.IsTrue(TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(start, end));
+            Assert.That(TimeKeeper.Instance.DoDateTimesSpanDaylightSavingsTransition(start, end), Is.True);
         }
 
         [Test]
@@ -38,9 +38,9 @@ namespace LcmsnetUnitTest
             // timekeeper time should be waaay different from AET time as it's set to pst.
             // but mathematically, they would be the same(or close to the same) so we check the strings
             // to see if they actually are different
-            Assert.IsFalse(nowAet.ToString(CultureInfo.InvariantCulture) == timeKeeperTime.ToString(CultureInfo.InvariantCulture));
+            Assert.That(nowAet.ToString(CultureInfo.InvariantCulture) == timeKeeperTime.ToString(CultureInfo.InvariantCulture), Is.False);
             TimeKeeper.Instance.TimeZone = aet;
-            Assert.IsTrue(nowAet.Subtract(TimeKeeper.Instance.ConvertToTimeZone(timeKeeperTime, "AUS Eastern Standard Time")).TotalMilliseconds < 2);
+            Assert.That(nowAet.Subtract(TimeKeeper.Instance.ConvertToTimeZone(timeKeeperTime, "AUS Eastern Standard Time")).TotalMilliseconds < 2, Is.True);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace LcmsnetUnitTest
             TimeKeeper.Instance.TimeZone = pst;
             var timeKeeperTime = TimeKeeper.Instance.Now;
             var nowPst = TimeZoneInfo.ConvertTimeFromUtc(now, pst);
-            Assert.IsTrue(nowPst.Subtract(timeKeeperTime).TotalMilliseconds < 2);
+            Assert.That(nowPst.Subtract(timeKeeperTime).TotalMilliseconds < 2, Is.True);
         }
     }
 }
