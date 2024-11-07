@@ -98,10 +98,10 @@
       <Version>5.0.115</Version>
     </PackageReference>
     <PackageReference Include="DynamicData">
-      <Version>8.4.1</Version>
+      <Version>9.0.4</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>20.1.1</Version>
+      <Version>20.1.63</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

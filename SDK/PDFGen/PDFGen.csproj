@@ -74,7 +74,8 @@
     <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)lib\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)lib\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\"
-xcopy /y /f /d "$(TargetDir)PdfSharp-wpf.dll" "$(SolutionDir)lib\"</PostBuildEvent>
+xcopy /y /f /d "$(TargetDir)PdfSharp-wpf.dll" "$(SolutionDir)lib\"
+xcopy /y /f /d "$(TargetDir)PdfSharp.Charting-wpf.dll" "$(SolutionDir)lib\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

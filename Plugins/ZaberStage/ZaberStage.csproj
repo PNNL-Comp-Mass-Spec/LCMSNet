@@ -95,10 +95,10 @@
       <Version>5.0.115</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>20.1.1</Version>
+      <Version>20.1.63</Version>
     </PackageReference>
     <PackageReference Include="Zaber.Motion">
-      <Version>6.1.0</Version>
+      <Version>6.7.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
