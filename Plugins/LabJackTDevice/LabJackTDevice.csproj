@@ -38,10 +38,6 @@
     <Reference Include="FluidicsSDK">
       <HintPath>..\..\lib\FluidicsSDK.dll</HintPath>
     </Reference>
-    <Reference Include="LabJack.LJM, Version=1.19.1.0, Culture=neutral, PublicKeyToken=0316e29ba8d40ce0, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\LabJack.LJM.dll</HintPath>
-    </Reference>
     <Reference Include="LcmsNetCommonControls">
       <HintPath>..\..\lib\LcmsNetCommonControls.dll</HintPath>
     </Reference>
@@ -60,9 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LabJack.LJM.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="ReactiveUI.WPF">
       <Version>20.1.63</Version>
     </PackageReference>
@@ -78,7 +71,7 @@
     <PostBuildEvent>xcopy /y /f /d "$(TargetPath)" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)$(TargetName).xml" "$(SolutionDir)pluginDLLs\"
-xcopy /y /f /d "$(ProjectDir)LabJack.LJM.dll" "$(SolutionDir)pluginDLLs\"
+xcopy /y /f /d "$(TargetDir)LabJack.LJM.dll" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)LabJackTSeries.dll" "$(SolutionDir)pluginDLLs\"
 xcopy /y /f /d "$(TargetDir)LabJackTSeries.pdb" "$(SolutionDir)pluginDLLs\"</PostBuildEvent>
   </PropertyGroup>
