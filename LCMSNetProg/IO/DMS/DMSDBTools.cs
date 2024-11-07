@@ -57,7 +57,7 @@ namespace LcmsNet.IO.DMS
             catch (Exception ex)
             {
                 ErrMsg = "Exception getting run request list";
-                //                  throw new DatabaseDataException(ErrMsg, ex);
+                // throw new DatabaseDataException(ErrMsg, ex);
                 ApplicationLogger.LogError(0, ErrMsg, ex);
                 return Enumerable.Empty<DmsDownloadData>();
             }
