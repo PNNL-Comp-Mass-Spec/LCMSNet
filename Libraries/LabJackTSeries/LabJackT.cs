@@ -351,6 +351,191 @@ namespace LabJackTSeries
         }
 
         /// <summary>
+        /// Set the duty cycle (% on time) of a digital output configured for PWM
+        /// </summary>
+        /// <param name="dioIndex">Digital output index</param>
+        /// <param name="dutyPercent">Duty cycle/"% on time" of the output, from 0 to 100</param>
+        /// <returns></returns>
+        public int SetDIOPWMDutyCycle(uint dioIndex, double dutyPercent)
+        {
+            if (dutyPercent < 0)
+            {
+                dutyPercent = 0;
+            }
+
+            if (dutyPercent > 100)
+            {
+                dutyPercent = 100;
+            }
+
+            var clockSource = $"DIO{dioIndex}_EF_CLOCK_SOURCE";
+            var config = $"DIO{dioIndex}_EF_CONFIG_A";
+
+            var clockIndex = 0d;
+            var read1 = LJM.eReadName(labJackDeviceRef.Handle, clockSource, ref clockIndex);
+
+            if (read1 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)read1);
+                ThrowErrorMessage("Error reading clock index.  " + error, (int)read1);
+                return -1;
+            }
+
+            var clockRoll = $"DIO_EF_CLOCK{(int)clockIndex}_ROLL_VALUE";
+            var clockRollValue = 0d;
+
+            var read2 = LJM.eReadName(labJackDeviceRef.Handle, clockRoll, ref clockRollValue);
+
+            if (read2 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)read2);
+                ThrowErrorMessage("Error reading clock roll value.  " + error, (int)read2);
+                return -1;
+            }
+
+            var configValue = dutyPercent / 100.0 * clockRollValue;
+
+            var result = LJM.eWriteName(labJackDeviceRef.Handle, config, (int)configValue); // Set the duty cycle
+
+            if (result != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result);
+                ThrowErrorMessage("Error configuring digital output.  " + error, (int)result);
+            }
+
+            return (int)result;
+        }
+
+        /// <summary>
+        /// Configure a digital output for PWM use (note: See LabJack data sheet for model to determine if output supports PWM)
+        /// </summary>
+        /// <param name="dioIndex">Digital output index</param>
+        /// <param name="clockIndex">Clock index of the clock to use</param>
+        /// <returns></returns>
+        public int ConfigureDIOForPWMOut(uint dioIndex, uint clockIndex = 0)
+        {
+            if (clockIndex > 2)
+            {
+                return (int)LJM.LJMERROR.INVALID_NAME;
+            }
+
+            var enable = $"DIO{dioIndex}_EF_ENABLE";
+            var index = $"DIO{dioIndex}_EF_INDEX";
+            var clockSource = $"DIO{dioIndex}_EF_CLOCK_SOURCE";
+            var config = $"DIO{dioIndex}_EF_CONFIG_A";
+            var result1 = LJM.eWriteName(labJackDeviceRef.Handle, enable, 0); // Disable the DIO extended feature
+            var result2 = LJM.eWriteName(labJackDeviceRef.Handle, index, 0); // Set the feature index to '0' (PWM)
+            var result3 = LJM.eWriteName(labJackDeviceRef.Handle, clockSource, clockIndex); // Set the index of the clock to use
+            var result4 = LJM.eWriteName(labJackDeviceRef.Handle, config, 0); // Set the high->low transition point to 0 (PWM 'off' for the output
+            var result5 = LJM.eWriteName(labJackDeviceRef.Handle, enable, 1); // Enable the DIO extended feature
+
+            if (result1 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result1);
+                ThrowErrorMessage("Error configuring digital output.  " + error, (int)result1);
+            }
+
+            if (result2 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result2);
+                ThrowErrorMessage("Error configuring digital output.  " + error, (int)result2);
+            }
+
+            if (result3 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result3);
+                ThrowErrorMessage("Error configuring digital output.  " + error, (int)result3);
+            }
+
+            if (result4 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result4);
+                ThrowErrorMessage("Error configuring digital output.  " + error, (int)result4);
+            }
+
+            if (result5 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result5);
+                ThrowErrorMessage("Error configuring digital output.  " + error, (int)result5);
+            }
+
+            return (int)result1;
+        }
+
+        /// <summary>
+        /// Configure a clock
+        /// </summary>
+        /// <param name="clockIndex">Clock index; 0 is 32-bit, 1 and 2 are 16-bit</param>
+        /// <param name="divisor">Frequency divider: divide frequency by this value</param>
+        /// <param name="rollValue">value at which the clock should reset; '0' for max value (with divisor, controls the output frequency</param>
+        /// <param name="resultFrequencyHz">Computed result frequency; T4/T7 ref clock is 80 MHz, T8 is 100MHz, this is (ref clock) / (divisor * rollValue)</param>
+        /// <returns></returns>
+        public int ConfigureClockSource(uint clockIndex, LabJackTClockDivisor divisor, uint rollValue, out double resultFrequencyHz)
+        {
+            resultFrequencyHz = 0;
+            if (clockIndex > 2)
+            {
+                return (int)LJM.LJMERROR.INVALID_NAME;
+            }
+
+            if (clockIndex > 0 && rollValue > 65535)
+            {
+                return (int)LJM.LJMERROR.INVALID_VALUE;
+            }
+
+            var refClock = 8e7; // 80 MHz
+            var devType = 0;
+            var connType = 0;
+            var ipAddr = 0;
+            var serialNum = 0;
+            var port = 0;
+            var maxBytesPerMB = 0;
+            LJM.GetHandleInfo(labJackDeviceRef.Handle, ref devType, ref connType, ref serialNum, ref ipAddr, ref port, ref maxBytesPerMB);
+
+            if (devType == LJM.CONSTANTS.dtT8)
+            {
+                refClock = 1e8; // 100 MHz
+            }
+
+            var enable = $"DIO_EF_CLOCK{clockIndex}_ENABLE";
+            var div = $"DIO_EF_CLOCK{clockIndex}_DIVISOR";
+            var roll = $"DIO_EF_CLOCK{clockIndex}_ROLL_VALUE";
+
+            resultFrequencyHz = refClock / ((int)divisor * rollValue);
+
+            var result1 = LJM.eWriteName(labJackDeviceRef.Handle, enable, 0); // Disable the clock
+            var result2 = LJM.eWriteName(labJackDeviceRef.Handle, div, (int)divisor); // Set the divisor
+            var result3 = LJM.eWriteName(labJackDeviceRef.Handle, roll, rollValue); // Set the roll (reset) value
+            var result4 = LJM.eWriteName(labJackDeviceRef.Handle, enable, 1); // Enable the clock
+
+            if (result1 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result1);
+                ThrowErrorMessage("Error configuring clock.  " + error, (int)result1);
+            }
+
+            if (result2 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result2);
+                ThrowErrorMessage("Error configuring clock.  " + error, (int)result2);
+            }
+
+            if (result3 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result3);
+                ThrowErrorMessage("Error configuring clock.  " + error, (int)result3);
+            }
+
+            if (result4 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result4);
+                ThrowErrorMessage("Error configuring clock.  " + error, (int)result4);
+            }
+
+            return (int)result1;
+        }
+
+        /// <summary>
         /// Gets the current LabJack driver version
         /// </summary>
         /// <returns>The driver version, as a float</returns>

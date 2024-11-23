@@ -44,9 +44,9 @@ namespace LabJackTSeries
         /// </summary>
         /// <param name="channel">Enumerated port to read from</param>
         /// <returns>The measured value, or -1 if a problem</returns>
-        public double Read(LabJackT7ExtendFeatureInputs channel)
+        public double Read(LabJackT7ExtendFeatureAnalogInputs channel)
         {
-            var portName = Enum.GetName(typeof(LabJackT7ExtendFeatureInputs), channel);
+            var portName = Enum.GetName(typeof(LabJackT7ExtendFeatureAnalogInputs), channel);
             if (portName == null)
             {
                 return -1;

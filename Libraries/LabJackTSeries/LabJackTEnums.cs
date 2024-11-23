@@ -189,9 +189,9 @@
     }
 
     /// <summary>
-    /// Input names and addresses on the LabJack T7. Not a comprehensive list.
+    /// Analog Input extended feature names and addresses on the LabJack T7. Not a comprehensive list.
     /// </summary>
-    public enum LabJackT7ExtendFeatureInputs
+    public enum LabJackT7ExtendFeatureAnalogInputs
     {
         // ReSharper disable InconsistentNaming
 
@@ -287,6 +287,23 @@
         MIO0 = 2020,
         MIO1 = 2021,
         MIO2 = 2022
+        // ReSharper restore InconsistentNaming
+    }
+
+    /// <summary>
+    /// Digital IO extended feature names and addresses on the LabJack T7. Not a comprehensive list.
+    /// </summary>
+    public enum LabJackTClockDivisor
+    {
+        // ReSharper disable InconsistentNaming
+        TwoTo0 = 1,
+        TwoTo1 = 2,
+        TwoTo2 = 4,
+        TwoTo3 = 8,
+        TwoTo4 = 16,
+        TwoTo5 = 32,
+        TwoTo6 = 64,
+        TwoTo8 = 256,
         // ReSharper restore InconsistentNaming
     }
 
