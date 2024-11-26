@@ -86,6 +86,20 @@ namespace LabJackTSeries
         }
 
         /// <summary>
+        /// General method for writing to a port
+        /// </summary>
+        /// <param name="name">Enumerated port to write to</param>
+        /// <param name="value">The value to write (0/1 for digital)</param>
+        public void Write(LabJackT7RB12Outputs name, double value)
+        {
+            var portName = Enum.GetName(typeof(LabJackT7Outputs), name);
+            if (portName == null)
+                return;
+
+            WriteRegisterByName((LabJackT7IONames)(int)name, value);
+        }
+
+        /// <summary>
         /// Set the state/voltage of one of the outputs
         /// </summary>
         /// <param name="register">The register to write to</param>

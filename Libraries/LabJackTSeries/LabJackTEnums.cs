@@ -291,6 +291,27 @@
     }
 
     /// <summary>
+    /// Output names and addresses on the LabJack T7, used with the RB12 relay board. Complete list.
+    /// </summary>
+    public enum LabJackT7RB12Outputs
+    {
+        // ReSharper disable InconsistentNaming
+        EIO0 = 2008,
+        EIO1 = 2009,
+        EIO2 = 2010,
+        EIO3 = 2011,
+        EIO4 = 2012,
+        EIO5 = 2013,
+        EIO6 = 2014,
+        EIO7 = 2015,
+        CIO0 = 2016,
+        CIO1 = 2017,
+        CIO2 = 2018,
+        CIO3 = 2019
+        // ReSharper restore InconsistentNaming
+    }
+
+    /// <summary>
     /// Digital IO extended feature names and addresses on the LabJack T7. Not a comprehensive list.
     /// </summary>
     public enum LabJackTClockDivisor
