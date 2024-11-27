@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using LabJack;
 
 namespace LabJackTSeries
@@ -401,6 +402,63 @@ namespace LabJackTSeries
             {
                 var error = GetErrorString((int)result);
                 ThrowErrorMessage("Error configuring digital output.  " + error, (int)result);
+            }
+
+            return (int)result;
+        }
+
+        /// <summary>
+        /// Set the duty cycle (% on time) of digital outputs configured for PWM, that use the same clock source
+        /// </summary>
+        /// <param name="dioIndices">Digital output indices</param>
+        /// <param name="dutyPercents">Duty cycle/"% on time" of the outputs, from 0 to 100</param>
+        /// <returns></returns>
+        public int SetMultiDIOPWMDutyCycle(uint[] dioIndices, double[] dutyPercents)
+        {
+            if (dioIndices.Length != dutyPercents.Length)
+            {
+                return -1;
+            }
+
+            var clockSources = dioIndices.Select(x => $"DIO{x}_EF_CLOCK_SOURCE").ToArray();
+            var configs = dioIndices.Select(x => $"DIO{x}_EF_CONFIG_A").ToArray();
+            var refAddress = 0;
+
+            var clockIndices = new double[3];
+            var read1 = LJM.eReadNames(labJackDeviceRef.Handle, clockSources.Length, clockSources, clockIndices, ref refAddress);
+
+            if (read1 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)read1);
+                ThrowErrorMessage("Error reading clock index.  " + error + " on address '" + refAddress + "'", (int)read1);
+                return -1;
+            }
+
+            if (clockIndices.Distinct().Count() > 1)
+            {
+                return -1;
+            }
+
+            var clockRoll = $"DIO_EF_CLOCK{(int)clockIndices[0]}_ROLL_VALUE";
+            var clockRollValue = 0d;
+
+            var read2 = LJM.eReadName(labJackDeviceRef.Handle, clockRoll, ref clockRollValue);
+
+            if (read2 != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)read2);
+                ThrowErrorMessage("Error reading clock roll value.  " + error, (int)read2);
+                return -1;
+            }
+
+            var configValues = dutyPercents.Select(x => (double)(int)(x / 100.0 * clockRollValue)).ToArray();
+
+            var result = LJM.eWriteNames(labJackDeviceRef.Handle, configs.Length, configs, configValues, ref refAddress); // Set the duty cycle
+
+            if (result != LJM.LJMERROR.NOERROR)
+            {
+                var error = GetErrorString((int)result);
+                ThrowErrorMessage("Error configuring digital output.  " + error + " on address '" + refAddress + "'", (int)result);
             }
 
             return (int)result;
