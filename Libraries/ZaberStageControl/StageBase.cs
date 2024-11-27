@@ -194,6 +194,34 @@ namespace ZaberStageControl
 
             StageConnectionManager.Instance.AddUsedStages(serialsFound);
 
+            if (!HomeStages(false, out errorMessage))
+            {
+                return false;
+            }
+
+            System.Threading.Thread.Sleep(MinTimeBetweenCommandsMs);
+
+            try
+            {
+                //var position = GetPosition();
+                //if (position == -1)
+                //{
+                //    errorMessage = "The valve position is unknown.  Make sure it is plugged in.";
+                //    SendError(new DeviceErrorEventArgs(errorMessage, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "Valve Position"));
+                //    return false;
+                //}
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Could not get the valve position. " + ex.Message;
+                return false;
+            }
+            return true;
+        }
+
+        public bool HomeStages(bool force, out string errorMessage)
+        {
+            errorMessage = "";
             try
             {
                 var homeGroups = StagesUsed.Where(x => x.DeviceRef != null).GroupBy(x => x.InitOrder).OrderBy(x => x.Key);
@@ -205,7 +233,7 @@ namespace ZaberStageControl
                     {
                         var device = stage.DeviceRef;
                         var axis = device.GetAxis(stage.AxisNumber);
-                        if (!axis.IsHomed())
+                        if (!axis.IsHomed() || force)
                         {
                             tasks.Add(axis.HomeAsync());
                         }
@@ -235,23 +263,6 @@ namespace ZaberStageControl
                 return false;
             }
 
-            System.Threading.Thread.Sleep(MinTimeBetweenCommandsMs);
-
-            try
-            {
-                //var position = GetPosition();
-                //if (position == -1)
-                //{
-                //    errorMessage = "The valve position is unknown.  Make sure it is plugged in.";
-                //    SendError(new DeviceErrorEventArgs(errorMessage, null, DeviceErrorStatus.ErrorAffectsAllColumns, this, "Valve Position"));
-                //    return false;
-                //}
-            }
-            catch (Exception ex)
-            {
-                errorMessage = "Could not get the valve position. " + ex.Message;
-                return false;
-            }
             return true;
         }
 
