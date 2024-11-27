@@ -355,7 +355,7 @@ namespace LabJackTSeries
         /// Set the duty cycle (% on time) of a digital output configured for PWM
         /// </summary>
         /// <param name="dioIndex">Digital output index</param>
-        /// <param name="dutyPercent">Duty cycle/"% on time" of the output, from 0 to 100</param>
+        /// <param name="dutyPercent">Duty cycle/"% on time" of the output, from 0 to 1</param>
         /// <returns></returns>
         public int SetDIOPWMDutyCycle(uint dioIndex, double dutyPercent)
         {
@@ -394,7 +394,7 @@ namespace LabJackTSeries
                 return -1;
             }
 
-            var configValue = dutyPercent / 100.0 * clockRollValue;
+            var configValue = dutyPercent * clockRollValue;
 
             var result = LJM.eWriteName(labJackDeviceRef.Handle, config, (int)configValue); // Set the duty cycle
 
@@ -411,7 +411,7 @@ namespace LabJackTSeries
         /// Set the duty cycle (% on time) of digital outputs configured for PWM, that use the same clock source
         /// </summary>
         /// <param name="dioIndices">Digital output indices</param>
-        /// <param name="dutyPercents">Duty cycle/"% on time" of the outputs, from 0 to 100</param>
+        /// <param name="dutyPercents">Duty cycle/"% on time" of the outputs, from 0 to 1</param>
         /// <returns></returns>
         public int SetMultiDIOPWMDutyCycle(uint[] dioIndices, double[] dutyPercents)
         {
@@ -451,7 +451,7 @@ namespace LabJackTSeries
                 return -1;
             }
 
-            var configValues = dutyPercents.Select(x => (double)(int)(x / 100.0 * clockRollValue)).ToArray();
+            var configValues = dutyPercents.Select(x => (double)(int)(x * clockRollValue)).ToArray();
 
             var result = LJM.eWriteNames(labJackDeviceRef.Handle, configs.Length, configs, configValues, ref refAddress); // Set the duty cycle
 
