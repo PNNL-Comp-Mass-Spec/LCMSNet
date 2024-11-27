@@ -460,6 +460,11 @@ namespace ZaberStageControl
             }
         }
 
+        public Task WaitUntilIdleAsync()
+        {
+            return DeviceRef.GetAxis(AxisNumber).WaitUntilIdleAsync(true);
+        }
+
         public void Home()
         {
             DeviceRef.GetAxis(AxisNumber).Home();
