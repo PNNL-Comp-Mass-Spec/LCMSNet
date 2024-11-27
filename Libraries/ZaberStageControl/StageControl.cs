@@ -238,9 +238,59 @@ namespace ZaberStageControl
             }
         }
 
+        /// <summary>
+        /// Handle inversion and limits for an absolute move (as needed)
+        /// </summary>
+        /// <returns></returns>
+        public double FixPosition(double targetPosition)
+        {
+            // invert position if needed
+            var inverted = IsInverted ? MaxPositionMM - targetPosition : targetPosition;
+
+            // ensure position is below the max position
+            var belowMax = Math.Min(MaxPositionMM, inverted);
+
+            // ensure position is above the min position (0)
+            var aboveMin = Math.Max(belowMax, 0);
+
+            return aboveMin;
+        }
+
+        /// <summary>
+        /// Handle limits for a relative move (as needed)
+        /// </summary>
+        /// <returns></returns>
+        public double FixPositionRelative(double relativeMove)
+        {
+            // invert current position if needed
+            var currentPosition = GetPositionMMFixed();
+
+            var maxPosMove = MaxPositionMM - currentPosition;
+            var maxNegMove = currentPosition;
+
+            var correctedPos = Math.Min(relativeMove, maxPosMove);
+            var correctedNeg = Math.Max(correctedPos, maxNegMove);
+
+            return correctedNeg;
+        }
+
+        /// <summary>
+        /// Gets the current position of the stage (never inverted)
+        /// </summary>
+        /// <returns></returns>
         public double GetPositionMM()
         {
             return DeviceRef.GetAxis(AxisNumber).GetPosition(Units.Length_Millimetres);
+        }
+
+        /// <summary>
+        /// Gets the current position of the stage (inverted if stage is inverted)
+        /// </summary>
+        /// <returns></returns>
+        public double GetPositionMMFixed()
+        {
+            var pos = GetPositionMM();
+            return IsInverted ? MaxPositionMM - pos : pos;
         }
 
         /// <summary>
