@@ -116,7 +116,7 @@ namespace SerialPortDevices.PortDetails.SerialAdapterData
                             Caption = match["Caption"].ToString(),
                             Name = match["Name"].ToString(),
                             Description = match["Description"].ToString(),
-                            Service = match["ProviderType"].ToString()
+                            Service = match["ProviderType"]?.ToString() ?? ""
                         };
 
                         data.Add(wmiData.DeviceId, wmiData);
